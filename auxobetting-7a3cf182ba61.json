@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "auxobetting",
+  "private_key_id": "7a3cf182ba61db6f190e5e0f868b5164238ece59",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC2nAoRspEWWUFp\nw0ovYAojYdiKIfeU/4w2u+LhEgNdyjuTKH3Mh+YOViyKXUN/VnTNirG8hImMlJVp\nJKZxzK5V1LQmjUCULSvihHdqR5NumtVw02tRK/LodRe32arcg+qU8WWvSjuHWWze\nDN9qjG/TjzcYuGOymweBWslukiNkz/ZvEJ2/0nFk0jwsanO6hGe+2HguansaIYSj\nuexXZxIX7rau/obThCycxAVzmnJv1eOWPJbdOiSzqQlB9VAoJY8pAlmhybOSJqus\nkVriFjcB1ww10qWePmv8Q1lvXjJYlhESRqIsE/gJczzBXIG5s0sqgiM0WFdAO4cs\nirWyggEVAgMBAAECggEAT9RDKp1vg9+dEwlGoxNPG0ypByn2O/LDbyIP+uiPBC9m\nf9yRshou3lGZwxsmaMJ46WoabRlbsFM8Rey5vsIF7IvB/aB+fMiKiMn0EkgcEZwq\ndtpV7fRSioC1z6+eXCxnHpmxJEJFZ9QWHbRu7vtZ35iaM3pYSzouu8PejzHfuy/Y\nPbWh/ebYHDXnhA//ayYz2mbqQl8q61U8/Ib9l7DXe8K3D2Tju5fucCbEKLVEyldL\nT2wYf2VoObtnKbi+qzYcWNCAND9TQmmn/08oBGi1C0/UIbf0QdhycA0MhlEz8sX+\nvAYD3JwNDcDzQDDbUcoz08AaUiz+zgTK0iHzbWQsuQKBgQD081yk0LgMXg2wQsHh\n8MuuPTk573xyu3npkmwj6uYvgzAvL9h/Lp/IsZroccUlZrRy3mx377eMQXRpXA6i\nSzeCtiCuiMbCbLVlpul1TnD5ZRmYHvd9waG6sy7tvKZD+suEpExVh3XE4ese5h1W\nyXUN4x0qUnHQs0grazrPHuEYzwKBgQC+2MaK+pGX13s5kGpv6Za1Gs3cv7HHTCgv\nBcJsxqh1Yn1Y0SiKIf27HBkdugiBYgT+NopfH9pqj7tGA/Xv97qsgn45zsMlvhZO\npSSWd2Ka6nPdw4FxuUsAl4UAfxwhcQVP9FeM79G+DGdZshtpmxMsjVwErLkSPO20\nJ2tWHVO42wKBgQDot611CLdTSKhIpaP+PP/F8nTEDjt15ZfVyT7kgO9ghIrqydIu\nQuWbjuFVpYFgH0uhNqBm8mC36BfpYYSlvEBo9w/lwhzT6uQMR5/Vy0iaKOtAE2uf\nFq/I6SPUyj5Mp6Fjy5SaTbAd9WWkXYvSQGPtZbD33Iw1c59FYQLmdLf3EQKBgAgS\nezNdrdLSVm/038ukAa/fVl3D7e0UF48Fm1emf3GXnN2o2yIclfLYGWfceoeecb+e\n5vNnEYH4Wl93w2tG+ypYyqX/TNnH1IG3Enkay5zp1cTHhC4fPEDmJ8YBmlr/wM3E\n8/8OFb0IIUb19Zrd6E22HPJFq/5NfXBlSnD2BJiJAoGAFN+mXFv3MHnqYmle2i6E\n8ntbD8oki3e4O1gktq2C0lnZ9LdBE4obfDw93pBlV1ILH06F6oPJWQs6tQVew08h\nGegjx9ox0I6LwF0AI+Xgj+DOZ6F9vu6iKGS2V9dKAaEjvLHkn4T08YB9v9S7aGXh\nCD5mUj1j6UuLnHpYrcpsuh4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "python-to-sheet@auxobetting.iam.gserviceaccount.com",
+  "client_id": "103572259470642539011",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/python-to-sheet%40auxobetting.iam.gserviceaccount.com"
+}
