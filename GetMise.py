@@ -33,7 +33,7 @@ def main(driver,rattrape_perte,wantwin,perte):
     mise = (float(wantwin) + float(perte)) / (float(cote) - 1)
     mise = round(mise, 2)
     if mise < 0.2:
-        mise = 0.5
+        mise = 0.2
         print("cote : " + str(cote)+" | perte : " + str(
             perte) + " | wantwin : " + str(
             wantwin) + " | mise : " + str(mise))

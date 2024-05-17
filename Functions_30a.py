@@ -85,6 +85,7 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
     # AUCUN MATCH TROUVE
     printtext = 0
     wintour =0
+    ligue_name = ""
     #SCRIPT RECHERCHE DE MATCH
     if Functions_1XBET.verification_page_de_match(driver) == True:  # VÉRIFICATION SI PAGE DE MATCH
         print('PAGE MATCH OK!')
@@ -187,11 +188,14 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
 
         # RECHERCHE INFOS DE MISE
         players = Functions_1XBET.get_players_name(driver)
+
         proba40A = 0
         if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
             proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
         else:
-            proba40A = Functions_stats1.get_proba_40A(players[0], players[1],driver,match_Url)
+            proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
+            if proba40A == 0:
+                proba40A = Functions_stats1.get_proba_40A_other(players[0], players[1], driver, match_Url)
     # RECHERCHE INFOS DE MISE
     infos_de_mise = Functions_gsheets.get_infos_de_mise30A(ligue_name, rattrape_perte, perte, wantwin, mise, increment)
     print("#RECHERCHE INFOS DE MISE")
@@ -236,6 +240,7 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
             break
         tentative1 =0
         sucess_get_paris30a  = 0
+        jeu = Functions_1XBET.get_jeu_actuel_30a(driver)
         while sucess_get_paris30a == 0:
             try:
                 Functions_1XBET.recherche_paris_30a(driver, jeu)
@@ -250,16 +255,16 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
         infos_de_mise = Functions_1XBET.get_mise30a(driver,rattrape_perte,wantwin,perte)
         mise = infos_de_mise[0]
         cote = infos_de_mise[1]
-        if proba40A < 0.3 and cote < 3:
+        if proba40A < 0.3 and cote < 2.6:
             if perte >0:
                 Functions_gsheets.suivi_lost30([perte, wantwin, mise, ligue_name])
-            bet_30a = True
-            error = True
+            bet_30a = 1
+            error = 1
             perte = 0
-            rattrape_perte = 0
-            mise = 0.5
+            rattrape_perte = 1
+            mise = 0.71
             wantwin = 1
-            print('Cote trop faible')
+            print('Cote trop faible 0,2')
             break
         print('nouvelle perte : '+str(perte))
         while send_mise == 0 and error == 0  and jeu <13:
@@ -318,11 +323,13 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
         if passageset == 1:
             score_actuel = '0:0'
             gamestart = 1
+            jeu = 1
             if rattrape_perte == 1:
                 error = 0
                 print("passage set 2")
                 gamestart = 0
                 passageset = 0
+                jeu =1
             else:
                 error = 1
                 print("erreur perte en 1 set")
@@ -549,12 +556,12 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
             increment = 0
             wantwin = 1
         else:
-            while perte > 6.12:
+            while perte > 2:
                 #perte_partiel=5
                 comp_list = ['wta', 'atp']
                 compet_ok = random.choice(comp_list)
-                Functions_gsheets.suivi_lost30([6.12, 1.2, 5.23, compet_ok])
-                perte = perte-6.12
+                Functions_gsheets.suivi_lost30([2, 0, 1, compet_ok])
+                perte = perte-2
             mise = (wantwin + perte) / (cote - 1)
             mise = round(mise, 2)
             Functions_gsheets.suivi_lost30([perte, wantwin, mise,compet_ok])
@@ -566,7 +573,7 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
 
     infos = [win, perte, wantwin, mise,x]
     print(newmatch)
-    #Functions_1XBET.update_match_done("del", newmatch,matchlist_file_name)
+    Functions_1XBET.update_match_done("del", newmatch,matchlist_file_name)
     Functions_1XBET.del_running(script_num,running_file_name)
     DeleteBet.main(driver,error)
     return infos

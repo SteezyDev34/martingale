@@ -3,7 +3,6 @@ import random
 import time
 
 import DeleteBet
-import Functions_stats1
 import GetIfGameStart
 import GetInfosDeMise
 import GetJeuActuel
@@ -164,7 +163,6 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
                                 newmatch = VerificationMatchTrouve.main(driver,bet_item,
                                                                                      matchlist_file_name)
                                 if newmatch[0]:
-                                    print('non non non')
                                     if OuverturePageMatch.main(bet_item, script_num,
                                                                             newmatch[1],
                                                                             running_file_name,
@@ -177,7 +175,6 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
             # si un match est trouvé on arrete la recherche
             if match_found:
                 break
-
 
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE
     # END SCRIPT RECHERCHE DE MATCH
@@ -193,16 +190,17 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
         if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
             proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
         else:
-            proba40A = Functions_stats1.get_proba_40A(players[0], players[1],driver,match_Url)
-
+            proba40A = Functions_stats.get_proba_40A(players[0], players[1])
+        if proba40A >= 0.43:
+            rattrape_perte = 2
 
         print("#RECHERCHE INFOS DE MISE")
         infos_de_mise = GetInfosDeMise.main(ligue_name, rattrape_perte, perte, wantwin, mise, increment,
                                                             proba40A)
-        perte = float(infos_de_mise[0])
-        wantwin = float(infos_de_mise[1])
-        mise = float(infos_de_mise[2])
-        increment = float(infos_de_mise[3])
+        perte = infos_de_mise[0]
+        wantwin = infos_de_mise[1]
+        mise = infos_de_mise[2]
+        increment = infos_de_mise[3]
         rattrape_perte = infos_de_mise[4]
 
         # END RECHERCHE INFOS DE MISE
@@ -238,18 +236,13 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
         infos_de_mise = GetMise.main(driver, rattrape_perte, wantwin, perte)
         mise = infos_de_mise[0]
         cote = infos_de_mise[1]
-        if proba40A < 0.4 and cote < 3.5:
-            if perte >0:
-                Functions_gsheets.suivi_lost([perte, wantwin, mise, ligue_name])
-            bet_40a = True
-            error = True
+        if rattrape_perte == 1 and cote < 3.5:
+            Functions_gsheets.suivi_lost([perte, wantwin, mise, ligue_name])
             perte = 0
             rattrape_perte = 0
-            mise = 0.5
-            wantwin = 1
-            print('Cote trop faible')
-            break
-
+            mise = 0.2
+            wantwin = 0.2
+            print('Cote trop faible pour recup')
         while not PlacerMise.main(driver, mise) and not error:
             continue
         validate_bet = 0
@@ -283,8 +276,8 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
             if ValidationDuParis.main(driver, jeu, mise):
                 validate_bet = True
                 jeu = jeu + 1
-                perte = float(perte) + float(mise)
-                wantwin = float(wantwin) + float(increment)
+                perte = perte + mise
+                wantwin = wantwin + increment
                 bet_40a = True
                 print("prochain jeu : " + str(jeu))
                 print("wantwin : " + str(wantwin))
@@ -303,7 +296,7 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
     retour_section_tps_reglementaire.main(driver)
     ### AND PREPARE FIRST GAME
     winmatch = 0
-    while (winmatch <= 0 and not error):
+    while (winmatch <= 0 and error == 0):
         # WAIT FOR GAME START
         if passageset == 1:
             score_actuel = '0:0'
@@ -422,7 +415,7 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
                                 validate_bet = 1
                                 jeu = jeu + 1
                                 perte = perte + mise
-                                wantwin = float(wantwin) + float(increment)
+                                wantwin = wantwin + increment
                                 print("prochain jeu : " + str(jeu))
                                 print("wantwin : " + str(wantwin))
                                 print("perte : " + str(perte))
@@ -500,17 +493,17 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
             else:
                 x = -1
             perte = 0
-            mise = 0.5
+            mise = 0.2
             increment = 0
-            wantwin = 1
+            wantwin = 0.2
             break
     if perte > 0:
         if perte >= 200:
             Functions_gsheets.update_lost(script_num, perte)
             perte = 0
-            mise = 0.5
+            mise = 0.2
             increment = 0
-            wantwin = 1
+            wantwin = 0.2
         else:
             """while perte > 5.79:
                 #perte_partiel=5
@@ -524,17 +517,16 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
                     Functions_gsheets.suivi_lost30([3.15, 0.8, 1.65, ligue_name])
                     perte = perte - 3.15'''"""
 
-            mise = (float(wantwin) + float(perte)) / (float(cote) - 1)
+            mise = (wantwin + perte) / (cote - 1)
             mise = round(mise, 2)
             Functions_gsheets.suivi_lost([perte, wantwin, mise, ligue_name])
             perte = 0
-            mise = 0.5
+            mise = 0.2
             increment = 0
-            wantwin = 1
+            wantwin = 0.2
 
     infos = [win, perte, wantwin, mise, x]
     print("update " + newmatch)
     Functions_1XBET.update_match_done("del", newmatch, matchlist_file_name)
     Functions_1XBET.del_running(script_num, running_file_name)
-    DeleteBet.main(driver,error)
     return infos

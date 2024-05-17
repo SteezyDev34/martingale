@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 ##FIN DEFINITION DES FONCTIONS
 from unidecode import unidecode
 
-def get_proba_40A(playerName1, playerName2,driver,link):
+def get_proba_40A_other(playerName1, playerName2,driver,link):
     prob_service_joueur1 = 0
     prob_service_joueur2 = 0
     prob_retour_joueur1 = 0
@@ -105,12 +105,187 @@ def get_proba_40A(playerName1, playerName2,driver,link):
             prob_40_40_totale = prob_40_40_joueur1 + prob_40_40_joueur2
             prob = float("{:.2}".format(prob_40_40_totale))
             print('Proba 40 A = ' + str(prob))
-            driver.get(link)
         except:
             print('erreur lors du la proba40A')
             prob =0
             tentative = tentative +1
         else:
             ok = 1
+    driver.get(link)
     return prob
 #print(get_proba_40A('DENIS YEVSEYEV', 'MARK LAJAL', driver))
+import time
+from datetime import date
+import requests
+import json
+
+global headers
+headers= {
+    'X-RapidAPI-Key': 'b052b9bd1cmsh0e38ccdfaf9d624p1dd988jsnde30c2e5a6dc',
+    "X-RapidAPI-Host": "ultimate-tennis1.p.rapidapi.com"
+}
+
+def getPlayerApiId(playerName):
+    file1 = open("atprankinjson.txt", "r")
+    playerId = False
+    # Lisez le contenu mis à jour du fichier
+    playersList = file1.read()
+    # Fermez le fichier après la lecture
+    file1.close()
+    playersList = playersList.split('\n')
+    # on supprime la date
+    del playersList[0]
+
+    print(playerName)
+    #playerNameElements = playerName.split(" ")
+    LastName = playerName.lower()
+    for player in playersList:
+        nplayer = player.lower().split('|')[0]
+        LastName = LastName
+        #print(LastName)
+        if nplayer in LastName:
+            playerElements = player.split('|')
+            playerLastName = playerElements[0].split(' ')[-1]
+            playerId = playerElements[1]
+            print('Player Name : ' + playerName)
+            print('Player ID : ' + playerId)
+            break
+    return playerId
+def getPlayerWtaApiId(playerName):
+    file1 = open("wtarankinjson.txt", "r")
+    playerId = False
+    # Lisez le contenu mis à jour du fichier
+    playersList = file1.read()
+    # Fermez le fichier après la lecture
+    file1.close()
+
+    playersList = playersList.split('\n')
+    # on supprime la date
+    del playersList[0]
+    playerNameElements = playerName.split(" ")
+    LastName = playerNameElements[-1]
+
+    for player in playersList:
+        if LastName.lower() in player.lower():
+            playerElements = player.split('|')
+            playerLastName = playerElements[0].split(' ')[-1]
+            if LastName.lower() == playerLastName.lower():
+                playerId = playerElements[1]
+                print('Player Name : '+playerName)
+                print('Player ID : '+playerId)
+                break
+    return playerId
+def get_proba_40A(playerName1, playerName2,cat='atp',surface='clay'):
+
+    try:
+        print('proba atp')
+        playerID1 = getPlayerApiId(playerName1)
+        print(playerID1)
+        playerID2 = getPlayerApiId(playerName2)
+        print(playerID2)
+        urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/"+cat+"/"+playerID1+"/2023/"+surface
+        urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/" + cat + "/" + playerID2 + "/2023/" + surface
+
+        response = requests.get(urlplayer1, headers=headers)
+        time.sleep(1)
+    except Exception as e:
+        print(f'erreur lors du la proba40A : {e}')
+        return 0
+    else:
+
+        try:
+            data = str(response.json())
+            data = data.replace("'", '"')
+            data = json.loads(data)
+            print(data)
+
+            prob_service_joueur = float(data['ServiceRecordStats']['ServicePointsWonPercentage']) / 100
+            prob_retour_joueur = float(data['ReturnRecordStats']['ReturnPointsWonPercentage']) / 100
+
+            # Statistiques du joueur2
+            response = requests.get(urlplayer2, headers=headers)
+        except Exception as e:
+            print(f'erreur lors du la proba40A 2 : {e}')
+            return 0
+        else:
+            try:
+
+                data = str(response.json())
+                data = data.replace("'", '"')
+                data = json.loads(data)
+                print(data)
+
+                # Statistiques de l'adversaire
+                prob_service_adversaire = float(data['ServiceRecordStats']['ServicePointsWonPercentage']) / 100
+                prob_retour_adversaire = float(data['ReturnRecordStats']['ReturnPointsWonPercentage']) / 100
+
+                # Calcul de la probabilité pour le joueur et l'adversaire
+                prob_40_40_joueur = prob_service_joueur * prob_retour_joueur
+                prob_40_40_adversaire = prob_service_adversaire * prob_retour_adversaire
+
+                # Calcul de la probabilité totale
+                prob_40_40_totale = prob_40_40_joueur + prob_40_40_adversaire
+                prob = float("{:.2}".format(prob_40_40_totale))
+                print('Proba 40 A = '+str(prob))
+                if prob <=0.43:
+                    print('PAS DE RATTRAPAGE')
+                else:
+                    print('RATTRAPAGE OK!')
+
+            except:
+                print('erreur lors du la proba40A 3')
+                return 0
+            else:
+                return prob
+def get_wta_proba_40A(playerName1, playerName2):
+    print('proba wta')
+
+    try:
+        playerID1 = str(getPlayerWtaApiId(playerName1))
+        playerID2 = str(getPlayerWtaApiId(playerName2))
+        urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID1 + "/2023"
+        # print(urlplayer1)
+        urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID2 + "/2023"
+        # print(urlplayer2)
+        response = requests.get(urlplayer1, headers=headers)
+        time.sleep(2)
+    except:
+        return 0
+    else:
+        try:
+            #print(response.text)
+            data = json.loads(response.text)
+
+            print(data)
+
+            prob_service_joueur = data['player_data'][0]['service_points_won_percent']/100
+            prob_retour_joueur = data['player_data'][0]['return_points_won_percent']/100
+
+
+            # Statistiques du joueur2
+            response = requests.get(urlplayer2, headers=headers)
+        except:
+            return 0
+        else:
+            try:
+                data = json.loads(response.text)
+                print(data)
+
+                # Statistiques de l'adversaire
+                prob_service_adversaire = float(data['player_data'][0]['service_points_won_percent']) / 100
+                prob_retour_adversaire = float(data['player_data'][0]['return_points_won_percent']) / 100
+
+                # Calcul de la probabilité pour le joueur et l'adversaire
+                prob_40_40_joueur = prob_service_joueur * prob_retour_joueur
+                prob_40_40_adversaire = prob_service_adversaire * prob_retour_adversaire
+
+                # Calcul de la probabilité totale
+                prob_40_40_totale = prob_40_40_joueur + prob_40_40_adversaire
+                prob = float("{:.2}".format(prob_40_40_totale))
+                print(str(prob))
+            except:
+                return 0
+            else:
+                return prob
+#get_wta_proba_40A('errani', 'wang')
+#print(get_proba_40A('thiedm', 'MICHALSKI'))

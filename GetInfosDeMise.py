@@ -64,6 +64,7 @@ def get_perte_en_cours(ligue_name):
                         print("compet ok in")
                         break
                     else:
+                        data.append(rows)
                         print('not : ' + data[3])
                         rows = rows - 1
 
@@ -108,6 +109,7 @@ def main(ligue_name,rattrape_perte,perte,wantwin,mise,increment,proba40A):
     print("RECHERCHDES DES INFOS DE MISE...")
     #ON RÉCUPÈRE LES PERTES EN COURS SELON LA LIGUE
     infos = get_perte_en_cours(ligue_name)
+    proba40A = 0.5
     if infos != False:
         lost_compet = infos[3].strip().lower()
         if proba40A >0.40:
@@ -123,13 +125,14 @@ def main(ligue_name,rattrape_perte,perte,wantwin,mise,increment,proba40A):
             if int(get_perte_generale()) > 0.2:
                 rattrape_perte = 1
                 perte = 0
-                mise = 0.5
+                mise = 0.3
                 increment = 0
-                wantwin = 1
+                wantwin = 0.2
         print("perte : " + str(
             perte) + " | wantwin : " + str(
             wantwin) + " | mise : " + str(mise))
     else:
+        print('perte false')
         if rattrape_perte == 0:
             if int(get_perte_generale()) > 0.2:
                 rattrape_perte = 1

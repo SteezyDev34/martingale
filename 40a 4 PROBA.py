@@ -35,7 +35,7 @@ proxy_options = {
         'no_proxy': 'localhost,127.0.0.1'  # Exclude localhost from proxy
     }
 }
-opt.add_experimental_option("debuggerAddress", "localhost:7980")
+opt.add_experimental_option("debuggerAddress", "localhost:7976")
 opt.add_argument('--proxy-server=http://{}'.format(proxy))
 service = Service(r"/Users/steezy/PycharmProjects/1xbot/venv/bin/chromedriver")
 driver = webdriver.Chrome(service=service, options=opt)
@@ -70,13 +70,16 @@ matchlist_file_name = 'matchlist_proba'
 running_file_name = 'running_proba'
 match_done_key = ""#Nom du match dans Gsheets
 match_found = 0
-while (win< 10):
+while (win< 100):
     infos = False
     try:
-        infos = Functions_40a_proba.all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin, increment, cote,
-                                     lose, firstgame,
-                                     jeu, set_actuel, set, score_actuel, passageset, x, match_list, match_done_key,
-                                     match_found, rattrape_perte, matchlist_file_name, running_file_name)
+        infos = Functions_40a_proba.all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
+                                               increment,
+                                               cote,
+                                               lose, firstgame,
+                                               jeu, set_actuel, set, score_actuel, passageset, x, match_list,
+                                               match_done_key,
+                                               match_found, rattrape_perte, matchlist_file_name, running_file_name)
     except:
         pass
     if infos != False:

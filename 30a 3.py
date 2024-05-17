@@ -12,22 +12,21 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-import Functions_4030
+import Functions_30a
 ##DEFINITION DES FONCTIONS
 ##
 ##FIN DEFINITION DES FONCTIONS
 
 from selenium.webdriver.chrome.options import Options
 opt = Options()
-opt.add_experimental_option("debuggerAddress", "localhost:7911")
+opt.add_experimental_option("debuggerAddress", "localhost:7972")
 service = Service(r"/Users/steezy/PycharmProjects/1xbot/venv/bin/chromedriver")
 driver = webdriver.Chrome(service=service, options=opt)
 
 
-
 ##CONDITIONS DE DEPART
 ##
-script_num = 1
+script_num = 3
 setaffiche=[]
 error=0
 win = 0
@@ -35,7 +34,7 @@ mise = 0.2
 perte = 0
 wantwin = 0.2
 increment = 0.2
-cote = 3
+cote = 2.4
 lose =0
 firstgame = 1
 jeu = firstgame
@@ -50,28 +49,28 @@ def put_mise(jeu, mise):
     try:
         element = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.XPATH, '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
-            jeu) + ' : 40:40 - Oui")]'))
+            jeu) + ' : 30:30 - Oui")]'))
         )
     except:
-        print("btn 40A not visible")
-        error = "btn 40A not visible"
+        print("btn 30A not visible")
+        error = "btn 30A not visible"
     else:
         try:
             list_of_bet_type = driver.find_elements_by_xpath(
         '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
-            jeu) + ' : 40:40 - Oui")]')
+            jeu) + ' : 30:30 - Oui")]')
         except:
-            print("btn 40A not reachable")
-            error = "btn 40A not reachable"
+            print("btn 30A not reachable")
+            error = "btn 30A not reachable"
         else:
             if len(list_of_bet_type) > 0:
                 print(list_of_bet_type[0].text)
                 try:
                     element = WebDriverWait(driver, 1).until(
                         EC.element_to_be_clickable((By.XPATH, '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
-            jeu) + ' : 40:40 - Oui")]')))
+            jeu) + ' : 30:30 - Oui")]')))
                 except:
-                    print("btn 40A not clicable retry ")
+                    print("btn 30A not clicable retry ")
                 else:
                     list_of_bet_type[0].click()
                     try:
@@ -129,26 +128,23 @@ def delete_bet():
 
 ##START
 match_list = []
-matchlist_file_name = 'matchlist'
-running_file_name = 'running'
 match_done_key = ""#Nom du match dans Gsheets
 match_found = 0
 while (win< 999):
     infos = False
+    infos = Functions_30a.all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin, increment, cote,
+                                     lose, firstgame,
+                                     jeu, set_actuel, set, score_actuel, passageset, x, match_list, match_done_key,
+                                     match_found, rattrape_perte)
 
-
-    infos = Functions_4030.all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin, increment, cote,
-                                      lose, firstgame,
-                                      jeu, set_actuel, set, score_actuel, passageset, x, match_list, match_done_key,
-                                      match_found, rattrape_perte, matchlist_file_name, running_file_name)
-
+    print(infos)
     if infos != False:
         win = infos[0]
         perte = infos[1]
         wantwin = infos[2]
         mise = infos[3]
         x = infos[4]
-    cote = 3
+    cote = 2.4
     increment = 0.2
     jeu = 1
     setaffiche=[]

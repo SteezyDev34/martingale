@@ -161,7 +161,7 @@ def delete_bet(driver, error):
 #VÉRIFIERR SI PAGE DE MATCH
 def verification_page_de_match(driver):
     #driver.switch_to.window(driver.window_handles[0])
-    print("verfication si page match...")
+    #print("verfication si page match...")
     try:
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(
@@ -875,6 +875,8 @@ def recherche_paris_40a(driver,jeu):
                 list_of_newbet_type = list_of_newbet_type.split(" : 40-40 - Oui")
                 jeu = int(list_of_newbet_type[0].split("Jeu ")[1])
                 print("AUTRE JEU TROUVÉ : Jeu " + str(jeu))
+                print("Jeu actuel : " + str(jeu))
+                if_get_jeu = True
             elif len(list_of_newbet_type) >= 2:
                 print('PLUSIEURS JEUX TROUVÉS!')
                 newbet_type1 = list_of_newbet_type[0].text
@@ -964,7 +966,7 @@ def recherche_paris_30a(driver,jeu):
     if_get_jeu = False
     clic = 0
     try:
-        element = WebDriverWait(driver, 180).until(
+        element = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.XPATH,
                                             '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
                                                 jeu) + ' 30-30 - Oui")]'))
@@ -1196,12 +1198,12 @@ def recherche_paris_15a(driver,jeu):
 
 def recherche_prochain_paris_30a(driver,jeu):
     #driver.switch_to.window(driver.window_handles[0])
-    jeu = jeu +1
+    #jeu = jeu +1
     print('RECHERCHE DES PARIS 30 A....')
     if_get_jeu = False
     clic = 0
     try:
-        element = WebDriverWait(driver, 3).until(
+        element = WebDriverWait(driver, 30).until(
             EC.presence_of_element_located((By.XPATH,
                                             '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
                                                 jeu) + ' 30-30 - Oui")]'))
@@ -1449,6 +1451,7 @@ def get_mise(driver,rattrape_perte,wantwin,perte):
             print('erreur recup cote : 3')
             cote = 3
         else:
+            time.sleep(1)
             print('cote recupéré ' + cote)
             if cote != '':
                 try:
@@ -1477,6 +1480,7 @@ def get_mise30a(driver,rattrape_perte,wantwin,perte):
     else:
         print("Rattrapage, recuperation de la cote")
         try:
+            time.sleep(1)
             cote = driver.find_elements(By.CLASS_NAME,
                                         'cpn-bet__coef')[
                 0].text
@@ -1496,8 +1500,8 @@ def get_mise30a(driver,rattrape_perte,wantwin,perte):
                 cote = 2.4
     mise = (wantwin + perte) / (cote - 1)
     mise = round(mise, 2)
-    if mise < 0.5:
-        mise = 0.5
+    if mise < 0.2:
+        mise = 0.2
     print("cote : " + str(cote))
     print("wantwin : " + str(wantwin))
     print("perte : " + str(perte))
@@ -1513,6 +1517,7 @@ def get_mise15a(driver,rattrape_perte,wantwin,perte):
     else:
         print("Rattrapage, recuperation de la cote")
         try:
+            time.sleep(1)
             cote = driver.find_elements(By.CLASS_NAME,
                 'cpn-total__coef')[
                 0].text
@@ -1728,7 +1733,7 @@ def get_if_game_start(driver,saved_score):
     error = 0
     printext = 0
     while (gamestart <= 0 and error == 0):
-        driver.switch_to.window(driver.window_handles[0])
+        #driver.switch_to.window(driver.window_handles[0])
         score_actuel = get_score_actuel(driver,saved_score)
         saved_score = saved_score
         if score_actuel == '0:0':
@@ -1884,15 +1889,15 @@ def recherche_paris_40_30(driver,jeu):
     scoreboard_player = driver.find_elements(By.CLASS_NAME,'c-scoreboard-player-score__row')
     scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME,'c-scoreboard-player-score__heading')[0]
     first_player = scoreboard_player1.find_elements(By.CLASS_NAME,'c-scoreboard-player-score__ball')
-    if len(first_player)>0:
+    if len(first_player)>0 and jeu !=1:
         first_player = 2
 
-        win_type = '15:40'
+        win_type = '30:40'
     else:
         first_player = 1
-        win_type = '40:15'
+        win_type = '40:30'
     print('next player to win : ' + str(first_player) + ' ' + win_type)
-    win_texte = '40-15'
+    win_texte = '40-30'
     if_get_jeu = False
     clic = 0
 
@@ -2019,19 +2024,23 @@ def recherche_paris_40_30(driver,jeu):
     return [clic, jeu,win_type]
 def recherche_first_paris_40_30(driver,jeu):
     #driver.switch_to.window(driver.window_handles[0])
-    print('RECHERCHE DES PARIS 40 30....')
+    print('RECHERCHE DES PARIS 40 30....FIRST')
     scoreboard_player = driver.find_elements(By.CLASS_NAME,'c-scoreboard-player-score__row')
+    print('lenrow')
     scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME,'c-scoreboard-player-score__heading')[0]
+    print('lenrow2')
     first_player = scoreboard_player1.find_elements(By.CLASS_NAME,'c-scoreboard-player-score__ball')
+    print('lenrow3')
+    print('len first pleyer : '+str(len(first_player)))
     if len(first_player)>0:
         first_player = 1
-        win_type = '40:15'
+        win_type = '40:30'
 
     else:
         first_player = 2
-        win_type = '15:40'
+        win_type = '30:40'
     print('next player to win : '+str(first_player)+' '+win_type)
-    win_texte = '40-15'
+    win_texte = '40-30'
     if_get_jeu = False
     clic = 0
 

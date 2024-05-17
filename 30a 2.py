@@ -26,7 +26,7 @@ driver = webdriver.Chrome(service=service, options=opt)
 
 ##CONDITIONS DE DEPART
 ##
-script_num = 1
+script_num = 2
 setaffiche=[]
 error=0
 win = 0

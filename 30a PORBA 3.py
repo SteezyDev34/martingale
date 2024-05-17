@@ -19,14 +19,14 @@ import Functions_30a
 
 from selenium.webdriver.chrome.options import Options
 opt = Options()
-opt.add_experimental_option("debuggerAddress", "localhost:7974")
+opt.add_experimental_option("debuggerAddress", "localhost:7972")
 service = Service(r"/Users/steezy/PycharmProjects/1xbot/venv/bin/chromedriver")
 driver = webdriver.Chrome(service=service, options=opt)
 
 
 ##CONDITIONS DE DEPART
 ##
-script_num = 1
+script_num = 3
 setaffiche=[]
 error=0
 win = 0
@@ -57,10 +57,11 @@ match_found = 0
 while (win< 999):
     infos = False
     try:
-        infos = Functions_30a.all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin, increment, cote,
-                                     lose, firstgame,
-                                     jeu, set_actuel, set, score_actuel, passageset, x, match_list, match_done_key,
-                                     match_found, rattrape_perte,matchlist_file_name,running_file_name)
+        infos = Functions_30a.all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin, increment,
+                                         cote,
+                                         lose, firstgame,
+                                         jeu, set_actuel, set, score_actuel, passageset, x, match_list, match_done_key,
+                                         match_found, rattrape_perte, matchlist_file_name, running_file_name)
     except:
         print(infos)
     if infos != False:
@@ -70,7 +71,7 @@ while (win< 999):
         mise = infos[3]
         x = infos[4]
     cote = 2.4
-    increment = 0.5
+    increment = 0
     jeu = 1
     setaffiche=[]
     erreur=0

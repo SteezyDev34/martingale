@@ -173,7 +173,7 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
     # END SCRIPT RECHERCHE DE MATCH
     proba40A = 0.45
     # RECHERCHE INFOS DE MISE
-    '''players = Functions_1XBET.get_players_name(driver)
+    players = Functions_1XBET.get_players_name(driver)
     proba40A = 0
     if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
         proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
@@ -181,7 +181,7 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
     else:
         proba40A = Functions_stats.get_proba_40A(players[0], players[1])
     if proba40A >= 0.43:
-        rattrape_perte = 2'''
+        rattrape_perte = 2
     infos_de_mise = Functions_gsheets.get_infos_de_mise(ligue_name, rattrape_perte, perte, wantwin, mise, increment,
                                                         proba40A)
     print("#RECHERCHE INFOS DE MISE")
@@ -300,7 +300,8 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
         if passageset == 1:
             score_actuel = '0:0'
             gamestart = 1
-            if rattrape_perte > 3:
+            jeu_actuel = 0
+            if rattrape_perte < 3:
                 error = 0
                 print("passage set 2")
                 time.sleep(30)
@@ -323,7 +324,8 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
                 Functions_1XBET.verification_page_de_match(driver)
                 error = 1
                 break
-            jeu_actuel = Functions_1XBET.get_jeu_actuel(driver)+1
+            if jeu_actuel != 0:
+                jeu_actuel = Functions_1XBET.get_jeu_actuel(driver)+1
             jeu = Functions_1XBET.recherche_paris_40_30(driver, jeu_actuel)
 
             if jeu[0] == True:
@@ -353,8 +355,8 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
         Functions_1XBET.retour_section_tps_reglementaire(driver)
         while (result <= 0 and error == 0):
             time.sleep(timesleep)
-            score_actuel = Functions_1XBET.get_score_actuel(driver, saved_score)
             saved_score = score_actuel
+            score_actuel = Functions_1XBET.get_score_actuel(driver, saved_score)
             print('win score = '+ win_score)
             if score_actuel == False:
                 error = 1
@@ -503,17 +505,17 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
             else:
                 x = -1
             perte = 0
-            mise = 0.2
-            increment = 0.2
-            wantwin = 0.2
+            mise = 0.5
+            increment = 0
+            wantwin = 1
             break
     if perte > 0:
         if perte >= 200:
             Functions_gsheets.update_lost(script_num, perte)
             perte = 0
-            mise = 0.2
-            increment = 0.2
-            wantwin = 0.2
+            mise = 0.5
+            increment = 0
+            wantwin = 1
         else:
             """while perte > 5.79:
                 #perte_partiel=5
@@ -531,9 +533,9 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
             mise = round(mise, 2)
             Functions_gsheets.suivi_lost30([perte, wantwin, mise, ligue_name])
             perte = 0
-            mise = 0.2
+            mise = 0.5
             increment = 0
-            wantwin = 0.2
+            wantwin = 1
 
     infos = [win, perte, wantwin, mise, x]
     print("update " + newmatch)

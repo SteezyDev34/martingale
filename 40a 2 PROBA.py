@@ -47,7 +47,7 @@ script_num = 2
 setaffiche=[]
 error=0
 win = 0
-mise = 0.5
+mise = 5
 perte = 0
 wantwin = 1
 increment = 0
@@ -70,13 +70,16 @@ matchlist_file_name = 'matchlist_proba'
 running_file_name = 'running_proba'
 match_done_key = ""#Nom du match dans Gsheets
 match_found = 0
-while (win< 10):
+while (win< 100):
     infos = False
     try:
-        infos = Functions_40a_proba.all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin, increment, cote,
-                                     lose, firstgame,
-                                     jeu, set_actuel, set, score_actuel, passageset, x, match_list, match_done_key,
-                                     match_found, rattrape_perte, matchlist_file_name, running_file_name)
+        infos = Functions_40a_proba.all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
+                                               increment,
+                                               cote,
+                                               lose, firstgame,
+                                               jeu, set_actuel, set, score_actuel, passageset, x, match_list,
+                                               match_done_key,
+                                               match_found, rattrape_perte, matchlist_file_name, running_file_name)
     except:
         pass
     if infos != False:

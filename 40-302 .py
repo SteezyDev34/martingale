@@ -19,7 +19,7 @@ import Functions_4030
 
 from selenium.webdriver.chrome.options import Options
 opt = Options()
-opt.add_experimental_option("debuggerAddress", "localhost:7911")
+opt.add_experimental_option("debuggerAddress", "localhost:7912")
 service = Service(r"/Users/steezy/PycharmProjects/1xbot/venv/bin/chromedriver")
 driver = webdriver.Chrome(service=service, options=opt)
 
@@ -135,13 +135,13 @@ match_done_key = ""#Nom du match dans Gsheets
 match_found = 0
 while (win< 999):
     infos = False
-
-
-    infos = Functions_4030.all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin, increment, cote,
+    try:
+        infos = Functions_4030.all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin, increment, cote,
                                       lose, firstgame,
                                       jeu, set_actuel, set, score_actuel, passageset, x, match_list, match_done_key,
                                       match_found, rattrape_perte, matchlist_file_name, running_file_name)
-
+    except:
+        continue
     if infos != False:
         win = infos[0]
         perte = infos[1]

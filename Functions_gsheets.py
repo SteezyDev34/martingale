@@ -112,7 +112,7 @@ def get_perte_en_cours30A(ligue_name):
     if rows ==1 and wk1.get_row(rows, returnas='matrix', include_tailing_empty=True)==['', '', '','']:
         return False
     else:
-        compet_recup_ok_list = ['double', 'qualification', 'couple', 'itf', 'challenger']
+        compet_recup_ok_list = ['double', 'couple']
         try:
             if any(compet_ok in ligue_name for compet_ok in
                compet_recup_ok_list):
@@ -299,6 +299,7 @@ def get_infos_de_mise30A(ligue_name,rattrape_perte,perte,wantwin,mise,increment)
             perte) + " | wantwin : " + str(
             wantwin) + " | mise : " + str(mise))
     else:
+        print('gsheets infos false')
         if rattrape_perte == 0:
             if int(get_perte_generale()) > 0.2:
                 rattrape_perte = 1
