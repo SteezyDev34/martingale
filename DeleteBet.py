@@ -6,7 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-def main(driver, error):
+def DeleteBet(driver):
     #driver.switch_to.window(driver.window_handles[0])
     try:
         element = WebDriverWait(driver, 20).until(

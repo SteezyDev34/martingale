@@ -960,13 +960,131 @@ def recherche_paris_40a(driver,jeu):
                 clic = 0
     return [clic, jeu]
 
+def recherche_first_paris_30a(driver,jeu):
+    #driver.switch_to.window(driver.window_handles[0])
+    print('RECHERCHE DES PARIS 30 A....')
+    if_get_jeu = False
+    clic = 0
+    try:
+        element = WebDriverWait(driver, 180).until(
+            EC.presence_of_element_located((By.XPATH,
+                                            '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
+                                                jeu) + ' 30-30 - Oui")]'))
+        )
+    except Exception as e:
+        print("Paris Jeu " + str(jeu) + " 30-30 - Oui NON TROUVÉ!")
+        print("Vérificattion si autre jeu en cours...")
+        try:
+            element = WebDriverWait(driver, 3).until(
+                EC.presence_of_element_located((By.XPATH,
+                                                '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), " 30-30 - Oui")]'))
+            )
+        except Exception as e:
+            print('Aucun bouton paris 30-30 - Oui TROUVÉ!')
+        else:
+            list_of_newbet_type = driver.find_elements(By.XPATH,
+                                                       '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), " 30-30 - Oui")]')
+            score_actuel = get_score_actuel(driver,"")
+            if len(list_of_newbet_type) == 1:
+                list_of_newbet_type = list_of_newbet_type[0].text
+                print(list_of_newbet_type)
+                list_of_newbet_type = list_of_newbet_type.split(" 30-30 - Oui")
+                jeu = int(list_of_newbet_type[0].split("Jeu ")[1])
+                print("AUTRE JEU TROUVÉ : Jeu " + str(jeu))
+                if_get_jeu = True
+            elif len(list_of_newbet_type) >= 2:
+                print('PLUSIEURS JEUX TROUVÉS!')
+                newbet_type1 = list_of_newbet_type[0].text
+                newbet_type1 = newbet_type1.split(" 30-30 - Oui")
+                game1 = int(newbet_type1[0].split("Jeu ")[1])
+                print('PROCHAIN JEU TROUVÉ : ' + str(game1))
+                newbet_type2 = list_of_newbet_type[1].text
+                print(newbet_type2)
+                newbet_type2 = newbet_type2.split(" 30-30 - Oui")
+                game2 = int(newbet_type2[0].split("Jeu ")[1])
+                print('JEU D\'APRÈS TROUVÉ : ' + str(game2))
+                print("vérification ordre de jeu")
+                score_actuel = get_score_actuel(driver,"")
+                if game1 < game2 and (score_actuel =="40:15" or score_actuel =="15:40" or score_actuel =="40:0" or score_actuel =="0:40" or score_actuel =="40:40" or score_actuel =="40:A" or score_actuel =="A:40" ):
+                    jeu = game1-1
+                    print("Jeu actuel : " + str(jeu))
+                    if_get_jeu = True
+                else:
+                    jeu = game2-1
+                    print("Jeu actuel : " + str(jeu))
+                    if_get_jeu = True
+            else:
+                print('ERROR: try get num game running')
+    else:
+        if_get_jeu = True
+
+    if if_get_jeu == True:
+        try:
+            list_of_bet_type = driver.find_elements(By.XPATH,
+                                                    '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
+                                                        jeu) + ' 30-30 - Oui")]')
+        except Exception as e:
+            print(f"#E0018\nUne erreur est survenue : {e}")
+            print("btn 30A not reachable")
+        else:
+            if len(list_of_bet_type) > 0:
+                print('JEU TROUVÉ! : '+list_of_bet_type[0].text)
+                tentative = 0
+                while clic == 0 and tentative < 5:
+                    print('VERIFICATTION SI CLIQUABLE...')
+                    try:
+                        element = WebDriverWait(driver, 2).until(
+                            EC.element_to_be_clickable((By.XPATH,
+                                                        '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
+                                                            jeu) + ' 30-30 - Oui")]')))
+                    except:
+                        tentative = tentative + 1
+                        print("btn 30A not clicable retry")
+                        the_jeu = get_jeu_actuel(driver)
+                        if jeu != the_jeu:
+                            tentative = 99
+                            print('jeu diff')
+
+
+                    else:
+                        try:
+                            #list_of_bet_type[0].click()
+                            #driver.find_element(By.XPATH,'//*[@id="sports_right"]/div/div[2]/div[2]/div[1]/div/div[2]/div[2]/div/div/div/div[2]/div[2]/div[contains(text(), "Jeu ' + str(jeu) + ' 30-30 - Oui")]').click()
+                            driver.find_element(By.XPATH,
+                                                '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
+                                                            jeu) + ' 30-30 - Oui")]').click()
+                        except Exception as e:
+                            print(f"#E0019\nUne erreur est survenue : {e}")
+                            print('CLICK IMPOSSIBLE!')
+                            driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.CONTROL + Keys.HOME)
+                            driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.DOWN)
+                            tentative = tentative + 1
+                            time.sleep(1)
+                        else:
+                            try :
+                                element = WebDriverWait(driver, 10).until(
+                                    EC.presence_of_element_located((By.CLASS_NAME,'cpn-bets-list'))
+                                )
+                            except Exception as e:
+                                print(f"#E00124\nUne erreur est survenue : {e}")
+                                print('Pas de paris affiché!')
+                                tentative = tentative + 1
+                                time.sleep(1)
+                            else:
+                                clic = True
+
+            else:
+                print("pas de btn 30 recuperé")
+                clic = 0
+    return [clic, jeu]
+
 def recherche_paris_30a(driver,jeu):
     #driver.switch_to.window(driver.window_handles[0])
     print('RECHERCHE DES PARIS 30 A....')
     if_get_jeu = False
     clic = 0
     try:
-        element = WebDriverWait(driver, 20).until(
+        element = WebDriverWait(driver, 300).until(
             EC.presence_of_element_located((By.XPATH,
                                             '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
                                                 jeu) + ' 30-30 - Oui")]'))

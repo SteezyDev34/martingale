@@ -45,31 +45,34 @@ txt_after_write = file1.read()
 # Fermez le fichier après la lecture
 file1.close()
 txt_after_write = txt_after_write.split('\n')
-if txt_after_write[0]!= str(today):
-    print('nouvelle date')
-    url = "https://ultimate-tennis1.p.rapidapi.com/live_leaderboard/450"
+try:
+    if txt_after_write[0]!= str(today):
+        print('nouvelle date')
+        url = "https://ultimate-tennis1.p.rapidapi.com/live_leaderboard/450"
 
 
 
-    response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers)
 
-    print(response.text)
-    # Convertir la chaîne JSON en une structure de données Python
-    data = json.loads(response.text)
+        print(response.text)
+        # Convertir la chaîne JSON en une structure de données Python
+        data = json.loads(response.text)
 
-    # Afficher la structure de données Python
-    players_id_list = []
-    for player in data['data']:
-        thename = player['Name'].split('.')
-        players_id_list.append(thename[1].strip()+'|'+player['id'])
-    players_id_list = '\n'.join(players_id_list)
-    # Ouvrez à nouveau le fichier en mode écriture
-    file1 = open("atprankinjson.txt", "w+")
-    # Écrivez l'heure actuelle dans le fichier
-    file1.write(str(today)+'\n'+players_id_list)
-    print(today)
-    # Fermez le fichier après l'écriture
-    file1.close()
+        # Afficher la structure de données Python
+        players_id_list = []
+        for player in data['data']:
+            thename = player['Name'].split('.')
+            players_id_list.append(thename[1].strip()+'|'+player['id'])
+        players_id_list = '\n'.join(players_id_list)
+        # Ouvrez à nouveau le fichier en mode écriture
+        file1 = open("atprankinjson.txt", "w+")
+        # Écrivez l'heure actuelle dans le fichier
+        file1.write(str(today)+'\n'+players_id_list)
+        print(today)
+        # Fermez le fichier après l'écriture
+        file1.close()
+except:
+    pass
 
 
 ###
@@ -88,28 +91,31 @@ txt_after_write = file1.read()
 # Fermez le fichier après la lecture
 file1.close()
 txt_after_write = txt_after_write.split('\n')
-if txt_after_write[0]!= str(today):
-    print('nouvelle date')
-    url = "https://ultimate-tennis1.p.rapidapi.com/rankings/wta/singles/1000/current"
+try:
+    if txt_after_write[0]!= str(today):
+        print('nouvelle date')
+        url = "https://ultimate-tennis1.p.rapidapi.com/rankings/wta/singles/1000/current"
 
 
 
-    response = requests.get(url, headers=headers)
-    # Convertir la chaîne JSON en une structure de données Python
-    data = json.loads(response.text)
-    print(data)
-    # Afficher la structure de données Python
-    players_id_list = []
-    for player in data['data']:
-        players_id_list.append(player['name'].strip()+'|'+str(player['ID']))
-    players_id_list = '\n'.join(players_id_list)
-    # Ouvrez à nouveau le fichier en mode écriture
-    file1 = open("wtarankinjson.txt", "w+")
-    # Écrivez l'heure actuelle dans le fichier
-    file1.write(str(today)+'\n'+players_id_list)
-    print(today)
-    # Fermez le fichier après l'écriture
-    file1.close()
+        response = requests.get(url, headers=headers)
+        # Convertir la chaîne JSON en une structure de données Python
+        data = json.loads(response.text)
+        print(data)
+        # Afficher la structure de données Python
+        players_id_list = []
+        for player in data['data']:
+            players_id_list.append(player['name'].strip()+'|'+str(player['ID']))
+        players_id_list = '\n'.join(players_id_list)
+        # Ouvrez à nouveau le fichier en mode écriture
+        file1 = open("wtarankinjson.txt", "w+")
+        # Écrivez l'heure actuelle dans le fichier
+        file1.write(str(today)+'\n'+players_id_list)
+        print(today)
+        # Fermez le fichier après l'écriture
+        file1.close()
+except:
+    pass
 
 
 def getPlayerApiId(playerName):

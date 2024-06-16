@@ -4,7 +4,8 @@ import time
 import Functions_gsheets
 import Functions_1XBET
 import re
-
+import Functions_stats
+import Functions_stats1
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -179,7 +180,7 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
         proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
         print()
     else:
-        proba40A = Functions_stats.get_proba_40A(players[0], players[1])
+        proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
     if proba40A >= 0.43:
         rattrape_perte = 2
     infos_de_mise = Functions_gsheets.get_infos_de_mise(ligue_name, rattrape_perte, perte, wantwin, mise, increment,

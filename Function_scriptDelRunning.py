@@ -1,6 +1,6 @@
 #Function_scriptDelRunning
 #SCRIPT NON EN COURS DONC SUPPRIMER NUM SCRIPT DU FICHIER RUNNING
-def main(script_num,running_file_name):
+def scriptDelRunning(script_num,running_file_name):
     #on ouvre le fichier text en mode lecture
     get_running_file = open(running_file_name+".txt", "r")
     #on lit le contenu du fichier

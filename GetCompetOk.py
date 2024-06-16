@@ -1,6 +1,6 @@
 from config import GSheets
 global GSheets
-def main():
+def GetCompetOk():
     # on ouvre le fichier gsheets
     sh = GSheets.open('BOT 1XBET PYTHON')
     # on selectionne la feuille
@@ -24,7 +24,10 @@ def main():
             compet_not_ok_list.append(data[1])
         # on passe à la ligne du dessus
         rows = rows - 1
-    print('compet ok recupéré : ',compet_ok_list)
-    print('compet non ok recupéré : ',compet_not_ok_list)
-
-    return[compet_ok_list,compet_not_ok_list]
+    #print('compet ok recupéré : ',compet_ok_list)
+    #print('compet non ok recupéré : ',compet_not_ok_list)
+    data = {
+        'compet_ok_list' :compet_ok_list,
+        'compet_not_ok_list':compet_not_ok_list
+    }
+    return data

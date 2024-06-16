@@ -5,12 +5,12 @@ import time
 import DeleteBet
 import GetIfGameStart
 import GetInfosDeMise
-import GetJeuActuel
+import Function_GetJeuActuel
 import GetLigueName
 import GetMatchScore
-import GetMise
+import Function_GetMise
 import GetScoreActuel
-import GetSetActuel
+import Function_GetSetActuel
 import OuverturePageMatch
 import PlacerMise
 import ValidationDuParis
@@ -20,7 +20,7 @@ import GetCompetOk
 import Functions_gsheets
 import Functions_1XBET
 import Functions_stats
-import ScriptDelRunning
+import Function_scriptDelRunning
 import GetIfScriptsRunning
 import GetIfMatchPage
 import re

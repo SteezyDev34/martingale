@@ -1,9 +1,11 @@
 import pygsheets
 global gc
 gc = pygsheets.authorize(service_file='auxobetting-7a3cf182ba61.json')
-import re
+import config
 #SUIVIS LOST 40 A
-def suivi_lost(values):
+def suivi_lost():
+    config.saveLog("AJOUT DES PARTES DANS LE SHEET")
+    values = [config.perte, config.wantwin, config.mise, config.ligue_name]
     # open the google spreadsheet (where 'PY to Gsheet Test' is the name of my sheet)
     sh = gc.open('BOT 1XBET PYTHON')
     # select the sheet
@@ -14,8 +16,13 @@ def suivi_lost(values):
         wk1.update_row(rows,values, col_offset=0)
     else:
         wk1.insert_rows(0, number=1, values=values, inherit=False)
+    config.perte = 0
+    config.rattrape_perte = 1
+    config.mise = 0.2
+    config.wantwin = 0.2
 # SUIVIS LOST 30 A
-def suivi_lost30(values):
+def suivi_lost30():
+    values = [config.perte, config.wantwin, config.mise, config.ligue_name]
     # open the google spreadsheet (where 'PY to Gsheet Test' is the name of my sheet)
     sh = gc.open('BOT 1XBET PYTHON')
     # select the sheet

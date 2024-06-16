@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import DeleteBet
 
 
-def main(driver):
+def RetourTpsReg(driver):
     #driver.switch_to.window(driver.window_handles[0])
     temps_reg = 0
     error = 0
@@ -24,7 +24,6 @@ def main(driver):
 
             try:
                 txt_input = driver.find_elements(By.CLASS_NAME, 'scoreboard-nav-items-search__input')[0].text
-                print('text input = '+str(txt_input))
                 driver.find_elements(By.CLASS_NAME,'scoreboard-nav-items-search__input')[0].clear()
             except Exception as e:
                 print('erreur effacer champ recherche')

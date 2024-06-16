@@ -2,8 +2,6 @@ from selenium.webdriver.common.by import By
 
 
 def GetPlayersName(driver):
-    print('c-scoreboard-team')
-
     players = driver.find_elements(By.CLASS_NAME,'c-scoreboard-team')
     print(str(len(players)))
     players_name=[]

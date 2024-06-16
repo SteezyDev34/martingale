@@ -2,34 +2,34 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+import config
 
-def main(driver,mise):
-    #driver.switch_to.window(driver.window_handles[0])
+def PlacerMise(driver):
+    sending_mise = False
     try:
 
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME,'cpn-info__division')))
     except Exception as e:
-        print(f"#E001912\nUne erreur est survenue : {e}")
-        print("CHAMP DE MISE NON TROUVÉ")
+        config.saveLog(f"#E001912\nUne erreur est survenue : {e}")
+        config.saveLog("CHAMP DE MISE NON TROUVÉ")
         return False
     else:
         cpn_setting = driver.find_element(By.CLASS_NAME, 'cpn-info__division')
         cpn_setting = cpn_setting.find_element(By.CLASS_NAME, 'cpn-value-controls__input')
-        sending_mise = 0
         tentative = 0
-        while sending_mise == 0 and tentative<10:
+        while not sending_mise and tentative<10:
             cpn_setting.clear()
-            cpn_setting.send_keys(str(mise))
+            cpn_setting.send_keys(str(config.mise))
             cpn_setting.clear()
-            cpn_setting.send_keys(str(mise))
+            cpn_setting.send_keys(str(config.mise))
             l = cpn_setting.get_attribute("value")
-            print("mise insérrer : "+str(l))
-            if str(l) == str(mise):
-                sending_mise = 1
-                return True
+            config.saveLog("mise insérrer : "+str(l))
+            if str(l) == str(config.mise):
+                sending_mise = True
 
             else:
                 tentative = tentative + 1
-                print('mauvaise mise insérée!')
+                config.saveLog('mauvaise mise insérée!')
                 time.sleep(1)
+    return sending_mise

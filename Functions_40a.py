@@ -5,12 +5,12 @@ import time
 import DeleteBet
 import GetIfGameStart
 import GetInfosDeMise
-import GetJeuActuel
+import Function_GetJeuActuel
 import GetLigueName
 import GetMatchScore
-import GetMise
+import Function_GetMise
 import GetScoreActuel
-import GetSetActuel
+import Function_GetSetActuel
 import OuverturePageMatch
 import PlacerMise
 import ValidationDuParis
@@ -20,7 +20,7 @@ import GetCompetOk
 import Functions_gsheets
 import Functions_1XBET
 import Functions_stats
-import ScriptDelRunning
+import Function_scriptDelRunning
 import GetIfScriptsRunning
 import GetIfMatchPage
 import re
@@ -454,7 +454,7 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
             else:
                 result = 0
                 set_actuel = "nac"
-                set_actuel = GetSetActuel.main(driver, error, saved_set)
+                set_actuel = Function_GetSetActuel.main(driver, error, saved_set)
                 saved_set = set_actuel
                 if set_actuel == False:
                     error = 1

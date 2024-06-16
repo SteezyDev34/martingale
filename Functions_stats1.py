@@ -20,7 +20,7 @@ def get_proba_40A_other(playerName1, playerName2,driver,link):
     tentative = 0
     prob = 0
     ok =0
-    while ok ==0 and tentative <3:
+    while ok ==0 and tentative <1:
         try:
             driver.get('https://www.ultimatetennisstatistics.com/headToHead?tab=statistics')
             element = WebDriverWait(driver, 20).until(

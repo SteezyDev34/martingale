@@ -19,7 +19,7 @@ import Functions_4030
 
 from selenium.webdriver.chrome.options import Options
 opt = Options()
-opt.add_experimental_option("debuggerAddress", "localhost:7911")
+opt.add_experimental_option("debuggerAddress", "localhost:7979")
 service = Service(r"/Users/steezy/PycharmProjects/1xbot/venv/bin/chromedriver")
 driver = webdriver.Chrome(service=service, options=opt)
 

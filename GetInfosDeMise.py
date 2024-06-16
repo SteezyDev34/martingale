@@ -114,7 +114,10 @@ def main(ligue_name,rattrape_perte,perte,wantwin,mise,increment,proba40A):
         lost_compet = infos[3].strip().lower()
         if proba40A >0.40:
             perte = (infos[0].replace(",", "."))
-            wantwin = float(infos[1].replace(",", "."))
+            if infos[1] !='':
+                wantwin = float(infos[1].replace(",", "."))
+            else:
+                wantwin = 0
             mise = float(infos[2].replace(",", "."))
             if rattrape_perte == 2:
                 rattrape_perte = 2
