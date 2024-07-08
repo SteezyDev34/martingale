@@ -16,17 +16,20 @@ def GetIfGameStart(driver):
             if not printext:
                 config.saveLog('GAME NOT START')
                 printext = True
-                if  not GetIfMatchPage(driver):
+                if not GetIfMatchPage(driver):
                     config.error = True
             time.sleep(1)#attente 20 sec que le jeu commence
             # END GET SCORE
-        elif config.score_actuel == '15:0' or config.score_actuel == '0:15' or config.score_actuel == '15:15' or config.score_actuel == '30:15' or config.score_actuel == '15:30' or config.score_actuel == '40:15' or config.score_actuel == '15:40' or config.score_actuel == '0:30' or config.score_actuel == '30:0' or config.score_actuel == '30:30' or config.score_actuel == '30:40' or config.score_actuel == '40:30' or config.score_actuel == '0:40' or config.score_actuel == '40:0' or config.score_actuel == '40:40' or config.score_actuel == 'A:40' or config.score_actuel == '40:A':
+        elif config.score_actuel == '15:0' or config.score_actuel == '0:15' or config.score_actuel == '15:15' or config.score_actuel == '30:15' or config.score_actuel == '15:30' or config.score_actuel == '40:15' or config.score_actuel == '15:40' or config.score_actuel == '0:30' or config.score_actuel == '30:0' or config.score_actuel == '30:30' or config.score_actuel == '30:40' or config.score_actuel == '40:30' or config.score_actuel == '0:40' or config.score_actuel == '40:0':
             print('GAME START')
             gamestart = True
-        else:
+        elif not config.score_actuel:
             gamestart = False
             if not GetIfMatchPage(driver):
                 config.error = True
+        else:
+            gamestart = False
+
     return gamestart
 def GetIfGameStart30A(driver):
     gamestart = False
@@ -37,7 +40,7 @@ def GetIfGameStart30A(driver):
         if config.score_actuel == '0:0' or config.score_actuel == '15:0' or config.score_actuel == '0:15' or config.score_actuel == '15:15' or config.score_actuel == '30:15' or config.score_actuel == '15:30' or config.score_actuel == '0:30' or config.score_actuel == '30:0' or config.score_actuel == '30:30':
             print('GAME START')
             gamestart = True
-        elif not config.score_actuel:
+        else:
             gamestart = False
             if not GetIfMatchPage(driver):
                 config.error = True

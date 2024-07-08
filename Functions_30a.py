@@ -73,11 +73,13 @@ def all_script(driver):
         print('perte '+str(config.perte))
         if config.proba40A < config.probamini and config.cote < config.cotemini: #and config.perte<=0:
             if config.perte > 0:
+                config.saveLog('récupération pour : '+str(config.perte))
+            else:
                 Functions_gsheets.suivi_lost()
-            bet_30a = True
-            config.error = True
-            config.saveLog('Cote trop faible 0,2')
-            break
+                bet_30a = True
+                config.error = True
+                config.saveLog('Cote trop faible 0,2')
+                break
         tentative_placermise = 0
         validate_bet = False
         config.saveLog('On place la mise')

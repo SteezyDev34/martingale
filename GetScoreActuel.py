@@ -7,9 +7,11 @@ import config
 def GetScoreActuel(driver):
     config.score_actuel = False
     get_score = False
+    print('eedrrrr = ' +str(config.error))
     while not get_score and not config.error:
         try:
             config.score_actuel = driver.find_element(By.CLASS_NAME,'c-scoreboard-score__content').text
+            print('score trouvé +' + str(config.score_actuel))
         except Exception as e:
             print(f"#E0020\nUne erreur est survenue : {e}")
             GetIfMatchPage(driver)
@@ -21,4 +23,5 @@ def GetScoreActuel(driver):
                 print("Score actuel = "+str(config.score_actuel))
                 print("saved actuel = " + str(config.saved_score))
             config.saved_score = config.score_actuel
+            print('test score actuel '+ str(config.score_actuel))
     return True

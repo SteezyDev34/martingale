@@ -2,7 +2,7 @@ import Functions_30a
 
 print('START')
 
-from SetDriver2 import driver
+from SetDriver6 import driver
 import config_30A as config
 
 config.script_num = 2

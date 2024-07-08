@@ -1,18 +1,18 @@
 # GetMise
+import time
+
 from selenium.webdriver.common.by import By
 import config
 
 
 def GetMise(driver):
-    # rattrape_perte = 0
-    if config.rattrape_perte == 0:
-        config.saveLog('Pas de rattrapage, cote : 3')
-        config.cote = 3
-    elif config.rattrape_perte == 2:
+    print('rattrapeg : ',config.rattrape_perte)
+    if config.rattrape_perte == 3:
         config.saveLog('Bonne proba, cote : 3')
         config.cote = 3
     else:
         config.saveLog("Rattrapage, recuperation de la cote")
+        time.sleep(2)
         try:
             config.cote = driver.find_elements(By.CLASS_NAME,
                                                'cpn-total__coef')[
@@ -40,7 +40,7 @@ def GetMise(driver):
 
     return True
 def GetMise30A(driver):
-    # rattrape_perte = 0
+    config.rattrape_perte = 1
     if config.rattrape_perte == 0:
         config.saveLog('Pas de rattrapage, cote : 2.4')
         config.cote = 2.4

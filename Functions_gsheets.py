@@ -261,7 +261,6 @@ def get_infos_de_mise(ligue_name,rattrape_perte,perte,wantwin,mise,increment,F40
         print('lname = '+ligue_name)
         print('lnamecomp = ' + lost_compet)
         if ligue_name == lost_compet:
-            print
             perte = float(infos[0].replace(",", "."))
             wantwin = float(infos[1].replace(",", "."))
             mise = float(infos[2].replace(",", "."))
@@ -274,9 +273,9 @@ def get_infos_de_mise(ligue_name,rattrape_perte,perte,wantwin,mise,increment,F40
             if int(get_perte_generale()) > 0.2:
                 rattrape_perte = 1
                 perte = 0
-                mise = 0.5
+                mise = 0.2
                 increment = 0
-                wantwin = 1
+                wantwin = 2
         print("1 perte : " + str(
             perte) + " | wantwin : " + str(
             wantwin) + " | mise : " + str(mise))

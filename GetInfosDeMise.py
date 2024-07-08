@@ -1,5 +1,6 @@
 # GetInfosDeMise.py
 #RÉCUPRER LES PERTE 40 A DE LA LIGUE
+import config
 from config import GSheets
 
 def get_compet_recup_ok():
@@ -25,6 +26,7 @@ def get_compet_recup_ok():
 
     return[compet_RECUP_ok_list,compet_RECUP_not_ok_list]
 def get_perte_en_cours(ligue_name):
+    print('get perte en cours')
     # open the google spreadsheet (where 'PY to Gsheet Test' is the name of my sheet)
     sh = GSheets.open('BOT 1XBET PYTHON')
     # select the sheet
@@ -33,20 +35,22 @@ def get_perte_en_cours(ligue_name):
     row = wk1.get_all_values()
     rows = len(row)
     i=0
-
+    print('ini gett per')
 
     if rows ==1 and wk1.get_row(rows, returnas='matrix', include_tailing_empty=True)==['', '', '','']:
+        config.rattrape_perte = 0
         return False
     else:
+        config.rattrape_perte = 1
         #LISTE DES COMPET QUI PEUVENT FAIRE DU RATTRAPAGE
         compet_recup_ok_list = get_compet_recup_ok()
         compet_ok_list = compet_recup_ok_list[0]
         compet_not_ok_list = compet_recup_ok_list[1]
         try:
-            if any(compet_ok in ligue_name for compet_ok in
+            if (any(compet_ok in ligue_name for compet_ok in
                    compet_ok_list) and not any(
                 compet_not_ok in ligue_name for
-                compet_not_ok in compet_not_ok_list):
+                compet_not_ok in compet_not_ok_list)) or config.proba40A >0.4:
 
                 while rows != 0:
                     data = wk1.get_row(rows, returnas='matrix', include_tailing_empty=True)
@@ -67,12 +71,14 @@ def get_perte_en_cours(ligue_name):
                         data.append(rows)
                         print('not : ' + data[3])
                         rows = rows - 1
-
+                print(data)
                 return data
             else:
+                print('pas bonne ligue pour recup')
                 return False
 
         except Exception as e:
+            print('erreur recup data')
             print(e)
             return False
 #INFOS DE MISE
@@ -109,26 +115,33 @@ def main(ligue_name,rattrape_perte,perte,wantwin,mise,increment,proba40A):
     print("RECHERCHDES DES INFOS DE MISE...")
     #ON RÉCUPÈRE LES PERTES EN COURS SELON LA LIGUE
     infos = get_perte_en_cours(ligue_name)
-    proba40A = 0.5
+    r = 0.5
     if infos != False:
         lost_compet = infos[3].strip().lower()
-        if proba40A >0.40:
-            perte = (infos[0].replace(",", "."))
-            if infos[1] !='':
+        if r >0.40:
+            if infos[0] != "":
+                perte = (infos[0].replace(",", "."))
+            else:
+                perte = 0
+            if infos[1] !="":
                 wantwin = float(infos[1].replace(",", "."))
             else:
-                wantwin = 0
-            mise = float(infos[2].replace(",", "."))
+                wantwin = 0.2
+            if infos[2] != "":
+                mise = float(infos[2].replace(",", "."))
+            else:
+                mise = 0.2
             if rattrape_perte == 2:
                 rattrape_perte = 2
             else:
                 rattrape_perte =1
             del_perte_en_cours(infos[4])
         elif rattrape_perte == 0:
+            config.saveLog("rettrape === 0")
             if int(get_perte_generale()) > 0.2:
                 rattrape_perte = 1
                 perte = 0
-                mise = 0.3
+                mise = 0.2
                 increment = 0
                 wantwin = 0.2
         print("perte : " + str(

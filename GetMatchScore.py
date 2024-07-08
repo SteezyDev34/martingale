@@ -4,9 +4,10 @@ from selenium.webdriver.common.by import By
 
 def main(div_bet_score,score_to_start):
     get_bet_score = False
-    get_if_icon_ball = div_bet_score.find_elements(By.XPATH,
-                                                   './/span[@class="c-events-scoreboard__ball"]/div[not(contains(@style,"display: none;"))]')
     try:
+        get_if_icon_ball = div_bet_score.find_elements(By.XPATH,
+                                                       './/span[@class="c-events-scoreboard__ball"]/div[not(contains(@style,"display: none;"))]')
+
         bet_score = div_bet_score.text
         bet_score = bet_score.replace(
         '\n', '')

@@ -1,17 +1,10 @@
-import pandas as pd
-import random
 import time
 import Functions_gsheets
 import Functions_1XBET
 import re
 import Functions_stats
 import Functions_stats1
-from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.keys import Keys
 
 score_gamestart_list = [
     '15:0',
@@ -178,7 +171,6 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
     proba40A = 0
     if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
         proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
-        print()
     else:
         proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
     if proba40A >= 0.43:
@@ -532,11 +524,11 @@ def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin,
 
             mise = (wantwin + perte) / (cote - 1)
             mise = round(mise, 2)
-            Functions_gsheets.suivi_lost30([perte, wantwin, mise, ligue_name])
+            Functions_gsheets.suivi_lost30(perte, wantwin, mise, ligue_name)
             perte = 0
-            mise = 0.5
+            mise = 0.2
             increment = 0
-            wantwin = 1
+            wantwin = 0.2
 
     infos = [win, perte, wantwin, mise, x]
     print("update " + newmatch)

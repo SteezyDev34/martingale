@@ -13,7 +13,6 @@ def DeleteBet(driver):
             EC.presence_of_element_located(
                 (By.CLASS_NAME, "cpn-bet__remove"))
         )
-        driver.find_element(By.TAG_NAME,'body').send_keys(Keys.CONTROL + Keys.HOME)
         time.sleep(2)
         element = driver.find_element(By.CLASS_NAME,'cpn-bet__remove')
     except:

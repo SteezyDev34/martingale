@@ -94,7 +94,7 @@ def ValidationDuParis(driver):
                             printtext = 0
                             while preloader == 1:
                                 try:
-                                    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME,"cpn-preloader")))
+                                    WebDriverWait(driver, 3).until(EC.visibility_of_element_located((By.CLASS_NAME,"cpn-preloader")))
                                 except:
                                     config.saveLog('pas de loader')
                                     preloader = 0
