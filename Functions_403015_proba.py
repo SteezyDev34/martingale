@@ -13,7 +13,7 @@ from GetBet4015 import GetBet4015, GetNextBet4015
 from ScriptRechercheDeMatch import rechercheDeMatch4030
 
 from ValidationDuParis import ValidationDuParis
-import config
+import config4030 as config
 import Functions_gsheets
 import Functions_1XBET
 import re
