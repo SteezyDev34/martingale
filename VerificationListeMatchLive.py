@@ -4,14 +4,18 @@ import config
 
 
 def VerificationListeMatchLive(driver):
+
     try:
         driver.find_element(By.CLASS_NAME, 'game_content_line')
 
     except:
-        config.saveLog("Liste match live non visible!")
+        txtlog = "Liste match live non visible!"
+        config.saveLog(txtlog,config.newmatch)
+        print(txtlog)
         return False
     else:
         if not config.print_match_live_text:
-            config.saveLog("Liste match live OK!")
+            txtlog = "Liste match live OK!"
+            config.saveLog(txtlog, config.newmatch)
             config.print_match_live_text = True
         return True
