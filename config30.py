@@ -15,14 +15,7 @@ cote = 3
 probamini = 0.3
 cotemini = 2.7
 def init_variable():
-    GSheets = pygsheets.authorize(service_file='/Users/steezy/PycharmProjects/mrtingal/auxobetting-a36473795856.json')
-
-    # Ouverture du Gsheets
-    sh = GSheets.open('BOT 1XBET PYTHON')
-    # On selectionne la première feuille
-    wk2 = sh[1]
-    print(wk2)
-    global mise, perte, wantwin, increment, probamini
+    global mise, perte, wantwin, increment, probamini, cotemini
     mise = float(wk2.get_value('B11').replace(',', '.'))
     probamini = float(wk2.get_value('B2').replace(',', '.'))
     cotemini = float(wk2.get_value('B3').replace(',', '.'))
@@ -97,5 +90,3 @@ def saveLog(txt):
         # Écrire le texte à la fin du fichier
         heure_actuelle = datetime.datetime.now().strftime("%H:%M:%S")
         fichier.write(str(heure_actuelle)+' : '+str(txt))
-    if devMode:
-        print(str(txt))
