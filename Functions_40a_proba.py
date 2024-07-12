@@ -52,7 +52,7 @@ def all_script(driver):
 
     # --------
     # SCRIPT RECHERCHE DE MATCH
-    if not rechercheDeMatch(driver):
+    while not rechercheDeMatch(driver):
         config.error = True
     # --------
 
@@ -174,7 +174,6 @@ def all_script(driver):
                 config.saveLog("passage set 2")
                 config.saveLog("attente 30 sec")
                 time.sleep(30)
-                passageset = False
             else:
                 config.error = True
                 print("erreur perte en 1 set")
@@ -194,11 +193,20 @@ def all_script(driver):
                 break
             # On recherche le jeu actuel
             config.saveLog('liste des paris affichée, On recherche le jeu actuel')
-            if not GetNextBet40A(driver):
-                config.error = True
-                config.saveLog('error recup jeu #ERR345')
+            if passageset :
+                if not GetBet40A(driver):
+                    config.error = True
+                    passageset = False
+                    config.saveLog('error recup jeu #ERR345')
+                else:
+                    bet_40a = True
             else:
-                bet_40a = True
+                if not GetNextBet40A(driver):
+                    config.error = True
+                    passageset = False
+                    config.saveLog('error recup jeu #ERR345')
+                else:
+                    bet_40a = True
 
             config.saveLog('prochain PAris 40A cliqué')
         # ON ENVOIE LA MISE
