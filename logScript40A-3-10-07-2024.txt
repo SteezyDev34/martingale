@@ -1,0 +1,179 @@
+13:06:50 : compet_ok_list : ['wimbledon', 'challenger', 'women', 'cup', 'master', 'itf', 'wta', 'atp', 'féminin', 'femmes']
+13:06:50 : compet_not_ok_list : ['mixte', 'att', 'doubles', 'couple', 'couples', 'double', 'masters', 'paire', 'daily', 'utr', 'russie', 'ace', 'world', 'cyber']
+13:06:50 : Vérfication si page match...
+13:06:50 : On cherche le tableau des scores
+13:06:50 : PAGE MATCH OK!
+13:07:24 : Vérification si numéro de set bien récupéré
+13:07:24 : 2 Set
+13:07:24 : Récupération du set actuel : 2
+13:07:24 : PREPARATION DU PREMIER PARIS
+13:07:24 : Affichage de la liste des paris
+13:07:24 : recherche du champ déroulant...
+13:07:25 : Vérification si numéro de set bien récupéré
+13:07:25 : 2 Set
+13:07:25 : Récupération du set actuel : 2
+13:07:30 : ouverture du champ déroulant...
+13:07:30 : Plusieurs liens trouvés....
+13:07:30 : SET 2 non trouvé : error Temps réglementaire
+13:07:30 : menu :2 trouvé in :2 Set
+13:07:36 : liste des pariis affichée, On recherche le jeu actuel
+13:07:36 : Récupération du set pour cherhcer le jeu
+13:07:36 : Vérification si numéro de set bien récupéré
+13:07:36 : 2 Set
+13:07:36 : Récupération du set actuel : 2
+13:07:37 : Récupération du jeu actuel : 7
+13:07:37 : JEU TROUVÉ! : Jeu 7 : 40-40 - Oui
+13:07:37 : VERIFICATTION SI CLIQUABLE...
+13:07:38 : Premier PAris 40A cliqué
+13:07:38 : Rattrapage, recuperation de la cote
+13:07:40 : cote recupéré 4.33
+13:07:40 : cote : 4.33 | perte : 0.0 | wantwin : 0.2 | mise : 0.2
+13:07:40 : On place la mise
+13:07:40 : pl mise insérrer : 0.2
+13:07:40 : On vérifie le score pour valider le paris
+13:07:40 : GAME START
+13:07:40 : mise insérrer : 0.2
+13:07:40 : RECHERCHE DU BOUTON PLACER UN PARIS
+13:07:41 : pl mise insérrer : 0.2
+13:07:41 : mise insérrer : 0.2
+13:07:41 : loading...
+13:07:45 : pas de loader
+13:07:45 : Vérification de validation
+13:07:51 : pas de fentre validation, vérification erreur
+13:07:51 : alert : Les cotes pour l'événement 'Patten/Heliovaara - Arevalo-Gonzalez/Pavić 2 Set' ont été modifiées
+13:07:52 : mise insérrer : 0.2
+13:07:52 : RECHERCHE DU BOUTON PLACER UN PARIS
+13:08:39 : compet_ok_list : ['wimbledon', 'challenger', 'women', 'cup', 'master', 'itf', 'wta', 'atp', 'féminin', 'femmes']
+13:08:39 : compet_not_ok_list : ['mixte', 'att', 'doubles', 'couple', 'couples', 'double', 'masters', 'paire', 'daily', 'utr', 'russie', 'ace', 'world', 'cyber']
+13:08:39 : Vérfication si page match...
+13:08:39 : On cherche le tableau des scores
+13:08:39 : PAGE MATCH OK!
+13:09:29 : Vérification si numéro de set bien récupéré
+13:09:29 : 2 Set
+13:09:29 : Récupération du set actuel : 2
+13:09:29 : PREPARATION DU PREMIER PARIS
+13:09:29 : Affichage de la liste des paris
+13:09:29 : recherche du champ déroulant...
+13:09:29 : Vérification si numéro de set bien récupéré
+13:09:29 : 2 Set
+13:09:29 : Récupération du set actuel : 2
+13:09:35 : ouverture du champ déroulant...
+13:09:35 : Plusieurs liens trouvés....
+13:09:35 : SET 2 non trouvé : error Temps réglementaire
+13:09:35 : menu :2 trouvé in :2 Set
+13:09:41 : liste des pariis affichée, On recherche le jeu actuel
+13:09:41 : Récupération du set pour cherhcer le jeu
+13:09:41 : Vérification si numéro de set bien récupéré
+13:09:41 : 2 Set
+13:09:41 : Récupération du set actuel : 2
+13:09:42 : Récupération du jeu actuel : 8
+13:09:42 : JEU TROUVÉ! : Jeu 8 : 40-40 - Oui
+13:09:42 : VERIFICATTION SI CLIQUABLE...
+13:09:42 : Premier PAris 40A cliqué
+13:09:42 : Rattrapage, recuperation de la cote
+13:09:44 : cote recupéré 5.5
+13:09:44 : cote : 5.5 | perte : 0.0 | wantwin : 0.2 | mise : 0.2
+13:09:44 : On place la mise
+13:09:45 : pl mise insérrer : 0.2
+13:09:45 : On vérifie le score pour valider le paris
+13:09:45 : GAME NOT START
+13:09:45 : mise insérrer : 0.2
+13:09:45 : RECHERCHE DU BOUTON PLACER UN PARIS
+13:09:47 : pl mise insérrer : 0.2
+13:09:47 : mise insérrer : 0.2
+13:09:47 : loading...
+13:09:59 : pas de loader
+13:09:59 : Vérification de validation
+13:09:59 : PARI VALIDÉ!
+13:10:00 : prochain jeu : 9
+13:10:00 : wantwin : 0.2
+13:10:00 : perte : 0.2
+13:10:00 : mise : 0.2
+13:10:00 : increment : 0.0
+13:10:00 : retour tps reg 1
+13:10:05 : GAME NOT START
+13:10:05 : Vérfication si page match...
+13:10:05 : On cherche le tableau des scores
+13:10:05 : PAGE MATCH OK!
+13:10:29 : JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
+13:10:29 : Affichage de la liste des paris
+13:10:29 : recherche du champ déroulant...
+13:10:29 : Vérification si numéro de set bien récupéré
+13:10:29 : 2 Set
+13:10:29 : Récupération du set actuel : 2
+13:10:34 : ouverture du champ déroulant...
+13:10:34 : Plusieurs liens trouvés....
+13:10:34 : SET 2 non trouvé : error Temps réglementaire
+13:10:34 : menu :2 trouvé in :2 Set
+13:10:40 : liste des paris affichée, On recherche le jeu actuel
+13:10:40 : Récupération du set pour cherhcer le jeu
+13:10:40 : Vérification si numéro de set bien récupéré
+13:10:40 : 2 Set
+13:10:40 : Récupération du set actuel : 2
+13:10:40 : Récupération du jeu actuel : 8
+13:10:40 : PROCHAIN JEU : 9
+13:10:40 : JEU TROUVÉ! : Jeu 9 : 40-40 - Oui
+13:10:40 : VERIFICATTION SI CLIQUABLE...
+13:10:41 : prochain PAris 40A cliqué
+13:10:41 : ON ENVOIE LA MISE
+13:10:41 : Rattrapage, recuperation de la cote
+13:10:43 : cote recupéré 4.33
+13:10:43 : cote : 4.33 | perte : 0.2 | wantwin : 0.2 | mise : 0.2
+13:10:44 : pl mise insérrer : 0.2
+13:10:44 : ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
+13:13:21 : LOSE
+13:13:21 : vide sec actu False
+13:13:21 : Vérification si numéro de set bien récupéré
+13:13:21 : 2 Set
+13:13:21 : set 2 - saved set 2
+13:13:21 : on est toujours sur le meme set
+13:13:21 : GAME NOT START
+13:13:21 : mise insérrer : 0.2
+13:13:21 : RECHERCHE DU BOUTON PLACER UN PARIS
+13:13:22 : pl mise insérrer : 0.2
+13:13:22 : mise insérrer : 0.2
+13:13:23 : loading...
+13:13:35 : pas de loader
+13:13:35 : Vérification de validation
+13:13:36 : PARI VALIDÉ!
+13:13:36 : retour tps reg 3
+13:13:41 : GAME NOT START
+13:13:41 : Vérfication si page match...
+13:13:41 : On cherche le tableau des scores
+13:13:41 : PAGE MATCH OK!
+13:14:01 : JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
+13:14:01 : Affichage de la liste des paris
+13:14:01 : recherche du champ déroulant...
+13:14:01 : Vérification si numéro de set bien récupéré
+13:14:01 : 2 Set
+13:14:06 : ouverture du champ déroulant...
+13:14:06 : Plusieurs liens trouvés....
+13:14:06 : SET 2 non trouvé : error Temps réglementaire
+13:14:06 : menu :2 trouvé in :2 Set
+13:14:12 : liste des paris affichée, On recherche le jeu actuel
+13:14:12 : Récupération du set pour cherhcer le jeu
+13:14:12 : Vérification si numéro de set bien récupéré
+13:14:12 : 2 Set
+13:14:12 : Récupération du jeu actuel : 9
+13:14:12 : PROCHAIN JEU : 10
+13:14:12 : JEU TROUVÉ! : Jeu 10 : 40-40 - Oui
+13:14:12 : VERIFICATTION SI CLIQUABLE...
+13:14:13 : prochain PAris 40A cliqué
+13:14:13 : ON ENVOIE LA MISE
+13:14:13 : Rattrapage, recuperation de la cote
+13:14:15 : cote recupéré 5
+13:14:15 : cote : 5.0 | perte : 0.4 | wantwin : 0.2 | mise : 0.2
+13:14:15 : pl mise insérrer : 0.2
+13:14:15 : ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
+13:16:32 : WIN
+13:17:21 : compet_ok_list : ['wimbledon', 'challenger', 'women', 'cup', 'master', 'itf', 'wta', 'atp', 'féminin', 'femmes']
+13:17:21 : compet_not_ok_list : ['mixte', 'att', 'doubles', 'couple', 'couples', 'double', 'masters', 'paire', 'daily', 'utr', 'russie', 'ace', 'world', 'cyber']
+13:17:21 : Vérfication si page match...
+13:17:21 : On cherche le tableau des scores
+13:17:23 : Tableau des scores introuvable!
+13:17:23 : On vérifie que le match ne soit pas terminé
+13:17:25 : Ce n'est pas une page de match
+13:17:25 : Recherche de match
+13:17:25 : Est ce que le script peut y aller?
+13:17:25 : Script : 3
+13:17:25 : script 3 STOP!

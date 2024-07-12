@@ -1,0 +1,845 @@
+09:54:37 : compet_ok_list : ['wimbledon', 'challenger', 'women', 'cup', 'master', 'itf', 'wta', 'atp', 'féminin', 'femmes']
+09:54:37 : compet_not_ok_list : ['mixte', 'att', 'doubles', 'couple', 'couples', 'double', 'masters', 'paire', 'daily', 'utr', 'russie', 'ace', 'world', 'cyber']
+09:54:37 : Vérfication si page match...
+09:54:37 : On cherche le tableau des scores
+09:54:39 : Tableau des scores introuvable!
+09:54:39 : On vérifie que le match ne soit pas terminé
+09:54:41 : Ce n'est pas une page de match
+09:54:41 : Recherche de match
+09:54:41 : Est ce que le script peut y aller?
+09:54:41 : Script : 4
+09:54:41 : script 4 STOP!
+10:05:19 : Liste match live OK!
+10:05:20 : nb ligue found : 23
+10:05:20 : Nom de la ligue :challenger iasi
+10:05:21 : Nom de la ligue :challenger trieste
+10:05:22 : Nom de la ligue :itf don benito femmes
+10:05:26 : Nom de la ligue :itf tianjin couples
+10:05:26 : Mauvaise ligue
+10:05:28 : Nom de la ligue :itf tokyo doubles
+10:05:28 : Mauvaise ligue
+10:05:28 : Nom de la ligue :itf buzau femmes qualification
+10:05:30 : Nom de la ligue :itf kursumlijska banja femmes qualification
+10:05:31 : Nom de la ligue :itf kursumlijska banja qualification
+10:07:27 : Vérification si numéro de set bien récupéré
+10:07:27 : 1 Set
+10:07:27 : Récupération du set actuel : 1
+10:07:27 : PREPARATION DU PREMIER PARIS
+10:07:27 : Affichage de la liste des paris
+10:07:27 : recherche du champ déroulant...
+10:07:27 : Vérification si numéro de set bien récupéré
+10:07:27 : 1 Set
+10:07:27 : Récupération du set actuel : 1
+10:07:33 : ouverture du champ déroulant...
+10:07:33 : Plusieurs liens trouvés....
+10:07:33 : SET 1 non trouvé : error Temps réglementaire
+10:07:34 : menu :1 trouvé in :1 Set
+10:07:41 : liste des pariis affichée, On recherche le jeu actuel
+10:07:41 : Récupération du set pour cherhcer le jeu
+10:07:41 : Vérification si numéro de set bien récupéré
+10:07:41 : 1 Set
+10:07:41 : Récupération du set actuel : 1
+10:07:41 : Récupération du jeu actuel : 1
+10:07:42 : JEU TROUVÉ! : Jeu 1 : 40-40 - Oui
+10:07:42 : VERIFICATTION SI CLIQUABLE...
+10:07:48 : Premier PAris 40A cliqué
+10:07:48 : Rattrapage, recuperation de la cote
+10:07:50 : cote recupéré 3.25
+10:07:50 : cote : 3.25 | perte : 0.0 | wantwin : 0.2 | mise : 0.2
+10:07:50 : AJOUT DES PARTES DANS LE SHEET
+10:07:56 : itf qualif > LEAVE!
+10:07:56 : retour tps reg 1
+10:09:01 : compet_ok_list : ['wimbledon', 'challenger', 'women', 'cup', 'master', 'itf', 'wta', 'atp', 'féminin', 'femmes']
+10:09:01 : compet_not_ok_list : ['mixte', 'att', 'doubles', 'couple', 'couples', 'double', 'masters', 'paire', 'daily', 'utr', 'russie', 'ace', 'world', 'cyber']
+10:09:01 : Vérfication si page match...
+10:09:01 : On cherche le tableau des scores
+10:09:03 : Tableau des scores introuvable!
+10:09:03 : On vérifie que le match ne soit pas terminé
+10:09:05 : Ce n'est pas une page de match
+10:09:05 : Recherche de match
+10:09:05 : nb ligue found : 23
+10:09:05 : Nom de la ligue :challenger iasi
+10:09:07 : Nom de la ligue :challenger trieste
+10:09:08 : Nom de la ligue :itf don benito femmes
+10:09:09 : Nom de la ligue :itf tianjin couples
+10:09:09 : Mauvaise ligue
+10:09:09 : Nom de la ligue :itf tokyo doubles
+10:09:09 : Mauvaise ligue
+10:09:09 : Nom de la ligue :itf buzau femmes qualification
+10:09:09 : Nom de la ligue :itf kursumlijska banja femmes qualification
+10:09:10 : Nom de la ligue :itf kursumlijska banja qualification
+10:10:09 : Vérification si numéro de set bien récupéré
+10:10:09 : 1 Set
+10:10:09 : Récupération du set actuel : 1
+10:10:09 : PREPARATION DU PREMIER PARIS
+10:10:09 : Affichage de la liste des paris
+10:10:09 : recherche du champ déroulant...
+10:10:09 : Vérification si numéro de set bien récupéré
+10:10:09 : 1 Set
+10:10:09 : Récupération du set actuel : 1
+10:10:15 : ouverture du champ déroulant...
+10:10:15 : Plusieurs liens trouvés....
+10:10:16 : SET 1 non trouvé : error Temps réglementaire
+10:10:16 : menu :1 trouvé in :1 Set
+10:10:23 : liste des pariis affichée, On recherche le jeu actuel
+10:10:23 : Récupération du set pour cherhcer le jeu
+10:10:23 : Vérification si numéro de set bien récupéré
+10:10:23 : 1 Set
+10:10:23 : Récupération du set actuel : 1
+10:10:23 : Récupération du jeu actuel : 1
+10:10:23 : JEU TROUVÉ! : Jeu 1 : 40-40 - Oui
+10:10:23 : VERIFICATTION SI CLIQUABLE...
+10:10:26 : Premier PAris 40A cliqué
+10:10:26 : Rattrapage, recuperation de la cote
+10:10:29 : cote recupéré 3.25
+10:10:29 : cote : 3.25 | perte : 0.0 | wantwin : 0.2 | mise : 0.2
+10:10:29 : AJOUT DES PARTES DANS LE SHEET
+10:10:31 : itf qualif > LEAVE!
+10:10:31 : retour tps reg 1
+10:11:16 : compet_ok_list : ['wimbledon', 'challenger', 'women', 'cup', 'master', 'itf', 'wta', 'atp', 'féminin', 'femmes']
+10:11:16 : compet_not_ok_list : ['mixte', 'att', 'doubles', 'couple', 'couples', 'double', 'masters', 'paire', 'daily', 'utr', 'russie', 'ace', 'world', 'cyber']
+10:11:16 : Vérfication si page match...
+10:11:16 : On cherche le tableau des scores
+10:11:19 : Tableau des scores introuvable!
+10:11:19 : On vérifie que le match ne soit pas terminé
+10:11:21 : Ce n'est pas une page de match
+10:11:21 : Recherche de match
+10:11:22 : nb ligue found : 23
+10:11:22 : Nom de la ligue :challenger iasi
+10:11:23 : Nom de la ligue :challenger trieste
+10:11:24 : Nom de la ligue :itf don benito femmes
+10:11:25 : Nom de la ligue :itf tianjin couples
+10:11:25 : Mauvaise ligue
+10:11:26 : Nom de la ligue :itf tokyo doubles
+10:11:26 : Mauvaise ligue
+10:11:26 : Nom de la ligue :itf buzau femmes qualification
+10:11:26 : Nom de la ligue :itf kursumlijska banja femmes qualification
+10:11:27 : Nom de la ligue :itf kursumlijska banja qualification
+10:11:27 : Nom de la ligue :itf roda de bara qualification
+10:11:28 : Nom de la ligue :itf rome femmesqualification
+10:11:29 : Nom de la ligue :itf tianjin femmes couples
+10:11:29 : Mauvaise ligue
+10:11:30 : Nom de la ligue :itf umag qualification
+10:11:31 : Nom de la ligue :itf uriage qualification
+10:11:37 : Nom de la ligue :att marbella
+10:11:37 : Mauvaise ligue
+10:11:37 : Nom de la ligue :att moscou
+10:11:37 : Mauvaise ligue
+10:11:37 : Nom de la ligue :ace belarus cup
+10:11:37 : Mauvaise ligue
+10:11:37 : Nom de la ligue :ace belarus cup femmes
+10:11:37 : Mauvaise ligue
+10:11:38 : Nom de la ligue :daily aqua tour
+10:11:38 : Mauvaise ligue
+10:11:38 : Nom de la ligue :daily aqua tour femmes
+10:11:38 : Mauvaise ligue
+10:11:38 : Nom de la ligue :vs open
+10:11:38 : Mauvaise ligue
+10:11:38 : Nom de la ligue :atp world cyber tour
+10:11:38 : Mauvaise ligue
+10:11:39 : Nom de la ligue :vr australian open
+10:11:39 : Mauvaise ligue
+10:11:40 : Nom de la ligue :utr pro tennis series skopje
+10:11:40 : Mauvaise ligue
+10:11:40 : Pas de bonne ligue trouvé, attente 30 sec
+10:12:10 : Recherche de match
+10:12:10 : nb ligue found : 23
+10:12:10 : Nom de la ligue :challenger iasi
+10:12:10 : Nom de la ligue :challenger trieste
+10:12:11 : Nom de la ligue :itf don benito femmes
+10:12:11 : Nom de la ligue :itf tianjin couples
+10:12:11 : Mauvaise ligue
+10:12:11 : Nom de la ligue :itf tokyo doubles
+10:12:11 : Mauvaise ligue
+10:12:11 : Nom de la ligue :itf buzau femmes qualification
+10:12:11 : Nom de la ligue :itf kursumlijska banja femmes qualification
+10:12:11 : Nom de la ligue :itf kursumlijska banja qualification
+10:12:12 : Nom de la ligue :itf roda de bara qualification
+10:12:12 : Nom de la ligue :itf rome femmesqualification
+10:12:13 : Nom de la ligue :itf tianjin femmes couples
+10:12:13 : Mauvaise ligue
+10:12:13 : Nom de la ligue :itf umag qualification
+10:12:13 : Nom de la ligue :itf uriage qualification
+10:12:15 : Nom de la ligue :att marbella
+10:12:15 : Mauvaise ligue
+10:12:15 : Nom de la ligue :att moscou
+10:12:15 : Mauvaise ligue
+10:12:15 : Nom de la ligue :ace belarus cup
+10:12:15 : Mauvaise ligue
+10:12:15 : Nom de la ligue :ace belarus cup femmes
+10:12:15 : Mauvaise ligue
+10:12:15 : Nom de la ligue :daily aqua tour
+10:12:15 : Mauvaise ligue
+10:12:15 : Nom de la ligue :daily aqua tour femmes
+10:12:15 : Mauvaise ligue
+10:12:16 : Nom de la ligue :vs open
+10:12:16 : Mauvaise ligue
+10:12:16 : Nom de la ligue :atp world cyber tour
+10:12:16 : Mauvaise ligue
+10:12:16 : Nom de la ligue :vr australian open
+10:12:16 : Mauvaise ligue
+10:12:16 : Nom de la ligue :utr pro tennis series skopje
+10:12:16 : Mauvaise ligue
+10:12:16 : Pas de bonne ligue trouvé, attente 30 sec
+10:12:46 : Recherche de match
+10:12:46 : nb ligue found : 24
+10:12:46 : Nom de la ligue :challenger iasi
+10:12:48 : Nom de la ligue :challenger trieste
+10:12:50 : Nom de la ligue :itf don benito femmes
+10:12:51 : Nom de la ligue :itf tianjin couples
+10:12:51 : Mauvaise ligue
+10:12:51 : Nom de la ligue :itf tokyo doubles
+10:12:51 : Mauvaise ligue
+10:12:51 : Nom de la ligue :itf buzau femmes qualification
+10:12:51 : Nom de la ligue :itf kursumlijska banja femmes qualification
+10:12:52 : Nom de la ligue :itf kursumlijska banja qualification
+10:12:52 : Nom de la ligue :itf roda de bara qualification
+10:12:52 : Nom de la ligue :itf rome femmesqualification
+10:12:53 : Lecture nom ligue impossible!
+10:12:53 : Pas de bonne ligue trouvé, attente 30 sec
+10:13:23 : Recherche de match
+10:36:24 : nb ligue found : 24
+10:36:26 : Nom de la ligue :challenger brunswick
+10:36:27 : Nom de la ligue :challenger iasi
+10:36:28 : Nom de la ligue :challenger trieste
+10:36:31 : Nom de la ligue :itf bissy-chambery women
+10:37:24 : Vérification si numéro de set bien récupéré
+10:37:24 : 1 Set
+10:37:24 : Récupération du set actuel : 1
+10:37:24 : PREPARATION DU PREMIER PARIS
+10:37:24 : Affichage de la liste des paris
+10:37:24 : recherche du champ déroulant...
+10:37:24 : Vérification si numéro de set bien récupéré
+10:37:24 : 1 Set
+10:37:24 : Récupération du set actuel : 1
+10:37:30 : ouverture du champ déroulant...
+10:37:30 : Plusieurs liens trouvés....
+10:37:30 : SET 1 non trouvé : error Temps réglementaire
+10:37:30 : menu :1 trouvé in :1 Set
+10:37:37 : liste des pariis affichée, On recherche le jeu actuel
+10:37:38 : Récupération du set pour cherhcer le jeu
+10:37:38 : Vérification si numéro de set bien récupéré
+10:37:38 : 1 Set
+10:37:38 : Récupération du set actuel : 1
+10:37:38 : Récupération du jeu actuel : 1
+10:37:38 : JEU TROUVÉ! : Jeu 1 : 40-40 - Oui
+10:37:38 : VERIFICATTION SI CLIQUABLE...
+10:37:40 : Premier PAris 40A cliqué
+10:37:40 : Rattrapage, recuperation de la cote
+10:37:42 : cote recupéré 4.33
+10:37:42 : cote : 4.33 | perte : 0.0 | wantwin : 0.2 | mise : 0.2
+10:37:42 : On place la mise
+10:37:43 : mise insérrer : 0.2
+10:37:43 : On vérifie le score pour valider le paris
+10:37:43 : GAME NOT START
+10:37:43 : mise insérrer : 0.2
+10:37:43 : RECHERCHE DU BOUTON PLACER UN PARIS
+10:37:45 : mise insérrer : 0.2
+10:37:45 : mise insérrer : 0.2
+10:37:47 : loading...
+10:37:57 : pas de loader
+10:37:57 : Vérification de validation
+10:37:58 : PARI VALIDÉ!
+10:37:59 : prochain jeu : 2
+10:37:59 : wantwin : 0.2
+10:37:59 : perte : 0.2
+10:37:59 : mise : 0.2
+10:37:59 : increment : 0.0
+10:37:59 : retour tps reg 1
+10:38:05 : GAME NOT START
+10:38:05 : Vérfication si page match...
+10:38:05 : On cherche le tableau des scores
+10:38:05 : PAGE MATCH OK!
+10:41:17 : JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
+10:41:17 : Affichage de la liste des paris
+10:41:17 : recherche du champ déroulant...
+10:41:17 : Vérification si numéro de set bien récupéré
+10:41:17 : 1 Set
+10:41:17 : Récupération du set actuel : 1
+10:41:22 : ouverture du champ déroulant...
+10:41:22 : Plusieurs liens trouvés....
+10:41:22 : SET 1 non trouvé : error Temps réglementaire
+10:41:23 : menu :1 trouvé in :1 Set
+10:41:28 : liste des paris affichée, On recherche le jeu actuel
+10:41:28 : Récupération du set pour cherhcer le jeu
+10:41:29 : Vérification si numéro de set bien récupéré
+10:41:29 : 1 Set
+10:41:29 : Récupération du set actuel : 1
+10:41:29 : Récupération du jeu actuel : 1
+10:41:29 : PROCHAIN JEU : 2
+10:41:29 : JEU TROUVÉ! : Jeu 2 : 40-40 - Oui
+10:41:29 : VERIFICATTION SI CLIQUABLE...
+10:41:29 : prochain PAris 40A cliqué
+10:41:29 : ON ENVOIE LA MISE
+10:41:29 : Rattrapage, recuperation de la cote
+10:41:31 : cote recupéré 3.4
+10:41:31 : cote : 3.4 | perte : 0.2 | wantwin : 0.2 | mise : 0.2
+10:41:32 : mise insérrer : 0.2
+10:41:32 : ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
+10:44:59 : WIN
+10:46:35 : compet_ok_list : ['wimbledon', 'challenger', 'women', 'cup', 'master', 'itf', 'wta', 'atp', 'féminin', 'femmes']
+10:46:35 : compet_not_ok_list : ['mixte', 'att', 'doubles', 'couple', 'couples', 'double', 'masters', 'paire', 'daily', 'utr', 'russie', 'ace', 'world', 'cyber']
+10:46:35 : Vérfication si page match...
+10:46:35 : On cherche le tableau des scores
+10:46:37 : Tableau des scores introuvable!
+10:46:37 : On vérifie que le match ne soit pas terminé
+10:46:39 : Ce n'est pas une page de match
+10:46:39 : Recherche de match
+10:50:57 : nb ligue found : 18
+10:50:59 : Nom de la ligue :wta båstad
+10:51:00 : Nom de la ligue :wta contrexeville
+10:51:05 : Nom de la ligue :challenger brunswick
+10:51:06 : Nom de la ligue :challenger iasi
+10:51:06 : Nom de la ligue :challenger salzbourg
+10:51:06 : Nom de la ligue :challenger trieste
+10:51:07 : Nom de la ligue :itf don benito femmes
+10:51:09 : Nom de la ligue :itf lodz
+10:51:10 : Nom de la ligue :itf padoue
+10:51:11 : Nom de la ligue :itf tianjin couples
+10:51:11 : Mauvaise ligue
+10:51:11 : Nom de la ligue :itf tokyo doubles
+10:51:11 : Mauvaise ligue
+10:51:11 : Nom de la ligue :itf buzau femmes qualification
+10:51:11 : Nom de la ligue :itf kursumlijska banja femmes qualification
+10:51:12 : Nom de la ligue :itf kursumlijska banja qualification
+10:51:13 : Nom de la ligue :itf monastir femmes qualification
+10:51:17 : Nom de la ligue :itf roda de bara qualification
+10:51:19 : Nom de la ligue :itf rome femmesqualification
+10:51:49 : Vérification si numéro de set bien récupéré
+10:51:49 : 1 Set
+10:51:49 : Récupération du set actuel : 1
+10:51:49 : PREPARATION DU PREMIER PARIS
+10:51:49 : Affichage de la liste des paris
+10:51:49 : recherche du champ déroulant...
+10:51:49 : Vérification si numéro de set bien récupéré
+10:51:49 : 1 Set
+10:51:49 : Récupération du set actuel : 1
+10:51:54 : ouverture du champ déroulant...
+10:51:54 : Plusieurs liens trouvés....
+10:51:54 : SET 1 non trouvé : error Temps réglementaire
+10:51:54 : menu :1 trouvé in :1 Set
+10:52:01 : liste des pariis affichée, On recherche le jeu actuel
+10:52:01 : Récupération du set pour cherhcer le jeu
+10:52:01 : Vérification si numéro de set bien récupéré
+10:52:01 : 1 Set
+10:52:01 : Récupération du set actuel : 1
+10:52:01 : Récupération du jeu actuel : 1
+10:52:01 : JEU TROUVÉ! : Jeu 1 : 40-40 - Oui
+10:52:01 : VERIFICATTION SI CLIQUABLE...
+10:52:02 : Premier PAris 40A cliqué
+10:52:02 : Rattrapage, recuperation de la cote
+10:52:04 : cote recupéré 3.25
+10:52:04 : cote : 3.25 | perte : 0.0 | wantwin : 0.2 | mise : 0.2
+10:52:04 : AJOUT DES PARTES DANS LE SHEET
+10:52:06 : itf qualif > LEAVE!
+10:52:06 : retour tps reg 1
+10:52:44 : compet_ok_list : ['wimbledon', 'challenger', 'women', 'cup', 'master', 'itf', 'wta', 'atp', 'féminin', 'femmes']
+10:52:44 : compet_not_ok_list : ['mixte', 'att', 'doubles', 'couple', 'couples', 'double', 'masters', 'paire', 'daily', 'utr', 'russie', 'ace', 'world', 'cyber']
+10:52:44 : Vérfication si page match...
+10:52:44 : On cherche le tableau des scores
+10:52:46 : Tableau des scores introuvable!
+10:52:46 : On vérifie que le match ne soit pas terminé
+10:52:48 : Ce n'est pas une page de match
+10:52:48 : Recherche de match
+10:52:48 : nb ligue found : 18
+10:52:49 : Nom de la ligue :wta båstad
+10:52:49 : Nom de la ligue :wta contrexeville
+10:52:49 : Nom de la ligue :challenger brunswick
+10:52:51 : Nom de la ligue :challenger iasi
+10:52:51 : Nom de la ligue :challenger salzbourg
+10:52:52 : Nom de la ligue :challenger trieste
+10:52:53 : Nom de la ligue :itf don benito femmes
+10:52:56 : Nom de la ligue :itf lodz
+10:52:58 : Nom de la ligue :itf padoue
+10:52:59 : Nom de la ligue :itf tianjin couples
+10:52:59 : Mauvaise ligue
+10:52:59 : Nom de la ligue :itf tokyo doubles
+10:52:59 : Mauvaise ligue
+10:53:00 : Nom de la ligue :itf buzau femmes qualification
+10:53:01 : Nom de la ligue :itf kursumlijska banja femmes qualification
+10:53:01 : Nom de la ligue :itf kursumlijska banja qualification
+10:53:02 : Nom de la ligue :itf monastir femmes qualification
+10:53:03 : Nom de la ligue :itf roda de bara qualification
+10:53:03 : Nom de la ligue :itf rome femmesqualification
+10:53:28 : Vérification si numéro de set bien récupéré
+10:53:28 : 1 Set
+10:53:28 : Récupération du set actuel : 1
+10:53:28 : PREPARATION DU PREMIER PARIS
+10:53:28 : Affichage de la liste des paris
+10:53:28 : recherche du champ déroulant...
+10:53:28 : Vérification si numéro de set bien récupéré
+10:53:28 : 1 Set
+10:53:28 : Récupération du set actuel : 1
+10:53:33 : ouverture du champ déroulant...
+10:53:33 : Plusieurs liens trouvés....
+10:53:33 : SET 1 non trouvé : error Temps réglementaire
+10:53:33 : menu :1 trouvé in :1 Set
+10:53:39 : liste des pariis affichée, On recherche le jeu actuel
+10:53:39 : Récupération du set pour cherhcer le jeu
+10:53:39 : Vérification si numéro de set bien récupéré
+10:53:39 : 1 Set
+10:53:39 : Récupération du set actuel : 1
+10:53:40 : Récupération du jeu actuel : 1
+10:53:40 : JEU TROUVÉ! : Jeu 1 : 40-40 - Oui
+10:53:40 : VERIFICATTION SI CLIQUABLE...
+10:53:41 : Premier PAris 40A cliqué
+10:53:41 : Rattrapage, recuperation de la cote
+10:53:43 : cote recupéré 3.25
+10:53:43 : cote : 3.25 | perte : 0.0 | wantwin : 0.2 | mise : 0.2
+10:53:43 : AJOUT DES PARTES DANS LE SHEET
+10:53:45 : itf qualif > LEAVE!
+10:53:45 : retour tps reg 1
+10:53:59 : compet_ok_list : ['wimbledon', 'challenger', 'women', 'cup', 'master', 'itf', 'wta', 'atp', 'féminin', 'femmes']
+10:53:59 : compet_not_ok_list : ['mixte', 'att', 'doubles', 'couple', 'couples', 'double', 'masters', 'paire', 'daily', 'utr', 'russie', 'ace', 'world', 'cyber']
+10:53:59 : Vérfication si page match...
+10:53:59 : On cherche le tableau des scores
+10:54:29 : Tableau des scores introuvable!
+10:54:29 : On vérifie que le match ne soit pas terminé
+10:54:32 : Ce n'est pas une page de match
+10:54:32 : Recherche de match
+10:54:32 : nb ligue found : 18
+10:54:32 : Nom de la ligue :wta båstad
+10:54:33 : Nom de la ligue :wta contrexeville
+10:54:34 : Nom de la ligue :challenger brunswick
+10:54:35 : Nom de la ligue :challenger iasi
+10:54:35 : Nom de la ligue :challenger salzbourg
+10:54:35 : Nom de la ligue :challenger trieste
+10:54:36 : Nom de la ligue :itf don benito femmes
+10:54:36 : Nom de la ligue :itf lodz
+10:54:36 : Nom de la ligue :itf padoue
+10:54:37 : Nom de la ligue :itf tianjin couples
+10:54:37 : Mauvaise ligue
+10:54:37 : Nom de la ligue :itf tokyo doubles
+10:54:37 : Mauvaise ligue
+10:54:38 : Nom de la ligue :itf buzau femmes qualification
+10:54:38 : Nom de la ligue :itf kursumlijska banja femmes qualification
+10:54:44 : Nom de la ligue :itf kursumlijska banja qualification
+10:54:45 : Nom de la ligue :itf monastir femmes qualification
+10:54:46 : Nom de la ligue :itf roda de bara qualification
+10:54:47 : Nom de la ligue :itf rome femmesqualification
+10:55:13 : Vérification si numéro de set bien récupéré
+10:55:13 : 1 Set
+10:55:13 : Récupération du set actuel : 1
+10:55:13 : PREPARATION DU PREMIER PARIS
+10:55:13 : Affichage de la liste des paris
+10:55:13 : recherche du champ déroulant...
+10:55:13 : Vérification si numéro de set bien récupéré
+10:55:13 : 1 Set
+10:55:13 : Récupération du set actuel : 1
+10:55:18 : ouverture du champ déroulant...
+10:55:18 : Plusieurs liens trouvés....
+10:55:18 : SET 1 non trouvé : error Temps réglementaire
+10:55:18 : menu :1 trouvé in :1 Set
+10:55:24 : liste des pariis affichée, On recherche le jeu actuel
+10:55:24 : Récupération du set pour cherhcer le jeu
+10:55:24 : Vérification si numéro de set bien récupéré
+10:55:24 : 1 Set
+10:55:24 : Récupération du set actuel : 1
+10:55:25 : Récupération du jeu actuel : 1
+10:55:25 : JEU TROUVÉ! : Jeu 1 : 40-40 - Oui
+10:55:25 : VERIFICATTION SI CLIQUABLE...
+10:55:25 : Premier PAris 40A cliqué
+10:55:25 : Rattrapage, recuperation de la cote
+10:55:27 : cote recupéré 3.25
+10:55:27 : cote : 3.25 | perte : 0.0 | wantwin : 0.2 | mise : 0.2
+10:55:27 : AJOUT DES PARTES DANS LE SHEET
+10:55:29 : itf qualif > LEAVE!
+10:55:29 : retour tps reg 1
+10:56:15 : compet_ok_list : ['wimbledon', 'challenger', 'women', 'cup', 'master', 'itf', 'wta', 'atp', 'féminin', 'femmes']
+10:56:15 : compet_not_ok_list : ['mixte', 'att', 'doubles', 'couple', 'couples', 'double', 'masters', 'paire', 'daily', 'utr', 'russie', 'ace', 'world', 'cyber']
+10:56:15 : Vérfication si page match...
+10:56:15 : On cherche le tableau des scores
+10:56:17 : Tableau des scores introuvable!
+10:56:17 : On vérifie que le match ne soit pas terminé
+10:56:19 : Ce n'est pas une page de match
+10:56:19 : Recherche de match
+10:56:19 : nb ligue found : 18
+10:56:19 : Nom de la ligue :wta båstad
+10:56:20 : Nom de la ligue :wta contrexeville
+10:56:20 : Nom de la ligue :challenger brunswick
+10:56:22 : Nom de la ligue :challenger iasi
+10:56:24 : Nom de la ligue :challenger salzbourg
+10:56:25 : Nom de la ligue :challenger trieste
+10:56:26 : Nom de la ligue :itf don benito femmes
+10:56:27 : Nom de la ligue :itf lodz
+10:56:28 : Nom de la ligue :itf nottingham
+10:56:29 : Nom de la ligue :itf padoue
+10:56:30 : Nom de la ligue :itf tianjin couples
+10:56:30 : Mauvaise ligue
+10:56:30 : Nom de la ligue :itf tokyo doubles
+10:56:30 : Mauvaise ligue
+10:56:30 : Nom de la ligue :itf buzau femmes qualification
+10:56:30 : Nom de la ligue :itf don benito femmes doubles
+10:56:30 : Mauvaise ligue
+10:56:30 : Nom de la ligue :itf kursumlijska banja femmes qualification
+10:56:31 : Nom de la ligue :itf kursumlijska banja qualification
+10:56:31 : Nom de la ligue :itf monastir femmes qualification
+10:56:33 : Nom de la ligue :itf rome femmesqualification
+10:57:12 : Vérification si numéro de set bien récupéré
+10:57:12 : 1 Set
+10:57:12 : Récupération du set actuel : 1
+10:57:12 : PREPARATION DU PREMIER PARIS
+10:57:12 : Affichage de la liste des paris
+10:57:12 : recherche du champ déroulant...
+10:57:12 : Vérification si numéro de set bien récupéré
+10:57:12 : 1 Set
+10:57:12 : Récupération du set actuel : 1
+10:57:18 : ouverture du champ déroulant...
+10:57:18 : Plusieurs liens trouvés....
+10:57:19 : SET 1 non trouvé : error Temps réglementaire
+10:57:19 : menu :1 trouvé in :1 Set
+10:57:28 : liste des pariis affichée, On recherche le jeu actuel
+10:57:28 : Récupération du set pour cherhcer le jeu
+10:57:28 : Vérification si numéro de set bien récupéré
+10:57:28 : 1 Set
+10:57:28 : Récupération du set actuel : 1
+10:57:28 : Récupération du jeu actuel : 1
+10:57:28 : JEU TROUVÉ! : Jeu 1 : 40-40 - Oui
+10:57:28 : VERIFICATTION SI CLIQUABLE...
+10:57:30 : Premier PAris 40A cliqué
+10:57:30 : Rattrapage, recuperation de la cote
+10:57:32 : cote recupéré 3.5
+10:57:32 : cote : 3.5 | perte : 0.0 | wantwin : 0.2 | mise : 0.2
+10:57:32 : AJOUT DES PARTES DANS LE SHEET
+10:57:34 : itf qualif > LEAVE!
+10:57:34 : retour tps reg 1
+10:58:26 : compet_ok_list : ['wimbledon', 'challenger', 'women', 'cup', 'master', 'itf', 'wta', 'atp', 'féminin', 'femmes']
+10:58:26 : compet_not_ok_list : ['mixte', 'att', 'doubles', 'couple', 'couples', 'double', 'masters', 'paire', 'daily', 'utr', 'russie', 'ace', 'world', 'cyber']
+10:58:26 : Vérfication si page match...
+10:58:26 : On cherche le tableau des scores
+10:58:29 : Tableau des scores introuvable!
+10:58:29 : On vérifie que le match ne soit pas terminé
+10:58:31 : Ce n'est pas une page de match
+10:58:31 : Recherche de match
+11:02:31 : nb ligue found : 17
+11:02:31 : Nom de la ligue :wta båstad
+11:03:12 : Vérification si numéro de set bien récupéré
+11:03:12 : 1 Set
+11:03:12 : Récupération du set actuel : 1
+11:03:12 : PREPARATION DU PREMIER PARIS
+11:03:12 : Affichage de la liste des paris
+11:03:12 : recherche du champ déroulant...
+11:03:13 : Vérification si numéro de set bien récupéré
+11:03:13 : 1 Set
+11:03:13 : Récupération du set actuel : 1
+11:03:18 : ouverture du champ déroulant...
+11:03:18 : Plusieurs liens trouvés....
+11:03:18 : SET 1 non trouvé : error Temps réglementaire
+11:03:18 : menu :1 trouvé in :1 Set
+11:03:25 : liste des pariis affichée, On recherche le jeu actuel
+11:03:25 : Récupération du set pour cherhcer le jeu
+11:03:25 : Vérification si numéro de set bien récupéré
+11:03:25 : 1 Set
+11:03:25 : Récupération du set actuel : 1
+11:03:25 : Récupération du jeu actuel : 1
+11:03:25 : JEU TROUVÉ! : Jeu 1 : 40-40 - Oui
+11:03:25 : VERIFICATTION SI CLIQUABLE...
+11:03:26 : Premier PAris 40A cliqué
+11:03:26 : Rattrapage, recuperation de la cote
+11:03:29 : cote recupéré 3.25
+11:03:29 : cote : 3.25 | perte : 0.2 | wantwin : 0.2 | mise : 0.2
+11:03:29 : On place la mise
+11:03:30 : mise insérrer : 0.2
+11:03:30 : On vérifie le score pour valider le paris
+11:03:30 : GAME NOT START
+11:03:30 : mise insérrer : 0.2
+11:03:30 : RECHERCHE DU BOUTON PLACER UN PARIS
+11:03:31 : mise insérrer : 0.2
+11:03:31 : mise insérrer : 0.2
+11:03:31 : loading...
+11:03:40 : pas de loader
+11:03:40 : Vérification de validation
+11:03:40 : PARI VALIDÉ!
+11:03:40 : prochain jeu : 2
+11:03:40 : wantwin : 0.2
+11:03:40 : perte : 0.4
+11:03:40 : mise : 0.2
+11:03:40 : increment : 0.0
+11:03:40 : retour tps reg 1
+11:03:46 : GAME NOT START
+11:03:46 : Vérfication si page match...
+11:03:46 : On cherche le tableau des scores
+11:03:46 : PAGE MATCH OK!
+11:07:46 : JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
+11:07:46 : Affichage de la liste des paris
+11:07:46 : recherche du champ déroulant...
+11:07:46 : Vérification si numéro de set bien récupéré
+11:07:46 : 1 Set
+11:07:46 : Récupération du set actuel : 1
+11:07:54 : ouverture du champ déroulant...
+11:07:54 : Plusieurs liens trouvés....
+11:07:54 : SET 1 non trouvé : error Temps réglementaire
+11:07:55 : menu :1 trouvé in :1 Set
+11:08:04 : liste des paris affichée, On recherche le jeu actuel
+11:08:04 : Récupération du set pour cherhcer le jeu
+11:08:04 : Vérification si numéro de set bien récupéré
+11:08:04 : 1 Set
+11:08:04 : Récupération du set actuel : 1
+11:08:05 : Récupération du jeu actuel : 1
+11:08:05 : PROCHAIN JEU : 2
+11:08:05 : JEU TROUVÉ! : Jeu 2 : 40-40 - Oui
+11:08:05 : VERIFICATTION SI CLIQUABLE...
+11:08:07 : prochain PAris 40A cliqué
+11:08:07 : ON ENVOIE LA MISE
+11:08:07 : Rattrapage, recuperation de la cote
+11:08:09 : cote recupéré 3
+11:08:13 : mise insérrer : 0.3
+11:08:13 : ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
+11:11:09 : LOSE
+11:11:09 : vide sec actu False
+11:11:09 : Vérification si numéro de set bien récupéré
+11:11:09 : 1 Set
+11:11:09 : set 1 - saved set 1
+11:11:09 : on est toujours sur le meme set
+11:11:09 : GAME NOT START
+11:11:10 : mise insérrer : 0.3
+11:11:10 : RECHERCHE DU BOUTON PLACER UN PARIS
+11:11:11 : mise insérrer : 0.3
+11:11:12 : mise insérrer : 0.3
+11:11:12 : loading...
+11:11:21 : pas de loader
+11:11:21 : Vérification de validation
+11:11:21 : PARI VALIDÉ!
+11:11:22 : retour tps reg 3
+11:11:26 : GAME NOT START
+11:11:26 : Vérfication si page match...
+11:11:26 : On cherche le tableau des scores
+11:11:26 : PAGE MATCH OK!
+11:12:14 : JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
+11:12:14 : Affichage de la liste des paris
+11:12:14 : recherche du champ déroulant...
+11:12:14 : Vérification si numéro de set bien récupéré
+11:12:14 : 1 Set
+11:12:19 : ouverture du champ déroulant...
+11:12:19 : Plusieurs liens trouvés....
+11:12:19 : SET 1 non trouvé : error Temps réglementaire
+11:12:20 : menu :1 trouvé in :1 Set
+11:12:26 : liste des paris affichée, On recherche le jeu actuel
+11:12:26 : Récupération du set pour cherhcer le jeu
+11:12:26 : Vérification si numéro de set bien récupéré
+11:12:26 : 1 Set
+11:12:26 : Récupération du jeu actuel : 2
+11:12:26 : PROCHAIN JEU : 3
+11:12:26 : JEU TROUVÉ! : Jeu 3 : 40-40 - Oui
+11:12:26 : VERIFICATTION SI CLIQUABLE...
+11:12:27 : prochain PAris 40A cliqué
+11:12:27 : ON ENVOIE LA MISE
+11:12:27 : Rattrapage, recuperation de la cote
+11:12:29 : cote recupéré 3.25
+11:12:31 : mise insérrer : 0.4
+11:12:31 : ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
+11:14:37 : LOSE
+11:14:37 : vide sec actu False
+11:14:37 : Vérification si numéro de set bien récupéré
+11:14:37 : 1 Set
+11:14:37 : set 1 - saved set 1
+11:14:37 : on est toujours sur le meme set
+11:14:37 : GAME NOT START
+11:14:37 : mise insérrer : 0.4
+11:14:37 : RECHERCHE DU BOUTON PLACER UN PARIS
+11:14:38 : mise insérrer : 0.4
+11:14:38 : mise insérrer : 0.4
+11:14:38 : loading...
+11:14:48 : pas de loader
+11:14:48 : Vérification de validation
+11:14:48 : PARI VALIDÉ!
+11:14:48 : retour tps reg 3
+11:14:53 : GAME NOT START
+11:14:53 : Vérfication si page match...
+11:14:53 : On cherche le tableau des scores
+11:14:53 : PAGE MATCH OK!
+11:15:49 : JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
+11:15:50 : Affichage de la liste des paris
+11:15:50 : recherche du champ déroulant...
+11:15:50 : Vérification si numéro de set bien récupéré
+11:15:50 : 1 Set
+11:15:56 : ouverture du champ déroulant...
+11:15:56 : Plusieurs liens trouvés....
+11:15:56 : SET 1 non trouvé : error Temps réglementaire
+11:15:56 : menu :1 trouvé in :1 Set
+11:16:04 : liste des paris affichée, On recherche le jeu actuel
+11:16:04 : Récupération du set pour cherhcer le jeu
+11:16:04 : Vérification si numéro de set bien récupéré
+11:16:04 : 1 Set
+11:16:05 : Récupération du jeu actuel : 3
+11:16:05 : PROCHAIN JEU : 4
+11:16:05 : JEU TROUVÉ! : Jeu 4 : 40-40 - Oui
+11:16:05 : VERIFICATTION SI CLIQUABLE...
+11:16:06 : prochain PAris 40A cliqué
+11:16:06 : ON ENVOIE LA MISE
+11:16:06 : Rattrapage, recuperation de la cote
+11:16:08 : cote recupéré 3
+11:16:10 : mise insérrer : 0.65
+11:16:10 : ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
+11:18:50 : LOSE
+11:18:50 : vide sec actu False
+11:18:50 : Vérification si numéro de set bien récupéré
+11:18:50 : 1 Set
+11:18:50 : set 1 - saved set 1
+11:18:50 : on est toujours sur le meme set
+11:18:50 : GAME NOT START
+11:18:50 : mise insérrer : 0.65
+11:18:50 : RECHERCHE DU BOUTON PLACER UN PARIS
+11:18:51 : mise insérrer : 0.65
+11:18:51 : mise insérrer : 0.65
+11:18:52 : loading...
+11:19:00 : pas de loader
+11:19:00 : Vérification de validation
+11:19:00 : PARI VALIDÉ!
+11:19:01 : retour tps reg 3
+11:19:06 : GAME NOT START
+11:19:06 : Vérfication si page match...
+11:19:06 : On cherche le tableau des scores
+11:19:06 : PAGE MATCH OK!
+11:20:25 : JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
+11:20:25 : Affichage de la liste des paris
+11:20:25 : recherche du champ déroulant...
+11:20:25 : Vérification si numéro de set bien récupéré
+11:20:25 : 1 Set
+11:20:31 : ouverture du champ déroulant...
+11:20:31 : Plusieurs liens trouvés....
+11:20:31 : SET 1 non trouvé : error Temps réglementaire
+11:20:31 : menu :1 trouvé in :1 Set
+11:20:38 : liste des paris affichée, On recherche le jeu actuel
+11:20:38 : Récupération du set pour cherhcer le jeu
+11:20:38 : Vérification si numéro de set bien récupéré
+11:20:38 : 1 Set
+11:20:38 : Récupération du jeu actuel : 4
+11:20:38 : PROCHAIN JEU : 5
+11:20:38 : JEU TROUVÉ! : Jeu 5 : 40-40 - Oui
+11:20:38 : VERIFICATTION SI CLIQUABLE...
+11:20:39 : prochain PAris 40A cliqué
+11:20:39 : ON ENVOIE LA MISE
+11:20:39 : Rattrapage, recuperation de la cote
+11:20:41 : cote recupéré 3.25
+11:20:43 : mise insérrer : 0.87
+11:20:43 : ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
+11:22:08 : LOSE
+11:22:08 : vide sec actu False
+11:22:08 : Vérification si numéro de set bien récupéré
+11:22:08 : 1 Set
+11:22:08 : set 1 - saved set 1
+11:22:08 : on est toujours sur le meme set
+11:22:08 : GAME NOT START
+11:22:08 : mise insérrer : 0.87
+11:22:08 : RECHERCHE DU BOUTON PLACER UN PARIS
+11:22:09 : mise insérrer : 0.87
+11:22:09 : mise insérrer : 0.87
+11:22:10 : loading...
+11:22:18 : pas de loader
+11:22:18 : Vérification de validation
+11:22:19 : PARI VALIDÉ!
+11:22:19 : retour tps reg 3
+11:22:23 : GAME NOT START
+11:22:23 : Vérfication si page match...
+11:22:23 : On cherche le tableau des scores
+11:22:23 : PAGE MATCH OK!
+11:22:48 : JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
+11:22:48 : Affichage de la liste des paris
+11:22:48 : recherche du champ déroulant...
+11:22:48 : Vérification si numéro de set bien récupéré
+11:22:48 : 1 Set
+11:22:53 : ouverture du champ déroulant...
+11:22:53 : Plusieurs liens trouvés....
+11:22:54 : SET 1 non trouvé : error Temps réglementaire
+11:22:54 : menu :1 trouvé in :1 Set
+11:23:00 : liste des paris affichée, On recherche le jeu actuel
+11:23:00 : Récupération du set pour cherhcer le jeu
+11:23:00 : Vérification si numéro de set bien récupéré
+11:23:00 : 1 Set
+11:23:00 : Récupération du jeu actuel : 5
+11:23:00 : PROCHAIN JEU : 6
+11:23:00 : JEU TROUVÉ! : Jeu 6 : 40-40 - Oui
+11:23:00 : VERIFICATTION SI CLIQUABLE...
+11:23:00 : prochain PAris 40A cliqué
+11:23:00 : ON ENVOIE LA MISE
+11:23:00 : Rattrapage, recuperation de la cote
+11:23:02 : cote recupéré 3
+11:23:03 : mise insérrer : 1.41
+11:23:03 : ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
+11:26:51 : LOSE
+11:26:51 : vide sec actu False
+11:26:51 : Vérification si numéro de set bien récupéré
+11:26:51 : 1 Set
+11:26:51 : set 1 - saved set 1
+11:26:51 : on est toujours sur le meme set
+11:26:51 : GAME NOT START
+11:26:52 : mise insérrer : 1.41
+11:26:52 : RECHERCHE DU BOUTON PLACER UN PARIS
+11:26:54 : mise insérrer : 1.41
+11:26:55 : mise insérrer : 1.41
+11:26:55 : loading...
+11:27:03 : pas de loader
+11:27:03 : Vérification de validation
+11:27:04 : PARI VALIDÉ!
+11:27:05 : retour tps reg 3
+11:27:10 : GAME NOT START
+11:27:10 : Vérfication si page match...
+11:27:10 : On cherche le tableau des scores
+11:27:10 : PAGE MATCH OK!
+11:28:27 : JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
+11:28:27 : Affichage de la liste des paris
+11:28:27 : recherche du champ déroulant...
+11:28:27 : Vérification si numéro de set bien récupéré
+11:28:27 : 1 Set
+11:28:33 : ouverture du champ déroulant...
+11:28:33 : Plusieurs liens trouvés....
+11:28:33 : SET 1 non trouvé : error Temps réglementaire
+11:28:34 : menu :1 trouvé in :1 Set
+11:28:41 : liste des paris affichée, On recherche le jeu actuel
+11:28:41 : Récupération du set pour cherhcer le jeu
+11:28:41 : Vérification si numéro de set bien récupéré
+11:28:41 : 1 Set
+11:28:41 : Récupération du jeu actuel : 6
+11:28:41 : PROCHAIN JEU : 7
+11:28:42 : JEU TROUVÉ! : Jeu 7 : 40-40 - Oui
+11:28:42 : VERIFICATTION SI CLIQUABLE...
+11:28:44 : prochain PAris 40A cliqué
+11:28:44 : ON ENVOIE LA MISE
+11:28:44 : Rattrapage, recuperation de la cote
+11:28:46 : cote recupéré 3.25
+11:28:47 : mise insérrer : 1.88
+11:28:47 : ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
+11:30:53 : LOSE
+11:30:53 : vide sec actu False
+11:30:53 : Vérification si numéro de set bien récupéré
+11:30:53 : 1 Set
+11:30:53 : set 1 - saved set 1
+11:30:53 : on est toujours sur le meme set
+11:30:53 : GAME NOT START
+11:30:55 : mise insérrer : 1.88
+11:30:55 : RECHERCHE DU BOUTON PLACER UN PARIS
+11:30:56 : mise insérrer : 1.88
+11:30:56 : mise insérrer : 1.88
+11:30:59 : loading...
+11:31:10 : pas de loader
+11:31:10 : Vérification de validation
+11:31:10 : PARI VALIDÉ!
+11:31:11 : retour tps reg 3
+11:31:17 : GAME NOT START
+11:31:17 : Vérfication si page match...
+11:31:17 : On cherche le tableau des scores
+11:31:17 : PAGE MATCH OK!
+11:31:49 : JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
+11:31:49 : Affichage de la liste des paris
+11:31:49 : recherche du champ déroulant...
+11:31:49 : Vérification si numéro de set bien récupéré
+11:31:49 : 1 Set
+11:31:55 : ouverture du champ déroulant...
+11:31:55 : Plusieurs liens trouvés....
+11:31:55 : SET 1 non trouvé : error Temps réglementaire
+11:31:56 : menu :1 trouvé in :1 Set
+11:32:05 : liste des paris affichée, On recherche le jeu actuel
+11:32:05 : Récupération du set pour cherhcer le jeu
+11:32:05 : Vérification si numéro de set bien récupéré
+11:32:05 : 1 Set
+11:32:05 : Récupération du jeu actuel : 7
+11:32:05 : PROCHAIN JEU : 8
+11:32:06 : JEU TROUVÉ! : Jeu 8 : 40-40 - Oui
+11:32:06 : VERIFICATTION SI CLIQUABLE...
+11:32:08 : prochain PAris 40A cliqué
+11:32:08 : ON ENVOIE LA MISE
+11:32:08 : Rattrapage, recuperation de la cote
+11:32:10 : cote recupéré 3
+11:32:12 : mise insérrer : 3.06
+11:32:12 : ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
