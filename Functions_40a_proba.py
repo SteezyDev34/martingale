@@ -219,16 +219,18 @@ def all_script(driver):
             if passageset :
                 if not GetBet40A(driver):
                     config.error = True
-                    passageset = False
                     config.saveLog('error recup jeu #ERR345', config.newmatch)
                 else:
+                    print('passageset premier jeu ok')
+                    passageset = False
                     bet_40a = True
             else:
                 if not GetNextBet40A(driver):
                     config.error = True
-                    passageset = False
                     config.saveLog('error recup jeu #ERR345', config.newmatch)
                 else:
+                    print('passage prochain jeu')
+                    passageset = False
                     bet_40a = True
 
             config.saveLog('prochain PAris 40A cliqué', config.newmatch)

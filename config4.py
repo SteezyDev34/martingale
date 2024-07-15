@@ -78,7 +78,7 @@ import datetime
 date_actuelle = datetime.datetime.now().strftime("%d-%m-%Y")
 def saveLog(txt, matchname=newmatch):
     date_actuelle = datetime.datetime.now().strftime("%Y-%m-%d")
-    nom_de_base = "logScript40A-" + str(script_num) + '-' + str(matchname)
+    nom_de_base = "logScript40A-" + str(script_num)
 
     # Créer le nom de fichier avec la date
     nom_du_fichier = f"{nom_de_base}-{date_actuelle}.txt"

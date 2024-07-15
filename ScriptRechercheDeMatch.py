@@ -22,7 +22,7 @@ def rechercheDeMatch(driver):
     config.error = False
 
     # ON RÉCUPÈRE LES COMPET À JOUER
-    get_compet = GetCompetOk30()
+    get_compet = GetCompetOk()
     compet_ok_list = get_compet['compet_ok_list']
     config.saveLog('compet_ok_list : '+str(compet_ok_list), config.newmatch)
 
