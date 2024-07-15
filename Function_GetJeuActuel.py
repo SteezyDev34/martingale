@@ -13,7 +13,6 @@ def GetJeuActuel(driver):
         return False
     else:
         try:
-            config.saveLog("Récupération du set pour cherhcer le jeu")
             GetSetActuel(driver)
             if config.set_actuel == '1':
                 jeu_actuel_player1 = config.jeu_actuel[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__cell')[1]

@@ -22,20 +22,20 @@ def rechercheDeMatch(driver):
     config.error = False
 
     # ON RÉCUPÈRE LES COMPET À JOUER
-    get_compet = GetCompetOk()
+    get_compet = GetCompetOk30()
     compet_ok_list = get_compet['compet_ok_list']
-    config.saveLog('compet_ok_list : '+str(compet_ok_list))
+    config.saveLog('compet_ok_list : '+str(compet_ok_list), config.newmatch)
 
     # ON RÉCUPÈRE LES COMPET À NE PAS JOUER
     compet_not_ok_list = get_compet['compet_not_ok_list']
-    config.saveLog('compet_not_ok_list : '+str(compet_not_ok_list))
+    config.saveLog('compet_not_ok_list : '+str(compet_not_ok_list), config.newmatch)
     print('RECHERCHE DE MATCH')
     match_found = False
     while not match_found and not config.error:
         """On vérifie si c'est la page d'un match """
         match_found = GetIfMatchPage(driver)
         # SCRIPT RECHERCHE DE MATCH
-        config.saveLog('Recherche de match')
+        config.saveLog('Recherche de match', config.newmatch)
 
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
         GetIfScriptsRunning(config.running_file_name)
@@ -48,7 +48,7 @@ def rechercheDeMatch(driver):
         # RECUPERATION DES LIGUES EN COURS
         bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                               'dashboard-champ-content')
-        config.saveLog('nb ligue found : '+str(len(bet_list_ligue)))
+        config.saveLog('nb ligue found : '+str(len(bet_list_ligue)),config.newmatch)
         # POUR CHAQUE LIGUE RÉCUPÉRÉE
         for bet_ligue in bet_list_ligue:
             # ON RÉCUPÈRE LE NOM DE LA LIGUE
@@ -111,7 +111,7 @@ def rechercheDeMatch(driver):
                 break
 
         if not match_found:
-            config.saveLog('Pas de bonne ligue trouvé, attente 30 sec')
+            config.saveLog('Pas de bonne ligue trouvé, attente 30 sec', config.newmatch)
             time.sleep(30)
 
 
@@ -126,8 +126,8 @@ def rechercheDeMatch(driver):
         # RECHERCHE INFOS DE MISE
         players = GetPlayersName(driver)
         if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
-            config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
-            #config.proba40A = 0.5
+            #config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
+            config.proba40A = 0.5
         else:
             config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
             #config.proba40A = 0.5
@@ -136,14 +136,12 @@ def rechercheDeMatch(driver):
 
         print("#RECHERCHE INFOS DE MISE")
         infos_de_mise = GetInfosDeMise.main(config.ligue_name, config.rattrape_perte, config.perte, config.wantwin, config.mise, config.increment,
-                                                            config.proba40A)
+                                                            config.proba40A, '30')
         config.perte = float(infos_de_mise[0])
         config.wantwin = float(infos_de_mise[1])
         config.mise = float(infos_de_mise[2])
         config.increment = float(infos_de_mise[3])
         config.rattrape_perte = infos_de_mise[4]
-        print('rr perte'+str(config.perte))
-        print("#RRRRR Rattrap = "+str(config.rattrape_perte))
         # END RECHERCHE INFOS DE MISE
         config.saved_set = ""
         config.set_actuel = GetSetActuel(driver)
@@ -152,7 +150,6 @@ def rechercheDeMatch(driver):
         if not config.set_actuel:
 
             config.error = True
-        print('err ' + str(config.error))
     return match_found
 
 def rechercheDeMatch30(driver):
@@ -161,17 +158,17 @@ def rechercheDeMatch30(driver):
     # ON RÉCUPÈRE LES COMPET À JOUER
     get_compet = GetCompetOk30()
     compet_ok_list = get_compet['compet_ok_list']
-    config.saveLog('compet_ok_list : '+str(compet_ok_list))
+    config.saveLog('compet_ok_list : '+str(compet_ok_list), config.newmatch)
 
     # ON RÉCUPÈRE LES COMPET À NE PAS JOUER
     compet_not_ok_list = get_compet['compet_not_ok_list']
-    config.saveLog('compet_not_ok_list : '+str(compet_not_ok_list))
+    config.saveLog('compet_not_ok_list : '+str(compet_not_ok_list), config.newmatch)
 
     """On vérifie si c'est la page d'un match live"""
     match_found = GetIfMatchPage(driver)
     # SCRIPT RECHERCHE DE MATCH
     while not match_found and not config.error:
-        config.saveLog('Recherche de match')
+        config.saveLog('Recherche de match', config.newmatch)
 
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
         GetIfScriptsRunning(config.running_file_name)
@@ -185,7 +182,7 @@ def rechercheDeMatch30(driver):
         bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                               'dashboard-champ-content')
         if config.devMode:
-            config.saveLog('nb ligue found : '+str(len(bet_list_ligue)))
+            config.saveLog('nb ligue found : '+str(len(bet_list_ligue)), config.newmatch)
         # POUR CHAQUE LIGUE RÉCUPÉRÉE
         for bet_ligue in bet_list_ligue:
             # ON RÉCUPÈRE LE NOM DE LA LIGUE
@@ -218,7 +215,7 @@ def rechercheDeMatch30(driver):
                             div_bet_score = bet_item.find_elements(By.CLASS_NAME,
                                                                    'c-events-scoreboard__lines_tennis')
                         except:
-                            config.saveLog("Impossible de récupérer le score")
+                            config.saveLog("Impossible de récupérer le score", config.newmatch)
                             continue
                         else:
                             # si le score est récupéré
@@ -242,13 +239,13 @@ def rechercheDeMatch30(driver):
                                     else:
                                         continue
             else:
-                config.saveLog('Mauvaise ligue')
+                config.saveLog('Mauvaise ligue', config.newmatch)
             # si un match est trouvé on arrete la recherche
             if match_found:
                 break
 
         if not match_found:
-            config.saveLog('Pas de bonne ligue trouvé, attente 30 sec')
+            config.saveLog('Pas de bonne ligue trouvé, attente 30 sec', config.newmatch)
             time.sleep(30)
 
 
@@ -271,7 +268,6 @@ def rechercheDeMatch30(driver):
             if config.proba40A ==  0:
                 config.proba40A = Functions_stats1.get_proba_40A_other(players[0], players[1],driver,config.match_Url)
 
-        print("#RECHERCHE INFOS DE MISE")
         infos_de_mise = GetInfosDeMise.main(config.ligue_name, config.rattrape_perte, config.perte, config.wantwin, config.mise, config.increment,
                                                             config.proba40A)
         config.perte = float(infos_de_mise[0])
@@ -279,7 +275,6 @@ def rechercheDeMatch30(driver):
         config.mise = float(infos_de_mise[2])
         config.increment = float(infos_de_mise[3])
         config.rattrape_perte = infos_de_mise[4]
-        print("#RRRRR Rattrap = "+str(config.rattrape_perte))
         # END RECHERCHE INFOS DE MISE
         config.saved_set = ""
         config.set_actuel = GetSetActuel(driver)
@@ -288,7 +283,6 @@ def rechercheDeMatch30(driver):
         if not config.set_actuel:
 
             config.error = True
-        print('err ' + str(config.error))
     else:
         time.sleep(30)
     return match_found
@@ -299,17 +293,17 @@ def rechercheDeMatch4030(driver):
     # ON RÉCUPÈRE LES COMPET À JOUER
     get_compet = GetCompetOk30()
     compet_ok_list = get_compet['compet_ok_list']
-    config.saveLog('compet_ok_list : '+str(compet_ok_list))
+    config.saveLog('compet_ok_list : '+str(compet_ok_list), config.newmatch)
 
     # ON RÉCUPÈRE LES COMPET À NE PAS JOUER
     compet_not_ok_list = get_compet['compet_not_ok_list']
-    config.saveLog('compet_not_ok_list : '+str(compet_not_ok_list))
+    config.saveLog('compet_not_ok_list : '+str(compet_not_ok_list), config.newmatch)
 
     """On vérifie si c'est la page d'un match live"""
     match_found = GetIfMatchPage(driver)
     # SCRIPT RECHERCHE DE MATCH
     while not match_found and not config.error:
-        config.saveLog('Recherche de match')
+        config.saveLog('Recherche de match', config.newmatch)
 
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
         GetIfScriptsRunning(config.running_file_name)
@@ -323,7 +317,7 @@ def rechercheDeMatch4030(driver):
         bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                               'dashboard-champ-content')
         if config.devMode:
-            config.saveLog('nb ligue found : '+str(len(bet_list_ligue)))
+            config.saveLog('nb ligue found : '+str(len(bet_list_ligue)), config.newmatch)
         # POUR CHAQUE LIGUE RÉCUPÉRÉE
         for bet_ligue in bet_list_ligue:
             # ON RÉCUPÈRE LE NOM DE LA LIGUE
@@ -356,7 +350,7 @@ def rechercheDeMatch4030(driver):
                             div_bet_score = bet_item.find_elements(By.CLASS_NAME,
                                                                    'c-events-scoreboard__lines_tennis')
                         except:
-                            config.saveLog("Impossible de récupérer le score")
+                            config.saveLog("Impossible de récupérer le score", config.newmatch)
                             continue
                         else:
                             # si le score est récupéré
@@ -380,13 +374,13 @@ def rechercheDeMatch4030(driver):
                                     else:
                                         continue
             else:
-                config.saveLog('Mauvaise ligue')
+                config.saveLog('Mauvaise ligue', config.newmatch)
             # si un match est trouvé on arrete la recherche
             if match_found:
                 break
 
         if not match_found:
-            config.saveLog('Pas de bonne ligue trouvé, attente 30 sec')
+            config.saveLog('Pas de bonne ligue trouvé, attente 30 sec', config.newmatch)
             time.sleep(30)
 
 
@@ -418,8 +412,6 @@ def rechercheDeMatch4030(driver):
         config.mise = float(infos_de_mise[2])
         config.increment = float(infos_de_mise[3])
         config.rattrape_perte = infos_de_mise[4]
-        print('rr perte'+str(config.perte))
-        print("#RRRRR Rattrap = "+str(config.rattrape_perte))
         # END RECHERCHE INFOS DE MISE
         config.saved_set = ""
         config.set_actuel = GetSetActuel(driver)

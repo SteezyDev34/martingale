@@ -9,15 +9,8 @@ import Functions_gsheets
 config.script_num = 4
 
 while (config.win < 100):
-    try:
-        Functions_40a_proba.all_script(driver)
-    except:
-        try:
-            driver.get('https://1xbet.com/fr/live/Tennis/')
-        except:
-            driver.get('https://1xbet.com/fr/live/Tennis/')
-    else:
-        driver.get('https://1xbet.com/fr/live/Tennis/')
+    Functions_40a_proba.all_script(driver)
+    driver.get('https://1xbet.com/fr/live/Tennis/')
     if config.perte > 0:
         perte = config.perte
         while perte > 2:

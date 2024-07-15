@@ -1,4 +1,5 @@
 import pygsheets
+import os
 GSheets = pygsheets.authorize(service_file='/Users/steezy/PycharmProjects/mrtingal/auxobetting-a36473795856.json')
 match_list = []
 match_done_key = ""#Nom du match dans Gsheets
@@ -34,8 +35,8 @@ def init_variable():
 init_variable()
 print('mise'+str(mise))
 rattrape_perte = 0
-matchlist_file_name = '/Users/steezy/PycharmProjects/mrtingal/matchlist_proba'
-running_file_name = '/Users/steezy/PycharmProjects/mrtingal/running_proba'
+matchlist_file_name = '/Users/steezy/PycharmProjects/mrtingal/matchlist4030_proba'
+running_file_name = '/Users/steezy/PycharmProjects/mrtingal/running4030_proba'
 score_to_start = [
     "00(0)00(0)"
 ]
@@ -75,13 +76,17 @@ import datetime
 
 # Obtenir la date actuelle et la formater
 date_actuelle = datetime.datetime.now().strftime("%d-%m-%Y")
-def saveLog(txt,matchname):
-
-    # Nom de base du fichier
-    nom_de_base = "logScript40A-"+str(script_num)+'-'+matchname
+def saveLog(txt, matchname=newmatch):
+    date_actuelle = datetime.datetime.now().strftime("%Y-%m-%d")
+    nom_de_base = "logScript4030-" + str(script_num) + '-' + matchname
 
     # Créer le nom de fichier avec la date
     nom_du_fichier = f"{nom_de_base}-{date_actuelle}.txt"
+
+    # Créer le répertoire s'il n'existe pas
+    nom_du_repertoire = os.path.dirname(nom_du_fichier)
+    if nom_du_repertoire and not os.path.exists(nom_du_repertoire):
+        os.makedirs(nom_du_repertoire)
 
     # Ouvrir le fichier en mode ajout
     with open(nom_du_fichier, 'a+') as fichier:
@@ -94,6 +99,6 @@ def saveLog(txt,matchname):
             fichier.write('\n')
         # Écrire le texte à la fin du fichier
         heure_actuelle = datetime.datetime.now().strftime("%H:%M:%S")
-        fichier.write(str(heure_actuelle)+' : '+str(txt))
-    if devMode:
+        fichier.write(str(heure_actuelle) + ' : ' + str(txt))
         print(str(txt))
+

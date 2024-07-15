@@ -19,6 +19,6 @@ def GetScoreActuel(driver):
             config.score_actuel = config.score_actuel.replace("\n", "")
             if config.saved_score != config.score_actuel:
                 print("Score actuel = "+str(config.score_actuel))
-                print("saved actuel = " + str(config.saved_score))
+                #print("saved actuel = " + str(config.saved_score))
             config.saved_score = config.score_actuel
     return True

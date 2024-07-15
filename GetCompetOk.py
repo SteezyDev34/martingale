@@ -36,7 +36,7 @@ def GetCompetOk30():
     # on ouvre le fichier gsheets
     sh = GSheets.open('BOT 1XBET PYTHON')
     # on selectionne la feuille
-    wk1 = sh[9]
+    wk1 = sh[11]
     # on récupère les valeurs
     row = wk1.get_all_values()
     # le nombre de lignes

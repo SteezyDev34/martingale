@@ -7,8 +7,8 @@ def main(bet_ligue):
     try:
         div_ligue_name = bet_ligue.find_element(By.TAG_NAME, 'div')
     except Exception as e:
-        #print (f"#E0004\nUne erreur est survenue : {e}")
-        config.saveLog('Lecture nom ligue impossible!')
+        txtlog = "Lecture nom ligue impossible!"
+        config.saveLog(txtlog, config.newmatch)
         config.ligue_name = False
     else:
         try:
@@ -19,9 +19,6 @@ def main(bet_ligue):
         except Exception as e:
             config.saveLog(f"#E0005\nUne erreur est survenue : {e}")
             config.ligue_name = False
-        """else:
-            if config.devMode:
-                config.saveLog('Nom de la ligue :'+config.ligue_name)"""
     return config.ligue_name
 # GetLigueNameFromUrl
 def fromUrl(driver):

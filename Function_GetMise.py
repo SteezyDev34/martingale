@@ -7,27 +7,32 @@ import config
 import config
 
 def GetMise(driver):
-    print('rattrapeg : ',config.rattrape_perte)
     if config.rattrape_perte == 3:
-        config.saveLog('Bonne proba, cote : 3')
+        txtlog = 'Bonne proba, cote : 3'
+        print(txtlog)
+        config.saveLog(txtlog, config.newmatch)
         config.cote = 3
     else:
-        config.saveLog("Rattrapage, recuperation de la cote")
+        txtlog = "Rattrapage, recuperation de la cote"
+        config.saveLog(txtlog, config.newmatch)
         time.sleep(2)
         try:
             config.cote = driver.find_elements(By.CLASS_NAME,
                                                'cpn-total__coef')[
                 0].text
         except:
-            config.saveLog('erreur recup cote : 3')
+            txtlog = 'erreur recup cote : 3'
+            config.saveLog(txtlog, config.newmatch)
             config.cote = 3
         else:
-            config.saveLog('cote recupéré ' + str(config.cote))
+            txtlog = 'cote recupéré ' + str(config.cote)
+            config.saveLog(txtlog, config.newmatch)
             if config.cote != '':
                 try:
                     config.cote = float(config.cote)
                 except:
-                    config.saveLog('error float cote : cote = 3')
+                    txtlog = 'error float cote : cote = 3'
+                    config.saveLog(txtlog,config.newmatch)
                     config.cote = 3
             else:
                 config.cote = 3
@@ -35,9 +40,11 @@ def GetMise(driver):
     config.mise = round(config.mise, 2)
     if config.mise < 0.2:
         config.mise = 0.2
-        config.saveLog("cote : " + str(config.cote) + " | perte : " + str(
+        txtlog  = "cote : " + str(config.cote) + " | perte : " + str(
             config.perte) + " | wantwin : " + str(
-            config.wantwin) + " | mise : " + str(config.mise))
+            config.wantwin) + " | mise : " + str(config.mise)
+        print(txtlog)
+        config.saveLog(txtlog,config.newmatch)
 
     return True
 def GetMise30A(driver):
@@ -116,10 +123,10 @@ def GetMise15A(driver):
 def GetMise4030(driver):
     config.rattrape_perte = 1
     if config.rattrape_perte == 0:
-        config.saveLog('Pas de rattrapage, cote : 2.4')
+        config.saveLog('Pas de rattrapage, cote : 4')
         config.cote = 3
     elif config.rattrape_perte == 2:
-        config.saveLog('Bonne proba, cote : 2.4')
+        config.saveLog('Bonne proba, cote : 4')
         config.cote = 3
     else:
         config.saveLog("Rattrapage, recuperation de la cote")

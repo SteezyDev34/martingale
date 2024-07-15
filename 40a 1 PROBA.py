@@ -10,16 +10,7 @@ config.script_num = 1
 while (config.win < 100):
 
     config.init_variable()
-    try:
-        Functions_40a_proba.all_script(driver)
-    except Exception as e:
-        print(f'ERREUR SCRIPT : {e}')
-        try:
-            driver.get('https://1xbet.com/fr/live/Tennis/')
-        except:
-            driver.get('https://1xbet.com/fr/live/Tennis/')
-    else:
-        driver.get('https://1xbet.com/fr/live/Tennis/')
+    Functions_40a_proba.all_script(driver)
     if config.perte > 0:
         perte = config.perte
         while perte > 2:
@@ -40,4 +31,8 @@ while (config.win < 100):
         config.mise = round(config.mise, 2)
         config.perte= perte
         Functions_gsheets.suivi_lost()
+    try:
+        driver.get('https://1xbet.com/fr/live/Tennis/')
+    except:
+        driver.get('https://1xbet.com/fr/live/Tennis/')
 print('TOTAL WIN : '+str(config.win))

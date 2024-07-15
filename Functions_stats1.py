@@ -106,7 +106,6 @@ def get_proba_40A_other(playerName1, playerName2,driver,link):
             prob = float("{:.2}".format(prob_40_40_totale))
             print('Proba 40 A = ' + str(prob))
         except:
-            print('erreur lors du la proba40A')
             prob =0
             tentative = tentative +1
         else:
@@ -178,18 +177,14 @@ def getPlayerWtaApiId(playerName):
 def get_proba_40A(playerName1, playerName2,cat='atp',surface='clay'):
 
     try:
-        print('proba atp')
         playerID1 = getPlayerApiId(playerName1)
-        print(playerID1)
         playerID2 = getPlayerApiId(playerName2)
-        print(playerID2)
         urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/"+cat+"/"+playerID1+"/2023/"+surface
         urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/" + cat + "/" + playerID2 + "/2023/" + surface
 
         response = requests.get(urlplayer1, headers=headers)
         time.sleep(1)
     except Exception as e:
-        print(f'erreur lors du la proba40A : {e}')
         return 0
     else:
 
@@ -205,7 +200,6 @@ def get_proba_40A(playerName1, playerName2,cat='atp',surface='clay'):
             # Statistiques du joueur2
             response = requests.get(urlplayer2, headers=headers)
         except Exception as e:
-            print(f'erreur lors du la proba40A 2 : {e}')
             return 0
         else:
             try:
@@ -233,7 +227,6 @@ def get_proba_40A(playerName1, playerName2,cat='atp',surface='clay'):
                     print('RATTRAPAGE OK!')
 
             except:
-                print('erreur lors du la proba40A 3')
                 return 0
             else:
                 return prob

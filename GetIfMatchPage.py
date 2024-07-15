@@ -9,8 +9,6 @@ def GetIfMatchPage(driver):
     logTxt = "Vérfication si page match..."
     config.saveLog(logTxt,config.newmatch)
     try:
-        logTxt = "On cherche le tableau des scores"
-        config.saveLog(logTxt)
         element = WebDriverWait(driver, 2).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'c-scoreboard-score__heading'))
@@ -37,6 +35,6 @@ def GetIfMatchPage(driver):
             return False
     else:
         logTxt = "PAGE MATCH OK!"
-        config.saveLog(logTxt,config.newmatch)
-        print(logTxt)
+        #config.saveLog(logTxt,config.newmatch)
+        #print(logTxt)
         return True

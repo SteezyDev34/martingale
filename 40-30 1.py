@@ -2,7 +2,7 @@ print('START 40-30 1')
 
 import Functions_403015_proba
 from SetDriver9 import driver
-import config as config
+import config
 
 config.script_num = 1
 
