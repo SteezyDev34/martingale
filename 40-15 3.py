@@ -1,8 +1,8 @@
 
-print('START 40 30 3')
+print('START 40 15 3')
 
-import Functions_403015_proba
-from SetDriver11 import driver
+import Functions_4015_proba
+from SetDriver7 import driver
 import config as config
 import Functions_gsheets
 
@@ -11,7 +11,7 @@ config.script_num = 3
 while (config.win < 100):
     try:
         config.init_variable()
-        Functions_403015_proba.all_script(driver)
+        Functions_4015_proba.all_script(driver)
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:

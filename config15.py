@@ -1,5 +1,6 @@
 import pygsheets
 import os
+print('config 40 15 test')
 GSheets = pygsheets.authorize(service_file='/Users/steezy/PycharmProjects/mrtingal/auxobetting-a36473795856.json')
 match_list = []
 match_done_key = ""#Nom du match dans Gsheets
@@ -23,9 +24,13 @@ cotemini = 0.3
 def init_variable():
     global mise, perte, wantwin, increment, probamini, cotemini
     mise = float(wk1.get_value('B11').replace(',', '.'))
+    print('init mise : ' + str(mise))
     probamini = float(wk1.get_value('B2').replace(',', '.'))
+    print('init probamini : ' + str(probamini))
     cotemini = float(wk1.get_value('B3').replace(',', '.'))
+    print('init cotemini : ' + str(cotemini))
     perte = 0
+    print('init perte : ' + str(perte))
     wantwin = float(wk1.get_value('B8').replace(',', '.'))
     increment = float(wk1.get_value('B9').replace(',', '.'))
     increment = float(wk1.get_value('B9').replace(',', '.'))
@@ -38,7 +43,10 @@ rattrape_perte = 0
 matchlist_file_name = '/Users/steezy/PycharmProjects/mrtingal/matchlist4030_proba'
 running_file_name = '/Users/steezy/PycharmProjects/mrtingal/running4030_proba'
 score_to_start = [
-    "00(0)00(0)"
+    "00(0)00(0)",
+    "00(15)00(0)",
+    "00(0)00(15)",
+    "00(15)00(15)",
 ]
 """score_to_start = [
     "00(0)00(0)",
@@ -78,7 +86,7 @@ import datetime
 date_actuelle = datetime.datetime.now().strftime("%d-%m-%Y")
 def saveLog(txt, newmatch=""):
     date_actuelle = datetime.datetime.now().strftime("%Y-%m-%d")
-    nom_de_base = "logScript4030-" + str(script_num) + '-' + str(newmatch)
+    nom_de_base = "logScript4015-" + str(script_num) + '-' + str(newmatch)
 
     # Créer le nom de fichier avec la date
     nom_du_fichier = f"{nom_de_base}-{date_actuelle}.txt"

@@ -32,6 +32,7 @@ def rechercheDeMatch(driver):
     print('RECHERCHE DE MATCH')
     match_found = False
     while not match_found and not config.error:
+        config.init_variable()
         """On vérifie si c'est la page d'un match """
         match_found = GetIfMatchPage(driver)
         # SCRIPT RECHERCHE DE MATCH
@@ -111,6 +112,7 @@ def rechercheDeMatch(driver):
                 break
 
         if not match_found:
+            driver.get('https://1xbet.com/fr/live/Tennis/')
             config.saveLog('Pas de bonne ligue trouvé, attente 30 sec', config.newmatch)
             time.sleep(30)
 
@@ -126,8 +128,8 @@ def rechercheDeMatch(driver):
         # RECHERCHE INFOS DE MISE
         players = GetPlayersName(driver)
         if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
-            #config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
-            config.proba40A = 0.5
+            config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
+            #config.proba40A = 0.5
         else:
             config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
             #config.proba40A = 0.5
@@ -136,7 +138,7 @@ def rechercheDeMatch(driver):
 
         print("#RECHERCHE INFOS DE MISE")
         infos_de_mise = GetInfosDeMise.main(config.ligue_name, config.rattrape_perte, config.perte, config.wantwin, config.mise, config.increment,
-                                                            config.proba40A, '30')
+                                                            config.proba40A, '40')
         config.perte = float(infos_de_mise[0])
         config.wantwin = float(infos_de_mise[1])
         config.mise = float(infos_de_mise[2])
@@ -150,6 +152,8 @@ def rechercheDeMatch(driver):
         if not config.set_actuel:
 
             config.error = True
+    else:
+        driver.get('https://1xbet.com/fr/live/Tennis/')
     return match_found
 
 def rechercheDeMatch30(driver):
@@ -300,9 +304,10 @@ def rechercheDeMatch4030(driver):
     config.saveLog('compet_not_ok_list : '+str(compet_not_ok_list), config.newmatch)
 
     """On vérifie si c'est la page d'un match live"""
-    match_found = GetIfMatchPage(driver)
+    match_found = False
     # SCRIPT RECHERCHE DE MATCH
     while not match_found and not config.error:
+        config.init_variable()
         config.saveLog('Recherche de match', config.newmatch)
 
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
@@ -379,9 +384,14 @@ def rechercheDeMatch4030(driver):
             if match_found:
                 break
 
+
         if not match_found:
-            config.saveLog('Pas de bonne ligue trouvé, attente 30 sec', config.newmatch)
-            time.sleep(30)
+            if GetIfMatchPage(driver):
+                match_found = True
+            else:
+                config.saveLog('Pas de bonne ligue trouvé, attente 30 sec', config.newmatch)
+                time.sleep(30)
+                break
 
 
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE
@@ -406,7 +416,7 @@ def rechercheDeMatch4030(driver):
 
         print("#RECHERCHE INFOS DE MISE")
         infos_de_mise = GetInfosDeMise.main(config.ligue_name, config.rattrape_perte, config.perte, config.wantwin, config.mise, config.increment,
-                                                            config.proba40A)
+                                                            config.proba40A,'30')
         config.perte = float(infos_de_mise[0])
         config.wantwin = float(infos_de_mise[1])
         config.mise = float(infos_de_mise[2])
@@ -422,5 +432,5 @@ def rechercheDeMatch4030(driver):
             config.error = True
         print('err ' + str(config.error))
     else:
-        time.sleep(30)
+        driver.get('https://1xbet.com/fr/live/Tennis/')
     return match_found

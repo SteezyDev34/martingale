@@ -17,7 +17,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from unidecode import unidecode
 
-import Functions_40a
 ##DEFINITION DES FONCTIONS
 ##
 ##FIN DEFINITION DES FONCTIONS

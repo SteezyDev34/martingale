@@ -5,7 +5,8 @@ from selenium.webdriver.common.by import By
 import config
 import config
 import config
-
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 def GetMise(driver):
     if config.rattrape_perte == 3:
         txtlog = 'Bonne proba, cote : 3'
@@ -45,10 +46,56 @@ def GetMise(driver):
             config.wantwin) + " | mise : " + str(config.mise)
         print(txtlog)
         config.saveLog(txtlog,config.newmatch)
+    getmisemax = False
+    tentative = 0
+    while not getmisemax:
+        try:
+            btn_extra = driver.find_elements(By.CLASS_NAME,
+                                               'cpn-extra__btn')[
+                0]
+        except:
+            tentative += 1
+            if tentative > 5:
+                getmisemax = True
+                config.misemax = 0
+        else:
+            btn_extra.click()
+            try:
+                element = WebDriverWait(driver, 5).until(
+                    EC.presence_of_element_located(
+                        (By.CLASS_NAME, 'cpn-dropdown--is-active'))
+                )
+                btn_extra = driver.find_elements(By.CLASS_NAME,
+                                             'cpn-dropdown--is-active')[
+                0]
+            except:
+                tentative +=1
+                if tentative > 5:
+                    getmisemax = True
+                    config.misemax = 0
+            else:
+                btn_extra = btn_extra.find_elements(By.CLASS_NAME,
+                                             'cpn-dropdown__content')[
+                0]
+                btn_extra =btn_extra.find_elements(By.CLASS_NAME,
+                                             'cpn-extra-settings__item')[
+                0]
+                btn_extra = btn_extra.find_elements(By.CLASS_NAME,
+                                             'cpn-extra-settings__btn')[
+                0].text
+                try:
+                    config.misemax = float(btn_extra.split(' EUR')[0].replace(' ', ''))
+                except:
+                    getmisemax = True
+                    config.misemax = 0
+                else:
+                    getmisemax = True
 
+
+
+    print('miise max : '+str(config.misemax))
     return True
 def GetMise30A(driver):
-    config.rattrape_perte = 1
     if config.rattrape_perte == 0:
         config.saveLog('Pas de rattrapage, cote : 2.4')
         config.cote = 2.4

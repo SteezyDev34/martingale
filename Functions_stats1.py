@@ -72,13 +72,13 @@ def get_proba_40A_other(playerName1, playerName2,driver,link):
                     trok = tr.text.split('Service Points Won %')
                     prob_service_joueur1 = trok[0].replace('%','')
                     if prob_service_joueur1 == '':
-                        prob_service_joueur1 =0.5
+                        prob_service_joueur1 =0
                     else:
                         prob_service_joueur1 =  float(prob_service_joueur1)/ 100
                         print('prob_service_joueur1 : '+str(prob_service_joueur1))
                     prob_service_joueur2 = trok[1].replace('%', '')
                     if prob_service_joueur2 == '':
-                        prob_service_joueur2 = 0.5
+                        prob_service_joueur2 = 0
                     else:
                         prob_service_joueur2 = float(prob_service_joueur2) / 100
                         print('prob_service_joueur2 : ' + str(prob_service_joueur2))
@@ -86,13 +86,13 @@ def get_proba_40A_other(playerName1, playerName2,driver,link):
                     trok = tr.text.split('Return Points Won %')
                     prob_retour_joueur1 = trok[0].replace('%','')
                     if prob_retour_joueur1 == '':
-                        prob_retour_joueur1 = 0.5
+                        prob_retour_joueur1 = 0
                     else:
                         prob_retour_joueur1 =  float(prob_retour_joueur1)/ 100
                         print('prob_retour_joueur1 : '+str(prob_retour_joueur1))
                     prob_retour_joueur2 = trok[1].replace('%', '')
                     if prob_retour_joueur2 == '':
-                        prob_retour_joueur2 = 0.5
+                        prob_retour_joueur2 = 0
                     else:
                         prob_retour_joueur2 = float(prob_retour_joueur2) / 100
                         print('prob_retour_joueur2 : ' + str(prob_retour_joueur2))

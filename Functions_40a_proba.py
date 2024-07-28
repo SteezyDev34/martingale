@@ -1,6 +1,7 @@
 import random
 import time
 
+import GetInfosDeMise
 from DeleteBet import DeleteBet
 from GetIfGameStart import GetIfGameStart
 from Function_GetJeuActuel import GetJeuActuel
@@ -22,7 +23,9 @@ from Function_scriptDelRunning import scriptDelRunning
 
 
 from retour_section_tps_reglementaire import RetourTpsReg
-
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 score_gamestart_list = [
     '15:0',
     '0:15',
@@ -45,6 +48,7 @@ score_gamestart_list = [
 
 
 def all_script(driver):
+    lose = True
 
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning(config.script_num, config.running_file_name)
@@ -81,13 +85,14 @@ def all_script(driver):
         GetMise(driver)
         print('cotemini : '+str(config.cotemini)+' cote : '+str(config.cote))
         print('proba mini : ' + str(config.probamini)+' proba : '+str(config.proba40A))
+        print('Rattrapage : ' +str(config.rattrape_perte))
         if float(config.proba40A) < float(config.probamini) and float(config.cote) < float(config.cotemini):
             print('perte? '+str(config.perte))
             if config.perte > 0:
-                Functions_gsheets.suivi_lost()
+                Functions_gsheets.suivi_lost30()
                 bet_30a = True
                 config.error = True
-                txtlog ='Cote et proba trop faible > sheets'
+                txtlog ='Perte on recup anymay'
                 print(txtlog)
                 config.saveLog(txtlog, config.newmatch)
                 break
@@ -99,13 +104,13 @@ def all_script(driver):
                 config.saveLog(txtlog, config.newmatch)
                 break
         elif 'itf' in config.ligue_name and 'qualification' in config.ligue_name:
-            Functions_gsheets.suivi_lost()
-            #bet_30a = True
-            #config.error = True
-            #txtlog = 'itf qualif > LEAVE!'
-            #print(txtlog)
-            #config.saveLog(txtlog, config.newmatch)
-            #break
+            Functions_gsheets.suivi_lost30()
+            bet_30a = True
+            config.error = True
+            txtlog = 'itf qualif > LEAVE!'
+            print(txtlog)
+            config.saveLog(txtlog, config.newmatch)
+            break
         else:
             print('!!!!!macth ok pour continuer')
 
@@ -183,6 +188,22 @@ def all_script(driver):
     while (winmatch <= 0 and not config.error):
         # WAIT FOR GAME START
         if passageset:
+            if float(config.perte) > 0:
+                perte = config.perte
+                while perte > config.recup40:
+                    config.perte = config.recup40
+                    config.wantwin = 0
+                    config.mise = config.recup40
+                    Functions_gsheets.suivi_lost30()
+                    perte = perte - config.recup40
+                config.init_variable()
+                config.mise = (float(config.wantwin) + float(perte)) / (float(config.cote) - 1)
+                config.mise = round(config.mise, 2)
+                config.perte = perte
+                Functions_gsheets.suivi_lost30()
+            print("#RECHERCHE INFOS DE MISE")
+            config.saved_set = ""
+            config.set_actuel = GetSetActuel(driver)
             config.score_actuel = '0:0'
             gamestart = 1
             config.jeu_actuel = 0
@@ -411,27 +432,27 @@ def all_script(driver):
             config.increment = 0
             config.wantwin = 0.2
             break
-    if config.perte > 0:
+    if float(config.perte) > 0:
         perte = config.perte
         while perte > config.recup40:
             config.perte = config.recup40
             config.wantwin = 0
             config.mise = config.recup40
-            Functions_gsheets.suivi_lost()
+            Functions_gsheets.suivi_lost30()
             perte = perte - config.recup40
-            if perte>1:
+            """if perte>1:
                 comp_list = ['wta', 'atp', 'challenger']
                 config.ligue_name = random.choice(comp_list)
                 config.perte = config.recup30
                 config.wantwin = 0
                 config.mise = config.recup30
                 Functions_gsheets.suivi_lost30()
-                perte = perte - config.recup30
+                perte = perte - config.recup30"""
         config.init_variable()
         config.mise = (float(config.wantwin) + float(perte)) / (float(config.cote) - 1)
         config.mise = round(config.mise, 2)
         config.perte= perte
-        Functions_gsheets.suivi_lost()
+        Functions_gsheets.suivi_lost30()
     infos = [config.win, config.perte, config.wantwin, config.mise]
     print("update : " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)

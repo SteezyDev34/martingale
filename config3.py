@@ -1,5 +1,7 @@
 import pygsheets
 import os
+
+print('config 30A')
 GSheets = pygsheets.authorize(service_file='/Users/steezy/PycharmProjects/mrtingal/auxobetting-a36473795856.json')
 match_list = []
 match_done_key = ""#Nom du match dans Gsheets
@@ -8,7 +10,7 @@ script_num = 0
 #Ouverture du Gsheets
 sh = GSheets.open('BOT 1XBET PYTHON')
 # On selectionne la première feuille
-wk1 = sh[1]
+wk1 = sh[2]
 #on récupère les différentes valeurs
 win = 0
 mise = wk1.get_value('B11').replace(',','.')
@@ -23,9 +25,13 @@ cotemini = 0.3
 def init_variable():
     global mise, perte, wantwin, increment, probamini, cotemini
     mise = float(wk1.get_value('B11').replace(',', '.'))
+    print('init mise : '+str(mise))
     probamini = float(wk1.get_value('B2').replace(',', '.'))
+    print('init probamini : ' + str(probamini))
     cotemini = float(wk1.get_value('B3').replace(',', '.'))
+    print('init cotemini : ' + str(cotemini))
     perte = 0
+    print('init perte : ' + str(perte))
     wantwin = float(wk1.get_value('B8').replace(',', '.'))
     increment = float(wk1.get_value('B9').replace(',', '.'))
 init_variable()

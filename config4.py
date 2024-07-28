@@ -1,5 +1,6 @@
 import pygsheets
 import os
+print('confg 40 A')
 GSheets = pygsheets.authorize(service_file='/Users/steezy/PycharmProjects/mrtingal/auxobetting-a36473795856.json')
 match_list = []
 match_done_key = ""#Nom du match dans Gsheets
@@ -20,12 +21,17 @@ recup30 = float(wk1.get_value('B15').replace(',','.'))
 cote = 3
 probamini = 0.5
 cotemini = 0.3
+misemax = 400
 def init_variable():
     global mise, perte, wantwin, increment, probamini, cotemini
     mise = float(wk1.get_value('B11').replace(',', '.'))
+    print('init mise : ' + str(mise))
     probamini = float(wk1.get_value('B2').replace(',', '.'))
+    print('init probamini : ' + str(probamini))
     cotemini = float(wk1.get_value('B3').replace(',', '.'))
+    print('init cotemini : ' + str(cotemini))
     perte = 0
+    print('init mise : ' + str(perte))
     wantwin = float(wk1.get_value('B8').replace(',', '.'))
     increment = float(wk1.get_value('B9').replace(',', '.'))
     increment = float(wk1.get_value('B9').replace(',', '.'))

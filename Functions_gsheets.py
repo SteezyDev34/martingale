@@ -2,7 +2,6 @@ import pygsheets
 global gc
 gc = pygsheets.authorize(service_file='/Users/steezy/PycharmProjects/mrtingal/auxobetting-a36473795856.json')
 import config
-import  config
 #SUIVIS LOST 40 A
 def suivi_lost4030():
     config.saveLog("AJOUT DES PARTES DANS LE SHEET")
@@ -18,7 +17,7 @@ def suivi_lost4030():
     else:
         wk1.insert_rows(0, number=1, values=values, inherit=False)
     config.perte = 0
-    config.rattrape_perte = 1
+    config.rattrape_perte = 0
     config.mise = 0.2
     config.wantwin = 0.2
 #SUIVIS LOST 40 A
@@ -36,7 +35,7 @@ def suivi_lost():
     else:
         wk1.insert_rows(0, number=1, values=values, inherit=False)
     config.perte = 0
-    config.rattrape_perte = 1
+    config.rattrape_perte = 0
     config.mise = 0.2
     config.wantwin = 0.2
 # SUIVIS LOST 30 A
@@ -52,6 +51,10 @@ def suivi_lost30():
         wk1.update_row(rows,values, col_offset=0)
     else:
         wk1.insert_rows(0, number=1, values=values, inherit=False)
+        config.perte = 0
+        config.rattrape_perte = 0
+        config.mise = 0.2
+        config.wantwin = 0.2
 # SUIVIS LOST 15 A
 def suivi_lost15(values):
     # open the google spreadsheet (where 'PY to Gsheet Test' is the name of my sheet)
@@ -82,6 +85,7 @@ def get_perte_en_cours(ligue_name):
     row = wk1.get_all_values()
     rows = len(row)
     i=0
+    print('rows +'+str(rows))
 
 
     if rows ==1 and wk1.get_row(rows, returnas='matrix', include_tailing_empty=True)==['', '', '','']:
@@ -274,7 +278,9 @@ def maj_perte(col, val, x):
 def get_infos_de_mise(ligue_name,rattrape_perte,perte,wantwin,mise,increment,F40A):
     print("RECHERCHDES DES INFOS DE MISE...")
     #ON RÉCUPÈRE LES PERTES EN COURS SELON LA LIGUE
+    print('info is hget')
     infos = get_perte_en_cours(ligue_name)
+
     if infos != False:
         lost_compet = infos[3].strip().lower()
         print('lname = '+ligue_name)
@@ -282,29 +288,12 @@ def get_infos_de_mise(ligue_name,rattrape_perte,perte,wantwin,mise,increment,F40
         if ligue_name == lost_compet:
             perte = float(infos[0].replace(",", "."))
             wantwin = float(infos[1].replace(",", "."))
-            mise = float(infos[2].replace(",", "."))
-            if rattrape_perte == 2:
-                rattrape_perte = 2
-            else:
-                rattrape_perte =1
             del_perte_en_cours(infos[4])
-        elif rattrape_perte == 0:
-            if int(get_perte_generale()) > 0.2:
-                rattrape_perte = 1
-                perte = 0
-                mise = 0.2
-                increment = 0
-                wantwin = 2
         print("1 perte : " + str(
             perte) + " | wantwin : " + str(
             wantwin) + " | mise : " + str(mise))
     else:
         print('aucun rattrapage recup #109U')
-        if rattrape_perte == 0:
-            if int(get_perte_generale()) > 0.2:
-                rattrape_perte = 1
-        elif rattrape_perte == 1:
-            rattrape_perte = 2
         print("retour perte : " + str(
             perte) + " | wantwin : " + str(
             wantwin) + " | mise : " + str(mise))

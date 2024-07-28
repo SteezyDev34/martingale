@@ -369,7 +369,7 @@ def all_script(driver):
             config.perte = 2
             config.wantwin = 0
             config.mise = 1
-            Functions_gsheets.suivi_lost()
+            Functions_gsheets.suivi_lost30()
             perte = perte - 2
             if perte > 1:
                 comp_list = ['wta', 'atp', 'challenger']
@@ -383,7 +383,7 @@ def all_script(driver):
         config.mise = (float(config.wantwin) + float(perte)) / (float(config.cote) - 1)
         config.mise = round(config.mise, 2)
         config.perte = perte
-        Functions_gsheets.suivi_lost()
+        Functions_gsheets.suivi_lost30()
     config.init_variable()
     infos = [config.win, config.perte, config.wantwin, config.mise]
     print("update " + config.newmatch)
