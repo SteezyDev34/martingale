@@ -1,7 +1,7 @@
 import pygsheets
 import os
 print('config 40 15 test')
-GSheets = pygsheets.authorize(service_file='/Users/steezy/PycharmProjects/mrtingal/auxobetting-a36473795856.json')
+GSheets = pygsheets.authorize(service_file='auxobetting-a36473795856.json')
 match_list = []
 match_done_key = ""#Nom du match dans Gsheets
 match_found = 0

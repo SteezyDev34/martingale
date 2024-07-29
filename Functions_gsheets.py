@@ -1,6 +1,6 @@
 import pygsheets
 global gc
-gc = pygsheets.authorize(service_file='/Users/steezy/PycharmProjects/mrtingal/auxobetting-a36473795856.json')
+gc = pygsheets.authorize(service_file='auxobetting-a36473795856.json')
 import config
 #SUIVIS LOST 40 A
 def suivi_lost4030():

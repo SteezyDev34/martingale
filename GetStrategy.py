@@ -1,5 +1,5 @@
 import pygsheets
-GSheets = pygsheets.authorize(service_file='/Users/steezy/PycharmProjects/mrtingal/auxobetting-a36473795856.json')
+GSheets = pygsheets.authorize(service_file='auxobetting-a36473795856.json')
 
 def GetStrategy(sh):
     sh = GSheets.open('BOT 1XBET PYTHON')
