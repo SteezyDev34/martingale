@@ -5,3 +5,4 @@
 SetDriver*
 logScript*
 .eggs
+chromedriver.exe
