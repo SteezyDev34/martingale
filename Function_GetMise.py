@@ -178,6 +178,7 @@ def GetMise4030(driver):
     else:
         config.saveLog("Rattrapage, recuperation de la cote")
         try:
+            time.sleep(2)
             config.cote = driver.find_elements(By.CLASS_NAME,
                                                'cpn-total__coef')[
                 0].text

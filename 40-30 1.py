@@ -14,6 +14,7 @@ while (config.win < 100):
         Functions_403015_proba.all_script(driver)
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
+        print('perte = '+str(config.perte))
     if config.perte > 0:
         perte = config.perte
         while perte > 2:

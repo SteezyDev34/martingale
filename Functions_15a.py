@@ -67,7 +67,7 @@ def all_script(driver):
 
         config.saveLog('Premier PAris 15A cliqué')
         GetMise15A(driver)
-        if config.proba40A < 0.3 and config.cote < 2.4:
+        if config.proba40A < 0.3 and config.cote < 1.7:
             if config.perte > 0:
                 Functions_gsheets.suivi_lost30()
             bet_15a = True

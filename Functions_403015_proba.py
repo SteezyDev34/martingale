@@ -83,14 +83,14 @@ def all_script(driver):
         #ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
         GetMise4030(driver)
         print('perte'+str(config.perte))
-        if config.proba40A < 0.39 and config.cote < 3.4:
+        if config.proba40A < 0.4 and config.cote < 99:
             if config.perte >0:
                 print('teretet')
-                #Functions_gsheets.suivi_lost4030()
-            #bet_40a = True
-            #config.error = True
-            #config.saveLog('Cote trop faible 0,2',config.newmatch)
-            #break
+                Functions_gsheets.suivi_lost30()
+            bet_40a = True
+            config.error = True
+            config.saveLog('Cote trop faible 0,2',config.newmatch)
+            break
         tentative_placermise = 0
         validate_bet = False
         config.saveLog('On place la mise',config.newmatch)

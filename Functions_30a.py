@@ -70,13 +70,11 @@ def all_script(driver):
         print('cotemini : ' + str(config.cotemini) + ' cote : ' + str(config.cote))
         print('proba mini : ' + str(config.probamini) + ' proba : ' + str(config.proba40A))
         if config.proba40A < config.probamini and config.cote < config.cotemini: #and config.perte<=0:
-            if config.perte > 0:
-                config.saveLog('récupération pour : '+str(config.perte), config.newmatch)
-            """else:
-                bet_30a = True
-                config.error = True
-                config.saveLog('Cote trop faible 0,2', config.newmatch)
-                break"""
+            bet_30a = True
+            config.error = True
+            config.saveLog('Cote trop faible 0,2', config.newmatch)
+            break
+
         tentative_placermise = 0
         validate_bet = False
         config.saveLog('On place la mise', config.newmatch)
