@@ -9,7 +9,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import Functions_4030
@@ -115,7 +114,6 @@ def delete_bet():
         print("cross no found")
     else:
         #driver.switch_to.window(driver.window_handles[0])
-        driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.HOME)
         time.sleep(2)
         #driver.switch_to.window(driver.window_handles[0])
         element = driver.find_element_by_class_name('c-bet-box__del')

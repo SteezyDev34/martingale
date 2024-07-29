@@ -1,6 +1,5 @@
 import time
 
-from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -107,8 +106,6 @@ def GetBet30A(driver):
                                 except Exception as e:
                                     config.saveLog(f"#E0019\nUne erreur est survenue : {e}",config.newmatch)
                                     config.saveLog('CLICK IMPOSSIBLE!',config.newmatch)
-                                    driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.CONTROL + Keys.HOME)
-                                    driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.DOWN)
                                     tentative_show_bet_box += 1
                                     time.sleep(1)
                                 else:
@@ -229,8 +226,6 @@ def GetNextBet30A(driver):
                                 except Exception as e:
                                     config.saveLog(f"#E0019\nUne erreur est survenue : {e}",config.newmatch)
                                     config.saveLog('CLICK IMPOSSIBLE!',config.newmatch)
-                                    driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.CONTROL + Keys.HOME)
-                                    driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.DOWN)
                                     tentative_show_bet_box += 1
                                     time.sleep(1)
                                 else:
