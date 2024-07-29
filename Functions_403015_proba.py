@@ -82,8 +82,10 @@ def all_script(driver):
         send_mise = 0
         #ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
         GetMise4030(driver)
-        print('perte'+str(config.perte))
-        if config.proba40A < 0.4 and config.cote < 99:
+        print('cotemini : ' + str(config.cotemini) + ' cote : ' + str(config.cote))
+        print('proba mini : ' + str(config.probamini) + ' proba : ' + str(config.proba40A))
+        print('Rattrapage : ' + str(config.rattrape_perte))
+        if float(config.proba40A) < float(config.probamini) and float(config.cote) < float(config.cotemini):
             if config.perte >0:
                 print('teretet')
                 Functions_gsheets.suivi_lost30()

@@ -2,3 +2,6 @@
 /build/
 /venv/
 *.json
+SetDriver*
+logScript*
+.eggs
