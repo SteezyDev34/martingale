@@ -86,13 +86,11 @@ def all_script(driver):
         print('proba mini : ' + str(config.probamini) + ' proba : ' + str(config.proba40A))
         print('Rattrapage : ' + str(config.rattrape_perte))
         if float(config.proba40A) < float(config.probamini) and float(config.cote) < float(config.cotemini):
-            if config.perte >0:
-                print('teretet')
-                Functions_gsheets.suivi_lost30()
-            bet_40a = True
-            config.error = True
-            config.saveLog('Cote trop faible 0,2',config.newmatch)
-            break
+            if config.perte <=0:
+                bet_40a = True
+                config.error = True
+                config.saveLog('Cote trop faible 0,2',config.newmatch)
+                break
         tentative_placermise = 0
         validate_bet = False
         config.saveLog('On place la mise',config.newmatch)
