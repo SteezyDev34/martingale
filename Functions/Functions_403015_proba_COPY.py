@@ -1,27 +1,27 @@
 import random
 import time
 
-from DeleteBet import DeleteBet
-from GetIfGameStart import GetIfGameStart
+from Functions.DeleteBet import DeleteBet
+from Functions.GetIfGameStart import GetIfGameStart
 from Function_GetJeuActuel import GetJeuActuel
 from Function_GetMise import GetMise
-from GetScoreActuel import GetScoreActuel
+from Functions.GetScoreActuel import GetScoreActuel
 from Function_GetSetActuel import GetSetActuel
-from PlacerMise import PlacerMise
-from GetBet4030 import GetBet4030, GetNextBet4030
-from GetBet4015 import GetBet4015, GetNextBet4015
-from ScriptRechercheDeMatch import rechercheDeMatch
+from Functions.PlacerMise import PlacerMise
+from Functions.GetBet4030 import GetBet4030, GetNextBet4030
+from Functions.GetBet4015 import GetBet4015, GetNextBet4015
+from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 
-from ValidationDuParis import ValidationDuParis
+from Functions.ValidationDuParis import ValidationDuParis
 import config
-import Functions_gsheets
-import Functions_1XBET
+from Functions import Functions_gsheets
+from Functions import Functions_1XBET
 import re
 
-from Function_AfficherParis4030 import AfficherParis4030
-from Function_scriptDelRunning import scriptDelRunning
+from Functions.Function_AfficherParis4030 import AfficherParis4030
+from Functions.Function_scriptDelRunning import scriptDelRunning
 
-from retour_section_tps_reglementaire import RetourTpsReg
+from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 score_gamestart_list = [
     '15:0',

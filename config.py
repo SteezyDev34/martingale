@@ -1,6 +1,7 @@
 import pygsheets
 import os
 import datetime
+import mysql.connector
 
 projectPath = os.path.dirname(os.path.abspath(__file__))
 GSheets = pygsheets.authorize(service_file=projectPath+'/GsheetsJson/auxobetting-a36473795856.json')
@@ -40,6 +41,25 @@ saved_score = False
 numset = ""
 set = ""
 gain = 0
+matchlist_file_name=""
+running_file_name=""
+match_list = [] #List des matchs
+match_done_key = ""#Nom du match dans Gsheets
+match_found = 0 # Match valide trouvé
+mise = 0.2
+probamini = 0.4
+cotemini = 1
+perte = 0
+wantwin = 0.2
+increment = 0
+recup40 = 0
+recup30 = 0
+running_file_name = ""
+rattrape_perte = 0
+matchlist_file_name = ""
+print_running_text = False
+print_match_live_text = False
+error = False
 
 def init_variable():
     global mise, perte, wantwin,increment, probamini, cotemini,recup40,recup30
@@ -64,9 +84,9 @@ def init_variable():
     increment = float(wk1.get_value('B9').replace(',', '.'))
     recup40 = float(wk1.get_value('B14').replace(',','.'))
     recup30 = float(wk1.get_value('B15').replace(',','.'))
-    running_file_name = projectPath+'/SCRIPTS '+scriptType+'/running.txt'
+    running_file_name = projectPath+'/SCRIPTS '+scriptType+'/running'
     rattrape_perte = 0
-    matchlist_file_name = projectPath+'/SCRIPTS'+scriptType+'/matchlist.txt'
+    matchlist_file_name = projectPath+'/SCRIPTS '+scriptType+'/matchlist'
     print_running_text = False
     print_match_live_text = False
     devMode = wk1.get_value('B13')

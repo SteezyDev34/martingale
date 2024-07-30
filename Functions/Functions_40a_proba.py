@@ -12,15 +12,15 @@ from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 
 from Functions.ValidationDuParis import ValidationDuParis
 import config
-import Functions_gsheets
-import Functions_1XBET
+from Functions import Functions_gsheets
+from Functions import Functions_1XBET
 import re
 
-from Function_AfficherParis40A import AfficherParis40A
-from Function_scriptDelRunning import scriptDelRunning
+from Functions.Function_AfficherParis40A import AfficherParis40A
+from Functions.Function_scriptDelRunning import scriptDelRunning
 
 
-from retour_section_tps_reglementaire import RetourTpsReg
+from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 score_gamestart_list = [
     '15:0',

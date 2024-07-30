@@ -1,9 +1,9 @@
 import time
-import Functions_gsheets
-import Functions_1XBET
+from Functions import Functions_gsheets
+from Functions import Functions_1XBET
 import re
-import Functions_stats
-import Functions_stats1
+from Functions import Functions_stats
+from Functions import Functions_stats1
 from selenium.webdriver.common.by import By
 
 score_gamestart_list = [

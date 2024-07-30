@@ -16,7 +16,7 @@ name_part = os.path.splitext(file_name)[0]
 parts = name_part.split('-')
 if len(parts) > 1:
     config.scriptType = parts[0]  # Suppose que le type est avant le tiret
-    config.script_num = parts[1]  # Suppose que le numéro est avant le tiret
+    config.script_num = float(parts[1])  # Suppose que le numéro est avant le tiret
     print(f"SCRIPT TYPE : {config.scriptType}")
     print(f"SCRIPT NUM : {config.script_num}")
 else:
@@ -30,9 +30,11 @@ from Functions import Functions_gsheets, Functions_40a_proba
 
 
 while (config.win < 100):
+    config.init_variable()
+
+    Functions_40a_proba.all_script(driver)
     try:
-        config.init_variable()
-        Functions_40a_proba.all_script(driver)
+        print()
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:

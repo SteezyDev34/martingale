@@ -5,13 +5,13 @@ import config
 
 from Functions import GetMatchScore, Functions_stats1, GetInfosDeMise, Functions_stats, GetLigueName
 from Functions.Function_GetSetActuel import GetSetActuel
-import OuverturePageMatch
-import VerificationMatchTrouve
+from Functions import OuverturePageMatch
+from Functions import VerificationMatchTrouve
 from Functions.GetCompetOk import GetCompetOk, GetCompetOk30
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetIfScriptsRunning import GetIfScriptsRunning
 from Functions.GetPlayersName import GetPlayersName
-from VerificationListeMatchLive import VerificationListeMatchLive
+from Functions.VerificationListeMatchLive import VerificationListeMatchLive
 
 
 def rechercheDeMatch(driver):

@@ -1,6 +1,6 @@
 # OuverturePageMatch
 
-import AddRunning
+from Functions import AddRunning
 from Functions import UpdateMatchDone
 
 

@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from config import matchlist_file_name
-import VerificationMatchTrouve
+from Functions import VerificationMatchTrouve
 
 
 def selection_des_paris_du_set(driver,set):
