@@ -12,19 +12,11 @@ from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetIfScriptsRunning import GetIfScriptsRunning
 from Functions.GetPlayersName import GetPlayersName
 from Functions.VerificationListeMatchLive import VerificationListeMatchLive
+from Functions.GetJsonData import getCompet
 
 
 def rechercheDeMatch(driver):
     config.error = False
-
-    # ON RÉCUPÈRE LES COMPET À JOUER
-    get_compet = GetCompetOk()
-    compet_ok_list = get_compet['compet_ok_list']
-    config.saveLog('compet_ok_list : '+str(compet_ok_list), config.newmatch)
-
-    # ON RÉCUPÈRE LES COMPET À NE PAS JOUER
-    compet_not_ok_list = get_compet['compet_not_ok_list']
-    config.saveLog('compet_not_ok_list : '+str(compet_not_ok_list), config.newmatch)
     print('RECHERCHE DE MATCH')
     match_found = False
     while not match_found and not config.error:
@@ -33,15 +25,13 @@ def rechercheDeMatch(driver):
         match_found = GetIfMatchPage(driver)
         # SCRIPT RECHERCHE DE MATCH
         config.saveLog('Recherche de match', config.newmatch)
-
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-        GetIfScriptsRunning(config.running_file_name)
-
+        GetIfScriptsRunning()
         # VERIFICATION SI PAGE DE LIST LIVE"""
         if not VerificationListeMatchLive(driver):
             config.error = True
+            print("PAGE VIDE")
             return False
-
         # RECUPERATION DES LIGUES EN COURS
         bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                               'dashboard-champ-content')
@@ -55,11 +45,7 @@ def rechercheDeMatch(driver):
                 config.error = False
                 break
             # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-            if any(compet_ok in config.ligue_name for compet_ok in
-                   compet_ok_list) and not any(
-                compet_not_ok in config.ligue_name for
-                compet_not_ok in compet_not_ok_list):
-
+            if getCompet():
                 # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
                 try:
                     bet_items = bet_ligue.find_elements(By.CLASS_NAME,
@@ -102,7 +88,7 @@ def rechercheDeMatch(driver):
                                     else:
                                         continue
             else:
-                """config.saveLog('Mauvaise ligue')"""
+                config.saveLog('Mauvaise ligue :'+config.ligue_name)
             # si un match est trouvé on arrete la recherche
             if match_found:
                 break

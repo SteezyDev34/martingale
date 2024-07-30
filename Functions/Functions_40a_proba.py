@@ -15,40 +15,17 @@ import config
 from Functions import Functions_gsheets
 from Functions import Functions_1XBET
 import re
-
 from Functions.Function_AfficherParis40A import AfficherParis40A
 from Functions.Function_scriptDelRunning import scriptDelRunning
 
-
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
-
-score_gamestart_list = [
-    '15:0',
-    '0:15',
-    '15:15',
-    '30:15',
-    '15:30',
-    '40:15',
-    '15:40',
-    '0:30',
-    '30:0',
-    '30:30',
-    '30:40',
-    '40:30',
-    '0:40',
-    '40:0',
-    '40:40',
-    'A:40',
-    '40:A'
-]
 
 
 def all_script(driver):
     lose = True
 
     # Mise à jour du fichier txt des script en cours
-    scriptDelRunning(config.script_num, config.running_file_name)
-
+    scriptDelRunning()
 
     # --------
     # SCRIPT RECHERCHE DE MATCH

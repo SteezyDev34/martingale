@@ -1,14 +1,29 @@
 import pygsheets
 import os
 import datetime
-import mysql.connector
-
+import requests
+import json
+def getJsonData(url):
+    # URL du lien JSON de la strategy
+    try:
+        # Envoyer une requête GET à l'URL
+        response = requests.get(url)
+        # Vérifier que la requête a réussi
+        response.raise_for_status()
+        # Parser le JSON depuis la réponse
+        strategy = response.json()[0]
+        # Afficher les données pour vérification
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de la récupération des données : {e}")
+        return
+    except json.JSONDecodeError as e:
+        print(f"Erreur lors du parsing du JSON : {e}")
+        return
+    else:
+        return strategy
 projectPath = os.path.dirname(os.path.abspath(__file__))
-GSheets = pygsheets.authorize(service_file=projectPath+'/GsheetsJson/auxobetting-a36473795856.json')
 #Initialisation des varables
 script_num = 0 # Numéro du Script
-GsheetName = "BOT 1XBET PYTHON" # Nom du gsheets ou sont stocké les données
-SheetsNum = 0
 win = 0 # Nombre de victoire
 cote = 3
 scriptType = ""
@@ -54,9 +69,7 @@ wantwin = 0.2
 increment = 0
 recup40 = 0
 recup30 = 0
-running_file_name = ""
 rattrape_perte = 0
-matchlist_file_name = ""
 print_running_text = False
 print_match_live_text = False
 error = False
@@ -69,27 +82,27 @@ def init_variable():
     match_list = [] #List des matchs
     match_done_key = ""#Nom du match dans Gsheets
     match_found = 0 # Match valide trouvé
-    sh = GSheets.open(GsheetName)
-    wk1 = sh[SheetsNum]
-    print(wk1.title)
-    mise = float(wk1.get_value('B11').replace(',', '.'))
+    url = "https://auxobetting.fr/strategy"+scriptType+"/"
+    print(url)
+    strategy = getJsonData(url)
+    mise = strategy["mise"]
     print('init mise : '+str(mise))
-    probamini = float(wk1.get_value('B2').replace(',', '.'))
+    probamini = strategy["proba_mini"]
     print('init probamini : ' + str(probamini))
-    cotemini = float(wk1.get_value('B3').replace(',', '.'))
+    cotemini = strategy["cote_recup"]
     print('init cotemini : ' + str(cotemini))
     perte = 0
     print('init perte : ' + str(perte))
-    wantwin = float(wk1.get_value('B8').replace(',', '.'))
-    increment = float(wk1.get_value('B9').replace(',', '.'))
-    recup40 = float(wk1.get_value('B14').replace(',','.'))
-    recup30 = float(wk1.get_value('B15').replace(',','.'))
+    wantwin = strategy["wantwin"]
+    increment = strategy["increment"]
+    recup40 = strategy["mtt_recup"]
+    recup30 = strategy["mtt_recup"]
     running_file_name = projectPath+'/SCRIPTS '+scriptType+'/running'
     rattrape_perte = 0
     matchlist_file_name = projectPath+'/SCRIPTS '+scriptType+'/matchlist'
     print_running_text = False
     print_match_live_text = False
-    devMode = wk1.get_value('B13')
+    devMode = strategy["devmode"]
     if devMode.lower() == "true":
         devMode = True
     else:

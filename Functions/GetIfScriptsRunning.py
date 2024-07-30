@@ -4,7 +4,7 @@ import config
 
 
 #EST CE QUE LE SCRIPT EST EN COURS
-def GetIfScriptsRunning(running_file_name):
+def GetIfScriptsRunning():
     go = False
     txtlog = ""
     if not config.print_running_text:
@@ -18,7 +18,7 @@ def GetIfScriptsRunning(running_file_name):
             autre_script = 1
             while autre_script < config.script_num:
                 # on ouvre le fichier texte en mode lecture
-                get_running_file = open(running_file_name + ".txt", "r")
+                get_running_file = open(config.running_file_name + ".txt", "r")
                 #on lit le contenu du fichier
                 get_running = get_running_file.read()
                 #on ferme le fichier
