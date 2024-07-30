@@ -5,4 +5,6 @@
 SetDriver*
 logScript*
 .eggs
-chromedriver.exe
+ChromeDriver/chromedriver.exe
+/ChromeDriver
+/GsheetsJson

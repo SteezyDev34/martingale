@@ -1,10 +1,9 @@
 
 print('START 40 30 4')
 
-import Functions_403015_proba
-from SetDriver12 import driver
+from Functions import Functions_403015_proba, Functions_gsheets
+from ChromeDriver.SetDriver12 import driver
 import config as config
-import Functions_gsheets
 
 config.script_num = 4
 

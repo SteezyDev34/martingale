@@ -1,5 +1,5 @@
 import pygsheets
-GSheets = pygsheets.authorize(service_file='auxobetting-a36473795856.json')
+GSheets = pygsheets.authorize(service_file='GsheetsJson/auxobetting-a36473795856.json')
 match_list = []
 matchlist_file_name = 'matchlist'
 running_file_name = 'running'

@@ -1,8 +1,8 @@
-import Functions_15a
+from Functions import Functions_15a
 
 print('START')
 
-from SetDriver1 import driver
+from ChromeDriver.SetDriver1 import driver
 import config
 
 config.script_num = 1

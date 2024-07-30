@@ -1,17 +1,13 @@
 print('START')
-import re
-import threading
 import time
 
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-import Functions_4030
+from Functions import Functions_4030
 ##DEFINITION DES FONCTIONS
 ##
 ##FIN DEFINITION DES FONCTIONS
@@ -133,9 +129,9 @@ while (win< 999):
     infos = False
     try:
         infos = Functions_4030.all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin, increment, cote,
-                                      lose, firstgame,
-                                      jeu, set_actuel, set, score_actuel, passageset, x, match_list, match_done_key,
-                                      match_found, rattrape_perte, matchlist_file_name, running_file_name)
+                                          lose, firstgame,
+                                          jeu, set_actuel, set, score_actuel, passageset, x, match_list, match_done_key,
+                                          match_found, rattrape_perte, matchlist_file_name, running_file_name)
     except:
         continue
     if infos != False:

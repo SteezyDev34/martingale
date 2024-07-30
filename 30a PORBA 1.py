@@ -1,9 +1,8 @@
-import Functions_30a
-import Functions_gsheets
+from Functions import Functions_gsheets, Functions_30a
 
 print('START')
 
-from SetDriver5 import driver
+from ChromeDriver.SetDriver5 import driver
 import config as config
 
 config.script_num = 1

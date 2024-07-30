@@ -1,7 +1,9 @@
 import pygsheets
 import os
+# Récupérer le nom du fichier
+current_file = os.path.basename(__file__)
 print('confg 40 A')
-GSheets = pygsheets.authorize(service_file='auxobetting-a36473795856.json')
+GSheets = pygsheets.authorize(service_file='GsheetsJson/auxobetting-a36473795856.json')
 match_list = []
 match_done_key = ""#Nom du match dans Gsheets
 match_found = 0
