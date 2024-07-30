@@ -3,8 +3,11 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import config
+from Functions.GetMise import GetMise
+
 
 def PlacerMise(driver):
+    GetMise(driver)
     sending_mise = False
     try:
 

@@ -4,7 +4,7 @@ import time
 from Functions.DeleteBet import DeleteBet
 from Functions.GetIfGameStart import GetIfGameStart
 from Function_GetJeuActuel import GetJeuActuel
-from Function_GetMise import GetMise
+from GetMise import GetMise
 from Functions.GetScoreActuel import GetScoreActuel
 from Function_GetSetActuel import GetSetActuel
 from Functions.PlacerMise import PlacerMise

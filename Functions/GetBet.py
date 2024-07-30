@@ -7,53 +7,59 @@ from selenium.webdriver.support import expected_conditions as EC
 from Functions.Function_GetJeuActuel import GetJeuActuel
 import config
 
-def GetBet40A(driver):
-    print('RECHERCHE DES PARIS 40 A....')
+def GetBet(driver):
+    print("RECHERCHE DES PARIS "+config.scriptType+"....")
     GetJeuActuel(driver)
     if_get_jeu = False
     clic = False
     tentative_clic = 0
+    if config.scriptType == "40A":
+        sType = " : 40-40"
+    elif config.scriptType == "30A":
+        sType = " 30-30"
+    elif config.scriptType == "15A":
+        sType = " 15-15"
     while not clic and tentative_clic<30:
         try:
             element = WebDriverWait(driver, 1).until(
                 EC.presence_of_element_located((By.XPATH,
                                                 '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
-                                                    config.jeu_actuel) + ' : 40-40 - Oui")]'))
+                                                    config.jeu_actuel) + sType+' - Oui")]'))
             )
         except Exception as e:
             tentative_clic+=1
             config.saveLog('tentative_clic : '+str(tentative_clic),config.newmatch)
             time.sleep(1)
             if tentative_clic ==5:
-                config.saveLog("Paris Jeu " + str(config.jeu_actuel) + " : 40-40 - Oui NON TROUVÉ!", config.newmatch)
+                config.saveLog("Paris Jeu " + str(config.jeu_actuel) + sType+" - Oui NON TROUVÉ!", config.newmatch)
                 config.saveLog("Vérificattion si autre jeu en cours...", config.newmatch)
                 try:
                     element = WebDriverWait(driver, 10).until(
                         EC.presence_of_element_located((By.XPATH,
-                                                        '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), " : 40-40 - Oui")]'))
+                                                        '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "'+sType++' - Oui")]'))
                     )
                 except Exception as e:
                     config.saveLog('Aucun paris 40A TROUVÉ!', config.newmatch)
                     return
                 else:
                     list_of_newbet_type = driver.find_elements(By.XPATH,
-                                                               '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), " : 40-40 - Oui")]')
+                                                               '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "'+sType+' - Oui")]')
                     if len(list_of_newbet_type) == 1:
                         config.saveLog('Un seul paris trouvé', config.newmatch)
                         list_of_newbet_type = list_of_newbet_type[0].text
                         print(list_of_newbet_type)
-                        list_of_newbet_type = list_of_newbet_type.split(" : 40-40 - Oui")
+                        list_of_newbet_type = list_of_newbet_type.split(sType+" - Oui")
                         config.jeu_actuel = int(list_of_newbet_type[0].split("Jeu ")[1])
                         print("AUTRE JEU TROUVÉ : Jeu " + str(config.jeu_actuel))
                     elif len(list_of_newbet_type) >= 2:
                         config.saveLog('PLUSIEURS JEUX TROUVÉS!', config.newmatch)
                         newbet_type1 = list_of_newbet_type[0].text
-                        newbet_type1 = newbet_type1.split(" : 40-40 - Oui")
+                        newbet_type1 = newbet_type1.split(sType+" - Oui")
                         game1 = int(newbet_type1[0].split("Jeu ")[1])
                         config.saveLog('PROCHAIN JEU TROUVÉ : ' + str(game1), config.newmatch)
                         newbet_type2 = list_of_newbet_type[1].text
                         config.saveLog(newbet_type2)
-                        newbet_type2 = newbet_type2.split(" : 40-40 - Oui")
+                        newbet_type2 = newbet_type2.split(sType+" - Oui")
                         game2 = int(newbet_type2[0].split("Jeu ")[1])
                         config.saveLog('JEU D\'APRÈS TROUVÉ : ' + str(game2), config.newmatch)
                         config.saveLog("vérification ordre de jeu", config.newmatch)
@@ -70,7 +76,7 @@ def GetBet40A(driver):
             try:
                 list_of_bet_type = driver.find_elements(By.XPATH,
                                                         '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
-                                                            config.jeu_actuel) + ' : 40-40 - Oui")]')
+                                                            config.jeu_actuel) + sType+' - Oui")]')
             except Exception as e:
                 config.saveLog(f"#E0015\ btn 40A not reachable : {e}", config.newmatch)
             else:
@@ -83,7 +89,7 @@ def GetBet40A(driver):
                             element = WebDriverWait(driver, 2).until(
                                 EC.element_to_be_clickable((By.XPATH,
                                                             '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
-                                                                config.jeu_actuel) + ' : 40-40 - Oui")]')))
+                                                                config.jeu_actuel) + sType+' - Oui")]')))
                         except Exception as e:
                             tentative += 1
                             if tentative ==5:
@@ -101,7 +107,7 @@ def GetBet40A(driver):
                                 try:
                                     driver.find_element(By.XPATH,
                                                         '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
-                                                                    config.jeu_actuel) + ' : 40-40 - Oui")]').click()
+                                                                    config.jeu_actuel) + sType+' - Oui")]').click()
                                 except Exception as e:
                                     config.saveLog(f"#E0019\nUne erreur est survenue : {e}")
                                     config.saveLog('CLICK IMPOSSIBLE!', config.newmatch)
@@ -124,55 +130,61 @@ def GetBet40A(driver):
                 else:
                     config.saveLog("pas de btn 40 recuperé")
                     return clic
-def GetNextBet40A(driver):
-    print('RECHERCHE DES PROCHAINS PARIS 40 A....')
+def GetNextBet(driver):
+    print('RECHERCHE DES PROCHAINS PARIS '+config.scriptType+'....')
     GetJeuActuel(driver)
     config.jeu_actuel =config.jeu_actuel+1
     config.saveLog("PROCHAIN JEU : "+str(config.jeu_actuel), config.newmatch)
     if_get_jeu = False
     clic = False
     tentative_clic = 0
+    if config.scriptType == "40A":
+        sType = " : 40-40"
+    elif config.scriptType == "30A":
+        sType = " 30-30"
+    elif config.scriptType == "15A":
+        sType = " 15-15"
     while not clic and tentative_clic<30:
         try:
             element = WebDriverWait(driver, 1).until(
                 EC.presence_of_element_located((By.XPATH,
                                                 '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
-                                                    config.jeu_actuel) + ' : 40-40 - Oui")]'))
+                                                    config.jeu_actuel) + sType+' - Oui")]'))
             )
         except Exception as e:
             tentative_clic+=1
             config.saveLog('tentative_clic : '+str(tentative_clic), config.newmatch)
             time.sleep(1)
             if tentative_clic ==5:
-                config.saveLog("Paris Jeu " + str(config.jeu_actuel) + " : 40-40 - Oui NON TROUVÉ!", config.newmatch)
+                config.saveLog("Paris Jeu " + str(config.jeu_actuel) + sType+" - Oui NON TROUVÉ!", config.newmatch)
                 config.saveLog("Vérificattion si autre jeu en cours...", config.newmatch)
                 try:
                     element = WebDriverWait(driver, 10).until(
                         EC.presence_of_element_located((By.XPATH,
-                                                        '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), " : 40-40 - Oui")]'))
+                                                        '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "'+sType+' - Oui")]'))
                     )
                 except Exception as e:
                     config.saveLog('Aucun paris 40A TROUVÉ!', config.newmatch)
                     return
                 else:
                     list_of_newbet_type = driver.find_elements(By.XPATH,
-                                                               '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), " : 40-40 - Oui")]')
+                                                               '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "'+sType+' - Oui")]')
                     if len(list_of_newbet_type) == 1:
                         config.saveLog('Un seul paris trouvé', config.newmatch)
                         list_of_newbet_type = list_of_newbet_type[0].text
                         print(list_of_newbet_type)
-                        list_of_newbet_type = list_of_newbet_type.split(" : 40-40 - Oui")
+                        list_of_newbet_type = list_of_newbet_type.split(sType+" - Oui")
                         config.jeu_actuel = int(list_of_newbet_type[0].split("Jeu ")[1])
                         print("AUTRE JEU TROUVÉ : Jeu " + str(config.jeu_actuel))
                     elif len(list_of_newbet_type) >= 2:
                         config.saveLog('PLUSIEURS JEUX TROUVÉS!', config.newmatch)
                         newbet_type1 = list_of_newbet_type[0].text
-                        newbet_type1 = newbet_type1.split(" : 40-40 - Oui")
+                        newbet_type1 = newbet_type1.split(sType+" - Oui")
                         game1 = int(newbet_type1[0].split("Jeu ")[1])
                         config.saveLog('PROCHAIN JEU TROUVÉ : ' + str(game1), config.newmatch)
                         newbet_type2 = list_of_newbet_type[1].text
                         config.saveLog(newbet_type2, config.newmatch)
-                        newbet_type2 = newbet_type2.split(" : 40-40 - Oui")
+                        newbet_type2 = newbet_type2.split(sType+" - Oui")
                         game2 = int(newbet_type2[0].split("Jeu ")[1])
                         config.saveLog('JEU D\'APRÈS TROUVÉ : ' + str(game2), config.newmatch)
                         config.saveLog("vérification ordre de jeu", config.newmatch)
@@ -189,7 +201,7 @@ def GetNextBet40A(driver):
             try:
                 list_of_bet_type = driver.find_elements(By.XPATH,
                                                         '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
-                                                            config.jeu_actuel) + ' : 40-40 - Oui")]')
+                                                            config.jeu_actuel) + sType+' - Oui")]')
             except Exception as e:
                 config.saveLog(f"#E0015\ btn 40A not reachable : {e}", config.newmatch)
             else:
@@ -202,7 +214,7 @@ def GetNextBet40A(driver):
                             element = WebDriverWait(driver, 2).until(
                                 EC.element_to_be_clickable((By.XPATH,
                                                             '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
-                                                                config.jeu_actuel) + ' : 40-40 - Oui")]')))
+                                                                config.jeu_actuel) + sType+' - Oui")]')))
                         except Exception as e:
                             tentative += 1
                             if tentative ==5:
@@ -220,7 +232,7 @@ def GetNextBet40A(driver):
                                 try:
                                     driver.find_element(By.XPATH,
                                                         '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "Jeu ' + str(
-                                                                    config.jeu_actuel) + ' : 40-40 - Oui")]').click()
+                                                                    config.jeu_actuel) + sType+' - Oui")]').click()
                                 except Exception as e:
                                     config.saveLog(f"#E0019\nUne erreur est survenue : {e}", config.newmatch)
                                     config.saveLog('CLICK IMPOSSIBLE!')

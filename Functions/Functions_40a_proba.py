@@ -3,23 +3,25 @@ import time
 from Functions.DeleteBet import DeleteBet
 from Functions.GetIfGameStart import GetIfGameStart
 from Functions.Function_GetJeuActuel import GetJeuActuel
-from Functions.Function_GetMise import GetMise
+from Functions.GetMise import GetMise
+from Functions.GetPlayersName import GetPlayersName
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.PlacerMise import PlacerMise
-from Functions.GetBet40A import GetBet40A, GetNextBet40A
+from Functions.GetBet import GetBet, GetNextBet
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 
 from Functions.ValidationDuParis import ValidationDuParis
 import config
-from Functions import Functions_gsheets
+from Functions import Functions_gsheets, GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1, \
+    GetInfosDeMise
 from Functions import Functions_1XBET
 import re
-from Functions.Function_AfficherParis40A import AfficherParis40A
+from Functions.AfficherParis import AfficherParis
 from Functions.Function_scriptDelRunning import scriptDelRunning
 
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
-
+from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
 
 def all_script(driver):
     lose = True
@@ -33,22 +35,52 @@ def all_script(driver):
         config.error = True
     # --------
 
+    if config.match_found and not config.error:
+        config.ligue_name = GetLigueName.fromUrl(driver)[0]
+        config.match_Url = GetLigueName.fromUrl(driver)[1]
+        config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
+
+        # RECHERCHE INFOS DE MISE
+        players = GetPlayersName(driver)
+        if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
+            config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
+            #config.proba40A = 0.5
+        else:
+            config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
+            #config.proba40A = 0.5
+            if config.proba40A ==  0:
+                config.proba40A = Functions_stats1.get_proba_40A_other(players[0], players[1], driver, config.match_Url)
+
+        print("#RECHERCHE INFOS DE MISE")
+        infosperte = getPerte()
+        print("PERTE : ")
+        print(infosperte)
+        if infosperte:
+            config.perte = infosperte[1]
+            delPerte(infosperte[0])
+            config.rattrape_perte = 1
+        # END RECHERCHE INFOS DE MISE
+        config.set_actuel = GetSetActuel(driver)
+        config.saved_set = config.set_actuel
+
+        if not config.set_actuel:
+            config.error = True
 
 
     ##PREPARATTION PREMIER PARIS
-    txtlog = 'PREPARATION DU PREMIER PARIS'
-    config.saveLog(txtlog, config.newmatch)
-    print(txtlog)
     bet_40a = False
     while not bet_40a and not config.error:
+        txtlog = 'PREPARATION DU PREMIER PARIS'
+        config.saveLog(txtlog, config.newmatch)
+        print(txtlog)
         #Affichage de la liste des paris
         config.saveLog('Affichage de la liste des paris', config.newmatch)
-        if not AfficherParis40A(driver):
+        if not AfficherParis(driver):
             config.error = True
             break
         #On recherche le jeu actuel
         config.saveLog('liste des pariis affichée, On recherche le jeu actuel', config.newmatch)
-        if not GetBet40A(driver):
+        if not GetBet(driver):
             config.error = True
             config.saveLog('error recup jeu #ERR345', config.newmatch)
 
@@ -61,23 +93,16 @@ def all_script(driver):
         print('Rattrapage : ' +str(config.rattrape_perte))
         if float(config.proba40A) < float(config.probamini) and float(config.cote) < float(config.cotemini):
             print('perte? '+str(config.perte))
-            if config.perte > 0:
-                Functions_gsheets.suivi_lost30()
-                bet_30a = True
-                config.error = True
-                txtlog ='Perte on recup anymay'
-                print(txtlog)
-                config.saveLog(txtlog, config.newmatch)
-                break
-            else:
-                bet_30a = True
-                config.error = True
-                txtlog = 'Cote et proba trop faible 0,2'
-                print(txtlog)
-                config.saveLog(txtlog, config.newmatch)
-                break
+            DispatchPerte()
+            bet_30a = True
+            config.error = True
+            txtlog = 'Cote et proba trop faible 0,2'
+            print(txtlog)
+            config.saveLog(txtlog, config.newmatch)
+            break
         elif 'itf' in config.ligue_name and 'qualification' in config.ligue_name:
-            Functions_gsheets.suivi_lost30()
+            print('perte? '+str(config.perte))
+            DispatchPerte()
             bet_30a = True
             config.error = True
             txtlog = 'itf qualif > LEAVE!'
@@ -86,8 +111,6 @@ def all_script(driver):
             break
         else:
             print('!!!!!macth ok pour continuer')
-
-
         tentative_placermise = 0
         validate_bet = False
         txtlog = 'On place la mise'
@@ -158,29 +181,15 @@ def all_script(driver):
     passageset = False
     winmatch = 0
     config.lose =False
-    while (winmatch <= 0 and not config.error):
+    while (winmatch < config.nb_tour and not config.error):
         # WAIT FOR GAME START
         if passageset:
-            if float(config.perte) > 0:
-                perte = config.perte
-                while perte > config.recup40:
-                    config.perte = config.recup40
-                    config.wantwin = 0
-                    config.mise = config.recup40
-                    Functions_gsheets.suivi_lost30()
-                    perte = perte - config.recup40
-                config.init_variable()
-                config.mise = (float(config.wantwin) + float(perte)) / (float(config.cote) - 1)
-                config.mise = round(config.mise, 2)
-                config.perte = perte
-                Functions_gsheets.suivi_lost30()
-            print("#RECHERCHE INFOS DE MISE")
             config.saved_set = ""
             config.set_actuel = GetSetActuel(driver)
             config.score_actuel = '0:0'
             gamestart = 1
             config.jeu_actuel = 0
-            if config.rattrape_perte >= 0:
+            if config.rattrape_perte == 1:
                 config.error = False
                 txtlog = "passage set 2"
                 print(txtlog)
@@ -188,6 +197,15 @@ def all_script(driver):
                 txtlog = "attente 30 sec"
                 print(txtlog)
                 config.saveLog(txtlog, config.newmatch)
+                time.sleep(30)
+            elif config.perte >0:
+                DispatchPerte()
+                config.init_variable()
+                txtlog = "passage set 2 restart"
+                print(txtlog)
+                config.saveLog(txtlog, config.newmatch)
+                txtlog = "attente 30 sec"
+                print(txtlog)
                 time.sleep(30)
             else:
                 config.error = True
@@ -205,13 +223,13 @@ def all_script(driver):
 
             # Affichage de la liste des paris
             config.saveLog('Affichage de la liste des paris', config.newmatch)
-            if not AfficherParis40A(driver):
+            if not AfficherParis(driver):
                 config.error = True
                 break
             # On recherche le jeu actuel
             config.saveLog('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
             if passageset :
-                if not GetBet40A(driver):
+                if not GetBet(driver):
                     config.error = True
                     config.saveLog('error recup jeu #ERR345', config.newmatch)
                 else:
@@ -219,7 +237,7 @@ def all_script(driver):
                     passageset = False
                     bet_40a = True
             else:
-                if not GetNextBet40A(driver):
+                if not GetNextBet(driver):
                     config.error = True
                     config.saveLog('error recup jeu #ERR345', config.newmatch)
                 else:
@@ -233,7 +251,6 @@ def all_script(driver):
         print(txtlog)
         config.saveLog(txtlog, config.newmatch)
         send_mise = False
-        GetMise(driver)
         while not send_mise and not config.error:
             if PlacerMise(driver):
                 send_mise = True
@@ -259,7 +276,7 @@ def all_script(driver):
             if config.score_actuel == '40:A' or config.score_actuel == 'A:40' or config.score_actuel == '40:40':
                 result = True
                 lose = False
-                winmatch = True
+                winmatch += 1
                 DeleteBet(driver)
                 txtlog = 'WIN'
                 print(txtlog)
@@ -399,34 +416,8 @@ def all_script(driver):
                 DeleteBet(driver)
             except:
                 print('cpn-bet__remove not found')
-
-            config.perte = 0
-            config.mise = 0.2
-            config.increment = 0
-            config.wantwin = 0.2
             break
-    if float(config.perte) > 0:
-        perte = config.perte
-        while perte > config.recup40:
-            config.perte = config.recup40
-            config.wantwin = 0
-            config.mise = config.recup40
-            Functions_gsheets.suivi_lost30()
-            perte = perte - config.recup40
-            """if perte>1:
-                comp_list = ['wta', 'atp', 'challenger']
-                config.ligue_name = random.choice(comp_list)
-                config.perte = config.recup30
-                config.wantwin = 0
-                config.mise = config.recup30
-                Functions_gsheets.suivi_lost30()
-                perte = perte - config.recup30"""
-        config.init_variable()
-        config.mise = (float(config.wantwin) + float(perte)) / (float(config.cote) - 1)
-        config.mise = round(config.mise, 2)
-        config.perte= perte
-        Functions_gsheets.suivi_lost30()
-    infos = [config.win, config.perte, config.wantwin, config.mise]
+    DispatchPerte()
     print("update : " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)

@@ -7,7 +7,7 @@ import config
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from Functions.GetIfMatchPage import GetIfMatchPage
-def AfficherParis40A(driver):
+def AfficherParis(driver):
     config.saveLog('recherche du champ déroulant...', config.newmatch)
     GetSetActuel(driver)
     selection = False

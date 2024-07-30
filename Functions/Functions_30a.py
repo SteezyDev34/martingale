@@ -3,7 +3,7 @@ import time
 from Functions.DeleteBet import DeleteBet
 from Functions.GetIfGameStart import GetIfGameStart30A
 from Functions.Function_GetJeuActuel import GetJeuActuel
-from Functions.Function_GetMise import GetMise, GetMise30A
+from Functions.GetMise import GetMise, GetMise30A
 from Functions.GetBet30A import GetBet30A, GetNextBet30A
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.Function_GetSetActuel import GetSetActuel
@@ -15,7 +15,7 @@ import config
 from Functions import Functions_gsheets
 from Functions import Functions_1XBET
 import re
-from Functions.Function_AfficherParis40A import AfficherParis40A
+from Functions.AfficherParis import AfficherParis40A
 from Functions.Function_scriptDelRunning import scriptDelRunning
 
 compet_not_ok_list = [

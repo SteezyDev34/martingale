@@ -60,12 +60,15 @@ matchlist_file_name=""
 running_file_name=""
 match_list = [] #List des matchs
 match_done_key = ""#Nom du match dans Gsheets
-match_found = 0 # Match valide trouvé
+match_found = False # Match valide trouvé
 mise = 0.2
 probamini = 0.4
 cotemini = 1
+cotebase = 1
+misemax = 0
 perte = 0
 wantwin = 0.2
+nb_tour = 1
 increment = 0
 recup40 = 0
 recup30 = 0
@@ -81,7 +84,7 @@ def init_variable():
     global error
     match_list = [] #List des matchs
     match_done_key = ""#Nom du match dans Gsheets
-    match_found = 0 # Match valide trouvé
+    match_found = False # Match valide trouvé
     url = "https://auxobetting.fr/strategy"+scriptType+"/"
     print(url)
     strategy = getJsonData(url)
@@ -91,6 +94,12 @@ def init_variable():
     print('init probamini : ' + str(probamini))
     cotemini = strategy["cote_recup"]
     print('init cotemini : ' + str(cotemini))
+    cotebase = strategy["cote_base"]
+    print('init cotebase : ' + str(cotebase))
+    nb_tour = strategy["nb_tour"]
+    print('init nb_tour : ' + str(nb_tour))
+    restart_set2 = strategy["restart_set2"]
+    print('init restart_set2 : ' + str(restart_set2))
     perte = 0
     print('init perte : ' + str(perte))
     wantwin = strategy["wantwin"]
