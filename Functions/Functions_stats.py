@@ -6,6 +6,7 @@ import re
 import threading
 import time
 
+import os
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -30,18 +31,22 @@ today = date.today()
 ####
 #ATP
 ####
-# Ouvrez le fichier "atprankinjson.txt" en mode ajout et
-# créez le fichier s'il n'existe pas
-file1 = open("../DataFiles/atprankinjson.txt", "a+")
-# Fermez le fichier
-file1.close()
+# Chemin du fichier
+file_path = "DataFiles/atprankinjson.txt"
+
+# Vérifiez si le fichier existe, sinon créez-le
+if not os.path.exists(file_path):
+    with open(file_path, "a+") as file1:
+        pass  # Crée le fichier et le ferme immédiatement
+
 # Ouvrez à nouveau le fichier en mode lecture
-file1 = open("../DataFiles/atprankinjson.txt", "r")
+with open(file_path, "r") as file1:
+    content = file1.read()
+    # Vous pouvez maintenant traiter le contenu du fichier
 
 # Lisez le contenu mis à jour du fichier
-txt_after_write = file1.read()
+txt_after_write = content
 # Fermez le fichier après la lecture
-file1.close()
 txt_after_write = txt_after_write.split('\n')
 try:
     if txt_after_write[0]!= str(today):
@@ -63,7 +68,7 @@ try:
             players_id_list.append(thename[1].strip()+'|'+player['id'])
         players_id_list = '\n'.join(players_id_list)
         # Ouvrez à nouveau le fichier en mode écriture
-        file1 = open("../DataFiles/atprankinjson.txt", "w+")
+        file1 = open("DataFiles/atprankinjson.txt", "w+")
         # Écrivez l'heure actuelle dans le fichier
         file1.write(str(today)+'\n'+players_id_list)
         print(today)
@@ -76,18 +81,18 @@ except:
 ###
 #WTA
 ###
-# Ouvrez le fichier "atprankinjson.txt" en mode ajout et
-# créez le fichier s'il n'existe pas
-file1 = open("../DataFiles/wtarankinjson.txt", "a+")
-# Fermez le fichier
-file1.close()
-# Ouvrez à nouveau le fichier en mode lecture
-file1 = open("../DataFiles/wtarankinjson.txt", "r")
+file_path = "DataFiles/wtarankinjson.txt"
 
-# Lisez le contenu mis à jour du fichier
-txt_after_write = file1.read()
-# Fermez le fichier après la lecture
-file1.close()
+# Vérifiez si le fichier existe, sinon créez-le
+if not os.path.exists(file_path):
+    # Créez le fichier en mode ajout
+    with open(file_path, "a+"):
+        pass  # Le fichier est créé et immédiatement fermé
+
+# Ouvrez à nouveau le fichier en mode lecture
+with open(file_path, "r") as file1:
+    # Lisez le contenu du fichier
+    txt_after_write = file1.read()
 txt_after_write = txt_after_write.split('\n')
 try:
     if txt_after_write[0]!= str(today):

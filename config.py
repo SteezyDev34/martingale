@@ -3,11 +3,15 @@ import os
 import datetime
 import requests
 import json
+proxy = {
+    "http": "http://auxobettingproxy:Scorpion971@209.200.239.22:51523",
+    "https": "http://auxobettingproxy:Scorpion971@209.200.239.22:51523",
+}
 def getJsonData(url):
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url,proxies=proxy)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -81,31 +85,31 @@ def init_variable():
     global mise, perte, wantwin,increment, probamini, cotemini,recup40,recup30
     global running_file_name,matchlist_file_name,print_running_text,rattrape_perte
     global print_match_live_text,devMode,match_list,match_done_key,match_found
-    global error
+    global error,cotebase,nb_tour,restart_set2
     match_list = [] #List des matchs
     match_done_key = ""#Nom du match dans Gsheets
     match_found = False # Match valide trouvé
     url = "https://auxobetting.fr/strategy"+scriptType+"/"
     print(url)
     strategy = getJsonData(url)
-    mise = strategy["mise"]
+    mise = float(strategy["mise"])
     print('init mise : '+str(mise))
-    probamini = strategy["proba_mini"]
+    probamini = float(strategy["proba_mini"])
     print('init probamini : ' + str(probamini))
-    cotemini = strategy["cote_recup"]
+    cotemini = float(strategy["cote_recup"])
     print('init cotemini : ' + str(cotemini))
-    cotebase = strategy["cote_base"]
+    cotebase = float(strategy["cote_base"])
     print('init cotebase : ' + str(cotebase))
-    nb_tour = strategy["nb_tour"]
+    nb_tour = float(strategy["nb_tour"])
     print('init nb_tour : ' + str(nb_tour))
-    restart_set2 = strategy["restart_set2"]
+    restart_set2 = float(strategy["restart_set2"])
     print('init restart_set2 : ' + str(restart_set2))
     perte = 0
     print('init perte : ' + str(perte))
-    wantwin = strategy["wantwin"]
-    increment = strategy["increment"]
-    recup40 = strategy["mtt_recup"]
-    recup30 = strategy["mtt_recup"]
+    wantwin = float(strategy["wantwin"])
+    increment = float(strategy["increment"])
+    recup40 = float(strategy["mtt_recup"])
+    recup30 = float(strategy["mtt_recup"])
     running_file_name = projectPath+'/SCRIPTS '+scriptType+'/running'
     rattrape_perte = 0
     matchlist_file_name = projectPath+'/SCRIPTS '+scriptType+'/matchlist'

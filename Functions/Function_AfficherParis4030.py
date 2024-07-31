@@ -2,11 +2,11 @@ import time
 
 from selenium.webdriver.support.wait import WebDriverWait
 
-from Function_GetSetActuel import GetSetActuel
+from Functions.Function_GetSetActuel import GetSetActuel
 import config
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from GetIfMatchPage import GetIfMatchPage
+from Functions.GetIfMatchPage import GetIfMatchPage
 def AfficherParis4030(driver):
     config.saveLog('recherche du champ déroulant...',config.newmatch)
     GetSetActuel(driver)

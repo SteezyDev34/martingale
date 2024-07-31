@@ -1,15 +1,20 @@
 import requests
 import json
 import config
-config.scriptType= "40A"
-config.ligue_name = "ATP"
+#config.scriptType= "40A"
+#config.ligue_name = "ATP"
 #config.perte = 10
+# Configuration du proxy
+proxy = {
+    "http": "http://auxobettingproxy:Scorpion971@209.200.239.22:51523",
+    "https": "http://auxobettingproxy:Scorpion971@209.200.239.22:51523",
+}
 def getPerte():
     if getCompetRecup():
         url = "https://auxobetting.fr/strategy"+config.scriptType+"/get_perte.php"
         try:
             # Envoyer une requête GET à l'URL
-            response = requests.get(url)
+            response = requests.get(url,proxies=proxy)
             # Vérifier que la requête a réussi
             response.raise_for_status()
             # Parser le JSON depuis la réponse
@@ -29,11 +34,11 @@ def delPerte(id):
     url = "https://auxobetting.fr/strategy40A/del_perte.php?id="+str(id)
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url,proxies=proxy)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
-        result = response.json()[0]
+        result = response.json()
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
         print(f"Erreur lors de la récupération des données : {e}")
@@ -50,7 +55,7 @@ def getCompetRecup():
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url,proxies=proxy)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -86,7 +91,7 @@ def getCompet():
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url,proxies=proxy)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -100,9 +105,7 @@ def getCompet():
         return
     else:
         compet_ok_list = compets["compet_ok"]
-        print(compet_ok_list)
         compet_not_ok_list = compets["compet_not_ok"]
-        print(compet_not_ok_list)
         try:
             if any(compet_ok in config.ligue_name for compet_ok in
                    compet_ok_list) and not any(
@@ -122,7 +125,7 @@ def SendPerte(scriptType,perte):
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url,proxies=proxy)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -157,4 +160,3 @@ def DispatchPerte():
     if config.perte >0.2:
         SendPerte("4030",config.perte)
 
-getCompet()

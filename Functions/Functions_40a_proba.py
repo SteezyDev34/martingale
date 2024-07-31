@@ -13,8 +13,7 @@ from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 
 from Functions.ValidationDuParis import ValidationDuParis
 import config
-from Functions import Functions_gsheets, GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1, \
-    GetInfosDeMise
+from Functions import GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1
 from Functions import Functions_1XBET
 import re
 from Functions.AfficherParis import AfficherParis
@@ -56,8 +55,8 @@ def all_script(driver):
         print("PERTE : ")
         print(infosperte)
         if infosperte:
-            config.perte = infosperte[1]
-            delPerte(infosperte[0])
+            config.perte = float(infosperte['perte'])
+            delPerte(infosperte['id'])
             config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
         config.set_actuel = GetSetActuel(driver)
@@ -181,7 +180,7 @@ def all_script(driver):
     passageset = False
     winmatch = 0
     config.lose =False
-    while (winmatch < config.nb_tour and not config.error):
+    while (float(winmatch) < float(config.nb_tour) and not config.error):
         # WAIT FOR GAME START
         if passageset:
             config.saved_set = ""
@@ -412,6 +411,7 @@ def all_script(driver):
             print('lose : ' + str(config.perte))
         elif not lose and not config.error:
             config.win += 1
+            config.perte = 0
             try:
                 DeleteBet(driver)
             except:
@@ -422,4 +422,4 @@ def all_script(driver):
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)
-    return infos
+    return True

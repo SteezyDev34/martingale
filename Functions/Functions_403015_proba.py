@@ -2,17 +2,18 @@ import time
 
 from Functions.DeleteBet import DeleteBet
 from Functions.GetIfGameStart import GetIfGameStart
-from Function_GetJeuActuel import GetJeuActuel
-from GetMise import GetMise4030
+from Functions.Function_GetJeuActuel import GetJeuActuel
+from Functions.GetPlayersName import GetPlayersName
+from Functions.GetMise import GetMise
 from Functions.GetScoreActuel import GetScoreActuel
-from Function_GetSetActuel import GetSetActuel
+from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.PlacerMise import PlacerMise4030
 from Functions.GetBet4030 import GetBet4030, GetNextBet4030
-from Functions.ScriptRechercheDeMatch import rechercheDeMatch4030
+from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 
 from Functions.ValidationDuParis import ValidationDuParis4030
 import config
-from Functions import Functions_gsheets
+from Functions import  GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1
 from Functions import Functions_1XBET
 import re
 
@@ -20,37 +21,49 @@ from Functions.Function_AfficherParis4030 import AfficherParis4030
 from Functions.Function_scriptDelRunning import scriptDelRunning
 
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
+from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
 
-score_gamestart_list = [
-    '15:0',
-    '0:15',
-    '15:15',
-    '30:15',
-    '15:30',
-    '40:15',
-    '15:40',
-    '0:30',
-    '30:0',
-    '30:30',
-    '30:40',
-    '40:30',
-    '0:40',
-    '40:0',
-    '40:40',
-    'A:40',
-    '40:A'
-]
 
 
 def all_script(driver):
     # Mise à jour du fichier txt des script en cours
-    scriptDelRunning(config.script_num, config.running_file_name)
+    scriptDelRunning()
 
     # --------
     # SCRIPT RECHERCHE DE MATCH
-    while not rechercheDeMatch4030(driver):
+    while not rechercheDeMatch(driver):
         config.error = True
     # --------
+    if config.match_found and not config.error:
+        config.ligue_name = GetLigueName.fromUrl(driver)[0]
+        config.match_Url = GetLigueName.fromUrl(driver)[1]
+        config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
+
+        # RECHERCHE INFOS DE MISE
+        players = GetPlayersName(driver)
+        if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
+            config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
+            #config.proba40A = 0.5
+        else:
+            config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
+            #config.proba40A = 0.5
+            if config.proba40A ==  0:
+                config.proba40A = Functions_stats1.get_proba_40A_other(players[0], players[1], driver, config.match_Url)
+
+        print("#RECHERCHE INFOS DE MISE")
+        infosperte = getPerte()
+        print("PERTE : ")
+        print(infosperte)
+        if infosperte:
+            config.perte = float(infosperte['perte'])
+            delPerte(infosperte['id'])
+            config.rattrape_perte = 1
+        # END RECHERCHE INFOS DE MISE
+        config.set_actuel = GetSetActuel(driver)
+        config.saved_set = config.set_actuel
+
+        if not config.set_actuel:
+            config.error = True
 
 
     print('config.ligue_name : '+config.ligue_name)
@@ -76,7 +89,7 @@ def all_script(driver):
         config.saveLog('Premier PAris 40A cliqué',config.newmatch)
         send_mise = 0
         #ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
-        GetMise4030(driver)
+        GetMise(driver)
         print('cotemini : ' + str(config.cotemini) + ' cote : ' + str(config.cote))
         print('proba mini : ' + str(config.probamini) + ' proba : ' + str(config.proba40A))
         print('Rattrapage : ' + str(config.rattrape_perte))
@@ -209,7 +222,7 @@ def all_script(driver):
         # ON ENVOIE LA MISE
         config.saveLog("ON ENVOIE LA MISE",config.newmatch)
         send_mise = False
-        GetMise4030(driver)
+        GetMise(driver)
         while not send_mise and not config.error:
             if PlacerMise4030(driver, config.mise):
                 send_mise = True
@@ -360,26 +373,7 @@ def all_script(driver):
             print(winmatch)
             print(config.error)
     if config.perte > 0:
-        perte = config.perte
-        while perte > 5:
-            config.perte = 5
-            config.wantwin = 0
-            config.mise = 0.5
-            Functions_gsheets.suivi_lost30()
-            perte = perte - 5
-            """if perte>1:
-                comp_list = ['wta', 'atp', 'challenger']
-                config.ligue_name = random.choice(comp_list)
-                config.perte = 1
-                config.wantwin = 0
-                config.mise = 0.61
-                Functions_gsheets.suivi_lost30()
-                perte = perte - 1"""
-
-        config.mise = (float(config.wantwin) + float(perte)) / (float(config.cote) - 1)
-        config.mise = round(config.mise, 2)
-        config.perte= perte
-        Functions_gsheets.suivi_lost4030()
+        DispatchPerte()
     infos = [config.win, config.perte, config.wantwin, config.mise]
     print("update " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
