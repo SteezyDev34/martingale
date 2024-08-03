@@ -149,5 +149,8 @@ def saveLog(txt, matchname=newmatch):
             fichier.write('\n')
         # Écrire le texte à la fin du fichier
         heure_actuelle = datetime.datetime.now().strftime("%H:%M:%S")
-        fichier.write(str(heure_actuelle) + ' : ' + str(txt))
+        try:
+            fichier.write(str(heure_actuelle) + ' : ' + str(txt))
+        except:
+            print('erreur de log')
         print(str(txt))
