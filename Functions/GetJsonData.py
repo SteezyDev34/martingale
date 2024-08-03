@@ -18,7 +18,10 @@ def getPerte():
             # Vérifier que la requête a réussi
             response.raise_for_status()
             # Parser le JSON depuis la réponse
-            pertes = response.json()[0]
+            if len(response.json())>0:
+                pertes = response.json()[0]
+            else:
+                return False
             # Afficher les données pour vérification
         except requests.exceptions.RequestException as e:
             print(f"Erreur lors de la récupération des données : {e}")
@@ -31,7 +34,7 @@ def getPerte():
     else:
         return
 def delPerte(id):
-    url = "https://auxobetting.fr/strategy40A/del_perte.php?id="+str(id)
+    url = "https://auxobetting.fr/strategy"+config.scriptType+"/del_perte.php?id="+str(id)
     try:
         # Envoyer une requête GET à l'URL
         response = requests.get(url,proxies=proxy)

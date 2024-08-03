@@ -14,7 +14,7 @@ def PlacerMise(driver):
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME,'cpn-info__division')))
     except Exception as e:
-        config.saveLog(f"#E001912\nUne erreur est survenue : {e}",config.newmatch)
+
         config.saveLog("CHAMP DE MISE NON TROUVÉ",config.newmatch)
         return False
     else:
@@ -43,7 +43,6 @@ def PlacerMise30(driver,mise):
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME,'cpn-info__division')))
     except Exception as e:
-        config.saveLog(f"#E001912\nUne erreur est survenue : {e}",config.newmatch)
         config.saveLog("CHAMP DE MISE NON TROUVÉ",config.newmatch)
         return False
     else:
@@ -72,7 +71,6 @@ def PlacerMise4030(driver,mise):
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME,'cpn-info__division')))
     except Exception as e:
-        config.saveLog(f"#E001912\nUne erreur est survenue : {e}",config.newmatch)
         config.saveLog("CHAMP DE MISE NON TROUVÉ",config.newmatch)
         return False
     else:

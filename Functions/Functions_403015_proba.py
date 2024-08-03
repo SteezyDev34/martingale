@@ -13,7 +13,7 @@ from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 
 from Functions.ValidationDuParis import ValidationDuParis4030
 import config
-from Functions import  GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1
+from Functions import GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1
 from Functions import Functions_1XBET
 import re
 
