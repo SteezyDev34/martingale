@@ -168,6 +168,8 @@ def all_script(driver):
             gamestart = 1
             config.jeu_actuel = 0
             if config.rattrape_perte > 0:
+                DispatchPerte()
+                config.perte = 0
                 config.error = False
                 config.saveLog("passage set 2",config.newmatch)
                 config.saveLog("attente 30 sec",config.newmatch)

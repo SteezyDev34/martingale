@@ -9,7 +9,7 @@ proxy = {
 }
 def getJsonData(url):
     i =0
-    while i<2:
+    while i<5:
         i+=1
         print(proxy)
         # URL du lien JSON de la strategy

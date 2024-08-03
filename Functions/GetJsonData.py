@@ -118,13 +118,16 @@ def getCompet():
         print(f"Pas de suppression de perte {e}")
     else:
         compet_ok_list = compets["compet_ok"]
+        print(compet_ok_list)
         compet_not_ok_list = compets["compet_not_ok"]
+        print(compet_not_ok_list)
+
         try:
             if any(compet_ok in config.ligue_name for compet_ok in
                    compet_ok_list) and not any(
                 compet_not_ok in config.ligue_name for
                 compet_not_ok in compet_not_ok_list):
-                print("COMPET RECUP OK")
+                print("COMPET OK")
                 return True
 
             else:
