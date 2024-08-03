@@ -8,23 +8,26 @@ proxy = {
     "https": "http://auxobettingproxy:Scorpion971@209.200.239.22:51523",
 }
 def getJsonData(url):
-    # URL du lien JSON de la strategy
-    try:
-        # Envoyer une requête GET à l'URL
-        response = requests.get(url,proxies=proxy)
-        # Vérifier que la requête a réussi
-        response.raise_for_status()
-        # Parser le JSON depuis la réponse
-        strategy = response.json()[0]
-        # Afficher les données pour vérification
-    except requests.exceptions.RequestException as e:
-        print(f"Erreur lors de la récupération des données : {e}")
-        return
-    except json.JSONDecodeError as e:
-        print(f"Erreur lors du parsing du JSON : {e}")
-        return
-    else:
-        return strategy
+    i =0
+    while i<2:
+        i+=1
+        print(proxy)
+        # URL du lien JSON de la strategy
+        try:
+            # Envoyer une requête GET à l'URL
+            response = requests.get(url,proxies=proxy)
+            # Vérifier que la requête a réussi
+            response.raise_for_status()
+            # Parser le JSON depuis la réponse
+            strategy = response.json()[0]
+            # Afficher les données pour vérification
+        except requests.exceptions.RequestException as e:
+            print(f"Erreur lors de la récupération des données : {e}")
+        except json.JSONDecodeError as e:
+            print(f"Erreur lors du parsing du JSON : {e}")
+        else:
+            return strategy
+
 projectPath = os.path.dirname(os.path.abspath(__file__))
 #Initialisation des varables
 script_num = 0 # Numéro du Script
