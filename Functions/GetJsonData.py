@@ -17,6 +17,7 @@ def getPerte():
             response = requests.get(url,proxies=proxy)
             # Vérifier que la requête a réussi
             response.raise_for_status()
+            print(response.json())
             # Parser le JSON depuis la réponse
             pertes = response.json()[0]
             # Afficher les données pour vérification
@@ -26,6 +27,8 @@ def getPerte():
         except json.JSONDecodeError as e:
             print(f"Erreur lors du parsing du JSON : {e}")
             return
+        except Exception as e:
+            print(f"pas de perte {e}")
         else:
             return pertes
     else:
@@ -38,6 +41,7 @@ def delPerte(id):
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
+        print(response.json())
         result = response.json()
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
@@ -46,6 +50,8 @@ def delPerte(id):
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
         return
+    except Exception as e:
+        print(f"Pas de suppression de perte {e}")
     else:
         print(result)
         return True
@@ -67,6 +73,8 @@ def getCompetRecup():
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
         return
+    except Exception as e:
+        print(f"Pas de compet {e}")
     else:
         compet_ok_list = compets["compet_recup_ok"]
         print(compet_ok_list)
@@ -103,6 +111,8 @@ def getCompet():
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
         return
+    except Exception as e:
+        print(f"Pas de suppression de perte {e}")
     else:
         compet_ok_list = compets["compet_ok"]
         compet_not_ok_list = compets["compet_not_ok"]
@@ -137,6 +147,8 @@ def SendPerte(scriptType,perte):
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
         return
+    except Exception as e:
+        print(f"Pas d'envoi de perte {e}")
     else:
         if result['status'] == "success":
             print(str(perte)+ "> Perte insert in strategy"+str(scriptType))
