@@ -1,4 +1,3 @@
-import pygsheets
 import os
 import datetime
 import requests
