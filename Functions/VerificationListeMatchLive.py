@@ -10,12 +10,12 @@ def VerificationListeMatchLive(driver):
 
     except:
         txtlog = "Liste match live non visible!"
-        config.saveLog(txtlog,config.newmatch)
+        config.saveLog(txtlog,1,config.newmatch)
         print(txtlog)
         return False
     else:
         if not config.print_match_live_text:
             txtlog = "Liste match live OK!"
-            config.saveLog(txtlog, config.newmatch)
+            config.saveLog(txtlog,0, config.newmatch)
             config.print_match_live_text = True
         return True

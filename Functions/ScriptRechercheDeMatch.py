@@ -21,7 +21,6 @@ def rechercheDeMatch(driver):
         """On vérifie si c'est la page d'un match """
         config.match_found = GetIfMatchPage(driver)
         # SCRIPT RECHERCHE DE MATCH
-        config.saveLog('Recherche de match', config.newmatch)
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
         GetIfScriptsRunning()
         # VERIFICATION SI PAGE DE LIST LIVE"""
@@ -32,11 +31,11 @@ def rechercheDeMatch(driver):
         # RECUPERATION DES LIGUES EN COURS
         bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                               'dashboard-champ-content')
-        config.saveLog('nb ligue found : '+str(len(bet_list_ligue)),config.newmatch)
         # POUR CHAQUE LIGUE RÉCUPÉRÉE
         for bet_ligue in bet_list_ligue:
             # ON RÉCUPÈRE LE NOM DE LA LIGUE
             config.ligue_name = GetLigueName.main(bet_ligue)
+            print(config.ligue_name)
             # EN CAS D'ERREUR
             if not config.ligue_name:
                 config.error = False
@@ -60,7 +59,7 @@ def rechercheDeMatch(driver):
                                                                    'c-events-scoreboard__lines_tennis')
                         except:
                             txtlog = "Impossible de récupérer le score"
-                            config.saveLog(txtlog, config.newmatch)
+                            config.saveLog(txtlog,0, config.newmatch)
                             print(txtlog)
                             continue
                         else:
@@ -68,6 +67,7 @@ def rechercheDeMatch(driver):
                             if len(div_bet_score) <= 0:
                                 continue
                             # on le vérifie
+                            print(config.score_to_start)
                             bet_score = GetMatchScore.main(div_bet_score[0],
                                                            config.score_to_start)
                             if bet_score:  # SI LE MATCH EST PRET
@@ -84,16 +84,12 @@ def rechercheDeMatch(driver):
                                         break
                                     else:
                                         continue
-            else:
-                config.saveLog('Mauvaise ligue :'+config.ligue_name)
-            # si un match est trouvé on arrete la recherche
             if config.match_found:
                 break
 
         if not config.match_found:
+            config.saveLog('PAS DE MATCH TROUVE',1)
             driver.get('https://1xbet.com/fr/live/Tennis/')
-            config.saveLog('Pas de bonne ligue trouvé, attente 30 sec', config.newmatch)
-            time.sleep(30)
 
 
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE

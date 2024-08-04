@@ -59,7 +59,6 @@ def selection_des_paris_du_set(driver,set):
                                 tentative = tentative+1
                             else:
                                 if select_option_text.strip() == set:
-                                    print('menu :' + set + ' trouvé in :' + select_option.text)
                                     try:
                                         select_option.click()
                                         time.sleep(1)

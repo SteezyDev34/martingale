@@ -1,6 +1,8 @@
 # Function_GetMatchScore
 from selenium.webdriver.common.by import By
 
+import config
+
 
 def main(div_bet_score,score_to_start):
     get_bet_score = False
@@ -11,6 +13,7 @@ def main(div_bet_score,score_to_start):
         bet_score = div_bet_score.text
         bet_score = bet_score.replace(
         '\n', '')
+        config.saveLog('SCore : '+str(bet_score),0)
     except:
         print('Impossible de lire le score du match!')
         get_bet_score = False

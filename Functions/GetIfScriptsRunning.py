@@ -9,11 +9,11 @@ def GetIfScriptsRunning():
     txtlog = ""
     if not config.print_running_text:
         txtlog = "Est ce que le script peut y aller?"
-        config.saveLog(txtlog, config.newmatch)
+        config.saveLog(txtlog, 0, config.newmatch)
     while not go:
         if not config.print_running_text:
             txtlog = "Script : " + str(config.script_num)
-            config.saveLog(txtlog, config.newmatch)
+            config.saveLog(txtlog, 0, config.newmatch)
         if config.script_num > 1:  #si le script n'est pas le 1 car il doit forcément se lancer
             autre_script = 1
             while autre_script < config.script_num:
@@ -30,7 +30,7 @@ def GetIfScriptsRunning():
                     #on arrête la boucle
                     if not config.print_running_text:
                         txtlog = "script " + str(config.script_num) + " STOP!"
-                        config.saveLog(txtlog, config.newmatch)
+                        config.saveLog(txtlog,1, config.newmatch)
                         print(txtlog)
                         config.print_running_text = True
                     break
@@ -39,16 +39,15 @@ def GetIfScriptsRunning():
             if autre_script == config.script_num:
                 if not config.print_running_text:
                     txtlog = "script " + str(config.script_num) + " GO!"
-                    config.saveLog(txtlog, config.newmatch)
+                    config.saveLog(txtlog,1, config.newmatch)
                     print(txtlog)
                     config.print_running_text = True
                 go = True
                 break
         else:
             if not config.print_running_text:
-                txtlog = "first script " + str(config.script_num) + " GO!"
-                config.saveLog(txtlog, config.newmatch)
-                print(txtlog)
+                txtlog = "script " + str(config.script_num) + " GO!"
+                config.saveLog(txtlog,1, config.newmatch)
             go = True
             config.print_running_text = True
             break

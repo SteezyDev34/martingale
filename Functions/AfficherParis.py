@@ -34,7 +34,7 @@ def AfficherParis(driver):
                 config.saveLog("Erreur lors du clic sur le champ deroulant", config.newmatch)
                 tentative = tentative+1
             else:
-                config.saveLog("ouverture du champ déroulant...", config.newmatch)
+                config.saveLog("ouverture du champ déroulant...",0, config.newmatch)
                 try:
                     element = WebDriverWait(driver, 5).until(
                         EC.presence_of_element_located(
@@ -61,7 +61,6 @@ def AfficherParis(driver):
                                 config.saveLog(str(tentative), config.newmatch)
                             else:
                                 if select_option_text.strip() == str(config.set_actuel)+' Set':
-                                    config.saveLog('menu :' + str(config.set_actuel) + ' trouvé in :' + select_option.text, config.newmatch)
                                     try:
                                         select_option.click()
                                         time.sleep(1)

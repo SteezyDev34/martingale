@@ -80,15 +80,14 @@ def getCompetRecup():
         print(f"Pas de compet {e}")
     else:
         compet_ok_list = compets["compet_recup_ok"]
-        print(compet_ok_list)
+        config.saveLog(compet_ok_list,0)
         compet_not_ok_list = compets["compet_recup_not_ok"]
-        print(compet_not_ok_list)
+        config.saveLog(compet_not_ok_list,0)
         try:
             if any(compet_ok in config.ligue_name for compet_ok in
                    compet_ok_list) and not any(
                 compet_not_ok in config.ligue_name for
                 compet_not_ok in compet_not_ok_list):
-                print("COMPET RECUP OK")
                 return True
 
             else:
@@ -118,16 +117,15 @@ def getCompet():
         print(f"Pas de suppression de perte {e}")
     else:
         compet_ok_list = compets["compet_ok"]
-        print(compet_ok_list)
+        #config.saveLog(compet_ok_list,0)
         compet_not_ok_list = compets["compet_not_ok"]
-        print(compet_not_ok_list)
+        #config.saveLog(compet_not_ok_list,0)
 
         try:
             if any(compet_ok in config.ligue_name for compet_ok in
                    compet_ok_list) and not any(
                 compet_not_ok in config.ligue_name for
                 compet_not_ok in compet_not_ok_list):
-                print("COMPET OK")
                 return True
 
             else:

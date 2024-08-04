@@ -33,5 +33,5 @@ def GetJeuActuel(driver):
             config.saveLog("erreur : numjeu")
             return False
         else:
-            config.saveLog('Récupération du jeu actuel : ' + str(config.jeu_actuel))
+            config.saveLog('Récupération du jeu actuel : ' + str(config.jeu_actuel),0)
             return True

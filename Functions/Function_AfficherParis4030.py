@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from Functions.GetIfMatchPage import GetIfMatchPage
 def AfficherParis4030(driver):
-    config.saveLog('recherche du champ déroulant...',config.newmatch)
+    config.saveLog('recherche du champ déroulant...',0,config.newmatch)
     GetSetActuel(driver)
     selection = False
     tentative = 0

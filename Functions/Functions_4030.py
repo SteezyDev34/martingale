@@ -1,537 +1,390 @@
 import time
-from Functions import Functions_gsheets
+
+from Functions.DeleteBet import DeleteBet
+from Functions.GetIfGameStart import GetIfGameStart
+from Functions.Function_GetJeuActuel import GetJeuActuel
+from Functions.GetPlayersName import GetPlayersName
+from Functions.GetMise import GetMise
+from Functions.GetScoreActuel import GetScoreActuel
+from Functions.Function_GetSetActuel import GetSetActuel
+from Functions.PlacerMise import PlacerMise4030
+from Functions.GetBet4030 import GetBet4030, GetNextBet4030
+from Functions.ScriptRechercheDeMatch import rechercheDeMatch
+
+from Functions.ValidationDuParis import ValidationDuParis4030
+import config
+from Functions import GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1
 from Functions import Functions_1XBET
 import re
-from Functions import Functions_stats
-from Functions import Functions_stats1
-from selenium.webdriver.common.by import By
 
-score_gamestart_list = [
-    '15:0',
-    '0:15',
-    '15:15',
-    '30:15',
-    '15:30',
-    '40:15',
-    '15:40',
-    '0:30',
-    '30:0',
-    '30:30',
-    '30:40',
-    '40:30',
-    '0:40',
-    '40:0',
-    '40:40',
-    'A:40',
-    '40:A'
-]
-score_to_start = [
-    "00(0)00(0)",
-    "00(15)00(0)",
-    "00(0)00(15)",
-    "00(15)00(15)",
-    "00(30)00(15)",
-    "00(15)00(30)",
-    "00(30)00(0)",
-    "00(0)00(30)"
-]
+from Functions.Function_AfficherParis4030 import AfficherParis4030
+from Functions.Function_scriptDelRunning import scriptDelRunning
+
+from Functions.retour_section_tps_reglementaire import RetourTpsReg
+from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
 
 
-def all_script(driver, script_num, setaffiche, error, win, mise, perte, wantwin, increment, cote, lose, firstgame,
-               jeu, set_actuel, set, score_actuel, passageset, x, match_list, match_done_key, match_found,
-               rattrape_perte, matchlist_file_name, running_file_name):
-    ##RECHERCHE DE MATCH
-    Functions_1XBET.del_running(script_num, running_file_name)  # SCRIPT NON EN COURS, SUPPRESSION DE LA LISTE RUNNING
-    error = 0
-    newmatch = "no-newmatch"
-    compet_ok = "no-compet-ok"
 
-    # ON RÉCUPÈRE LES COMPET À JOUER
-    get_compet = Functions_gsheets.get_compet_ok()
-    compet_ok_list = get_compet[0]
-    ligue_name = ''
-    # ON RÉCUPÈRE LES COMPET À NE PAS JOUER
-    compet_not_ok_list = get_compet[1]
-    # AUCUN MATCH TROUVE
+def all_script(driver):
+    # Mise à jour du fichier txt des script en cours
+    scriptDelRunning()
 
-    printtext = 0  # est ce que le print a déjà été affiché
-
-    # VÉRIFICATION SI PAGE DE MATCH
-    if Functions_1XBET.verification_page_de_match(driver) == True:
-        print('PAGE MATCH OK!')
-        match_found = 1
-        ligue_name = Functions_1XBET.get_ligue_name_from_url(driver)  # ON
-        newmatch = Functions_1XBET.verification_match_trouve_url(driver, matchlist_file_name)[1]
-    # FIN# VÉRIFICATION SI PAGE DE MATCH
-
+    # --------
     # SCRIPT RECHERCHE DE MATCH
-    while (match_found == 0 and error == 0):
-        if printtext == 0:  # SI LE TEXTE D'ATTENTE N'EST PAS ENCORE AFFICHÉ
-            print("wainting for go!")
+    while not rechercheDeMatch(driver):
+        print("err rech match")
+        driver.get('https://1xbet.com/fr/live/Tennis/')
+        config.error = True
+    # --------
+    if config.match_found and not config.error:
+        config.ligue_name = GetLigueName.fromUrl(driver)[0]
+        config.match_Url = GetLigueName.fromUrl(driver)[1]
+        config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
 
-        print_running_text = 0  # est ce que le texte a déjà été affiché
-
-        # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-        while Functions_1XBET.get_if_running(script_num, running_file_name) != True:
-            if print_running_text == 0:
-                print("script " + str(script_num) + " STOP!")
-                print_running_text = 1
-
-            # script_running = 1 #A SUPP
-        # FIN# EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-
-        if printtext == 0:
-            print("script " + str(script_num) + " GO!")
-            print('RECHERHCE DE MATCH')
-            printtext = 1
-
-        # VERIFICATION SI PAGE DE MATCH LIVE
-        if Functions_1XBET.verification_liste_match_live(driver) == True:
-            if printtext == 0:
-                print('LISTE MATCH LIVE OK!')
-                printtext = 1
-            # RECUPERATION DES LIGUES EN COURS
-            bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                                  'dashboard-champ-content')
-            if len(bet_list_ligue) > 0:  # SI DES LIGUES SONT RÉCUPÉRÉES
-                for bet_ligue in bet_list_ligue:
-                    # ON RÉCUPÈRE LE NOM DE LA LIGUE
-                    ligue_name = ""
-                    ligue_name = Functions_1XBET.get_ligue_name(bet_ligue)
-
-                    if ligue_name != False:
-                        # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-                        if any(compet_ok in ligue_name for compet_ok in
-                               compet_ok_list) and not any(
-                            compet_not_ok in ligue_name for
-                            compet_not_ok in compet_not_ok_list):
-                            #print('Nom de ligue = ' + ligue_name)
-                            # DEBUG DE COMPET OK MAIS CE SCRIPT EST FACULTATIF
-                            for compet_ok in compet_ok_list:
-                                if compet_ok in ligue_name:
-                                    #print('compet ok in : ' + compet_ok)
-                                    for compet_not_ok in compet_not_ok_list:
-                                        if compet_not_ok in ligue_name:
-                                            #print('compet not ok in : ' + compet_not_ok)
-                                            continue
-                                        else:
-                                            compet_ok = ligue_name
-                                            #print('stop compet ok : ' + compet_ok)
-                                            break
-
-                            # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
-                            try:
-                                bet_items = bet_ligue.find_elements(By.CLASS_NAME,
-                                                                    'c-events-scoreboard__item')
-                            except:
-                                continue
-
-                            else:
-                                if len(bet_items) > 0:  # SI DES MATCHS SONT RÉCUPÉRÉS
-                                    # print('Vérification du score!')
-                                    for bet_item in bet_items:
-                                        if match_found != 0:
-                                            break  # si un match est trouvé on arrete la recherche
-                                        try:
-                                            div_bet_score = bet_item.find_elements(By.CLASS_NAME,
-                                                                                   'c-events-scoreboard__lines_tennis')
-                                        except:
-                                            print("Impossible de récupérer le score")
-                                        else:
-                                            if len(div_bet_score) > 0:
-                                                bet_score = Functions_1XBET.get_match_score(div_bet_score[0],
-                                                                                            score_to_start)
-                                                if bet_score == True:  # SI LE MATCH EST PRET
-                                                    # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
-                                                    newmatch = Functions_1XBET.verification_match_trouve(bet_item,
-                                                                                                         matchlist_file_name)
-                                                    if newmatch[0] == True:
-                                                        if Functions_1XBET.ouverture_page_match(bet_item, script_num,
-                                                                                                newmatch[1],
-                                                                                                running_file_name,
-                                                                                                matchlist_file_name) == True:
-                                                            newmatch = newmatch[1]
-                                                            match_found = 1
-                                                        else:
-                                                            error = 1
-                    else:
-                        error = 1
-
-                    # si un match est trouvé on arrete la recherche
-                    if match_found != 0:
-                        break
+        # RECHERCHE INFOS DE MISE
+        players = GetPlayersName(driver)
+        if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
+            config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
+            #config.proba40A = 0.5
         else:
-            error = 1
-        # FIN# VERIFICATION SI PAGE DE MATCH LIVE
+            config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
+            #config.proba40A = 0.5
+            if config.proba40A ==  0:
+                config.proba40A = Functions_stats1.get_proba_40A_other(players[0], players[1], driver, config.match_Url)
 
-    # END SCRIPT RECHERCHE DE MATCH
-    proba40A = 0.45
-    # RECHERCHE INFOS DE MISE
-    players = Functions_1XBET.get_players_name(driver)
-    proba40A = 0
-    if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
-        proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
-    else:
-        proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
-    if proba40A >= 0.43:
-        rattrape_perte = 2
-    infos_de_mise = Functions_gsheets.get_infos_de_mise(ligue_name, rattrape_perte, perte, wantwin, mise, increment,
-                                                        proba40A)
-    print("#RECHERCHE INFOS DE MISE")
-    perte = infos_de_mise[0]
-    wantwin = infos_de_mise[1]
-    mise = infos_de_mise[2]
-    increment = infos_de_mise[3]
-    rattrape_perte = infos_de_mise[4]
-    saved_set = ""
-    # END RECHERCHE INFOS DE MISE
+        print("#RECHERCHE INFOS DE MISE")
+        infosperte = getPerte()
+        print("PERTE : ")
+        print(infosperte)
+        if infosperte:
+            config.perte = float(infosperte['perte'])
+            delPerte(infosperte['id'])
+            config.rattrape_perte = 1
+        # END RECHERCHE INFOS DE MISE
+        config.set_actuel = GetSetActuel(driver)
+        config.saved_set = config.set_actuel
 
-    if error == 0:
-        set_actuel = Functions_1XBET.get_set_actuel(driver, error, saved_set)
-        saved_set = set_actuel
-        if set_actuel == False:
-            error = 1
-        try:
-            numset = int(set_actuel.split(' ')[0])
-        except:
-            error = 1
-        else:
-            set = str(numset) + " Set"
-            set_actuel = set
-            # print("set actuel : " + set)
+        if not config.set_actuel:
+            config.error = True
+
+
+    print('config.ligue_name : '+config.ligue_name)
 
     ##PREPARATTION PREMIER PARIS
-    bet_40a = 0
-    while bet_40a == 0 and error == 0:
-        if Functions_1XBET.selection_des_paris_30_40_du_set(driver, set) == True:
-            error = 0
-        else:
-            Functions_1XBET.verification_page_de_match(driver)
-            error = 1
+    config.saveLog('PREPARATION DU PREMIER PARIS',1,config.newmatch)
+    bet_40a = False
+    tentative = 0
+    while not bet_40a and not config.error:
+        #Affichage de la liste des paris
+        config.saveLog('Affichage de la liste des paris',0,config.newmatch)
+        if not AfficherParis4030(driver):
+            config.error = True
             break
-        jeu_actuel = Functions_1XBET.get_jeu_actuel(driver)
-        jeu = Functions_1XBET.recherche_first_paris_40_30(driver, jeu_actuel)
-        if jeu[0] == True:
-            win_score = jeu[2]
-            print('first win score :'+win_score)
-            jeu = jeu_actuel
-
         else:
-            error = 1
-            print('error recup jeu #ERR345')
+            #On recherche le jeu actuel
+            config.saveLog('liste des pariis affichée, On recherche le jeu actuel',0,config.newmatch)
+            jeu = GetBet4030(driver)
 
-        send_mise = 0
-        infos_de_mise = Functions_1XBET.get_mise(driver, rattrape_perte, wantwin, perte)
-        mise = infos_de_mise[0]
-        cote = infos_de_mise[1]
-        print('nouvelle perte : ' + str(perte))
-        while send_mise == 0 and error == 0:
-            if Functions_1XBET.placer_mise(driver, mise) == True:
-                send_mise = 1
-            else:
-                error = 1
-        validate_bet = 0
-        gamestart = 0
-        tentative = 0
-        saved_score = ""
-        ##VALIDATION DU PARIS SI SCORE OK
-        while validate_bet == 0 and error == 0 and tentative < 30:
-            # VÉRIFICATION DU SCORE ACTUEL
-            score_actuel = Functions_1XBET.get_score_actuel(driver, saved_score)
-            saved_score = score_actuel
-            if score_actuel == False:
-                error = 1
-            if score_actuel == "0:0" and gamestart == 0:
-                print("GAME NOT START")
-            elif score_actuel == "0:0" and gamestart == 1:
-                validate_bet = 0
-                jeu = jeu + 1
-                print("GAME PASS WITHOUT VALIDATE")
-                gamestart = 0
-                result = 1
-                lose = 1
-                findbtn = 1
-                if win_score == '30:40':
-                    win_score = '40:30'
+        if not jeu:
+            tentative +=1
+            if tentative>5:
+                config.error = True
+                config.saveLog('error recup jeu #ERR345',1,config.newmatch)
+        else:
+            win_score30 = jeu[1]
+            config.saveLog('Premier PAris 40A cliqué',1,config.newmatch)
+            send_mise = 0
+            #ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
+            GetMise(driver)
+            config.saveLog('cotemini : ' + str(config.cotemini) + ' cote : ' + str(config.cote),1)
+            config.saveLog('proba mini : ' + str(config.probamini) + ' proba : ' + str(config.proba40A),1)
+            config.saveLog('Rattrapage : ' + str(config.rattrape_perte),1)
+            if float(config.proba40A) < float(config.probamini) and float(config.cote) < float(config.cotemini):
+                if config.perte <=0:
+                    bet_40a = True
+                    config.error = True
+                    config.saveLog('Cote trop faible 0,2',config.newmatch)
+                    break
+            tentative_placermise = 0
+            validate_bet = False
+            config.saveLog('On place la mise',1,config.newmatch)
+            while not PlacerMise4030(driver,config.mise) and not config.error and tentative_placermise < 5:
+                tentative_placermise+=1
+                if tentative_placermise == 2:
+                    validate_bet = True
                 else:
-                    win_score = '30:40'
+                    validate_bet = False
+            gamestart = False
+            tentative = 0
+            config.saved_score = ""
+            config.saveLog('On vérifie le score pour valider le paris',0,config.newmatch)
+            ##VALIDATION DU PARIS SI SCORE OK
+            while not validate_bet and not config.error and tentative < 30:
+                # VÉRIFICATION DU SCORE ACTUEL
+                GetScoreActuel(driver)
+                config.saved_score = config.score_actuel
+                if config.score_actuel == "0:0" and not gamestart:
+                    config.saveLog("GAME NOT START",config.newmatch)
+                elif config.score_actuel == "0:0" and gamestart:
+                    validate_bet = True
+                    config.jeu_actuel += 1
+                    config.saveLog("GAME PASS WITHOUT VALIDATE ON FIRST",config.newmatch)
+                    gamestart = False
+                    result = True
+                    lose = True
+                    findbtn = True
+                    if win_score30 == '30:40':
+                        win_score30 = '40:30'
+                    else:
+                        win_score30 = '30:40'
+                else:
+                    gamestart = True
+                    config.saveLog("GAME START",config.newmatch)
+                if ValidationDuParis4030(driver, config.mise):
+                    validate_bet = True
+                    bet_40a = True
+                    config.jeu_actuel +=1
+                    config.perte = float(config.perte) + float(config.mise)
+                    config.wantwin = float(config.wantwin) + float(config.increment)
+                    config.saveLog("prochain jeu : " + str(config.jeu_actuel), config.newmatch)
+                    config.saveLog("wantwin : " + str(config.wantwin), config.newmatch)
+                    config.saveLog("perte : " + str(config.perte), config.newmatch)
+                    config.saveLog("mise : " + str(config.mise), config.newmatch)
+                    config.saveLog("increment : " + str(config.increment), config.newmatch)
+                else:
+                    GetJeuActuel(driver)
+                    tentative = tentative + 1
+                    validate_bet = True
+                    config.saveLog("Erreur lor de la validation, nouvelle tentative",config.newmatch)
 
-                ###ajouter ici les actions avant de reprendre
-                '''elif score_actuel == "40:40" or score_actuel == "40:A" or score_actuel == "A:40":
-                    error = 1
-                    print("40A leave!")
-                    Functions_1XBET.delete_bet(driver, error)
-                    ###ajouter ici les actions avant de reprendre
-                    break'''
+    # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
+    config.saveLog("retour tps reg 1",config.newmatch)
+    RetourTpsReg(driver)
+    ### AND PREPARE FIRST GAME
+    passageset = False
+    winmatch = 0
+    config.lose =False
+    lose = False
+    while (winmatch <= 0 and not config.error):
+        print("wzit")
+        # WAIT FOR GAME START
+        if passageset:
+            print("passage àà")
+            config.score_actuel = '0:0'
+            gamestart = 1
+            config.jeu_actuel = 0
+            if config.rattrape_perte > 0:
+                DispatchPerte()
+                config.perte = 0
+                config.error = False
+                config.saveLog("passage set 2",config.newmatch)
+                config.saveLog("attente 30 sec",config.newmatch)
+                time.sleep(30)
             else:
-                gamestart = 1
-            if Functions_1XBET.validation_du_paris(driver, jeu, mise) == True:
-                validate_bet = 1
-                jeu = jeu + 1
-                perte = perte + mise
-                wantwin = wantwin + increment
-                bet_40a = 1
-                print("prochain jeu : " + str(jeu))
-                print("wantwin : " + str(wantwin))
-                print("perte : " + str(perte))
-                print("mise : " + str(mise))
-                print("increment : " + str(increment))
-            else:
-                getjeu = Functions_1XBET.get_jeu_actuel(driver)
-                tentative = tentative + 1
-                validate_bet = 2
-                if getjeu != jeu:
+                config.error = True
+                print("erreur perte en 1 set")
+        elif str(config.jeu_actuel) == '13':
+            while config.score_actuel != "0:1" and config.score_actuel != "1:0":
+                GetScoreActuel(driver)
+                if config.score_actuel != "15:15":
                     break
 
-        # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
-    print("retour tps reg 1")
-    Functions_1XBET.retour_section_tps_reglementaire(driver)
-    ### AND PREPARE FIRST GAME
-    winmatch = 0
-    while (winmatch <= 0 and error == 0):
-        # WAIT FOR GAME START
-        if passageset == 1:
-            score_actuel = '0:0'
-            gamestart = 1
-            jeu_actuel = 0
-            if rattrape_perte < 3:
-                error = 0
-                print("passage set 2")
-                time.sleep(30)
-                passageset = 0
-            else:
-                error = 1
-                print("erreur perte en 1 set")
-        else:
+                time.sleep(10)
+            print('debutie break')
+            while config.score_actuel != "0:0":
+                GetScoreActuel(driver)
+                time.sleep(10)
             gamestart = 0
+        else:
+            gamestart = False
             ##ATTENTE QUE LE JEU COMMENCE
-            Functions_1XBET.get_if_game_start(driver, saved_score)
-        printext = 0
+            GetIfGameStart(driver)
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
-        bet_40a = 0
-        while bet_40a == 0 and error == 0:
+        config.saveLog("JEU COMMENCÉ ON PREPARE LE PROCHAIN BET",config.newmatch)
+        bet_40a = False
+        while not bet_40a and not config.error:
 
-            if Functions_1XBET.selection_des_paris_30_40_du_set(driver, set) == True:
-                error = 0
-            else:
-                Functions_1XBET.verification_page_de_match(driver)
-                error = 1
+            # Affichage de la liste des paris
+            config.saveLog('Affichage de la liste des paris',config.newmatch)
+            if not AfficherParis4030(driver):
+                config.error = True
                 break
-            if jeu_actuel != 0:
-                jeu_actuel = Functions_1XBET.get_jeu_actuel(driver) + 1
-            jeu = Functions_1XBET.recherche_paris_40_30(driver, jeu_actuel)
-
-            if jeu[0] == True:
-                #win_score = jeu[2]
-                jeu = jeu_actuel
-
-                bet_40a = 1
+            # On recherche le jeu actuel
+            GetJeuActuel(driver)
+            config.saveLog('liste des paris affichée, On recherche le jeu actuel',config.newmatch)
+            if passageset:
+                print("jeu 1 > "+str(config.jeu_actuel))
+                jeu = GetBet4030(driver)
+                passageset = False
             else:
-                error = 1
+                print("jeu > " + str(config.jeu_actuel))
+                jeu = GetNextBet4030(driver)
+            if not jeu:
+                config.error = True
+                config.saveLog('error recup jeu #ERR345',config.newmatch)
+            else:
+                win_score30 = jeu[1]
+                bet_40a = True
+
+            config.saveLog('prochain PAris 40A cliqué',config.newmatch)
         # ON ENVOIE LA MISE
-        send_mise = 0
-        infos_de_mise = Functions_1XBET.get_mise(driver, rattrape_perte, wantwin, perte)
-        mise = infos_de_mise[0]
-        cote = infos_de_mise[1]
-        while send_mise == 0 and error == 0:
-            if Functions_1XBET.placer_mise(driver, mise) == True:
-                send_mise = 1
+        config.saveLog("ON ENVOIE LA MISE",config.newmatch)
+        send_mise = False
+        GetMise(driver)
+        while not send_mise and not config.error:
+            if PlacerMise4030(driver, config.mise):
+                send_mise = True
             else:
-                error = 1
+                config.error = True
         ##ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
-        validate_bet = 0
-        saved_score = ""
-        saved_set = ""
+        config.saveLog("ON ATTEND LE RESULTAT POUR VALIDER LE PARIS",config.newmatch)
+        validate_bet = False
+        config.saved_score = ""
+        config.saved_set = ""
         timesleep = 1  # TEMPS D'ATTENTE AVANT DE RECUPERER LE SCORE PASSE À 1 SI 40 DANS LE SCORE
-        result = 0
-        print("retour tps reg 2")
-        Functions_1XBET.retour_section_tps_reglementaire(driver)
-        while (result <= 0 and error == 0):
+        result = False
+        RetourTpsReg(driver)
+        while not result and not config.error:
             time.sleep(timesleep)
-            saved_score = score_actuel
-            score_actuel = Functions_1XBET.get_score_actuel(driver, saved_score)
-            print('win score = '+ win_score)
-            if score_actuel == False:
-                error = 1
-            if score_actuel == '0:0' and saved_score == win_score:
-                result = 1
-                lose = 0
-                winmatch = 1
-                Functions_1XBET.delete_bet(driver, error)
-                print('WIN')
-            elif score_actuel == '0:0' and saved_score != win_score :
-                print('LOSE')
-                validate_bet = 0
+            saved_score = config.score_actuel
+            GetScoreActuel(driver)
+            if not config.score_actuel:
+                config.error = True
+                break
+            if config.score_actuel == '0:0' and saved_score == win_score30:
+                result = True
+                lose = False
+                winmatch = True
+                DeleteBet(driver)
+                config.saveLog('WIN',config.newmatch)
+            elif config.score_actuel == '0:0' and saved_score != win_score30:
+                config.saveLog('LOSE',config.newmatch)
+                validate_bet = False
                 tentative = 0
-                gamestart = 0
-                lose = 1
-                result = 1
-                if win_score == '30:40':
-                    win_score = '40:30'
-                else:
-                    win_score = '30:40'
-                set_actuel = "nac"
-                # print("vide sec actu " + set_actuel)
-                set_actuel = Functions_1XBET.get_set_actuel(driver, error, saved_set)
-                saved_set = set_actuel
-                saved_score = score_actuel
-                if set_actuel == False:
-                    error = 1
-                # print("recup set ectu" + set_actuel)
-                numset = int(set.split(' ')[0])
-                print('numset actuel ' + str(numset))
-                newset = int(set.split(' ')[0]) + 1
-                print('num prochain set ' + str(newset))
-                # print('VERIFICATION DU SET PAR COPIE : ' + set_actuel)
-                if len(re.findall(str(numset) + ' Set', set_actuel)) > 0:  ## si on est toujours sur le meme set
+                gamestart = False
+                lose = True
+                result = True
 
-                    if jeu >= 13:  # SI TIE BREAK
-                        print("attente fin de tie break")
-                        passageset = 1
+                config.saved_set = config.set_actuel
+                config.set_actuel = False
+                config.saveLog("vide sec actu " + str(config.set_actuel),config.newmatch)
+                GetSetActuel(driver)
+                newset = int(config.saved_set) +1
+                if not config.set_actuel:
+                    config.error = True
+                config.saveLog('set ' + str(config.set_actuel)+' - saved set '+str(config.saved_set),config.newmatch)
+                if str(config.saved_set) == str(config.set_actuel):  ## si on est toujours sur le meme set
+                    config.saveLog('on est toujours sur le meme set',config.newmatch)
+
+                    if config.jeu_actuel >= 13:  # SI TIE BREAK
+                        config.saveLog("jeu "+str(config.jeu_actuel),config.newmatch)
+                        config.saveLog("attente fin de tie break",config.newmatch)
+                        passageset = True
                     else:
                         ##VALIDATION DU PARIS SI SCORE OK
-                        while validate_bet == 0 and error == 0:
+                        while not validate_bet and not config.error:
                             # VÉRIFICATION DU SCORE ACTUEL
-                            score_actuel = Functions_1XBET.get_score_actuel(driver, saved_score)
-                            if score_actuel == False:
-                                error = 1
-                            if score_actuel == "0:0" and gamestart == 0:
-                                print("GAME NOT START")
-                            elif score_actuel == "0:0" and gamestart == 1:
-                                validate_bet = 0
-                                jeu = jeu + 1
-                                print("GAME PASS WITHOUT VALIDATE")
-                                gamestart = 0
-                                result = 1
-                                lose = 1
-                                findbtn = 1
-
+                            GetScoreActuel(driver)
+                            if config.score_actuel == False:
+                                config.error = True
+                                config.saveLog("error pendant la récupération du score",config.newmatch)
+                            if config.score_actuel == "0:0" and not gamestart:
+                                config.saveLog("GAME NOT START",config.newmatch)
+                            elif config.score_actuel == "0:0" and gamestart:
+                                validate_bet = False
+                                config.jeu_actuel += 1
+                                config.saveLog("GAME PASS WITHOUT VALIDATE",config.newmatch)
+                                gamestart = False
+                                result = True
+                                lose = True
+                                findbtn = True
                                 ###ajouter ici les actions avant de reprendre
-                            elif score_actuel == "40:40" or score_actuel == "40:A" or score_actuel == "A:40":
-                                error = 1
-                                print("40A leave!")
-                                Functions_1XBET.delete_bet(driver, error)
-                                ###ajouter ici les actions avant de reprendre
-                                break
                             else:
-                                gamestart = 1
-                            if Functions_1XBET.validation_du_paris(driver, jeu, mise) == True:
-                                validate_bet = 1
-                                jeu = jeu + 1
-                                perte = perte + mise
-                                wantwin = wantwin + increment
-                                print("prochain jeu : " + str(jeu))
-                                print("wantwin : " + str(wantwin))
-                                print("perte : " + str(perte))
-                                print("mise : " + str(mise))
-                                print("increment : " + str(increment))
+                                gamestart = True
+                            if ValidationDuParis4030(driver,config.mise):
+                                validate_bet = True
+                                config.jeu_actuel += 1
+                                config.perte = float(config.perte) + float(config.mise)
+                                config.wantwin = float(config.wantwin) + float(config.increment)
+                                bet_40a = True
+                                config.saveLog("prochain jeu : " + str(config.jeu_actuel),config.newmatch)
+                                config.saveLog("wantwin : " + str(config.wantwin),config.newmatch)
+                                config.saveLog("perte : " + str(config.perte),config.newmatch)
+                                config.saveLog("mise : " + str(config.mise),config.newmatch)
+                                config.saveLog("increment : " + str(config.increment),config.newmatch)
                             else:
-                                getjeu = Functions_1XBET.get_jeu_actuel(driver)
+                                getjeu = config.jeu_actuel
+                                GetJeuActuel(driver)
                                 tentative = tentative + 1
-                                if getjeu != jeu:
-                                    validate_bet = 0
-                                    jeu = jeu + 1
-                                    print("GAME PASS WITHOUT VALIDATE")
-                                    gamestart = 0
-                                    result = 1
-                                    lose = 1
-                                    findbtn = 1
+                                if getjeu != config.jeu_actuel+1:
+                                    validate_bet = False
+                                    config.jeu_actuel =int(config.jeu_actuel)+ 1
+                                    print("GAME PASS WITHOUT VALIDATE #2#")
+                                    gamestart = False
+                                    result = True
+                                    lose = True
+                                    findbtn = True
                                     break
                         # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
-                        print("retour tps reg 3")
-                        Functions_1XBET.retour_section_tps_reglementaire(driver)
-                elif len(re.findall(str(newset) + ' Set', set_actuel)) > 0:  ##SI ON EST SUR LE PROCHAIN SET
-                    findset = 1
-                    findbtn = 1
-                    validate = 1
-                    set = str(newset) + " Set"
-                    passageset = 1
-                    result = 1
-                    lose = ""
-                    score_actuel = '0:0'
-                    print('Passage prochain set')
-                    Functions_1XBET.delete_bet(driver, error)
+                        config.saveLog("retour tps reg 3",config.newmatch)
+                        RetourTpsReg(driver)
+                elif str(newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
+                    config.saveLog("SI ON EST SUR LE PROCHAIN SET",config.newmatch)
+                    findset = True
+                    findbtn = True
+                    validate = True
+                    passageset = True
+                    result = True
+                    lose = True
+                    config.score_actuel = '0:0'
+                    config.saveLog('Passage prochain set',config.newmatch)
+                    DeleteBet(driver)
+                    config.saveLog('Waiit 30 sec',config.newmatch)
                     time.sleep(30)
                 else:
-                    print("ERROR : recup set " + set_actuel)
-                    error = 1
+                    print("ERROR : recup set " + str(config.set_actuel))
+                    config.error = True
             else:
-                saved_score = score_actuel
-                result = 0
-                set_actuel = "nac"
-                set_actuel = Functions_1XBET.get_set_actuel(driver, error, saved_set)
-                saved_set = set_actuel
-                if set_actuel == False:
-                    error = 1
+                result = False
+                #config.set_actuel = "nac"
+                #GetSetActuel(driver)
+                #config.saved_set = config.set_actuel
+                if not config.set_actuel:
+                    config.error = False
                 else:
-                    if saved_score != score_actuel:
-                        print(score_actuel)
-                        saved_score = score_actuel
-                    numset = int(set.split(' ')[0])
-                    newset = int(set.split(' ')[0]) + 1
-                    if re.search('40', score_actuel):
+                    if config.saved_score != config.score_actuel:
+                        config.saveLog(str(config.score_actuel),config.newmatch)
+                        config.saved_score = config.score_actuel
+                    numset = int(config.set_actuel.split(' ')[0])
+                    newset = int(config.set_actuel.split(' ')[0]) + 1
+                    if re.search('40', config.score_actuel):
                         timesleep = 1
                     else:
                         timesleep = 20
-        if lose == 1 and error == 0:
-            print('lose : ' + str(perte))
-        elif lose == 0 and error == 0:
-            win = win + 1
+        if lose and not config.error:
+            print('lose : ' + str(config.perte))
+        elif not lose and not config.error:
+            config.win += 1
+            print('lllose')
             try:
-                btn_close = driver.find_elements(By.CLASS_NAME,
-                                                 'cpn-bet__remove')
+                DeleteBet(driver)
             except:
                 print('cpn-bet__remove not found')
-            else:
-                for close in btn_close:
-                    try:
-                        close.click()
-                    except:
-                        continue
-            if rattrape_perte > 0:
-                x = x + 1
-                print("x : " + str(x))
-                print("cote : " + str(cote))
-                gain = (mise * cote) - perte - mise
-                print("gain : " + str(gain))
-                Functions_gsheets.maj_perte(script_num, gain, x)
-            else:
-                x = -1
-            perte = 0
-            mise = 0.5
-            increment = 0
-            wantwin = 1
+
+            config.perte = 0
+            config.mise = 0.2
+            config.increment = 0
+            config.wantwin = 0.2
             break
-    if perte > 0:
-        if perte >= 200:
-            Functions_gsheets.update_lost(script_num, perte)
-            perte = 0
-            mise = 0.5
-            increment = 0
-            wantwin = 1
-        else:
-            """while perte > 5.79:
-                #perte_partiel=5
-                #comp_list = ['wta']
-                #ligue_name = random.choice(comp_list)
-                Functions_gsheets.suivi_lost([5.79, 1.2, 2.33, ligue_name])
-                perte = perte - 5.79
-                '''if perte>3.15:
-                    comp_list = ['wta', 'atp', 'challenger']
-                    ligue_name = random.choice(comp_list)
-                    Functions_gsheets.suivi_lost30([3.15, 0.8, 1.65, ligue_name])
-                    perte = perte - 3.15'''"""
-
-            mise = (wantwin + perte) / (cote - 1)
-            mise = round(mise, 2)
-            Functions_gsheets.suivi_lost30(perte, wantwin, mise, ligue_name)
-            perte = 0
-            mise = 0.2
-            increment = 0
-            wantwin = 0.2
-
-    infos = [win, perte, wantwin, mise, x]
-    print("update " + newmatch)
-    Functions_1XBET.update_match_done("del", newmatch, matchlist_file_name)
-    Functions_1XBET.del_running(script_num, running_file_name)
+        else :
+            print('no lose')
+            print(winmatch)
+            print(config.error)
+    if config.perte > 0:
+        DispatchPerte()
+    infos = [config.win, config.perte, config.wantwin, config.mise]
+    print("update " + config.newmatch)
+    Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
+    Functions_1XBET.del_running(config.script_num, config.running_file_name)
+    DeleteBet(driver)
     return infos

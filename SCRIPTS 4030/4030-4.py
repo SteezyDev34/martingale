@@ -23,14 +23,13 @@ if len(parts) > 1:
 else:
     print("Le format du nom du fichier est incorrect.")
     exit()
-from Functions import Functions_403015_proba
+from Functions.Functions_4030 import all_script
 from Functions.GetJsonData import DispatchPerte
 
 while (config.win < 100):
     config.init_variable()
-    Functions_403015_proba.all_script(driver)
     try:
-        print()
+        all_script(driver)
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
         print('perte = '+str(config.perte))

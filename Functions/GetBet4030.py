@@ -145,8 +145,8 @@ def GetBet4030(driver):
                             else:
                                 clic = True
                 else:
-                    print("pas de btn 40 recuperé")
-                    clic = False
+                    print("pas de btn 4030 recuperé")
+                    return False
     return [clic, win_type]
 def GetNextBet4030(driver):
     clic = False
@@ -197,6 +197,7 @@ def GetNextBet4030(driver):
                 )
             except Exception as e:
                 print('Aucun bouton paris 40-40 - Oui TROUVÉ!')
+                return False
             else:
                 list_of_newbet_type = driver.find_elements(By.XPATH,
                                                            '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "va gagner le Jeu")]')
@@ -292,5 +293,7 @@ def GetNextBet4030(driver):
 
                 else:
                     print("pas de btn 40 recuperé")
-                    clic = True
+                    return False
+        else:
+            return False
     return [clic, win_type]
