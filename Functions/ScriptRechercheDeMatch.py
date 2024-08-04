@@ -42,11 +42,13 @@ def rechercheDeMatch(driver):
                 break
             # ON VÉRIFIE QUE LA COMPET EST JOUABLE
             if getCompet():
+                print('get comp')
                 # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
                 try:
                     bet_items = bet_ligue.find_elements(By.CLASS_NAME,
                                                         'c-events-scoreboard__item')
                 except :
+                    print(' c-events-scoreboard__item')
                     # s'il y une erreur on passe au suivant
                     continue
                 else:
@@ -84,6 +86,8 @@ def rechercheDeMatch(driver):
                                         break
                                     else:
                                         continue
+            else:
+                print('pas de get compet')
             if config.match_found:
                 break
 

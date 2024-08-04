@@ -108,7 +108,7 @@ def all_script(driver):
             tentative_placermise = 0
             validate_bet = False
             config.saveLog('On place la mise',1,config.newmatch)
-            while not PlacerMise4030(driver,config.mise) and not config.error and tentative_placermise < 5:
+            while not PlacerMise4030(driver,config.mise) and not config.error and tentative_placermise < 2:
                 tentative_placermise+=1
                 if tentative_placermise == 2:
                     validate_bet = True

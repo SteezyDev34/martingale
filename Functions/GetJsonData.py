@@ -11,7 +11,7 @@ proxy = {
 }
 def getPerte():
     if getCompetRecup():
-        url = "https://auxobetting.fr/strategy"+config.scriptType+"/get_perte.php"
+        url = "https://auxobetting.fr/strategy4030/get_perte.php"
         try:
             # Envoyer une requête GET à l'URL
             response = requests.get(url,proxies=proxy)
@@ -33,6 +33,7 @@ def getPerte():
         except Exception as e:
             print(f"pas de perte {e}")
         else:
+            config.rattrape_perte = 1
             return pertes
     else:
         return
@@ -117,9 +118,9 @@ def getCompet():
         print(f"Pas de suppression de perte {e}")
     else:
         compet_ok_list = compets["compet_ok"]
-        #config.saveLog(compet_ok_list,0)
+        config.saveLog(compet_ok_list,0)
         compet_not_ok_list = compets["compet_not_ok"]
-        #config.saveLog(compet_not_ok_list,0)
+        config.saveLog(compet_not_ok_list,0)
 
         try:
             if any(compet_ok in config.ligue_name for compet_ok in
@@ -162,9 +163,9 @@ def SendPerte(scriptType,perte):
             return False
 def DispatchPerte():
     while config.perte >1:
-        if SendPerte("4030",2):
+        if SendPerte("4030",1):
             config.perte -= 1
-        if config.perte>1:
+        """if config.perte>1:
             if SendPerte("40A",1):
                 config.perte -= 1
         if config.perte>1:
@@ -172,7 +173,7 @@ def DispatchPerte():
                 config.perte -= 1
         if config.perte>1:
             if SendPerte("15A",1):
-                config.perte -= 1
+                config.perte -= 1"""
     if config.perte >0.2:
         SendPerte("4030",config.perte)
 

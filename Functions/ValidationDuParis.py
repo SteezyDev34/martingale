@@ -17,6 +17,7 @@ def ValidationDuParis(driver):
             l = cpn_setting.find_elements(By.CLASS_NAME, 'cpn-value-controls__input')[0].get_attribute("value")
             config.saveLog("mise insérrer : " + str(l),config.newmatch)
         except:
+            tentative+=1
             config.saveLog('erreur verification mise',config.newmatch)
             break
         else:
@@ -175,6 +176,7 @@ def ValidationDuParis4030(driver,mise):
             l = cpn_setting.find_elements(By.CLASS_NAME, 'cpn-value-controls__input')[0].get_attribute("value")
             config.saveLog("mise insérrer valid : " + str(l),config.newmatch)
         except:
+            tentative+=1
             config.saveLog('erreur verification mise',config.newmatch)
             break
         else:
