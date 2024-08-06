@@ -90,6 +90,7 @@ def init_variable():
     match_list = [] #List des matchs
     match_done_key = ""#Nom du match dans Gsheets
     match_found = False # Match valide trouvé
+    print('scr : '+scriptType)
     url = "https://auxobetting.fr/strategy"+scriptType+"/"
     saveLog(url,0)
     strategy = getJsonData(url)

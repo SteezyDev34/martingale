@@ -166,19 +166,29 @@ def all_script(driver):
     config.lose =False
     lose = False
     while (winmatch <= 0 and not config.error):
-        print("wzit")
         # WAIT FOR GAME START
         if passageset:
             print("passage àà")
             config.score_actuel = '0:0'
             gamestart = 1
             config.jeu_actuel = 0
-            if config.rattrape_perte > 0:
-                DispatchPerte()
-                config.perte = 0
+            if config.rattrape_perte == 1:
                 config.error = False
-                config.saveLog("passage set 2",config.newmatch)
-                config.saveLog("attente 30 sec",config.newmatch)
+                txtlog = "passage set 2"
+                print(txtlog)
+                config.saveLog(txtlog, config.newmatch)
+                txtlog = "attente 30 sec"
+                print(txtlog)
+                config.saveLog(txtlog, config.newmatch)
+                time.sleep(30)
+            elif config.perte > 0:
+                DispatchPerte()
+                config.init_variable()
+                txtlog = "passage set 2 restart"
+                print(txtlog)
+                config.saveLog(txtlog, config.newmatch)
+                txtlog = "attente 30 sec"
+                print(txtlog)
                 time.sleep(30)
             else:
                 config.error = True
@@ -365,21 +375,13 @@ def all_script(driver):
             print('lose : ' + str(config.perte))
         elif not lose and not config.error:
             config.win += 1
-            print('lllose')
+            config.perte = 0
             try:
                 DeleteBet(driver)
             except:
                 print('cpn-bet__remove not found')
 
-            config.perte = 0
-            config.mise = 0.2
-            config.increment = 0
-            config.wantwin = 0.2
             break
-        else :
-            print('no lose')
-            print(winmatch)
-            print(config.error)
     if config.perte > 0:
         DispatchPerte()
     infos = [config.win, config.perte, config.wantwin, config.mise]

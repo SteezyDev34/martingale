@@ -11,7 +11,9 @@ def ValidationDuParis(driver):
     #driver.switch_to.window(driver.window_handles[0])
     validation = False
     tentative = 0
+    print('validation paris')
     while not validation and tentative < 4:
+        print('boucle validation paris')
         try:
             cpn_setting = driver.find_elements(By.CLASS_NAME, 'cpn-info__division')[0]
             l = cpn_setting.find_elements(By.CLASS_NAME, 'cpn-value-controls__input')[0].get_attribute("value")

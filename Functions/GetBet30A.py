@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from Function_GetJeuActuel import GetJeuActuel
+from Functions.Function_GetJeuActuel import GetJeuActuel
 import config
 
 def GetBet30A(driver):
