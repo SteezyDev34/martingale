@@ -209,6 +209,12 @@ def all_script(driver):
             else:
                 config.error = True
                 print("erreur perte en 1 set")
+        elif config.jeu_actuel == 13:
+            while config.score_actuel !="0:1" or config.score_actuel != "1:0":
+                print("wait start tie break")
+            while config.score_actuel !="0:0":
+                print("wait start tie break")
+            time.sleep(60)
         else:
             gamestart = 0
             ##ATTENTE QUE LE JEU COMMENCE
