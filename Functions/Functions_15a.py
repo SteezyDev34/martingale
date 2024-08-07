@@ -20,19 +20,9 @@ from Functions.AfficherParis import AfficherParis
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
 
-compet_not_ok_list = [
-    'cyber',
-    'world',
-    'ace',
-    'russie'
-]
-score_to_start = [
-"00(0)00(0)",
-"00(15)00(0)",
-"00(15)00(15)",
-"00(0)00(15)",
-]
 def all_script(driver):
+    lose = True
+
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
 
@@ -382,15 +372,14 @@ def all_script(driver):
             print('lose : ' + str(config.perte))
         elif not lose and not config.error:
             config.win += 1
+            config.perte = 0
             try:
                 DeleteBet(driver)
             except:
                 print('cpn-bet__remove not found')
-            config.perte = 0
             break
-    if config.perte > 0.2:
+    if config.perte >0.2:
         DispatchPerte()
-    config.init_variable()
     print("update " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
