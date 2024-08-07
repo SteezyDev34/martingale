@@ -81,9 +81,9 @@ def getCompetRecup():
         print(f"Pas de compet {e}")
     else:
         compet_ok_list = compets["compet_recup_ok"]
-        config.saveLog(compet_ok_list,0)
+        #config.saveLog(compet_ok_list,0)
         compet_not_ok_list = compets["compet_recup_not_ok"]
-        config.saveLog(compet_not_ok_list,0)
+        #config.saveLog(compet_not_ok_list,0)
         try:
             if any(compet_ok in config.ligue_name for compet_ok in
                    compet_ok_list) and not any(
@@ -118,9 +118,9 @@ def getCompet():
         print(f"Pas de suppression de perte {e}")
     else:
         compet_ok_list = compets["compet_ok"]
-        config.saveLog(compet_ok_list,0)
+        #config.saveLog(compet_ok_list,0)
         compet_not_ok_list = compets["compet_not_ok"]
-        config.saveLog(compet_not_ok_list,0)
+        #config.saveLog(compet_not_ok_list,0)
 
         try:
             if any(compet_ok in config.ligue_name for compet_ok in
@@ -157,14 +157,18 @@ def SendPerte(scriptType,perte):
     else:
         if result['status'] == "success":
             print(str(perte)+ "> Perte insert in strategy"+str(scriptType))
+            config.perte -=perte
             return True
         else:
             print(result)
             return False
 def DispatchPerte():
+    print("perte befor dispatch",config.perte)
     while config.perte >1:
         if SendPerte("4030",1):
-            config.perte -= 1
+            print('pertte ajouté')
+        else:
+            print('non ajoute', SendPerte)
         """if config.perte>1:
             if SendPerte("40A",1):
                 config.perte -= 1
@@ -176,4 +180,5 @@ def DispatchPerte():
                 config.perte -= 1"""
     if config.perte >0.2:
         SendPerte("4030",config.perte)
+    print('perte after dispatch',config.perte)
 

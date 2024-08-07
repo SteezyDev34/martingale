@@ -67,9 +67,9 @@ def rechercheDeMatch(driver):
                         else:
                             # si le score est récupéré
                             if len(div_bet_score) <= 0:
+                                print("pas de sc")
                                 continue
                             # on le vérifie
-                            print(config.score_to_start)
                             bet_score = GetMatchScore.main(div_bet_score[0],
                                                            config.score_to_start)
                             if bet_score:  # SI LE MATCH EST PRET

@@ -35,7 +35,6 @@ def GetMise(driver):
                     config.cote = config.cotebase
             else:
                 config.cote = config.cotebase
-    print('ccc'+str(config.cote))
     config.mise = (float(config.wantwin) + float(config.perte)) / (float(config.cote) - 1)
     config.mise = round(config.mise, 2)
     if config.mise < 0.2:

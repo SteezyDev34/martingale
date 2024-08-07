@@ -3,8 +3,9 @@ import time
 from Functions.DeleteBet import DeleteBet
 from Functions.GetIfGameStart import GetIfGameStart30A
 from Functions.Function_GetJeuActuel import GetJeuActuel
-from Functions.GetMise import GetMise, GetMise15A
+from Functions.GetMise import GetMise
 from Functions.GetBet15A import GetBet15A, GetNextBet15A
+from Functions.GetPlayersName import GetPlayersName
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.PlacerMise import PlacerMise
@@ -12,11 +13,13 @@ from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 from Functions.ValidationDuParis import ValidationDuParis
 import config
-from Functions import Functions_gsheets
+from Functions import Functions_gsheets, GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1
 from Functions import Functions_1XBET
 import re
-from Functions.AfficherParis import AfficherParis40A
+from Functions.AfficherParis import AfficherParis
 from Functions.Function_scriptDelRunning import scriptDelRunning
+from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
+
 compet_not_ok_list = [
     'cyber',
     'world',
@@ -31,7 +34,7 @@ score_to_start = [
 ]
 def all_script(driver):
     # Mise à jour du fichier txt des script en cours
-    scriptDelRunning(config.script_num, config.running_file_name)
+    scriptDelRunning()
 
     # --------
     # SCRIPT RECHERCHE DE MATCH
@@ -39,6 +42,35 @@ def all_script(driver):
         config.error = True
     # --------
 
+    if config.match_found and not config.error:
+        config.ligue_name = GetLigueName.fromUrl(driver)[0]
+        config.match_Url = GetLigueName.fromUrl(driver)[1]
+        config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
+
+        # RECHERCHE INFOS DE MISE
+        players = GetPlayersName(driver)
+        if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
+            config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
+            # config.proba40A = 0.5
+        else:
+            config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
+            # config.proba40A = 0.5
+            if config.proba40A == 0:
+                config.proba40A = Functions_stats1.get_proba_40A_other(players[0], players[1], driver, config.match_Url)
+
+        print("#RECHERCHE INFOS DE MISE")
+        infosperte = getPerte()
+        print("PERTE : ")
+        print(infosperte)
+        if infosperte:
+            config.perte = float(infosperte['perte'])
+            delPerte(infosperte['id'])
+            config.rattrape_perte = 1
+        # END RECHERCHE INFOS DE MISE
+        config.set_actuel = GetSetActuel(driver)
+        config.saved_set = config.set_actuel
+        if not config.set_actuel:
+            config.error = True
     ##PREPARATTION PREMIER PARIS
     config.saveLog('PREPARATION DU PREMIER PARIS', config.newmatch)
     bet_15a = False
@@ -53,7 +85,7 @@ def all_script(driver):
             bet_15a = True
         # Affichage de la liste des paris
         config.saveLog('Affichage de la liste des paris', config.newmatch)
-        if not AfficherParis40A(driver):
+        if not AfficherParis(driver):
             config.error = True
             break
         # On recherche le jeu actuel
@@ -65,7 +97,7 @@ def all_script(driver):
         config.saveLog('Premier PAris 15A cliqué', config.newmatch)
         config.saveLog("on attebnd 2 sec que la paris s'affiche bien pour recuprer la cote", config.newmatch)
         time.sleep(2)
-        GetMise15A(driver)
+        GetMise(driver)
         print('cotemini : ' + str(config.cotemini) + ' cote : ' + str(config.cote))
         print('proba mini : ' + str(config.probamini) + ' proba : ' + str(config.proba40A))
         if config.proba40A < config.probamini and config.cote < config.cotemini: #and config.perte<=0:
@@ -186,7 +218,7 @@ def all_script(driver):
 
             # Affichage de la liste des paris
             config.saveLog('Affichage de la liste des paris', config.newmatch)
-            if not AfficherParis40A(driver):
+            if not AfficherParis(driver):
                 config.error = True
                 break
             # On recherche le jeu actuel
@@ -354,37 +386,13 @@ def all_script(driver):
                 DeleteBet(driver)
             except:
                 print('cpn-bet__remove not found')
-
             config.perte = 0
-            config.mise = 0.5
-            config.increment = 0
-            config.wantwin = 1
             break
-    if config.perte > 0:
-        perte = config.perte
-        while perte > 2:
-            config.perte = 2
-            config.wantwin = 0
-            config.mise = 1
-            Functions_gsheets.suivi_lost30()
-            perte = perte - 2
-            if perte > 1:
-                comp_list = ['wta', 'atp', 'challenger']
-                config.ligue_name = random.choice(comp_list)
-                config.perte = 1
-                config.wantwin = 0
-                config.mise = 0.61
-                Functions_gsheets.suivi_lost30()
-                perte = perte - 1
-
-        config.mise = (float(config.wantwin) + float(perte)) / (float(config.cote) - 1)
-        config.mise = round(config.mise, 2)
-        config.perte = perte
-        Functions_gsheets.suivi_lost30()
+    if config.perte > 0.2:
+        DispatchPerte()
     config.init_variable()
-    infos = [config.win, config.perte, config.wantwin, config.mise]
     print("update " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)
-    return infos
+    return True
