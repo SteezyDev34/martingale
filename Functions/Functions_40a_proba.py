@@ -90,24 +90,25 @@ def all_script(driver):
         print('cotemini : '+str(config.cotemini)+' cote : '+str(config.cote))
         print('proba mini : ' + str(config.probamini)+' proba : '+str(config.proba40A))
         print('Rattrapage : ' +str(config.rattrape_perte))
-        if float(config.proba40A) < float(config.probamini) and float(config.cote) < float(config.cotemini):
+        if float(config.proba40A) < float(config.probamini): #and float(config.cote) < float(config.cotemini):
             print('perte? '+str(config.perte))
             DispatchPerte()
-            bet_30a = True
-            config.error = True
-            txtlog = 'Cote et proba trop faible 0,2'
+            config.rattrape_perte = 0
+            #bet_30a = True
+            #config.error = True
+            txtlog = 'Cote et proba trop faible > 0,2'
             print(txtlog)
             config.saveLog(txtlog, config.newmatch)
-            break
-        elif 'itf' in config.ligue_name and 'qualification' in config.ligue_name:
-            print('perte? '+str(config.perte))
-            DispatchPerte()
-            bet_30a = True
-            config.error = True
-            txtlog = 'itf qualif > LEAVE!'
-            print(txtlog)
-            config.saveLog(txtlog, config.newmatch)
-            break
+            #break
+            """elif 'itf' in config.ligue_name and 'qualification' in config.ligue_name:
+                print('perte? '+str(config.perte))
+                DispatchPerte()
+                bet_30a = True
+                config.error = True
+                txtlog = 'itf qualif > LEAVE!'
+                print(txtlog)
+                config.saveLog(txtlog, config.newmatch)
+                break"""
         else:
             print('!!!!!macth ok pour continuer')
         tentative_placermise = 0
@@ -213,7 +214,7 @@ def all_script(driver):
             while config.score_actuel !="0:1" or config.score_actuel != "1:0":
                 print("wait start tie break")
             while config.score_actuel !="0:0":
-                print("wait start tie break")
+                print("wait end tie break")
             time.sleep(60)
         else:
             gamestart = 0
