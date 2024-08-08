@@ -69,7 +69,7 @@ def all_script(driver):
         # Affichage de la liste des paris
         config.saveLog('On vérifie le score', config.newmatch)
         GetScoreActuel(driver)
-        if config.score_actuel == "0:15" or config.score_actuel == "15:0" or config.score_actuel == "15:15" or config.score_actuel == "30:30" or config.score_actuel == "30:15" or config.score_actuel == "15:30" or config.score_actuel == "30:0" or config.score_actuel == "0:30" or config.score_actuel == "30:40" or config.score_actuel == "40:30" or config.score_actuel == "0:40" or config.score_actuel == "15:40" or config.score_actuel == "40:40" or config.score_actuel == "A:40" or config.score_actuel == "40:A" or config.score_actuel == "40:0" or config.score_actuel == "40:15":
+        if config.score_actuel == "15:15" or config.score_actuel == "0:15" or config.score_actuel == "15:0" or config.score_actuel == "30:30" or config.score_actuel == "30:15" or config.score_actuel == "15:30" or config.score_actuel == "30:0" or config.score_actuel == "0:30" or config.score_actuel == "30:40" or config.score_actuel == "40:30" or config.score_actuel == "0:40" or config.score_actuel == "15:40" or config.score_actuel == "40:40" or config.score_actuel == "A:40" or config.score_actuel == "40:A" or config.score_actuel == "40:0" or config.score_actuel == "40:15":
             first_game_pass = True
             config.saveLog('score : '+config.score_actuel+' ...first game passss', config.newmatch)
             bet_15a = True

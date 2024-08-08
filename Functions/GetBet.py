@@ -36,7 +36,7 @@ def GetBet(driver):
                 try:
                     element = WebDriverWait(driver, 10).until(
                         EC.presence_of_element_located((By.XPATH,
-                                                        '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "'+sType++' - Oui")]'))
+                                                        '//*[@id="allBetsTable"]/div/div[not(contains(@style,"display: none;"))]/div/div[2]/div/span[contains(text(), "'+sType+' - Oui")]'))
                     )
                 except Exception as e:
                     config.saveLog('Aucun paris 40A TROUVÉ!', config.newmatch)
