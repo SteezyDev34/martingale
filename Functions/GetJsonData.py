@@ -11,7 +11,7 @@ proxy = {
 }
 def getPerte():
     if getCompetRecup():
-        url = "https://auxobetting.fr/strategy4030/get_perte.php"
+        url = "https://auxobetting.fr/"+config.scriptType+"/get_perte.php"
         try:
             # Envoyer une requête GET à l'URL
             response = requests.get(url,proxies=proxy)
