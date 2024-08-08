@@ -13,7 +13,7 @@ from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 from Functions.ValidationDuParis import ValidationDuParis
 import config
-from Functions import Functions_gsheets, GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1
+from Functions import GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1
 from Functions import Functions_1XBET
 import re
 from Functions.AfficherParis import AfficherParis
