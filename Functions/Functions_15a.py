@@ -253,7 +253,7 @@ def all_script(driver):
             if not config.score_actuel:
                 config.error = True
                 break
-            if passageset or config.score_actuel == '40:0' or config.score_actuel == '40:15' or config.score_actuel == '0:40' or config.score_actuel == '15:40' or config.score_actuel == '40:30' or config.score_actuel == '30:40' or config.score_actuel == '40:40' or config.score_actuel == 'A:40' or config.score_actuel == '40:A':
+            if passageset or config.score_actuel == '40:0' or config.score_actuel == '0:40' or config.score_actuel == '0:30' or config.score_actuel == '30:0':
                 config.saveLog('LOSE', config.newmatch)
                 validate_bet = False
                 tentative = 0
