@@ -163,22 +163,14 @@ def SendPerte(scriptType,perte):
             print(result)
             return False
 def DispatchPerte():
-    print("perte befor dispatch",config.perte)
-    while config.perte >200:
-        if SendPerte("4030",1):
-            print('pertte ajouté')
-        else:
-            print('non ajoute', SendPerte)
-        """if config.perte>1:
-            if SendPerte("40A",1):
-                config.perte -= 1
+    while config.perte >1:
+        SendPerte("4030",1)
         if config.perte>1:
-            if SendPerte("30A",1):
-                config.perte -= 1
+            SendPerte("40A",1)
         if config.perte>1:
-            if SendPerte("15A",1):
-                config.perte -= 1"""
+            SendPerte("30A",1)
+        if config.perte>1:
+            SendPerte("15A",1)
     if config.perte >0.2:
         SendPerte(config.scriptType,config.perte)
-    print('perte after dispatch',config.perte)
 
