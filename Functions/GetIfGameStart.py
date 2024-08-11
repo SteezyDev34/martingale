@@ -37,12 +37,11 @@ def GetIfGameStart30A(driver):
     while not gamestart and not config.error:
         GetScoreActuel(driver)
         config.saved_score = config.saved_score
-        if config.score_actuel == '0:0' or config.score_actuel == '15:0' or config.score_actuel == '0:15' or config.score_actuel == '15:15' or config.score_actuel == '30:15' or config.score_actuel == '15:30' or config.score_actuel == '0:30' or config.score_actuel == '30:0' or config.score_actuel == '30:30':
+        if config.score_actuel == '0:0':
             print('GAME START')
             gamestart = True
         else:
             gamestart = False
             if not GetIfMatchPage(driver):
                 config.error = True
-
     return gamestart
