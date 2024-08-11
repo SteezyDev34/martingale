@@ -92,7 +92,8 @@ def all_script(driver):
         GetMise(driver)
         print('cotemini : ' + str(config.cotemini) + ' cote : ' + str(config.cote))
         print('proba mini : ' + str(config.probamini) + ' proba : ' + str(config.proba40A))
-        if config.proba40A < config.probamini and config.cote < config.cotemini: #and config.perte<=0:
+        print('perte : '+str(config.perte))
+        if config.proba40A < config.probamini and config.cote < config.cotemini and (config.perte<=0 or not config.perte):
             bet_30a = True
             config.error = True
             config.saveLog('Cote trop faible 0,2', config.newmatch)

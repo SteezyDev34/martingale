@@ -73,7 +73,8 @@ def all_script(driver):
             first_game_pass = True
             config.saveLog('score : '+config.score_actuel+' ...first game passss', config.newmatch)
             bet_15a = True
-        # Affichage de la liste des paris
+            gamestart = True
+        # Affichage de la liste des parisdcs
         config.saveLog('Affichage de la liste des paris', config.newmatch)
         if not AfficherParis(driver):
             config.error = True
@@ -90,7 +91,7 @@ def all_script(driver):
         GetMise(driver)
         print('cotemini : ' + str(config.cotemini) + ' cote : ' + str(config.cote))
         print('proba mini : ' + str(config.probamini) + ' proba : ' + str(config.proba40A))
-        if config.proba40A < config.probamini and config.cote < config.cotemini: #and config.perte<=0:
+        if config.proba40A < config.probamini and config.cote < config.cotemini and (config.perte<=0 or not config.perte):
             bet_15a = True
             config.error = True
             config.saveLog('Cote trop faible 0,2', config.newmatch)
@@ -253,7 +254,7 @@ def all_script(driver):
             if not config.score_actuel:
                 config.error = True
                 break
-            if passageset or config.score_actuel == '40:0' or config.score_actuel == '0:40' or config.score_actuel == '0:30' or config.score_actuel == '30:0':
+            if passageset or config.score_actuel == '0:30' or config.score_actuel == '30:0':
                 config.saveLog('LOSE', config.newmatch)
                 validate_bet = False
                 tentative = 0
@@ -285,7 +286,7 @@ def all_script(driver):
                                 config.error = True
                                 config.saveLog("error pendant la récupération du score", config.newmatch)
                                 break
-                            if (config.score_actuel == "0:15" or config.score_actuel == "15:15" or config.score_actuel == "15:0" or config.score_actuel == "0:30" or config.score_actuel == "15:30" or config.score_actuel == "30:15" or config.score_actuel == "30:0") and gamestart:
+                            if (config.score_actuel == "0:15" or config.score_actuel == "15:15" or config.score_actuel == "15:0" or config.score_actuel == "0:30" or config.score_actuel == "15:30" or config.score_actuel == "30:15" or config.score_actuel == "30:0" or config.score_actuel == "40:15" or config.score_actuel == "40:0"or config.score_actuel == "15:40" or config.score_actuel == "0:40" or config.score_actuel == "30:40" or config.score_actuel == "40:30" or config.score_actuel == "40:40") and gamestart:
                                 validate_bet = False
                                 config.jeu_actuel += 1
                                 config.saveLog("GAME PASS WITHOUT VALIDATE", config.newmatch)
