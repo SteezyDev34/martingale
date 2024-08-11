@@ -24,16 +24,13 @@ from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
 
 def all_script(driver):
     lose = True
-
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
-
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver):
         config.error = True
     # --------
-
     if config.match_found and not config.error:
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
@@ -90,7 +87,7 @@ def all_script(driver):
         print('cotemini : '+str(config.cotemini)+' cote : '+str(config.cote))
         print('proba mini : ' + str(config.probamini)+' proba : '+str(config.proba40A))
         print('Rattrapage : ' +str(config.rattrape_perte))
-        if float(config.proba40A) < float(config.probamini): #and float(config.cote) < float(config.cotemini):
+        if float(config.proba40A) < float(config.probamini) and float(config.cote) < float(config.cotemini):
             print('perte? '+str(config.perte))
             DispatchPerte()
             config.rattrape_perte = 0
