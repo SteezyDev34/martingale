@@ -120,12 +120,12 @@ import json
 
 global headers
 headers= {
-    'X-RapidAPI-Key': 'b052b9bd1cmsh0e38ccdfaf9d624p1dd988jsnde30c2e5a6dc',
+    'X-RapidAPI-Key': 'ef2b13642dmshf1d9ccde3c85691p1e0f03jsn54d169ef64f5',
     "X-RapidAPI-Host": "ultimate-tennis1.p.rapidapi.com"
 }
 
 def getPlayerApiId(playerName):
-    file1 = open("../DataFiles/atprankinjson.txt", "r")
+    file1 = open("DataFiles/atprankinjson.txt", "r")
     playerId = False
     # Lisez le contenu mis à jour du fichier
     playersList = file1.read()
@@ -151,7 +151,7 @@ def getPlayerApiId(playerName):
             break
     return playerId
 def getPlayerWtaApiId(playerName):
-    file1 = open("../DataFiles/wtarankinjson.txt", "r")
+    file1 = open("DataFiles/wtarankinjson.txt", "r")
     playerId = False
     # Lisez le contenu mis à jour du fichier
     playersList = file1.read()
@@ -174,17 +174,18 @@ def getPlayerWtaApiId(playerName):
                 print('Player ID : '+playerId)
                 break
     return playerId
-def get_proba_40A(playerName1, playerName2,cat='atp',surface='clay'):
+def get_proba_40A(playerName1, playerName2,cat='atp',surface='hard'):
 
     try:
         playerID1 = getPlayerApiId(playerName1)
         playerID2 = getPlayerApiId(playerName2)
-        urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/"+cat+"/"+playerID1+"/2023/"+surface
-        urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/" + cat + "/" + playerID2 + "/2023/" + surface
+        urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/"+cat+"/"+playerID1+"/2024/"+surface
+        urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/" + cat + "/" + playerID2 + "/2024/" + surface
 
         response = requests.get(urlplayer1, headers=headers)
         time.sleep(1)
     except Exception as e:
+        print(f'stat error : {e}')
         return 0
     else:
 
@@ -236,9 +237,9 @@ def get_wta_proba_40A(playerName1, playerName2):
     try:
         playerID1 = str(getPlayerWtaApiId(playerName1))
         playerID2 = str(getPlayerWtaApiId(playerName2))
-        urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID1 + "/2023"
+        urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID1 + "/2024"
         # print(urlplayer1)
-        urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID2 + "/2023"
+        urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID2 + "/2024"
         # print(urlplayer2)
         response = requests.get(urlplayer1, headers=headers)
         time.sleep(2)

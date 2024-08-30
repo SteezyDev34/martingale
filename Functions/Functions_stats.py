@@ -23,7 +23,7 @@ from unidecode import unidecode
 
 global headers
 headers= {
-    'X-RapidAPI-Key': 'b052b9bd1cmsh0e38ccdfaf9d624p1dd988jsnde30c2e5a6dc',
+    'X-RapidAPI-Key': 'ef2b13642dmshf1d9ccde3c85691p1e0f03jsn54d169ef64f5',
     "X-RapidAPI-Host": "ultimate-tennis1.p.rapidapi.com"
 }
 # Obtenez l'heure actuelle
@@ -111,7 +111,7 @@ try:
             players_id_list.append(player['name'].strip()+'|'+str(player['ID']))
         players_id_list = '\n'.join(players_id_list)
         # Ouvrez à nouveau le fichier en mode écriture
-        file1 = open("../DataFiles/wtarankinjson.txt", "w+")
+        file1 = open("DataFiles/wtarankinjson.txt", "w+")
         # Écrivez l'heure actuelle dans le fichier
         file1.write(str(today)+'\n'+players_id_list)
         print(today)
@@ -151,7 +151,7 @@ def getPlayerApiId(playerName):
 def getPlayerWtaApiId(playerName):
 
     playerName = unidecode(playerName)
-    file1 = open("../DataFiles/wtarankinjson.txt", "r")
+    file1 = open("DataFiles/wtarankinjson.txt", "r")
     playerId = False
     # Lisez le contenu mis à jour du fichier
     playersList = file1.read()
@@ -180,9 +180,9 @@ def get_wta_proba_40A(playerName1, playerName2):
     try:
         playerID1 = str(getPlayerWtaApiId(playerName1))
         playerID2 = str(getPlayerWtaApiId(playerName2))
-        urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID1 + "/2023"
+        urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID1 + "/2024"
         # print(urlplayer1)
-        urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID2 + "/2023"
+        urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID2 + "/2024"
         # print(urlplayer2)
         response = requests.get(urlplayer1, headers=headers)
         time.sleep(2)
