@@ -142,11 +142,13 @@ def all_script(driver):
                 lose = True
                 findbtn = True
             elif config.score_actuel == "40:40" or config.score_actuel == "40:A" or config.score_actuel == "A:40":
-                config.error = True
-                txtlog = "40A leave!"
-                print(txtlog)
-                config.saveLog(txtlog, config.newmatch)
-                DeleteBet(driver)
+                validate_bet = False
+                config.jeu_actuel = int(config.jeu_actuel) + 1
+                print("GAME PASS WITHOUT VALIDATE #2#")
+                gamestart = False
+                result = True
+                lose = True
+                findbtn = True
                 break
             else:
                 gamestart = True
