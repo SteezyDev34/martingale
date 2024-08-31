@@ -24,16 +24,13 @@ from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
 
 def all_script(driver):
     lose = True
-
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
-
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver):
         config.error = True
     # --------
-
     if config.match_found and not config.error:
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
@@ -87,28 +84,27 @@ def all_script(driver):
         send_mise = 0
         #ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
         GetMise(driver)
-        print('cotemini : '+str(config.cotemini)+' cote : '+str(config.cote))
-        print('proba mini : ' + str(config.probamini)+' proba : '+str(config.proba40A))
-        print('Rattrapage : ' +str(config.rattrape_perte))
-        if float(config.proba40A) < float(config.probamini): #and float(config.cote) < float(config.cotemini):
-            print('perte? '+str(config.perte))
-            DispatchPerte()
-            config.rattrape_perte = 0
-            #bet_30a = True
-            #config.error = True
-            txtlog = 'Cote et proba trop faible > 0,2'
-            print(txtlog)
-            config.saveLog(txtlog, config.newmatch)
-            #break
-            """elif 'itf' in config.ligue_name and 'qualification' in config.ligue_name:
-                print('perte? '+str(config.perte))
+        print('Cotemini : '+str(config.cotemini)+' Cote : '+str(config.cote))
+        print('Proba mini : '+ str(config.probamini)+' Proba : '+str(config.proba40A))
+        print('Rattrapage : '+str(config.rattrape_perte))
+        if float(config.proba40A) < float(config.probamini) and float(config.cote) < float(config.cotemini):
+            if 'wta' not in config.ligue_name or 'atp' not in config.ligue_name:
                 DispatchPerte()
+                config.rattrape_perte = 0
                 bet_30a = True
                 config.error = True
-                txtlog = 'itf qualif > LEAVE!'
+                txtlog = 'Cote et proba trop faible > LEAVE!'
                 print(txtlog)
                 config.saveLog(txtlog, config.newmatch)
-                break"""
+                break
+        elif 'itf' in config.ligue_name and config.perte<0:
+            DispatchPerte()
+            bet_30a = True
+            config.error = True
+            txtlog = 'itf qualif > LEAVE!'
+            print(txtlog)
+            config.saveLog(txtlog, config.newmatch)
+            break
         else:
             print('!!!!!macth ok pour continuer')
         tentative_placermise = 0
@@ -146,11 +142,13 @@ def all_script(driver):
                 lose = True
                 findbtn = True
             elif config.score_actuel == "40:40" or config.score_actuel == "40:A" or config.score_actuel == "A:40":
-                config.error = True
-                txtlog = "40A leave!"
-                print(txtlog)
-                config.saveLog(txtlog, config.newmatch)
-                DeleteBet(driver)
+                validate_bet = False
+                config.jeu_actuel = int(config.jeu_actuel) + 1
+                print("GAME PASS WITHOUT VALIDATE #2#")
+                gamestart = False
+                result = True
+                lose = True
+                findbtn = True
                 break
             else:
                 gamestart = True
@@ -211,14 +209,16 @@ def all_script(driver):
                 config.error = True
                 print("erreur perte en 1 set")
         elif config.jeu_actuel == 13:
-            while config.score_actuel !="0:1" or config.score_actuel != "1:0":
+            while config.score_actuel !="0:1" and config.score_actuel != "1:0":
                 print("wait start tie break")
+                print('score actuel : '+config.score_actuel)
                 time.sleep(30)
                 GetScoreActuel(driver)
             while config.score_actuel !="0:0":
+                print("wait end tie break")
+                print('score actuel : '+config.score_actuel)
                 time.sleep(30)
                 GetScoreActuel(driver)
-                print("wait end tie break")
             time.sleep(60)
         else:
             gamestart = 0
