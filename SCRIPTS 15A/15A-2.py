@@ -2,7 +2,7 @@ print('START')
 import os
 
 #Chargement de Chrome driver
-from ChromeDriver.SetDriver6 import driver
+from ChromeDriver.SetDriver2 import driver
 
 #Chargement des variables globales
 import config
@@ -32,9 +32,11 @@ from Functions.GetJsonData import DispatchPerte
 
 while (config.win < 100):
     config.init_variable()
-
+    tour = 0
     try:
-        Functions_15a.all_script(driver)
+        while  tour < config.nb_tour:
+            tour +=1
+            Functions_15a.all_script(driver)
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:
