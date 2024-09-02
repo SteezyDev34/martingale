@@ -13,7 +13,7 @@ from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 
 from Functions.ValidationDuParis import ValidationDuParis
 import config
-from Functions import GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1
+from Functions import GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1, AddRunning
 from Functions import Functions_1XBET
 import re
 from Functions.AfficherParis import AfficherParis
@@ -32,6 +32,7 @@ def all_script(driver):
         config.error = True
     # --------
     if config.match_found and not config.error:
+        AddRunning.main(config.script_num,config.running_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
