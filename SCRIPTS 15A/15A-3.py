@@ -30,7 +30,7 @@ from Functions.GetJsonData import DispatchPerte
 
 
 
-while (config.win < 100):
+while (config.win < 10):
     config.init_variable()
     tour = 0
     try:

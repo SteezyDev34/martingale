@@ -28,8 +28,11 @@ from Functions.GetJsonData import DispatchPerte
 
 while (config.win < 100):
     config.init_variable()
+    tour = 0
     try:
-        all_script(driver)
+        while tour < config.nb_tour:
+            tour += 1
+            all_script(driver)
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
         print('perte = '+str(config.perte))

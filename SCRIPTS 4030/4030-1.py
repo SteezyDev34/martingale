@@ -31,8 +31,11 @@ while (config.win < 100):
     if config.devMode:
         all_script(driver)
     else:
+        tour = 0
         try:
-            all_script(driver)
+            while tour < config.nb_tour:
+                tour += 1
+                all_script(driver)
         except Exception as e:
             print(f"ERROR SCRIPT : {e}")
             print('perte = '+str(config.perte))

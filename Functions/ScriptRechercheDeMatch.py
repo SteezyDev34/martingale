@@ -3,7 +3,7 @@ import time
 from selenium.webdriver.common.by import By
 import config
 
-from Functions import GetMatchScore, GetLigueName
+from Functions import GetMatchScore, GetLigueName, AddRunning
 from Functions import OuverturePageMatch
 from Functions import VerificationMatchTrouve
 from Functions.GetIfMatchPage import GetIfMatchPage
@@ -90,6 +90,7 @@ def rechercheDeMatch(driver):
             else:
                 print('pas de get compet')
             if config.match_found:
+                AddRunning.main(config.script_num, config.running_file_name)
                 break
 
         if not config.match_found:
