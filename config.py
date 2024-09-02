@@ -123,9 +123,9 @@ def init_variable():
     saveLog('init recup40 : ' + str(recup40), 0)
     recup30 = float(strategy["mtt_recup"])
     saveLog('init recup30 : ' + str(recup30), 0)
-    running_file_name = projectPath+'/SCRIPTS '+scriptType+'/running'
+    running_file_name = '../SCRIPTS '+scriptType+'/running'
     rattrape_perte = 0
-    matchlist_file_name = projectPath+'/SCRIPTS '+scriptType+'/matchlist'
+    matchlist_file_name = '../SCRIPTS '+scriptType+'/matchlist'
 
 
 
