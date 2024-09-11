@@ -165,21 +165,24 @@ def all_script(driver):
                 print("erreur perte en 1 set")
 
         elif config.jeu_actuel==13:
-            while config.score_actuel != "0:1" and config.score_actuel != "1:0" and config.score_actuel != "1:1" and config.score_actuel != "2:0" and config.score_actuel != "0:2":
+            GetJeuActuel(driver)
+            GetIfGameStart30A(driver)
+            while config.score_actuel != "0:0":
                 print('possible tie break, attente debut ...')
-                GetScoreActuel(driver)
                 if config.score_actuel == "30:30":
                     print("WIN")
                     bet_30a = True
                     send_mise = True
                     result = True
                     lose = False
-
                 GetScoreActuel(driver)
-            print('tie break commencé... attente fin')
-            while config.score_actuel != "0:0":
-                print('Tie break en cours attente du prochain set')
-                GetScoreActuel(driver)
+            if config.jeu_actuel==13:
+                while config.score_actuel != "0:1" and config.score_actuel != "1:0" and config.score_actuel != "1:1" and config.score_actuel != "2:0" and config.score_actuel != "0:2":
+                    print('Tie break en cours attente début')
+                    GetScoreActuel(driver)
+                    time.sleep(30)
+                print('tie break commencé... attente fin')
+                time.sleep(60)
             passageset = True
             continue
 

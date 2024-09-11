@@ -101,11 +101,10 @@ def all_script(driver):
             config.saveLog('proba mini : ' + str(config.probamini) + ' proba : ' + str(config.proba40A),1)
             config.saveLog('Rattrapage : ' + str(config.rattrape_perte),1)
             if float(config.proba40A) < float(config.probamini) and float(config.cote) < float(config.cotemini):
-                if config.perte <=0:
-                    bet_40a = True
-                    config.error = True
-                    config.saveLog('Cote trop faible 0,2',config.newmatch)
-                    break
+                bet_40a = True
+                config.error = True
+                config.saveLog('Cote trop faible 0,2', config.newmatch)
+                break
             tentative_placermise = 0
             validate_bet = False
             config.saveLog('On place la mise',1,config.newmatch)
@@ -196,15 +195,13 @@ def all_script(driver):
                 print("erreur perte en 1 set")
         elif str(config.jeu_actuel) == '13':
             while config.score_actuel != "0:1" and config.score_actuel != "1:0":
+                print('attente debutt tie break')
                 GetScoreActuel(driver)
-                if config.score_actuel != "15:15":
-                    break
-
                 time.sleep(10)
             print('debutie break')
             while config.score_actuel != "0:0":
                 GetScoreActuel(driver)
-                time.sleep(10)
+                time.sleep(30)
             gamestart = 0
         else:
             gamestart = False
