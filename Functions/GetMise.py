@@ -17,7 +17,7 @@ def GetMise(driver):
         time.sleep(2)
         try:
             config.cote = driver.find_elements(By.CLASS_NAME,
-                                               'cpn-total__coef')[
+                                               'coupon-result-coef-value')[
                 0].text
         except:
             txtlog = 'erreur recup cote : 3'

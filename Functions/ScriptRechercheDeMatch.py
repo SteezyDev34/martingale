@@ -27,7 +27,7 @@ def rechercheDeMatch(driver):
         if not VerificationListeMatchLive(driver):
             config.error = True
             print("PAGE VIDE")
-            driver.get('https://1xbet.com/fr/live/Tennis/')
+            driver.get('https://ca.1x001.com/fr/live/tennis')
             return False
         # RECUPERATION DES LIGUES EN COURS
         bet_list_ligue = driver.find_elements(By.CLASS_NAME,
@@ -95,7 +95,7 @@ def rechercheDeMatch(driver):
 
         if not config.match_found:
             config.saveLog('PAS DE MATCH TROUVE',1)
-            driver.get('https://1xbet.com/fr/live/Tennis/')
+            driver.get('https://ca.1x001.com/fr/live/tennis')
 
 
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE

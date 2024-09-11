@@ -152,6 +152,6 @@ while (win< 999):
     validate=0
     match_found = 0
     try:
-        driver.get('https://1xbet.com/fr/live/Tennis/')
+        driver.get('https://ca.1x001.com/fr/live/tennis')
     except:
-        driver.get('https://1xbet.com/fr/live/Tennis/')
+        driver.get('https://ca.1x001.com/fr/live/tennis')

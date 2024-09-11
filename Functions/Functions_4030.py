@@ -33,7 +33,7 @@ def all_script(driver):
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver):
         print("err rech match")
-        driver.get('https://1xbet.com/fr/live/Tennis/')
+        driver.get('https://ca.1x001.com/fr/live/tennis')
         config.error = True
     # --------
     if config.match_found and not config.error:

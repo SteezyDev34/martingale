@@ -6,7 +6,7 @@ import config
 
 def GetSetActuel(driver):
     try:
-        config.set_actuel = driver.find_elements(By.CLASS_NAME, 'c-scoreboard-score__heading')[0].text
+        config.set_actuel = driver.find_elements(By.CLASS_NAME, 'game-timer__label')[0].text
     except Exception as e:
         config.saveLog(f"#E0009\nUne erreur est survenue : {e}",config.newmatch)
         config.saveLog("erreur : c-scoreboard-score__heading",config.newmatch)

@@ -42,7 +42,7 @@ while (config.win < 100):
     if config.perte > 0:
         DispatchPerte()
     try:
-        driver.get('https://1xbet.com/fr/live/Tennis/')
+        driver.get('https://ca.1x001.com/fr/live/tennis')
     except:
-        driver.get('https://1xbet.com/fr/live/Tennis/')
+        driver.get('https://ca.1x001.com/fr/live/tennis')
 print('TOTAL WIN : '+str(config.win))
