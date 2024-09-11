@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from Functions.DeleteBet import DeleteBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
 import config
-
+from selenium.webdriver.common.action_chains import ActionChains
 def GetBet(driver):
     print("RECHERCHE DES PARIS "+config.scriptType+"....")
     DeleteBet(driver)
