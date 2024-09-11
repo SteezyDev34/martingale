@@ -126,8 +126,6 @@ def init_variable():
     running_file_name = projectPath+'/SCRIPTS '+scriptType+'/running'
     rattrape_perte = 0
     matchlist_file_name = projectPath+'/SCRIPTS '+scriptType+'/matchlist'
-    print_running_text = False
-    print_match_live_text = False
 
 
 
