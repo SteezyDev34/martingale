@@ -6,7 +6,7 @@ import config
 def VerificationListeMatchLive(driver):
 
     try:
-        driver.find_element(By.CLASS_NAME, 'game_content_line')
+        driver.find_element(By.ID, 'maincontent')
 
     except:
         txtlog = "Liste match live non visible!"

@@ -168,7 +168,7 @@ def DispatchPerte():
         if config.perte>3:
             SendPerte("40A",3)
         if config.perte>1:
-            SendPerte("30A",)
+            SendPerte("30A",1)
         if config.perte>1:
             SendPerte("15A",1)
     if config.perte >0.2:

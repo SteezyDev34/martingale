@@ -4,7 +4,7 @@ from Functions.DeleteBet import DeleteBet
 from Functions.GetIfGameStart import GetIfGameStart30A
 from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.GetMise import GetMise
-from Functions.GetBet30A import GetBet30A, GetNextBet30A
+from Functions.GetBet import GetBet, GetNextBet
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.Function_GetSetActuel import GetSetActuel
@@ -83,9 +83,14 @@ def all_script(driver):
             break
         # On recherche le jeu actuel
         config.saveLog('liste des pariis affichée, On recherche le jeu actuel', config.newmatch)
-        if not GetBet30A(driver):
-            config.error = True
-            config.saveLog('error recup jeu #ERR345', config.newmatch)
+        if first_game_pass:
+            if not GetNextBet(driver):
+                config.error = True
+                config.saveLog('error recup jeu #ERR345', config.newmatch)
+        else:
+            if not GetBet(driver):
+                config.error = True
+                config.saveLog('error recup jeu #ERR345', config.newmatch)
 
         config.saveLog('Premier PAris 30A cliqué', config.newmatch)
         config.saveLog("on attebnd 2 sec que la paris s'affiche bien pour recuprer la cote", config.newmatch)
@@ -221,13 +226,13 @@ def all_script(driver):
             config.saveLog('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
             if passageset:
                 config.perte = config.perte-config.mise
-                if not GetBet30A(driver):
+                if not GetBet(driver):
                     config.error = True
                     config.saveLog('error recup jeu #ERR345', config.newmatch)
                 else:
                     bet_30a = True
             else:
-                if not GetNextBet30A(driver):
+                if not GetNextBet(driver):
                     config.error = True
                     config.saveLog('error recup jeu #ERR345', config.newmatch)
                 else:

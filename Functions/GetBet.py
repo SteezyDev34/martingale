@@ -23,20 +23,21 @@ def GetBet(driver):
 
     tentative_clic = 0
     tentative = 0
-    canvas = driver.find_element(By.CLASS_NAME, 'market-grid-canvas__container')
+    canvas = driver.find_element(By.ID, 'allBetsTable')
     # Récupérer les coordonnées du div
     location = canvas.location
     size = canvas.size
-    sautDeLigne = 50
+    sautDeLigne = 40
+    decalageX = 5
     ligne = 1
-    while not clic and tentative<10:
+    while not clic and tentative<3:
         print('Ligne suivante')
-        canvas = driver.find_element(By.CLASS_NAME, 'market-grid-canvas__container')
+        canvas = driver.find_element(By.ID, 'allBetsTable')
         # Récupérer les coordonnées du div
         location = canvas.location
         size = canvas.size
         y = size['height'] / -2 + sautDeLigne
-        x = -5
+        x = size['width'] / -2 + decalageX
         # Calculer les coordonnées pour cliquer au centre du div
         print('Y offset : '+str(y))
         # Créer une instance ActionChains
@@ -48,7 +49,7 @@ def GetBet(driver):
         try:
             element = WebDriverWait(driver, 2).until(
                 EC.presence_of_element_located((By.CLASS_NAME,
-                                                'ui-coupon-bet-market__name'))
+                                                'cpn-bet-market__label'))
             )
         except Exception as e:
             tentative_clic+=1
@@ -56,15 +57,17 @@ def GetBet(driver):
             time.sleep(1)
             if tentative_clic ==3:
                 config.saveLog('Pas d\'infos, suivant...')
-                sautDeLigne = sautDeLigne + 40
+                sautDeLigne = sautDeLigne + 30
                 ligne = ligne+1
+                print('ligne '+str(ligne))
+                tentative_clic = 0
         else:
             print('Infos de paris affiché')
             try:
                 time.sleep(1)
                 print('Lecture des infos')
                 list_of_bet_type = driver.find_elements(By.CLASS_NAME,
-                                                        'ui-coupon-bet-market__name')
+                                                        'cpn-bet-market__label')
             except Exception as e:
                 config.saveLog(f"#E0015\ Infos de paris non lisible : {e}")
             else:
@@ -79,15 +82,19 @@ def GetBet(driver):
                         return clic
                     else:
                         print('mauvais jeu')
-                        sautDeLigne = sautDeLigne + 40
+                        sautDeLigne = sautDeLigne + 30
                 else:
                     print('Mauvais paris')
-                    sautDeLigne = sautDeLigne + 40
+                    sautDeLigne = sautDeLigne + 30
                     ligne = ligne + 1
-        if ligne == 10:
-            print('Aucun paris trouvé, nouvelle tentative : '+str(tentative))
-            tentative = tentative+1
-            return False
+                    print('ligne ' + str(ligne))
+        if y > size['height'] / 2 or ligne > 8:
+            print('size height :'+str(size['height'] ))
+            print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
+            sautDeLigne = 40
+            y = size['height'] / -2 + sautDeLigne
+            ligne = 1
+            tentative = tentative + 1
 def GetNextBet(driver):
     print("RECHERCHE DES PARIS "+config.scriptType+"....")
     DeleteBet(driver)
@@ -105,20 +112,21 @@ def GetNextBet(driver):
 
     tentative_clic = 0
     tentative = 0
-    canvas = driver.find_element(By.CLASS_NAME, 'market-grid-canvas__container')
+    canvas = driver.find_element(By.ID, 'allBetsTable')
     # Récupérer les coordonnées du div
     location = canvas.location
     size = canvas.size
-    sautDeLigne = 50
+    sautDeLigne = 40
+    decalageX = 5
     ligne = 1
-    while not clic and tentative<10:
+    while not clic and tentative<3:
         print('Ligne suivante')
-        canvas = driver.find_element(By.CLASS_NAME, 'market-grid-canvas__container')
+        #canvas = driver.find_element(By.ID, 'allBetsTable')
         # Récupérer les coordonnées du div
         location = canvas.location
         size = canvas.size
         y = size['height'] / -2 + sautDeLigne
-        x = -5
+        x = size['width'] / -2 + decalageX
         # Calculer les coordonnées pour cliquer au centre du div
         print('Y offset : '+str(y))
         # Créer une instance ActionChains
@@ -130,7 +138,7 @@ def GetNextBet(driver):
         try:
             element = WebDriverWait(driver, 2).until(
                 EC.presence_of_element_located((By.CLASS_NAME,
-                                                'ui-coupon-bet-market__name'))
+                                                'cpn-bet-market__label'))
             )
         except Exception as e:
             tentative_clic+=1
@@ -138,15 +146,17 @@ def GetNextBet(driver):
             time.sleep(1)
             if tentative_clic ==3:
                 config.saveLog('Pas d\'infos, suivant...')
-                sautDeLigne = sautDeLigne + 40
+                sautDeLigne = sautDeLigne + 30
                 ligne = ligne+1
+                print('ligne '+str(ligne))
+                tentative_clic = 0
         else:
             print('Infos de paris affiché')
             try:
                 time.sleep(1)
                 print('Lecture des infos')
                 list_of_bet_type = driver.find_elements(By.CLASS_NAME,
-                                                        'ui-coupon-bet-market__name')
+                                                        'cpn-bet-market__label')
             except Exception as e:
                 config.saveLog(f"#E0015\ Infos de paris non lisible : {e}")
             else:
@@ -161,12 +171,16 @@ def GetNextBet(driver):
                         return clic
                     else:
                         print('mauvais jeu')
-                        sautDeLigne = sautDeLigne + 40
+                        sautDeLigne = sautDeLigne + 30
                 else:
                     print('Mauvais paris')
-                    sautDeLigne = sautDeLigne + 40
+                    sautDeLigne = sautDeLigne + 30
                     ligne = ligne + 1
-        if ligne == 10:
+                    print('ligne ' + str(ligne))
+        if y > size['height']/2 or ligne>8:
+            print('size height :' + str(size['height']))
             print('Aucun paris trouvé, nouvelle tentative : '+str(tentative))
+            sautDeLigne = 40
+            y = size['height'] / -2 + sautDeLigne
+            ligne = 1
             tentative = tentative+1
-            return False

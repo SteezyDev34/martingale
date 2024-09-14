@@ -4,7 +4,7 @@ from Functions.DeleteBet import DeleteBet
 from Functions.GetIfGameStart import GetIfGameStart30A
 from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.GetMise import GetMise
-from Functions.GetBet15A import GetBet15A, GetNextBet15A
+from Functions.GetBet import GetBet, GetNextBet
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.Function_GetSetActuel import GetSetActuel
@@ -82,9 +82,14 @@ def all_script(driver):
             break
         # On recherche le jeu actuel
         config.saveLog('liste des pariis affichée, On recherche le jeu actuel', config.newmatch)
-        if not GetBet15A(driver):
-            config.error = True
-            config.saveLog('error recup jeu #ERR345', config.newmatch)
+        if first_game_pass:
+            if not GetNextBet(driver):
+                config.error = True
+                config.saveLog('error recup jeu #ERR345', config.newmatch)
+        else:
+            if not GetBet(driver):
+                config.error = True
+                config.saveLog('error recup jeu #ERR345', config.newmatch)
 
         config.saveLog('Premier PAris 15A cliqué', config.newmatch)
         config.saveLog("on attebnd 2 sec que la paris s'affiche bien pour recuprer la cote", config.newmatch)
@@ -155,7 +160,7 @@ def all_script(driver):
             score_actuel = '40:0'
             gamestart = 1
             config.jeu_actuel = 0
-            if config.rattrape_perte == 1:
+            if config.rattrape_perte != 9:
                 config.error = False
                 config.saveLog("passage set 2", config.newmatch)
                 config.saveLog("attente 30 sec", config.newmatch)
@@ -173,7 +178,9 @@ def all_script(driver):
                     send_mise = True
                     result = True
                     lose = False
-
+                GetJeuActuel(driver)
+                if config.jeu_actuel == 1:
+                    break
                 GetScoreActuel(driver)
             print('tie break commencé... attente fin')
             while config.score_actuel != "0:0":
@@ -217,13 +224,13 @@ def all_script(driver):
             config.saveLog('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
             if passageset:
                 config.perte = config.perte-config.mise
-                if not GetBet15A(driver):
+                if not GetBet(driver):
                     config.error = True
                     config.saveLog('error recup jeu #ERR345', config.newmatch)
                 else:
                     bet_15a = True
             else:
-                if not GetNextBet15A(driver):
+                if not GetNextBet(driver):
                     config.error = True
                     config.saveLog('error recup jeu #ERR345', config.newmatch)
                 else:
