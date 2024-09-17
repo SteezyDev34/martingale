@@ -60,7 +60,11 @@ def AfficherParis(driver):
                                 tentative = tentative+1
                                 config.saveLog(str(tentative), config.newmatch)
                             else:
-                                if select_option_text.strip() == str(config.set_actuel)+' Set':
+                                if  str(config.set_actuel) == "1":
+                                    theset = "1er"
+                                else:
+                                    theset = str(config.set_actuel)+"ème"
+                                if select_option_text.strip().lower() == str(theset).lower()+' set':
                                     try:
                                         select_option.click()
                                         time.sleep(1)
