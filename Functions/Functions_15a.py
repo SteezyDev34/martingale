@@ -373,10 +373,7 @@ def all_script(driver):
                         config.saved_score = config.score_actuel
                     numset = int(config.set_actuel.split(' ')[0])
                     newset = int(config.set_actuel.split(' ')[0]) + 1
-                    if re.search('15', config.score_actuel):
-                        timesleep = 1
-                    else:
-                        timesleep = 20
+                    timesleep = 20
         if lose and not config.error:
             print('lose : ' + str(config.perte))
         elif not lose and not config.error:
