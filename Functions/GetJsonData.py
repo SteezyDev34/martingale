@@ -6,8 +6,8 @@ import config
 #config.perte = 10
 # Configuration du proxy
 proxy = {
-    "http": "http://auxobettingproxy:Scorpion971@209.200.239.22:51523",
-    "https": "http://auxobettingproxy:Scorpion971@209.200.239.22:51523",
+    "http": "http://auxobettingproxy:Scorpion971@209.200.239.188:51523",
+    "https": "http://auxobettingproxy:Scorpion971@209.200.239.188:51523",
 }
 def getPerte():
     if getCompetRecup():

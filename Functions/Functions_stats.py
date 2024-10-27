@@ -26,6 +26,10 @@ headers= {
     'X-RapidAPI-Key': 'ef2b13642dmshf1d9ccde3c85691p1e0f03jsn54d169ef64f5',
     "X-RapidAPI-Host": "ultimate-tennis1.p.rapidapi.com"
 }
+proxy = {
+    "http": "http://auxobettingproxy:Scorpion971@209.200.239.188:51523",
+    "https": "http://auxobettingproxy:Scorpion971@209.200.239.188:51523",
+}
 # Obtenez l'heure actuelle
 today = date.today()
 ####
@@ -55,7 +59,7 @@ try:
 
 
 
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, proxies=proxy)
 
         print(response.text)
         # Convertir la chaîne JSON en une structure de données Python
@@ -101,7 +105,7 @@ try:
 
 
 
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, proxies=proxy)
         # Convertir la chaîne JSON en une structure de données Python
         data = json.loads(response.text)
         print(data)
@@ -184,7 +188,7 @@ def get_wta_proba_40A(playerName1, playerName2):
         # print(urlplayer1)
         urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID2 + "/2024"
         # print(urlplayer2)
-        response = requests.get(urlplayer1, headers=headers)
+        response = requests.get(urlplayer1, headers=headers, proxies=proxy)
         time.sleep(2)
     except:
         return 0
@@ -200,7 +204,7 @@ def get_wta_proba_40A(playerName1, playerName2):
 
 
             # Statistiques du joueur2
-            response = requests.get(urlplayer2, headers=headers)
+            response = requests.get(urlplayer2, headers=headers, proxies=proxy)
         except:
             return 0
         else:
