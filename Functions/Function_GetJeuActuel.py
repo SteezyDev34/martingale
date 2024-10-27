@@ -14,17 +14,25 @@ def GetJeuActuel(driver):
     else:
         try:
             GetSetActuel(driver)
-            if config.set_actuel == '1':
+            if config.set_actuel.lower() == '1':
                 jeu_actuel_player1 = config.jeu_actuel[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__cell')[1]
                 jeu_actuel_player2 = config.jeu_actuel[1].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__cell')[1]
                 config.jeu_actuel = int(jeu_actuel_player1.text) + int(jeu_actuel_player2.text) + 1
-            elif config.set_actuel == '2':
+            elif config.set_actuel.lower() == '2':
                 jeu_actuel_player1 = config.jeu_actuel[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__cell')[2]
                 jeu_actuel_player2 = config.jeu_actuel[1].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__cell')[2]
                 config.jeu_actuel = int(jeu_actuel_player1.text) + int(jeu_actuel_player2.text) + 1
-            elif config.set_actuel == '3':
+            elif config.set_actuel.lower() == '3':
                 jeu_actuel_player1 = config.jeu_actuel[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__cell')[3]
                 jeu_actuel_player2 = config.jeu_actuel[1].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__cell')[3]
+                config.jeu_actuel = int(jeu_actuel_player1.text) + int(jeu_actuel_player2.text) + 1
+            elif config.set_actuel.lower() == '4':
+                jeu_actuel_player1 = config.jeu_actuel[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__cell')[4]
+                jeu_actuel_player2 = config.jeu_actuel[1].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__cell')[4]
+                config.jeu_actuel = int(jeu_actuel_player1.text) + int(jeu_actuel_player2.text) + 1
+            elif config.set_actuel.lower() == '5':
+                jeu_actuel_player1 = config.jeu_actuel[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__cell')[5]
+                jeu_actuel_player2 = config.jeu_actuel[1].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__cell')[5]
                 config.jeu_actuel = int(jeu_actuel_player1.text) + int(jeu_actuel_player2.text) + 1
             else:
                 return False

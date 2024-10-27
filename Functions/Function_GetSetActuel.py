@@ -14,7 +14,8 @@ def GetSetActuel(driver):
     else:
         try:
             config.saveLog("Vérification si numéro de set bien récupéré",0,config.newmatch)
-            numset = int(config.set_actuel.split(' ')[0])
+            numset = config.set_actuel.split(' ')[0]
+            numset = int(''.join(char for char in numset if char.isdigit()))
         except Exception as e:
             config.saveLog(f"#E0010\nUne erreur est survenue : {e}",config.newmatch)
             config.saveLog("erreur : numset",config.newmatch)
@@ -23,6 +24,7 @@ def GetSetActuel(driver):
             config.set_actuel = str(numset)
             config.saveLog(str(numset)+' Set',0,config.newmatch)
             if config.saved_set != config.set_actuel:
+                print('set actuel : '+config.set_actuel)
                 config.saveLog('Récupération du set actuel : ' + str(config.set_actuel),0,config.newmatch)
 
     return True

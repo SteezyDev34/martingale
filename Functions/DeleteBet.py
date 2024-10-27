@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 def DeleteBet(driver):
     #driver.switch_to.window(driver.window_handles[0])
     try:
-        element = WebDriverWait(driver, 20).until(
+        element = WebDriverWait(driver, 3).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, "cpn-bet__remove"))
         )
