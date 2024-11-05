@@ -42,7 +42,7 @@ def all_script(driver):
         players = GetPlayersName(driver)
         if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
             config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
-            # config.proba40A = 0.5
+            #config.proba40A = 0.5
         else:
             config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
             # config.proba40A = 0.5
@@ -97,7 +97,7 @@ def all_script(driver):
         GetMise(driver)
         print('cotemini : ' + str(config.cotemini) + ' cote : ' + str(config.cote))
         print('proba mini : ' + str(config.probamini) + ' proba : ' + str(config.proba40A))
-        if config.proba40A < config.probamini and config.cote < config.cotemini and (config.perte<=0 or not config.perte):
+        if config.proba40A < config.probamini and config.cote < config.cotemini: #and (config.perte<=0 or not config.perte):
             bet_15a = True
             config.error = True
             config.saveLog('Cote trop faible 0,2', config.newmatch)
@@ -160,7 +160,7 @@ def all_script(driver):
             score_actuel = '40:0'
             gamestart = 1
             config.jeu_actuel = 0
-            if config.rattrape_perte != 9:
+            if config.rattrape_perte == 3:
                 config.error = False
                 config.saveLog("passage set 2", config.newmatch)
                 config.saveLog("attente 30 sec", config.newmatch)

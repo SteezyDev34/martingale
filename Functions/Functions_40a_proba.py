@@ -89,23 +89,23 @@ def all_script(driver):
         print('Proba mini : '+ str(config.probamini)+' Proba : '+str(config.proba40A))
         print('Rattrapage : '+str(config.rattrape_perte))
         if float(config.proba40A) < float(config.probamini) and float(config.cote) < float(config.cotemini):
-            if 'wta' not in config.ligue_name or 'atp' not in config.ligue_name:
-                DispatchPerte()
-                config.rattrape_perte = 0
-                bet_30a = True
-                config.error = True
-                txtlog = 'Cote et proba trop faible > LEAVE!'
-                print(txtlog)
-                config.saveLog(txtlog, config.newmatch)
-                break
-        elif 'itf' in config.ligue_name and config.perte<0:
+            #if 'wta' not in config.ligue_name or 'atp' not in config.ligue_name:
             DispatchPerte()
+            config.rattrape_perte = 0
             bet_30a = True
             config.error = True
-            txtlog = 'itf qualif > LEAVE!'
+            txtlog = 'Cote et proba trop faible > LEAVE!'
             print(txtlog)
             config.saveLog(txtlog, config.newmatch)
-            break
+            #break
+            '''elif 'itf' in config.ligue_name and config.perte<0:
+                DispatchPerte()
+                bet_30a = True
+                config.error = True
+                txtlog = 'itf qualif > LEAVE!'
+                print(txtlog)
+                config.saveLog(txtlog, config.newmatch)
+                break'''
         else:
             print('!!!!!macth ok pour continuer')
         tentative_placermise = 0

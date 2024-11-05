@@ -8,3 +8,4 @@ logScript*
 chromedriver.exe
 /GsheetsJson
 /DataFiles/*
+/ChromeDriver/

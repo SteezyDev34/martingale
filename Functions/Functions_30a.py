@@ -99,7 +99,7 @@ def all_script(driver):
         print('cotemini : ' + str(config.cotemini) + ' cote : ' + str(config.cote))
         print('proba mini : ' + str(config.probamini) + ' proba : ' + str(config.proba40A))
         print('perte : '+str(config.perte))
-        if config.proba40A < config.probamini and config.cote < config.cotemini and (config.perte<=0 or not config.perte):
+        if config.proba40A < config.probamini and config.cote < config.cotemini:# and (config.perte<=0 or not config.perte):
             bet_30a = True
             config.error = True
             config.saveLog('Cote trop faible 0,2', config.newmatch)
@@ -161,7 +161,7 @@ def all_script(driver):
             score_actuel = '40:0'
             gamestart = 1
             config.jeu_actuel = 0
-            if config.rattrape_perte == 1:
+            if config.rattrape_perte == 3:
                 config.error = False
                 config.saveLog("passage set 2", config.newmatch)
                 config.saveLog("attente 30 sec", config.newmatch)

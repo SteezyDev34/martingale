@@ -11,7 +11,7 @@ proxy = {
 }
 def getPerte():
     if getCompetRecup():
-        url = "https://auxobetting.fr/strategy"+config.scriptType+"/get_perte.php"
+        url = "http://auxobeg.cluster030.hosting.ovh.net/strategy"+config.scriptType+"/get_perte.php"
         try:
             # Envoyer une requête GET à l'URL
             response = requests.get(url,proxies=proxy)
@@ -38,7 +38,7 @@ def getPerte():
     else:
         return
 def delPerte(id):
-    url = "https://auxobetting.fr/strategy"+config.scriptType+"/del_perte.php?id="+str(id)
+    url = "http://auxobeg.cluster030.hosting.ovh.net/strategy"+config.scriptType+"/del_perte.php?id="+str(id)
     try:
         # Envoyer une requête GET à l'URL
         response = requests.get(url,proxies=proxy)
@@ -61,7 +61,7 @@ def delPerte(id):
         return True
 
 def getCompetRecup():
-    url = "https://auxobetting.fr/strategy"+config.scriptType+"/get_compet_recup.php"
+    url = "http://auxobeg.cluster030.hosting.ovh.net/strategy"+config.scriptType+"/get_compet_recup.php"
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
@@ -98,7 +98,7 @@ def getCompetRecup():
             print(e)
             return False
 def getCompet():
-    url = "https://auxobetting.fr/strategy"+config.scriptType+"/get_compet.php"
+    url = "http://auxobeg.cluster030.hosting.ovh.net/strategy"+config.scriptType+"/get_compet.php"
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
@@ -136,7 +136,7 @@ def getCompet():
             print(e)
             return False
 def SendPerte(scriptType,perte):
-    url = "https://auxobetting.fr/strategy"+str(scriptType)+"/insert_perte.php?perte="+str(perte)
+    url = "http://auxobeg.cluster030.hosting.ovh.net/strategy"+str(scriptType)+"/insert_perte.php?perte="+str(perte)
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL

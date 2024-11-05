@@ -4,9 +4,9 @@ from selenium.webdriver.common.by import By
 
 print('START')
 import os
-
+import time
 #Chargement de Chrome driver
-from ChromeDriver.SetDriver10 import driver
+from ChromeDriver.SetDriver1 import driver
 
 all_bets = driver.find_element(By.CLASS_NAME, 'all-bets')
 
@@ -57,19 +57,20 @@ def fordate(d):
 from selenium.webdriver.support.ui import Select
 i=0
 for bets in betslist:
-    driver.get("https://www.auxobetting.fr/bilan/add-bet.php")
+    driver.get("http://www.auxobeg.cluster030.hosting.ovh.net/bilan/add-bet.php")
     bets[0] = fordate(bets[0])
     driver.find_element(By.CLASS_NAME,'champ_date_du_paris').send_keys(bets[0])
-    driver.find_element(By.CLASS_NAME, 'champ_sport').send_keys('Baseball')
+    driver.find_element(By.CLASS_NAME, 'champ_sport').send_keys('Rugby')
     driver.find_element(By.CLASS_NAME, 'champ_intitule').send_keys(bets[1])
     driver.find_element(By.CLASS_NAME, 'champ_cote').send_keys(str(bets[2].replace(',','.')))
     driver.find_element(By.CLASS_NAME, 'champ_mise').send_keys(str(bets[3]))
+    driver.find_element(By.CLASS_NAME, 'champ_code').send_keys('code'+str(time.time()))
     select_element = driver.find_element(By.CLASS_NAME, 'champ_etat')
     select = Select(select_element)
     select.select_by_value(bets[4])
     if bets[4]  == "Lost":
         i+=1
-        if i == 0:
+        if i == 2:
 
             i=0
         else:
