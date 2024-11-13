@@ -6,11 +6,9 @@ import config
 #VÉRIFIERR SI PAGE DE MATCH
 def GetIfMatchPage(driver):
     #driver.switch_to.window(driver.window_handles[0])
-<<<<<<< Updated upstream:Functions/GetIfMatchPage.py
     logTxt = "Vérfication si page match..."
     config.saveLog(logTxt,0,config.newmatch)
-=======
->>>>>>> Stashed changes:GetIfMatchPage.py
+
     try:
         element = WebDriverWait(driver, 2).until(
             EC.presence_of_element_located(
