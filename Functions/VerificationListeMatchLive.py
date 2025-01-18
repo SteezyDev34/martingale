@@ -6,7 +6,10 @@ import config
 def VerificationListeMatchLive(driver):
 
     try:
-        driver.find_element(By.ID, 'maincontent')
+        if "ca.1xbet.com" in config.current_url:
+            driver.find_element(By.CLASS_NAME, 'betting-main-dashboard')
+        else:
+            driver.find_element(By.ID, 'maincontent')
 
     except:
         txtlog = "Liste match live non visible!"

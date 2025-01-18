@@ -30,8 +30,12 @@ def rechercheDeMatch(driver):
             driver.get('https://1xbet.com/fr/live/Tennis/')
             return False
         # RECUPERATION DES LIGUES EN COURS
-        bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                              'dashboard-champ-content')
+        if "ca.1xbet.com" in config.current_url:
+            bet_list_ligue = driver.find_elements(By.CLASS_NAME,
+                                              'ui-dashboard-champ')
+        else:
+            bet_list_ligue = driver.find_elements(By.CLASS_NAME,
+                                                  'dashboard-champ-content')
         # POUR CHAQUE LIGUE RÉCUPÉRÉE
         for bet_ligue in bet_list_ligue:
             # ON RÉCUPÈRE LE NOM DE LA LIGUE
@@ -46,10 +50,13 @@ def rechercheDeMatch(driver):
                 print('get comp')
                 # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
                 try:
-                    bet_items = bet_ligue.find_elements(By.CLASS_NAME,
+                    if "ca.1xbet.com" in config.current_url:
+                        bet_items = bet_ligue.find_elements(By.CLASS_NAME,
+                                                            'ui-dashboard-game')
+                    else:
+                        bet_items = bet_ligue.find_elements(By.CLASS_NAME,
                                                         'c-events-scoreboard__item')
                 except :
-                    print(' c-events-scoreboard__item')
                     # s'il y une erreur on passe au suivant
                     continue
                 else:
@@ -58,8 +65,12 @@ def rechercheDeMatch(driver):
                     for bet_item in bet_items:
                         try:
                             # on récupère le score
-                            div_bet_score = bet_item.find_elements(By.CLASS_NAME,
-                                                                   'c-events-scoreboard__lines_tennis')
+                            if "ca.1xbet.com" in config.current_url:
+                                div_bet_score = bet_item.find_elements(By.CLASS_NAME,
+                                                                   'ui-game-scores')
+                            else:
+                                div_bet_score = bet_item.find_elements(By.CLASS_NAME,
+                                                                       'c-events-scoreboard__lines_tennis')
                         except:
                             txtlog = "Impossible de récupérer le score"
                             config.saveLog(txtlog,0, config.newmatch)
@@ -71,8 +82,12 @@ def rechercheDeMatch(driver):
                                 print("pas de sc")
                                 continue
                             # on le vérifie
+                            if "ca.1xbet.com" in config.current_url:
+                                scoretostart =config.score_to_start_ca
+                            else:
+                                scoretostart =config.score_to_start
                             bet_score = GetMatchScore.main(div_bet_score[0],
-                                                           config.score_to_start)
+                                                           scoretostart)
                             if bet_score:  # SI LE MATCH EST PRET
                                 # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
                                 config.newmatch = VerificationMatchTrouve.main(driver, bet_item,

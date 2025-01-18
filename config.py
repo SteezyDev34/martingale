@@ -3,8 +3,8 @@ import datetime
 import requests
 import json
 proxy = {
-    "http": "http://auxobettingproxy:Scorpion971@223.29.227.158:51523",
-    "https": "http://auxobettingproxy:Scorpion971@223.29.227.158:51523",
+    "http": "http://auxobettingproxy:Scorpion971@209.200.239.6:51523",
+    "https": "http://auxobettingproxy:Scorpion971@209.200.239.6:51523",
 }
 def getJsonData(url):
     i =0
@@ -49,6 +49,16 @@ score_to_start = [
     "00(30)00(0)",
     "00(0)00(30)"
 ]
+score_to_start_ca = [
+    "0000(0)(0)",
+    "0000(0)(15)",
+    "0000(15)(0)",
+    "0000(15)(15)",
+    "0000(15)(30)",
+    "0000(30)(15)",
+    "0000(0)(30)",
+    "0000(30)(0)"
+]
 ligue_name = ""
 match_Url = ""
 newmatch = ""
@@ -82,6 +92,9 @@ print_running_text = False
 print_match_live_text = False
 error = False
 devMode =1
+current_url = ""
+
+
 def init_variable():
     global mise, perte, wantwin,increment, probamini, cotemini,recup40,recup30
     global running_file_name,matchlist_file_name,print_running_text,rattrape_perte

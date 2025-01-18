@@ -12,7 +12,11 @@ def main(bet_ligue):
         config.ligue_name = False
     else:
         try:
-            config.ligue_name = div_ligue_name.find_element(By.CLASS_NAME,
+            if "ca.1xbet.com" in config.current_url:
+                config.ligue_name = div_ligue_name.find_element(By.CLASS_NAME,
+                                                                'ui-dashboard-champ-name__caption')
+            else:
+                config.ligue_name = div_ligue_name.find_element(By.CLASS_NAME,
                                                      'c-events__name')
             config.ligue_name = config.ligue_name.text.lower()
             config.ligue_name = config.ligue_name.replace('.', '')

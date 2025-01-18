@@ -7,8 +7,12 @@ import config
 def main(div_bet_score,score_to_start):
     get_bet_score = False
     try:
-        get_if_icon_ball = div_bet_score.find_elements(By.XPATH,
+        if "ca.1xbet.com" in config.current_url:
+            get_if_icon_ball = div_bet_score.find_elements(By.XPATH,
                                                        './/span[@class="c-events-scoreboard__ball"]/div[not(contains(@style,"display: none;"))]')
+        else:
+            get_if_icon_ball = div_bet_score.find_elements(By.CLASS_NAME,
+                                                           'ui-game-scores__item--inning')
 
         bet_score = div_bet_score.text
         bet_score = bet_score.replace(

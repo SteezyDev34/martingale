@@ -23,6 +23,8 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
 
 def all_script(driver):
+    config.current_url = driver.current_url
+    print('on est sur : '+config.current_url)
     lose = True
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
@@ -40,8 +42,8 @@ def all_script(driver):
         # RECHERCHE INFOS DE MISE
         players = GetPlayersName(driver)
         if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
-            config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
-            #config.proba40A = 0.5
+            #config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
+            config.proba40A = 0.5
         else:
             config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
             #config.proba40A = 0.5

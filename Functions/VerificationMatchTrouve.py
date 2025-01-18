@@ -7,13 +7,22 @@ from Functions import GetMatchDone
 
 def main(driver,bet_item,matchlist_file_name):
     try:
-        newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
-                                             'c-events__name')[
-            0].get_attribute(
-            "href")
-        newmatch = newmatchtxt.split(
-            '-')
-        config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
+        if "ca.1xbet.com" in config.current_url:
+            newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
+                                                 'dashboard-game-block__link')[
+                0].get_attribute(
+                "href")
+            newmatch = newmatchtxt.split(
+                '-')
+            config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
+        else:
+            newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
+                                                 'c-events__name')[
+                0].get_attribute(
+                "href")
+            newmatch = newmatchtxt.split(
+                '-')
+            config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
     except Exception as e:
         print(f"#E0007\nUne erreur est survenue : {e}")
         print('Impossible de lire le lien du match!')

@@ -8,8 +8,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 ##FIN DEFINITION DES FONCTIONS
 from unidecode import unidecode
 proxy = {
-    "http": "http://auxobettingproxy:Scorpion971@223.29.227.158:51523",
-    "https": "http://auxobettingproxy:Scorpion971@223.29.227.158:51523",
+    "http": "http://auxobettingproxy:Scorpion971@209.200.239.6:51523",
+    "https": "http://auxobettingproxy:Scorpion971@209.200.239.6:51523",
 }
 def get_proba_40A_other(playerName1, playerName2,driver,link):
     prob_service_joueur1 = 0
