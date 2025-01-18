@@ -3,8 +3,8 @@ import datetime
 import requests
 import json
 proxy = {
-    "http": "http://auxobettingproxy:Scorpion971@209.200.239.188:51523",
-    "https": "http://auxobettingproxy:Scorpion971@209.200.239.188:51523",
+    "http": "http://auxobettingproxy:Scorpion971@223.29.227.158:51523",
+    "https": "http://auxobettingproxy:Scorpion971@223.29.227.158:51523",
 }
 def getJsonData(url):
     i =0
