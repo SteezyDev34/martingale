@@ -3,8 +3,8 @@ import datetime
 import requests
 import json
 proxy = {
-    "http": "http://auxobettingproxy:Scorpion971@209.200.239.6:51523",
-    "https": "http://auxobettingproxy:Scorpion971@209.200.239.6:51523",
+    "http": "http://auxobettingproxy:Scorpion971@223.29.227.61:51523",
+    "https": "http://auxobettingproxy:Scorpion971@223.29.227.61:51523",
 }
 def getJsonData(url):
     i =0
@@ -105,7 +105,7 @@ def init_variable():
     match_found = False # Match valide trouvé
     print('scr : '+scriptType)
     url = "http://auxobeg.cluster030.hosting.ovh.net/strategy"+scriptType+"/"
-    saveLog(url,0)
+    #saveLog(url,0)
     strategy = getJsonData(url)
     devMode = strategy["devmode"]
     if devMode == "1":
@@ -113,29 +113,29 @@ def init_variable():
     else:
         devMode = False
     error = False
-    saveLog('init devMode : ' + str(devMode), 0)
+    #saveLog('init devMode : ' + str(devMode), 0)
     mise = float(strategy["mise"])
-    saveLog('init mise : '+str(mise),0)
+    #saveLog('init mise : '+str(mise),0)
     probamini = float(strategy["proba_mini"])
-    saveLog('init probamini : ' + str(probamini),0)
+    #saveLog('init probamini : ' + str(probamini),0)
     cotemini = float(strategy["cote_recup"])
-    saveLog('init cotemini : ' + str(cotemini),0)
+    #saveLog('init cotemini : ' + str(cotemini),0)
     cotebase = float(strategy["cote_base"])
-    saveLog('init cotebase : ' + str(cotebase),0)
+    #saveLog('init cotebase : ' + str(cotebase),0)
     nb_tour = float(strategy["nb_tour"])
-    saveLog('init nb_tour : ' + str(nb_tour),0)
+    #saveLog('init nb_tour : ' + str(nb_tour),0)
     restart_set2 = float(strategy["restart_set2"])
-    saveLog('init restart_set2 : ' + str(restart_set2),0)
+    #saveLog('init restart_set2 : ' + str(restart_set2),0)
     perte = 0
-    saveLog('init perte : ' + str(perte),0)
+    #saveLog('init perte : ' + str(perte),0)
     wantwin = float(strategy["wantwin"])
-    saveLog('init wantwin : ' + str(wantwin), 0)
+    #saveLog('init wantwin : ' + str(wantwin), 0)
     increment = float(strategy["increment"])
-    saveLog('init increment : ' + str(increment), 0)
+    #saveLog('init increment : ' + str(increment), 0)
     recup40 = float(strategy["mtt_recup"])
-    saveLog('init recup40 : ' + str(recup40), 0)
+    #saveLog('init recup40 : ' + str(recup40), 0)
     recup30 = float(strategy["mtt_recup"])
-    saveLog('init recup30 : ' + str(recup30), 0)
+    #saveLog('init recup30 : ' + str(recup30), 0)
     running_file_name = projectPath+'/SCRIPTS '+scriptType+'/running'
     rattrape_perte = 0
     matchlist_file_name = projectPath+'/SCRIPTS '+scriptType+'/matchlist'

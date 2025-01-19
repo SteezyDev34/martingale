@@ -19,7 +19,9 @@ def rechercheDeMatch(driver):
     while not config.match_found and not config.error:
         config.init_variable()
         """On vérifie si c'est la page d'un match """
-        config.match_found = GetIfMatchPage(driver)
+        if GetIfMatchPage(driver):
+            config.match_found = True
+            continue
         # SCRIPT RECHERCHE DE MATCH
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
         GetIfScriptsRunning()

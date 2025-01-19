@@ -7,7 +7,7 @@ import config
 def GetIfMatchPage(driver):
     #driver.switch_to.window(driver.window_handles[0])
     logTxt = "Vérfication si page match..."
-    config.saveLog(logTxt,0,config.newmatch)
+    #config.saveLog(logTxt,0,config.newmatch)
 
     try:
         print(config.current_url)
@@ -58,6 +58,6 @@ def GetIfMatchPage(driver):
             return False
     else:
         logTxt = "PAGE MATCH OK!"
-        config.saveLog(logTxt,config.newmatch)
-        print(logTxt)
+        #config.saveLog(logTxt,config.newmatch)
+        #print(logTxt)
         return True

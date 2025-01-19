@@ -45,15 +45,15 @@ def all_script(driver):
             #config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
             config.proba40A = 0.5
         else:
-            config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
-            #config.proba40A = 0.5
+            #config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
+            config.proba40A = 0.5
             if config.proba40A ==  0:
                 config.proba40A = Functions_stats1.get_proba_40A_other(players[0], players[1], driver, config.match_Url)
 
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getPerte()
         print("PERTE : ")
-        print(infosperte)
+        time.sleep(5)
         if infosperte:
             config.perte = float(infosperte['perte'])
             delPerte(infosperte['id'])

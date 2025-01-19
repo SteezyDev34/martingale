@@ -1,7 +1,8 @@
 # Function_GetSetActuel.py
 # OBTENIR LE SET ACTUEL
 import time
-
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import config
 
@@ -9,10 +10,13 @@ import config
 def GetSetActuel(driver):
     try:
         if "ca.1xbet.com" in config.current_url:
-            config.set_actuel = driver.find_elements(By.CLASS_NAME, 'ui-game-timer__label')[0].text
+            config.set_actuel = WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located(
+                    (By.CLASS_NAME, 'ui-game-timer__label'))
+            )
+            config.set_actuel=config.set_actuel.text
         else:
             config.set_actuel = driver.find_elements(By.CLASS_NAME, 'c-scoreboard-score__heading')[0].text
-
     except Exception as e:
         config.saveLog(f"#E0009\nUne erreur est survenue : {e}",config.newmatch)
         config.saveLog("erreur : c-scoreboard-score__heading",config.newmatch)
@@ -20,7 +24,7 @@ def GetSetActuel(driver):
     else:
         try:
             config.saveLog("Vérification si numéro de set bien récupéré",0,config.newmatch)
-            numset = config.set_actuel.split('er ')[0]
+            numset = config.set_actuel.split(' ')[0]
             numset = int(''.join(char for char in numset if char.isdigit()))
         except Exception as e:
             config.saveLog(f"#E0010\nUne erreur est survenue : {e}",config.newmatch)
@@ -29,7 +33,6 @@ def GetSetActuel(driver):
         else:
             config.set_actuel = str(numset)
             config.saveLog(str(numset)+' Set',0,config.newmatch)
-            time.sleep(30)
             if config.saved_set != config.set_actuel:
                 print('set actuel : '+config.set_actuel)
                 config.saveLog('Récupération du set actuel : ' + str(config.set_actuel),0,config.newmatch)

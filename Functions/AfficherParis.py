@@ -15,20 +15,29 @@ def AfficherParis(driver):
     clic = False
     while not selection and tentative <6:
         try:
-            element = WebDriverWait(driver, 5).until(
-                EC.presence_of_element_located(
-                    (By.CLASS_NAME, 'scoreboard-nav__select'))
-            )
+            if "ca.1xbet.com" in config.current_url:
+                element = WebDriverWait(driver, 5).until(
+                    EC.presence_of_element_located(
+                        (By.CLASS_NAME, 'input-select__multiselect'))
+                )
+            else:
+                element = WebDriverWait(driver, 5).until(
+                    EC.presence_of_element_located(
+                        (By.CLASS_NAME, 'scoreboard-nav__select'))
+                )
         except Exception as e:
             config.saveLog(f"#E0012\nUne erreur est survenue : {e}", config.newmatch)
             config.saveLog("ERROR : champ déroulant non trouvé", config.newmatch)
             tentative = tentative +1
             config.saveLog(str(tentative),  config.newmatch)
         else:
-            select_form = driver.find_elements(By.CLASS_NAME, 'scoreboard-nav__select')
+            if "ca.1xbet.com" in config.current_url:
+                select_form = driver.find_elements(By.CLASS_NAME, 'input-select__multiselect')
+            else:
+                select_form = driver.find_elements(By.CLASS_NAME, 'scoreboard-nav__select')
             try:
                 select_form[0].click()
-                time.sleep(5)
+                time.sleep(3)
             except Exception as e:
                 config.saveLog(f"#E0013\nUne erreur est survenue : {e}", config.newmatch)
                 config.saveLog("Erreur lors du clic sur le champ deroulant", config.newmatch)
@@ -38,13 +47,14 @@ def AfficherParis(driver):
                 try:
                     element = WebDriverWait(driver, 5).until(
                         EC.presence_of_element_located(
-                            (By.CLASS_NAME, 'multiselect__element'))
+                            (By.CLASS_NAME, 'multiselect__content'))
                     )
                 except Exception as e:
                     config.saveLog(f"#E0014\nUne erreur est survenue : {e}", config.newmatch)
                     config.saveLog("ERROR : aucun element dans le champ déroulant ", config.newmatch)
                 else:
-                    select_form_set_1 = driver.find_elements(By.CLASS_NAME,
+                    time.sleep(5)
+                    select_form_set_1 = element.find_elements(By.CLASS_NAME,
                                                              'multiselect__element')
                     if len(select_form_set_1) > 0:
                         config.saveLog('Plusieurs liens trouvés....', config.newmatch)
@@ -52,8 +62,13 @@ def AfficherParis(driver):
                             if selection == True:
                                 break
                             try:
-                                select_span = select_option.find_elements(By.CLASS_NAME,'multiselect__option')[0]
-                                select_option_text = select_span.find_elements(By.TAG_NAME,'span')[0].get_attribute('title')
+                                if "ca.1xbet.com" in config.current_url:
+                                    select_span = select_option.find_element(By.CLASS_NAME, 'multiselect__option')
+                                    select_option = driver.find_element(By.XPATH,'//*[@id="game_toolbar"]/div[1]/div/div/div/div[3]/ul/li[2]/span/button')
+                                    select_option_text = select_span.find_element(By.CLASS_NAME,'ui-option__caption').get_attribute("textContent").strip()
+                                else:
+                                    select_span = select_option.find_elements(By.CLASS_NAME, 'multiselect__option')[0]
+                                    select_option_text = select_span.find_elements(By.TAG_NAME,'span')[0].text
                             except Exception as e:
                                 config.saveLog(f"#E0015\nUne erreur est survenue : {e}", config.newmatch)
                                 config.saveLog("Aucun élements multiselect__option", config.newmatch)

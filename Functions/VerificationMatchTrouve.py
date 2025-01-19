@@ -1,5 +1,7 @@
 # Function_VerificationMatchTrouve
 #VERRIFICATION DU MATCH TROUVÉ
+import time
+
 from selenium.webdriver.common.by import By
 import config
 from Functions import GetMatchDone
@@ -48,12 +50,12 @@ def fromUrl(driver,matchlist_file_name):
         newmatch = newmatchtxt.split(
             '-')
         config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
+
     except Exception as e:
         print(f"#E0007\nUne erreur est survenue : {e}")
         print('Impossible de lire le lien du match!')
         return [False, config.newmatch]
     else:
-        #print('newmatch : '+newmatch)
         match_list = GetMatchDone.main(matchlist_file_name)
         if not any( config.newmatch in x for x in match_list):
             #print('Le match n\'a pas encore été parié!')
