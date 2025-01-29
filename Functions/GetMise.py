@@ -5,7 +5,17 @@ from selenium.webdriver.common.by import By
 import config
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+
+from Functions.GetJsonData import getGlobalPerte
+
+
 def GetMise(driver):
+    print("#RECHERCHE INFOS DE MISE")
+    infosperte = getGlobalPerte()
+    print("PERTE : ")
+    print(infosperte)
+    if infosperte:
+        config.perte = float(infosperte['perte'])
     if config.rattrape_perte == 3:
         txtlog = 'Bonne proba, cote : 3'
         print(txtlog)

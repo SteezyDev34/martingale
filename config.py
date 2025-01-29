@@ -71,6 +71,7 @@ mise = 0.2
 probamini = 0.4
 cotemini = 1
 cotebase = 1
+winning = 0
 misemax = 0
 perte = 0
 wantwin = 0.2

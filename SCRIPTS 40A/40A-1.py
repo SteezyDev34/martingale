@@ -29,7 +29,7 @@ from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import  classementeDeMatch
 
-classementeDeMatch(driver)
+#classementeDeMatch(driver)
 
 while (config.win < 100):
     config.init_variable()
@@ -39,6 +39,7 @@ while (config.win < 100):
         while tour < config.nb_tour:
             tour += 1
             Functions_40a_proba.all_script(driver)
+
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:

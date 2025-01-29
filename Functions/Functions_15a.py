@@ -18,7 +18,7 @@ from Functions import Functions_1XBET
 import re
 from Functions.AfficherParis import AfficherParis
 from Functions.Function_scriptDelRunning import scriptDelRunning
-from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
+from Functions.GetJsonData import getGlobalPerte, SendGlobalPerte
 
 def all_script(driver):
     lose = True
@@ -40,13 +40,6 @@ def all_script(driver):
 
 
         print("#RECHERCHE INFOS DE MISE")
-        infosperte = getPerte()
-        print("PERTE : ")
-        print(infosperte)
-        if infosperte:
-            config.perte = float(infosperte['perte'])
-            delPerte(infosperte['id'])
-            config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
         config.set_actuel = GetSetActuel(driver)
         config.saved_set = config.set_actuel
@@ -116,7 +109,6 @@ def all_script(driver):
             if ValidationDuParis(driver):
                 validate_bet = True
                 config.jeu_actuel += 1
-                config.perte = float(config.perte) + float(config.mise)
                 config.wantwin = float(config.wantwin) + float(config.increment)
                 bet_15a = True
                 config.saveLog("prochain jeu : " + str(config.jeu_actuel), config.newmatch)
@@ -140,6 +132,7 @@ def all_script(driver):
     while not winmatch and not config.error:
         # WAIT FOR GAME START
         if passageset:
+            SendGlobalPerte(config.scriptType, '-' + config.mise)
             score_actuel = '40:0'
             gamestart = 1
             config.jeu_actuel = 0
@@ -206,7 +199,6 @@ def all_script(driver):
             # On recherche le jeu actuel
             config.saveLog('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
             if passageset:
-                config.perte = config.perte-config.mise
                 if not GetBet(driver):
                     config.error = True
                     config.saveLog('error recup jeu #ERR345', config.newmatch)
@@ -298,7 +290,6 @@ def all_script(driver):
                             if ValidationDuParis(driver):
                                 validate_bet = 1
                                 config.jeu_actuel += 1
-                                config.perte = config.perte + config.mise
                                 config.wantwin = float(config.wantwin) + float(config.increment)
                                 print("prochain jeu : " + str(config.jeu_actuel))
                                 print("wantwin : " + str(config.wantwin))
@@ -362,13 +353,14 @@ def all_script(driver):
         elif not lose and not config.error:
             config.win += 1
             config.perte = 0
+            win = 0 - config.winning
+            print('win in this game : ' + str(win) + '€')
+            SendGlobalPerte(config.scriptType, win)
             try:
                 DeleteBet(driver)
             except:
                 print('cpn-bet__remove not found')
             break
-    if config.perte >0.2:
-        DispatchPerte()
     print("update " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)

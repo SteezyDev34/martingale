@@ -37,6 +37,34 @@ def getPerte():
             return pertes
     else:
         return
+def getGlobalPerte():
+    if getCompetRecup():
+        url = "http://p-com.studio/api/strategy"+config.scriptType+"/get_global_perte.php"
+        try:
+            # Envoyer une requête GET à l'URL
+            response = requests.get(url,proxies=proxy)
+            # Vérifier que la requête a réussi
+            response.raise_for_status()
+            print(response.json())
+            # Parser le JSON depuis la réponse
+            if len(response.json())>0:
+                pertes = response.json()[0]
+            else:
+                return False
+            # Afficher les données pour vérification
+        except requests.exceptions.RequestException as e:
+            print(f"Erreur lors de la récupération des données : {e}")
+            return
+        except json.JSONDecodeError as e:
+            print(f"Erreur lors du parsing du JSON : {e}")
+            return
+        except Exception as e:
+            print(f"pas de perte {e}")
+        else:
+            config.rattrape_perte = 1
+            return pertes
+    else:
+        return
 def delPerte(id):
     url = "http://p-com.studio/api/strategy"+config.scriptType+"/del_perte.php?id="+str(id)
     try:
@@ -162,6 +190,33 @@ def SendPerte(scriptType,perte):
         else:
             print(result)
             return False
+def SendGlobalPerte(scriptType,mise):
+    url = "http://p-com.studio/api/strategy"+str(scriptType)+"/insert_global_perte.php?mise="+str(mise)
+    # URL du lien JSON de la strategy
+    try:
+        # Envoyer une requête GET à l'URL
+        response = requests.get(url,proxies=proxy)
+        # Vérifier que la requête a réussi
+        response.raise_for_status()
+        # Parser le JSON depuis la réponse
+        result = response.json()
+        # Afficher les données pour vérification
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de la récupération des données : {e}")
+        return
+    except json.JSONDecodeError as e:
+        print(f"Erreur lors du parsing du JSON : {e}")
+        return
+    except Exception as e:
+        print(f"Pas d'envoi de perte {e}")
+    else:
+        if result['status'] == "success":
+            print(str(mise)+ "> mise insert in strategy"+str(scriptType))
+            return True
+        else:
+            print(result)
+            return False
+
 def DispatchPerte():
     #while config.perte >3:
         #SendPerte("4030",3)

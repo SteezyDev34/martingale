@@ -4,6 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import re
 
 from Functions.DeleteBet import DeleteBet
+from Functions.GetJsonData import SendGlobalPerte
 from Functions.PlacerMise import PlacerMise
 import config
 
@@ -160,6 +161,8 @@ def ValidationDuParis(driver):
                                                 'button')[0].click()
                                             fenetre_validation = 1
                                             validation = 1
+                                            SendGlobalPerte(config.scriptType, config.mise)
+                                            config.winning = float(config.mise) * float(config.cote)
                                             return True
                         else:
                             PlacerMise(driver)

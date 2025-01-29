@@ -17,12 +17,11 @@ from Functions import GetLigueName, VerificationMatchTrouve, Functions_stats, Fu
 from Functions import Functions_1XBET
 import re
 
-from Functions.Function_AfficherParis4030 import AfficherParis4030
+from Functions.Function_AfficherParis4030 import AfficherParis
 from Functions.Function_scriptDelRunning import scriptDelRunning
 
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
-from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
-
+from Functions.GetJsonData import getPerte, delPerte, DispatchPerte, SendGlobalPerte
 
 
 def all_script(driver):
@@ -42,25 +41,6 @@ def all_script(driver):
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
 
-        # RECHERCHE INFOS DE MISE
-        players = GetPlayersName(driver)
-        if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
-            config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
-            #config.proba40A = 0.5
-        else:
-            config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
-            #config.proba40A = 0.5
-            if config.proba40A ==  0:
-                config.proba40A = Functions_stats1.get_proba_40A_other(players[0], players[1], driver, config.match_Url)
-
-        print("#RECHERCHE INFOS DE MISE")
-        infosperte = getPerte()
-        print("PERTE : ")
-        print(infosperte)
-        if infosperte:
-            config.perte = float(infosperte['perte'])
-            delPerte(infosperte['id'])
-            config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
         config.set_actuel = GetSetActuel(driver)
         config.saved_set = config.set_actuel
@@ -78,7 +58,7 @@ def all_script(driver):
     while not bet_40a and not config.error:
         #Affichage de la liste des paris
         config.saveLog('Affichage de la liste des paris',0,config.newmatch)
-        if not AfficherParis4030(driver):
+        if not AfficherParis(driver):
             config.error = True
             break
         else:
@@ -144,7 +124,6 @@ def all_script(driver):
                     validate_bet = True
                     bet_40a = True
                     config.jeu_actuel +=1
-                    config.perte = float(config.perte) + float(config.mise)
                     config.wantwin = float(config.wantwin) + float(config.increment)
                     config.saveLog("prochain jeu : " + str(config.jeu_actuel), config.newmatch)
                     config.saveLog("wantwin : " + str(config.wantwin), config.newmatch)
@@ -181,15 +160,6 @@ def all_script(driver):
                 print(txtlog)
                 config.saveLog(txtlog, config.newmatch)
                 time.sleep(30)
-            elif config.perte > 0:
-                DispatchPerte()
-                config.init_variable()
-                txtlog = "passage set 2 restart"
-                print(txtlog)
-                config.saveLog(txtlog, config.newmatch)
-                txtlog = "attente 30 sec"
-                print(txtlog)
-                time.sleep(30)
             else:
                 config.error = True
                 print("erreur perte en 1 set")
@@ -214,7 +184,7 @@ def all_script(driver):
 
             # Affichage de la liste des paris
             config.saveLog('Affichage de la liste des paris',config.newmatch)
-            if not AfficherParis4030(driver):
+            if not AfficherParis(driver):
                 config.error = True
                 break
             # On recherche le jeu actuel
@@ -312,7 +282,6 @@ def all_script(driver):
                             if ValidationDuParis4030(driver,config.mise):
                                 validate_bet = True
                                 config.jeu_actuel += 1
-                                config.perte = float(config.perte) + float(config.mise)
                                 config.wantwin = float(config.wantwin) + float(config.increment)
                                 bet_40a = True
                                 config.saveLog("prochain jeu : " + str(config.jeu_actuel),config.newmatch)
@@ -373,6 +342,9 @@ def all_script(driver):
             print('lose : ' + str(config.perte))
         elif not lose and not config.error:
             config.win += 1
+            win = 0 - config.winning
+            print('win in this game : ' + str(win) + '€')
+            SendGlobalPerte(config.scriptType, win)
             config.perte = 0
             try:
                 DeleteBet(driver)
@@ -380,11 +352,9 @@ def all_script(driver):
                 print('cpn-bet__remove not found')
 
             break
-    if config.perte > 0:
-        DispatchPerte()
-    infos = [config.win, config.perte, config.wantwin, config.mise]
+
     print("update " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)
-    return infos
+    return True
