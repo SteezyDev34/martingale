@@ -57,7 +57,7 @@ def fordate(d):
 from selenium.webdriver.support.ui import Select
 i=0
 for bets in betslist:
-    driver.get("http://www.auxobeg.cluster030.hosting.ovh.net/bilan/add-bet.php")
+    driver.get("http://www.p-com.studio/api/bilan/add-bet.php")
     bets[0] = fordate(bets[0])
     driver.find_element(By.CLASS_NAME,'champ_date_du_paris').send_keys(bets[0])
     driver.find_element(By.CLASS_NAME, 'champ_sport').send_keys('Rugby')

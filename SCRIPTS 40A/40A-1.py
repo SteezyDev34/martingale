@@ -2,7 +2,7 @@ print('START')
 import os
 
 #Chargement de Chrome driver
-from ChromeDriver.SetDriver9 import driver
+from ChromeDriver.SetDriver1 import driver
 
 #Chargement des variables globales
 import config
@@ -27,8 +27,9 @@ else:
 #Chargement des fonctions
 from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
+from Functions.ScriptRechercheDeMatch import  classementeDeMatch
 
-
+classementeDeMatch(driver)
 
 while (config.win < 100):
     config.init_variable()

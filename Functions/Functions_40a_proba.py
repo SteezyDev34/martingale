@@ -26,6 +26,7 @@ def all_script(driver):
     lose = True
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
+
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver):
@@ -36,17 +37,6 @@ def all_script(driver):
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
-
-        # RECHERCHE INFOS DE MISE
-        players = GetPlayersName(driver)
-        if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
-            config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
-            #config.proba40A = 0.5
-        else:
-            config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
-            #config.proba40A = 0.5
-            if config.proba40A ==  0:
-                config.proba40A = Functions_stats1.get_proba_40A_other(players[0], players[1], driver, config.match_Url)
 
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getPerte()
@@ -85,29 +75,7 @@ def all_script(driver):
         send_mise = 0
         #ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
         GetMise(driver)
-        print('Cotemini : '+str(config.cotemini)+' Cote : '+str(config.cote))
-        print('Proba mini : '+ str(config.probamini)+' Proba : '+str(config.proba40A))
         print('Rattrapage : '+str(config.rattrape_perte))
-        if float(config.proba40A) < float(config.probamini) and float(config.cote) < float(config.cotemini):
-            #if 'wta' not in config.ligue_name or 'atp' not in config.ligue_name:
-            DispatchPerte()
-            config.rattrape_perte = 0
-            bet_30a = True
-            config.error = True
-            txtlog = 'Cote et proba trop faible > LEAVE!'
-            print(txtlog)
-            config.saveLog(txtlog, config.newmatch)
-            #break
-            '''elif 'itf' in config.ligue_name and config.perte<0:
-                DispatchPerte()
-                bet_30a = True
-                config.error = True
-                txtlog = 'itf qualif > LEAVE!'
-                print(txtlog)
-                config.saveLog(txtlog, config.newmatch)
-                break'''
-        else:
-            print('!!!!!macth ok pour continuer')
         tentative_placermise = 0
         validate_bet = False
         txtlog = 'On place la mise'
@@ -197,6 +165,7 @@ def all_script(driver):
                 print(txtlog)
                 config.saveLog(txtlog, config.newmatch)
                 time.sleep(30)
+
             elif config.perte >0:
                 DispatchPerte()
                 config.init_variable()
@@ -213,6 +182,10 @@ def all_script(driver):
             while config.score_actuel !="0:1" and config.score_actuel != "1:0":
                 print("wait start tie break")
                 print('score actuel : '+config.score_actuel)
+                saveset = config.set_actuel
+                GetSetActuel(driver)
+                if saveset != config.set_actuel:
+                    break
                 time.sleep(30)
                 GetScoreActuel(driver)
             while config.score_actuel !="0:0":

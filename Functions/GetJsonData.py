@@ -6,12 +6,12 @@ import config
 #config.perte = 10
 # Configuration du proxy
 proxy = {
-    "http": "http://auxobettingproxy:Scorpion971@209.200.239.188:51523",
-    "https": "http://auxobettingproxy:Scorpion971@209.200.239.188:51523",
+    "http": "http://auxobettingproxy:Scorpion971@223.29.227.180:51523",
+    "https": "http://auxobettingproxy:Scorpion971@223.29.227.180:51523",
 }
 def getPerte():
     if getCompetRecup():
-        url = "http://auxobeg.cluster030.hosting.ovh.net/strategy"+config.scriptType+"/get_perte.php"
+        url = "http://p-com.studio/api/strategy"+config.scriptType+"/get_perte.php"
         try:
             # Envoyer une requête GET à l'URL
             response = requests.get(url,proxies=proxy)
@@ -38,7 +38,7 @@ def getPerte():
     else:
         return
 def delPerte(id):
-    url = "http://auxobeg.cluster030.hosting.ovh.net/strategy"+config.scriptType+"/del_perte.php?id="+str(id)
+    url = "http://p-com.studio/api/strategy"+config.scriptType+"/del_perte.php?id="+str(id)
     try:
         # Envoyer une requête GET à l'URL
         response = requests.get(url,proxies=proxy)
@@ -61,7 +61,7 @@ def delPerte(id):
         return True
 
 def getCompetRecup():
-    url = "http://auxobeg.cluster030.hosting.ovh.net/strategy"+config.scriptType+"/get_compet_recup.php"
+    url = "http://p-com.studio/api/strategy"+config.scriptType+"/get_compet_recup.php"
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
@@ -98,7 +98,7 @@ def getCompetRecup():
             print(e)
             return False
 def getCompet():
-    url = "http://auxobeg.cluster030.hosting.ovh.net/strategy"+config.scriptType+"/get_compet.php"
+    url = "http://p-com.studio/api/strategy"+config.scriptType+"/get_compet.php"
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
@@ -136,7 +136,7 @@ def getCompet():
             print(e)
             return False
 def SendPerte(scriptType,perte):
-    url = "http://auxobeg.cluster030.hosting.ovh.net/strategy"+str(scriptType)+"/insert_perte.php?perte="+str(perte)
+    url = "http://p-com.studio/api/strategy"+str(scriptType)+"/insert_perte.php?perte="+str(perte)
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
@@ -163,14 +163,14 @@ def SendPerte(scriptType,perte):
             print(result)
             return False
 def DispatchPerte():
-    while config.perte >3:
+    #while config.perte >3:
         #SendPerte("4030",3)
-        if config.perte>3:
-            SendPerte("40A",3)
-        if config.perte>1:
-            SendPerte("30A",)
-        if config.perte>1:
-            SendPerte("15A",1)
+        #if config.perte>1:
+            #SendPerte("40A",1)
+        #if config.perte>1:
+            #SendPerte("30A",1)
+        #if config.perte>1:
+            #SendPerte("15A",1)
     if config.perte >0.2:
         SendPerte(config.scriptType,config.perte)
 

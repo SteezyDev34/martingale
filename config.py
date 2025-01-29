@@ -3,8 +3,8 @@ import datetime
 import requests
 import json
 proxy = {
-    "http": "http://auxobettingproxy:Scorpion971@209.200.239.188:51523",
-    "https": "http://auxobettingproxy:Scorpion971@209.200.239.188:51523",
+    "http": "http://auxobettingproxy:Scorpion971@223.29.227.180:51523",
+    "https": "http://auxobettingproxy:Scorpion971@223.29.227.180:51523",
 }
 def getJsonData(url):
     i =0
@@ -13,7 +13,7 @@ def getJsonData(url):
         # URL du lien JSON de la strategy
         try:
             # Envoyer une requête GET à l'URL
-            response = requests.get(url)
+            response = requests.get(url,proxies=proxy)
             # Vérifier que la requête a réussi
             response.raise_for_status()
             # Parser le JSON depuis la réponse
@@ -62,6 +62,7 @@ numset = ""
 set = ""
 gain = 0
 matchlist_file_name=""
+matchlisttodo_file_name=""
 running_file_name=""
 match_list = [] #List des matchs
 match_done_key = ""#Nom du match dans Gsheets
@@ -84,14 +85,14 @@ error = False
 devMode =1
 def init_variable():
     global mise, perte, wantwin,increment, probamini, cotemini,recup40,recup30
-    global running_file_name,matchlist_file_name,print_running_text,rattrape_perte
+    global running_file_name,matchlist_file_name, matchlisttodo_file_name,print_running_text,rattrape_perte
     global print_match_live_text,devMode,match_list,match_done_key,match_found
     global error,cotebase,nb_tour,restart_set2
     match_list = [] #List des matchs
     match_done_key = ""#Nom du match dans Gsheets
     match_found = False # Match valide trouvé
     print('scr : '+scriptType)
-    url = "http://auxobeg.cluster030.hosting.ovh.net/strategy"+scriptType+"/"
+    url = "http://p-com.studio/api/strategy"+scriptType+"/"
     saveLog(url,0)
     strategy = getJsonData(url)
     devMode = strategy["devmode"]
@@ -126,6 +127,7 @@ def init_variable():
     running_file_name = projectPath+'/SCRIPTS '+scriptType+'/running'
     rattrape_perte = 0
     matchlist_file_name = projectPath+'/SCRIPTS '+scriptType+'/matchlist'
+    matchlisttodo_file_name = projectPath+'/matchlisttodo'
 
 
 

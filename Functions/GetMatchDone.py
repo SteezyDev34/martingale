@@ -6,3 +6,10 @@ def main(matchlist_file_name):
     get_matchlist_file.close()
     match_list = get_matchlist.split('\n')
     return match_list
+
+def set(matchlisttodo_file_name):
+    get_matchlist_file = open(matchlisttodo_file_name+".txt", "r")
+    get_matchlist = get_matchlist_file.read()
+    get_matchlist_file.close()
+    match_list = get_matchlist.split('\n')
+    return match_list

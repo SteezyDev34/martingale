@@ -38,16 +38,6 @@ def all_script(driver):
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
 
-        # RECHERCHE INFOS DE MISE
-        players = GetPlayersName(driver)
-        if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
-            config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
-            #config.proba40A = 0.5
-        else:
-            config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
-            # config.proba40A = 0.5
-            if config.proba40A == 0:
-                config.proba40A = Functions_stats1.get_proba_40A_other(players[0], players[1], driver, config.match_Url)
 
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getPerte()
@@ -95,13 +85,6 @@ def all_script(driver):
         config.saveLog("on attebnd 2 sec que la paris s'affiche bien pour recuprer la cote", config.newmatch)
         time.sleep(2)
         GetMise(driver)
-        print('cotemini : ' + str(config.cotemini) + ' cote : ' + str(config.cote))
-        print('proba mini : ' + str(config.probamini) + ' proba : ' + str(config.proba40A))
-        if config.proba40A < config.probamini and config.cote < config.cotemini: #and (config.perte<=0 or not config.perte):
-            bet_15a = True
-            config.error = True
-            config.saveLog('Cote trop faible 0,2', config.newmatch)
-            break
 
         tentative_placermise = 0
         validate_bet = False
