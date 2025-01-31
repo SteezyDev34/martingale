@@ -268,6 +268,7 @@ def all_script(driver):
                 gamestart = False
                 lose = True
                 result = True
+                time.sleep(10)
 
                 config.saved_set = config.set_actuel
                 config.set_actuel = False

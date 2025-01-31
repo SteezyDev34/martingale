@@ -20,12 +20,12 @@ def GetBet4030(driver):
     if len(first_player) > 0:
         first_player = 1
         win_type = '40:30'
-        sType = "Joueur "+str(first_player)+" va gagner le jeu "+str(config.jeu_actuel)+" 40-30"
+        sType = "ueur "+str(first_player)+" va gagner le Jeu "+str(config.jeu_actuel)+" 40-3"
 
     else:
         first_player = 2
         win_type = '30:40'
-        sType = "Joueur "+str(first_player)+" va gagner le jeu "+str(config.jeu_actuel)+" 40-30"
+        sType = "ueur "+str(first_player)+" va gagner le Jeu "+str(config.jeu_actuel)+" 40-3"
 
     print('next player to win : ' + str(first_player) + ' ' + win_type)
     win_texte = '40-30'
@@ -42,6 +42,7 @@ def GetBet4030(driver):
     ligne = 1
     i = 0
     while not clic and tentative<3:
+        GetJeuActuel(driver)
         print('Ligne suivante')
         canvas = driver.find_element(By.ID, 'allBetsTable')
         # Récupérer les coordonnées du div
@@ -89,15 +90,19 @@ def GetBet4030(driver):
                 config.saveLog(f"#E0015\ Infos de paris non lisible : {e}")
             else:
                 print('jeu actu '+str(config.jeu_actuel))
-                list_of_newbet_type = list_of_bet_type[0].text
+                list_of_newbet_type_text = list_of_bet_type[0].text
+                print(list_of_newbet_type_text)
+                list_of_newbet_type = list_of_newbet_type_text.split(sType)
+                print('len list_of_newbet_type')
+                print(len(list_of_newbet_type))
                 print(list_of_newbet_type)
-                list_of_newbet_type = list_of_newbet_type.split(sType)
                 if len(list_of_newbet_type) >1:
-                    getjeu_actuel = int(list_of_newbet_type[0].split("Jeu ")[1])
+                    list_of_newbet_type_text = list_of_newbet_type_text.split(" 40")[0]
+                    getjeu_actuel = int(list_of_newbet_type_text.split("Jeu ")[1])
                     if str(config.jeu_actuel) == str(getjeu_actuel):
                         print('paris trouvé')
                         clic = True
-                        return clic
+                        return [clic, win_type]
                     else:
                         print('mauvais jeu')
                         if i % 2 == 0:
@@ -137,14 +142,14 @@ def GetNextBet4030(driver):
     scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__heading')[0]
     first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__ball')
     if len(first_player) > 0:
-        first_player = 1
+        first_player = 2
         win_type = '40:30'
-        sType = "Joueur " + str(first_player) + " va gagner le jeu " + str(config.jeu_actuel) + " 40-30"
+        sType = "ueur " + str(first_player) + " va gagner le Jeu " + str(config.jeu_actuel) + " 40-3"
 
     else:
-        first_player = 2
+        first_player = 1
         win_type = '30:40'
-        sType = "Joueur " + str(first_player) + " va gagner le jeu " + str(config.jeu_actuel) + " 40-30"
+        sType = "ueur " + str(first_player) + " va gagner le Jeu " + str(config.jeu_actuel) + " 40-3"
 
     print('next player to win : ' + str(first_player) + ' ' + win_type)
     win_texte = '40-30'
@@ -159,7 +164,10 @@ def GetNextBet4030(driver):
     sautDeLigne = 40
     decalageX = 5
     ligne = 1
+    i = 0
     while not clic and tentative<3:
+        GetJeuActuel(driver)
+        config.jeu_actuel = config.jeu_actuel + 1
         print('Ligne suivante')
         #canvas = driver.find_element(By.ID, 'allBetsTable')
         # Récupérer les coordonnées du div
@@ -208,15 +216,17 @@ def GetNextBet4030(driver):
             else:
                 print('jeu actu '+str(config.jeu_actuel))
 
-                list_of_newbet_type = list_of_bet_type[0].text
-                print(list_of_newbet_type)
-                list_of_newbet_type = list_of_newbet_type.split(sType)
+                list_of_newbet_type_text = list_of_bet_type[0].text
+                print(list_of_newbet_type_text)
+                print(sType)
+                list_of_newbet_type = list_of_newbet_type_text.split(sType)
                 if len(list_of_newbet_type) >1:
-                    getjeu_actuel = int(list_of_newbet_type[0].split("Jeu ")[1])
+                    list_of_newbet_type_text = list_of_newbet_type_text.split(" 40")[0]
+                    getjeu_actuel = int(list_of_newbet_type_text.split("Jeu ")[1])
                     if str(config.jeu_actuel) == str(getjeu_actuel):
                         print('paris trouvé')
                         clic = True
-                        return clic
+                        return [clic, win_type]
                     else:
                         print('mauvais jeu')
                         if i % 2 == 0:

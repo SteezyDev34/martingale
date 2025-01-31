@@ -94,6 +94,7 @@ def init_variable():
     match_found = False # Match valide trouvé
     print('scr : '+scriptType)
     url = "http://p-com.studio/api/strategy"+scriptType+"/"
+    print(url)
     saveLog(url,0)
     strategy = getJsonData(url)
     devMode = strategy["devmode"]

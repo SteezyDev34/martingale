@@ -64,6 +64,8 @@ def AfficherParis(driver):
                                     theset = "1er"
                                 else:
                                     theset = str(config.set_actuel)+"ème"
+                                    print(str(theset).lower()+' set Evénements rapides'.lower())
+                                    print(select_option_text.strip().lower())
                                 if select_option_text.strip().lower() == str(theset).lower()+' set Evénements rapides'.lower():
                                     try:
                                         select_option.click()
@@ -84,12 +86,12 @@ def AfficherParis(driver):
                                                 driver.find_elements(By.CLASS_NAME,
                                                                      'scoreboard-nav-items-search__input')[
                                                     0].send_keys(
-                                                    "Score du jeu")
+                                                    "Le score du Jeu. "+str(theset).lower()+" set Evénements rapides")
                                                 l = driver.find_elements(By.CLASS_NAME,
                                                                          'scoreboard-nav-items-search__input')[
                                                     0].get_attribute("value")
 
-                                                if l == "Score du jeu":
+                                                if l == "Le score du Jeu. "+str(theset).lower()+" set Evénements rapides":
                                                     paris = 1
                                                 else:
                                                     tentative = tentative+1

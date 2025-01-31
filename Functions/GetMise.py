@@ -12,6 +12,7 @@ from Functions.GetJsonData import getGlobalPerte
 def GetMise(driver):
     print("#RECHERCHE INFOS DE MISE")
     infosperte = getGlobalPerte()
+    print('test')
     print("PERTE : ")
     print(infosperte)
     if infosperte:
