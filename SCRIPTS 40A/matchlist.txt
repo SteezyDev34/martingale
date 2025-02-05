@@ -24,3 +24,4 @@ rossi-carola-cavelli
 gismondi-nicole-giannini
 pellegrino-alexis-gautier
 vasilescu-gaia-squarcialupi
+rybakov-alan-magadan

@@ -64,7 +64,7 @@ def AfficherParis(driver):
                                     theset = "1er"
                                 else:
                                     theset = str(config.set_actuel)+"ème"
-                                if select_option_text.strip().lower() == str(theset).lower()+' set':
+                                if select_option_text.strip().lower() == str(theset).lower()+' set Evénements rapides'.lower():
                                     try:
                                         select_option.click()
                                         time.sleep(1)
