@@ -42,6 +42,9 @@ def all_script(driver):
         if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
             config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
             #config.proba40A = 0.5
+            if config.proba40A ==  0:
+                config.proba40A = Functions_stats1.get_wta_proba_40A_other(players[0], players[1], driver, config.match_Url)
+
         else:
             config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
             #config.proba40A = 0.5

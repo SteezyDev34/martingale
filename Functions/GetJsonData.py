@@ -164,13 +164,19 @@ def SendPerte(scriptType,perte):
             return False
 def DispatchPerte():
     while config.perte >3:
-        #SendPerte("4030",3)
-        if config.perte>3:
-            SendPerte("40A",3)
-        if config.perte>1:
+
+        if config.perte > 2:
+            SendPerte("4030", 2)
+        if config.perte>2:
+            SendPerte("40A",2)
+        if config.perte>2:
             SendPerte("30A",)
-        if config.perte>1:
-            SendPerte("15A",1)
+        if config.perte>2:
+            SendPerte("15A",2)
+        if config.perte > 2:
+            SendPerte("4015", 2)
+        if config.perte>2:
+            SendPerte("400",2)
     if config.perte >0.2:
         SendPerte(config.scriptType,config.perte)
 
