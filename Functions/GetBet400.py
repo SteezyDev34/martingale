@@ -9,26 +9,26 @@ import config
 from selenium.webdriver.common.action_chains import ActionChains
 #from ChromeDriver.SetDriver1 import driver
 
-def GetBet4030(driver):
+def GetBet400(driver):
     print("RECHERCHE DES PARIS " + config.scriptType + "....")
     DeleteBet(driver)
     GetJeuActuel(driver)
-    print('RECHERCHE DES PARIS 40 30....FIRST')
+    print('RECHERCHE DES PARIS 40 0....FIRST')
     scoreboard_player = driver.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__row')
     scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__heading')[0]
     first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__ball')
     if len(first_player) > 0:
         first_player = 1
-        win_type = '40:30'
-        sType = "ueur "+str(first_player)+" va gagner le Jeu "+str(config.jeu_actuel)+" 40-3"
+        win_type = '40:0'
+        sType = "Joueur "+str(first_player)+" va gagner le Jeu "+str(config.jeu_actuel)+" 40-0"
 
     else:
         first_player = 2
-        win_type = '30:40'
-        sType = "ueur "+str(first_player)+" va gagner le Jeu "+str(config.jeu_actuel)+" 40-3"
+        win_type = '0:40'
+        sType = "Joueur "+str(first_player)+" va gagner le Jeu "+str(config.jeu_actuel)+" 40-0"
 
     print('next player to win : ' + str(first_player) + ' ' + win_type)
-    win_texte = '40-30'
+    win_texte = '40-0'
     if_get_jeu = False
     clic = False
     tentative_clic = 0
@@ -96,7 +96,7 @@ def GetBet4030(driver):
                 print('len list_of_newbet_type')
                 print(len(list_of_newbet_type))
                 print(list_of_newbet_type)
-                if len(list_of_newbet_type) >1:
+                if list_of_newbet_type_text ==sType:
                     list_of_newbet_type_text = list_of_newbet_type_text.split(" 40")[0]
                     getjeu_actuel = int(list_of_newbet_type_text.split("Jeu ")[1])
                     if str(config.jeu_actuel) == str(getjeu_actuel):
@@ -132,27 +132,27 @@ def GetBet4030(driver):
             tentative = tentative + 1
             i=0
         i = i + 1
-def GetNextBet4030(driver):
+def GetNextBet400(driver):
     print("RECHERCHE DES PARIS " + config.scriptType + "....")
     DeleteBet(driver)
     GetJeuActuel(driver)
     config.jeu_actuel = config.jeu_actuel+1
-    print('RECHERCHE DES PARIS 40 30....FIRST')
+    print('RECHERCHE DES PARIS 40 0....FIRST')
     scoreboard_player = driver.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__row')
     scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__heading')[0]
     first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__ball')
     if len(first_player) > 0:
         first_player = 2
-        win_type = '40:30'
-        sType = "ueur " + str(first_player) + " va gagner le Jeu " + str(config.jeu_actuel) + " 40-3"
+        win_type = '40:0'
+        sType = "Joueur " + str(first_player) + " va gagner le Jeu " + str(config.jeu_actuel) + " 40-0"
 
     else:
         first_player = 1
-        win_type = '30:40'
-        sType = "ueur " + str(first_player) + " va gagner le Jeu " + str(config.jeu_actuel) + " 40-3"
+        win_type = '0:40'
+        sType = "Joueur " + str(first_player) + " va gagner le Jeu " + str(config.jeu_actuel) + " 40-0"
 
     print('next player to win : ' + str(first_player) + ' ' + win_type)
-    win_texte = '40-30'
+    win_texte = '40-0'
     if_get_jeu = False
     clic = False
     tentative_clic = 0
@@ -220,7 +220,7 @@ def GetNextBet4030(driver):
                 print(list_of_newbet_type_text)
                 print(sType)
                 list_of_newbet_type = list_of_newbet_type_text.split(sType)
-                if len(list_of_newbet_type) >1:
+                if list_of_newbet_type_text ==  sType:
                     list_of_newbet_type_text = list_of_newbet_type_text.split(" 40")[0]
                     getjeu_actuel = int(list_of_newbet_type_text.split("Jeu ")[1])
                     if str(config.jeu_actuel) == str(getjeu_actuel):

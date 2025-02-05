@@ -8,7 +8,7 @@ from Functions.GetMise import GetMise
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.PlacerMise import PlacerMise
-from Functions.GetBet4030 import GetBet4030, GetNextBet4030
+from Functions.GetBet400 import GetBet400, GetNextBet400
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 
 from Functions.ValidationDuParis import ValidationDuParis
@@ -21,7 +21,7 @@ from Functions.Function_AfficherParis4030 import AfficherParis
 from Functions.Function_scriptDelRunning import scriptDelRunning
 
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
-from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
+from Functions.GetJsonData import getPerte, delPerte, DispatchPerte
 
 
 
@@ -73,7 +73,7 @@ def all_script(driver):
         else:
             #On recherche le jeu actuel
             config.saveLog('liste des pariis affichée, On recherche le jeu actuel',0,config.newmatch)
-            jeu = GetBet4030(driver)
+            jeu = GetBet400(driver)
 
         if not jeu:
             tentative +=1
@@ -81,7 +81,7 @@ def all_script(driver):
                 config.error = True
                 config.saveLog('error recup jeu #ERR345',1,config.newmatch)
         else:
-            win_score30 = jeu[1]
+            win_score0 = jeu[1]
             config.saveLog('Premier PAris 40A cliqué',1,config.newmatch)
             send_mise = 0
             #ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
@@ -118,10 +118,10 @@ def all_script(driver):
                     result = True
                     lose = True
                     findbtn = True
-                    if win_score30 == '30:40':
-                        win_score30 = '40:30'
+                    if win_score0 == '0:40':
+                        win_score0 = '40:0'
                     else:
-                        win_score30 = '30:40'
+                        win_score0 = '0:40'
                 else:
                     gamestart = True
                     config.saveLog("GAME START",config.newmatch)
@@ -207,16 +207,16 @@ def all_script(driver):
             config.saveLog('liste des paris affichée, On recherche le jeu actuel',config.newmatch)
             if passageset:
                 print("jeu 1 > "+str(config.jeu_actuel))
-                jeu = GetBet4030(driver)
+                jeu = GetBet400(driver)
                 passageset = False
             else:
                 print("jeu > " + str(config.jeu_actuel))
-                jeu = GetNextBet4030(driver)
+                jeu = GetNextBet400(driver)
             if not jeu:
                 config.error = True
                 config.saveLog('error recup jeu #ERR345',config.newmatch)
             else:
-                win_score30 = jeu[1]
+                win_score0 = jeu[1]
                 bet_40a = True
 
             config.saveLog('prochain PAris 40A cliqué',config.newmatch)
@@ -244,13 +244,13 @@ def all_script(driver):
             if not config.score_actuel:
                 config.error = True
                 break
-            if config.score_actuel == '0:0' and saved_score == win_score30:
+            if config.score_actuel == '0:0' and saved_score == win_score0:
                 result = True
                 lose = False
                 winmatch = True
                 DeleteBet(driver)
                 config.saveLog('WIN',config.newmatch)
-            elif config.score_actuel == '0:0' and saved_score != win_score30:
+            elif (config.score_actuel == '0:0' and saved_score != win_score0) or (config.score_actuel == '40:40' and saved_score != win_score0):
                 config.saveLog('LOSE',config.newmatch)
                 validate_bet = False
                 tentative = 0
