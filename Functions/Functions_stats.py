@@ -27,8 +27,8 @@ headers= {
     "X-RapidAPI-Host": "ultimate-tennis1.p.rapidapi.com"
 }
 proxy = {
-    "http": "http://auxobettingproxy:Scorpion971@223.29.227.180:51523",
-    "https": "http://auxobettingproxy:Scorpion971@223.29.227.180:51523",
+    "http": "http://auxobettingproxy:Scorpion971@223.29.227.155:51523",
+    "https": "http://auxobettingproxy:Scorpion971@223.29.227.155:51523",
 }
 # Obtenez l'heure actuelle
 today = date.today()
