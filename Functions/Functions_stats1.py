@@ -330,7 +330,7 @@ def get_proba_40A(playerName1, playerName2,cat='atp',surface='hard'):
         playerID2 = getPlayerApiId(playerName2)
         urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/"+cat+"/"+playerID1+"/2024/"+surface
         urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/" + cat + "/" + playerID2 + "/2024/" + surface
-
+        time.sleep(1)
         response = requests.get(urlplayer1, headers=headers, proxies=proxy)
         time.sleep(1)
     except Exception as e:
@@ -346,9 +346,10 @@ def get_proba_40A(playerName1, playerName2,cat='atp',surface='hard'):
 
             prob_service_joueur = float(data['ServiceRecordStats']['ServicePointsWonPercentage']) / 100
             prob_retour_joueur = float(data['ReturnRecordStats']['ReturnPointsWonPercentage']) / 100
-
             # Statistiques du joueur2
+            time.sleep(1)
             response = requests.get(urlplayer2, headers=headers, proxies=proxy)
+            time.sleep(1)
         except Exception as e:
             return 0
         else:
@@ -371,7 +372,7 @@ def get_proba_40A(playerName1, playerName2,cat='atp',surface='hard'):
                 prob_40_40_totale = prob_40_40_joueur + prob_40_40_adversaire
                 prob = float("{:.2}".format(prob_40_40_totale))
                 print('Proba 40 A = '+str(prob))
-                if prob <=0.43:
+                if prob <=0.2:
                     print('PAS DE RATTRAPAGE')
                 else:
                     print('RATTRAPAGE OK!')
@@ -391,7 +392,7 @@ def get_wta_proba_40A(playerName1, playerName2):
         urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID2 + "/2024"
         # print(urlplayer2)
         response = requests.get(urlplayer1, headers=headers, proxies=proxy)
-        time.sleep(2)
+        time.sleep(1)
     except:
         return 0
     else:

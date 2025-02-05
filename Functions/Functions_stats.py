@@ -58,7 +58,7 @@ try:
         url = "https://ultimate-tennis1.p.rapidapi.com/live_leaderboard/450"
 
 
-
+        time.sleep(1)
         response = requests.get(url, headers=headers, proxies=proxy)
 
         print(response.text)
@@ -104,7 +104,7 @@ try:
         url = "https://ultimate-tennis1.p.rapidapi.com/rankings/wta/singles/1000/current"
 
 
-
+        time.sleep(1)
         response = requests.get(url, headers=headers, proxies=proxy)
         # Convertir la chaîne JSON en une structure de données Python
         data = json.loads(response.text)
@@ -189,7 +189,7 @@ def get_wta_proba_40A(playerName1, playerName2):
         urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID2 + "/2024"
         # print(urlplayer2)
         response = requests.get(urlplayer1, headers=headers, proxies=proxy)
-        time.sleep(2)
+        time.sleep(1)
     except:
         return 0
     else:
@@ -202,7 +202,7 @@ def get_wta_proba_40A(playerName1, playerName2):
             prob_service_joueur = data['player_data'][0]['service_points_won_percent']/100
             prob_retour_joueur = data['player_data'][0]['return_points_won_percent']/100
 
-
+            time.sleep(1)
             # Statistiques du joueur2
             response = requests.get(urlplayer2, headers=headers, proxies=proxy)
         except:
