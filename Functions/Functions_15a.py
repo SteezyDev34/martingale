@@ -143,7 +143,7 @@ def all_script(driver):
             score_actuel = '40:0'
             gamestart = 1
             config.jeu_actuel = 0
-            if config.rattrape_perte == 3:
+            if config.rattrape_perte == 1:
                 config.error = False
                 config.saveLog("passage set 2", config.newmatch)
                 config.saveLog("attente 30 sec", config.newmatch)
@@ -161,6 +161,8 @@ def all_script(driver):
                     send_mise = True
                     result = True
                     lose = False
+                    while config.score_actuel == "15:15":
+                        GetScoreActuel(driver)
                 GetJeuActuel(driver)
                 if config.jeu_actuel == 1:
                     break
@@ -210,6 +212,7 @@ def all_script(driver):
                 if not GetBet(driver):
                     config.error = True
                     config.saveLog('error recup jeu #ERR345', config.newmatch)
+                    passageset = False
                 else:
                     bet_15a = True
             else:
@@ -343,6 +346,8 @@ def all_script(driver):
                 winmatch = True
                 DeleteBet(driver)
                 config.saveLog('WIN', config.newmatch)
+                while config.score_actuel == "15:15":
+                    GetScoreActuel(driver)
             else:
                 result = False
                 # config.set_actuel = "nac"

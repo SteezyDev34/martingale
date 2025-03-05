@@ -37,6 +37,33 @@ def getPerte():
             return pertes
     else:
         return
+def getGlobalPerte():
+    url = "http://p-com.studio/api/strategy40A/get_global_perte.php"
+    try:
+        # Envoyer une requête GET à l'URL
+        response = requests.get(url,proxies=proxy)
+        # Vérifier que la requête a réussi
+        response.raise_for_status()
+        print(response.json())
+        # Parser le JSON depuis la réponse
+        if len(response.json())>0:
+            pertes = response.json()[0]
+        else:
+            return False
+        # Afficher les données pour vérification
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de la récupération des données : {e}")
+        return
+    except json.JSONDecodeError as e:
+        print(f"Erreur lors du parsing du JSON : {e}")
+        return
+    except Exception as e:
+        print(f"pas de perte {e}")
+    else:
+        print(pertes)
+        config.rattrape_perte = 1
+        return pertes
+
 def delPerte(id):
     url = "http://p-com.studio/api/strategy"+config.scriptType+"/del_perte.php?id="+str(id)
     try:
@@ -81,9 +108,9 @@ def getCompetRecup():
         print(f"Pas de compet {e}")
     else:
         compet_ok_list = compets["compet_recup_ok"]
-        #config.saveLog(compet_ok_list,0)
+        config.saveLog(compet_ok_list,1)
         compet_not_ok_list = compets["compet_recup_not_ok"]
-        #config.saveLog(compet_not_ok_list,0)
+        config.saveLog(compet_not_ok_list,1)
         try:
             if any(compet_ok in config.ligue_name for compet_ok in
                    compet_ok_list) and not any(
@@ -162,15 +189,59 @@ def SendPerte(scriptType,perte):
         else:
             print(result)
             return False
+def SendGlobalPerte(scriptType,mise):
+    url = "http://p-com.studio/api/strategy"+str(scriptType)+"/insert_global_perte.php?mise="+str(mise)
+    # URL du lien JSON de la strategy
+    try:
+        # Envoyer une requête GET à l'URL
+        response = requests.get(url,proxies=proxy)
+        # Vérifier que la requête a réussi
+        response.raise_for_status()
+        # Parser le JSON depuis la réponse
+        result = response.json()
+        # Afficher les données pour vérification
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de la récupération des données : {e}")
+        return
+    except json.JSONDecodeError as e:
+        print(f"Erreur lors du parsing du JSON : {e}")
+        return
+    except Exception as e:
+        print(f"Pas d'envoi de perte {e}")
+    else:
+        if result['status'] == "success":
+            print(str(mise)+ "> mise insert in strategy"+str(scriptType))
+            return True
+        else:
+            print(result)
+            return False
+
 def DispatchPerte():
-    #while config.perte >3:
-        #SendPerte("4030",3)
-        #if config.perte>1:
-            #SendPerte("40A",1)
-        #if config.perte>1:
-            #SendPerte("30A",1)
-        #if config.perte>1:
-            #SendPerte("15A",1)
-    if config.perte >0.2:
-        SendPerte(config.scriptType,config.perte)
+    SendGlobalPerte(config.scriptType, config.perte)
+def a_DispatchPerte():
+    m = 1
+    n = 0.5
+    if config.perte > 20:
+        m = 2
+        n = 1
+    if config.perte > 50:
+        m =3
+        n = 2
+    if config.perte > 100:
+        m =5
+        n = 2
+    while config.perte >=n:
+        SendPerte("15A",n)
+        if config.perte >= m:
+            SendPerte("30A", m)
+        if config.perte>=m:
+            SendPerte("4030",m)
+        if config.perte>m:
+            SendPerte("4015",m)
+        if config.perte>=m:
+            SendPerte("40A",n)
+        SendPerte("400",n)
+    if config.perte >0:
+        #SendPerte(config.scriptType,config.perte)
+        SendPerte("15A", config.perte)
 

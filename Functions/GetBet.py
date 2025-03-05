@@ -162,6 +162,9 @@ def GetNextBet(driver):
             except Exception as e:
                 config.saveLog(f"#E0015\ Infos de paris non lisible : {e}")
             else:
+                if len(list_of_bet_type) ==0:
+                    print('pas de cpn-bet-market__label')
+                    continue
                 list_of_newbet_type = list_of_bet_type[0].text
                 print(list_of_newbet_type)
                 list_of_newbet_type = list_of_newbet_type.split(sType+" - Oui")

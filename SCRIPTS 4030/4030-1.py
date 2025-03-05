@@ -28,13 +28,15 @@ from Functions.GetJsonData import DispatchPerte
 
 while (config.win < 100):
     config.init_variable()
-    if config.devMode:
-        all_script(driver)
-    else:
+
+    try:
         tour = 0
         while tour < config.nb_tour:
-            tour += 1
             all_script(driver)
+
+            tour += 1
+    except Exception as e:
+        print(e)
     if config.perte > 0:
         DispatchPerte()
     try:

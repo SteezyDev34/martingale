@@ -211,12 +211,13 @@ def GetNextBet4030(driver):
                 print('Lecture des infos')
                 list_of_bet_type = driver.find_elements(By.CLASS_NAME,
                                                         'cpn-bet-market__label')
+                list_of_newbet_type_text = list_of_bet_type[0].text
+
             except Exception as e:
                 config.saveLog(f"#E0015\ Infos de paris non lisible : {e}")
             else:
                 print('jeu actu '+str(config.jeu_actuel))
 
-                list_of_newbet_type_text = list_of_bet_type[0].text
                 print(list_of_newbet_type_text)
                 print(sType)
                 list_of_newbet_type = list_of_newbet_type_text.split(sType)

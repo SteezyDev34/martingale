@@ -164,6 +164,9 @@ def all_script(driver):
                     send_mise = True
                     result = True
                     lose = False
+                    print('attende un peu que le score c')
+                    while config.score_actuel == "30:30":
+                        GetScoreActuel(driver)
                 GetScoreActuel(driver)
             if config.jeu_actuel==13:
                 while config.score_actuel != "0:1" and config.score_actuel != "1:0" and config.score_actuel != "1:1" and config.score_actuel != "2:0" and config.score_actuel != "0:2":
@@ -346,6 +349,8 @@ def all_script(driver):
                 winmatch = True
                 DeleteBet(driver)
                 config.saveLog('WIN', config.newmatch)
+                while config.score_actuel == "30:30":
+                    GetScoreActuel(driver)
             else:
                 result = False
                 # config.set_actuel = "nac"

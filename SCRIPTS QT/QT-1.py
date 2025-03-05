@@ -2,7 +2,7 @@ print('START')
 import os
 
 #Chargement de Chrome driver
-from ChromeDriver.SetDriver1 import driver
+from ChromeDriver.SetDriver6 import driver
 
 #Chargement des variables globales
 import config
@@ -25,11 +25,8 @@ else:
 
 
 #Chargement des fonctions
-from Functions import Functions_40a_proba
+from Functions import Functions_QT
 from Functions.GetJsonData import DispatchPerte
-from Functions.ScriptRechercheDeMatch import  classementeDeMatch
-#classementeDeMatch(driver)
-
 while (config.win < 100):
     config.init_variable()
 
@@ -37,14 +34,13 @@ while (config.win < 100):
     try:
         while tour < config.nb_tour:
             tour += 1
-            Functions_40a_proba.all_script(driver)
+            Functions_QT.all_script(driver)
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:
         DispatchPerte()
     try:
-        print("test de suivi")
-        driver.get('https://1xbet.com/fr/live/Tennis/')
+        driver.get('https://1xbet.com/fr/live/basketball/')
     except:
         continue
 print('TOTAL WIN : '+str(config.win))

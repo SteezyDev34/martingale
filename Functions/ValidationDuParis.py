@@ -137,6 +137,11 @@ def ValidationDuParis(driver):
                                             config.saveLog("Paris déjà placé",config.newmatch)
                                             DeleteBet(driver)
                                             return True
+                                        elif len(re.findall("peut être accepté",driver.find_elements(By.CLASS_NAME,'swal2-content')[0].text)) >0:
+                                            driver.find_element(By.CLASS_NAME, 'swal2-confirm').click()
+                                            config.saveLog("Paris déjà placé",config.newmatch)
+                                            DeleteBet(driver)
+                                            return True
                                         else:
                                             driver.find_element(By.CLASS_NAME,'swal2-confirm').click()
                                 else:
@@ -302,6 +307,12 @@ def ValidationDuParis4030(driver,mise):
                                             config.saveLog("Paris déjà placé",config.newmatch)
                                             DeleteBet(driver)
                                             return True
+                                        elif len(re.findall("peut être accepté",driver.find_elements(By.CLASS_NAME,'swal2-content')[0].text)) >0:
+                                            driver.find_element(By.CLASS_NAME, 'swal2-confirm').click()
+                                            config.saveLog("Paris déjà placé",config.newmatch)
+                                            DeleteBet(driver)
+                                            return True
+
                                         else:
                                             driver.find_element(By.CLASS_NAME,'swal2-confirm').click()
                                 else:

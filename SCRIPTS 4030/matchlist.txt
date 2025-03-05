@@ -3,7 +3,6 @@ matchlist
 luca-van-assche
 popko-kamil-majchrzak
 jia-jing-lu
-irene-burillo-escorihuela
 montsi-leo-matthysen
 zund-alena-kovackova
 krymkova-vaidehi-chaudhari
@@ -49,4 +48,15 @@ maria-ashlyn-krueger
 stevens-joshua-charlton
 olivieri-felix-gill
 colson-max-basing
-berrettini-tallon-griekspoor
+sawangkaew-rebecca-marino
+avanesyan-xinyu-wang
+atmane-fajing-sun
+hsu-hayden-jones
+assche-benjamin-bonzi
+sabalenka-ekaterina-alexandrova
+fucsovics-aziz-dougaz
+schell-iliyan-radulov
+fritz-bu-yunchaokete
+burruchaga-federico-coria
+tien-dusan-lajovic
+added-matteo-martineau

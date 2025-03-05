@@ -1,7 +1,7 @@
 import time
 
 from Functions.DeleteBet import DeleteBet
-from Functions.GetIfGameStart import GetIfGameStart
+from Functions.GetIfGameStart import GetIfGameStart, GetIfGameStart30A
 from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.GetMise import GetMise
 from Functions.GetPlayersName import GetPlayersName
@@ -20,7 +20,7 @@ from Functions.AfficherParis import AfficherParis
 from Functions.Function_scriptDelRunning import scriptDelRunning
 
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
-from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
+from Functions.GetJsonData import getPerte, delPerte,DispatchPerte, getGlobalPerte, SendGlobalPerte
 
 def all_script(driver):
     lose = True
@@ -39,12 +39,26 @@ def all_script(driver):
         config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
 
         print("#RECHERCHE INFOS DE MISE")
-        infosperte = getPerte()
+        infosperte = getGlobalPerte()
         print("PERTE : ")
         print(infosperte)
         if infosperte:
-            config.perte = float(infosperte['perte'])
-            delPerte(infosperte['id'])
+            if float(infosperte['perte']) <=1:
+                config.perte = float(infosperte['perte'])
+                m = 0-config.perte
+                SendGlobalPerte(config.scriptType,m)
+            if float(infosperte['perte']) >1:
+                config.perte = 1
+                SendGlobalPerte(config.scriptType, -1)
+            if float(infosperte['perte']) > 20:
+                config.perte = 3
+                SendGlobalPerte(config.scriptType, -3)
+            if float(infosperte['perte']) > 50:
+                config.perte = 5
+                SendGlobalPerte(config.scriptType, -5)
+            if float(infosperte['perte']) > 100:
+                config.perte = 10
+                SendGlobalPerte(config.scriptType, -10)
             config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
         config.set_actuel = GetSetActuel(driver)
@@ -193,6 +207,7 @@ def all_script(driver):
                 print('score actuel : '+config.score_actuel)
                 time.sleep(30)
                 GetScoreActuel(driver)
+            passageset = True
             time.sleep(60)
         else:
             gamestart = 0
@@ -265,6 +280,8 @@ def all_script(driver):
                 txtlog = 'WIN'
                 print(txtlog)
                 config.saveLog(txtlog, config.newmatch)
+                while config.score_actuel == '40:A' or config.score_actuel == 'A:40' or config.score_actuel == '40:40':
+                    GetScoreActuel(driver)
             elif config.score_actuel == '0:0':
                 txtlog = 'LOSE'
                 print(txtlog)

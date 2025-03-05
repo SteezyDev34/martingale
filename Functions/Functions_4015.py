@@ -176,22 +176,30 @@ def all_script(driver):
             else:
                 config.error = True
                 print("erreur perte en 1 set")
-        elif str(config.jeu_actuel) == '13':
-            while config.score_actuel != "0:1" and config.score_actuel != "1:0":
-                print('attente debutt tie break')
-                GetScoreActuel(driver)
-                time.sleep(10)
-            print('debutie break')
-            while config.score_actuel != "0:0":
-                GetScoreActuel(driver)
+        elif config.jeu_actuel == 13:
+            while config.score_actuel !="0:1" and config.score_actuel != "1:0":
+                print("wait start tie break")
+                print('score actuel : '+config.score_actuel)
+                saveset = config.set_actuel
+                GetSetActuel(driver)
+                if saveset != config.set_actuel:
+                    break
                 time.sleep(30)
-            gamestart = 0
+                GetScoreActuel(driver)
+            while config.score_actuel !="0:0":
+                print("wait end tie break")
+                print('score actuel : '+config.score_actuel)
+                time.sleep(30)
+                GetScoreActuel(driver)
+            time.sleep(60)
         else:
             gamestart = False
             ##ATTENTE QUE LE JEU COMMENCE
             GetIfGameStart(driver)
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
-        config.saveLog("JEU COMMENCÉ ON PREPARE LE PROCHAIN BET",config.newmatch)
+        txtlog = "JEU COMMENCÉ ON PREPARE LE PROCHAIN BET"
+        print(txtlog)
+        config.saveLog(txtlog, config.newmatch)
         bet_40a = False
         while not bet_40a and not config.error:
 
@@ -248,7 +256,7 @@ def all_script(driver):
                 winmatch = True
                 DeleteBet(driver)
                 config.saveLog('WIN',config.newmatch)
-            elif (config.score_actuel == '0:0' and saved_score != win_score15) or (config.score_actuel == '40:40' and saved_score != win_score15):
+            elif config.score_actuel == '0:0' and saved_score != win_score15:
                 config.saveLog('LOSE',config.newmatch)
                 validate_bet = False
                 tentative = 0
