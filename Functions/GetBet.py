@@ -38,8 +38,8 @@ def GetBet(driver):
         # Récupérer les coordonnées du div
         location = canvas.location
         size = canvas.size
-        y = sautDeLigne
-        x = decalageX
+        y = size['height'] / -2 + sautDeLigne
+        x = size['width'] / -2 + decalageX
         # Calculer les coordonnées pour cliquer au centre du div
         print('Y offset : '+str(y))
         # Créer une instance ActionChains
@@ -90,11 +90,11 @@ def GetBet(driver):
                     sautDeLigne = sautDeLigne + 30
                     ligne = ligne + 1
                     print('ligne ' + str(ligne))
-        if y > size['height'] or ligne > 8:
+        if y > size['height'] / 2 or ligne > 8:
             print('size height :'+str(size['height'] ))
             print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
             sautDeLigne = 40
-            y = size['height'] + sautDeLigne
+            y = size['height'] / -2 + sautDeLigne
             ligne = 1
             tentative = tentative + 1
 def GetNextBet(driver):
@@ -127,8 +127,8 @@ def GetNextBet(driver):
         # Récupérer les coordonnées du div
         location = canvas.location
         size = canvas.size
-        y = sautDeLigne
-        x = decalageX
+        y = size['height'] / -2 + sautDeLigne
+        x = size['width'] / -2 + decalageX
         # Calculer les coordonnées pour cliquer au centre du div
         print('Y offset : '+str(y))
         # Créer une instance ActionChains
@@ -182,10 +182,10 @@ def GetNextBet(driver):
                     sautDeLigne = sautDeLigne + 30
                     ligne = ligne + 1
                     print('ligne ' + str(ligne))
-        if y > size['height'] or ligne>8:
+        if y > size['height']/2 or ligne>8:
             print('size height :' + str(size['height']))
             print('Aucun paris trouvé, nouvelle tentative : '+str(tentative))
             sautDeLigne = 40
-            y = size['height'] + sautDeLigne
+            y = size['height'] / -2 + sautDeLigne
             ligne = 1
             tentative = tentative+1

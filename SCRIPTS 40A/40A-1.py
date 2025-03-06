@@ -34,10 +34,11 @@ while (config.win < 100):
     config.init_variable()
 
     tour = 0
+    while tour < config.nb_tour:
+        tour += 1
+        Functions_40a_proba.all_script(driver)
     try:
-        while tour < config.nb_tour:
-            tour += 1
-            Functions_40a_proba.all_script(driver)
+        print('dood')
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:
