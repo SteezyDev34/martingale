@@ -24,17 +24,11 @@ def GetMise(driver):
             config.saveLog(txtlog, config.newmatch)
             config.cote = config.cotebase
         else:
+
             txtlog = 'cote recupéré ' + str(config.cote)
             config.saveLog(txtlog, config.newmatch)
-            if config.cote != '':
-                try:
-                    config.cote = float(config.cote)
-                except:
-                    txtlog = 'error float cote : cote = '+str(config.cote)
-                    config.saveLog(txtlog,config.newmatch)
-                    config.cote = config.cotebase
-            else:
-                config.cote = config.cotebase
+            if config.cote != '' or str(config.cote) == '0':
+               config.cote = config.cotebase
     config.mise = (float(config.wantwin) + float(config.perte)) / (float(config.cote) - 1)
     config.mise = round(config.mise, 2)
     if config.mise < 0.2:

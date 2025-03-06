@@ -18,7 +18,7 @@ from Functions import Functions_1XBET
 import re
 from Functions.AfficherParis import AfficherParis
 from Functions.Function_scriptDelRunning import scriptDelRunning
-from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
+from Functions.GetJsonData import getPerte, delPerte,DispatchPerte, SendGlobalPerte, getGlobalPerte
 
 def all_script(driver):
     lose = True
@@ -38,14 +38,28 @@ def all_script(driver):
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
 
-
         print("#RECHERCHE INFOS DE MISE")
-        infosperte = getPerte()
+        infosperte = getGlobalPerte()
         print("PERTE : ")
         print(infosperte)
         if infosperte:
-            config.perte = float(infosperte['perte'])
-            delPerte(infosperte['id'])
+            if float(infosperte['perte']) > 100:
+                SendGlobalPerte(config.scriptType, -5)
+                config.perte = 5
+            elif float(infosperte['perte']) > 50:
+                SendGlobalPerte(config.scriptType, -3)
+                config.perte = 3
+            elif float(infosperte['perte']) > 1:
+                SendGlobalPerte(config.scriptType, -1)
+                config.perte = 1
+            elif float(infosperte['perte']) <= 1:
+                config.perte = float(infosperte['perte'])
+                m = 0 - config.perte
+                SendGlobalPerte(config.scriptType, m)
+                config.perte = float(infosperte['perte'])
+
+
+
             config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
         config.set_actuel = GetSetActuel(driver)

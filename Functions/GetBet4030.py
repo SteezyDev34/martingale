@@ -90,6 +90,8 @@ def GetBet4030(driver):
                 config.saveLog(f"#E0015\ Infos de paris non lisible : {e}")
             else:
                 print('jeu actu '+str(config.jeu_actuel))
+                if len(list_of_bet_type)<1:
+                    continue
                 list_of_newbet_type_text = list_of_bet_type[0].text
                 print(list_of_newbet_type_text)
                 list_of_newbet_type = list_of_newbet_type_text.split(sType)

@@ -21,7 +21,7 @@ from Functions.Function_AfficherParis4030 import AfficherParis
 from Functions.Function_scriptDelRunning import scriptDelRunning
 
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
-from Functions.GetJsonData import getPerte, delPerte, DispatchPerte
+from Functions.GetJsonData import getPerte, delPerte, DispatchPerte,SendGlobalPerte, getGlobalPerte
 
 
 
@@ -43,12 +43,30 @@ def all_script(driver):
         config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
 
         print("#RECHERCHE INFOS DE MISE")
-        infosperte = getPerte()
+        infosperte = getGlobalPerte()
         print("PERTE : ")
         print(infosperte)
         if infosperte:
-            config.perte = float(infosperte['perte'])
-            delPerte(infosperte['id'])
+            if float(infosperte['perte']) > 100:
+                SendGlobalPerte(config.scriptType, -20)
+                config.perte = 20
+            elif float(infosperte['perte']) > 50:
+                SendGlobalPerte(config.scriptType, -10)
+                config.perte = 10
+            elif float(infosperte['perte']) > 20:
+                SendGlobalPerte(config.scriptType, -5)
+                config.perte = 5
+            elif float(infosperte['perte']) > 10:
+                SendGlobalPerte(config.scriptType, -3)
+                config.perte = 3
+            elif float(infosperte['perte']) > 1:
+                SendGlobalPerte(config.scriptType, -1)
+                config.perte = 1
+            elif float(infosperte['perte']) <= 1:
+                config.perte = float(infosperte['perte'])
+                m = 0 - config.perte
+                SendGlobalPerte(config.scriptType, m)
+                config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
         config.set_actuel = GetSetActuel(driver)

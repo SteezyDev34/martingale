@@ -43,22 +43,26 @@ def all_script(driver):
         print("PERTE : ")
         print(infosperte)
         if infosperte:
-            if float(infosperte['perte']) <=1:
-                config.perte = float(infosperte['perte'])
-                m = 0-config.perte
-                SendGlobalPerte(config.scriptType,m)
-            if float(infosperte['perte']) >1:
-                config.perte = 1
-                SendGlobalPerte(config.scriptType, -1)
-            if float(infosperte['perte']) > 20:
-                config.perte = 3
-                SendGlobalPerte(config.scriptType, -3)
-            if float(infosperte['perte']) > 50:
-                config.perte = 5
-                SendGlobalPerte(config.scriptType, -5)
             if float(infosperte['perte']) > 100:
-                config.perte = 10
+                SendGlobalPerte(config.scriptType, -20)
+                config.perte = 20
+            elif float(infosperte['perte']) > 50:
                 SendGlobalPerte(config.scriptType, -10)
+                config.perte = 10
+            elif float(infosperte['perte']) > 20:
+                SendGlobalPerte(config.scriptType, -5)
+                config.perte = 5
+            elif float(infosperte['perte']) > 10:
+                SendGlobalPerte(config.scriptType, -3)
+                config.perte = 3
+            elif float(infosperte['perte']) > 1:
+                SendGlobalPerte(config.scriptType, -1)
+                config.perte = 1
+            elif float(infosperte['perte']) <= 1:
+                config.perte = float(infosperte['perte'])
+                m = 0 - config.perte
+                SendGlobalPerte(config.scriptType, m)
+                config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
         config.set_actuel = GetSetActuel(driver)

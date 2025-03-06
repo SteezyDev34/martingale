@@ -121,4 +121,7 @@ def RetourTpsReg(driver):
                             temps_reg = 1
                             break
             else:
+                print("err345678YUU multiselect")
                 error = 1
+        else:
+            print('the is an erreor here 56666')
