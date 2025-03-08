@@ -42,7 +42,7 @@ while (config.win < 100):
     if config.perte > 0:
         DispatchPerte()
     try:
-        driver.get('https://ca.1x001.com/fr/live/tennis')
+        driver.get('https://1xlite-989182.top/fr/live/tennis')
     except:
         continue
 print('TOTAL WIN : '+str(config.win))

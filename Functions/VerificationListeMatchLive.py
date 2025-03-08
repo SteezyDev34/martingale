@@ -17,4 +17,6 @@ def VerificationListeMatchLive(driver):
             config.saveLog("Liste match live OK!")
             config.print_match_live_text = True
         return True
-VerificationListeMatchLive(driver)
+if __name__ == "__main__":
+    from ChromeDriver.SetDriver1 import driver
+    VerificationListeMatchLive(driver)

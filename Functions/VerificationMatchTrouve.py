@@ -8,7 +8,7 @@ from Functions import GetMatchDone
 def main(driver,bet_item,matchlist_file_name):
     try:
         newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
-                                             'c-events__name')[
+                                             'dashboard-game-block__link')[
             0].get_attribute(
             "href")
         newmatch = newmatchtxt.split(

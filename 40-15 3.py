@@ -26,8 +26,8 @@ while (config.win < 100):
         config.perte = perte
         Functions_gsheets.suivi_lost30()
     try:
-        driver.get('https://ca.1x001.com/fr/live/tennis')
+        driver.get('https://1xlite-989182.top/fr/live/tennis')
     except:
-        driver.get('https://ca.1x001.com/fr/live/tennis')
+        driver.get('https://1xlite-989182.top/fr/live/tennis')
 print('TOTAL WIN : ' + str(config.win))
 

@@ -12,7 +12,7 @@ def GetIfMatchPage(driver):
     config.saveLog( logTxt)
     try:
         logTxt = "On cherche le tableau des scores"
-        config.saveLog( logTxt)
+        #config.saveLog( logTxt)
         element = WebDriverWait(driver, 2).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'scoreboard-section__scroll'))
@@ -47,23 +47,26 @@ def GetIfMatchPage(driver):
                 print(ul_text)
                 # Vérifier si le texte contient le mot "résume", indépendamment de la casse
                 if 'résume' in ul_text.lower():
-                    logTxt = "MATCH TERMINÉ! Retour sur https://ca.1x001.com/fr/live/tennis"
+                    logTxt = "MATCH TERMINÉ! Retour sur https://1xlite-989182.top/fr/live/tennis"
                     config.saveLog(logTxt)
-                    driver.get('https://ca.1x001.com/fr/live/tennis')
+                    driver.get('https://1xlite-989182.top/fr/live/tennis')
                     return False
                 else:
                     logTxt = "Ce n'est pas une page de match"
                     config.saveLog(logTxt)
-                    driver.get('https://ca.1x001.com/fr/live/tennis')
+                    driver.get('https://1xlite-989182.top/fr/live/tennis')
                     return False
 
         else:
-            logTxt = "MATCH TERMINÉ! Retour sur https://ca.1x001.com/fr/live/tennis"
+            logTxt = "MATCH TERMINÉ! Retour sur https://1xlite-989182.top/fr/live/tennis"
             config.saveLog( logTxt)
-            driver.get('https://ca.1x001.com/fr/live/tennis')
+            driver.get('https://1xlite-989182.top/fr/live/tennis')
             return False
     else:
         logTxt = "PAGE MATCH OK!"
-        config.saveLog( logTxt)
+        #config.saveLog( logTxt)
         return True
-GetIfMatchPage(driver)
+
+if __name__ == "__main__":
+    from ChromeDriver.SetDriver1 import driver
+    print(GetIfMatchPage(driver))

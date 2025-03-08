@@ -28,22 +28,20 @@ else:
 from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
 
-
-
 while (config.win < 100):
     config.init_variable()
 
     tour = 0
+    Functions_40a_proba.all_script(driver)
     try:
         while tour < config.nb_tour:
             tour += 1
-            Functions_40a_proba.all_script(driver)
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:
         DispatchPerte()
     try:
-        driver.get('https://1xbet.com/fr/live/Tennis/')
+        driver.get('https://1xlite-989182.top/fr/live/tennis')
     except:
         continue
 print('TOTAL WIN : '+str(config.win))

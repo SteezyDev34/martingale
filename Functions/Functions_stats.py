@@ -50,7 +50,6 @@ txt_after_write = content
 txt_after_write = txt_after_write.split('\n')
 try:
     if txt_after_write[0]!= str(today):
-        print('nouvelle date')
         url = "https://ultimate-tennis1.p.rapidapi.com/live_leaderboard/450"
 
 

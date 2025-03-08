@@ -2,15 +2,14 @@ import time
 
 from selenium.webdriver.support.wait import WebDriverWait
 
-from Functions.Function_GetSetActuel import GetSetActuel
+from Functions.Function_GetSetActuel import GetSetActuel, GetQTtActuel
 import config
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from Functions.GetIfMatchPage import GetIfMatchPage
-#from ChromeDriver.SetDriver1 import driver
-
+from Functions.ModalHandler import ModalHandler
 def AfficherParis(driver):
-    config.saveLog('recherche du champ déroulant...')
+    config.saveLog('recherche du champ déroulant...', config.newmatch)
     GetSetActuel(driver)
     selection = False
     tentative = 0
@@ -25,24 +24,22 @@ def AfficherParis(driver):
             config.saveLog(f"#E0012\nUne erreur est survenue : {e}")
             config.saveLog("ERROR : champ déroulant non trouvé")
             tentative = tentative +1
-            config.saveLog(str(tentative))
+            config.saveLog(str(tentative),  config.newmatch)
         else:
-            #récupération du bouton de menu deroulant
             select_form = driver.find_elements(By.CLASS_NAME, 'game-toolbar__sub-games-dropdown')
             try:
                 select_form[0].click()
-                time.sleep(1)
             except Exception as e:
-                config.saveLog(f"#E0013\nUne erreur est survenue : {e}")
-                config.saveLog("Erreur lors du clic sur le champ deroulant")
+                config.saveLog(f"#E0013\nUne erreur est survenue : {e}", config.newmatch)
+                config.saveLog("Erreur lors du clic sur le champ deroulant", config.newmatch)
+                ModalHandler(driver)
                 tentative = tentative+1
-                config.saveLog(str(tentative))
             else:
-                config.saveLog("ouverture du champ déroulant...")
+                config.saveLog("ouverture du champ déroulant...",0, config.newmatch)
                 try:
                     element = WebDriverWait(driver, 5).until(
-                        EC.presence_of_element_located(
-                            (By.CLASS_NAME, 'multiselect__element'))
+                        EC.visibility_of_element_located(
+                            (By.CLASS_NAME, 'multiselect__content-wrapper'))
                     )
                 except Exception as e:
                     config.saveLog(f"#E0014\nUne erreur est survenue : {e}")
@@ -51,7 +48,6 @@ def AfficherParis(driver):
                     select_form_set_1 = driver.find_elements(By.CLASS_NAME,
                                                              'multiselect__element')
                     if len(select_form_set_1) > 0:
-                        config.saveLog('Plusieurs liens trouvés....')
                         for select_option in select_form_set_1:
                             if selection == True:
                                 break
@@ -63,16 +59,20 @@ def AfficherParis(driver):
                                 tentative = tentative+1
                                 config.saveLog(str(tentative))
                             else:
-                                if select_option_text.strip() == str(config.set_actuel)+' Set':
-                                    config.saveLog('menu :' + str(config.set_actuel) + ' trouvé in :' + select_option.text)
+                                if  str(config.set_actuel) == "1":
+                                    theset = "1er"
+                                else:
+                                    theset = str(config.set_actuel)+"ème"
+                                if select_option_text.strip().lower() == str(theset).lower()+' set Evénements rapides'.lower():
+                                    config.saveLog('Lien '+select_option_text.lower()+' = '+str(theset).lower()+' set Evénements rapides'.lower(), config.newmatch)
                                     try:
                                         select_option.click()
-                                        time.sleep(1)
                                     except Exception as e:
-                                        config.saveLog(f"#E0015\nUne erreur est survenue : {e}")
-                                        config.saveLog("ERROR : clic impossible menu 1set")
+                                        config.saveLog(f"#E0015\nUne erreur est survenue : {e}", config.newmatch)
+                                        config.saveLog("ERROR : clic impossible menu 1set", config.newmatch)
                                         tentative = tentative + 1
-                                        config.saveLog(str(tentative))
+                                        config.saveLog(str(tentative), config.newmatch)
+                                        ModalHandler(driver)
                                     else:
                                         paris = 0
                                         tentative = 0
@@ -83,7 +83,6 @@ def AfficherParis(driver):
                                                     0]
                                                 searchbutton = toolbar.find_elements(By.CLASS_NAME,'ui-search')[0]
                                                 searchbutton.click()
-                                                time.sleep(1)
                                                 toolbar.find_elements(By.CLASS_NAME,
                                                                      'ui-search__input')[
                                                     0].clear()
@@ -99,7 +98,6 @@ def AfficherParis(driver):
                                                     paris = 1
                                                 else:
                                                     tentative = tentative+1
-                                                    time.sleep(1)
                                             except Exception as e:
                                                 config.saveLog(f"#E0016\nUne erreur est survenue : {e}")
                                                 config.saveLog("ERROR : impossible ecrire 'Paris'")
@@ -108,9 +106,8 @@ def AfficherParis(driver):
                                             else:
                                                 selection = True
                                 else:
-                                    config.saveLog('SET '+str(config.set_actuel)+' non trouvé : error '+select_option_text)
-                    time.sleep(2)
-                time.sleep(2)
+                                    config.saveLog('Lien '+select_option_text.lower()+' > '+str(theset).lower()+' set Evénements rapides'.lower(), config.newmatch)
     return selection
-
-#AfficherParis(driver)
+if __name__ == "__main__":
+    from ChromeDriver.SetDriver1 import driver
+    AfficherParis(driver)

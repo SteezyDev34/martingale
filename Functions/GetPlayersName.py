@@ -23,4 +23,6 @@ def GetPlayersName(driver):
             print(name)
             players_name.append(name)
     return players_name
-GetPlayersName(driver)
+if __name__ == "__main__":
+    from ChromeDriver.SetDriver1 import driver
+    GetPlayersName(driver)

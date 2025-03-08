@@ -5,6 +5,8 @@ from selenium.webdriver.common.by import By
 import config
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from Functions.GetBet import GetBet
+config.wantwin =0
 def GetMise(driver):
     if config.rattrape_perte == 3:
         txtlog = 'Bonne proba, cote : 3'
@@ -14,7 +16,6 @@ def GetMise(driver):
     else:
         txtlog = "Rattrapage, recuperation de la cote"
         config.saveLog(txtlog, config.newmatch)
-        time.sleep(2)
         try:
             config.cote = driver.find_elements(By.CLASS_NAME,
                                                'coupon-result-coef-value')[
@@ -24,27 +25,20 @@ def GetMise(driver):
             config.saveLog(txtlog, config.newmatch)
             config.cote = config.cotebase
         else:
+
             txtlog = 'cote recupéré ' + str(config.cote)
             config.saveLog(txtlog, config.newmatch)
-            if config.cote != '':
-                try:
-                    config.cote = float(config.cote)
-                except:
-                    txtlog = 'error float cote : cote = '+str(config.cote)
-                    config.saveLog(txtlog,config.newmatch)
-                    config.cote = config.cotebase
-            else:
-                config.cote = config.cotebase
+            if config.cote == '' or str(config.cote) == '0':
+               config.cote = config.cotebase
     config.mise = (float(config.wantwin) + float(config.perte)) / (float(config.cote) - 1)
     config.mise = round(config.mise, 2)
     if config.mise < 0.2:
         config.mise = 0.2
-        txtlog  = "cote : " + str(config.cote) + " | perte : " + str(
-            config.perte) + " | wantwin : " + str(
-            config.wantwin) + " | mise : " + str(config.mise)
-        print(txtlog)
-        config.saveLog(txtlog,config.newmatch)
-    getmisemax = False
+    txtlog  = "cote : " + str(config.cote) + " | perte : " + str(
+        config.perte) + " | wantwin : " + str(
+        config.wantwin) + " | mise : " + str(config.mise)
+    config.saveLog(txtlog,config.newmatch)
+    getmisemax = True
     tentative = 0
     while not getmisemax:
         try:
@@ -88,8 +82,11 @@ def GetMise(driver):
                     config.misemax = 0
                 else:
                     getmisemax = True
-
-
-
-    print('miise max : '+str(config.misemax))
+    #print('miise max : '+str(config.misemax))
     return True
+if __name__ == "__main__":
+    from ChromeDriver.SetDriver1 import driver
+
+    print(config.perte)
+    GetBet(driver)
+    GetMise(driver)

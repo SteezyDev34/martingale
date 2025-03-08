@@ -6,7 +6,7 @@ import config
 from Functions.GetMise import GetMise
 #from ChromeDriver.SetDriver1 import driver
 
-config.mise = 50
+
 def PlacerMise(driver):
     sending_mise = False
     try:
@@ -14,8 +14,8 @@ def PlacerMise(driver):
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME,'coupon-amount')))
     except Exception as e:
-        config.saveLog(f"#E001912\nUne erreur est survenue : {e}")
-        config.saveLog("CHAMP DE MISE NON TROUVÉ")
+
+        config.saveLog("CHAMP DE MISE NON TROUVÉ",config.newmatch)
         return False
     else:
         cpn_setting = driver.find_element(By.CLASS_NAME, 'coupon-amount')
@@ -90,4 +90,8 @@ def PlacerMise4030(driver,mise):
                 config.saveLog('mauvaise mise insérée!',config.newmatch)
                 time.sleep(1)
     return sending_mise
-#PlacerMise(driver)
+if __name__ == "__main__":
+    from ChromeDriver.SetDriver1 import driver
+
+    config.mise = 21.34
+    PlacerMise(driver)

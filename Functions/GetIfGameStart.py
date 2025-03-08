@@ -16,8 +16,6 @@ def GetIfGameStart(driver):
             if not printext:
                 config.saveLog('GAME NOT START')
                 printext = True
-                if not GetIfMatchPage(driver):
-                    config.error = True
             time.sleep(1)#attente 20 sec que le jeu commence
             # END GET SCORE
         elif config.score_actuel == '15:0' or config.score_actuel == '0:15' or config.score_actuel == '15:15' or config.score_actuel == '30:15' or config.score_actuel == '15:30' or config.score_actuel == '40:15' or config.score_actuel == '15:40' or config.score_actuel == '0:30' or config.score_actuel == '30:0' or config.score_actuel == '30:30' or config.score_actuel == '30:40' or config.score_actuel == '40:30' or config.score_actuel == '0:40' or config.score_actuel == '40:0':
@@ -26,6 +24,7 @@ def GetIfGameStart(driver):
         elif not config.score_actuel:
             gamestart = False
             if not GetIfMatchPage(driver):
+                print('Ce n\'est pas une page de match')
                 config.error = True
         else:
             gamestart = False
@@ -45,3 +44,22 @@ def GetIfGameStart30A(driver):
             if not GetIfMatchPage(driver):
                 config.error = True
     return gamestart
+
+def GetIfGameEnd(driver):
+    gameeend = False
+    printext = False
+    while not gameeend and not config.error:
+        GetScoreActuel(driver)
+        config.saved_score = config.saved_score
+        if config.score_actuel == '0:0':
+            print('GAME END')
+            gameeend = True
+        else:
+            gameeend = False
+            if not GetIfMatchPage(driver):
+                config.error = True
+    return gameeend
+if __name__ == "__main__":
+    from ChromeDriver.SetDriver1 import driver
+    driver.switch_to.window(driver.window_handles[0])
+    GetIfGameStart(driver)

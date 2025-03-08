@@ -32,4 +32,3 @@ def DeleteBet(driver):
         print("coupon supprimé")
         return True
 
-DeleteBet(driver)
