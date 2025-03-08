@@ -2,7 +2,7 @@ print('START')
 import os
 
 #Chargement de Chrome driver
-from ChromeDriver.SetDriver9 import driver
+from ChromeDriver.SetDriver3 import driver
 
 #Chargement des variables globales
 import config

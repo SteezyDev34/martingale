@@ -188,12 +188,12 @@ def all_script(driver):
                             config.error = True
                             config.saveLog("error pendant la récupération du score", config.newmatch)
                             break
-                        if (config.score_actuel == "0:30" or config.score_actuel == "15:30" or config.score_actuel == "30:15" or config.score_actuel == "30:0") and gamestart:
+                        if (config.score_actuel == "0:15" or config.score_actuel == "15:15" or config.score_actuel == "15:0") and gamestart:
                             config.saveLog("GAME PASS WITHOUT VALIDATE", config.newmatch)
                             FirstGameBet(driver)
                             break
                             ###ajouter ici les actions avant de reprendre
-                        elif config.score_actuel == "30:30":
+                        elif config.score_actuel == "15:15":
                             config.error = True
                             config.saveLog("30A leave!", config.newmatch)
                             FirstGameBet(driver)

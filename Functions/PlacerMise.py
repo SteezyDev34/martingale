@@ -22,6 +22,7 @@ def PlacerMise(driver):
         cpn_setting = cpn_setting.find_element(By.CLASS_NAME, 'ui-number-input__field')
         tentative = 0
         while not sending_mise and tentative<10:
+            GetMise(driver)
             cpn_setting.clear()
             cpn_setting.send_keys(str(config.mise))
             l = cpn_setting.get_attribute("value")

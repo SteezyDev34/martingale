@@ -51,20 +51,30 @@ def GetBet(driver,nextBet=False):
     # Récupérer les coordonnées du div
     location = canvas.location
     size = canvas.size
-    sautDeLigne = 50
-    decalageX = 5
+    if config.systeme == 'Darwin':
+        sautDeLigne = 50
+    elif config.systeme == 'Windows':
+        y =0
+        sautDeLigne = 70
+    decalageX = 50
     ligne = 1
+
     while not clic and tentative<10:
         GetJeuActuel(driver)
         if nextBet:
             config.jeu_actuel = config.jeu_actuel + 1
-        print('Ligne suivante')
+        #print('Ligne suivante')
         canvas = driver.find_element(By.CLASS_NAME, 'market-grid-canvas__container')
         # Récupérer les coordonnées du div
         location = canvas.location
         size = canvas.size
-        y = size['height'] / -2 +10+ sautDeLigne
-        x = size['width'] / -2 + 50
+        if config.systeme == 'Darrwin':
+            print('dar')
+            y = size['height'] / -2 +10+ sautDeLigne
+            x = size['width'] / -2 + 50
+        elif config.systeme == 'Windows':
+            y = sautDeLigne
+            x = decalageX
         # Calculer les coordonnées pour cliquer au centre du div
         #print('Y offset : '+str(y))
         #print('X offset : ' + str(x))
@@ -104,12 +114,12 @@ def GetBet(driver,nextBet=False):
                 config.saveLog(f"#E0015\ Infos de paris non lisible : {e}")
             else:
                 list_of_newbet_type = list_of_bet_type.text
-                print(list_of_newbet_type)
+                #print(list_of_newbet_type)
                 list_of_newbet_type = list_of_newbet_type.split(sType+" - Oui")
                 if len(list_of_newbet_type) >1:
                     getjeu_actuel = int(list_of_newbet_type[0].split("Jeu ")[1])
                     if str(config.jeu_actuel) == str(getjeu_actuel):
-                        print('paris trouvé')
+                        #print('paris trouvé')
                         clic = True
                         return clic
                     else:
@@ -120,13 +130,22 @@ def GetBet(driver,nextBet=False):
                     sautDeLigne = sautDeLigne + 30
                     ligne = ligne + 1
                     print('ligne ' + str(ligne))
-        if y > size['height']/2 or ligne > 8:
-            #print('size height :'+str(size['height'] ))
-            #print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
-            sautDeLigne = 40
-            y = size['height'] / -2 + 10 + sautDeLigne
-            ligne = 1
-            tentative = tentative + 1
+        if config.systeme == 'Darwin':
+            if y > size['height']/2 or ligne > 8:
+                #print('size height :'+str(size['height'] ))
+                #print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
+                sautDeLigne = 40
+                y = size['height'] / -2 + 10 + sautDeLigne
+                ligne = 1
+                tentative = tentative + 1
+        elif config.systeme == 'Windows':
+            if y > size['height'] or ligne > 8:
+                #print('size height :' + str(size['height']))
+                #print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
+                sautDeLigne = 70
+                y = size['height'] + sautDeLigne
+                ligne = 1
+                tentative = tentative + 1
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
     driver.switch_to.window(driver.window_handles[0])
