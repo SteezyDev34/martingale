@@ -107,6 +107,7 @@ def AfficherParis(driver):
                                                 selection = True
                                 else:
                                     config.saveLog('Lien '+select_option_text.lower()+' > '+str(theset).lower()+' set Evénements rapides'.lower(), config.newmatch)
+                        return selection
     return selection
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver

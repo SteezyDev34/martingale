@@ -113,7 +113,7 @@ def all_script(driver):
                 config.error = True
                 print("erreur perte en 1 set")
                 DispatchPerte()
-        elif config.jeu_actuel == 13:
+        elif (config.jeu_actuel+1) == 13:
             while config.score_actuel !="0:1" and config.score_actuel != "1:0":
                 print("wait start tie break")
                 print('score actuel : '+config.score_actuel)
@@ -129,7 +129,8 @@ def all_script(driver):
                 time.sleep(30)
                 GetScoreActuel(driver)
             passageset = True
-            time.sleep(60)
+            time.sleep(30)
+            continue
         else:
             gamestart = 0
             ##ATTENTE QUE LE JEU COMMENCE
