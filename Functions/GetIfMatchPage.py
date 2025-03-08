@@ -8,8 +8,8 @@ from ChromeDriver.SetDriver1 import driver
 #VÉRIFIERR SI PAGE DE MATCH
 def GetIfMatchPage(driver):
     #driver.switch_to.window(driver.window_handles[0])
-    logTxt = "Vérfication si page match..."
-    config.saveLog( logTxt)
+    #logTxt = "Vérfication si page match..."
+    #config.saveLog( logTxt)
     try:
         logTxt = "On cherche le tableau des scores"
         #config.saveLog( logTxt)

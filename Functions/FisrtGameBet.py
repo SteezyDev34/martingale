@@ -13,7 +13,19 @@ def FirstGameBet(driver):
     ##PREPARATTION PREMIER PARIS
     bet_40a = False
     tentative=0
+    nextBet = False
     while not bet_40a and not config.error:
+        if config.scriptType  == '30A':
+            GetScoreActuel(driver)
+            if config.score_actuel != "0:15" or config.score_actuel != "15:0" or config.score_actuel != "15:15":
+                config.saveLog('score : ' + config.score_actuel + ' ...first game passss', config.newmatch)
+                nextBet = True
+        elif config.scriptType  == '15A':
+            GetScoreActuel(driver)
+            if config.score_actuel != "0:0":
+                config.saveLog('score : ' + config.score_actuel + ' ...first game passss', config.newmatch)
+                nextBet = True
+
         txtlog = 'PREPARATION DU PREMIER PARIS'
         config.saveLog(txtlog, config.newmatch)
         #Affichage de la liste des paris
@@ -23,7 +35,7 @@ def FirstGameBet(driver):
             break
         #On recherche le jeu actuel
         config.saveLog('liste des pariis affichée, On recherche le jeu actuel', config.newmatch)
-        if not GetBet(driver):
+        if not GetBet(driver,nextBet):
             tentative = tentative+1
             if tentative>5:
                 config.saveLog('error recup jeu #ERR345', config.newmatch)
@@ -38,7 +50,6 @@ def FirstGameBet(driver):
         tentative_placermise = 0
         validate_bet = False
         txtlog = 'On place la mise'
-        print(txtlog)
         config.saveLog(txtlog, config.newmatch)
         while not PlacerMise(driver) and not config.error and tentative_placermise < 5:
             tentative_placermise+=1
@@ -64,11 +75,12 @@ def FirstGameBet(driver):
                 config.saveLog(txtlog, config.newmatch)
                 gamestart = False
                 break
-            elif config.score_actuel == "40:40" or config.score_actuel == "40:A" or config.score_actuel == "A:40":
+            elif nextBet or  config.score_actuel == "40:40" or config.score_actuel == "40:A" or config.score_actuel == "A:40":
                 print("GAME PASS WITHOUT VALIDATE #2#")
                 gamestart = False
                 GetIfGameEnd(driver)
-                break
+                if not nextBet:
+                    break
             else:
                 gamestart = True
                 txtlog = "GAME START"

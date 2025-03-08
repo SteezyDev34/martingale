@@ -4,12 +4,12 @@ from Functions.DeleteBet import DeleteBet
 from Functions.GetIfGameStart import GetIfGameStart, GetIfGameStart30A, GetIfGameEnd
 from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.GetMise import GetMise
+from Functions.GetBet import GetBet
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.PlacerMise import PlacerMise
-from Functions.GetBet import GetBet
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 
 from Functions.ValidationDuParis import ValidationDuParis
@@ -184,7 +184,7 @@ def all_script(driver):
             if str(config.saved_set) == str(config.set_actuel):  ## si on est toujours sur le meme set
                 config.saveLog('on est toujours sur le meme set', config.newmatch)
 
-                if config.jeu_actuel >= 13:  # SI TIE BREAK
+                if (config.jeu_actuel+1) >= 13:  # SI TIE BREAK
                     txtlog = "jeu "+str(config.jeu_actuel)
                     print(txtlog)
                     config.saveLog(txtlog, config.newmatch)
@@ -233,7 +233,7 @@ def all_script(driver):
                 config.saveLog(txtlog, config.newmatch)
                 time.sleep(30)
             else:
-                print("ERROR : recup set " + str(config.set_actuel))
+                print("ERROR : ecup set " + str(config.set_actuel))
                 config.error = True
         elif result== 'WIN':
             config.perte = 0
