@@ -195,7 +195,7 @@ def all_script(driver):
                             ###ajouter ici les actions avant de reprendre
                         elif config.score_actuel == "15:15":
                             config.error = True
-                            config.saveLog("30A leave!", config.newmatch)
+                            config.saveLog("15A leave!", config.newmatch)
                             FirstGameBet(driver)
                             ###ajouter ici les actions avant de reprendre
                             break
