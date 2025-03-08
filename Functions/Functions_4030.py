@@ -1,17 +1,18 @@
 import time
 
 from Functions.DeleteBet import DeleteBet
-from Functions.GetIfGameStart import GetIfGameStart
+from Functions.GetIfGameStart import GetIfGameStart, GetIfGameStart30A, GetIfGameEnd
 from Functions.Function_GetJeuActuel import GetJeuActuel
-from Functions.GetPlayersName import GetPlayersName
 from Functions.GetMise import GetMise
+from Functions.GetBet import GetBet
+from Functions.GetPlayersName import GetPlayersName
+from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.Function_GetSetActuel import GetSetActuel
-from Functions.PlacerMise import PlacerMise4030
-from Functions.GetBet4030 import GetBet4030, GetNextBet4030
+from Functions.PlacerMise import PlacerMise
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 
-from Functions.ValidationDuParis import ValidationDuParis4030
+from Functions.ValidationDuParis import ValidationDuParis
 import config
 from Functions import GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1, AddRunning
 from Functions import Functions_1XBET
@@ -21,55 +22,57 @@ from Functions.Function_AfficherParis4030 import AfficherParis4030
 from Functions.Function_scriptDelRunning import scriptDelRunning
 
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
-from Functions.GetJsonData import getPerte, delPerte,DispatchPerte
-
-
-
+from Functions.GetJsonData import getPerte, delPerte,DispatchPerte, getGlobalPerte, SendGlobalPerte
+from Functions.FisrtGameBet import FirstGameBet
 def all_script(driver):
+    driver.switch_to.window(driver.window_handles[0])
+    lose = True
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
-
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver):
-        print("err rech match")
-        driver.get('https://1xlite-989182.top/fr/live/tennis')
         config.error = True
     # --------
+    config.match_found = True
     if config.match_found and not config.error:
-        AddRunning.main(config.script_num, config.running_file_name)
+        AddRunning.main(config.script_num,config.running_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
 
-        # RECHERCHE INFOS DE MISE
-        players = GetPlayersName(driver)
-        if 'wta' in config.ligue_name.lower() or 'féminin' in config.ligue_name.lower() or 'femmes' in config.ligue_name.lower() or 'women' in config.ligue_name.lower():
-            config.proba40A = Functions_stats.get_wta_proba_40A(players[0], players[1])
-            #config.proba40A = 0.5
-        else:
-            config.proba40A = Functions_stats1.get_proba_40A(players[0], players[1])
-            #config.proba40A = 0.5
-            if config.proba40A ==  0:
-                config.proba40A = Functions_stats1.get_proba_40A_other(players[0], players[1], driver, config.match_Url)
-
         print("#RECHERCHE INFOS DE MISE")
-        infosperte = getPerte()
+        infosperte = getGlobalPerte()
         print("PERTE : ")
-        print(infosperte)
         if infosperte:
-            config.perte = float(infosperte['perte'])
-            delPerte(infosperte['id'])
+            if float(infosperte['perte']) > 100:
+                SendGlobalPerte(config.scriptType, -20)
+                config.perte = 20
+            elif float(infosperte['perte']) > 50:
+                SendGlobalPerte(config.scriptType, -10)
+                config.perte = 10
+            elif float(infosperte['perte']) > 20:
+                SendGlobalPerte(config.scriptType, -5)
+                config.perte = 5
+            elif float(infosperte['perte']) > 10:
+                SendGlobalPerte(config.scriptType, -3)
+                config.perte = 3
+            elif float(infosperte['perte']) > 1:
+                SendGlobalPerte(config.scriptType, -1)
+                config.perte = 1
+            elif float(infosperte['perte']) <= 1:
+                config.perte = float(infosperte['perte'])
+                m = 0 - config.perte
+                SendGlobalPerte(config.scriptType, m)
+                config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
-        config.set_actuel = GetSetActuel(driver)
+        GetSetActuel(driver)
         config.saved_set = config.set_actuel
 
         if not config.set_actuel:
             config.error = True
 
-
-    print('config.ligue_name : '+config.ligue_name)
 
     ##PREPARATTION PREMIER PARIS
     config.saveLog('PREPARATION DU PREMIER PARIS',1,config.newmatch)

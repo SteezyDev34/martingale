@@ -90,7 +90,6 @@ def FirstGameBet(driver):
                 config.perte = float(config.perte) + float(config.mise)
                 config.wantwin = float(config.wantwin) + float(config.increment)
                 bet_40a = True
-
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
     driver.switch_to.window(driver.window_handles[0])

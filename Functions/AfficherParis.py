@@ -14,6 +14,9 @@ def AfficherParis(driver):
     selection = False
     tentative = 0
     clic = False
+    key = 'Paris'
+    if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
+        key = 'Score du Jeu.'
     while not selection and tentative <6:
         try:
             element = WebDriverWait(driver, 5).until(
@@ -89,18 +92,18 @@ def AfficherParis(driver):
                                                 toolbar.find_elements(By.CLASS_NAME,
                                                                      'ui-search__input')[
                                                     0].send_keys(
-                                                    "Paris")
+                                                    key)
                                                 l = toolbar.find_elements(By.CLASS_NAME,
                                                                          'ui-search__input')[
                                                     0].get_attribute("value")
 
-                                                if l == "Paris":
+                                                if l == key:
                                                     paris = 1
                                                 else:
                                                     tentative = tentative+1
                                             except Exception as e:
                                                 config.saveLog(f"#E0016\nUne erreur est survenue : {e}")
-                                                config.saveLog("ERROR : impossible ecrire 'Paris'")
+                                                config.saveLog("ERROR : impossible ecrire "+key)
                                                 if GetIfMatchPage(driver) != True:
                                                     break
                                             else:

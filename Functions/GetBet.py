@@ -12,6 +12,23 @@ from selenium.webdriver.common.action_chains import ActionChains
 def GetBet(driver,nextBet=False):
     print("RECHERCHE DES PARIS "+config.scriptType+"....")
     DeleteBet(driver)
+    GetJeuActuel(driver)
+    print('RECHERCHE DES PARIS 40 30....FIRST')
+    scoreboard_player = driver.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__row')
+    scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__heading')[0]
+    first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__ball')
+    if len(first_player) > 0:
+        first_player = 1
+        win_type = '40:30'
+        sType = "ueur "+str(first_player)+" va gagner le Jeu "+str(config.jeu_actuel)+" 40-3"
+
+    else:
+        first_player = 2
+        win_type = '30:40'
+        sType = "ueur "+str(first_player)+" va gagner le Jeu "+str(config.jeu_actuel)+" 40-3"
+
+    print('next player to win : ' + str(first_player) + ' ' + win_type)
+    win_texte = '40-30'
     if_get_jeu = False
     clic = False
     sType = ": 40-40"
