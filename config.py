@@ -2,6 +2,16 @@ import os
 import datetime
 import requests
 import json
+import platform
+
+systeme = platform.system()
+
+if systeme == "Darwin":
+    print("Vous êtes sur macOS")
+elif systeme == "Windows":
+    print("Vous êtes sur Windows")
+else:
+    print(f"Système inconnu : {systeme}")
 proxy = {
     "http": "http://auxobettingproxy:Scorpion971@223.29.227.173:51523",
     "https": "http://auxobettingproxy:Scorpion971@223.29.227.173:51523",

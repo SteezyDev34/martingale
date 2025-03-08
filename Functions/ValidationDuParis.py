@@ -56,7 +56,7 @@ def ValidationDuParis(driver):
                                 getbtn.click()
                             except:
                                 tentative = tentative + 1
-                                validation = ModalHandler()
+                                validation = ModalHandler(driver)
                             else:
                                 tentative = tentative + 1
                                 preloader = 1

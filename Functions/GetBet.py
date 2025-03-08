@@ -34,9 +34,14 @@ def GetBet(driver,nextBet=False):
     # Récupérer les coordonnées du div
     location = canvas.location
     size = canvas.size
-    sautDeLigne = 50
-    decalageX = 5
+    if config.systeme == 'Darwin':
+        sautDeLigne = 50
+    elif config.systeme == 'Windows':
+        y =0
+        sautDeLigne = 70
+    decalageX = 50
     ligne = 1
+
     while not clic and tentative<10:
         GetJeuActuel(driver)
         if nextBet:
@@ -46,11 +51,16 @@ def GetBet(driver,nextBet=False):
         # Récupérer les coordonnées du div
         location = canvas.location
         size = canvas.size
-        y = size['height'] / -2 +10+ sautDeLigne
-        x = size['width'] / -2 + 50
+        if config.systeme == 'Darrwin':
+            print('dar')
+            y = size['height'] / -2 +10+ sautDeLigne
+            x = size['width'] / -2 + 50
+        elif config.systeme == 'Windows':
+            y = sautDeLigne
+            x = decalageX
         # Calculer les coordonnées pour cliquer au centre du div
-        #print('Y offset : '+str(y))
-        #print('X offset : ' + str(x))
+        print('Y offset : '+str(y))
+        print('X offset : ' + str(x))
         # Créer une instance ActionChains
         actions = ActionChains(driver)
         # Cliquer aux coordonnées calculées
@@ -103,13 +113,22 @@ def GetBet(driver,nextBet=False):
                     sautDeLigne = sautDeLigne + 30
                     ligne = ligne + 1
                     print('ligne ' + str(ligne))
-        if y > size['height']/2 or ligne > 8:
-            #print('size height :'+str(size['height'] ))
-            #print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
-            sautDeLigne = 40
-            y = size['height'] / -2 + 10 + sautDeLigne
-            ligne = 1
-            tentative = tentative + 1
+        if config.systeme == 'Darwin':
+            if y > size['height']/2 or ligne > 8:
+                #print('size height :'+str(size['height'] ))
+                #print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
+                sautDeLigne = 40
+                y = size['height'] / -2 + 10 + sautDeLigne
+                ligne = 1
+                tentative = tentative + 1
+        elif config.systeme == 'Windows':
+            if y > size['height'] or ligne > 8:
+                #print('size height :' + str(size['height']))
+                #print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
+                sautDeLigne = 40
+                y = size['height'] + sautDeLigne
+                ligne = 1
+                tentative = tentative + 1
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
     driver.switch_to.window(driver.window_handles[0])
