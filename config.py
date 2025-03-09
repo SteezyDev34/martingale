@@ -101,6 +101,7 @@ cotemini = 1
 cotebase = 1
 misemax = 0
 perte = 0
+win_score30 = ''
 wantwin = 0.2
 nb_tour = 1
 increment = 0

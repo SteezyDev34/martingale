@@ -15,8 +15,8 @@ def GetResult(driver):
     RetourTpsReg(driver)
     while not result and not config.error:
         time.sleep(timesleep)
-        GetScoreActuel(driver)
         config.saved_score = config.score_actuel
+        GetScoreActuel(driver)
         if not config.score_actuel:
             config.error = True
             break
@@ -53,6 +53,18 @@ def GetResult(driver):
                 result = 'LOSE'
                 config.saveLog(result, config.newmatch)
                 return result
+        elif config.scriptType == '4030':
+            if config.score_actuel == '0:0' and config.saved_score == config.win_score30:
+                result = 'WIN'
+                config.saveLog(result, config.newmatch)
+                while config.score_actuel == '15:15':
+                    GetScoreActuel(driver)
+                return result
+            elif config.score_actuel == '0:0' and config.saved_score != config.win_score30:
+                result = 'LOSE'
+                config.saveLog(result, config.newmatch)
+                return result
+
 
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver

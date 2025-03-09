@@ -25,7 +25,7 @@ def FirstGameBet(driver):
         else:
             #On recherche le jeu actuel
             config.saveLog('liste des pariis affichée, On recherche le jeu actuel',0,config.newmatch)
-            jeu = GetBet4030(driver)
+            jeu = GetBet(driver)
 
         if not jeu:
             tentative +=1
@@ -49,7 +49,7 @@ def FirstGameBet(driver):
             tentative_placermise = 0
             validate_bet = False
             config.saveLog('On place la mise',1,config.newmatch)
-            while not PlacerMise4030(driver,config.mise) and not config.error and tentative_placermise < 2:
+            while not PlacerMise(driver) and not config.error and tentative_placermise < 2:
                 tentative_placermise+=1
                 if tentative_placermise == 2:
                     validate_bet = True
@@ -81,7 +81,7 @@ def FirstGameBet(driver):
                 else:
                     gamestart = True
                     config.saveLog("GAME START",config.newmatch)
-                if ValidationDuParis4030(driver, config.mise):
+                if ValidationDuParis(driver):
                     validate_bet = True
                     bet_40a = True
                     config.jeu_actuel +=1
