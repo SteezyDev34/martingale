@@ -28,13 +28,14 @@ else:
 from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import  classementeDeMatch
-classementeDeMatch(driver)
+#classementeDeMatch(driver)
 
 while (config.win < 100):
     config.init_variable()
 
     tour = 0
     Functions_40a_proba.all_script(driver)
+
     try:
         while tour < config.nb_tour:
             tour += 1

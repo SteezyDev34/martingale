@@ -196,7 +196,7 @@ def rechercheDeMatchNBA(driver):
     # END SCRIPT RECHERCHE DE MATCH
     return config.match_found
 def classementeDeMatch(driver):
-    driver.get('https://1xbet.com/fr/line/tennis')
+    driver.get('https://1xlite-989182.top/fr/line/tennis')
     config.error = False
     print('RECHERCHE DE MATCH')
     config.match_found = False
@@ -211,67 +211,84 @@ def classementeDeMatch(driver):
         if not VerificationListeMatchLive(driver):
             config.error = True
             print("PAGE VIDE")
-            driver.get('https://1xbet.com/fr/line/tennis')
+            driver.get('https://1xlite-989182.top/fr/line/tennis')
             return False
         # RECUPERATION DES LIGUES EN COURS
         bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                              'dashboard-champ-content')
+                                              'dashboard-champ')
         matchlist =[]
-        # POUR CHAQUE LIGUE RÉCUPÉRÉE
+        liguelist=[]
         for bet_ligue in bet_list_ligue:
             # ON RÉCUPÈRE LE NOM DE LA LIGUE
             config.ligue_name = GetLigueName.main(bet_ligue)
-            print(config.ligue_name)
             # EN CAS D'ERREUR
             if not config.ligue_name:
                 config.error = False
                 break
-            # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-            if getCompet():
-                print('get comp')
-                # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
-                try:
-                    bet_items = bet_ligue.find_elements(By.CLASS_NAME,
-                                                        'c-events-scoreboard__item')
-                except :
-                    print(' c-events-scoreboard__item')
-                    # s'il y une erreur on passe au suivant
-                    continue
-                else:
-                    if len(bet_items) <= 0:
-                        continue# SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
-                    i = 0
-                    for bet_item in bet_items:
-                        try:
-                            teams_name = bet_item.find_element(By.CLASS_NAME, 'c-events__teams')
-                            teams_name = teams_name.get_attribute('title')
-                            players = teams_name.split(' — ')
-                            players_name = []
-                            match = []
-                            for player in players:
-                                player = player.split('(')[0]
-                                player = player.strip()
-                                config.saveLog(player, config.newmatch)
-                                print(player)
-                                players_name.append(player)
-                            match.append(players_name)
-                            match.append(config.ligue_name)
-                            newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
-                                                                 'c-events__name')[
-                                0].get_attribute(
-                                "href")
-                            newmatch = newmatchtxt.split(
-                                '-')
-                            config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
-                            match.append(config.newmatch)
-                            matchlist.append(match)
+            liguelist.append([bet_ligue.find_elements(By.CLASS_NAME,
+                                                 'ui-dashboard-champ-name__link')[
+                0].get_attribute(
+                "href"),config.ligue_name])
 
-                        except Exception as e:
-                            print(e)
-                            txtlog = "Impossible de récupérer le score"
-                            config.saveLog(txtlog,0, config.newmatch)
-                            print(txtlog)
-                            continue
+        for link in liguelist:
+            driver.get(link[0])
+            config.ligue_name=link[1]
+            bet_list_ligue = driver.find_elements(By.CLASS_NAME,
+                                                  'ui-dashboard-champ__games')
+            # POUR CHAQUE LIGUE RÉCUPÉRÉE
+            for bet_ligue in bet_list_ligue:
+
+                # ON VÉRIFIE QUE LA COMPET EST JOUABLE
+                if getCompet():
+                    print(config.ligue_name)
+                    time.sleep(2)
+                    print('get comp')
+                    # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
+                    try:
+                        bet_items = driver.find_elements(By.CLASS_NAME,
+                                                            'dashboard-game-block__row')
+                    except :
+                        print(' c-events-scoreboard__item')
+                        # s'il y une erreur on passe au suivant
+                        continue
+                    else:
+                        if len(bet_items) <= 0:
+                            continue# SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
+                        i = 0
+                        for bet_item in bet_items:
+                            try:
+                                teams_name = bet_item.find_element(By.CLASS_NAME,
+                                                                   'dashboard-game-block__teams')
+                                players = teams_name.find_elements(By.CLASS_NAME,'dashboard-game-team-info')
+                                players_name = []
+                                match = []
+                                for player in players:
+                                    player = player.text.split('(')[0]
+                                    player = player.strip()
+                                    config.saveLog(player, config.newmatch)
+                                    players_name.append(player)
+                                match.append(players_name)
+                                match.append(config.ligue_name)
+                                newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
+                                                                     'dashboard-game-block__link')[
+                                    0].get_attribute(
+                                    "href")
+                                newmatch = newmatchtxt.split(
+                                    '-')
+                                config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
+                                match.append(config.newmatch)
+                                matchlist.append(match)
+
+                            except Exception as e:
+                                print(e)
+                                txtlog = "Impossible de récupérer le score"
+                                config.saveLog(txtlog,0, config.newmatch)
+                                print(txtlog)
+                                continue
+                            else:
+                                print('ok')
+                else:
+                    print('not comp')
 
         print(len(matchlist))
         goodmatch =[]
@@ -283,11 +300,13 @@ def classementeDeMatch(driver):
             if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
                 config.proba40A = Functions_stats.get_wta_proba_40A(players_name[0], players_name[1])
                 #config.proba40A = 0.5
+                time.sleep(1)
                 if config.proba40A == 0:
                     config.proba40A = Functions_stats1.get_wta_proba_40A_other(players_name[0], players_name[1],driver)
             else:
                 config.proba40A = Functions_stats1.get_proba_40A(players_name[0], players_name[1])
                 #config.proba40A = 0.5
+                time.sleep(1)
                 if config.proba40A == 0:
                     config.proba40A = Functions_stats1.get_proba_40A_other(players_name[0], players_name[1],driver)
             print('proba '+str(config.proba40A))
@@ -300,7 +319,7 @@ def classementeDeMatch(driver):
         tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
 
         # Retenir les 10 premières lignes
-        top_10 = tableau_trie[:20]
+        top_10 = tableau_trie[:50]
         for m in top_10:
             todo("add", m[2], config.matchlisttodo_file_name)
         break

@@ -13,22 +13,23 @@ def GetBet(driver,nextBet=False):
     print("RECHERCHE DES PARIS "+config.scriptType+"....")
     DeleteBet(driver)
     GetJeuActuel(driver)
-    print('RECHERCHE DES PARIS 40 30....FIRST')
-    scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
-    scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
-    first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
-    if len(first_player) > 0:
-        first_player = 1
-        config.win_type = '40:30'
-        win_texte = '40-30'
-        sType = "Jeu "+str(config.jeu_actuel)+" 40-30, Joueur "+str(first_player)
+    if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
+        print('RECHERCHE DES PARIS 40 30....FIRST')
+        scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
+        scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
+        first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
+        if len(first_player) > 0:
+            first_player = 1
+            config.win_type = '40:30'
+            win_texte = '40-30'
+            sType = "Jeu "+str(config.jeu_actuel)+" 40-30, Joueur "+str(first_player)
 
-    else:
-        first_player = 2
-        config.win_type = '30:40'
-        win_texte = '30-40'
-        sType = "Jeu " + str(config.jeu_actuel) + " 30-40, Joueur " + str(first_player)
-    print('next player to win : ' + str(first_player) + ' ' + config.win_type)
+        else:
+            first_player = 2
+            config.win_type = '30:40'
+            win_texte = '30-40'
+            sType = "Jeu " + str(config.jeu_actuel) + " 30-40, Joueur " + str(first_player)
+        print('next player to win : ' + str(first_player) + ' ' + config.win_type)
     if_get_jeu = False
     clic = False
     if config.scriptType == "40A":
@@ -66,7 +67,8 @@ def GetBet(driver,nextBet=False):
         GetJeuActuel(driver)
         print('i '+str(i))
         if nextBet:
-            config.jeu_actuel = config.jeu_actuel + 1
+            print('jeu = '+str(config.jeu_actuel))
+            config.jeu_actuel = int(config.jeu_actuel) + 1
         #print('Ligne suivante')
         canvas = driver.find_element(By.CLASS_NAME, 'market-grid-canvas__container')
         # Récupérer les coordonnées du div

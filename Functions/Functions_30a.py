@@ -88,15 +88,11 @@ def all_script(driver):
             score_actuel = '40:0'
             gamestart = 1
             config.jeu_actuel = 0
-            if config.rattrape_perte == 1:
-                config.error = False
-                config.saveLog("passage set 2", config.newmatch)
-                config.saveLog("attente 30 sec", config.newmatch)
-                time.sleep(30)
-                FirstGameBet(driver)
-            else:
-                config.error = True
-                print("erreur perte en 1 set")
+            config.error = False
+            config.saveLog("passage set 2", config.newmatch)
+            config.saveLog("attente 30 sec", config.newmatch)
+            time.sleep(30)
+            FirstGameBet(driver)
         elif (config.jeu_actuel+1)==13:
             GetJeuActuel(driver)
             GetIfGameEnd(driver)
@@ -131,6 +127,7 @@ def all_script(driver):
         config.saveLog(txtlog, config.newmatch)
         bet_40a = False
         tentative = 0
+        passageset = False
         while not bet_40a and not config.error:
             # Affichage de la liste des paris
             config.saveLog('Affichage de la liste des paris', config.newmatch)
@@ -164,6 +161,36 @@ def all_script(driver):
                 config.error = True
         result = GetResult(driver)
         if result == 'LOSE':
+            ##VALIDATION DU PARIS SI SCORE OK
+            validate_bet = False
+            tentative = 0
+            while not validate_bet and not config.error and tentative < 3:
+                # VÉRIFICATION DU SCORE ACTUEL
+                GetScoreActuel(driver)
+                if config.score_actuel == False:
+                    config.error = True
+                    config.saveLog("error pendant la récupération du score", config.newmatch)
+                    break
+                if (
+                        config.score_actuel == "0:30" or config.score_actuel == "15:30" or config.score_actuel == "30:15" or config.score_actuel == "30:0") and gamestart:
+                    config.saveLog("GAME PASS WITHOUT VALIDATE", config.newmatch)
+                    FirstGameBet(driver)
+                    break
+                    ###ajouter ici les actions avant de reprendre
+                elif config.score_actuel == "30:30":
+                    config.error = True
+                    config.saveLog("30A leave!", config.newmatch)
+                    FirstGameBet(driver)
+                    ###ajouter ici les actions avant de reprendre
+                    break
+                else:
+                    gamestart = True
+                if ValidationDuParis(driver):
+                    validate_bet = True
+                    config.perte = config.perte + config.mise
+                    config.wantwin = float(config.wantwin) + float(config.increment)
+            # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
+            RetourTpsReg(driver)
             #VÉRIFCATION DU SET ACTUEL
             config.saved_set = config.set_actuel
             GetSetActuel(driver)
@@ -177,36 +204,7 @@ def all_script(driver):
                     config.saveLog("jeu " + str(config.jeu_actuel), config.newmatch)
                     config.saveLog("attente fin de tie break", config.newmatch)
                     passageset = True
-                else:
-                    ##VALIDATION DU PARIS SI SCORE OK
-                    validate_bet = False
-                    tentative = 0
-                    while not validate_bet and not config.error and tentative < 3:
-                        # VÉRIFICATION DU SCORE ACTUEL
-                        GetScoreActuel(driver)
-                        if config.score_actuel == False:
-                            config.error = True
-                            config.saveLog("error pendant la récupération du score", config.newmatch)
-                            break
-                        if (config.score_actuel == "0:30" or config.score_actuel == "15:30" or config.score_actuel == "30:15" or config.score_actuel == "30:0") and gamestart:
-                            config.saveLog("GAME PASS WITHOUT VALIDATE", config.newmatch)
-                            FirstGameBet(driver)
-                            break
-                            ###ajouter ici les actions avant de reprendre
-                        elif config.score_actuel == "30:30":
-                            config.error = True
-                            config.saveLog("30A leave!", config.newmatch)
-                            FirstGameBet(driver)
-                            ###ajouter ici les actions avant de reprendre
-                            break
-                        else:
-                            gamestart = True
-                        if ValidationDuParis(driver):
-                            validate_bet = True
-                            config.perte = config.perte + config.mise
-                            config.wantwin = float(config.wantwin) + float(config.increment)
-                    # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
-                    RetourTpsReg(driver)
+
             elif str(newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                 txtlog = " ON EST SUR LE PROCHAIN SET"
                 passageset = True
@@ -224,6 +222,32 @@ def all_script(driver):
             winmatch = winmatch +1
             passageset = True
             DeleteBet(driver)
+            print("#RECHERCHE INFOS DE MISE")
+            infosperte = getGlobalPerte()
+            print("PERTE : ")
+            if infosperte:
+                if float(infosperte['perte']) > 100:
+                    SendGlobalPerte(config.scriptType, -20)
+                    config.perte = 20
+                elif float(infosperte['perte']) > 50:
+                    SendGlobalPerte(config.scriptType, -10)
+                    config.perte = 10
+                elif float(infosperte['perte']) > 20:
+                    SendGlobalPerte(config.scriptType, -5)
+                    config.perte = 5
+                elif float(infosperte['perte']) > 10:
+                    SendGlobalPerte(config.scriptType, -3)
+                    config.perte = 3
+                elif float(infosperte['perte']) > 1:
+                    SendGlobalPerte(config.scriptType, -1)
+                    config.perte = 1
+                elif float(infosperte['perte']) <= 1:
+                    config.perte = float(infosperte['perte'])
+                    m = 0 - config.perte
+                    SendGlobalPerte(config.scriptType, m)
+                    config.perte = float(infosperte['perte'])
+                config.rattrape_perte = 1
+                config.rattrape_perte = 1
     if config.perte >0.2:
         DispatchPerte()
     print("update " + config.newmatch)
