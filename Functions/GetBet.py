@@ -13,14 +13,14 @@ def GetBet(driver,nextBet=False):
     print("RECHERCHE DES PARIS "+config.scriptType+"....")
     DeleteBet(driver)
     GetJeuActuel(driver)
+    print('nextBet', nextBet)
     if nextBet:
         config.jeu_actuel = config.jeu_actuel + 1
     if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
-        print('RECHERCHE DES PARIS 40 30....FIRST')
         scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
         scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
         first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
-        if len(first_player) > 0:
+        if (len(first_player) > 0 and not nextBet) or (len(first_player) ==0 and nextBet):
             first_player = 1
             if config.scriptType == '4030':
                 config.win_type = '40:30'
@@ -49,7 +49,6 @@ def GetBet(driver,nextBet=False):
                 config.win_type = '0:40'
                 win_texte = '0-40'
                 sType = "Jeu " + str(config.jeu_actuel) + " 0-40, Joueur " + str(first_player)
-        print('next player to win : ' + str(first_player) + ' ' + config.win_type)
     if_get_jeu = False
     clic = False
     if config.scriptType == "40A":
@@ -73,11 +72,9 @@ def GetBet(driver,nextBet=False):
     location = canvas.location
     size = canvas.size
     if config.systeme == 'Darwin':
-        print('darwini')
         sautDeLigne = 50
         decalageX = size['width'] / -2 + 50
     elif config.systeme == 'Windows':
-        print('windows')
         y =0
         sautDeLigne = 70
         decalageX = 50
@@ -224,4 +221,4 @@ if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
     config.scriptType = '4030'
     driver.switch_to.window(driver.window_handles[0])
-    GetBet(driver)
+    GetBet(driver,True)
