@@ -13,6 +13,7 @@ def GetJeuActuel(driver):
         return False
     else:
         try:
+            #print('get set')
             GetSetActuel(driver)
             if config.set_actuel == '1':
                 jeu_actuel_player1 = config.jeu_actuel[1].find_elements(By.CLASS_NAME, 'scoreboard-periods-table-cell--td')[0]
@@ -41,8 +42,8 @@ def GetJeuActuel(driver):
             config.saveLog("erreur : numjeu")
             return False
         else:
-            #config.saveLog('Récupération du jeu actuel : ' + str(config.jeu_actuel))
+           # config.saveLog('Récupération du jeu actuel : ' + str(config.jeu_actuel))
             return True
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    from ChromeDriver.SetDriver4 import driver
     GetJeuActuel(driver)

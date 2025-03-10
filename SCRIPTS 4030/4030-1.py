@@ -3,7 +3,7 @@ print('START 40-30 1')
 import os
 
 #Chargement de Chrome driver
-from ChromeDriver.SetDriver1 import driver
+from ChromeDriver.SetDriver4 import driver
 
 #Chargement des variables globales
 import config

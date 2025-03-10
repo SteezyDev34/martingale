@@ -34,9 +34,9 @@ while (config.win < 100):
     config.init_variable()
 
     tour = 0
-    Functions_40a_proba.all_script(driver)
 
     try:
+        Functions_40a_proba.all_script(driver)
         while tour < config.nb_tour:
             tour += 1
     except Exception as e:

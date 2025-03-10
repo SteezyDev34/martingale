@@ -8,7 +8,7 @@ from Functions import GetMatchDone
 def main(driver,bet_item,matchlist_file_name):
     try:
         newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
-                                             'c-events__name')[
+                                             'dashboard-game-block__link')[
             0].get_attribute(
             "href")
         newmatch = newmatchtxt.split(
@@ -22,7 +22,7 @@ def main(driver,bet_item,matchlist_file_name):
         print('newmatch : '+config.newmatch)
         match_list = GetMatchDone.main(config.matchlisttodo_file_name)
         config.saveLog(match_list, config.newmatch)
-        if any( config.newmatch in x for x in match_list):
+        if not any( config.newmatch in x for x in match_list):
             txtlog = "Le match autorisé!"
             config.saveLog(txtlog, config.newmatch)
             driver.get(newmatchtxt)
@@ -34,7 +34,7 @@ def main(driver,bet_item,matchlist_file_name):
 def getstats(driver,bet_item,matchlist_file_name):
     try:
         newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
-                                             'c-events__name')[
+                                             'dashboard-game-block__link')[
             0].get_attribute(
             "href")
         newmatch = newmatchtxt.split(
@@ -72,7 +72,7 @@ def fromUrl(driver,matchlist_file_name):
     else:
         #print('newmatch : '+newmatch)
         match_list = GetMatchDone.main(matchlist_file_name)
-        if not any( config.newmatch in x for x in match_list):
+        if any( config.newmatch in x for x in match_list):
             #print('Le match n\'a pas encore été parié!')
             return [True,config.newmatch]
         else:

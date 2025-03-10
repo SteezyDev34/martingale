@@ -7,13 +7,12 @@ from Functions.DeleteBet import DeleteBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
 import config
 from selenium.webdriver.common.action_chains import ActionChains
-#from ChromeDriver.SetDriver1 import driver
-
 def GetBet(driver,nextBet=False):
     print("RECHERCHE DES PARIS "+config.scriptType+"....")
     DeleteBet(driver)
     GetJeuActuel(driver)
     print('nextBet', nextBet)
+    print('jeu '+str( config.jeu_actuel))
     if nextBet:
         config.jeu_actuel = config.jeu_actuel + 1
     if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
@@ -58,7 +57,7 @@ def GetBet(driver,nextBet=False):
         sType = " 30-30"
     elif config.scriptType == "15A":
         sType = " 15-15"
-
+    print(sType)
     tentative_clic = 0
     tentative = 0
     try:
@@ -81,6 +80,8 @@ def GetBet(driver,nextBet=False):
     ligne = 1
     i=0
     while not clic and tentative<10:
+        i = i + 1
+        print('i '+str(i))
         GetJeuActuel(driver)
         if nextBet:
             config.jeu_actuel = config.jeu_actuel + 1
@@ -96,8 +97,8 @@ def GetBet(driver,nextBet=False):
             y = sautDeLigne
             x = decalageX
         # Calculer les coordonnées pour cliquer au centre du div
-        #print('Y offset : '+str(y))
-        #print('X offset : ' + str(x))
+        print('Y offset : '+str(y))
+        print('X offset : ' + str(x))
         # Créer une instance ActionChains
         actions = ActionChains(driver)
         # Cliquer aux coordonnées calculées
@@ -120,11 +121,22 @@ def GetBet(driver,nextBet=False):
                 if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
                     if config.systeme == 'Darwin':
                         if i % 2 == 0:
+                            print('pair')
                             sautDeLigne = sautDeLigne
                             decalageX = 50
                         else:
                             sautDeLigne = sautDeLigne + 30
                             decalageX = size['width'] / -2 + 50
+                    else:
+                        if i % 2 == 0:
+                            print('pair win')
+                            sautDeLigne = sautDeLigne
+                            decalageX = 50
+                        else:
+                            print('impair')
+                            sautDeLigne = sautDeLigne + 30
+                            decalageX = size['width'] / 2 + 50
+
                 else:
                     sautDeLigne = sautDeLigne + 30
                 ligne = ligne+1
@@ -167,6 +179,16 @@ def GetBet(driver,nextBet=False):
                                 else:
                                     sautDeLigne = sautDeLigne + 30
                                     decalageX = size['width'] / -2 + 50
+                            else:
+                                print('win')
+                                if i % 2 == 0:
+                                    print('pair')
+                                    sautDeLigne = sautDeLigne + 30
+                                    decalageX = 50
+                                else:
+                                    print('impair')
+                                    sautDeLigne = sautDeLigne
+                                    decalageX = size['width'] / 2 + 50
                     else:
                         print('Mauvais paris')
                         if config.systeme == 'Darwin':
@@ -176,6 +198,17 @@ def GetBet(driver,nextBet=False):
                             else:
                                 sautDeLigne = sautDeLigne + 30
                                 decalageX = size['width'] / -2 + 50
+                        else:
+                            print('win')
+                            if i % 2 == 0:
+                                print('pair')
+                                sautDeLigne = sautDeLigne + 30
+                                decalageX = 50
+                            else:
+                                print('impair')
+
+                                sautDeLigne = sautDeLigne
+                                decalageX = size['width'] / 2 + 50
                         ligne = ligne + 1
                         print('ligne ' + str(ligne))
                 else:
@@ -213,12 +246,11 @@ def GetBet(driver,nextBet=False):
                 #print('size height :' + str(size['height']))
                 #print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
                 sautDeLigne = 70
+                decalageX = 50
                 y = size['height'] + sautDeLigne
                 ligne = 1
                 tentative = tentative + 1
-        i = i + 1
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    from ChromeDriver.SetDriver4 import driver
     config.scriptType = '4030'
-    driver.switch_to.window(driver.window_handles[0])
     GetBet(driver,True)

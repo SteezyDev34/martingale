@@ -239,6 +239,8 @@ def all_script(driver):
         elif result== 'WIN':
             config.perte = 0
             winmatch = winmatch +1
+            if float(winmatch) >= float(config.nb_tour):
+                break
             passageset = True
             DeleteBet(driver)
             print("#RECHERCHE INFOS DE MISE")

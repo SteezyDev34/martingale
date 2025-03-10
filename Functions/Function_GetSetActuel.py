@@ -23,9 +23,11 @@ def GetSetActuel(driver):
         else:
             config.set_actuel = str(numset)
             if config.saved_set != config.set_actuel:
-                config.saveLog('Nouveau Set actuel : ' + str(config.set_actuel),0,config.newmatch)
-            #else:
+                #config.saveLog('Nouveau Set actuel : ' + str(config.set_actuel),0,config.newmatch)
+                return True
+            else:
                 #config.saveLog('Set actuel : ' + str(config.set_actuel), 0, config.newmatch)
+                return True
 
     return True
 def GetQTtActuel(driver):
@@ -53,5 +55,5 @@ def GetQTtActuel(driver):
 
     return True
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    from ChromeDriver.SetDriver4 import driver
     print(GetSetActuel(driver))
