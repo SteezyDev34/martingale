@@ -26,9 +26,9 @@ def DeleteBet(driver):
             print("cross no found")
             return False
         else:
-            print("coupon supprimé")
+            #print("coupon supprimé")
             return True
     else:
-        print("coupon supprimé")
+        #print("coupon supprimé")
         return True
 

@@ -41,7 +41,7 @@ def GetJeuActuel(driver):
             config.saveLog("erreur : numjeu")
             return False
         else:
-            config.saveLog('Récupération du jeu actuel : ' + str(config.jeu_actuel))
+            #config.saveLog('Récupération du jeu actuel : ' + str(config.jeu_actuel))
             return True
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver

@@ -24,8 +24,8 @@ def GetSetActuel(driver):
             config.set_actuel = str(numset)
             if config.saved_set != config.set_actuel:
                 config.saveLog('Nouveau Set actuel : ' + str(config.set_actuel),0,config.newmatch)
-            else:
-                config.saveLog('Set actuel : ' + str(config.set_actuel), 0, config.newmatch)
+            #else:
+                #config.saveLog('Set actuel : ' + str(config.set_actuel), 0, config.newmatch)
 
     return True
 def GetQTtActuel(driver):
