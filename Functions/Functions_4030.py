@@ -44,7 +44,7 @@ def all_script(driver):
 
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
-        if infosperte:
+        if not infosperte:
             if float(infosperte['perte']) > 100:
                 SendGlobalPerte(config.scriptType, -20)
                 config.perte = 20
@@ -236,6 +236,7 @@ def all_script(driver):
             config.perte = 0
             winmatch = winmatch +1
             DeleteBet(driver)
+            passageset = True
             print("#RECHERCHE INFOS DE MISE")
             infosperte = getGlobalPerte()
             if infosperte:
