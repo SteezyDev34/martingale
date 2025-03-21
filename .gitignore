@@ -2,7 +2,6 @@
 /build/
 /venv/
 *.json
-SetDriver*
 logScript*
 .eggs
 chromedriver.exe
