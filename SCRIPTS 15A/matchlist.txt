@@ -5,7 +5,6 @@ meligeni-rodrigues-alves
 khachanov-jakub-mensik
 dimitrov-nuno-borges
 sabalenka-mccartney-kessler
-alex-de-minaur
 pace-saumya-vig
 jing-jing-lu
 on-yu-choi
@@ -16,3 +15,16 @@ michelsen-daniil-medvedev
 michelsen-daniil-medvedev
 pavel-marcello-serafini
 lena-thomas-iglesias
+nicolas-garcia-longo
+daniel-antonio-nunez
+tseng-nathan-ponwith
+zhukayev-mae-malige
+pucinelli-de-almeida
+nedev-guido-andreozzi
+carlos-alcaraz-garfia
+griekspoor-yosuke-watanuki
+giron-arthur-fils
+perfetti-louis-wessels
+fearnley-james-duckworth
+nakashima-ben-shelton
+sabalenka-sonay-kartal

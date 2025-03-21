@@ -12,7 +12,7 @@ def ValidationDuParis(driver):
     validation = False
     tentative = 0
     print('validation paris')
-    while not validation and tentative < 5:
+    while not validation and tentative < 2:
         print('tentative', str(tentative))
         print('boucle validation paris')
         try:

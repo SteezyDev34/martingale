@@ -24,7 +24,8 @@ else:
     exit()
 
 
-#Chargement des fonctions
+#Chargement des
+
 from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import  classementeDeMatch
@@ -33,18 +34,18 @@ from Functions.ScriptRechercheDeMatch import  classementeDeMatch
 while (config.win < 100):
     config.init_variable()
 
-    tour = 0
-
     try:
         Functions_40a_proba.all_script(driver)
-        while tour < config.nb_tour:
-            tour += 1
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:
         DispatchPerte()
-    try:
-        driver.get('https://1xlite-989182.top/fr/live/tennis')
-    except:
-        continue
+    sucess = False
+    while not sucess:
+        try:
+            driver.get('https://1xlite-262783.top/fr/live/tennis')
+        except:
+            continue
+        else:
+            sucess = True
 print('TOTAL WIN : '+str(config.win))

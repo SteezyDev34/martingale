@@ -40,7 +40,6 @@ podrez-alice-robbe
 lamasine-loann-massard
 coppejans-george-loffhagen
 gauff-moyuka-uchijima
-carlos-alcaraz-garfia
 beatriz-haddad-maia
 van-de-zandschulp
 hijikata-brandon-nakashima
@@ -57,3 +56,16 @@ michelsen-daniil-medvedev
 michelsen-daniil-medvedev
 pavel-marcello-serafini
 lena-thomas-iglesias
+zhukayev-mae-malige
+pucinelli-de-almeida
+nedev-guido-andreozzi
+giron-arthur-fils
+fearnley-james-duckworth
+sabalenka-sonay-kartal
+sabalenka-sonay-kartal
+sabalenka-sonay-kartal
+sabalenka-sonay-kartal
+sabalenka-sonay-kartal
+sabalenka-sonay-kartal
+sabalenka-sonay-kartal
+sabalenka-sonay-kartal

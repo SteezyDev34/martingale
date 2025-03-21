@@ -3,7 +3,7 @@ print('START 40-30 1')
 import os
 
 #Chargement de Chrome driver
-from ChromeDriver.SetDriver4 import driver
+from ChromeDriver.SetDriver7 import driver
 
 #Chargement des variables globales
 import config
@@ -28,21 +28,21 @@ from Functions.GetJsonData import DispatchPerte
 
 while (config.win < 100):
     config.init_variable()
-    if config.devMode:
+
+    try:
         all_script(driver)
-    else:
-        tour = 0
-        try:
-            while tour < config.nb_tour:
-                tour += 1
-                all_script(driver)
-        except Exception as e:
-            print(f"ERROR SCRIPT : {e}")
-            print('perte = '+str(config.perte))
+    except Exception as e:
+        print(f"ERROR SCRIPT : {e}")
+        print('perte = ' + str(config.perte))
+
     if config.perte > 0:
         DispatchPerte()
-    try:
-        driver.get('https://1xbet.com/fr/live/Tennis/')
-    except:
-        driver.get('https://1xbet.com/fr/live/Tennis/')
+    sucess = False
+    while not sucess:
+        try:
+            driver.get('https://1xlite-262783.top/fr/live/tennis')
+        except:
+            continue
+        else:
+            sucess = True
 print('TOTAL WIN : ' + str(config.win))

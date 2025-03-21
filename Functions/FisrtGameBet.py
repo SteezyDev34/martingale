@@ -51,7 +51,7 @@ def FirstGameBet(driver):
         validate_bet = False
         txtlog = 'On place la mise'
         config.saveLog(txtlog, config.newmatch)
-        while not PlacerMise(driver) and not config.error and tentative_placermise < 5:
+        while not PlacerMise(driver) and not config.error and tentative_placermise < 3:
             tentative_placermise+=1
             if tentative_placermise == 5:
                 validate_bet = True

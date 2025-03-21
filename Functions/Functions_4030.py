@@ -26,7 +26,6 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 from Functions.GetJsonData import getPerte, delPerte,DispatchPerte, getGlobalPerte, SendGlobalPerte
 from Functions.FisrtGameBet import FirstGameBet
 def all_script(driver):
-    driver.switch_to.window(driver.window_handles[0])
     lose = True
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
@@ -44,7 +43,7 @@ def all_script(driver):
 
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
-        if not infosperte:
+        if infosperte:
             if float(infosperte['perte']) > 100:
                 SendGlobalPerte(config.scriptType, -20)
                 config.perte = 20

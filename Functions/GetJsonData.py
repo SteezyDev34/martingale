@@ -211,6 +211,7 @@ def SendGlobalPerte(scriptType,mise):
     else:
         if result['status'] == "success":
             print(str(mise)+ "> mise insert in strategy"+str(scriptType))
+            config.perte = 0
             return True
         else:
             print(result)

@@ -29,16 +29,18 @@ from Functions.GetJsonData import DispatchPerte
 while (config.win < 100):
     config.init_variable()
     try:
-        tour = 0
-        while tour < config.nb_tour:
-            tour += 1
-            all_script(driver)
+        all_script(driver)
+
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:
         DispatchPerte()
-    try:
-        driver.get('https://1xbet.com/fr/live/Tennis/')
-    except:
-        driver.get('https://1xbet.com/fr/live/Tennis/')
+    sucess = False
+    while not sucess:
+        try:
+            driver.get('https://1xlite-262783.top/fr/live/tennis')
+        except:
+            continue
+        else:
+            sucess = True
 print('TOTAL WIN : ' + str(config.win))

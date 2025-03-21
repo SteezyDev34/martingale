@@ -84,7 +84,7 @@ def all_script(driver):
     config.lose =False
     while (float(winmatch) < float(config.nb_tour) and not config.error):
         # WAIT FOR GAME START
-        if passageset:
+        if passageset :
             config.saved_set = ""
             config.set_actuel = GetSetActuel(driver)
             config.score_actuel = '0:0'
@@ -97,7 +97,8 @@ def all_script(driver):
                 txtlog = "attente 30 sec"
                 print(txtlog)
                 config.saveLog(txtlog, config.newmatch)
-                time.sleep(30)
+                if result != 'WIN':
+                    time.sleep(30)
                 FirstGameBet(driver)
             elif config.perte >0:
                 DispatchPerte()
@@ -107,7 +108,8 @@ def all_script(driver):
                 config.saveLog(txtlog, config.newmatch)
                 txtlog = "attente 30 sec"
                 print(txtlog)
-                time.sleep(30)
+                if result != 'WIN':
+                    time.sleep(30)
                 FirstGameBet(driver)
             else:
                 config.error = True

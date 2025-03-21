@@ -35,7 +35,6 @@ def GetIfGameStart30A(driver):
     printext = False
     while not gamestart and not config.error:
         GetScoreActuel(driver)
-        config.saved_score = config.saved_score
         if config.score_actuel == '0:0':
             print('GAME START')
             gamestart = True
@@ -50,7 +49,6 @@ def GetIfGameEnd(driver):
     printext = False
     while not gameeend and not config.error:
         GetScoreActuel(driver)
-        config.saved_score = config.saved_score
         if config.score_actuel == '0:0':
             print('GAME END')
             gameeend = True

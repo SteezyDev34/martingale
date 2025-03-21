@@ -82,7 +82,9 @@ def all_script(driver):
     passageset = False
     winmatch = 0
     config.lose =False
-    while (float(winmatch) < float(config.nb_tour) and not config.error):
+    while (float(winmatch) <= float(config.nb_tour)):
+        config.error=False
+        GetJeuActuel(driver)
         # WAIT FOR GAME START
         if passageset:
             score_actuel = '40:0'
@@ -93,7 +95,7 @@ def all_script(driver):
             config.saveLog("attente 30 sec", config.newmatch)
             time.sleep(30)
             FirstGameBet(driver)
-        elif (config.jeu_actuel+1)==13:
+        elif config.jeu_actuel==12:
             GetJeuActuel(driver)
             GetIfGameEnd(driver)
             while config.score_actuel != "0:0":
@@ -222,6 +224,7 @@ def all_script(driver):
             winmatch = winmatch +1
             passageset = True
             DeleteBet(driver)
+            GetIfGameEnd(driver)
             if float(winmatch) >= float(config.nb_tour):
                 break
             print("#RECHERCHE INFOS DE MISE")

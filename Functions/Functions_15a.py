@@ -46,19 +46,19 @@ def all_script(driver):
         if infosperte:
             if float(infosperte['perte']) > 100:
                 SendGlobalPerte(config.scriptType, -5)
-                config.perte = 5
+                config.perte = 2
             elif float(infosperte['perte']) > 50:
                 SendGlobalPerte(config.scriptType, -3)
-                config.perte = 3
+                config.perte = 1
             elif float(infosperte['perte']) > 20:
                 SendGlobalPerte(config.scriptType, -2)
-                config.perte = 2
+                config.perte = 0.5
             elif float(infosperte['perte']) > 10:
                 SendGlobalPerte(config.scriptType, -1)
-                config.perte = 1
+                config.perte = 0.3
             elif float(infosperte['perte']) > 1:
                 SendGlobalPerte(config.scriptType, -1)
-                config.perte = 1
+                config.perte = 0.2
             elif float(infosperte['perte']) <= 1:
                 config.perte = float(infosperte['perte'])
                 m = 0 - config.perte
@@ -84,6 +84,8 @@ def all_script(driver):
     config.lose =False
     while (float(winmatch) < float(config.nb_tour) and not config.error):
         # WAIT FOR GAME START
+        GetJeuActuel(driver)
+
         if passageset:
             score_actuel = '40:0'
             gamestart = 1

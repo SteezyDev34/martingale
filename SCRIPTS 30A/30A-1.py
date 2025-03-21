@@ -34,15 +34,18 @@ while (config.win < 100):
     config.init_variable()
     tour = 0
     try:
-        while tour < config.nb_tour:
-            tour +=1
-            Functions_30a.all_script(driver)
+        Functions_30a.all_script(driver)
+
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:
         DispatchPerte()
-    try:
-        driver.get('https://1xlite-989182.top/fr/live/tennis')
-    except:
-        driver.get('https://1xlite-989182.top/fr/live/tennis')
+    sucess = False
+    while not sucess:
+        try:
+            driver.get('https://1xlite-262783.top/fr/live/tennis')
+        except:
+            continue
+        else:
+            sucess = True
 print('TOTAL WIN : '+str(config.win))

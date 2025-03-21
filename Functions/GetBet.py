@@ -10,44 +10,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 def GetBet(driver,nextBet=False):
     print("RECHERCHE DES PARIS "+config.scriptType+"....")
     DeleteBet(driver)
-    GetJeuActuel(driver)
-    print('nextBet', nextBet)
-    print('jeu '+str( config.jeu_actuel))
-    if nextBet:
-        config.jeu_actuel = config.jeu_actuel + 1
-    if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
-        scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
-        scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
-        first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
-        if (len(first_player) > 0 and not nextBet) or (len(first_player) ==0 and nextBet):
-            first_player = 1
-            if config.scriptType == '4030':
-                config.win_type = '40:30'
-                win_texte = '40-30'
-                sType = "Jeu "+str(config.jeu_actuel)+" 40-30, Joueur "+str(first_player)
-            elif config.scriptType == '4015':
-                config.win_type = '40:15'
-                win_texte = '40-15'
-                sType = "Jeu " + str(config.jeu_actuel) + " 40-15, Joueur " + str(first_player)
-            elif config.scriptType == '400':
-                config.win_type = '40:0'
-                win_texte = '40-0'
-                sType = "Jeu "+str(config.jeu_actuel)+" 40-0, Joueur "+str(first_player)
-
-        else:
-            first_player = 2
-            if config.scriptType == '4030':
-                config.win_type = '30:40'
-                win_texte = '30-40'
-                sType = "Jeu " + str(config.jeu_actuel) + " 30-40, Joueur " + str(first_player)
-            elif config.scriptType == '4015':
-                config.win_type = '15:40'
-                win_texte = '15-40'
-                sType = "Jeu " + str(config.jeu_actuel) + " 15-40, Joueur " + str(first_player)
-            elif config.scriptType == '400':
-                config.win_type = '0:40'
-                win_texte = '0-40'
-                sType = "Jeu " + str(config.jeu_actuel) + " 0-40, Joueur " + str(first_player)
     if_get_jeu = False
     clic = False
     if config.scriptType == "40A":
@@ -57,7 +19,6 @@ def GetBet(driver,nextBet=False):
         sType = " 30-30"
     elif config.scriptType == "15A":
         sType = " 15-15"
-    print(sType)
     tentative_clic = 0
     tentative = 0
     try:
@@ -80,6 +41,45 @@ def GetBet(driver,nextBet=False):
     ligne = 1
     i=0
     while not clic and tentative<10:
+        GetJeuActuel(driver)
+        print('nextBet', nextBet)
+        print('jeu ' + str(config.jeu_actuel))
+        if nextBet:
+            config.jeu_actuel = config.jeu_actuel + 1
+        if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
+            scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
+            scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
+            first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
+            if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
+                first_player = 1
+                if config.scriptType == '4030':
+                    config.win_type = '30:40'  # inversé
+                    win_texte = '40-30'
+                    sType = "Jeu " + str(config.jeu_actuel) + " 40-30, Joueur " + str(first_player)
+                elif config.scriptType == '4015':
+                    config.win_type = '15:40'  # inversé
+                    win_texte = '40-15'
+                    sType = "Jeu " + str(config.jeu_actuel) + " 40-15, Joueur " + str(first_player)
+                elif config.scriptType == '400':
+                    config.win_type = '0:40'  # inversé
+                    win_texte = '40-0'
+                    sType = "Jeu " + str(config.jeu_actuel) + " 40-0, Joueur " + str(first_player)
+
+            else:
+                first_player = 2
+                if config.scriptType == '4030':
+                    config.win_type = '40:30'  # inversé
+                    win_texte = '30-40'
+                    sType = "Jeu " + str(config.jeu_actuel) + " 30-40, Joueur " + str(first_player)
+                elif config.scriptType == '4015':
+                    config.win_type = '40:15'  # inversé
+                    win_texte = '15-40'
+                    sType = "Jeu " + str(config.jeu_actuel) + " 15-40, Joueur " + str(first_player)
+                elif config.scriptType == '400':
+                    win_texte = '0-40'
+                    config.win_type = '40:0'  # inversé
+                    sType = "Jeu " + str(config.jeu_actuel) + " 0-40, Joueur " + str(first_player)
+
         i = i + 1
         print('i '+str(i))
         GetJeuActuel(driver)

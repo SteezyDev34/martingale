@@ -15,7 +15,7 @@ def GetResult(driver):
     RetourTpsReg(driver)
     while not result and not config.error:
         time.sleep(timesleep)
-        config.saved_score = config.score_actuel
+        previous_score = config.score_actuel
         GetScoreActuel(driver)
         if not config.score_actuel:
             config.error = True
@@ -53,14 +53,29 @@ def GetResult(driver):
                 result = 'LOSE'
                 config.saveLog(result, config.newmatch)
                 return result
-        elif config.scriptType == '4030':
-            if config.score_actuel == '0:0' and config.saved_score == config.win_score30:
+        elif config.scriptType == '4030' or config.scriptType == '4015':
+            print('previous_score = '+previous_score)
+            print('xin score = ' + config.win_type)
+            if config.score_actuel == '0:0' and previous_score == config.win_type:
                 result = 'WIN'
                 config.saveLog(result, config.newmatch)
-                while config.score_actuel == '15:15':
-                    GetScoreActuel(driver)
                 return result
-            elif config.score_actuel == '0:0' and config.saved_score != config.win_score30:
+            elif config.score_actuel == '0:0' and previous_score != config.win_type:
+                result = 'LOSE'
+                config.saveLog(result, config.newmatch)
+                return result
+        elif config.scriptType == '400':
+            print('previous_score = ' + previous_score)
+            print('xin score = ' + config.win_type)
+            if config.score_actuel == '0:0' and previous_score == config.win_type:
+                result = 'WIN'
+                config.saveLog(result, config.newmatch)
+                return result
+            elif config.score_actuel == '40:15' or config.score_actuel == '15:40' or config.score_actuel == '40:30' or config.score_actuel == '30:40':
+                result = 'LOSE'
+                config.saveLog(result, config.newmatch)
+                return result
+            elif config.score_actuel == '0:0' and previous_score != config.win_type:
                 result = 'LOSE'
                 config.saveLog(result, config.newmatch)
                 return result
