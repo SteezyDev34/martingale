@@ -43,7 +43,7 @@ while (config.win < 100):
     sucess = False
     while not sucess:
         try:
-            driver.get('https://1xlite-262783.top/fr/live/tennis')
+            driver.get('https://ca.1xbet.com/fr/live/tennis')
         except:
             continue
         else:

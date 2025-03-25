@@ -39,7 +39,7 @@ def GetBet(driver,nextBet=False):
         sautDeLigne = 70
         decalageX = 50
     ligne = 1
-    i=0
+    i=1
     while not clic and tentative<10:
         GetJeuActuel(driver)
         print('nextBet', nextBet)
@@ -80,7 +80,7 @@ def GetBet(driver,nextBet=False):
                     config.win_type = '40:0'  # inversé
                     sType = "Jeu " + str(config.jeu_actuel) + " 0-40, Joueur " + str(first_player)
 
-        i = i + 1
+
         print('i '+str(i))
         GetJeuActuel(driver)
         if nextBet:
@@ -106,7 +106,7 @@ def GetBet(driver,nextBet=False):
             actions.move_to_element_with_offset(canvas, x, y).click().perform()
         except:
             return False
-        #print('Click sur la ligne')
+        print('Click sur la ligne')
         try:
             element = WebDriverWait(driver, 2).until(
                 EC.visibility_of_element_located((By.CLASS_NAME,
@@ -216,14 +216,14 @@ def GetBet(driver,nextBet=False):
                     if len(list_of_newbet_type) >1:
                         getjeu_actuel = int(list_of_newbet_type[0].split("Jeu ")[1])
                         if str(config.jeu_actuel) == str(getjeu_actuel):
-                            #print('paris trouvé')
+                            print('paris trouvé')
                             clic = True
                             return clic
                         else:
-                            #print('mauvais jeu')
+                            print('mauvais jeu')
                             sautDeLigne = sautDeLigne + 30
                     else:
-                        #print('Mauvais paris')
+                        print('Mauvais paris')
                         sautDeLigne = sautDeLigne + 30
                         ligne = ligne + 1
                         print('ligne ' + str(ligne))
@@ -233,7 +233,7 @@ def GetBet(driver,nextBet=False):
             max_line = 8
         if config.systeme == 'Darwin':
             if y > size['height']/2 or ligne > max_line:
-                #print('size height :'+str(size['height'] ))
+                print('size height :'+str(size['height'] ))
                 #print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
                 sautDeLigne = 40
                 y = size['height'] / -2 + 10 + sautDeLigne
@@ -250,7 +250,8 @@ def GetBet(driver,nextBet=False):
                 y = size['height'] + sautDeLigne
                 ligne = 1
                 tentative = tentative + 1
+        i = i + 1
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver4 import driver
-    config.scriptType = '4030'
+    from ChromeDriver.SetDriver6 import driver
+    config.scriptType = '400'
     GetBet(driver,True)

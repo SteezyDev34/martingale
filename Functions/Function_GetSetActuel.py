@@ -1,11 +1,18 @@
 # Function_GetSetActuel.py
 # OBTENIR LE SET ACTUEL
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 import config
 
 
 def GetSetActuel(driver):
     try:
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.CLASS_NAME,
+                                              'ui-game-timer__label'))
+        )
         config.set_actuel = driver.find_elements(By.CLASS_NAME, 'ui-game-timer__label')[0].text
     except Exception as e:
         config.saveLog(f"#E0009\nUne erreur est survenue : {e}",config.newmatch)

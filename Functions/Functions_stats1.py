@@ -7,10 +7,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 ##
 ##FIN DEFINITION DES FONCTIONS
 from unidecode import unidecode
-proxy = {
-    "http": "http://auxobettingproxy:Scorpion971@223.29.227.155:51523",
-    "https": "http://auxobettingproxy:Scorpion971@223.29.227.155:51523",
-}
 def get_proba_40A_other(playerName1, playerName2,driver,link=False):
     prob_service_joueur1 = 0
     prob_service_joueur2 = 0
@@ -331,7 +327,7 @@ def get_proba_40A(playerName1, playerName2,cat='atp',surface='hard'):
         urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/"+cat+"/"+playerID1+"/2024/"+surface
         urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/" + cat + "/" + playerID2 + "/2024/" + surface
         time.sleep(1)
-        response = requests.get(urlplayer1, headers=headers, proxies=proxy)
+        response = requests.get(urlplayer1, headers=headers)
         time.sleep(1)
     except Exception as e:
         print(f'stat error : {e}')
@@ -348,7 +344,7 @@ def get_proba_40A(playerName1, playerName2,cat='atp',surface='hard'):
             prob_retour_joueur = float(data['ReturnRecordStats']['ReturnPointsWonPercentage']) / 100
             # Statistiques du joueur2
             time.sleep(1)
-            response = requests.get(urlplayer2, headers=headers, proxies=proxy)
+            response = requests.get(urlplayer2, headers=headers)
             time.sleep(1)
         except Exception as e:
             return 0
@@ -391,7 +387,7 @@ def get_wta_proba_40A(playerName1, playerName2):
         # print(urlplayer1)
         urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/wta/" + playerID2 + "/2024"
         # print(urlplayer2)
-        response = requests.get(urlplayer1, headers=headers, proxies=proxy)
+        response = requests.get(urlplayer1, headers=headers)
         time.sleep(1)
     except:
         return 0
@@ -407,7 +403,7 @@ def get_wta_proba_40A(playerName1, playerName2):
 
 
             # Statistiques du joueur2
-            response = requests.get(urlplayer2, headers=headers, proxies=proxy)
+            response = requests.get(urlplayer2, headers=headers)
         except:
             return 0
         else:

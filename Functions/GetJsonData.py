@@ -5,16 +5,13 @@ import config
 #config.ligue_name = "ATP"
 #config.perte = 10
 # Configuration du proxy
-proxy = {
-    "http": "http://auxobettingproxy:Scorpion971@223.29.227.173:51523",
-    "https": "http://auxobettingproxy:Scorpion971@223.29.227.173:51523",
-}
+
 def getPerte():
     if getCompetRecup():
         url = "http://p-com.studio/api/strategy"+config.scriptType+"/get_perte.php"
         try:
             # Envoyer une requête GET à l'URL
-            response = requests.get(url,proxies=proxy)
+            response = requests.get(url)
             # Vérifier que la requête a réussi
             response.raise_for_status()
             print(response.json())
@@ -41,7 +38,7 @@ def getGlobalPerte():
     url = "http://p-com.studio/api/strategy40A/get_global_perte.php"
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url,proxies=proxy)
+        response = requests.get(url)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         print(response.json())
@@ -68,7 +65,7 @@ def delPerte(id):
     url = "http://p-com.studio/api/strategy"+config.scriptType+"/del_perte.php?id="+str(id)
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url,proxies=proxy)
+        response = requests.get(url)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -92,7 +89,7 @@ def getCompetRecup():
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url,proxies=proxy)
+        response = requests.get(url)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -129,7 +126,7 @@ def getCompet():
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url,proxies=proxy)
+        response = requests.get(url)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -167,7 +164,7 @@ def SendPerte(scriptType,perte):
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url,proxies=proxy)
+        response = requests.get(url)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -194,7 +191,7 @@ def SendGlobalPerte(scriptType,mise):
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url,proxies=proxy)
+        response = requests.get(url)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse

@@ -1,20 +1,32 @@
+import time
+
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
 
 from Functions.GetIfMatchPage import GetIfMatchPage
 import config
 #from ChromeDriver.SetDriver1 import driver
 
+from selenium.webdriver.support import expected_conditions as EC
 
 def GetScoreActuel(driver):
     config.score_actuel = False
     get_score = False
+    tentative = 0
     while not get_score and not config.error:
         try:
+            score_teams = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.CLASS_NAME,
+                                                  'scoreboard-scores__item'))
+            )
             score_teams = driver.find_elements(By.CLASS_NAME,'scoreboard-scores__item')
         except Exception as e:
             print(f"#E0020\nUne erreur est survenue : {e}")
             GetIfMatchPage(driver)
-            config.error = True
+            tentative = tentative +1
+            time.sleep(1)
+            if tentative == 5:
+                config.error = True
         else:
             config.score_actuel =score_teams[0].text+':'+score_teams[1].text
             get_score = True

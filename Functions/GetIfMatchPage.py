@@ -47,20 +47,20 @@ def GetIfMatchPage(driver):
                 print(ul_text)
                 # Vérifier si le texte contient le mot "résume", indépendamment de la casse
                 if 'résume' in ul_text.lower():
-                    logTxt = "MATCH TERMINÉ! Retour sur https://1xlite-262783.top/fr/live/tennis"
+                    logTxt = "MATCH TERMINÉ! Retour sur https://ca.1xbet.com/fr/live/tennis"
                     config.saveLog(logTxt)
-                    driver.get('https://1xlite-262783.top/fr/live/tennis')
+                    driver.get('https://ca.1xbet.com/fr/live/tennis')
                     return False
                 else:
                     logTxt = "Ce n'est pas une page de match"
                     config.saveLog(logTxt)
-                    driver.get('https://1xlite-262783.top/fr/live/tennis')
+                    driver.get('https://ca.1xbet.com/fr/live/tennis')
                     return False
 
         else:
-            logTxt = "MATCH TERMINÉ! Retour sur https://1xlite-262783.top/fr/live/tennis"
+            logTxt = "MATCH TERMINÉ! Retour sur https://ca.1xbet.com/fr/live/tennis"
             config.saveLog( logTxt)
-            driver.get('https://1xlite-262783.top/fr/live/tennis')
+            driver.get('https://ca.1xbet.com/fr/live/tennis')
             return False
     else:
         logTxt = "PAGE MATCH OK!"

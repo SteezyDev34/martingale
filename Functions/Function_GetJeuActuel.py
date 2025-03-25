@@ -1,11 +1,18 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
 
 import Functions.Function_GetSetActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 import config
+from selenium.webdriver.support import expected_conditions as EC
+
 def GetJeuActuel(driver):
     config.jeu_actuel = 0
     try:
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.CLASS_NAME,
+                                              'scoreboard-periods-table__col'))
+        )
         config.jeu_actuel = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-table__col')
     except Exception as e:
         config.saveLog(f"#E0009\nUne erreur est survenue : {e}")

@@ -45,20 +45,20 @@ def all_script(driver):
         print("PERTE : ")
         if infosperte:
             if float(infosperte['perte']) > 100:
-                SendGlobalPerte(config.scriptType, -5)
-                config.perte = 2
+                SendGlobalPerte(config.scriptType, -10)
+                config.perte = 10
             elif float(infosperte['perte']) > 50:
-                SendGlobalPerte(config.scriptType, -3)
-                config.perte = 1
+                SendGlobalPerte(config.scriptType, -5)
+                config.perte = 5
             elif float(infosperte['perte']) > 20:
-                SendGlobalPerte(config.scriptType, -2)
-                config.perte = 0.5
+                SendGlobalPerte(config.scriptType, -3)
+                config.perte = 3
             elif float(infosperte['perte']) > 10:
-                SendGlobalPerte(config.scriptType, -1)
-                config.perte = 0.3
+                SendGlobalPerte(config.scriptType, -2)
+                config.perte = 2
             elif float(infosperte['perte']) > 1:
                 SendGlobalPerte(config.scriptType, -1)
-                config.perte = 0.2
+                config.perte = 1
             elif float(infosperte['perte']) <= 1:
                 config.perte = float(infosperte['perte'])
                 m = 0 - config.perte
@@ -82,6 +82,7 @@ def all_script(driver):
     passageset = False
     winmatch = 0
     config.lose =False
+    result = False
     while (float(winmatch) < float(config.nb_tour) and not config.error):
         # WAIT FOR GAME START
         GetJeuActuel(driver)
@@ -95,6 +96,10 @@ def all_script(driver):
             config.saveLog("attente 30 sec", config.newmatch)
             time.sleep(30)
             FirstGameBet(driver)
+        elif result == 'WIN':
+            config.saveLog("Restart", config.newmatch)
+            FirstGameBet(driver)
+            result = False
         elif (config.jeu_actuel+1)==13:
             GetJeuActuel(driver)
             GetIfGameEnd(driver)
@@ -223,7 +228,6 @@ def all_script(driver):
         elif result== 'WIN':
             config.perte = 0
             winmatch = winmatch +1
-            passageset = True
             DeleteBet(driver)
             if float(winmatch) >= float(config.nb_tour):
                 break
@@ -232,17 +236,17 @@ def all_script(driver):
             print("PERTE : ")
             if infosperte:
                 if float(infosperte['perte']) > 100:
+                    SendGlobalPerte(config.scriptType, -10)
+                    config.perte = 10
+                elif float(infosperte['perte']) > 50:
                     SendGlobalPerte(config.scriptType, -5)
                     config.perte = 5
-                elif float(infosperte['perte']) > 50:
+                elif float(infosperte['perte']) > 20:
                     SendGlobalPerte(config.scriptType, -3)
                     config.perte = 3
-                elif float(infosperte['perte']) > 20:
+                elif float(infosperte['perte']) > 10:
                     SendGlobalPerte(config.scriptType, -2)
                     config.perte = 2
-                elif float(infosperte['perte']) > 10:
-                    SendGlobalPerte(config.scriptType, -1)
-                    config.perte = 1
                 elif float(infosperte['perte']) > 1:
                     SendGlobalPerte(config.scriptType, -1)
                     config.perte = 1

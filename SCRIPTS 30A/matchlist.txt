@@ -57,7 +57,6 @@ michelsen-daniil-medvedev
 pavel-marcello-serafini
 lena-thomas-iglesias
 zhukayev-mae-malige
-pucinelli-de-almeida
 nedev-guido-andreozzi
 giron-arthur-fils
 fearnley-james-duckworth
@@ -69,3 +68,7 @@ sabalenka-sonay-kartal
 sabalenka-sonay-kartal
 sabalenka-sonay-kartal
 sabalenka-sonay-kartal
+mayo-trey-hilderbrand
+pablo-patino-samudio
+dimitrov-brandon-nakashima
+ce-fernanda-labrana

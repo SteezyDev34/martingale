@@ -12,10 +12,6 @@ elif systeme == "Windows":
     print("Vous êtes sur Windows")
 else:
     print(f"Système inconnu : {systeme}")
-proxy = {
-    "http": "http://auxobettingproxy:Scorpion971@223.29.227.173:51523",
-    "https": "http://auxobettingproxy:Scorpion971@223.29.227.173:51523",
-}
 def getJsonData(url):
     i =0
     while i<5:
@@ -23,7 +19,7 @@ def getJsonData(url):
         # URL du lien JSON de la strategy
         try:
             # Envoyer une requête GET à l'URL
-            response = requests.get(url,proxies=proxy)
+            response = requests.get(url)
             # Vérifier que la requête a réussi
             response.raise_for_status()
             # Parser le JSON depuis la réponse
