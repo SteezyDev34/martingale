@@ -152,6 +152,23 @@ def GetBet(driver,nextBet=False):
                                                       'ui-coupon-bet-market__name'))
                 )
             except Exception as e:
+                if config.systeme == 'Darwin':
+                    if i % 2 == 0:
+                        sautDeLigne = sautDeLigne
+                        decalageX = 50
+                    else:
+                        sautDeLigne = sautDeLigne + 30
+                        decalageX = size['width'] / -2 + 50
+                else:
+                    print('win')
+                    if i % 2 == 0:
+                        print('pair')
+                        sautDeLigne = sautDeLigne + 30
+                        decalageX = 50
+                    else:
+                        print('impair')
+                        sautDeLigne = sautDeLigne
+                        decalageX = size['width'] / 2 + 50
                 config.saveLog(f"#E0015\ Infos de paris non lisible : {e}")
             else:
                 list_of_newbet_type = list_of_bet_type.text

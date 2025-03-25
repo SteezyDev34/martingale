@@ -189,3 +189,4 @@ def saveLog(txt,prntxt =1, matchname=newmatch):
             print('erreur de log')
         if devMode or prntxt == 1:
             print(str(txt))
+print('config')
