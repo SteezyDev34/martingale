@@ -6,7 +6,7 @@ logScript*
 .eggs
 chromedriver.exe
 /GsheetsJson
-/DataFiles/*
+DataFiles/*
 SetDriver*
 .idea/prettier.xml
 .idea/php.xml
