@@ -89,9 +89,21 @@ if not os.path.exists(file_path):
         pass  # Le fichier est créé et immédiatement fermé
 
 # Ouvrez à nouveau le fichier en mode lecture
-with open(file_path, "r") as file1:
-    # Lisez le contenu du fichier
-    txt_after_write = file1.read()
+# Try different encodings when reading the file
+encodings = ['utf-8', 'latin-1', 'iso-8859-1', 'cp1252']
+txt_after_write = None
+
+for encoding in encodings:
+    try:
+        with open(file_path, 'r', encoding=encoding) as file1:
+            txt_after_write = file1.read()
+        break
+    except UnicodeDecodeError:
+        continue
+
+if txt_after_write is None:
+    raise Exception(f"Could not decode file {file_path} with any of the supported encodings")
+
 txt_after_write = txt_after_write.split('\n')
 try:
     if txt_after_write[0]!= str(today):

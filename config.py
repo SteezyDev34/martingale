@@ -73,6 +73,7 @@ score_to_start = [
 
 
 ]
+validated_bet = {}  # Définit validated_bet comme un dictionnaire vide au lieu d'une liste
 ligue_name = ""
 match_Url = ""
 newmatch = ""

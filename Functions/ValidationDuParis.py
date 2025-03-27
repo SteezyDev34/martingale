@@ -13,21 +13,35 @@ def ValidationDuParis(driver):
     tentative = 0
     print('validation paris')
     while not validation and tentative < 2:
+        print('Vérification des paris validés')
         print('tentative', str(tentative))
+        
+        # Vérification que le jeu actuel et le set actuel n'ont pas déjà été pariés
+        if hasattr(config, 'validated_bet') and config.validated_bet is not None:
+            current_game = getattr(config, 'jeu_actuel', None)
+            current_set = getattr(config, 'set_actuel', None)
+            
+            if (current_game is not None and current_set is not None and 
+                config.validated_bet.get('jeu') == current_game and
+                config.validated_bet.get('set') == current_set):
+                
+                config.saveLog(f"Ce jeu ({current_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.", 1, config.newmatch)
+                validation = True
+                break  # Sortir de la boucle si le jeu et le set ont déjà été pariés
         print('boucle validation paris')
         try:
             cpn_setting = driver.find_elements(By.CLASS_NAME, 'ui-number-input__field')[0]
             l = cpn_setting.get_attribute("value")
-            config.saveLog("mise insérée : " + str(l),config.newmatch)
+            config.saveLog("mise insérée : " + str(l),1,config.newmatch)
         except Exception as e:
             print(e)
             tentative+=1
-            config.saveLog('erreur verification mise',config.newmatch)
+            config.saveLog('erreur verification mise',1,config.newmatch)
             break
         else:
             if str(l) == str(config.mise):
                 sending_mise = 1
-                config.saveLog('RECHERCHE DU BOUTON PLACER UN PARIS',config.newmatch)
+                config.saveLog('RECHERCHE DU BOUTON PLACER UN PARIS',1,config.newmatch)
                 try:
                     element = WebDriverWait(driver, 3).until(
                         EC.presence_of_element_located((By.CLASS_NAME,
@@ -65,11 +79,11 @@ def ValidationDuParis(driver):
                                     try:
                                         WebDriverWait(driver, 3).until(EC.visibility_of_element_located((By.CLASS_NAME,"coupon-main-tab__preloader")))
                                     except:
-                                        config.saveLog('pas de loader',config.newmatch)
+                                        config.saveLog('pas de loader',1,config.newmatch)
                                         preloader = 0
                                     else:
                                         if printtext ==0:
-                                            config.saveLog('loading...',config.newmatch)
+                                            config.saveLog('loading...',1,config.newmatch)
                                             printtext = 1
 
                                 validation = ModalHandler(driver)
