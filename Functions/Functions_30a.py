@@ -82,6 +82,7 @@ def  all_script(driver):
     passageset = False
     winmatch = 0
     config.lose =False
+    result =False
     while (float(winmatch) <= float(config.nb_tour)):
         config.error=False
         GetJeuActuel(driver)
@@ -94,6 +95,10 @@ def  all_script(driver):
             config.saveLog("passage set 2", config.newmatch)
             config.saveLog("attente 30 sec", config.newmatch)
             time.sleep(30)
+            FirstGameBet(driver)
+        elif result == 'WIN':
+            config.error = False
+            config.saveLog("Restart", config.newmatch)
             FirstGameBet(driver)
         elif config.jeu_actuel==12:
             GetJeuActuel(driver)
@@ -193,6 +198,7 @@ def  all_script(driver):
                     config.wantwin = float(config.wantwin) + float(config.increment)
             # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
             RetourTpsReg(driver)
+            GetIfGameEnd(driver)
             #VÉRIFCATION DU SET ACTUEL
             config.saved_set = config.set_actuel
             GetSetActuel(driver)
@@ -222,7 +228,6 @@ def  all_script(driver):
         elif result== 'WIN':
             config.perte = 0
             winmatch = winmatch +1
-            passageset = True
             DeleteBet(driver)
             GetIfGameEnd(driver)
             if float(winmatch) >= float(config.nb_tour):

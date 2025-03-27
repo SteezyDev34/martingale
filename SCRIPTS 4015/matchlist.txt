@@ -51,7 +51,6 @@ colson-max-basing
 kudermetova-saisai-zheng
 ruse-taylor-townsend
 kuzuhara-ernesto-escobedo
-alejandro-moro-canas
 kudermetova-magda-linette
 sabalenka-ekaterina-alexandrova
 eubanks-reilly-opelka
@@ -83,3 +82,5 @@ giron-arthur-fils
 giron-arthur-fils
 djuric-stylianos-christodoulou
 nakashima-ben-shelton
+malaszszak-pawit-sornlaksup
+meerschen-aziz-ouakaa

@@ -159,6 +159,8 @@ def get_wta_proba_40A_other(playerName1, playerName2,driver,link=False):
                     if re.search(playerName.lower(), player_name.text.lower()):
                         print('find')
                         player.click()
+                    else:
+                        print('not found')
 
 
                     statTab = WebDriverWait(driver, 10).until(

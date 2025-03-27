@@ -196,7 +196,7 @@ def rechercheDeMatchNBA(driver):
     # END SCRIPT RECHERCHE DE MATCH
     return config.match_found
 def classementeDeMatch(driver):
-    driver.get('https://ca.1xbet.com/fr/live/tennis')
+    driver.get('https://ca.1xbet.com/fr/line/tennis')
     config.error = False
     print('RECHERCHE DE MATCH')
     config.match_found = False
@@ -211,7 +211,7 @@ def classementeDeMatch(driver):
         if not VerificationListeMatchLive(driver):
             config.error = True
             print("PAGE VIDE")
-            driver.get('https://ca.1xbet.com/fr/live/tennis')
+            driver.get('https://ca.1xbet.com/fr/line/tennis')
             return False
         # RECUPERATION DES LIGUES EN COURS
         bet_list_ligue = driver.find_elements(By.CLASS_NAME,
@@ -327,5 +327,5 @@ def classementeDeMatch(driver):
         break
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
-    rechercheDeMatch(driver)
+    from ChromeDriver.SetDriver6 import driver
+    classementeDeMatch(driver)

@@ -24,6 +24,9 @@ def RetourTpsReg(driver):
             config.saveLog(f"#E0012\nUne erreur est survenue : {e}")
             config.saveLog("ERROR : champ déroulant non trouvé")
             tentative = tentative +1
+            if tentative == 10:
+                config.error=True
+                break
             config.saveLog(str(tentative),  config.newmatch)
         else:
             select_form = driver.find_elements(By.CLASS_NAME, 'game-toolbar__sub-games-dropdown')
