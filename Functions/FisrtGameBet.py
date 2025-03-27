@@ -17,7 +17,7 @@ def FirstGameBet(driver):
     while not bet_40a and not config.error:
         if config.scriptType  == '30A':
             GetScoreActuel(driver)
-            if config.score_actuel != "0:15" or config.score_actuel != "15:0" or config.score_actuel != "15:15":
+            if config.score_actuel != "0:0" or config.score_actuel != "0:15" or config.score_actuel != "15:0" or config.score_actuel != "15:15":
                 config.saveLog('score : ' + config.score_actuel + ' ...first game passss', config.newmatch)
                 nextBet = True
         elif config.scriptType  == '15A':
