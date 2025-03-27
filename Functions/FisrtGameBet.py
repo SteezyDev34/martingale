@@ -18,27 +18,27 @@ def FirstGameBet(driver):
         if config.scriptType  == '30A':
             GetScoreActuel(driver)
             if config.score_actuel != "0:0" or config.score_actuel != "0:15" or config.score_actuel != "15:0" or config.score_actuel != "15:15":
-                config.saveLog('score : ' + config.score_actuel + ' ...first game passss', config.newmatch)
+                config.saveLog(f'score : {config.score_actuel} ...first game passss',1, config.newmatch)
                 nextBet = True
         elif config.scriptType  == '15A':
             GetScoreActuel(driver)
             if config.score_actuel != "0:0":
-                config.saveLog('score : ' + config.score_actuel + ' ...first game passss', config.newmatch)
+                config.saveLog(f'score : {config.score_actuel} ...first game passss', 1, config.newmatch)
                 nextBet = True
 
         txtlog = 'PREPARATION DU PREMIER PARIS'
-        config.saveLog(txtlog, config.newmatch)
+        config.saveLog(txtlog, 1, config.newmatch)
         #Affichage de la liste des paris
-        config.saveLog('Affichage de la liste des paris', config.newmatch)
+        config.saveLog('Affichage de la liste des paris',1, config.newmatch)
         if not AfficherParis(driver):
             config.error = True
             break
         #On recherche le jeu actuel
-        config.saveLog('liste des pariis affichée, On recherche le jeu actuel', config.newmatch)
+        config.saveLog('liste des pariis affichée, On recherche le jeu actuel', 1, config.newmatch)
         if not GetBet(driver,nextBet):
             tentative = tentative+1
             if tentative>5:
-                config.saveLog('error recup jeu #ERR345', config.newmatch)
+                config.saveLog('error recup jeu #ERR345',1,  config.newmatch)
                 config.error = True
             continue
 
@@ -50,7 +50,7 @@ def FirstGameBet(driver):
         tentative_placermise = 0
         validate_bet = False
         txtlog = 'On place la mise'
-        config.saveLog(txtlog, config.newmatch)
+        config.saveLog(txtlog, 1,config.newmatch)
         while not PlacerMise(driver) and not config.error and tentative_placermise < 3:
             tentative_placermise+=1
             if tentative_placermise == 5:
@@ -69,10 +69,10 @@ def FirstGameBet(driver):
             GetScoreActuel(driver)
             if config.score_actuel == "0:0" and not gamestart:
                 txtlog = "GAME NOT START"
-                config.saveLog(txtlog, config.newmatch)
+                config.saveLog(txtlog, 1, config.newmatch)
             elif config.score_actuel == "0:0" and gamestart:
                 txtlog = "GAME PASS WITHOUT VALIDATE ON FIRST"
-                config.saveLog(txtlog, config.newmatch)
+                config.saveLog(txtlog, 1, config.newmatch)
                 gamestart = False
                 break
             elif nextBet or  config.score_actuel == "40:40" or config.score_actuel == "40:A" or config.score_actuel == "A:40":
@@ -84,7 +84,7 @@ def FirstGameBet(driver):
             else:
                 gamestart = True
                 txtlog = "GAME START"
-                config.saveLog(txtlog, config.newmatch)
+                config.saveLog(txtlog, 1, config.newmatch)
             if ValidationDuParis(driver):
                 validate_bet = True
                 config.perte = float(config.perte) + float(config.mise)
