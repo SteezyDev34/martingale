@@ -6,7 +6,6 @@ dimitrov-nuno-borges
 sabalenka-mccartney-kessler
 pace-saumya-vig
 jing-jing-lu
-on-yu-choi
 genov-oleksii-krutykh
 zanolini-anastasia-abbagnato
 peniston-preston-brown
@@ -38,3 +37,13 @@ gerez-denis-obukhovsky
 park-dheeraj-kodancha
 fa-rodriguez-taverna
 stakusic-ana-konjuh
+juan-pablo-ficovich
+ponwith-ian-mayew
+jack-pinnington-jones
+mannarino-stefano-napolitano
+ostrensky-viktor-semko
+gabi-adrian-boitan
+didi-bredberg-canizares
+butulija-kirill-kivattsev
+moeller-clement-chidekh
+genaro-alberto-olivieri

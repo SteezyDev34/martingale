@@ -25,7 +25,7 @@ def GetIfMatchPage(driver):
             config.saveLog( logTxt)
             element = WebDriverWait(driver, 2).until(
                 EC.presence_of_element_located(
-                    (By.CLASS_NAME, 'old-layout__content'))
+                    (By.CLASS_NAME, 'old-layout'))
             )
         except:
             try:
