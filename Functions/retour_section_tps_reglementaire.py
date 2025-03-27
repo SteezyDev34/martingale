@@ -24,7 +24,7 @@ def RetourTpsReg(driver):
             config.saveLog(f"#E0012\nUne erreur est survenue : {e}")
             config.saveLog("ERROR : champ déroulant non trouvé")
             tentative = tentative +1
-            if tentative == 10:
+            if tentative ==9:
                 config.error=True
                 break
             config.saveLog(str(tentative),  config.newmatch)
