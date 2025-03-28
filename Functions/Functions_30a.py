@@ -229,7 +229,7 @@ def  all_script(driver):
             config.perte = 0
             winmatch = winmatch +1
             DeleteBet(driver)
-            GetIfGameEnd(driver)
+            #GetIfGameEnd(driver)
             if float(winmatch) >= float(config.nb_tour):
                 break
             print("#RECHERCHE INFOS DE MISE")
