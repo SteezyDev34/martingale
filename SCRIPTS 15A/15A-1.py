@@ -1,10 +1,10 @@
 print('START')
 import os
 
-#Chargement de Chrome driver
+# Chargement de Chrome driver
 from ChromeDriver.SetDriver3 import driver
 
-#Chargement des variables globales
+# Chargement des variables globales
 import config
 
 # Récupérer le nom du script
@@ -23,12 +23,11 @@ else:
     print("Le format du nom du fichier est incorrect.")
     exit()
 
-
-#Chargement des fonctions
+# Chargement des fonctions
 from Functions import Functions_15a
 from Functions.GetJsonData import DispatchPerte
-from Functions.ScriptRechercheDeMatch import  classementeDeMatch
-#classementeDeMatch(driver)
+
+# classementeDeMatch(driver)
 
 
 while (config.win < 100):
@@ -43,9 +42,9 @@ while (config.win < 100):
     sucess = False
     while not sucess:
         try:
-            driver.get('https://ca.1xbet.com/fr/live/tennis')
+            driver.get(config.site_url)
         except:
             continue
         else:
             sucess = True
-print('TOTAL WIN : '+str(config.win))
+print('TOTAL WIN : ' + str(config.win))

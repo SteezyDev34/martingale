@@ -1,10 +1,10 @@
 print('START')
 import os
 
-#Chargement de Chrome driver
+# Chargement de Chrome driver
 from ChromeDriver.SetDriver3 import driver
 
-#Chargement des variables globales
+# Chargement des variables globales
 import config
 
 # Récupérer le nom du script
@@ -23,26 +23,23 @@ else:
     print("Le format du nom du fichier est incorrect.")
     exit()
 
-
-#Chargement des fonctions
+# Chargement des fonctions
 from Functions import Functions_15a
 from Functions.GetJsonData import DispatchPerte
-
-
 
 while (config.win < 100):
     config.init_variable()
     tour = 0
     try:
-        while  tour < config.nb_tour:
-            tour +=1
+        while tour < config.nb_tour:
+            tour += 1
             Functions_15a.all_script(driver)
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:
         DispatchPerte()
     try:
-        driver.get('https://ca.1xbet.com/fr/live/tennis')
+        driver.get(config.site_url)
     except:
-        driver.get('https://ca.1xbet.com/fr/live/tennis')
-print('TOTAL WIN : '+str(config.win))
+        driver.get(config.site_url)
+print('TOTAL WIN : ' + str(config.win))

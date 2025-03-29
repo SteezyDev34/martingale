@@ -1,11 +1,10 @@
-
 print('START 40-15 1')
 import os
 
-#Chargement de Chrome driver
+# Chargement de Chrome driver
 from ChromeDriver.SetDriver5 import driver
 
-#Chargement des variables globales
+# Chargement des variables globales
 import config
 
 # Récupérer le nom du script
@@ -25,8 +24,8 @@ else:
     exit()
 from Functions.Functions_4015 import all_script
 from Functions.GetJsonData import DispatchPerte
-from Functions.ScriptRechercheDeMatch import  classementeDeMatch
-#classementeDeMatch(driver)
+
+# classementeDeMatch(driver)
 while (config.win < 100):
     config.init_variable()
     try:
@@ -38,7 +37,7 @@ while (config.win < 100):
     sucess = False
     while not sucess:
         try:
-            driver.get('https://ca.1xbet.com/fr/live/tennis')
+            driver.get(config.site_url)
         except:
             continue
         else:

@@ -1,72 +1,77 @@
-#Function_GetIfMatchPage
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-import config
-from ChromeDriver.SetDriver1 import driver
+# Function_GetIfMatchPage
+import time
 
-#VÉRIFIERR SI PAGE DE MATCH
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+import config
+
+
+# VÉRIFIERR SI PAGE DE MATCH
 def GetIfMatchPage(driver):
-    #driver.switch_to.window(driver.window_handles[0])
-    #logTxt = "Vérfication si page match..."
-    #config.saveLog( logTxt)
+    # driver.switch_to.window(driver.window_handles[0])
+    config.log('    🔎 Vérfication si page match', 'info', False)
     try:
-        logTxt = "On cherche le tableau des scores"
-        #config.saveLog( logTxt)
-        element = WebDriverWait(driver, 2).until(
+        config.log('         Recherche tableau des scores', 'info', False)
+        config.log('         CLASS="scoreboard-section__scroll"', 'info', False)
+        WebDriverWait(driver, 2).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'scoreboard-section__scroll'))
         )
     except:
-        logTxt = "Tableau des scores introuvable!"
-        config.saveLog( logTxt)
+        config.log_clear_line(2)
+        config.log('        ⚠️Tableau des scores introuvable!', 'warning', False)
+        config.log('         Recherche tableau des stats', 'info', False)
+        config.log('         CLASS="old-layout"', 'info', False)
         try:
-            logTxt ="On vérifie que le match ne soit pas terminé"
-            config.saveLog( logTxt)
             element = WebDriverWait(driver, 2).until(
                 EC.presence_of_element_located(
-                    (By.CLASS_NAME, 'old-layout'))
+                    (By.CLASS_NAME, 'statistic-frame'))
             )
         except:
+            config.log_clear_line(2)
+            config.log('        ⚠️Tableau des stats introuvable!', 'warning', False)
+            config.log('         Recherche tableau des résumé', 'info', False)
+            config.log('         CLASS="new-breadcrumbs"', 'info', False)
             try:
-                logTxt = "On vérifie que le match ne soit pas en résumé"
-                config.saveLog(logTxt)
                 ul_element = WebDriverWait(driver, 2).until(
                     EC.presence_of_element_located(
                         (By.CLASS_NAME, 'new-breadcrumbs'))
                 )
             except Exception as e:
-                logTxt = "Ce n'est pas une page de match"
-                print(f'{e}')
-                config.saveLog(logTxt)
+                config.log_clear_line(5)
+                config.log('    🔎 Ce n\'est pas une page de match', 'info', False)
+                time.sleep(1)
+                config.log_clear_line()
                 return False
             else:
-
+                config.log_clear_line(5)
                 # Récupérer le texte du <ul>
                 ul_text = ul_element.text
                 print(ul_text)
                 # Vérifier si le texte contient le mot "résume", indépendamment de la casse
                 if 'résume' in ul_text.lower():
-                    logTxt = "MATCH TERMINÉ! Retour sur https://ca.1xbet.com/fr/live/tennis"
-                    config.saveLog(logTxt)
-                    driver.get('https://ca.1xbet.com/fr/live/tennis')
+                    config.log('    🔎 MATCH TERMINÉ!', 'info', False)
+                    driver.get(config.site_url)
                     return False
                 else:
-                    logTxt = "Ce n'est pas une page de match"
-                    config.saveLog(logTxt)
-                    driver.get('https://ca.1xbet.com/fr/live/tennis')
+                    config.log('    🔎 Ce n\'est pas une page de résumé', 'info', False)
+                    driver.get(config.site_url)
                     return False
 
         else:
-            logTxt = "MATCH TERMINÉ! Retour sur https://ca.1xbet.com/fr/live/tennis"
-            config.saveLog( logTxt)
-            driver.get('https://ca.1xbet.com/fr/live/tennis')
+            config.log_clear_line(5)
+            config.log('    🔎 MATCH TERMINÉ!', 'info', False)
+            driver.get(config.site_url)
             return False
     else:
-        logTxt = "PAGE MATCH OK!"
-        #config.saveLog( logTxt)
+        config.log_clear_line(3)
+        config.log('    🔎 PAGE MATCH OK!', 'info', False)
         return True
+
 
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
+
     print(GetIfMatchPage(driver))

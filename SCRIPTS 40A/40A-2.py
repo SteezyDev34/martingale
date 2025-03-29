@@ -1,11 +1,22 @@
-print('START')
 import os
+import sys
 
-#Chargement de Chrome driver
-from ChromeDriver.SetDriver2 import driver
+# Récupérer le chemin absolu du fichier actuel
+current_file_path = os.path.abspath(__file__)
 
-#Chargement des variables globales
+# Récupérer le dossier parent du fichier actuel
+parent_directory = os.path.dirname(current_file_path)
+# ajouter un autre niveau parent si nécessaire
+project_directory = os.path.dirname(parent_directory)
+sys.path.append(project_directory)
+# Vérification de l'environnement
+
+# VenvDependencyManager.main()
+
+# Chargement des variables globales
 import config
+# Chargement de Chrome driver
+from ChromeDriver.SetDriver1 import driver
 
 # Récupérer le nom du script
 # Nom du fichier
@@ -17,33 +28,35 @@ parts = name_part.split('-')
 if len(parts) > 1:
     config.scriptType = parts[0]  # Suppose que le type est avant le tiret
     config.script_num = int(parts[1])  # Suppose que le numéro est avant le tiret
-    print(f"SCRIPT TYPE : {config.scriptType}")
-    print(f"SCRIPT NUM : {config.script_num}")
+
+    # sys.stdout.write(f"\rSCRIPT TYPE : {config.scriptType}")
+    # sys.stdout.write(f"\rSCRIPT NUM : {config.script_num}")
 else:
     print("Le format du nom du fichier est incorrect.")
     exit()
 
+# Chargement des functions
 
-#Chargement des fonctions
 from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
 
-
+# classementeDeMatch(driver)
 
 while (config.win < 100):
     config.init_variable()
-
-    tour = 0
+    Functions_40a_proba.all_script(driver)
     try:
-        while tour < config.nb_tour:
-            tour += 1
-            Functions_40a_proba.all_script(driver)
+        print('pass')
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:
         DispatchPerte()
-    try:
-        driver.get('https://ca.1xbet.com/fr/live/tennis/')
-    except:
-        continue
-print('TOTAL WIN : '+str(config.win))
+    sucess = False
+    while not sucess:
+        try:
+            driver.get(config.site_url)
+        except:
+            continue
+        else:
+            sucess = True
+print('TOTAL WIN : ' + str(config.win))

@@ -1,4 +1,4 @@
-2025-03-26
+2025-03-29
 Aryna Sabalenka|320760
 Iga Swiatek|326408
 Coco Gauff|328560
@@ -359,7 +359,7 @@ Zongyu Li|331259
 Aneta Kucmova|324656
 Tereza Martincova|318060
 Caroline Werner|319444
-Ana Sofia Sánchez|316694
+Ana Sofia SÃ¡nchez|316694
 Madison Sieg|328281
 Julie Belgraver|326766
 Dejana Radanovic|319706
@@ -390,7 +390,7 @@ Alexandra Shubladze|332168
 Beatrice Ricci|329308
 Anastasia Kulikova|323608
 Rina Saigo|326049
-Alizé Cornet|312121
+AlizÃ© Cornet|312121
 Julieta Estable|320090
 Lian Tran|327527
 Ekaterine Gorgodze|314660
@@ -402,7 +402,7 @@ Saki Imamura|326604
 Aurora Zantedeschi|325404
 Jenny Duerst|322627
 Martyna Kubka|328907
-Malene Helgø|323055
+Malene HelgÃ¸|323055
 Deborah Chiesa|319393
 Polina Iatcenko|330466
 Usue Maitane Arconada|321195
