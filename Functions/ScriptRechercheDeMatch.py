@@ -190,7 +190,7 @@ def rechercheDeMatchNBA(driver):
                                                                    'c-events-scoreboard__lines_tennis')
                         except:
                             txtlog = "Impossible de récupérer le score"
-                            config.saveLog(txtlog, 0, config.newmatch)
+                            config.log(txtlog, 0, config.newmatch)
                             print(txtlog)
                             continue
                         else:
@@ -224,7 +224,7 @@ def rechercheDeMatchNBA(driver):
                 break
 
         if not config.match_found:
-            config.saveLog('PAS DE MATCH TROUVE', 1)
+            config.log('PAS DE MATCH TROUVE', 1)
             driver.get('https://1xbet.com/fr/live/basketball/')
 
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE
@@ -303,7 +303,7 @@ def classementeDeMatch(driver):
                                 for player in players:
                                     player = player.text.split('(')[0]
                                     player = player.strip()
-                                    config.saveLog(player, config.newmatch)
+                                    config.log(player, config.newmatch)
                                     players_name.append(player)
                                 match.append(players_name)
                                 match.append(config.ligue_name)
@@ -320,7 +320,7 @@ def classementeDeMatch(driver):
                             except Exception as e:
                                 print(e)
                                 txtlog = "Impossible de récupérer le score"
-                                config.saveLog(txtlog, 0, config.newmatch)
+                                config.log(txtlog, 0, config.newmatch)
                                 print(txtlog)
                                 continue
                             else:

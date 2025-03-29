@@ -114,9 +114,9 @@ def getCompetRecup():
         print(f"Pas de compet {e}")
     else:
         compet_ok_list = compets["compet_recup_ok"]
-        config.saveLog(compet_ok_list, 1)
+        config.log(compet_ok_list, 1)
         compet_not_ok_list = compets["compet_recup_not_ok"]
-        config.saveLog(compet_not_ok_list, 1)
+        config.log(compet_not_ok_list, 1)
         try:
             if any(compet_ok in config.ligue_name for compet_ok in
                    compet_ok_list) and not any(
@@ -154,9 +154,9 @@ def getCompet():
         config.log(f'        Pas de données de compet : {e}', 'warning', False)
     else:
         compet_ok_list = compets["compet_ok"]
-        # config.saveLog(compet_ok_list,0)
+        # config.log(compet_ok_list,0)
         compet_not_ok_list = compets["compet_not_ok"]
-        # config.saveLog(compet_not_ok_list,0)
+        # config.log(compet_not_ok_list,0)
 
         try:
             if any(compet_ok in config.ligue_name for compet_ok in

@@ -116,7 +116,7 @@ def GetBet(driver, nextBet=False):
             )
         except Exception as e:
             tentative_clic += 1
-            config.saveLog('tentative_clic : ' + str(tentative_clic))
+            config.log('tentative_clic : ' + str(tentative_clic))
 
             if tentative_clic == 3:
                 config.log('Pas d\'infos, suivant...')
@@ -164,7 +164,7 @@ def GetBet(driver, nextBet=False):
                     else:
                         sautDeLigne = sautDeLigne
                         decalageX = size['width'] / 2 + 50
-                config.saveLog(f"#E0015\ Infos de paris non lisible : {e}")
+                config.log(f"#E0015\ Infos de paris non lisible : {e}")
             else:
                 list_of_newbet_type = list_of_bet_type.text
                 # print(list_of_newbet_type)

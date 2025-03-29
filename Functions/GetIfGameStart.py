@@ -15,7 +15,7 @@ def GetIfGameStart(driver):
             if not config.score_actuel:
                 config.error = True
             if not printext:
-                config.saveLog('GAME NOT START')
+                config.log('GAME NOT START')
                 printext = True
             time.sleep(1)  # attente 20 sec que le jeu commence
             # END GET SCORE

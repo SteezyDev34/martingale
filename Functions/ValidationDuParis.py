@@ -33,24 +33,24 @@ def ValidationDuParis(driver):
         try:
             cpn_setting = driver.find_elements(By.CLASS_NAME, 'ui-number-input__field')[0]
             l = cpn_setting.get_attribute("value")
-            config.saveLog("mise insérée : " + str(l))
+            config.log("mise insérée : " + str(l))
         except Exception as e:
             config.log(e)
             tentative += 1
-            config.saveLog('erreur verification mise')
+            config.log('erreur verification mise')
             break
         else:
             if str(l) == str(config.mise):
                 sending_mise = 1
-                config.saveLog('RECHERCHE DU BOUTON PLACER UN PARIS')
+                config.log('RECHERCHE DU BOUTON PLACER UN PARIS')
                 try:
                     element = WebDriverWait(driver, 3).until(
                         EC.presence_of_element_located((By.CLASS_NAME,
                                                         'coupon-buttons'))
                     )
                 except Exception as e:
-                    config.saveLog(f"#E0021\nUne erreur est survenue : {e}")
-                    config.saveLog('zone de bouton non trouvé!')
+                    config.log(f"#E0021\nUne erreur est survenue : {e}")
+                    config.log('zone de bouton non trouvé!')
                     tentative = tentative + 1
                     validation = ModalHandler(driver)
                 else:
@@ -59,9 +59,9 @@ def ValidationDuParis(driver):
                         cpn_setting = driver.find_elements(By.CLASS_NAME, 'ui-number-input__field')[0]
                         l = cpn_setting.get_attribute(
                             "value")
-                        config.saveLog("mise insérrer : " + str(l))
+                        config.log("mise insérrer : " + str(l))
                     except Exception as e:
-                        config.saveLog(f"#E005689\nUne erreur est survenue : {e}")
+                        config.log(f"#E005689\nUne erreur est survenue : {e}")
                         tentative = tentative + 1
                         validation = ModalHandler(driver)
                     else:
@@ -260,7 +260,7 @@ def ValidationDuParis4030(driver, mise):
                                             config.log('        impossible de cliqué sur ok')
                                         else:
                                             modal_wrapper = \
-                                            driver.find_elements(By.CLASS_NAME, 'c-coupon-modal__wrapper')[0]
+                                                driver.find_elements(By.CLASS_NAME, 'c-coupon-modal__wrapper')[0]
                                             modal_wrapper.find_elements(By.TAG_NAME,
                                                                         'button')[0].click()
                                             fenetre_validation = 1

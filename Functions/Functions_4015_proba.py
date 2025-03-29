@@ -52,45 +52,44 @@ def all_script(driver):
         config.error = True
     # --------
 
-
-    print('config.ligue_name : '+config.ligue_name)
+    print('config.ligue_name : ' + config.ligue_name)
 
     ##PREPARATTION PREMIER PARIS
-    config.saveLog('PREPARATION DU PREMIER PARIS',config.newmatch)
+    config.log('PREPARATION DU PREMIER PARIS', config.newmatch)
     bet_40a = False
     while not bet_40a and not config.error:
-        #Affichage de la liste des paris
-        config.saveLog('Affichage de la liste des paris',config.newmatch)
+        # Affichage de la liste des paris
+        config.log('Affichage de la liste des paris', config.newmatch)
         if not AfficherParis4030(driver):
             config.error = True
             break
-        #On recherche le jeu actuel
-        config.saveLog('liste des pariis affichée, On recherche le jeu actuel',config.newmatch)
+        # On recherche le jeu actuel
+        config.log('liste des pariis affichée, On recherche le jeu actuel', config.newmatch)
         jeu = GetBet4015(driver)
 
         if not jeu[0]:
             config.error = True
-            config.saveLog('error recup jeu #ERR345',config.newmatch)
+            config.log('error recup jeu #ERR345', config.newmatch)
         else:
             win_scor15 = jeu[1]
-        config.saveLog('Premier PAris 40A cliqué',config.newmatch)
+        config.log('Premier PAris 40A cliqué', config.newmatch)
         send_mise = 0
-        #ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
+        # ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
         GetMise4030(driver)
-        print('perte'+str(config.perte))
+        print('perte' + str(config.perte))
         if config.proba40A < 0.39 and config.cote < 3.4:
-            if config.perte >0:
+            if config.perte > 0:
                 print('teretet')
-                #Functions_gsheets.suivi_lost4030()
-            #bet_40a = True
-            #config.error = True
-            #config.saveLog('Cote trop faible 0,2',config.newmatch)
-            #break
+                # Functions_gsheets.suivi_lost4030()
+            # bet_40a = True
+            # config.error = True
+            # config.log('Cote trop faible 0,2',config.newmatch)
+            # break
         tentative_placermise = 0
         validate_bet = False
-        config.saveLog('On place la mise',config.newmatch)
-        while not PlacerMise4030(driver,config.mise) and not config.error and tentative_placermise < 5:
-            tentative_placermise+=1
+        config.log('On place la mise', config.newmatch)
+        while not PlacerMise4030(driver, config.mise) and not config.error and tentative_placermise < 5:
+            tentative_placermise += 1
             if tentative_placermise == 5:
                 validate_bet = True
             else:
@@ -98,18 +97,18 @@ def all_script(driver):
         gamestart = False
         tentative = 0
         config.saved_score = ""
-        config.saveLog('On vérifie le score pour valider le paris',config.newmatch)
+        config.log('On vérifie le score pour valider le paris', config.newmatch)
         ##VALIDATION DU PARIS SI SCORE OK
         while not validate_bet and not config.error and tentative < 30:
             # VÉRIFICATION DU SCORE ACTUEL
             GetScoreActuel(driver)
             config.saved_score = config.score_actuel
             if config.score_actuel == "0:0" and not gamestart:
-                config.saveLog("GAME NOT START",config.newmatch)
+                config.log("GAME NOT START", config.newmatch)
             elif config.score_actuel == "0:0" and gamestart:
                 validate_bet = True
                 config.jeu_actuel += 1
-                config.saveLog("GAME PASS WITHOUT VALIDATE ON FIRST",config.newmatch)
+                config.log("GAME PASS WITHOUT VALIDATE ON FIRST", config.newmatch)
                 gamestart = False
                 result = True
                 lose = True
@@ -120,31 +119,31 @@ def all_script(driver):
                     win_score15 = '15:40'
             else:
                 gamestart = True
-                config.saveLog("GAME START",config.newmatch)
+                config.log("GAME START", config.newmatch)
             if ValidationDuParis4030(driver, config.mise):
                 validate_bet = True
                 bet_40a = True
-                config.jeu_actuel +=1
+                config.jeu_actuel += 1
                 config.perte = float(config.perte) + float(config.mise)
                 config.wantwin = float(config.wantwin) + float(config.increment)
-                config.saveLog("prochain jeu : " + str(config.jeu_actuel), config.newmatch)
-                config.saveLog("wantwin : " + str(config.wantwin), config.newmatch)
-                config.saveLog("perte : " + str(config.perte), config.newmatch)
-                config.saveLog("mise : " + str(config.mise), config.newmatch)
-                config.saveLog("increment : " + str(config.increment), config.newmatch)
+                config.log("prochain jeu : " + str(config.jeu_actuel), config.newmatch)
+                config.log("wantwin : " + str(config.wantwin), config.newmatch)
+                config.log("perte : " + str(config.perte), config.newmatch)
+                config.log("mise : " + str(config.mise), config.newmatch)
+                config.log("increment : " + str(config.increment), config.newmatch)
             else:
                 GetJeuActuel(driver)
                 tentative = tentative + 1
                 validate_bet = True
-                config.saveLog("Erreur lor de la validation, nouvelle tentative",config.newmatch)
+                config.log("Erreur lor de la validation, nouvelle tentative", config.newmatch)
 
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
-    config.saveLog("retour tps reg 1",config.newmatch)
+    config.log("retour tps reg 1", config.newmatch)
     RetourTpsReg(driver)
     ### AND PREPARE FIRST GAME
     passageset = False
     winmatch = 0
-    config.lose =False
+    config.lose = False
     lose = False
     while (winmatch <= 0 and not config.error):
         print("wzit")
@@ -156,8 +155,8 @@ def all_script(driver):
             config.jeu_actuel = 0
             if config.rattrape_perte > 0:
                 config.error = False
-                config.saveLog("passage set 2",config.newmatch)
-                config.saveLog("attente 30 sec",config.newmatch)
+                config.log("passage set 2", config.newmatch)
+                config.log("attente 30 sec", config.newmatch)
                 time.sleep(30)
             else:
                 config.error = True
@@ -175,20 +174,20 @@ def all_script(driver):
             ##ATTENTE QUE LE JEU COMMENCE
             GetIfGameStart(driver)
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
-        config.saveLog("JEU COMMENCÉ ON PREPARE LE PROCHAIN BET",config.newmatch)
+        config.log("JEU COMMENCÉ ON PREPARE LE PROCHAIN BET", config.newmatch)
         bet_40a = False
         while not bet_40a and not config.error:
 
             # Affichage de la liste des paris
-            config.saveLog('Affichage de la liste des paris',config.newmatch)
+            config.log('Affichage de la liste des paris', config.newmatch)
             if not AfficherParis4030(driver):
                 config.error = True
                 break
             # On recherche le jeu actuel
             GetJeuActuel(driver)
-            config.saveLog('liste des paris affichée, On recherche le jeu actuel',config.newmatch)
+            config.log('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
             if passageset:
-                print("jeu 1 > "+str(config.jeu_actuel))
+                print("jeu 1 > " + str(config.jeu_actuel))
                 jeu = GetBet4015(driver)
                 passageset = False
             else:
@@ -196,14 +195,14 @@ def all_script(driver):
                 jeu = GetNextBet4015(driver)
             if not jeu[0]:
                 config.error = True
-                config.saveLog('error recup jeu #ERR345',config.newmatch)
+                config.log('error recup jeu #ERR345', config.newmatch)
             else:
                 win_score15 = jeu[1]
                 bet_40a = True
 
-            config.saveLog('prochain PAris 40A cliqué',config.newmatch)
+            config.log('prochain PAris 40A cliqué', config.newmatch)
         # ON ENVOIE LA MISE
-        config.saveLog("ON ENVOIE LA MISE",config.newmatch)
+        config.log("ON ENVOIE LA MISE", config.newmatch)
         send_mise = False
         GetMise4030(driver)
         while not send_mise and not config.error:
@@ -212,7 +211,7 @@ def all_script(driver):
             else:
                 config.error = True
         ##ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
-        config.saveLog("ON ATTEND LE RESULTAT POUR VALIDER LE PARIS",config.newmatch)
+        config.log("ON ATTEND LE RESULTAT POUR VALIDER LE PARIS", config.newmatch)
         validate_bet = False
         config.saved_score = ""
         config.saved_set = ""
@@ -231,9 +230,9 @@ def all_script(driver):
                 lose = False
                 winmatch = True
                 DeleteBet(driver)
-                config.saveLog('WIN',config.newmatch)
+                config.log('WIN', config.newmatch)
             elif config.score_actuel == '0:0' and saved_score != win_score15:
-                config.saveLog('LOSE',config.newmatch)
+                config.log('LOSE', config.newmatch)
                 validate_bet = False
                 tentative = 0
                 gamestart = False
@@ -242,18 +241,18 @@ def all_script(driver):
 
                 config.saved_set = config.set_actuel
                 config.set_actuel = False
-                config.saveLog("vide sec actu " + str(config.set_actuel),config.newmatch)
+                config.log("vide sec actu " + str(config.set_actuel), config.newmatch)
                 GetSetActuel(driver)
-                newset = int(config.saved_set) +1
+                newset = int(config.saved_set) + 1
                 if not config.set_actuel:
                     config.error = True
-                config.saveLog('set ' + str(config.set_actuel)+' - saved set '+str(config.saved_set),config.newmatch)
+                config.log('set ' + str(config.set_actuel) + ' - saved set ' + str(config.saved_set), config.newmatch)
                 if str(config.saved_set) == str(config.set_actuel):  ## si on est toujours sur le meme set
-                    config.saveLog('on est toujours sur le meme set',config.newmatch)
+                    config.log('on est toujours sur le meme set', config.newmatch)
 
                     if config.jeu_actuel >= 13:  # SI TIE BREAK
-                        config.saveLog("jeu "+str(config.jeu_actuel),config.newmatch)
-                        config.saveLog("attente fin de tie break",config.newmatch)
+                        config.log("jeu " + str(config.jeu_actuel), config.newmatch)
+                        config.log("attente fin de tie break", config.newmatch)
                         passageset = True
                     else:
                         ##VALIDATION DU PARIS SI SCORE OK
@@ -262,13 +261,13 @@ def all_script(driver):
                             GetScoreActuel(driver)
                             if config.score_actuel == False:
                                 config.error = True
-                                config.saveLog("error pendant la récupération du score",config.newmatch)
+                                config.log("error pendant la récupération du score", config.newmatch)
                             if config.score_actuel == "0:0" and not gamestart:
-                                config.saveLog("GAME NOT START",config.newmatch)
+                                config.log("GAME NOT START", config.newmatch)
                             elif config.score_actuel == "0:0" and gamestart:
                                 validate_bet = False
                                 config.jeu_actuel += 1
-                                config.saveLog("GAME PASS WITHOUT VALIDATE",config.newmatch)
+                                config.log("GAME PASS WITHOUT VALIDATE", config.newmatch)
                                 gamestart = False
                                 result = True
                                 lose = True
@@ -276,24 +275,24 @@ def all_script(driver):
                                 ###ajouter ici les actions avant de reprendre
                             else:
                                 gamestart = True
-                            if ValidationDuParis4030(driver,config.mise):
+                            if ValidationDuParis4030(driver, config.mise):
                                 validate_bet = True
                                 config.jeu_actuel += 1
                                 config.perte = float(config.perte) + float(config.mise)
                                 config.wantwin = float(config.wantwin) + float(config.increment)
                                 bet_40a = True
-                                config.saveLog("prochain jeu : " + str(config.jeu_actuel),config.newmatch)
-                                config.saveLog("wantwin : " + str(config.wantwin),config.newmatch)
-                                config.saveLog("perte : " + str(config.perte),config.newmatch)
-                                config.saveLog("mise : " + str(config.mise),config.newmatch)
-                                config.saveLog("increment : " + str(config.increment),config.newmatch)
+                                config.log("prochain jeu : " + str(config.jeu_actuel), config.newmatch)
+                                config.log("wantwin : " + str(config.wantwin), config.newmatch)
+                                config.log("perte : " + str(config.perte), config.newmatch)
+                                config.log("mise : " + str(config.mise), config.newmatch)
+                                config.log("increment : " + str(config.increment), config.newmatch)
                             else:
                                 getjeu = config.jeu_actuel
                                 GetJeuActuel(driver)
                                 tentative = tentative + 1
-                                if getjeu != config.jeu_actuel+1:
+                                if getjeu != config.jeu_actuel + 1:
                                     validate_bet = False
-                                    config.jeu_actuel =int(config.jeu_actuel)+ 1
+                                    config.jeu_actuel = int(config.jeu_actuel) + 1
                                     print("GAME PASS WITHOUT VALIDATE #2#")
                                     gamestart = False
                                     result = True
@@ -301,10 +300,10 @@ def all_script(driver):
                                     findbtn = True
                                     break
                         # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
-                        config.saveLog("retour tps reg 3",config.newmatch)
+                        config.log("retour tps reg 3", config.newmatch)
                         RetourTpsReg(driver)
                 elif str(newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
-                    config.saveLog("SI ON EST SUR LE PROCHAIN SET",config.newmatch)
+                    config.log("SI ON EST SUR LE PROCHAIN SET", config.newmatch)
                     findset = True
                     findbtn = True
                     validate = True
@@ -312,23 +311,23 @@ def all_script(driver):
                     result = True
                     lose = True
                     config.score_actuel = '0:0'
-                    config.saveLog('Passage prochain set',config.newmatch)
+                    config.log('Passage prochain set', config.newmatch)
                     DeleteBet(driver)
-                    config.saveLog('Waiit 30 sec',config.newmatch)
+                    config.log('Waiit 30 sec', config.newmatch)
                     time.sleep(30)
                 else:
                     print("ERROR : recup set " + str(config.set_actuel))
                     config.error = True
             else:
                 result = False
-                #config.set_actuel = "nac"
-                #GetSetActuel(driver)
-                #config.saved_set = config.set_actuel
+                # config.set_actuel = "nac"
+                # GetSetActuel(driver)
+                # config.saved_set = config.set_actuel
                 if not config.set_actuel:
                     config.error = False
                 else:
                     if config.saved_score != config.score_actuel:
-                        config.saveLog(str(config.score_actuel),config.newmatch)
+                        config.log(str(config.score_actuel), config.newmatch)
                         config.saved_score = config.score_actuel
                     numset = int(config.set_actuel.split(' ')[0])
                     newset = int(config.set_actuel.split(' ')[0]) + 1
@@ -351,7 +350,7 @@ def all_script(driver):
             config.increment = 0
             config.wantwin = 0.2
             break
-        else :
+        else:
             print('no lose')
             print(winmatch)
             print(config.error)
@@ -374,7 +373,7 @@ def all_script(driver):
 
         config.mise = (float(config.wantwin) + float(perte)) / (float(config.cote) - 1)
         config.mise = round(config.mise, 2)
-        config.perte= perte
+        config.perte = perte
         Functions_gsheets.suivi_lost4030()
     infos = [config.win, config.perte, config.wantwin, config.mise]
     print("update " + config.newmatch)

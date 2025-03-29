@@ -1,7 +1,8 @@
 # GetInfosDeMise.py
-#RÉCUPRER LES PERTE 40 A DE LA LIGUE
+# RÉCUPRER LES PERTE 40 A DE LA LIGUE
 import config
 from config import GSheets
+
 
 def get_compet_recup_ok():
     # open the google spreadsheet (where 'PY to Gsheet Test' is the name of my sheet)
@@ -24,7 +25,9 @@ def get_compet_recup_ok():
     print('compet_RECUP_not_ok_list')
     print(compet_RECUP_not_ok_list)
 
-    return[compet_RECUP_ok_list,compet_RECUP_not_ok_list]
+    return [compet_RECUP_ok_list, compet_RECUP_not_ok_list]
+
+
 def get_compet_recup_ok30():
     # open the google spreadsheet (where 'PY to Gsheet Test' is the name of my sheet)
     sh = GSheets.open('BOT 1XBET PYTHON')
@@ -46,7 +49,9 @@ def get_compet_recup_ok30():
     print('compet_RECUP_not_ok_list')
     print(compet_RECUP_not_ok_list)
 
-    return[compet_RECUP_ok_list,compet_RECUP_not_ok_list]
+    return [compet_RECUP_ok_list, compet_RECUP_not_ok_list]
+
+
 def get_perte_en_cours(ligue_name):
     print('get perte en cours')
     # open the google spreadsheet (where 'PY to Gsheet Test' is the name of my sheet)
@@ -56,14 +61,14 @@ def get_perte_en_cours(ligue_name):
     # Updates values in a row from 1st column
     row = wk1.get_all_values()
     rows = len(row)
-    i=0
+    i = 0
     try:
-        if rows ==1 and wk1.get_row(rows, returnas='matrix', include_tailing_empty=True)==['', '', '','']:
+        if rows == 1 and wk1.get_row(rows, returnas='matrix', include_tailing_empty=True) == ['', '', '', '']:
             config.rattrape_perte = 0
             print('no recup data')
             return False
         else:
-            #LISTE DES COMPET QUI PEUVENT FAIRE DU RATTRAPAGE
+            # LISTE DES COMPET QUI PEUVENT FAIRE DU RATTRAPAGE
             compet_recup_ok_list = get_compet_recup_ok()
             compet_ok_list = compet_recup_ok_list[0]
             compet_not_ok_list = compet_recup_ok_list[1]
@@ -71,9 +76,9 @@ def get_perte_en_cours(ligue_name):
             try:
                 print('try get reecup data')
                 if (any(compet_ok in ligue_name for compet_ok in
-                       compet_ok_list) and not any(
+                        compet_ok_list) and not any(
                     compet_not_ok in ligue_name for
-                    compet_not_ok in compet_not_ok_list)) or config.proba40A >0.4:
+                    compet_not_ok in compet_not_ok_list)) or config.proba40A > 0.4:
 
                     while rows != 0:
                         data = wk1.get_row(rows, returnas='matrix', include_tailing_empty=True)
@@ -107,6 +112,8 @@ def get_perte_en_cours(ligue_name):
                 return False
     except:
         return False
+
+
 def get_perte_en_cours30(ligue_name):
     print('get perte en cours 30')
     # open the google spreadsheet (where 'PY to Gsheet Test' is the name of my sheet)
@@ -116,16 +123,16 @@ def get_perte_en_cours30(ligue_name):
     # Updates values in a row from 1st column
     row = wk1.get_all_values()
     rows = len(row)
-    i=0
+    i = 0
     print('ini gett per')
     try:
-        if rows ==1 and wk1.get_row(rows, returnas='matrix', include_tailing_empty=True)==['', '', '','']:
+        if rows == 1 and wk1.get_row(rows, returnas='matrix', include_tailing_empty=True) == ['', '', '', '']:
             config.rattrape_perte = 0
             print('no recup data')
             return False
         else:
             config.rattrape_perte = 1
-            #LISTE DES COMPET QUI PEUVENT FAIRE DU RATTRAPAGE
+            # LISTE DES COMPET QUI PEUVENT FAIRE DU RATTRAPAGE
             compet_recup_ok_list = get_compet_recup_ok30()
             compet_ok_list = compet_recup_ok_list[0]
             compet_not_ok_list = compet_recup_ok_list[1]
@@ -133,9 +140,9 @@ def get_perte_en_cours30(ligue_name):
             try:
                 print('try get reecup data')
                 if (any(compet_ok in ligue_name for compet_ok in
-                       compet_ok_list) and not any(
+                        compet_ok_list) and not any(
                     compet_not_ok in ligue_name for
-                    compet_not_ok in compet_not_ok_list)) or config.proba40A >0.4:
+                    compet_not_ok in compet_not_ok_list)) or config.proba40A > 0.4:
 
                     while rows != 0:
                         data = wk1.get_row(rows, returnas='matrix', include_tailing_empty=True)
@@ -168,8 +175,10 @@ def get_perte_en_cours30(ligue_name):
                 return False
     except:
         return False
-#INFOS DE MISE
-#SUPPRIMER LA PERTE RRÉCUPÉRÉE DU TABLEAU
+
+
+# INFOS DE MISE
+# SUPPRIMER LA PERTE RRÉCUPÉRÉE DU TABLEAU
 def del_perte_en_cours(rows):
     # open the google spreadsheet (where 'PY to Gsheet Test' is the name of my sheet)
     sh = GSheets.open('BOT 1XBET PYTHON')
@@ -178,12 +187,14 @@ def del_perte_en_cours(rows):
     # Updates values in a row from 1st column
     row = wk1.get_all_values()
     nbrows = len(row)
-    if rows ==0:
-        wk1.update_row(rows, ["","","",""], col_offset=0)
+    if rows == 0:
+        wk1.update_row(rows, ["", "", "", ""], col_offset=0)
     elif nbrows == 1:
         wk1.update_row(rows, ["", "", "", ""], col_offset=0)
     else:
         wk1.delete_rows(rows, number=1)
+
+
 def del_perte_en_cours30(rows):
     # open the google spreadsheet (where 'PY to Gsheet Test' is the name of my sheet)
     sh = GSheets.open('BOT 1XBET PYTHON')
@@ -192,13 +203,15 @@ def del_perte_en_cours30(rows):
     # Updates values in a row from 1st column
     row = wk1.get_all_values()
     nbrows = len(row)
-    if rows ==0:
-        wk1.update_row(rows, ["","","",""], col_offset=0)
+    if rows == 0:
+        wk1.update_row(rows, ["", "", "", ""], col_offset=0)
     elif nbrows == 1:
         wk1.update_row(rows, ["", "", "", ""], col_offset=0)
     else:
         wk1.delete_rows(rows, number=1)
-#RÉCUPÉRER LES PERTES GÉNÉRALES
+
+
+# RÉCUPÉRER LES PERTES GÉNÉRALES
 def get_perte_generale():
     # open the google spreadsheet (where 'PY to Gsheet Test' is the name of my sheet)
     sh = GSheets.open('BOT 1XBET PYTHON')
@@ -212,22 +225,24 @@ def get_perte_generale():
         return 0
     else:
         return float(wk1.get_value('B4').replace(",", "."))
-def main(ligue_name,rattrape_perte,perte,wantwin,mise,increment,proba40A, type = '40'):
+
+
+def main(ligue_name, rattrape_perte, perte, wantwin, mise, increment, proba40A, type='40'):
     print("RECHERCHDES DES INFOS DE MISE...")
-    #ON RÉCUPÈRE LES PERTES EN COURS SELON LA LIGUE
+    # ON RÉCUPÈRE LES PERTES EN COURS SELON LA LIGUE
     if type == '30':
         infos = get_perte_en_cours30(ligue_name)
-    else :
+    else:
         infos = get_perte_en_cours(ligue_name)
     r = 0.5
     if infos != False:
         lost_compet = infos[3].strip().lower()
-        if r >0.40:
+        if r > 0.40:
             if infos[0] != "":
                 perte = (infos[0].replace(",", "."))
             else:
                 perte = 0
-            if infos[1] !="":
+            if infos[1] != "":
                 wantwin = float(infos[1].replace(",", "."))
             else:
                 wantwin = 0.2
@@ -241,7 +256,7 @@ def main(ligue_name,rattrape_perte,perte,wantwin,mise,increment,proba40A, type =
                 del_perte_en_cours(infos[4])
 
         elif rattrape_perte == 0:
-            config.saveLog("rettrape === 0")
+            config.log("rettrape === 0")
         print("perte : " + str(
             perte) + " | wantwin : " + str(
             wantwin) + " | mise : " + str(mise))
@@ -249,4 +264,4 @@ def main(ligue_name,rattrape_perte,perte,wantwin,mise,increment,proba40A, type =
         print("retour perte : " + str(
             perte) + " | wantwin : " + str(
             wantwin) + " | mise : " + str(mise))
-    return [perte,wantwin,mise,increment,rattrape_perte]
+    return [perte, wantwin, mise, increment, rattrape_perte]
