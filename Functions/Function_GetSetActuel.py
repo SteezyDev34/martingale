@@ -10,7 +10,7 @@ import config
 
 
 def GetSetActuel(driver):
-    config.log('        Récupératon du set actuel', '', False)
+    config.log('Récupératon du set actuel', '', False, 3)
     try:
         WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CLASS_NAME,
@@ -27,18 +27,18 @@ def GetSetActuel(driver):
             numset = config.set_actuel.split(' ')[0]
             numset = int(''.join(char for char in numset if char.isdigit()))
         except Exception as e:
-            config.log('        #E0010 erreur : numset', 'warning', True)
+            config.log('#E0010 erreur : numset', 'warning', True, 3)
             time.sleep(2)
             config.log_clear_line()
             return False
         else:
             config.set_actuel = str(numset)
             if config.saved_set != config.set_actuel:
-                config.log('        Nouveau Set actuel : ' + str(config.set_actuel), '', True)
+                config.log('Nouveau Set actuel : ' + str(config.set_actuel), '', True, 3)
                 config.log_clear_line()
                 return True
             else:
-                config.log('        Set actuel : ' + str(config.set_actuel), '', True)
+                config.log('Set actuel : ' + str(config.set_actuel), '', True, 3)
                 config.log_clear_line()
                 return True
 

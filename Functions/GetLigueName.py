@@ -9,7 +9,7 @@ def main(bet_ligue):
     try:
         div_ligue_name = bet_ligue.find_element(By.TAG_NAME, 'div')
     except Exception as e:
-        config.log('        Lecture nom ligue impossible!', 'warning', False)
+        config.log('Lecture nom ligue impossible!', 'warning', False, 2)
         config.ligue_name = False
         config.log_clear_line()
     else:
@@ -19,7 +19,7 @@ def main(bet_ligue):
             config.ligue_name = config.ligue_name.text.lower()
             config.ligue_name = config.ligue_name.replace('.', '')
         except Exception as e:
-            config.log(f'        #E0005\nUne erreur est survenue : {e}', 'warning', False)
+            config.log(f'#E0005 Une erreur est survenue : {e}', 'warning', False, 2)
             config.ligue_name = False
             config.log_clear_line()
     return config.ligue_name

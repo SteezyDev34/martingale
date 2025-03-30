@@ -28,11 +28,11 @@ Berrettini|bk40
 Popyrin|p09z
 Lehecka|l0bv
 Shapovalov|su55
+Mensik|m0ni
 Mpetshi Perricard|m0gz
 Tabilo|te30
 Nakashima|n0ae
 Michelsen|m0qi
-Mensik|m0ni
 Thompson|tc61
 Baez|b0bi
 Griekspoor|gj37
@@ -87,9 +87,9 @@ Walton|w09e
 Norrie|n771
 O'Connell|o483
 van de Zandschulp|v812
+Duckworth|d994
 Fucsovics|f724
 Kokkinakis|kd46
-Duckworth|d994
 Collignon|c0jp
 Nardi|n0bg
 Monteiro|mj08
@@ -124,6 +124,7 @@ Hanfmann|h997
 Daniel|da81
 Ritschard|rc04
 Coria|ce77
+Cilic|c977
 Moreno De Alboran|mw18
 Cerundolo|c0c8
 Spizzirri|s0ja
@@ -131,19 +132,18 @@ Quinn|q02l
 Kym|k0ep
 Purcell|ph71
 Garin|gd64
-Cilic|c977
 Ofner|o513
 Virtanen|v0am
 Mayot|m0g4
 Nagal|n897
 Burruchaga|b0fv
+Moller|m0k4
 Gomez|gj16
 Krueger|kc12
 Harris|hg86
 Diaz Acosta|d0cg
 Mannarino|me82
 Taberner|te16
-Moller|m0k4
 Kovalik|kc04
 Barrios Vera|bs86
 Gasquet|g628
@@ -188,6 +188,7 @@ Mena|mj98
 Bouquier|b0er
 Nava|n0am
 Karatsev|kc56
+Zhukayev|z09z
 Shimizu|s0aq
 Gigante|g0gd
 Rodionov|r09x
@@ -203,7 +204,6 @@ Evans|e687
 Butvilas|b0mm
 Dougaz|df88
 Squire|s0ak
-Zhukayev|z09z
 Onclin|o0a2
 Neumayer|n0cs
 Droguet|d0dw

@@ -1,11 +1,10 @@
 print('START')
 import os
 
-# Chargement de Chrome driver
-from ChromeDriver.SetDriver2 import driver
-
 # Chargement des variables globales
 import config
+# Chargement de Chrome driver
+from ChromeDriver.SetDriver1 import driver
 
 # Récupérer le nom du script
 # Nom du fichier
@@ -40,9 +39,9 @@ while (config.win < 100):
     sucess = False
     while not sucess:
         try:
-            driver.get(config.site_url)
+            driver.get('https://ca.1xbet.com/fr/live/tennis')
         except:
             continue
         else:
             sucess = True
-print('TOTAL WIN : ' + str(config.win))
+print('TOTAL WIN : '+str(config.win))

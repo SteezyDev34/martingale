@@ -11,7 +11,7 @@ from Functions.Function_GetJeuActuel import GetJeuActuel
 
 
 def GetBet(driver, nextBet=False):
-    config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', True)
+    config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', True, 2)
     DeleteBet(driver)
     if_get_jeu = False
     clic = False
@@ -164,7 +164,7 @@ def GetBet(driver, nextBet=False):
                     else:
                         sautDeLigne = sautDeLigne
                         decalageX = size['width'] / 2 + 50
-                config.log(f"#E0015\ Infos de paris non lisible : {e}")
+                config.log(f"#E0015 Infos de paris non lisible")
             else:
                 list_of_newbet_type = list_of_bet_type.text
                 # print(list_of_newbet_type)

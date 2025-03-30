@@ -8,6 +8,7 @@ from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
+from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetBet import GetBet
 from Functions.GetIfGameStart import GetIfGameStart, GetIfGameEnd
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
@@ -15,6 +16,7 @@ from Functions.GetMise import GetMise
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.PlacerMise import PlacerMise
+from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.ValidationDuParis import ValidationDuParis
 from Functions.VerificationMatchTrouve import newmatchFromUrl
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
@@ -24,11 +26,12 @@ def all_script(driver):
     # driver.switch_to.window(driver.window_handles[0])
     lose = True
     # Mise à jour du fichier txt des script en cours
-    # scriptDelRunning()
+    #
+    scriptDelRunning()
     # --------
     # SCRIPT RECHERCHE DE MATCH
-    """while not rechercheDeMatch(driver):
-        config.error = True"""
+    while not rechercheDeMatch(driver):
+        config.error = True
     # --------
     config.match_found = True
     if config.match_found and not config.error:

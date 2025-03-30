@@ -64,7 +64,7 @@ def getGlobalPerte():
     else:
         if float(pertes["perte"]) > 0:
             config.rattrape_perte = 1
-        config.log(f'        Perte global : {str(pertes["perte"])}', 'info', False)
+        config.log(f'Perte global : {str(pertes["perte"])}', 'info', False, 2)
 
         return pertes
 
@@ -133,7 +133,7 @@ def getCompetRecup():
 
 
 def getCompet():
-    config.log('        Recherche compet', 'info', False)
+    config.log('Recherche compet', 'info', False, 3)
     url = "http://p-com.studio/api/strategy" + config.scriptType + "/get_compet.php"
     # URL du lien JSON de la strategy
     try:
@@ -145,13 +145,13 @@ def getCompet():
         compets = response.json()
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
-        config.log(f'        Erreur lors de la récupération des données : {e}', 'warning', False)
+        config.log(f'Erreur lors de la récupération des données : {e}', 'warning', False, 3)
         return
     except json.JSONDecodeError as e:
-        config.log(f'        Erreur lors du parsing du JSON : {e}', 'warning', False)
+        config.log(f'Erreur lors du parsing du JSON : {e}', 'warning', False, 3)
         return
     except Exception as e:
-        config.log(f'        Pas de données de compet : {e}', 'warning', False)
+        config.log(f'Pas de données de compet : {e}', 'warning', False, 3)
     else:
         compet_ok_list = compets["compet_ok"]
         # config.log(compet_ok_list,0)
@@ -163,17 +163,17 @@ def getCompet():
                    compet_ok_list) and not any(
                 compet_not_ok in config.ligue_name for
                 compet_not_ok in compet_not_ok_list):
-                config.log(f'        Ligue OK!', 'info', True)
+                config.log(f'Ligue OK!', 'info', True, 3)
                 config.log_clear_line()
                 return True
 
             else:
-                config.log(f'        Ligue NOT OK!', 'warning', True)
+                config.log(f'Ligue NOT OK!', 'warning', True, 3)
                 config.log_clear_line()
                 return False
 
         except Exception as e:
-            config.log(f'        Erreur get compet : {e}', 'warning', False)
+            config.log(f'Erreur get compet : {e}', 'warning', False, 3)
             return False
 
 
@@ -227,7 +227,7 @@ def SendGlobalPerte(scriptType, mise):
         print(f"Pas d'envoi de perte {e}")
     else:
         if result['status'] == "success":
-            config.log(f"        {str(mise)} insert in strategy" + str(scriptType), 'info', False)
+            config.log(f"{str(mise)} insert in strategy" + str(scriptType), 'info', False, 2)
             return True
         else:
             config.log(f"        {result}", 'info', False)

@@ -32,80 +32,80 @@ def rechercheDeMatch(driver):
             return False"""
         try:
             # RECUPERATION DES LIGUES EN COURS
-            config.log('    🔎 Récupération des ligues', 'info', False)
+            config.log('🔎 Récupération des ligues', 'info', False, 1)
             bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                                   'dashboard-champ')
         except:
-            config.log('        ⚠️ligues introuvables!', 'warning', True)
+            config.log('⚠️ligues introuvables!', 'warning', True, 2)
             config.error = True
             config.log_clear_line()
             return False
         else:
-            config.log('        ligues trouvées!', 'success', False)
+            config.log('ligues trouvées!', 'success', False, 2)
             # POUR CHAQUE LIGUE RÉCUPÉRÉE
             for bet_ligue in bet_list_ligue:
                 # ON RÉCUPÈRE LE NOM DE LA LIGUE
                 config.ligue_name = GetLigueName.main(bet_ligue)
                 # EN CAS D'ERREUR
                 if not config.ligue_name:
-                    config.log('        nom ligues introuvalbe!', 'warning', False)
+                    config.log('nom ligues introuvalbe!', 'warning', False, 2)
                     config.log_clear_line()
                     config.error = False
                     continue
                 # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-                config.log('        🏟️ ' + config.ligue_name, 'info', True)
+                config.log('🏟️ ' + config.ligue_name, 'info', True, 2)
                 if getCompet():
                     # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
                     try:
-                        config.log('        Récupération des matchs', 'info', False)
+                        config.log('Récupération des matchs', 'info', False, 3)
                         bet_items = bet_ligue.find_elements(By.CLASS_NAME,
                                                             'dashboard-game-block')
                     except:
-                        config.log('        ⚠️Listes des matchs introuvables!', 'warning', False)
+                        config.log('⚠️Listes des matchs introuvables!', 'warning', False, 3)
                         # s'il y une erreur on passe au suivant
                         config.log_clear_line(2)
                         continue
                     else:
                         if len(bet_items) <= 0:
-                            config.log('        ⚠️Listes des matchs introuvables!', 'warning', False)
+                            config.log('⚠️Listes des matchs introuvables!', 'warning', False, 3)
                             # s'il y une erreur on passe au suivant
                             config.log_clear_line(2)
                             continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
                         for bet_item in bet_items:
                             try:
-                                config.log('        On récupère le nom des joueurs', 'info', True)
+                                config.log('On récupère le nom des joueurs', 'info', True, 3)
                                 div_bet_player = bet_item.find_element(By.CLASS_NAME, 'ui-team-scores__teams')
                             except:
-                                config.log('        Impossible de récpérer les joueurs!', 'warning', False)
+                                config.log('Impossible de récpérer les joueurs!', 'warning', False, 3)
                                 config.log_clear_line()
                                 continue
                             else:
                                 if div_bet_player:
                                     div_bet_player = div_bet_player.text.split('\n')
-                                    config.log('        ' + str(div_bet_player), 'info', True)
+                                    config.log(str(div_bet_player), 'info', True, 3)
                                 try:
                                     # on récupère le score
                                     div_bet_score = bet_item.find_elements(By.CLASS_NAME,
                                                                            'ui-game-scores')
                                 except:
 
-                                    config.log('        ⚠️Impossible de récupérer le score!', 'warning', False)
+                                    config.log('⚠️Impossible de récupérer le score!', 'warning', False, 4)
                                     time.sleep(2)
                                     config.log_clear_line()
                                     continue
                                 else:
                                     # si le score est récupéré
                                     if len(div_bet_score) <= 0:
-                                        config.log('        ⚠️Pas de score!', 'warning', False)
+                                        config.log('⚠️Pas de score!', 'warning', False, 4)
                                         time.sleep(2)
                                         config.log_clear_line()
                                         continue
                                     # on le vérifie
-                                    config.log('        Vérification du score!', 'info', False)
+                                    config.log('Vérification du score!', 'info', False, 4)
                                     bet_score = GetMatchScore.main(div_bet_score[0],
                                                                    config.score_to_start)
                                     if bet_score:  # SI LE MATCH EST PRET
-                                        config.log('        Score ok', 'info', True)
+                                        config.log('Score ok', 'info', True, 4)
                                         # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
                                         config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
                                                                                        config.matchlist_file_name)
@@ -115,13 +115,13 @@ def rechercheDeMatch(driver):
                                                                        config.running_file_name,
                                                                        config.matchlist_file_name):
                                                 config.newmatch = config.newmatch[1]
-                                                config.log('        ' + config.newmatch, 'info', True)
+                                                config.log(config.newmatch, 'info', True, 4)
                                                 config.match_found = True
                                                 break
                                             else:
                                                 continue
                                     else:
-                                        config.log('        Score NOT ok', 'warning', True)
+                                        config.log('Score NOT ok', 'warning', True, 4)
                                         config.log_clear_line()
                                 config.log_clear_line()
                 if config.match_found:
@@ -129,12 +129,13 @@ def rechercheDeMatch(driver):
                     break
 
         if not config.match_found:
-            config.log('        PAS DE MATCH TROUVE!', 'warning', True)
+            config.log('PAS DE MATCH TROUVE!', 'warning', True, 2)
             config.log_clear_line(2)
             driver.get(config.site_url)
+            time.sleep(5)
         else:
-            config.log('        MATCH TROUVE!', 'success', True)
-            time.sleep(10)
+            config.log('MATCH TROUVE!', 'success', True, 2)
+            time.sleep(5)
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE
     # END SCRIPT RECHERCHE DE MATCH
     return config.match_found
@@ -365,5 +366,15 @@ def classementeDeMatch(driver):
 
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
+    import sys
+    import os
 
+    # Récupérer le chemin absolu du fichier actuel
+    current_file_path = os.path.abspath(__file__)
+
+    # Récupérer le dossier parent du fichier actuel
+    parent_directory = os.path.dirname(current_file_path)
+    # ajouter un autre niveau parent si nécessaire
+    project_directory = os.path.dirname(parent_directory)
+    sys.path.append(project_directory)
     rechercheDeMatch(driver)

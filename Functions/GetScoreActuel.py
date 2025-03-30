@@ -33,7 +33,7 @@ def GetScoreActuel(driver):
             config.score_actuel = score_teams[0].text + ':' + score_teams[1].text
             get_score = True
             if config.saved_score != config.score_actuel:
-                config.log('        Score actuel : ' + str(config.score_actuel), '', False)
+                config.log('Score actuel : ' + str(config.score_actuel), '', False, 2)
             config.saved_score = config.score_actuel
     return True
 

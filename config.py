@@ -212,9 +212,15 @@ GREEN = "\033[32m"  # Texte vert
 BLUE = "\033[34m"  # Texte bleu
 CYAN = "\033[36m"  # Texte cyan
 RED = "\033[31m"  # Texte rouge
+PURPLE = "\033[35m"
+BGPURPLE = "\033[45m"
+BGCYAN = "\033[46m"
+BGBLUE = "\033[44m"
+BGRESET = "\033[40m"
 
 
-def log(message, type="", clear=True):
+def log(message, type="", clear=True, indent=0):
+    clear = False
     """
     Affiche un message dans le terminal tout en effaçant dynamiquement la ligne précédente si demandé.
 
@@ -236,23 +242,26 @@ def log(message, type="", clear=True):
         color = RED
     else:
         color = RESET  # Par défaut, pas de couleur
-
+    if indent > 0:
+        indent = "____" * indent
+    else:
+        indent = ""
     if clear:
-        # Calculer la longueur du dernier message pour l’effacement complet
+        # Calculer la longueur du dernier message pour l’eX ffacement complet
         previous_message_length = len(log_message)
         # Effacer la ligne précédente
         log_clear_line()
+
         # Afficher le nouveau message sur la même ligne
-        sys.stdout.write(f"{color}{message}{RESET}\n")
+        sys.stdout.write(f"{color}{indent}{message}{RESET}\n")
     else:
         # Afficher le message sur une nouvelle ligne
-        sys.stdout.write(f"{color}{message}{RESET}\n")
+        sys.stdout.write(f"{color}{indent}{message}{RESET}\n")
 
     sys.stdout.flush()
     # Mettre à jour la variable globale log_message avec le nouveau message
     log_message = message
     saveLog(message)
-    time.sleep(0.5)
 
 
 import sys
@@ -269,6 +278,6 @@ def log_clear_line(line_number=1):
         for _ in range(line_number):
             sys.stdout.write("clear\n")
     else:
-        for _ in range(line_number):
-            sys.stdout.write("\033[F\033[K\r")  # Remonter une ligne et l'effacer
-    time.sleep(0.5)
+        time.sleep(0)
+        # for _ in range(line_number):
+        # sys.stdout.write("\033[F\033[K\r")  # Remonter une ligne et l'effacer

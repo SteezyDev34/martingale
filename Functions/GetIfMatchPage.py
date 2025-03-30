@@ -68,6 +68,7 @@ def GetIfMatchPage(driver):
     else:
         config.log_clear_line(3)
         config.log('    🔎 PAGE MATCH OK!', 'info', False)
+        config.log_clear_line()
         return True
 
 
