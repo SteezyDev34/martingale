@@ -130,7 +130,7 @@ def init_variable():
     match_list = []  # List des matchs
     match_done_key = ""  # Nom du match dans Gsheets
     match_found = False  # Match valide trouvé
-    
+    validated_bet = []
     url = f"http://p-com.studio/api/strategy{scriptType}/"
     strategy = getJsonData(url)
     

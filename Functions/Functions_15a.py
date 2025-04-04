@@ -45,21 +45,21 @@ def all_script(driver):
         print("PERTE : ")
         if infosperte:
             if float(infosperte['perte']) > 100:
-                SendGlobalPerte(config.scriptType, -10)
-                config.perte = 10
-            elif float(infosperte['perte']) > 50:
-                SendGlobalPerte(config.scriptType, -5)
-                config.perte = 5
-            elif float(infosperte['perte']) > 20:
-                SendGlobalPerte(config.scriptType, -3)
-                config.perte = 3
-            elif float(infosperte['perte']) > 10:
                 SendGlobalPerte(config.scriptType, -2)
                 config.perte = 2
-            elif float(infosperte['perte']) > 1:
+            elif float(infosperte['perte']) > 50:
                 SendGlobalPerte(config.scriptType, -1)
                 config.perte = 1
-            elif float(infosperte['perte']) <= 1:
+            elif float(infosperte['perte']) > 20:
+                SendGlobalPerte(config.scriptType, -0.5)
+                config.perte = 0.5
+            elif float(infosperte['perte']) > 10:
+                SendGlobalPerte(config.scriptType, -0.3)
+                config.perte = 0.3
+            elif float(infosperte['perte']) > 1:
+                SendGlobalPerte(config.scriptType, -0.2)
+                config.perte = 0.2
+            elif float(infosperte['perte']) <= 0.2:
                 config.perte = float(infosperte['perte'])
                 m = 0 - config.perte
                 SendGlobalPerte(config.scriptType, m)
@@ -227,6 +227,7 @@ def all_script(driver):
                 config.error = True
         elif result== 'WIN':
             config.perte = 0
+            config.init_variable()
             winmatch = winmatch +1
             DeleteBet(driver)
             if float(winmatch) >= float(config.nb_tour):
@@ -236,21 +237,21 @@ def all_script(driver):
             print("PERTE : ")
             if infosperte:
                 if float(infosperte['perte']) > 100:
-                    SendGlobalPerte(config.scriptType, -10)
-                    config.perte = 10
-                elif float(infosperte['perte']) > 50:
-                    SendGlobalPerte(config.scriptType, -5)
-                    config.perte = 5
-                elif float(infosperte['perte']) > 20:
-                    SendGlobalPerte(config.scriptType, -3)
-                    config.perte = 3
-                elif float(infosperte['perte']) > 10:
                     SendGlobalPerte(config.scriptType, -2)
                     config.perte = 2
-                elif float(infosperte['perte']) > 1:
+                elif float(infosperte['perte']) > 50:
                     SendGlobalPerte(config.scriptType, -1)
                     config.perte = 1
-                elif float(infosperte['perte']) <= 1:
+                elif float(infosperte['perte']) > 20:
+                    SendGlobalPerte(config.scriptType, -0.5)
+                    config.perte = 0.5
+                elif float(infosperte['perte']) > 10:
+                    SendGlobalPerte(config.scriptType, -0.3)
+                    config.perte = 0.3
+                elif float(infosperte['perte']) > 1:
+                    SendGlobalPerte(config.scriptType, -0.2)
+                    config.perte = 0.2
+                elif float(infosperte['perte']) <= 0.2:
                     config.perte = float(infosperte['perte'])
                     m = 0 - config.perte
                     SendGlobalPerte(config.scriptType, m)

@@ -228,6 +228,7 @@ def  all_script(driver):
         elif result== 'WIN':
             config.perte = 0
             winmatch = winmatch +1
+            config.init_variable()
             DeleteBet(driver)
             #GetIfGameEnd(driver)
             if float(winmatch) >= float(config.nb_tour):
