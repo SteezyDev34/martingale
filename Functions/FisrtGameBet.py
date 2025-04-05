@@ -16,7 +16,7 @@ def FirstGameBet(driver):
     while not bet_40a and not config.error:
         if config.scriptType == '30A':
             GetScoreActuel(driver)
-            if config.score_actuel != "0:0" or config.score_actuel != "0:15" or config.score_actuel != "15:0" or config.score_actuel != "15:15":
+            if config.score_actuel != "0:0" and config.score_actuel != "0:15" and config.score_actuel != "15:0" and config.score_actuel != "15:15":
                 config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
                 nextBet = True
         elif config.scriptType == '15A' or config.scriptType == '030' or config.scriptType == '300':
