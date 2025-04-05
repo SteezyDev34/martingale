@@ -128,13 +128,13 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
     prob = 0
     ok = 0
     playersName = [playerName1, playerName2]
-    while ok == 0 and tentative < 1:
+    while ok == 0 and tentative < 4:
         i = 1
         try:
             for playerName in playersName:
                 print(playerName)
                 driver.get('https://www.wtatennis.com/rankings/singles')
-                element = WebDriverWait(driver, 20).until(
+                element = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located(
                         (By.CLASS_NAME, 'rankings__list'))
                 )
@@ -144,7 +144,7 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
                 time.sleep(2)
                 fieldplayer1 = driver.find_elements(By.CLASS_NAME, 'player-search__input')[0]
                 fieldplayer1.send_keys(playerName)
-                element = WebDriverWait(driver, 20).until(
+                element = WebDriverWait(driver, 10).until(
                     EC.visibility_of_element_located(
                         (By.CLASS_NAME, 'rankings__row'))
                 )
@@ -251,6 +251,7 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
                 print('Proba 40 A = ' + str(prob))
                 return prob
         except:
+            tentative = tentative+1
             continue
     if link:
         driver.get(link)
