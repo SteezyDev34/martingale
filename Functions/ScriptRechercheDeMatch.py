@@ -19,11 +19,11 @@ def rechercheDeMatch(driver):
     config.match_found = False
     while not config.match_found and not config.error:
         # config.init_variable()
-        # config.match_found = GetIfMatchPage(driver)
-        config.match_found = False
+        config.match_found = GetIfMatchPage(driver)
+        # config.match_found = False
         # SCRIPT RECHERCHE DE MATCH
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-        # GetIfScriptsRunning()
+        GetIfScriptsRunning()
         # VERIFICATION SI PAGE DE LIST LIVE"""
         """if not VerificationListeMatchLive(driver):
             config.error = True

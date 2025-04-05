@@ -1,8 +1,8 @@
 import time
 
 import config
+from Functions.GetBet import GetBet
 from Functions.GetScoreActuel import GetScoreActuel
-from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def GetResult(driver):
@@ -12,7 +12,8 @@ def GetResult(driver):
     config.saved_set = ""
     timesleep = 1  # TEMPS D'ATTENTE AVANT DE RECUPERER LE SCORE PASSE À 1 SI 40 DANS LE SCORE
     result = False
-    RetourTpsReg(driver)
+    win = False
+    # RetourTpsReg(driver)
     while not result and not config.error:
         time.sleep(timesleep)
         previous_score = config.score_actuel
@@ -53,14 +54,48 @@ def GetResult(driver):
                 result = 'LOSE'
                 config.log(result, config.newmatch)
                 return result
+        elif config.scriptType == '030' or config.scriptType == '300':
+            passed_score = [
+                '40:15',
+                '15:40',
+                '30:40',
+                '40:30'
+                '40:0',
+                '0:40',
+                '30:15',
+                '15:30',
+                '40:40',
+                '40:A',
+                'A:40'
+                '15:15'
+            ]
+            if not win and config.score_actuel == config.win_type:
+                print('win score = ' + config.win_type)
+                win = 'WIN'
+                print('win = ' + win)
+                config.log(result, config.newmatch)
+            if config.score_actuel in passed_score:
+                if not win:
+                    print('win score = ' + config.win_type)
+                    win = 'LOSE'
+                config.log(win, config.newmatch)
+                result = win
+                return result
         elif config.scriptType == '4030' or config.scriptType == '4015':
-            print('previous_score = ' + previous_score)
-            print('xin score = ' + config.win_type)
             if config.score_actuel == '0:0' and previous_score == config.win_type:
                 result = 'WIN'
                 config.log(result, config.newmatch)
                 return result
             elif config.score_actuel == '0:0' and previous_score != config.win_type:
+                result = 'LOSE'
+                config.log(result, config.newmatch)
+                return result
+        elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
+            if config.score_actuel == '0:0' and previous_score in config.win_type:
+                result = 'WIN'
+                config.log(result, config.newmatch)
+                return result
+            elif config.score_actuel == '0:0' and previous_score not in config.win_type:
                 result = 'LOSE'
                 config.log(result, config.newmatch)
                 return result
@@ -84,5 +119,7 @@ def GetResult(driver):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
+    config.scriptType = '030'
+    GetBet(driver, True)
     driver.switch_to.window(driver.window_handles[0])
     GetResult(driver)

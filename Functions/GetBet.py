@@ -82,7 +82,46 @@ def GetBet(driver, nextBet=False):
                     win_texte = '0-40'
                     config.win_type = '40:0'  # inversé
                     sType = "Jeu " + str(config.jeu_actuel) + " 0-40, Joueur " + str(first_player)
-
+        if config.scriptType == '030':
+            scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
+            scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
+            first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
+            sType = "Receveur Va Mener 30-0"
+            if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
+                first_player = 1
+                if config.scriptType == '030':
+                    config.win_type = '30:0'  # inversé
+                    win_texte = '30-0'
+            else:
+                first_player = 2
+                if config.scriptType == '030':
+                    config.win_type = '0:30'  # inversé
+                    win_texte = '30-0'
+        if config.scriptType == '300':
+            scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
+            scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
+            first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
+            sType = "Serveur Va Mener 30-0"
+            if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
+                first_player = 1
+                config.win_type = '0:30'  # inversé
+                win_texte = '30-0'
+            else:
+                first_player = 2
+                config.win_type = '30:0'  # inversé
+                win_texte = '30-0'
+        if config.scriptType == '6P':
+            sType = ", 6"
+            config.win_type = ['40:30', '30:40']  # inversé
+            win_texte = ', 6'
+        if config.scriptType == '5P':
+            sType = ", 5"
+            config.win_type = ['40:15', '15:40']  # inversé
+            win_texte = ', 5'
+        if config.scriptType == '4P':
+            sType = ", 4"
+            config.win_type = ['40:0', '0:40']  # inversé
+            win_texte = ', 4'
         # print('i '+str(i))
         GetJeuActuel(driver)
         if nextBet:
@@ -150,24 +189,27 @@ def GetBet(driver, nextBet=False):
                                                       'ui-coupon-bet-market__name'))
                 )
             except Exception as e:
-                if config.systeme == 'Darwin':
-                    if i % 2 == 0:
-                        sautDeLigne = sautDeLigne
-                        decalageX = 50
+                if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
+
+                    if config.systeme == 'Darwin':
+                        if i % 2 == 0:
+                            sautDeLigne = sautDeLigne
+                            decalageX = 50
+                        else:
+                            sautDeLigne = sautDeLigne + 30
+                            decalageX = size['width'] / -2 + 50
                     else:
-                        sautDeLigne = sautDeLigne + 30
-                        decalageX = size['width'] / -2 + 50
+                        if i % 2 == 0:
+                            sautDeLigne = sautDeLigne + 30
+                            decalageX = 50
+                        else:
+                            sautDeLigne = sautDeLigne
+                            decalageX = size['width'] / 2 + 50
                 else:
-                    if i % 2 == 0:
-                        sautDeLigne = sautDeLigne + 30
-                        decalageX = 50
-                    else:
-                        sautDeLigne = sautDeLigne
-                        decalageX = size['width'] / 2 + 50
+                    sautDeLigne = sautDeLigne + 30
                 config.log(f"#E0015 Infos de paris non lisible")
             else:
                 list_of_newbet_type = list_of_bet_type.text
-                # print(list_of_newbet_type)
                 if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
                     # print(sType)
                     list_of_newbet_type_text = list_of_newbet_type
@@ -220,10 +262,28 @@ def GetBet(driver, nextBet=False):
                                 sautDeLigne = sautDeLigne
                                 decalageX = size['width'] / 2 + 50
                         ligne = ligne + 1
+                elif config.scriptType == '5P' or config.scriptType == '4P':
+                    list_of_newbet_type = list_of_newbet_type.split(sType)
+                    if len(list_of_newbet_type) > 1:
+                        getjeu_actuel = list_of_newbet_type[0].split("Jeu ")[1]
+                        getjeu_actuel = ''.join(caractere for caractere in getjeu_actuel if caractere.isdigit())
+                        if str(config.jeu_actuel) == str(getjeu_actuel):
+                            # print('paris trouvé')
+                            clic = True
+                            return clic
+                        else:
+                            # print('mauvais jeu')
+                            sautDeLigne = sautDeLigne + 30
+                    else:
+                        # print('Mauvais paris')
+                        sautDeLigne = sautDeLigne + 30
+                        ligne = ligne + 1
+                        # print('ligne ' + str(ligne))
                 else:
                     list_of_newbet_type = list_of_newbet_type.split(sType + " - Oui")
                     if len(list_of_newbet_type) > 1:
-                        getjeu_actuel = int(list_of_newbet_type[0].split("Jeu ")[1])
+                        getjeu_actuel = list_of_newbet_type[0].split("Jeu ")[1]
+                        getjeu_actuel = ''.join(caractere for caractere in getjeu_actuel if caractere.isdigit())
                         if str(config.jeu_actuel) == str(getjeu_actuel):
                             # print('paris trouvé')
                             clic = True
@@ -239,13 +299,12 @@ def GetBet(driver, nextBet=False):
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
             max_line = 16
         else:
-            max_line = 8
+            max_line = 10
         if config.systeme == 'Darwin':
             if y > size['height'] / 2 or ligne > max_line:
                 # print('size height :'+str(size['height'] ))
                 # print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
                 sautDeLigne = 40
-                y = size['height'] / -2 + 10 + sautDeLigne
                 decalageX = size['width'] / -2 + 50
                 ligne = 1
                 tentative = tentative + 1
@@ -265,5 +324,5 @@ def GetBet(driver, nextBet=False):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    config.scriptType = '40A'
+    config.scriptType = '030'
     GetBet(driver, True)

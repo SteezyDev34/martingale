@@ -1,20 +1,5 @@
+print('START 40-30 1')
 import os
-import sys
-
-from art import *
-
-# Récupérer le chemin absolu du fichier actuel
-current_file_path = os.path.abspath(__file__)
-
-# Récupérer le dossier parent du fichier actuel
-parent_directory = os.path.dirname(current_file_path)
-# ajouter un autre niveau parent si nécessaire
-project_directory = os.path.dirname(parent_directory)
-sys.path.append(project_directory)
-# Vérification de l'environnement
-# import VenvDependencyManager
-
-# VenvDependencyManager.main()
 
 # Chargement des variables globales
 import config
@@ -31,29 +16,23 @@ parts = name_part.split('-')
 if len(parts) > 1:
     config.scriptType = parts[0]  # Suppose que le type est avant le tiret
     config.script_num = int(parts[1])  # Suppose que le numéro est avant le tiret
-    print(f'{config.PURPLE}' + text2art(
-        f"Start martingal {config.scriptType} {config.script_num}"))  # Crée un texte en art ASCII
-    # sys.stdout.write(f"\rSCRIPT TYPE : {config.scriptType}")
-    # sys.stdout.write(f"\rSCRIPT NUM : {config.script_num}")
+    print(f"SCRIPT TYPE : {config.scriptType}")
+    print(f"SCRIPT NUM : {config.script_num}")
 else:
     print("Le format du nom du fichier est incorrect.")
     exit()
-
-# Chargement des functions
-
-from Functions import Functions_40a_proba
+from Functions.Functions_030 import all_script
 from Functions.GetJsonData import DispatchPerte
-from Functions.ScriptRechercheDeMatch import classementeDeMatch
-
-classementeDeMatch(driver)
 
 while (config.win < 100):
     config.init_variable()
-    Functions_40a_proba.all_script(driver)
+
     try:
-        print('pass')
+        all_script(driver)
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
+        print('perte = ' + str(config.perte))
+
     if config.perte > 0:
         DispatchPerte()
     sucess = False

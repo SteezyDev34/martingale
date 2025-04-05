@@ -17,6 +17,8 @@ def AfficherParis(driver):
     key = 'Paris'
     if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
         key = 'Score du Jeu.'
+    elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
+        key = 'Nombre exact de points dans un jeu'
     while not selection and tentative < 6:
         try:
             element = WebDriverWait(driver, 5).until(

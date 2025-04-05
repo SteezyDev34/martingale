@@ -1,25 +1,27 @@
 import re
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-
 ##DEFINITION DES FONCTIONS
 ##
 ##FIN DEFINITION DES FONCTIONS
 from unidecode import unidecode
-def get_proba_40A_other(playerName1, playerName2,driver,link=False):
+
+
+def get_proba_40A_other(playerName1, playerName2, driver, link=False):
     prob_service_joueur1 = 0
     prob_service_joueur2 = 0
     prob_retour_joueur1 = 0
     prob_retour_joueur2 = 0
     playerName1 = unidecode(playerName1)
     playerName2 = unidecode(playerName2)
-    playerName1 = playerName1.replace('-',' ')
-    playerName2 = playerName2.replace('-',' ')
+    playerName1 = playerName1.replace('-', ' ')
+    playerName2 = playerName2.replace('-', ' ')
     tentative = 0
     prob = 0
-    ok =0
-    while ok ==0 and tentative <1:
+    ok = 0
+    while ok == 0 and tentative < 1:
         try:
             driver.get('https://www.ultimatetennisstatistics.com/headToHead?tab=statistics')
             element = WebDriverWait(driver, 20).until(
@@ -27,16 +29,14 @@ def get_proba_40A_other(playerName1, playerName2,driver,link=False):
                     (By.ID, 'player1'))
             )
 
-
-
-            fieldplayer1 = driver.find_element(By.ID,'player1')
+            fieldplayer1 = driver.find_element(By.ID, 'player1')
             fieldplayer1.send_keys(playerName1)
             element = WebDriverWait(driver, 20).until(
                 EC.visibility_of_element_located(
                     (By.ID, 'ui-id-1'))
             )
-            player_block = driver.find_element(By.ID,'ui-id-1')
-            player_list = player_block.find_elements(By.CLASS_NAME,'ui-menu-item')
+            player_block = driver.find_element(By.ID, 'ui-id-1')
+            player_list = player_block.find_elements(By.CLASS_NAME, 'ui-menu-item')
             for player in player_list:
                 if re.search(playerName1.lower(), player.text.lower()):
                     player.click()
@@ -59,22 +59,23 @@ def get_proba_40A_other(playerName1, playerName2,driver,link=False):
 
             playerID2 = url.split('playerId2=')[1]
 
-            driver.get('https://www.ultimatetennisstatistics.com/headToHead?tab=statistics&playerId1='+playerID1+'&playerId2='+playerID2)
+            driver.get(
+                'https://www.ultimatetennisstatistics.com/headToHead?tab=statistics&playerId1=' + playerID1 + '&playerId2=' + playerID2)
             element = WebDriverWait(driver, 20).until(
                 EC.visibility_of_element_located(
                     (By.ID, 'statisticsOverview'))
             )
-            stats_list = driver.find_element(By.ID,'statisticsOverview')
-            stats_tr = stats_list.find_elements(By.TAG_NAME,'tr')
+            stats_list = driver.find_element(By.ID, 'statisticsOverview')
+            stats_tr = stats_list.find_elements(By.TAG_NAME, 'tr')
             for tr in stats_tr:
                 if re.search('Service Points Won %'.lower(), tr.text.lower()):
                     trok = tr.text.split('Service Points Won %')
-                    prob_service_joueur1 = trok[0].replace('%','')
+                    prob_service_joueur1 = trok[0].replace('%', '')
                     if prob_service_joueur1 == '':
-                        prob_service_joueur1 =0
+                        prob_service_joueur1 = 0
                     else:
-                        prob_service_joueur1 =  float(prob_service_joueur1)/ 100
-                        print('prob_service_joueur1 : '+str(prob_service_joueur1))
+                        prob_service_joueur1 = float(prob_service_joueur1) / 100
+                        print('prob_service_joueur1 : ' + str(prob_service_joueur1))
                     prob_service_joueur2 = trok[1].replace('%', '')
                     if prob_service_joueur2 == '':
                         prob_service_joueur2 = 0
@@ -83,12 +84,12 @@ def get_proba_40A_other(playerName1, playerName2,driver,link=False):
                         print('prob_service_joueur2 : ' + str(prob_service_joueur2))
                 if re.search('Return Points Won %'.lower(), tr.text.lower()):
                     trok = tr.text.split('Return Points Won %')
-                    prob_retour_joueur1 = trok[0].replace('%','')
+                    prob_retour_joueur1 = trok[0].replace('%', '')
                     if prob_retour_joueur1 == '':
                         prob_retour_joueur1 = 0
                     else:
-                        prob_retour_joueur1 =  float(prob_retour_joueur1)/ 100
-                        print('prob_retour_joueur1 : '+str(prob_retour_joueur1))
+                        prob_retour_joueur1 = float(prob_retour_joueur1) / 100
+                        print('prob_retour_joueur1 : ' + str(prob_retour_joueur1))
                     prob_retour_joueur2 = trok[1].replace('%', '')
                     if prob_retour_joueur2 == '':
                         prob_retour_joueur2 = 0
@@ -105,64 +106,62 @@ def get_proba_40A_other(playerName1, playerName2,driver,link=False):
             prob = float("{:.2}".format(prob_40_40_totale))
             print('Proba 40 A = ' + str(prob))
         except:
-            prob =0
-            tentative = tentative +1
+            prob = 0
+            tentative = tentative + 1
         else:
             ok = 1
     if link:
         driver.get(link)
     return prob
-def get_wta_proba_40A_other(playerName1, playerName2,driver,link=False):
+
+
+def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
     prob_service_joueur1 = 0
     prob_service_joueur2 = 0
     prob_retour_joueur1 = 0
     prob_retour_joueur2 = 0
     playerName1 = unidecode(playerName1)
     playerName2 = unidecode(playerName2)
-    playerName1 = playerName1.replace('-',' ')
-    playerName2 = playerName2.replace('-',' ')
+    playerName1 = playerName1.replace('-', ' ')
+    playerName2 = playerName2.replace('-', ' ')
     tentative = 0
     prob = 0
-    ok =0
+    ok = 0
     playersName = [playerName1, playerName2]
-    while ok ==0 and tentative <1:
-        try:
-            i = 1
-            for playerName in playersName:
-                print(playerName)
-                driver.get('https://www.wtatennis.com/rankings/singles')
-                element = WebDriverWait(driver, 20).until(
-                    EC.presence_of_element_located(
-                        (By.CLASS_NAME, 'rankings__list'))
-                )
+    while ok == 0 and tentative < 1:
+        i = 1
+        for playerName in playersName:
+            print(playerName)
+            driver.get('https://www.wtatennis.com/rankings/singles')
+            element = WebDriverWait(driver, 20).until(
+                EC.presence_of_element_located(
+                    (By.CLASS_NAME, 'rankings__list'))
+            )
 
-
-
-                fieldplayer1 = driver.find_elements(By.CLASS_NAME,'player-search')[0]
-                fieldplayer1.click()
-                time.sleep(2)
-                fieldplayer1 = driver.find_elements(By.CLASS_NAME,'player-search__input')[0]
-                fieldplayer1.send_keys(playerName)
-                element = WebDriverWait(driver, 20).until(
-                    EC.visibility_of_element_located(
-                        (By.CLASS_NAME, 'rankings__row'))
-                )
-                time.sleep(5)
-                player_block = driver.find_elements(By.CLASS_NAME,'js-rankings-body')[0]
-                player_list = player_block.find_elements(By.CLASS_NAME,'rankings__row')
-                print('lplayer list le,')
-                print(len(player_list))
-                for player in player_list:
-                    print('eaach player')
-                    player_name = player.find_elements(By.CLASS_NAME,'player-name')[0]
-                    print(player_name.text.lower())
-                    if re.search(playerName.lower(), player_name.text.lower()):
-                        print('find')
-                        player.click()
-                    else:
-                        print('not found')
-
-
+            fieldplayer1 = driver.find_elements(By.CLASS_NAME, 'player-search')[0]
+            fieldplayer1.click()
+            time.sleep(2)
+            fieldplayer1 = driver.find_elements(By.CLASS_NAME, 'player-search__input')[0]
+            fieldplayer1.send_keys(playerName)
+            element = WebDriverWait(driver, 20).until(
+                EC.visibility_of_element_located(
+                    (By.CLASS_NAME, 'rankings__row'))
+            )
+            time.sleep(5)
+            player_block = driver.find_elements(By.CLASS_NAME, 'js-rankings-body')[0]
+            player_list = player_block.find_elements(By.CLASS_NAME, 'rankings__row')
+            print('lplayer list le,')
+            print(len(player_list))
+            for player in player_list:
+                print('eaach player')
+                player_name = player.find_elements(By.CLASS_NAME, 'player-name')[0].text.strip().replace('\n', ' ')
+                print(player_name.lower())
+                if re.search(playerName.lower(), player_name.lower()):
+                    print('find')
+                    player.click()
+                else:
+                    print('not found')
+                try:
                     statTab = WebDriverWait(driver, 10).until(
                         EC.presence_of_element_located((By.CSS_SELECTOR, "ul.tabs__list"))
                     )
@@ -216,10 +215,10 @@ def get_wta_proba_40A_other(playerName1, playerName2,driver,link=False):
                                 prob_service_joueur1 = value.replace('%', '')
                                 print('proba', prob_service_joueur1)
                                 if prob_service_joueur1 == '':
-                                    prob_service_joueur1 =0
+                                    prob_service_joueur1 = 0
                                 else:
-                                    prob_service_joueur1 =  float(prob_service_joueur1)/ 100
-                                    print('prob_service_joueur1 : '+str(prob_service_joueur1))
+                                    prob_service_joueur1 = float(prob_service_joueur1) / 100
+                                    print('prob_service_joueur1 : ' + str(prob_service_joueur1))
                         if label in ["Return Points Won"]:
                             if i == 2:
                                 prob_retour_joueur2 = value.replace('%', '')
@@ -229,47 +228,43 @@ def get_wta_proba_40A_other(playerName1, playerName2,driver,link=False):
                                     prob_retour_joueur2 = float(prob_retour_joueur2) / 100
                                     print('prob_retour_joueur1 : ' + str(prob_retour_joueur2))
                             else:
-                                prob_retour_joueur1 = value.replace('%','')
+                                prob_retour_joueur1 = value.replace('%', '')
                                 if prob_retour_joueur1 == '':
                                     prob_retour_joueur1 = 0
                                 else:
-                                    prob_retour_joueur1 =  float(prob_retour_joueur1)/ 100
-                                    print('prob_retour_joueur1 : '+str(prob_retour_joueur1))
+                                    prob_retour_joueur1 = float(prob_retour_joueur1) / 100
+                                    print('prob_retour_joueur1 : ' + str(prob_retour_joueur1))
                     if i == 2:
                         break
                     else:
-                        i=i+1
+                        i = i + 1
+                except:
+                    print('no stats found')
+            # Calcul de la probabilité pour le joueur et l'adversaire
+            prob_40_40_joueur1 = prob_service_joueur1 * prob_retour_joueur1
+            prob_40_40_joueur2 = prob_service_joueur2 * prob_retour_joueur2
 
-
-                # Calcul de la probabilité pour le joueur et l'adversaire
-                prob_40_40_joueur1 = prob_service_joueur1 * prob_retour_joueur1
-                prob_40_40_joueur2 = prob_service_joueur2 * prob_retour_joueur2
-
-                # Calcul de la probabilité totale
-                prob_40_40_totale = prob_40_40_joueur1 + prob_40_40_joueur2
-                prob = prob_40_40_totale
-                print('Proba 40 A = ' + str(prob))
-        except Exception as e:
-            print(e)
-            prob =0
-            tentative = tentative +1
-        else:
-            ok = 1
+            # Calcul de la probabilité totale
+            prob_40_40_totale = prob_40_40_joueur1 + prob_40_40_joueur2
+            prob = prob_40_40_totale
+            print('Proba 40 A = ' + str(prob))
+            return prob
     if link:
         driver.get(link)
     return prob
 
-#print(get_proba_40A('DENIS YEVSEYEV', 'MARK LAJAL', driver))
+
+# print(get_proba_40A('DENIS YEVSEYEV', 'MARK LAJAL', driver))
 import time
-from datetime import date
 import requests
 import json
 
 global headers
-headers= {
+headers = {
     'X-RapidAPI-Key': 'ef2b13642dmshf1d9ccde3c85691p1e0f03jsn54d169ef64f5',
     "X-RapidAPI-Host": "ultimate-tennis1.p.rapidapi.com"
 }
+
 
 def getPlayerApiId(playerName):
     file1 = open("DataFiles/atprankinjson.txt", "r")
@@ -283,12 +278,12 @@ def getPlayerApiId(playerName):
     del playersList[0]
 
     print(playerName)
-    #playerNameElements = playerName.split(" ")
+    # playerNameElements = playerName.split(" ")
     LastName = playerName.lower()
     for player in playersList:
         nplayer = player.lower().split('|')[0]
         LastName = LastName
-        #print(LastName)
+        # print(LastName)
         if nplayer in LastName:
             playerElements = player.split('|')
             playerLastName = playerElements[0].split(' ')[-1]
@@ -297,6 +292,8 @@ def getPlayerApiId(playerName):
             print('Player ID : ' + playerId)
             break
     return playerId
+
+
 def getPlayerWtaApiId(playerName):
     file1 = open("DataFiles/wtarankinjson.txt", "r")
     playerId = False
@@ -317,16 +314,17 @@ def getPlayerWtaApiId(playerName):
             playerLastName = playerElements[0].split(' ')[-1]
             if LastName.lower() == playerLastName.lower():
                 playerId = playerElements[1]
-                print('Player Name : '+playerName)
-                print('Player ID : '+playerId)
+                print('Player Name : ' + playerName)
+                print('Player ID : ' + playerId)
                 break
     return playerId
-def get_proba_40A(playerName1, playerName2,cat='atp',surface='hard'):
 
+
+def get_proba_40A(playerName1, playerName2, cat='atp', surface='hard'):
     try:
         playerID1 = getPlayerApiId(playerName1)
         playerID2 = getPlayerApiId(playerName2)
-        urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/"+cat+"/"+playerID1+"/2024/"+surface
+        urlplayer1 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/" + cat + "/" + playerID1 + "/2024/" + surface
         urlplayer2 = "https://ultimate-tennis1.p.rapidapi.com/player_stats/" + cat + "/" + playerID2 + "/2024/" + surface
         time.sleep(1)
         response = requests.get(urlplayer1, headers=headers)
@@ -369,8 +367,8 @@ def get_proba_40A(playerName1, playerName2,cat='atp',surface='hard'):
                 # Calcul de la probabilité totale
                 prob_40_40_totale = prob_40_40_joueur + prob_40_40_adversaire
                 prob = float("{:.2}".format(prob_40_40_totale))
-                print('Proba 40 A = '+str(prob))
-                if prob <=0.2:
+                print('Proba 40 A = ' + str(prob))
+                if prob <= 0.2:
                     print('PAS DE RATTRAPAGE')
                 else:
                     print('RATTRAPAGE OK!')
@@ -379,6 +377,8 @@ def get_proba_40A(playerName1, playerName2,cat='atp',surface='hard'):
                 return 0
             else:
                 return prob
+
+
 def get_wta_proba_40A(playerName1, playerName2):
     print('proba wta')
 
@@ -395,14 +395,13 @@ def get_wta_proba_40A(playerName1, playerName2):
         return 0
     else:
         try:
-            #print(response.text)
+            # print(response.text)
             data = json.loads(response.text)
 
             print(data)
 
-            prob_service_joueur = data['player_data'][0]['service_points_won_percent']/100
-            prob_retour_joueur = data['player_data'][0]['return_points_won_percent']/100
-
+            prob_service_joueur = data['player_data'][0]['service_points_won_percent'] / 100
+            prob_retour_joueur = data['player_data'][0]['return_points_won_percent'] / 100
 
             # Statistiques du joueur2
             response = requests.get(urlplayer2, headers=headers)
@@ -429,5 +428,9 @@ def get_wta_proba_40A(playerName1, playerName2):
                 return 0
             else:
                 return prob
-#get_wta_proba_40A('errani', 'wang')
-#print(get_proba_40A('thiedm', 'MICHALSKI'))
+
+
+if __name__ == '__main__':
+    from ChromeDriver.SetDriver1 import driver
+
+    print(get_wta_proba_40A_other('Julieta Pareja', 'Leolia Jeanjean', driver))
