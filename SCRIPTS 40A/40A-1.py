@@ -1,7 +1,6 @@
 import os
 import sys
 
-from art import *
 
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
@@ -12,9 +11,9 @@ parent_directory = os.path.dirname(current_file_path)
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
 # Vérification de l'environnement
-# import VenvDependencyManager
-
-# VenvDependencyManager.main()
+import VenvDependencyManager
+VenvDependencyManager.main()
+from art import *
 
 # Chargement des variables globales
 import config
@@ -45,7 +44,7 @@ from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch
 
-classementeDeMatch(driver)
+#classementeDeMatch(driver)
 
 while (config.win < 100):
     config.init_variable()
