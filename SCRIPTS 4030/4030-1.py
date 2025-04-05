@@ -25,8 +25,6 @@ else:
     exit()
 from Functions.Functions_4030 import all_script
 from Functions.GetJsonData import DispatchPerte
-from Functions.ScriptRechercheDeMatch import  classementeDeMatch
-classementeDeMatch(driver)
 while (config.win < 100):
     config.init_variable()
 

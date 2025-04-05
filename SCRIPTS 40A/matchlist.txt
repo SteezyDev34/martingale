@@ -13,7 +13,6 @@ jaisinghani-vullnet-tashi
 silva-antoine-walch
 molder-romain-faucon
 daniel-antonio-nunez
-gabi-adrian-boitan
 zandschulp-francisco-cerundolo
 draper-jenson-brooksby
 tseng-nathan-ponwith
@@ -24,7 +23,6 @@ sabalenka-sonay-kartal
 mertens-iga-swiatek
 aggarwal-lohithaksha-bathrinath
 perez-tyler-zink
-fa-rodriguez-taverna
 musetti-novak-djokovic
 mchale-elisabetta-cocciaretto
 ui-sung-park
@@ -45,3 +43,17 @@ mateas-ella-mcdonald
 gray-david-fix
 gray-david-fix
 juan-pablo-ficovich
+picchione-emilien-demanet
+darderi-sumit-nagal
+leonard-tereza-valentova
+mcadoo-linda-klimovicova
+strakhova-francesca-jones
+sabalenka-jasmine-paolini
+mannarino-dmitry-popko
+fritz-matteo-berrettini
+fitriadi-shintaro-imai
+gabi-adrian-boitan
+duerst-gaia-squarcialupi
+zhang-haley-giavara
+kouame-martin-krumich
+dodig-maxim-mrva
