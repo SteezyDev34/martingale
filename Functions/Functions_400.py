@@ -236,6 +236,7 @@ def all_script(driver):
                 config.error = True
         elif result == 'WIN':
             config.perte = 0
+            config.init_variable()
             winmatch = winmatch + 1
             DeleteBet(driver)
             passageset = True

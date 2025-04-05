@@ -242,6 +242,7 @@ def all_script(driver):
                 config.error = True
         elif result == 'WIN':
             config.perte = 0
+            config.init_variable()
             winmatch = winmatch + 1
             if float(winmatch) >= float(config.nb_tour):
                 break

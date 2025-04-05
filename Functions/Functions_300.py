@@ -206,6 +206,7 @@ def all_script(driver):
                 print("ERROR : recup set " + str(config.set_actuel))
                 config.error = True
         elif result == 'WIN':
+            config.init_variable()
             config.perte = 0
             winmatch = winmatch + 1
             DeleteBet(driver)
