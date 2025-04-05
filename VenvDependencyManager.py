@@ -84,11 +84,16 @@ def main():
     # Étape 1 : Vérifier si un venv est activé
     if not is_venv_activated():
         print("Aucun environnement virtuel n'est activé.")
-
+        # Activer l'environnement virtuel
+        activate_venv(venv_path)
+        print("Veuillez activer l'environnement virtuel en exécutant :")
+        print("  source venv/bin/activate (Linux/Mac)")
+        print("  venv\\Scripts\\activate (Windows)")
         # Vérifier si un venv existe dans le répertoire courant
         if not os.path.isdir(venv_path):
             print(f"Aucun environnement virtuel trouvé dans {venv_path}.")
             create_venv(venv_path)  # Créer un nouvel environnement virtuel
+            sys.exit(1)
         else:
             print(f"Environnement virtuel trouvé dans {venv_path}.")
 
