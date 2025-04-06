@@ -45,9 +45,8 @@ from Functions.GetJsonData import DispatchPerte
 
 while (config.win < 100):
     config.init_variable()
-    Functions_30a.all_script(driver)
     try:
-        print('pass')
+        Functions_30a.all_script(driver)
     except Exception as e:
         print(f"ERROR SCRIPT : {e}")
     if config.perte > 0:

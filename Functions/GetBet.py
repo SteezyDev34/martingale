@@ -161,7 +161,7 @@ def GetBet(driver, nextBet=False):
                 config.log('Pas d\'infos, suivant...')
                 if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
                     if config.systeme == 'Darwin':
-                        if i % 2 == 0:
+                        if i % 2 != 0:
                             sautDeLigne = sautDeLigne
                             decalageX = 50
                         else:
@@ -192,7 +192,7 @@ def GetBet(driver, nextBet=False):
                 if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
 
                     if config.systeme == 'Darwin':
-                        if i % 2 == 0:
+                        if i % 2 != 0:
                             sautDeLigne = sautDeLigne
                             decalageX = 50
                         else:
@@ -227,7 +227,7 @@ def GetBet(driver, nextBet=False):
                         else:
                             # print('mauvais jeu')
                             if config.systeme == 'Darwin':
-                                if i % 2 == 0:
+                                if i % 2 != 0:
                                     sautDeLigne = sautDeLigne
                                     decalageX = 50
                                 else:
@@ -246,7 +246,7 @@ def GetBet(driver, nextBet=False):
                     else:
                         # print('Mauvais paris')
                         if config.systeme == 'Darwin':
-                            if i % 2 == 0:
+                            if i % 2 != 0:
                                 sautDeLigne = sautDeLigne
                                 decalageX = 50
                             else:

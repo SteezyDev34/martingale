@@ -10,7 +10,7 @@ from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetBet import GetBet
-from Functions.GetIfGameStart import GetIfGameEnd
+from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
 from Functions.GetMise import GetMise
 from Functions.GetResult import GetResult
@@ -107,7 +107,7 @@ def all_script(driver):
         else:
             gamestart = 0
             ##ATTENTE QUE LE JEU COMMENCE
-            GetIfGameEnd(driver)
+            GetIfGameStart(driver)
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
         txtlog = "JEU COMMENCÉ ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)

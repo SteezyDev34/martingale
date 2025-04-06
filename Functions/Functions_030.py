@@ -19,6 +19,7 @@ from Functions.PlacerMise import PlacerMise
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.ValidationDuParis import ValidationDuParis
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
+from Functions.GetIfGameStart import GetIfGameStart
 
 
 def all_script(driver):
@@ -178,7 +179,7 @@ def all_script(driver):
                     config.wantwin = float(config.wantwin) + float(config.increment)
             # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
             RetourTpsReg(driver)
-            GetIfGameEnd(driver)
+            GetIfGameStart(driver)
             # VÉRIFCATION DU SET ACTUEL
             config.saved_set = config.set_actuel
             GetSetActuel(driver)

@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 def GetJeuActuel(driver):
     config.jeu_actuel = 0
     try:
-        WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((By.CLASS_NAME,
                                               'scoreboard-periods-table__col'))
         )
