@@ -1,7 +1,6 @@
 import os
 import sys
 
-
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
 
@@ -12,6 +11,7 @@ project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
 # Vérification de l'environnement
 import VenvDependencyManager
+
 VenvDependencyManager.main()
 from art import *
 
@@ -48,15 +48,8 @@ while (config.win < 100):
     try:
         Functions_4015.all_script(driver)
     except Exception as e:
-        print(f"ERROR SCRIPT : {e}")
-    if config.perte > 0:
-        DispatchPerte()
-    sucess = False
-    while not sucess:
-        try:
-            driver.get(config.site_url)
-        except:
-            continue
-        else:
-            sucess = True
+        config.log(f"ERROR SCRIPT : {e}", 'error', False)
+    else:
+        if config.perte > 0:
+            DispatchPerte()
 print('TOTAL WIN : ' + str(config.win))
