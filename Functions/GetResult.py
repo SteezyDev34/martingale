@@ -73,9 +73,9 @@ def GetResult(driver):
             ]
             if not win and config.score_actuel == config.win_type:
                 win = 'WIN'
-                config.log(result, 'success', False, 2)
+                config.log(win, 'success', False, 2)
             if config.score_actuel in passed_score:
-                if not win:
+                if win != 'WIN':
                     win = 'LOSE'
                 config.log(win, 'error', False, 2)
                 result = win
