@@ -62,6 +62,7 @@ set_actuel = ""
 jeu_actuel = ""
 score_actuel = False
 saved_score = False
+all_scores = {}
 numset = ""
 set = ""
 gain = 0

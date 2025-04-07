@@ -38,6 +38,17 @@ def GetScoreActuel(driver):
     return True
 
 
+def record_scores():
+    nouveau_score = {'set': config.set_actuel, 'jeu': config.jeu_actuel, 'score': config.score_actuel}
+    # Vérifier si cette entrée existe déjà dans config.all_scores
+    if not any(score['set'] == config.set_actuel and
+               score['jeu'] == config.jeu_actuel and
+               score['score'] == config.score_actuel
+               for score in config.all_scores):
+        # Si le dictionnaire n'existe pas encore, l'ajouter
+        config.all_scores.append(nouveau_score)
+
+
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 

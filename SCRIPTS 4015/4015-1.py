@@ -52,6 +52,7 @@ while (config.win < 100):
     else:
         if config.perte > 0:
             DispatchPerte()
+        sucess = False
         while not sucess:
             try:
                 driver.get(config.site_url)

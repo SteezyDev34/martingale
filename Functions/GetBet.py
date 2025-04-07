@@ -8,6 +8,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 import config
 from Functions.DeleteBet import DeleteBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
+from Functions.GetScoreActuel import GetScoreActuel
 
 
 def GetBet(driver, nextBet=False):
@@ -36,21 +37,22 @@ def GetBet(driver, nextBet=False):
     size = canvas.size
     if config.systeme == 'Darwin':
         if config.scriptType == '300' or config.scriptType == '030':
-            sautDeLigne = 50*3
+            sautDeLigne = 50 * 3
         else:
             sautDeLigne = 50
         decalageX = size['width'] / -2 + 50
     elif config.systeme == 'Windows':
         y = 0
         if config.scriptType == '300' or config.scriptType == '030':
-            sautDeLigne = 70*3
+            sautDeLigne = 70 * 3
         else:
             sautDeLigne = 70
         decalageX = 50
     ligne = 1
     i = 1
-    while not clic and tentative <3 and not config.error:
+    while not clic and tentative < 3 and not config.error:
         GetJeuActuel(driver)
+        GetScoreActuel(driver)
         # print('nextBet', nextBet)
         # print('jeu ' + str(config.jeu_actuel))
         if nextBet:
