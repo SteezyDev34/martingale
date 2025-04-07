@@ -10,7 +10,7 @@ from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetBet import GetBet
-from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
+from Functions.GetIfGameStart import GetIfGameEnd
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
 from Functions.GetMise import GetMise
 from Functions.GetResult import GetResult
@@ -186,6 +186,7 @@ def all_script(driver):
             if not config.set_actuel:
                 config.error = True
             config.log('set ' + str(config.set_actuel) + ' - saved set ' + str(config.saved_set), config.newmatch)
+            config.log_clear_line()
             if str(config.saved_set) == str(config.set_actuel):  ## si on est toujours sur le meme set
                 config.log('on est toujours sur le meme set', config.newmatch)
                 if (config.jeu_actuel + 1) >= 13:  # SI TIE BREAK

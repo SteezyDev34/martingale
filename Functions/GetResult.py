@@ -1,14 +1,14 @@
 import time
 
 import config
-from Functions.Functions_1XBET import retour_section_tps_reglementaire
 from Functions.GetBet import GetBet
 from Functions.GetScoreActuel import GetScoreActuel
+from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def GetResult(driver):
     ##ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
-    retour_section_tps_reglementaire(driver)
+    RetourTpsReg(driver)
     txtlog = "ON ATTEND LE RESULTAT POUR VALIDER LE PARIS"
     config.log(txtlog, config.newmatch)
     config.saved_set = ""
