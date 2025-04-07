@@ -13,10 +13,13 @@ from Functions.PlacerMise import PlacerMise
 def ValidationDuParis(driver):
     validation = False
     tentative = 0
-    config.log('        validation paris')
+    config.log('validation paris', 'info', False, 2)
+    config.log_clear_line()
     while not validation and tentative < 2:
-        config.log('        Vérification des paris validés')
+        config.log('Vérification des paris validés')
+        config.log_clear_line()
         config.log('        tentative', str(tentative))
+        config.log_clear_line()
 
         # Vérification que le jeu actuel et le set actuel n'ont pas déjà été pariés
         if hasattr(config, 'validated_bet') and config.validated_bet is not None:
@@ -29,11 +32,12 @@ def ValidationDuParis(driver):
                 config.log(f"Ce jeu ({current_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.")
                 validation = True
                 break  # Sortir de la boucle si le jeu et le set ont déjà été pariés
-        config.log('        boucle validation paris')
+        config.log('boucle validation paris')
+        config.log_clear_line()
         try:
             cpn_setting = driver.find_elements(By.CLASS_NAME, 'ui-number-input__field')[0]
             l = cpn_setting.get_attribute("value")
-            config.log("mise insérée : " + str(l))
+            config.log("mise insérée : " + str(l), 'info', False, 2)
         except Exception as e:
             config.log(e)
             tentative += 1
@@ -42,7 +46,7 @@ def ValidationDuParis(driver):
         else:
             if str(l) == str(config.mise):
                 sending_mise = 1
-                config.log('RECHERCHE DU BOUTON PLACER UN PARIS')
+                config.log('RECHERCHE DU BOUTON PLACER UN PARIS', 'info', False, 2)
                 try:
                     element = WebDriverWait(driver, 3).until(
                         EC.presence_of_element_located((By.CLASS_NAME,

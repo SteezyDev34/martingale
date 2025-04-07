@@ -41,9 +41,9 @@ def all_script(driver):
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
         if infosperte:
-            if float(infosperte['perte']) > 0.2:
-                SendGlobalPerte(config.scriptType, -0.2)
-                config.perte = 0.2
+            if float(infosperte['perte']) > 1:
+                SendGlobalPerte(config.scriptType, -1)
+                config.perte = 1
             elif float(infosperte['perte']) <= 1:
                 config.perte = float(infosperte['perte'])
                 m = 0 - config.perte
@@ -218,9 +218,9 @@ def all_script(driver):
             infosperte = getGlobalPerte()
             print("PERTE : ")
             if infosperte:
-                if float(infosperte['perte']) > 0.2:
-                    SendGlobalPerte(config.scriptType, -0.2)
-                    config.perte = 0.2
+                if float(infosperte['perte']) > 1:
+                    SendGlobalPerte(config.scriptType, -1)
+                    config.perte = 1
                 elif float(infosperte['perte']) <= 1:
                     config.perte = float(infosperte['perte'])
                     m = 0 - config.perte

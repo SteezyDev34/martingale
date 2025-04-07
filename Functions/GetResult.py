@@ -1,12 +1,14 @@
 import time
 
 import config
+from Functions.Functions_1XBET import retour_section_tps_reglementaire
 from Functions.GetBet import GetBet
 from Functions.GetScoreActuel import GetScoreActuel
 
 
 def GetResult(driver):
     ##ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
+    retour_section_tps_reglementaire(driver)
     txtlog = "ON ATTEND LE RESULTAT POUR VALIDER LE PARIS"
     config.log(txtlog, config.newmatch)
     config.saved_set = ""
@@ -70,15 +72,12 @@ def GetResult(driver):
                 '15:15'
             ]
             if not win and config.score_actuel == config.win_type:
-                print('win score = ' + config.win_type)
                 win = 'WIN'
-                print('win = ' + win)
-                config.log(result, config.newmatch)
+                config.log(result, 'success', False, 2)
             if config.score_actuel in passed_score:
                 if not win:
-                    print('win score = ' + config.win_type)
                     win = 'LOSE'
-                config.log(win, config.newmatch)
+                config.log(win, 'error', False, 2)
                 result = win
                 return result
         elif config.scriptType == '4030' or config.scriptType == '4015':

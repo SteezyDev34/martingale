@@ -11,38 +11,29 @@ import config
 # VÉRIFIERR SI PAGE DE MATCH
 def GetIfMatchPage(driver):
     # driver.switch_to.window(driver.window_handles[0])
-    config.log('    🔎 Vérfication si page match', 'info', False)
     try:
-        config.log('         Recherche tableau des scores', 'info', False)
-        config.log('         CLASS="scoreboard-section__scroll"', 'info', False)
         WebDriverWait(driver, 2).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'scoreboard-section__scroll'))
         )
     except:
-        config.log_clear_line(2)
         config.log('        ⚠️Tableau des scores introuvable!', 'warning', False)
-        config.log('         Recherche tableau des stats', 'info', False)
-        config.log('         CLASS="old-layout"', 'info', False)
+        config.log_clear_line()
         try:
             element = WebDriverWait(driver, 2).until(
                 EC.presence_of_element_located(
                     (By.CLASS_NAME, 'statistic-frame'))
             )
         except:
-            config.log_clear_line(2)
             config.log('        ⚠️Tableau des stats introuvable!', 'warning', False)
-            config.log('         Recherche tableau des résumé', 'info', False)
-            config.log('         CLASS="new-breadcrumbs"', 'info', False)
+            config.log_clear_line()
             try:
                 ul_element = WebDriverWait(driver, 2).until(
                     EC.presence_of_element_located(
                         (By.CLASS_NAME, 'new-breadcrumbs'))
                 )
             except Exception as e:
-                config.log_clear_line(5)
-                config.log('    🔎 Ce n\'est pas une page de match', 'info', False)
-                time.sleep(1)
+                config.log('    🔎 Ce n\'est pas une page de match', 'warning', False)
                 config.log_clear_line()
                 return False
             else:
@@ -57,16 +48,15 @@ def GetIfMatchPage(driver):
                     return False
                 else:
                     config.log('    🔎 Ce n\'est pas une page de résumé', 'info', False)
+                    config.log_clear_line()
                     driver.get(config.site_url)
                     return False
 
         else:
-            config.log_clear_line(5)
             config.log('    🔎 MATCH TERMINÉ!', 'info', False)
             driver.get(config.site_url)
             return False
     else:
-        config.log_clear_line(3)
         config.log('    🔎 PAGE MATCH OK!', 'info', False)
         config.log_clear_line()
         return True

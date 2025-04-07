@@ -36,10 +36,12 @@ def GetIfGameStart(driver):
 def GetIfGameStart30A(driver):
     gamestart = False
     printext = False
+    config.log('ATTENTE DEBUT DE JEU', 'info', False, 4)
     while not gamestart and not config.error:
         GetScoreActuel(driver)
         if config.score_actuel == '0:0':
-            config.log('        GAME START')
+            config.log('GAME START', 'info', False, 4)
+            config.log_clear_line()
             gamestart = True
         else:
             gamestart = False
@@ -51,10 +53,12 @@ def GetIfGameStart30A(driver):
 def GetIfGameEnd(driver):
     gameeend = False
     printext = False
+    config.log('ATTENTE FIN DE JEU', 'info', False, 4)
     while not gameeend and not config.error:
         GetScoreActuel(driver)
         if config.score_actuel == '0:0':
-            config.log('        GAME END')
+            config.log('FIN DE JEU', 'info', False, 4)
+            config.log_clear_line()
             gameeend = True
         else:
             gameeend = False

@@ -14,10 +14,12 @@ def GetMise(driver):
     if config.rattrape_perte == 3:
         txtlog = 'Bonne proba, cote : 3'
         config.log(txtlog, 'info', '', 3)
+        config.log_clear_line()
         config.cote = config.cotebase
     else:
         txtlog = "Rattrapage, recuperation de la cote"
         config.log(txtlog, 'info', '', 3)
+        config.log_clear_line()
         try:
             config.cote = driver.find_elements(By.CLASS_NAME,
                                                'coupon-result-coef-value')[
@@ -25,11 +27,13 @@ def GetMise(driver):
         except:
             txtlog = 'erreur recup cote : 3'
             config.log(txtlog, 'info', '', 3)
+            config.log_clear_line()
             config.cote = config.cotebase
         else:
 
             txtlog = 'cote recupéré ' + str(config.cote)
             config.log(txtlog, 'info', '', 3)
+            config.log_clear_line()
             if config.cote == '' or str(config.cote) == '0':
                 config.cote = config.cotebase
     config.mise = (float(config.wantwin) + float(config.perte)) / (float(config.cote) - 1)

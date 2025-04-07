@@ -68,4 +68,5 @@ yamanaka-hikaru-shiraishi
 yamanaka-hikaru-shiraishi
 sanchis-pedro-cachin
 pierre-hugues-herbert
-pujolras-abedallah-shelbayh
+yevseyev-franco-agamenone
+brunold-michael-geerts

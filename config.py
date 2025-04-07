@@ -278,6 +278,6 @@ def log_clear_line(line_number=1):
         for _ in range(line_number):
             sys.stdout.write("clear\n")
     else:
-        time.sleep(0)
-        # for _ in range(line_number):
-        # sys.stdout.write("\033[F\033[K\r")  # Remonter une ligne et l'effacer
+        time.sleep(0.5)
+        for _ in range(line_number):
+            sys.stdout.write("\033[F\033[K\r")  # Remonter une ligne et l'effacer

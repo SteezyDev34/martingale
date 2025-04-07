@@ -134,6 +134,7 @@ def getCompetRecup():
 
 def getCompet():
     config.log('Recherche compet', 'info', False, 3)
+    config.log_clear_line()
     url = "http://p-com.studio/api/strategy" + config.scriptType + "/get_compet.php"
     # URL du lien JSON de la strategy
     try:
@@ -198,7 +199,8 @@ def SendPerte(scriptType, perte):
         print(f"Pas d'envoi de perte {e}")
     else:
         if result['status'] == "success":
-            print(str(perte) + "> Perte insert in strategy" + str(scriptType))
+            config.log(str(perte) + "> Perte insert in strategy" + str(scriptType))
+            config.log_clear_line()
             config.perte -= perte
             return True
         else:
@@ -228,9 +230,11 @@ def SendGlobalPerte(scriptType, mise):
     else:
         if result['status'] == "success":
             config.log(f"{str(mise)} insert in strategy" + str(scriptType), 'info', False, 2)
+            config.log_clear_line()
             return True
         else:
             config.log(f"        {result}", 'info', False)
+            config.log_clear_line()
             return False
 
 

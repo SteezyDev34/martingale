@@ -11,6 +11,7 @@ import config
 
 def GetSetActuel(driver):
     config.log('Récupératon du set actuel', '', False, 3)
+    config.log_clear_line()
     try:
         WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CLASS_NAME,
@@ -19,7 +20,6 @@ def GetSetActuel(driver):
         config.set_actuel = driver.find_elements(By.CLASS_NAME, 'ui-game-timer__label')[0].text
     except Exception as e:
         config.log('        #E0009 ui-game-timer__label introuvable', 'warning', True)
-        time.sleep(2)
         config.log_clear_line()
         return False
     else:
@@ -28,7 +28,6 @@ def GetSetActuel(driver):
             numset = int(''.join(char for char in numset if char.isdigit()))
         except Exception as e:
             config.log('#E0010 erreur : numset', 'warning', True, 3)
-            time.sleep(2)
             config.log_clear_line()
             return False
         else:

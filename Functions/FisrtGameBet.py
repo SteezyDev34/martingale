@@ -49,6 +49,7 @@ def FirstGameBet(driver):
         tentative_placermise = 0
         validate_bet = False
         config.log('On place la mise', 'infos', True, 2)
+        config.log_clear_line()
         while not PlacerMise(driver) and not config.error and tentative_placermise < 3:
             tentative_placermise += 1
             if tentative_placermise == 5:
@@ -58,7 +59,8 @@ def FirstGameBet(driver):
         gamestart = False
         tentative = 0
         config.saved_score = ""
-        config.log('On vérifie le score pour valider le paris', 2)
+        config.log('On vérifie le score pour valider le paris', 'info', False, 2)
+        config.log_clear_line()
         ##VALIDATION DU PARIS SI SCORE OK
         while not validate_bet and not config.error and tentative < 3:
             # VÉRIFICATION DU SCORE ACTUEL

@@ -9,7 +9,7 @@ from Functions import GetMatchDone
 
 def main(driver, bet_item, matchlist_file_name):
     try:
-        config.log('Vérification si match déjà parié', 'info', True, 4)
+        config.log('Vérification si match déjà parié', 'info', False, 4)
         newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
                                              'dashboard-game-block__link')[
             0].get_attribute(
@@ -24,11 +24,11 @@ def main(driver, bet_item, matchlist_file_name):
     else:
         match_list = GetMatchDone.main(config.matchlisttodo_file_name)
         if any(config.newmatch in x for x in match_list):
-            config.log('Le match autorisé!', 'success', True, 4)
+            config.log('Le match autorisé!', 'success', False, 4)
             driver.get(newmatchtxt)
             return [True, config.newmatch]
         else:
-            config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
+            config.log('Le match  n\'est pas autorisé!', 'warning', False, 4)
             return [False, config.newmatch]
 
 

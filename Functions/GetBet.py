@@ -35,15 +35,21 @@ def GetBet(driver, nextBet=False):
     location = canvas.location
     size = canvas.size
     if config.systeme == 'Darwin':
-        sautDeLigne = 50
+        if config.scriptType == '300' or config.scriptType == '030':
+            sautDeLigne = 50*3
+        else:
+            sautDeLigne = 50
         decalageX = size['width'] / -2 + 50
     elif config.systeme == 'Windows':
         y = 0
-        sautDeLigne = 70
+        if config.scriptType == '300' or config.scriptType == '030':
+            sautDeLigne = 70*3
+        else:
+            sautDeLigne = 70
         decalageX = 50
     ligne = 1
     i = 1
-    while not clic and tentative < 10 and not config.error:
+    while not clic and tentative <3 and not config.error:
         GetJeuActuel(driver)
         # print('nextBet', nextBet)
         # print('jeu ' + str(config.jeu_actuel))
@@ -304,7 +310,10 @@ def GetBet(driver, nextBet=False):
             if y > size['height'] / 2 or ligne > max_line:
                 # print('size height :'+str(size['height'] ))
                 # print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
-                sautDeLigne = 40
+                if config.scriptType == '300' or config.scriptType == '030':
+                    sautDeLigne = 50 * 3
+                else:
+                    sautDeLigne = 50
                 decalageX = size['width'] / -2 + 50
                 ligne = 1
                 tentative = tentative + 1
@@ -313,7 +322,10 @@ def GetBet(driver, nextBet=False):
             if y > size['height'] or ligne > max_line:
                 # print('size height :' + str(size['height']))
                 # print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
-                sautDeLigne = 70
+                if config.scriptType == '300' or config.scriptType == '030':
+                    sautDeLigne = 70 * 3
+                else:
+                    sautDeLigne = 70
                 decalageX = 50
                 y = size['height'] + sautDeLigne
                 ligne = 1

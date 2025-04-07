@@ -53,17 +53,17 @@ def rechercheDeMatch(driver):
                     config.error = False
                     continue
                 # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-                config.log('🏟️ ' + config.ligue_name, 'info', True, 2)
+                config.log('🏟️ ' + config.ligue_name, 'info', False, 2)
                 if getCompet():
                     # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
                     try:
                         config.log('Récupération des matchs', 'info', False, 3)
+                        config.log_clear_line()
                         bet_items = bet_ligue.find_elements(By.CLASS_NAME,
                                                             'dashboard-game-block')
                     except:
                         config.log('⚠️Listes des matchs introuvables!', 'warning', False, 3)
                         # s'il y une erreur on passe au suivant
-                        config.log_clear_line(2)
                         continue
                     else:
                         if len(bet_items) <= 0:
@@ -73,7 +73,8 @@ def rechercheDeMatch(driver):
                             continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
                         for bet_item in bet_items:
                             try:
-                                config.log('On récupère le nom des joueurs', 'info', True, 3)
+                                config.log('On récupère le nom des joueurs', 'info', False, 3)
+                                config.log_clear_line()
                                 div_bet_player = bet_item.find_element(By.CLASS_NAME, 'ui-team-scores__teams')
                             except:
                                 config.log('Impossible de récpérer les joueurs!', 'warning', False, 3)
@@ -82,7 +83,8 @@ def rechercheDeMatch(driver):
                             else:
                                 if div_bet_player:
                                     div_bet_player = div_bet_player.text.split('\n')
-                                    config.log(str(div_bet_player), 'info', True, 3)
+                                    config.log(str(div_bet_player), 'info', False, 3)
+                                    config.log_clear_line()
                                 try:
                                     # on récupère le score
                                     div_bet_score = bet_item.find_elements(By.CLASS_NAME,
@@ -102,10 +104,12 @@ def rechercheDeMatch(driver):
                                         continue
                                     # on le vérifie
                                     config.log('Vérification du score!', 'info', False, 4)
+                                    config.log_clear_line()
                                     bet_score = GetMatchScore.main(div_bet_score[0],
                                                                    config.score_to_start)
                                     if bet_score:  # SI LE MATCH EST PRET
-                                        config.log('Score ok', 'info', True, 4)
+                                        config.log('Score ok', 'info', False, 4)
+                                        config.log_clear_line()
                                         # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
                                         config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
                                                                                        config.matchlist_file_name)
@@ -115,15 +119,15 @@ def rechercheDeMatch(driver):
                                                                        config.running_file_name,
                                                                        config.matchlist_file_name):
                                                 config.newmatch = config.newmatch[1]
-                                                config.log(config.newmatch, 'info', True, 4)
+                                                config.log(config.newmatch, 'info', False, 4)
                                                 config.match_found = True
                                                 break
                                             else:
                                                 continue
                                     else:
-                                        config.log('Score NOT ok', 'warning', True, 4)
+                                        config.log('Score NOT ok', 'warning', False, 4)
                                         config.log_clear_line()
-                                config.log_clear_line()
+                config.log_clear_line()
                 if config.match_found:
                     AddRunning.main(config.script_num, config.running_file_name)
                     break

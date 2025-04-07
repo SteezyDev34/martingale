@@ -40,9 +40,9 @@ def all_script(driver):
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
         if infosperte:
-            if float(infosperte['perte']) > 0.2:
-                SendGlobalPerte(config.scriptType, -0.2)
-                config.perte = 0.2
+            if float(infosperte['perte']) > 1:
+                SendGlobalPerte(config.scriptType, -1)
+                config.perte = 1
             elif float(infosperte['perte']) <= 1:
                 config.perte = float(infosperte['perte'])
                 m = 0 - config.perte
@@ -107,9 +107,9 @@ def all_script(driver):
         else:
             gamestart = 0
             ##ATTENTE QUE LE JEU COMMENCE
-            GetIfGameStart(driver)
+            GetIfGameEnd(driver)
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
-        txtlog = "JEU COMMENCÉ ON PREPARE LE PROCHAIN BET"
+        txtlog = "JEU TERMINÉ ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)
         bet_40a = False
         tentative = 0
@@ -217,9 +217,9 @@ def all_script(driver):
             infosperte = getGlobalPerte()
             print("PERTE : ")
             if infosperte:
-                if float(infosperte['perte']) > 0.2:
-                    SendGlobalPerte(config.scriptType, -0.2)
-                    config.perte = 0.2
+                if float(infosperte['perte']) > 1:
+                    SendGlobalPerte(config.scriptType, -1)
+                    config.perte = 1
                 elif float(infosperte['perte']) <= 1:
                     config.perte = float(infosperte['perte'])
                     m = 0 - config.perte
