@@ -1,28 +1,24 @@
-import random
 import time
+
+import config
+from Functions import Functions_1XBET
+from Functions import GetLigueName, VerificationMatchTrouve, AddRunning
+from Functions.AfficherParis import AfficherParis
 from Functions.DeleteBet import DeleteBet
-from Functions.GetIfGameStart import GetIfGameStart, GetIfGameStart30A, GetIfGameEnd
+from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
-from Functions.GetMise import GetMise
+from Functions.Function_GetSetActuel import GetSetActuel
+from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetBet import GetBet
-from Functions.GetPlayersName import GetPlayersName
+from Functions.GetIfGameStart import GetIfGameEnd
+from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
+from Functions.GetMise import GetMise
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
-from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.PlacerMise import PlacerMise
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
-
 from Functions.ValidationDuParis import ValidationDuParis
-import config
-from Functions import GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1, AddRunning
-from Functions import Functions_1XBET
-import re
-from Functions.AfficherParis import AfficherParis
-from Functions.Function_scriptDelRunning import scriptDelRunning
-
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
-from Functions.GetJsonData import getPerte, delPerte, DispatchPerte, getGlobalPerte, SendGlobalPerte
-from Functions.FisrtGameBet import FirstGameBet
 
 
 def all_script(driver):
@@ -46,15 +42,29 @@ def all_script(driver):
         infosperte = getGlobalPerte()
         print("PERTE : ")
         if infosperte:
-            if float(infosperte['perte']) > 1:
+            if float(infosperte['perte']) > 100:
+                SendGlobalPerte(config.scriptType, -10)
+                config.perte = 10
+                config.rattrape_perte = 1
+            elif float(infosperte['perte']) > 50:
+                SendGlobalPerte(config.scriptType, -5)
+                config.perte = 5
+                config.rattrape_perte = 1
+            elif float(infosperte['perte']) > 20:
+                SendGlobalPerte(config.scriptType, -3)
+                config.perte = 3
+                config.rattrape_perte = 1
+            elif float(infosperte['perte']) > 1:
                 SendGlobalPerte(config.scriptType, -1)
                 config.perte = 1
-            elif float(infosperte['perte']) <= 1:
+                config.rattrape_perte = 1
+            elif float(infosperte['perte']) >= 0.2:
                 config.perte = float(infosperte['perte'])
                 m = 0 - config.perte
                 SendGlobalPerte(config.scriptType, m)
                 config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
+
         # END RECHERCHE INFOS DE MISE
         GetSetActuel(driver)
         config.saved_set = config.set_actuel
@@ -225,10 +235,23 @@ def all_script(driver):
             infosperte = getGlobalPerte()
             print("PERTE : ")
             if infosperte:
-                if float(infosperte['perte']) > 1:
+                if float(infosperte['perte']) > 100:
+                    SendGlobalPerte(config.scriptType, -10)
+                    config.perte = 10
+                    config.rattrape_perte = 1
+                elif float(infosperte['perte']) > 50:
+                    SendGlobalPerte(config.scriptType, -5)
+                    config.perte = 5
+                    config.rattrape_perte = 1
+                elif float(infosperte['perte']) > 20:
+                    SendGlobalPerte(config.scriptType, -3)
+                    config.perte = 3
+                    config.rattrape_perte = 1
+                elif float(infosperte['perte']) > 1:
                     SendGlobalPerte(config.scriptType, -1)
                     config.perte = 1
-                elif float(infosperte['perte']) <= 1:
+                    config.rattrape_perte = 1
+                elif float(infosperte['perte']) >= 0.2:
                     config.perte = float(infosperte['perte'])
                     m = 0 - config.perte
                     SendGlobalPerte(config.scriptType, m)

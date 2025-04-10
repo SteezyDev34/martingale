@@ -34,7 +34,6 @@ def getPerte():
         except Exception as e:
             print(f"pas de perte {e}")
         else:
-            config.rattrape_perte = 1
             return pertes
     else:
         return
