@@ -16,7 +16,7 @@ def main(div_bet_score: object, score_to_start: list[str]) -> bool:
         bet_score = bet_score.replace(
             '\n', '')
     except:
-        config.log('⚠️Impossible de lire le score du match!', 'warning', False, 3)
+        config.log('Impossible de lire le score du match!', 'warning', False, 3)
         get_bet_score = False
     else:
         config.log('Score en cours : ' + bet_score, 'warning', True, 4)

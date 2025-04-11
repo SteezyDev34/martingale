@@ -13,7 +13,7 @@ def VerificationListeMatchLive(driver):
         driver.find_element(By.CLASS_NAME, 'betting-content__main')
     except Exception as e:
         config.log_clear_line(2)
-        config.log('        ⚠️Liste match live non visible!', 'warning', False)
+        config.log('        Liste match live non visible!', 'warning', False)
         time.sleep(2)
         config.log_clear_line()
         return False

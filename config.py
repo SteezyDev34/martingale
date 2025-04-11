@@ -296,5 +296,62 @@ def log_clear_line(line_number=1):
         time.sleep(0.5)
         for _ in range(line_number):
             # Remonte d'une ligne et l'efface
-            print('cle')
-            sys.stdout.write("\033[F\033[K\r")
+            try:
+                sys.stdout.write("\033[F\033[K\r")
+                sys.stdout.flush()
+            except:
+                clear_previous_line_windows()
+
+
+import ctypes
+
+# Obtenir un handle pour la console de sortie standard
+std_out_handle = ctypes.windll.kernel32.GetStdHandle(-11)
+
+
+# Fonction pour effacer la ligne précédente avec l'API Windows
+def clear_previous_line_windows():
+    # Obtenir la position actuelle du curseur
+    csbi = ctypes.create_string_buffer(22)
+    res = ctypes.windll.kernel32.GetConsoleScreenBufferInfo(std_out_handle, csbi)
+
+    if res:
+        from ctypes import Structure, c_short, c_long
+
+        class COORD(Structure):
+            _fields_ = [("X", c_short), ("Y", c_short)]
+
+        class SMALL_RECT(Structure):
+            _fields_ = [("Left", c_short), ("Top", c_short),
+                        ("Right", c_short), ("Bottom", c_short)]
+
+        class CONSOLE_SCREEN_BUFFER_INFO(Structure):
+            _fields_ = [("dwSize", COORD),
+                        ("dwCursorPosition", COORD),
+                        ("wAttributes", c_long),
+                        ("srWindow", SMALL_RECT),
+                        ("dwMaximumWindowSize", COORD)]
+
+        info = CONSOLE_SCREEN_BUFFER_INFO()
+        ctypes.windll.kernel32.GetConsoleScreenBufferInfo(std_out_handle, ctypes.byref(info))
+
+        # Déplacer le curseur à la ligne précédente
+        new_pos = COORD(0, info.dwCursorPosition.Y - 1)
+        ctypes.windll.kernel32.SetConsoleCursorPosition(std_out_handle, new_pos)
+
+        # Effacer la ligne
+        chars_written = ctypes.c_long()
+        console_size = info.dwSize.X
+        ctypes.windll.kernel32.FillConsoleOutputCharacterA(
+            std_out_handle, ord(' '), console_size, new_pos, ctypes.byref(chars_written))
+        ctypes.windll.kernel32.FillConsoleOutputAttribute(
+            std_out_handle, info.wAttributes, console_size, new_pos, ctypes.byref(chars_written))
+
+
+# Utilisation avec fallback
+def clear_previous_line_cross_platform():
+    try:
+        sys.stdout.write("\033[F\033[K\r")
+        sys.stdout.flush()
+    except:
+        clear_previous_line_windows()

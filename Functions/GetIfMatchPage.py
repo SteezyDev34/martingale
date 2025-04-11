@@ -17,7 +17,7 @@ def GetIfMatchPage(driver):
                 (By.CLASS_NAME, 'scoreboard-section__scroll'))
         )
     except:
-        config.log('        ⚠️Tableau des scores introuvable!', 'warning', False)
+        config.log('        Tableau des scores introuvable!', 'warning', False)
         config.log_clear_line()
         try:
             element = WebDriverWait(driver, 2).until(
@@ -25,7 +25,7 @@ def GetIfMatchPage(driver):
                     (By.CLASS_NAME, 'statistic-frame'))
             )
         except:
-            config.log('        ⚠️Tableau des stats introuvable!', 'warning', False)
+            config.log('        Tableau des stats introuvable!', 'warning', False)
             config.log_clear_line()
             try:
                 ul_element = WebDriverWait(driver, 2).until(
@@ -33,7 +33,7 @@ def GetIfMatchPage(driver):
                         (By.CLASS_NAME, 'new-breadcrumbs'))
                 )
             except Exception as e:
-                config.log('    🔎 Ce n\'est pas une page de match', 'warning', False)
+                config.log('     Ce n\'est pas une page de match', 'warning', False)
                 config.log_clear_line()
                 return False
             else:
@@ -43,21 +43,21 @@ def GetIfMatchPage(driver):
                 print(ul_text)
                 # Vérifier si le texte contient le mot "résume", indépendamment de la casse
                 if 'résume' in ul_text.lower():
-                    config.log('    🔎 MATCH TERMINÉ!', 'info', False)
+                    config.log('     MATCH TERMINÉ!', 'info', False)
                     driver.get(config.site_url)
                     return False
                 else:
-                    config.log('    🔎 Ce n\'est pas une page de résumé', 'info', False)
+                    config.log('     Ce n\'est pas une page de résumé', 'info', False)
                     config.log_clear_line()
                     driver.get(config.site_url)
                     return False
 
         else:
-            config.log('    🔎 MATCH TERMINÉ!', 'info', False)
+            config.log('     MATCH TERMINÉ!', 'info', False)
             driver.get(config.site_url)
             return False
     else:
-        config.log('    🔎 PAGE MATCH OK!', 'info', False)
+        config.log('     PAGE MATCH OK!', 'info', False)
         config.log_clear_line()
         return True
 

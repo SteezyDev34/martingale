@@ -48,6 +48,8 @@ def GetBet(driver, nextBet=False):
         else:
             sautDeLigne = 70
         decalageX = 50
+        decalageX = size['width'] / -2 + 50
+        
     ligne = 1
     i = 1
     while not clic and tentative < 3 and not config.error:

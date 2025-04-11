@@ -18,7 +18,7 @@ def main(driver, bet_item, matchlist_file_name):
             '-')
         config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
     except Exception as e:
-        config.log('⚠️Impossible de lire le lien du match!', 'warning', False, 4)
+        config.log('Impossible de lire le lien du match!', 'warning', False, 4)
         config.log_clear_line()
         return [False, config.newmatch]
     else:
@@ -69,7 +69,7 @@ def fromUrl(driver, matchlist_file_name):
             '-')
         config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
     except Exception as e:
-        config.log('            ⚠️Impossible de lire le lien du match!', 'warning', False)
+        config.log('            Impossible de lire le lien du match!', 'warning', False)
         return [False, config.newmatch]
     else:
         match_list = GetMatchDone.main(matchlist_file_name)
@@ -89,6 +89,6 @@ def newmatchFromUrl(driver):
             '-')
         config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
     except Exception as e:
-        config.log('        ⚠️Impossible de lire le lien du match!', 'warning', False)
+        config.log('        Impossible de lire le lien du match!', 'warning', False)
         config.log_clear_line()
         return [False, config.newmatch]

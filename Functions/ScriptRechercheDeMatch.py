@@ -15,7 +15,7 @@ from Functions.VerificationListeMatchLive import VerificationListeMatchLive
 
 def rechercheDeMatch(driver):
     config.error = False
-    config.log('🔎 RECHERCHE DE MATCH', 'title', False)
+    config.log(' RECHERCHE DE MATCH', 'title', False)
     config.match_found = False
     while not config.match_found and not config.error:
         # config.init_variable()
@@ -32,11 +32,11 @@ def rechercheDeMatch(driver):
             return False"""
         try:
             # RECUPERATION DES LIGUES EN COURS
-            config.log('🔎 Récupération des ligues', 'info', False, 1)
+            config.log(' Récupération des ligues', 'info', False, 1)
             bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                                   'dashboard-champ')
         except:
-            config.log('⚠️ligues introuvables!', 'warning', True, 2)
+            config.log('ligues introuvables!', 'warning', True, 2)
             config.error = True
             config.log_clear_line()
             return False
@@ -62,12 +62,12 @@ def rechercheDeMatch(driver):
                         bet_items = bet_ligue.find_elements(By.CLASS_NAME,
                                                             'dashboard-game-block')
                     except:
-                        config.log('⚠️Listes des matchs introuvables!', 'warning', False, 3)
+                        config.log('Listes des matchs introuvables!', 'warning', False, 3)
                         # s'il y une erreur on passe au suivant
                         continue
                     else:
                         if len(bet_items) <= 0:
-                            config.log('⚠️Listes des matchs introuvables!', 'warning', False, 3)
+                            config.log('Listes des matchs introuvables!', 'warning', False, 3)
                             # s'il y une erreur on passe au suivant
                             config.log_clear_line(2)
                             continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
@@ -91,14 +91,14 @@ def rechercheDeMatch(driver):
                                                                            'ui-game-scores')
                                 except:
 
-                                    config.log('⚠️Impossible de récupérer le score!', 'warning', False, 4)
+                                    config.log('Impossible de récupérer le score!', 'warning', False, 4)
                                     time.sleep(2)
                                     config.log_clear_line()
                                     continue
                                 else:
                                     # si le score est récupéré
                                     if len(div_bet_score) <= 0:
-                                        config.log('⚠️Pas de score!', 'warning', False, 4)
+                                        config.log('Pas de score!', 'warning', False, 4)
                                         time.sleep(2)
                                         config.log_clear_line()
                                         continue
