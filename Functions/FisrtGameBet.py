@@ -1,3 +1,5 @@
+import inspect
+
 import config
 from Functions.AfficherParis import AfficherParis
 from Functions.GetBet import GetBet
@@ -34,6 +36,10 @@ def FirstGameBet(driver):
 
         if not AfficherParis(driver):
             config.error = True
+            current_frame = inspect.currentframe()
+            config.log(
+                f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                'error', True)
             break
         # On recherche le jeu actuel
         config.log('liste des pariis affichée', '', True, 2)
@@ -42,6 +48,10 @@ def FirstGameBet(driver):
             if tentative > 5:
                 config.log('error recup jeu #ERR345', 'error', True, 2)
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
             continue
         # ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
         GetMise(driver)

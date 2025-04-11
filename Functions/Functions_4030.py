@@ -1,3 +1,4 @@
+import inspect
 import time
 
 import config
@@ -28,6 +29,10 @@ def all_script(driver):
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver):
         config.error = True
+        current_frame = inspect.currentframe()
+        config.log(
+            f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+            'error', True)
     # --------
     config.match_found = True
     if config.match_found and not config.error:
@@ -72,6 +77,10 @@ def all_script(driver):
 
         if not config.set_actuel:
             config.error = True
+            current_frame = inspect.currentframe()
+            config.log(
+                f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                'error', True)
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
@@ -108,6 +117,10 @@ def all_script(driver):
                 FirstGameBet(driver)
             else:
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
                 print("erreur perte en 1 set")
                 DispatchPerte()
         elif (config.jeu_actuel + 1) == 13:
@@ -142,6 +155,10 @@ def all_script(driver):
             config.log('Affichage de la liste des paris', config.newmatch)
             if not AfficherParis(driver):
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
                 break
             # On recherche le jeu actuel
             config.log('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
@@ -150,6 +167,10 @@ def all_script(driver):
                 if tentative > 5:
                     config.log('error recup jeu #ERR345', config.newmatch)
                     config.error = True
+                    current_frame = inspect.currentframe()
+                    config.log(
+                        f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                        'error', True)
                     tentative = 0
                 continue
             else:
@@ -168,6 +189,10 @@ def all_script(driver):
                 send_mise = True
             else:
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
         result = GetResult(driver)
 
         if result == 'LOSE':
@@ -177,6 +202,10 @@ def all_script(driver):
             newset = int(config.saved_set) + 1
             if not config.set_actuel:
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
             config.log('set ' + str(config.set_actuel) + ' - saved set ' + str(config.saved_set), config.newmatch)
             if str(config.saved_set) == str(config.set_actuel):  ## si on est toujours sur le meme set
                 config.log('on est toujours sur le meme set', config.newmatch)
@@ -232,6 +261,10 @@ def all_script(driver):
             else:
                 print("ERROR : ecup set " + str(config.set_actuel))
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
         elif result == 'WIN':
             config.perte = 0
             config.init_variable()

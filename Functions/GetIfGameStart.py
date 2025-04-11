@@ -1,3 +1,4 @@
+import inspect
 import time
 
 import config
@@ -14,6 +15,10 @@ def GetIfGameStart(driver):
         if config.score_actuel == '0:0':
             if not config.score_actuel:
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
             if not printext:
                 config.log('GAME NOT START')
                 printext = True
@@ -27,6 +32,10 @@ def GetIfGameStart(driver):
             if not GetIfMatchPage(driver):
                 print('Ce n\'est pas une page de match')
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
         else:
             gamestart = False
 
@@ -47,6 +56,10 @@ def GetIfGameStart30A(driver):
             gamestart = False
             if not GetIfMatchPage(driver):
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
     return gamestart
 
 
@@ -64,6 +77,10 @@ def GetIfGameEnd(driver):
             gameeend = False
             if not GetIfMatchPage(driver):
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
     return gameeend
 
 

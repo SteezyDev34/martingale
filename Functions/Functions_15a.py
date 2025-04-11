@@ -1,3 +1,4 @@
+import inspect
 import time
 
 import config
@@ -30,6 +31,11 @@ def all_script(driver):
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver):
         config.error = True
+        current_frame = inspect.currentframe()
+        config.log(
+            f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+            'error', True)
+
     # --------
     config.match_found = True
     if config.match_found and not config.error:
@@ -71,6 +77,10 @@ def all_script(driver):
 
         if not config.set_actuel:
             config.error = True
+            current_frame = inspect.currentframe()
+            config.log(
+                f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                'error', True)
 
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
@@ -139,6 +149,10 @@ def all_script(driver):
             config.log('Affichage de la liste des paris', config.newmatch)
             if not AfficherParis(driver):
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
                 break
             # On recherche le jeu actuel
             config.log('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
@@ -147,6 +161,10 @@ def all_script(driver):
                 if tentative > 5:
                     config.log('error recup jeu #ERR345', config.newmatch)
                     config.error = True
+                    current_frame = inspect.currentframe()
+                    config.log(
+                        f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                        'error', True)
                     tentative = 0
                 continue
             else:
@@ -175,6 +193,10 @@ def all_script(driver):
                 GetScoreActuel(driver)
                 if config.score_actuel == False:
                     config.error = True
+                    current_frame = inspect.currentframe()
+                    config.log(
+                        f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                        'error', True)
                     config.log("error pendant la récupération du score", config.newmatch)
                     break
                 if (
@@ -185,6 +207,10 @@ def all_script(driver):
                     ###ajouter ici les actions avant de reprendre
                 elif config.score_actuel == "15:15":
                     config.error = True
+                    current_frame = inspect.currentframe()
+                    config.log(
+                        f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                        'error', True)
                     config.log("15A leave!", config.newmatch)
                     FirstGameBet(driver)
                     ###ajouter ici les actions avant de reprendre
@@ -204,6 +230,10 @@ def all_script(driver):
             newset = int(config.saved_set) + 1
             if not config.set_actuel:
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
             config.log('set ' + str(config.set_actuel) + ' - saved set ' + str(config.saved_set), config.newmatch)
             if str(config.saved_set) == str(config.set_actuel):  ## si on est toujours sur le meme set
                 config.log('on est toujours sur le meme set', config.newmatch)

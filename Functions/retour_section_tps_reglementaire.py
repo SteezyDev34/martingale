@@ -1,14 +1,10 @@
-import re
-import time
+import inspect
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from Functions.Function_GetSetActuel import GetSetActuel, GetQTtActuel
 import config
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from Functions.GetIfMatchPage import GetIfMatchPage
 
 
 def RetourTpsReg(driver):
@@ -28,6 +24,10 @@ def RetourTpsReg(driver):
             tentative = tentative + 1
             if tentative == 9:
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
                 break
             config.log(str(tentative), config.newmatch)
         else:

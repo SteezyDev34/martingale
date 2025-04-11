@@ -1,13 +1,13 @@
+import inspect
+
 import config
-from Functions.AfficherParis import AfficherParis
+from AfficherParis import AfficherParis
 from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.GetBet import GetBet
-from Functions.GetIfGameStart import GetIfGameEnd
 from Functions.GetMise import GetMise
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.PlacerMise import PlacerMise
 from Functions.ValidationDuParis import ValidationDuParis
-from AfficherParis import AfficherParis
 
 
 def FirstGameBet(driver):
@@ -20,6 +20,10 @@ def FirstGameBet(driver):
         config.log('Affichage de la liste des paris', 0, config.newmatch)
         if not AfficherParis(driver):
             config.error = True
+            current_frame = inspect.currentframe()
+            config.log(
+                f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                'error', True)
             break
         else:
             # On recherche le jeu actuel
@@ -30,6 +34,10 @@ def FirstGameBet(driver):
             tentative += 1
             if tentative > 5:
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
                 config.log('error recup jeu #ERR345', 1, config.newmatch)
         else:
             win_score30 = jeu[1]

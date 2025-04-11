@@ -1,3 +1,4 @@
+import inspect
 import time
 
 from selenium.webdriver.common.by import By
@@ -38,6 +39,10 @@ def rechercheDeMatch(driver):
         except:
             config.log('ligues introuvables!', 'warning', True, 2)
             config.error = True
+            current_frame = inspect.currentframe()
+            config.log(
+                f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                'error', True)
             config.log_clear_line()
             return False
         else:
@@ -159,6 +164,10 @@ def rechercheDeMatchNBA(driver):
         # VERIFICATION SI PAGE DE LIST LIVE"""
         if not VerificationListeMatchLive(driver):
             config.error = True
+            current_frame = inspect.currentframe()
+            config.log(
+                f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                'error', True)
             print("PAGE VIDE")
             driver.get('https://1xbet.com/fr/live/basketball/')
             return False

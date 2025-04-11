@@ -1,3 +1,4 @@
+import inspect
 import time
 
 import config
@@ -32,6 +33,10 @@ def all_script(driver):
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver):
         config.error = True
+        current_frame = inspect.currentframe()
+        config.log(
+            f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+            'error', True)
     # --------
     config.match_found = True
     if config.match_found and not config.error:
@@ -118,6 +123,10 @@ def all_script(driver):
                 FirstGameBet(driver)
             else:
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
                 print("erreur perte en 1 set")
                 DispatchPerte()
         elif (config.jeu_actuel + 1) == 13:
@@ -153,6 +162,10 @@ def all_script(driver):
             config.log('Affichage de la liste des paris', config.newmatch)
             if not AfficherParis(driver):
                 config.error = True
+                current_frame = inspect.currentframe()
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
                 break
             # On recherche le jeu actuel
             config.log('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
