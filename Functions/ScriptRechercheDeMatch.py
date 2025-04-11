@@ -53,7 +53,7 @@ def rechercheDeMatch(driver):
                     config.error = False
                     continue
                 # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-                config.log('🏟️ ' + config.ligue_name, 'info', False, 2)
+                config.log(' ' + config.ligue_name, 'info', False, 2)
                 if getCompet():
                     # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
                     try:
