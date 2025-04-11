@@ -149,8 +149,8 @@ def GetBet(driver, nextBet=False):
             y = size['height'] / -2 + sautDeLigne
         x = decalageX
         # Calculer les coordonnées pour cliquer au centre du div
-        # print('Y offset : '+str(y))
-        # print('X offset : ' + str(x))
+        print('Y offset : ' + str(y))
+        print('X offset : ' + str(x))
         # Créer une instance ActionChains
         actions = ActionChains(driver)
         # Cliquer aux coordonnées calculées
@@ -165,31 +165,28 @@ def GetBet(driver, nextBet=False):
                                                   'ui-coupon-bet-market__name'))
             )
         except Exception as e:
-            tentative_clic += 1
             config.log('tentative_clic : ' + str(tentative_clic))
 
-            if tentative_clic == 3:
-                config.log('Pas d\'infos, suivant...')
-                if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
-                    if config.systeme == 'Darwin':
-                        if i % 2 != 0:
-                            sautDeLigne = sautDeLigne
-                            decalageX = 50
-                        else:
-                            sautDeLigne = sautDeLigne + 30
-                            decalageX = size['width'] / -2 + 50
+            config.log('Pas d\'infos, suivant...')
+            if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
+                if config.systeme == 'Darwin':
+                    if i % 2 != 0:
+                        sautDeLigne = sautDeLigne
+                        decalageX = 50
                     else:
-                        if i % 2 == 0:
-                            sautDeLigne = sautDeLigne
-                            decalageX = 50
-                        else:
-                            sautDeLigne = sautDeLigne + 50
-                            decalageX = size['width'] / 2 + 50
-
+                        sautDeLigne = sautDeLigne + 30
+                        decalageX = size['width'] / -2 + 50
                 else:
-                    sautDeLigne = sautDeLigne + 50
-                ligne = ligne + 1
-                tentative_clic = 0
+                    if i % 2 != 0:
+                        sautDeLigne = sautDeLigne
+                        decalageX = 50
+                    else:
+                        sautDeLigne = sautDeLigne + 50
+                        decalageX = size['width'] / 2 + 50
+
+            else:
+                sautDeLigne = sautDeLigne + 50
+            ligne = ligne + 1
         else:
             # print('Infos de paris affiché')
             try:
@@ -210,7 +207,7 @@ def GetBet(driver, nextBet=False):
                             sautDeLigne = sautDeLigne + 50
                             decalageX = size['width'] / -2 + 50
                     else:
-                        if i % 2 == 0:
+                        if i % 2 != 0:
                             sautDeLigne = sautDeLigne + 50
                             decalageX = 50
                         else:
@@ -246,7 +243,7 @@ def GetBet(driver, nextBet=False):
                                     decalageX = size['width'] / -2 + 50
                             else:
                                 # print('win')
-                                if i % 2 == 0:
+                                if i % 2 != 0:
                                     # print('pair')
                                     sautDeLigne = sautDeLigne + 50
                                     decalageX = 50
@@ -265,7 +262,7 @@ def GetBet(driver, nextBet=False):
                                 decalageX = size['width'] / -2 + 50
                         else:
                             # print('win')
-                            if i % 2 == 0:
+                            if i % 2 != 0:
                                 sautDeLigne = sautDeLigne + 50
                                 decalageX = 50
                             else:
