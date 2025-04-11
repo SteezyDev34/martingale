@@ -44,9 +44,9 @@ def GetBet(driver, nextBet=False):
     elif config.systeme == 'Windows':
         y = 0
         if config.scriptType == '300' or config.scriptType == '030':
-            sautDeLigne = 70 * 3
+            sautDeLigne = 80 * 3
         else:
-            sautDeLigne = 70
+            sautDeLigne = 80
         decalageX = 50
         decalageX = size['width'] / -2 + 50
 
@@ -183,11 +183,11 @@ def GetBet(driver, nextBet=False):
                             sautDeLigne = sautDeLigne
                             decalageX = 50
                         else:
-                            sautDeLigne = sautDeLigne + 30
+                            sautDeLigne = sautDeLigne + 50
                             decalageX = size['width'] / 2 + 50
 
                 else:
-                    sautDeLigne = sautDeLigne + 30
+                    sautDeLigne = sautDeLigne + 50
                 ligne = ligne + 1
                 tentative_clic = 0
         else:
@@ -207,17 +207,17 @@ def GetBet(driver, nextBet=False):
                             sautDeLigne = sautDeLigne
                             decalageX = 50
                         else:
-                            sautDeLigne = sautDeLigne + 30
+                            sautDeLigne = sautDeLigne + 50
                             decalageX = size['width'] / -2 + 50
                     else:
                         if i % 2 == 0:
-                            sautDeLigne = sautDeLigne + 30
+                            sautDeLigne = sautDeLigne + 50
                             decalageX = 50
                         else:
                             sautDeLigne = sautDeLigne
                             decalageX = size['width'] / -2 + 50
                 else:
-                    sautDeLigne = sautDeLigne + 30
+                    sautDeLigne = sautDeLigne + 50
                 config.log(f"#E0015 Infos de paris non lisible")
             else:
                 list_of_newbet_type = list_of_bet_type.text
@@ -242,13 +242,13 @@ def GetBet(driver, nextBet=False):
                                     sautDeLigne = sautDeLigne
                                     decalageX = 50
                                 else:
-                                    sautDeLigne = sautDeLigne + 30
+                                    sautDeLigne = sautDeLigne + 50
                                     decalageX = size['width'] / -2 + 50
                             else:
                                 # print('win')
                                 if i % 2 == 0:
                                     # print('pair')
-                                    sautDeLigne = sautDeLigne + 30
+                                    sautDeLigne = sautDeLigne + 50
                                     decalageX = 50
                                 else:
                                     # print('impair')
@@ -261,12 +261,12 @@ def GetBet(driver, nextBet=False):
                                 sautDeLigne = sautDeLigne
                                 decalageX = 50
                             else:
-                                sautDeLigne = sautDeLigne + 30
+                                sautDeLigne = sautDeLigne + 50
                                 decalageX = size['width'] / -2 + 50
                         else:
                             # print('win')
                             if i % 2 == 0:
-                                sautDeLigne = sautDeLigne + 30
+                                sautDeLigne = sautDeLigne + 50
                                 decalageX = 50
                             else:
 
@@ -284,10 +284,10 @@ def GetBet(driver, nextBet=False):
                             return clic
                         else:
                             # print('mauvais jeu')
-                            sautDeLigne = sautDeLigne + 30
+                            sautDeLigne = sautDeLigne + 50
                     else:
                         # print('Mauvais paris')
-                        sautDeLigne = sautDeLigne + 30
+                        sautDeLigne = sautDeLigne + 50
                         ligne = ligne + 1
                         # print('ligne ' + str(ligne))
                 else:
@@ -301,10 +301,10 @@ def GetBet(driver, nextBet=False):
                             return clic
                         else:
                             # print('mauvais jeu')
-                            sautDeLigne = sautDeLigne + 30
+                            sautDeLigne = sautDeLigne + 50
                     else:
                         # print('Mauvais paris')
-                        sautDeLigne = sautDeLigne + 30
+                        sautDeLigne = sautDeLigne + 50
                         ligne = ligne + 1
                         # print('ligne ' + str(ligne))
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
