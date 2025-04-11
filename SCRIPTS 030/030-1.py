@@ -28,7 +28,7 @@ parts = name_part.split('-')
 if len(parts) > 1:
     config.scriptType = parts[0]  # Suppose que le type est avant le tiret
     config.script_num = int(parts[1])  # Suppose que le numéro est avant le tiret
-    localhost = '7' + str(config.scriptType) + str(config.script_num)
+    localhost = '5' + str(config.scriptType) + str(config.script_num)
     config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
     print(config.localhost)
     # Demander confirmation à l'utilisateur
