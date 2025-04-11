@@ -210,6 +210,11 @@ import sys
 import os
 import time
 
+# Forcer l'encodage en UTF-8 pour stdout
+if sys.platform == "win32":
+    sys.stdout = codecs.getwriter("utf-8")(sys.stdout.buffer, errors="backslashreplace")
+    sys.stderr = codecs.getwriter("utf-8")(sys.stderr.buffer, errors="backslashreplace")
+
 # Initialisation de colorama pour le support des couleurs sur Windows
 # Le terminal natif de Windows ne prend pas en charge les codes ANSI par défaut
 # Colorama permet d'activer cette fonctionnalité sur Windows
