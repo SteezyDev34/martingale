@@ -54,6 +54,8 @@ else:
 # Chargement des functions
 # Chargement de Chrome driver
 from ChromeDriver.SetDriver import driver
+from Functions import Functions_4030
+from Functions.GetJsonData import DispatchPerte
 
 while (config.win < 100):
     config.init_variable()
