@@ -10,9 +10,9 @@ parent_directory = os.path.dirname(current_file_path)
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
 # Vérification de l'environnement
-# import VenvDependencyManager
+import VenvDependencyManager
 
-# VenvDependencyManager.main()
+VenvDependencyManager.main()
 from art import *
 
 # Chargement des variables globales
