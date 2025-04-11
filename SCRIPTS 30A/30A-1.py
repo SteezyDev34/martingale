@@ -39,7 +39,7 @@ if len(parts) > 1:
 
     confirmation = input(f"Avez-vous exécuté la commande \n{command}\n? (Y/N): ")
 
-    if confirmation.upper() != 'Y' or confirmation.upper() != 'y' or confirmation.upper() != 'O' or confirmation.upper() != 'o':
+    if confirmation.upper() != 'Y' and confirmation.upper() != 'y' and confirmation.upper() != 'O' and confirmation.upper() != 'o':
         print("Programme arrêté par l'utilisateur.")
         sys.exit(0)  # Arrêter le programme
 
