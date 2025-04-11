@@ -206,6 +206,7 @@ def saveLog(txt):
 
 
 import colorama
+import codecs
 import sys
 import os
 import time
