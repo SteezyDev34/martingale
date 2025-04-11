@@ -77,9 +77,9 @@ def GetResult(driver):
                 config.log(win, 'success', False, 2)
             if config.score_actuel in passed_score:
                 if win != 'WIN':
-                    if any(score['set'] == config.set_actuel and
-                           score['jeu'] == config.jeu_actuel and
-                           score['score'] == config.score_actuel
+                    if any(str(score['set']) == str(config.set_actuel) and
+                           str(score['jeu']) == str(config.jeu_actuel) and
+                           str(score['score']) == str(config.score_actuel)
                            for score in config.win_type):
                         win = 'WIN'
                     else:
