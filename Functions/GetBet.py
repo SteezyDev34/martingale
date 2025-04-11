@@ -46,7 +46,7 @@ def GetBet(driver, nextBet=False):
         if config.scriptType == '300' or config.scriptType == '030':
             sautDeLigne = 50 * 3
         else:
-            sautDeLigne = 70
+            sautDeLigne = 68
         decalageX = -50
 
     ligne = 1
@@ -202,7 +202,7 @@ def GetBet(driver, nextBet=False):
                             sautDeLigne = sautDeLigne + 30
                             decalageX = -50
                 else:
-                    sautDeLigne = sautDeLigne + 50
+                    sautDeLigne = sautDeLigne + 30
                 ligne = ligne + 1
             tentative_clic = tentative_clic + 1
         else:
@@ -233,7 +233,7 @@ def GetBet(driver, nextBet=False):
                             sautDeLigne = sautDeLigne + 30
                             decalageX = -50
                 else:
-                    sautDeLigne = sautDeLigne + 50
+                    sautDeLigne = sautDeLigne + 30
                 config.log(f"#E0015 Infos de paris non lisible")
             else:
                 list_of_newbet_type = list_of_bet_type.text
@@ -316,10 +316,10 @@ def GetBet(driver, nextBet=False):
                             return clic
                         else:
                             # print('mauvais jeu')
-                            sautDeLigne = sautDeLigne + 50
+                            sautDeLigne = sautDeLigne + 30
                     else:
                         # print('Mauvais paris')
-                        sautDeLigne = sautDeLigne + 50
+                        sautDeLigne = sautDeLigne + 30
                         ligne = ligne + 1
                         # print('ligne ' + str(ligne))
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
@@ -345,7 +345,7 @@ def GetBet(driver, nextBet=False):
                 if config.scriptType == '300' or config.scriptType == '030':
                     sautDeLigne = 50 * 3
                 else:
-                    sautDeLigne = 80
+                    sautDeLigne = 68
                 decalageX = 50
                 decalageX = -50
                 y = 0
