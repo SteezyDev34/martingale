@@ -213,7 +213,6 @@ def all_script(driver):
                 if (config.jeu_actuel + 1) >= 13:  # SI TIE BREAK
                     config.log("jeu " + str(config.jeu_actuel), config.newmatch)
                     config.log("attente fin de tie break", config.newmatch)
-                    passageset = True
 
             elif str(newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                 txtlog = " ON EST SUR LE PROCHAIN SET"
