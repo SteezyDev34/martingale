@@ -22,6 +22,7 @@ script_num = 0  # Numéro du Script
 win = 0  # Nombre de victoire
 cote = 3
 scriptType = "40A"
+localhost = ''
 site_url = "https://ca.1xbet.com/fr/live/tennis"
 # Score configurations
 score_to_start = [
