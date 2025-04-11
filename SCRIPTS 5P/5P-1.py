@@ -32,7 +32,7 @@ if len(parts) > 1:
     config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
     print(config.localhost)
     # Demander confirmation à l'utilisateur
-    if config.systeme != 'Windows':
+    if config.systeme == 'Windows':
         command = f'start chrome --remote-debugging-port={config.localhost} --user-data-dir="{project_directory}\\ChromeDebugProfile{config.localhost}"'
     else:
         command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
