@@ -167,27 +167,44 @@ def GetBet(driver, nextBet=False):
             config.log('tentative_clic : ' + str(tentative_clic))
 
             config.log('Pas d\'infos, suivant...')
-            if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
-                if config.systeme == 'Darwin':
-                    if i % 2 != 0:
-                        sautDeLigne = sautDeLigne
-                        decalageX = 50
+            tentative_clic = tentative_clic + 1
+            if tentative_clic < 4:
+                if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
+                    if config.systeme == 'Darwin':
+                        if i % 2 != 0:
+                            sautDeLigne = sautDeLigne
+                            decalageX = 50
+                        else:
+                            sautDeLigne = sautDeLigne + 30
+                            decalageX = size['width'] / -2 + 50
                     else:
-                        sautDeLigne = sautDeLigne + 30
-                        decalageX = size['width'] / -2 + 50
+                        if i % 2 != 0:
+                            print('gauche')
+                            sautDeLigne = sautDeLigne
+                            decalageX = 50
+                        else:
+                            print('droite')
+                            sautDeLigne = sautDeLigne + 30
+                            decalageX = size['width'] / -2 + 50
+                    if config.systeme == 'Darwin':
+                        if i % 2 != 0:
+                            sautDeLigne = sautDeLigne
+                            decalageX = 50
+                        else:
+                            sautDeLigne = sautDeLigne + 50
+                            decalageX = size['width'] / -2 + 50
+                    else:
+                        if i % 2 != 0:
+                            print('gauche')
+                            decalageX = 50
+                        else:
+                            print('droite')
+                            sautDeLigne = sautDeLigne + 30
+                            decalageX = -50
                 else:
-                    if i % 2 != 0:
-                        print('gauche')
-                        sautDeLigne = sautDeLigne
-                        decalageX = 50
-                    else:
-                        print('droite')
-                        sautDeLigne = sautDeLigne + 30
-                        decalageX = size['width'] / -2 + 50
-
-            else:
-                sautDeLigne = sautDeLigne + 50
-            ligne = ligne + 1
+                    sautDeLigne = sautDeLigne + 50
+                ligne = ligne + 1
+            tentative_clic = tentative_clic + 1
         else:
             # print('Infos de paris affiché')
             try:
