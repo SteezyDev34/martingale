@@ -227,7 +227,7 @@ BGPURPLE = colorama.Back.MAGENTA  # Fond magenta
 BGCYAN = colorama.Back.CYAN       # Fond cyan
 BGBLUE = colorama.Back.BLUE       # Fond bleu
 BGRESET = colorama.Back.BLACK     # Fond noir (réinitialisation)
-
+print(YELLOW)
 def log(message, type="", clear=True, indent=0):
     clear = False
     """
