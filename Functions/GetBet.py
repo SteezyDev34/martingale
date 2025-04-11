@@ -46,7 +46,7 @@ def GetBet(driver, nextBet=False):
         if config.scriptType == '300' or config.scriptType == '030':
             sautDeLigne = 50 * 3
         else:
-            sautDeLigne = 30
+            sautDeLigne = 40
         decalageX = 50
         decalageX = size['width'] / -2 + 50
 
