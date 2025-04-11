@@ -34,6 +34,7 @@ def GetScoreActuel(driver):
             get_score = True
             if config.saved_score != config.score_actuel:
                 config.log('Score actuel : ' + str(config.score_actuel), '', False, 2)
+                record_scores()
             config.saved_score = config.score_actuel
     return True
 

@@ -26,35 +26,72 @@ def GetResult(driver):
         if config.scriptType == "40A":
             if config.score_actuel == '40:A' or config.score_actuel == 'A:40' or config.score_actuel == '40:40':
                 result = 'WIN'
-                config.log(result, config.newmatch)
+                config.log(result, 'success', False, 2)
                 while config.score_actuel == '40:A' or config.score_actuel == 'A:40' or config.score_actuel == '40:40':
                     GetScoreActuel(driver)
                 return result
             elif config.score_actuel == '0:0':
                 result = 'LOSE'
-                config.log(result, config.newmatch)
+                config.log(result, 'error', False, 2)
                 return result
         elif config.scriptType == "30A":
+            passed_score = [
+                '40:15',
+                '15:40',
+                '30:40',
+                '40:30'
+                '40:0',
+                '0:40',
+                '40:40',
+                '40:A',
+                'A:40'
+            ]
             if config.score_actuel == '30:30':
-                result = 'WIN'
-                config.log(result, config.newmatch)
-                while config.score_actuel == '30:30':
-                    GetScoreActuel(driver)
-                return result
-            elif config.score_actuel == '40:0' or config.score_actuel == '0:40' or config.score_actuel == '40:15' or config.score_actuel == '15:40':
-                result = 'LOSE'
-                config.log(result, config.newmatch)
+                win = 'WIN'
+                config.log(win, 'success', False, 2)
+            if config.score_actuel in passed_score:
+                if win != 'WIN':
+                    if any(score['set'] == config.set_actuel and
+                           score['jeu'] == config.jeu_actuel and
+                           score['score'] == '30:30'
+                           for score in config.all_scores):
+                        win = 'WIN'
+                    else:
+                        win = 'LOSE'
+                        config.log(win, 'error', False, 2)
+                result = win
                 return result
         elif config.scriptType == "15A":
+            passed_score = [
+                '30:0',
+                '0:30',
+                '30:15',
+                '15:30',
+                '30:30'
+                '40:15',
+                '15:40',
+                '30:40',
+                '40:30'
+                '40:0',
+                '0:40',
+                '40:40',
+                '40:A',
+                'A:40'
+            ]
             if config.score_actuel == '15:15':
                 result = 'WIN'
-                config.log(result, config.newmatch)
-                while config.score_actuel == '15:15':
-                    GetScoreActuel(driver)
-                return result
-            elif config.score_actuel == '30:0' or config.score_actuel == '0:30':
-                result = 'LOSE'
-                config.log(result, config.newmatch)
+                config.log(win, 'success', False, 2)
+            if config.score_actuel in passed_score:
+                if win != 'WIN':
+                    if any(score['set'] == config.set_actuel and
+                           score['jeu'] == config.jeu_actuel and
+                           score['score'] == '15:15'
+                           for score in config.all_scores):
+                        win = 'WIN'
+                    else:
+                        win = 'LOSE'
+                        config.log(win, 'error', False, 2)
+                result = win
                 return result
         elif config.scriptType == '030' or config.scriptType == '300':
             passed_score = [
@@ -77,24 +114,24 @@ def GetResult(driver):
                 config.log(win, 'success', False, 2)
             if config.score_actuel in passed_score:
                 if win != 'WIN':
-                    if any(str(score['set']) == str(config.set_actuel) and
-                           str(score['jeu']) == str(config.jeu_actuel) and
-                           str(score['score']) == str(config.score_actuel)
-                           for score in config.win_type):
+                    if any(score['set'] == config.set_actuel and
+                           score['jeu'] == config.jeu_actuel and
+                           score['score'] == config.win_type
+                           for score in config.all_scores):
                         win = 'WIN'
                     else:
                         win = 'LOSE'
-                config.log(win, 'error', False, 2)
+                        config.log(win, 'error', False, 2)
                 result = win
                 return result
         elif config.scriptType == '4030' or config.scriptType == '4015':
             if config.score_actuel == '0:0' and previous_score == config.win_type:
                 result = 'WIN'
-                config.log(result, config.newmatch)
+                config.log(result, 'success', False, 2)
                 return result
             elif config.score_actuel == '0:0' and previous_score != config.win_type:
                 result = 'LOSE'
-                config.log(result, config.newmatch)
+                config.log(result, 'error', False, 2)
                 return result
         elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
             if config.score_actuel == '0:0' and previous_score in config.win_type:
