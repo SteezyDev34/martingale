@@ -336,6 +336,7 @@ def GetBet(driver, nextBet=False):
                 y = size['height'] + sautDeLigne
                 ligne = 1
                 tentative = tentative + 1
+                i = 0
         i = i + 1
 
 
