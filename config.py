@@ -204,22 +204,29 @@ def saveLog(txt):
             fichier.write(f"{heure_actuelle} : {txt}")
     except Exception as e:
         print(f'Erreur de log: {e}')
+import colorama
+import sys
+import os
+import time
 
+# Initialisation de colorama pour le support des couleurs sur Windows
+# Le terminal natif de Windows ne prend pas en charge les codes ANSI par défaut
+# Colorama permet d'activer cette fonctionnalité sur Windows
+colorama.init()
 
-# Couleurs ANSI (texte)
-RESET = "\033[0m"  # Réinitialisation du style
-BOLD = "\033[1m"  # Texte en gras
-YELLOW = "\033[33m"  # Texte jaune
-GREEN = "\033[32m"  # Texte vert
-BLUE = "\033[34m"  # Texte bleu
-CYAN = "\033[36m"  # Texte cyan
-RED = "\033[31m"  # Texte rouge
-PURPLE = "\033[35m"
-BGPURPLE = "\033[45m"
-BGCYAN = "\033[46m"
-BGBLUE = "\033[44m"
-BGRESET = "\033[40m"
-
+# Définition des couleurs ANSI avec colorama pour la compatibilité Windows
+RESET = colorama.Style.RESET_ALL  # Réinitialisation des styles
+BOLD = colorama.Style.BRIGHT      # Texte en gras
+YELLOW = colorama.Fore.YELLOW     # Texte jaune
+GREEN = colorama.Fore.GREEN       # Texte vert
+BLUE = colorama.Fore.BLUE         # Texte bleu
+CYAN = colorama.Fore.CYAN         # Texte cyan
+RED = colorama.Fore.RED           # Texte rouge
+PURPLE = colorama.Fore.MAGENTA    # Texte magenta
+BGPURPLE = colorama.Back.MAGENTA  # Fond magenta
+BGCYAN = colorama.Back.CYAN       # Fond cyan
+BGBLUE = colorama.Back.BLUE       # Fond bleu
+BGRESET = colorama.Back.BLACK     # Fond noir (réinitialisation)
 
 def log(message, type="", clear=True, indent=0):
     clear = False
@@ -231,7 +238,7 @@ def log(message, type="", clear=True, indent=0):
     :return: La longueur du message actuel, pour l'utiliser dans l'appel suivant.
     """
     global log_message
-    # Déterminer la couleur en fonction du type
+    # Détermination de la couleur en fonction du type de message
     if type == "info":
         color = BOLD
     elif type == "title":
@@ -243,31 +250,25 @@ def log(message, type="", clear=True, indent=0):
     elif type == "error":
         color = RED
     else:
-        color = RESET  # Par défaut, pas de couleur
-    if indent > 0:
-        indent = "____" * indent
-    else:
-        indent = ""
+        color = RESET  # Pas de couleur par défaut
+
+    # Gestion de l'indentation
+    indent = "____" * indent if indent > 0 else ""
+
     if clear:
-        # Calculer la longueur du dernier message pour l’eX ffacement complet
-        previous_message_length = len(log_message)
-        # Effacer la ligne précédente
+        # Effacement de la ligne précédente
         log_clear_line()
-
-        # Afficher le nouveau message sur la même ligne
+        # Affichage du nouveau message sur la même ligne
         sys.stdout.write(f"{color}{indent}{message}{RESET}\n")
     else:
-        # Afficher le message sur une nouvelle ligne
+        # Affichage du message sur une nouvelle ligne
         sys.stdout.write(f"{color}{indent}{message}{RESET}\n")
 
+    # Force l'écriture du buffer
     sys.stdout.flush()
-    # Mettre à jour la variable globale log_message avec le nouveau message
+    # Mise à jour du message global
     log_message = message
     saveLog(message)
-
-
-import sys
-
 
 def log_clear_line(line_number=1):
     """
@@ -276,10 +277,12 @@ def log_clear_line(line_number=1):
     :param line_number: Nombre de lignes à effacer (par défaut 1)
     """
     if os.getenv('PYCHARM_HOSTED') == '1':  # Si exécuté dans PyCharm
-        # Simplement écrire plusieurs lignes vides
+        # Simple écriture de lignes vides pour PyCharm
         for _ in range(line_number):
             sys.stdout.write("clear\n")
     else:
+        # Délai pour éviter les problèmes d'affichage
         time.sleep(0.5)
         for _ in range(line_number):
-            sys.stdout.write("\033[F\033[K\r")  # Remonter une ligne et l'effacer
+            # Remonte d'une ligne et l'efface
+            sys.stdout.write("\033[F\033[K\r")
