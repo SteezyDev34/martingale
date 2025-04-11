@@ -184,7 +184,7 @@ def GetBet(driver, nextBet=False):
                     else:
                         print('droite')
                         sautDeLigne = sautDeLigne + 30
-                        decalageX = size['width'] / 2 + 50
+                        decalageX = size['width'] / -2 + 50
 
             else:
                 sautDeLigne = sautDeLigne + 50
@@ -216,7 +216,7 @@ def GetBet(driver, nextBet=False):
                         else:
                             print('droite')
                             sautDeLigne = sautDeLigne + 30
-                            decalageX = size['width'] / 2 + 50
+                            decalageX = size['width'] / -2 + 50
                 else:
                     sautDeLigne = sautDeLigne + 50
                 config.log(f"#E0015 Infos de paris non lisible")
@@ -254,7 +254,7 @@ def GetBet(driver, nextBet=False):
                                 else:
                                     print('droite')
                                     sautDeLigne = sautDeLigne + 30
-                                    decalageX = size['width'] / 2 + 50
+                                    decalageX = size['width'] / -2 + 50
                     else:
                         print('Mauvais paris')
                         if config.systeme == 'Darwin':
@@ -273,7 +273,7 @@ def GetBet(driver, nextBet=False):
                             else:
                                 print('droite')
                                 sautDeLigne = sautDeLigne + 30
-                                decalageX = size['width'] / 2 + 50
+                                decalageX = size['width'] / -2 + 50
                         ligne = ligne + 1
                 elif config.scriptType == '5P' or config.scriptType == '4P':
                     list_of_newbet_type = list_of_newbet_type.split(sType)
