@@ -49,7 +49,7 @@ def GetBet(driver, nextBet=False):
             sautDeLigne = 70
         decalageX = 50
         decalageX = size['width'] / -2 + 50
-        
+
     ligne = 1
     i = 1
     while not clic and tentative < 3 and not config.error:
@@ -146,7 +146,8 @@ def GetBet(driver, nextBet=False):
             x = decalageX
         elif config.systeme == 'Windows':
             y = sautDeLigne
-            x = decalageX
+            y = size['height'] / -2 + 10 + sautDeLigne
+        x = decalageX
         # Calculer les coordonnées pour cliquer au centre du div
         # print('Y offset : '+str(y))
         # print('X offset : ' + str(x))
