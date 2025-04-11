@@ -212,6 +212,7 @@ import os
 import time
 
 # Forcer l'encodage en UTF-8 pour stdout
+print(sys.platform)
 if sys.platform == "win32":
     sys.stdout = codecs.getwriter("utf-8")(sys.stdout.buffer, errors="backslashreplace")
     sys.stderr = codecs.getwriter("utf-8")(sys.stderr.buffer, errors="backslashreplace")
