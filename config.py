@@ -2,7 +2,6 @@ import datetime
 import json
 import os
 import platform
-import time
 from typing import Dict, Any, Optional
 
 import requests
@@ -204,6 +203,8 @@ def saveLog(txt):
             fichier.write(f"{heure_actuelle} : {txt}")
     except Exception as e:
         print(f'Erreur de log: {e}')
+
+
 import colorama
 import sys
 import os
@@ -216,18 +217,20 @@ colorama.init()
 
 # Définition des couleurs ANSI avec colorama pour la compatibilité Windows
 RESET = colorama.Style.RESET_ALL  # Réinitialisation des styles
-BOLD = colorama.Style.BRIGHT      # Texte en gras
-YELLOW = colorama.Fore.YELLOW     # Texte jaune
-GREEN = colorama.Fore.GREEN       # Texte vert
-BLUE = colorama.Fore.BLUE         # Texte bleu
-CYAN = colorama.Fore.CYAN         # Texte cyan
-RED = colorama.Fore.RED           # Texte rouge
-PURPLE = colorama.Fore.MAGENTA    # Texte magenta
+BOLD = colorama.Style.BRIGHT  # Texte en gras
+YELLOW = colorama.Fore.YELLOW  # Texte jaune
+GREEN = colorama.Fore.GREEN  # Texte vert
+BLUE = colorama.Fore.BLUE  # Texte bleu
+CYAN = colorama.Fore.CYAN  # Texte cyan
+RED = colorama.Fore.RED  # Texte rouge
+PURPLE = colorama.Fore.MAGENTA  # Texte magenta
 BGPURPLE = colorama.Back.MAGENTA  # Fond magenta
-BGCYAN = colorama.Back.CYAN       # Fond cyan
-BGBLUE = colorama.Back.BLUE       # Fond bleu
-BGRESET = colorama.Back.BLACK     # Fond noir (réinitialisation)
+BGCYAN = colorama.Back.CYAN  # Fond cyan
+BGBLUE = colorama.Back.BLUE  # Fond bleu
+BGRESET = colorama.Back.BLACK  # Fond noir (réinitialisation)
 print(YELLOW)
+
+
 def log(message, type="", clear=True, indent=0):
     clear = False
     """
@@ -270,6 +273,7 @@ def log(message, type="", clear=True, indent=0):
     log_message = message
     saveLog(message)
 
+
 def log_clear_line(line_number=1):
     """
     Efface un certain nombre de lignes dans le terminal.
@@ -285,4 +289,5 @@ def log_clear_line(line_number=1):
         time.sleep(0.5)
         for _ in range(line_number):
             # Remonte d'une ligne et l'efface
+            print('cle')
             sys.stdout.write("\033[F\033[K\r")
