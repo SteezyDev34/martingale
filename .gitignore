@@ -7,8 +7,6 @@ logScript*
 chromedriver.exe
 /GsheetsJson
 DataFiles/*
-SetDriver*
 .idea/prettier.xml
 .idea/php.xml
-.DS_Store
 .DS_Store
