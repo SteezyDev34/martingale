@@ -47,8 +47,7 @@ def GetBet(driver, nextBet=False):
             sautDeLigne = 50 * 3
         else:
             sautDeLigne = 80
-        decalageX = 50
-        decalageX = size['width'] / -2 + 50
+        decalageX = -50
 
     ligne = 1
     i = 1
@@ -211,12 +210,11 @@ def GetBet(driver, nextBet=False):
                     else:
                         if i % 2 != 0:
                             print('gauche')
-                            sautDeLigne = sautDeLigne
                             decalageX = 50
                         else:
                             print('droite')
                             sautDeLigne = sautDeLigne + 30
-                            decalageX = size['width'] / -2 + 50
+                            decalageX = -50
                 else:
                     sautDeLigne = sautDeLigne + 50
                 config.log(f"#E0015 Infos de paris non lisible")
@@ -249,12 +247,11 @@ def GetBet(driver, nextBet=False):
                                 print('win')
                                 if i % 2 != 0:
                                     print('gauche')
-                                    sautDeLigne = sautDeLigne
                                     decalageX = 50
                                 else:
                                     print('droite')
                                     sautDeLigne = sautDeLigne + 30
-                                    decalageX = size['width'] / -2 + 50
+                                    decalageX = -50
                     else:
                         print('Mauvais paris')
                         if config.systeme == 'Darwin':
@@ -268,12 +265,11 @@ def GetBet(driver, nextBet=False):
                             # print('win')
                             if i % 2 != 0:
                                 print('gauche')
-                                sautDeLigne = sautDeLigne
                                 decalageX = 50
                             else:
                                 print('droite')
                                 sautDeLigne = sautDeLigne + 30
-                                decalageX = size['width'] / -2 + 50
+                                decalageX = -50
                         ligne = ligne + 1
                 elif config.scriptType == '5P' or config.scriptType == '4P':
                     list_of_newbet_type = list_of_newbet_type.split(sType)
@@ -334,7 +330,7 @@ def GetBet(driver, nextBet=False):
                 else:
                     sautDeLigne = 80
                 decalageX = 50
-                decalageX = size['width'] / -2 + 50
+                decalageX = -50
                 y = 0
                 ligne = 1
                 tentative = tentative + 1
