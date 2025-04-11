@@ -178,9 +178,11 @@ def GetBet(driver, nextBet=False):
                         decalageX = size['width'] / -2 + 50
                 else:
                     if i % 2 != 0:
+                        print('gauche')
                         sautDeLigne = sautDeLigne
                         decalageX = 50
                     else:
+                        print('droite')
                         sautDeLigne = sautDeLigne + 50
                         decalageX = size['width'] / 2 + 50
 
@@ -208,9 +210,11 @@ def GetBet(driver, nextBet=False):
                             decalageX = size['width'] / -2 + 50
                     else:
                         if i % 2 != 0:
+                            print('gauche')
                             sautDeLigne = sautDeLigne + 50
                             decalageX = 50
                         else:
+                            print('droite')
                             sautDeLigne = sautDeLigne
                             decalageX = size['width'] / -2 + 50
                 else:
@@ -233,7 +237,7 @@ def GetBet(driver, nextBet=False):
                             clic = True
                             return clic
                         else:
-                            # print('mauvais jeu')
+                            print('mauvais jeu')
                             if config.systeme == 'Darwin':
                                 if i % 2 != 0:
                                     sautDeLigne = sautDeLigne
@@ -242,17 +246,17 @@ def GetBet(driver, nextBet=False):
                                     sautDeLigne = sautDeLigne + 50
                                     decalageX = size['width'] / -2 + 50
                             else:
-                                # print('win')
+                                print('win')
                                 if i % 2 != 0:
-                                    # print('pair')
+                                    print('auche')
                                     sautDeLigne = sautDeLigne + 50
                                     decalageX = 50
                                 else:
-                                    # print('impair')
+                                    print('droite')
                                     sautDeLigne = sautDeLigne
                                     decalageX = size['width'] / -2 + 50
                     else:
-                        # print('Mauvais paris')
+                        print('Mauvais paris')
                         if config.systeme == 'Darwin':
                             if i % 2 != 0:
                                 sautDeLigne = sautDeLigne
@@ -263,10 +267,11 @@ def GetBet(driver, nextBet=False):
                         else:
                             # print('win')
                             if i % 2 != 0:
+                                print('gauiche')
                                 sautDeLigne = sautDeLigne + 50
                                 decalageX = 50
                             else:
-
+                                print('droite')
                                 sautDeLigne = sautDeLigne
                                 decalageX = size['width'] / -2 + 50
                         ligne = ligne + 1
@@ -322,15 +327,15 @@ def GetBet(driver, nextBet=False):
                 i = 0
         elif config.systeme == 'Windows':
             if y > size['height'] or ligne > max_line:
-                # print('size height :' + str(size['height']))
-                # print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
+                print('size height :' + str(size['height']))
+                print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
                 if config.scriptType == '300' or config.scriptType == '030':
-                    sautDeLigne = 70 * 3
+                    sautDeLigne = 50 * 3
                 else:
-                    sautDeLigne = 70
+                    sautDeLigne = 50
                 decalageX = 50
                 decalageX = size['width'] / -2 + 50
-                y = size['height'] + sautDeLigne
+                y = 0
                 ligne = 1
                 tentative = tentative + 1
                 i = 0
