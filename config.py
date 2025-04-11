@@ -263,7 +263,7 @@ def log(message, type="", clear=True, indent=0):
         color = RESET  # Pas de couleur par défaut
 
     # Gestion de l'indentation
-    indent = "____" * indent if indent > 0 else ""
+    indent = "    " * indent if indent > 0 else ""
 
     if clear:
         # Effacement de la ligne précédente
