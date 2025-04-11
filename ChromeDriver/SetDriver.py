@@ -10,7 +10,7 @@ import config
 Path = os.path.dirname(os.path.abspath(__file__))
 opt = Options()
 if config.systeme == 'Windows':
-    Path = Path + '\chromedriver.exe'
+    Path = Path + '\\chromedriver.exe'
 else:
     Path = Path + '/chromedriver'
 try:
