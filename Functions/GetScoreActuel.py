@@ -36,12 +36,12 @@ def GetScoreActuel(driver):
             get_score = True
             if config.saved_score != config.score_actuel:
                 config.log('Score actuel : ' + str(config.score_actuel), '', False, 2)
-                record_scores()
+                record_scores(driver)
             config.saved_score = config.score_actuel
     return True
 
 
-def record_scores():
+def record_scores(driver):
     GetSetActuel(driver)
     GetJeuActuel(driver)
     nouveau_score = {'set': config.set_actuel, 'jeu': config.jeu_actuel, 'score': config.score_actuel}
