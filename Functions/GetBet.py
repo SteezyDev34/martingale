@@ -288,7 +288,7 @@ def GetBet(driver, nextBet=False):
                                 sautDeLigne = sautDeLigne + 30
                                 decalageX = -50
                         ligne = ligne + 1
-                elif config.scriptType == '5P' or config.scriptType == '4P':
+                elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
                     list_of_newbet_type = list_of_newbet_type.split(sType)
                     if len(list_of_newbet_type) > 1:
                         getjeu_actuel = list_of_newbet_type[0].split("Jeu ")[1]

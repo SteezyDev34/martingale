@@ -51,10 +51,10 @@ def GetResult(driver):
                 config.log(win, 'success', False, 2)
             if config.score_actuel in passed_score:
                 if win != 'WIN':
-                    if any(score['set'] == config.set_actuel and
-                           score['jeu'] == config.jeu_actuel and
-                           score['score'] == '30:30'
-                           for score in config.all_scores):
+                    if any(score.get('set') == config.set_actuel and
+                           score.get('jeu') == config.jeu_actuel and
+                           score.get('score') == '30:30'
+                           for score in config.all_scores.values()):
                         win = 'WIN'
                     else:
                         win = 'LOSE'
@@ -83,10 +83,10 @@ def GetResult(driver):
                 config.log(win, 'success', False, 2)
             if config.score_actuel in passed_score:
                 if win != 'WIN':
-                    if any(score['set'] == config.set_actuel and
-                           score['jeu'] == config.jeu_actuel and
-                           score['score'] == '15:15'
-                           for score in config.all_scores):
+                    if any(score.get('set') == config.set_actuel and
+                           score.get('jeu') == config.jeu_actuel and
+                           score.get('score') == '15:15'
+                           for score in config.all_scores.values()):
                         win = 'WIN'
                     else:
                         win = 'LOSE'
@@ -117,7 +117,7 @@ def GetResult(driver):
                     if any(score.get('set') == config.set_actuel and
                            score.get('jeu') == config.jeu_actuel and
                            score.get('score') == config.win_type
-                           for score in config.all_scores):
+                           for score in config.all_scores.values()):
                         win = 'WIN'
                     else:
                         win = 'LOSE'
