@@ -2,6 +2,7 @@ import time
 
 import config
 from Functions.GetBet import GetBet
+from Functions.GetIfGameStart import GetIfGameEnd
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
@@ -49,6 +50,7 @@ def GetResult(driver):
             if config.score_actuel == '30:30':
                 win = 'WIN'
                 config.log(win, 'success', False, 2)
+                GetIfGameEnd(driver)
             if config.score_actuel in passed_score:
                 if win != 'WIN':
                     if any(score.get('set') == config.set_actuel and
@@ -81,6 +83,7 @@ def GetResult(driver):
             if config.score_actuel == '15:15':
                 result = 'WIN'
                 config.log(win, 'success', False, 2)
+                GetIfGameEnd(driver)
             if config.score_actuel in passed_score:
                 if win != 'WIN':
                     if any(score.get('set') == config.set_actuel and
