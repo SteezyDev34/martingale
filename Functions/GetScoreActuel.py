@@ -5,6 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 import config
+from Functions.Function_GetJeuActuel import GetJeuActuel
+from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.GetIfMatchPage import GetIfMatchPage
 
 
@@ -40,6 +42,8 @@ def GetScoreActuel(driver):
 
 
 def record_scores():
+    GetSetActuel(driver)
+    GetJeuActuel(driver)
     nouveau_score = {'set': config.set_actuel, 'jeu': config.jeu_actuel, 'score': config.score_actuel}
     # Si le dictionnaire n'existe pas encore, l'ajouter
     config.all_scores.update({len(config.all_scores): nouveau_score})
