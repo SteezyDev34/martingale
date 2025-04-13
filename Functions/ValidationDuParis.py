@@ -10,7 +10,7 @@ from Functions.ModalHandler import ModalHandler
 from Functions.PlacerMise import PlacerMise
 
 
-def ValidationDuParis(driver):
+def ValidationDuParis(driver, nexbet=False):
     validation = False
     tentative = 0
     config.log('validation paris', 'info', False, 2)
@@ -25,6 +25,8 @@ def ValidationDuParis(driver):
         if hasattr(config, 'validated_bet') and config.validated_bet is not None:
             current_game = getattr(config, 'jeu_actuel', None)
             current_set = getattr(config, 'set_actuel', None)
+            if nexbet:
+                current_game = float(current_game) + 1
 
             if (current_game is not None and current_set is not None and
                     config.validated_bet.get('jeu') == current_game and
