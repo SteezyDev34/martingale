@@ -88,7 +88,7 @@ def all_script(driver):
 
         if passageset:
             score_actuel = '40:0'
-            gamestart = 1
+            gamestart = True
             config.jeu_actuel = 0
             config.error = False
             config.log("passage set 2", config.newmatch)
@@ -124,7 +124,7 @@ def all_script(driver):
             passageset = True
             continue
         else:
-            gamestart = 0
+            gamestart = False
             ##ATTENTE QUE LE JEU COMMENCE
             GetIfGameEnd(driver)
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET

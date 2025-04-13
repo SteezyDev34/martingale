@@ -98,7 +98,7 @@ def all_script(driver):
             config.saved_set = ""
             config.set_actuel = GetSetActuel(driver)
             config.score_actuel = '0:0'
-            gamestart = 1
+            gamestart = True
             if config.rattrape_perte == 1:
                 config.error = False
                 txtlog = "passage set 2"
@@ -148,7 +148,7 @@ def all_script(driver):
             time.sleep(30)
             continue
         else:
-            gamestart = 0
+            gamestart = False
             ##ATTENTE QUE LE JEU COMMENCE
             GetIfGameStart(driver)
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET

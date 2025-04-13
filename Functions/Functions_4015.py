@@ -85,7 +85,7 @@ def all_script(driver):
             config.saved_set = ""
             config.set_actuel = GetSetActuel(driver)
             config.score_actuel = '0:0'
-            gamestart = 1
+            gamestart = True
             if config.rattrape_perte == 1:
                 config.error = False
                 txtlog = "passage set 2"
