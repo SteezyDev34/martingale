@@ -189,7 +189,7 @@ def all_script(driver):
                     break
                 else:
                     gamestart = True
-                if ValidationDuParis(driver):
+                if ValidationDuParis(driver, True):
                     validate_bet = True
                     config.perte = config.perte + config.mise
                     config.wantwin = float(config.wantwin) + float(config.increment)

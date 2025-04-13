@@ -198,7 +198,7 @@ def all_script(driver):
                             gamestart = True
                             txtlog = "GAME START"
                             config.log(txtlog, config.newmatch)
-                        if ValidationDuParis(driver):
+                        if ValidationDuParis(driver, True):
                             validate_bet = True
                             config.perte = float(config.perte) + float(config.mise)
                             config.wantwin = float(config.wantwin) + float(config.increment)
