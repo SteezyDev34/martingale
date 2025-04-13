@@ -29,7 +29,7 @@ def all_script(driver):
     scriptDelRunning()
     # --------
     # SCRIPT RECHERCHE DE MATCH
-    while not rechercheDeMatch(driver):
+    while not rechercheDeMatch(driver) and not config.error:
         config.error = True
         current_frame = inspect.currentframe()
         config.log(
@@ -94,8 +94,7 @@ def all_script(driver):
     winmatch = 0
     config.lose = False
     result = False
-    while (float(winmatch) <= float(config.nb_tour)):
-        config.error = False
+    while (float(winmatch) <= float(config.nb_tour)) and not config.error:
         GetJeuActuel(driver)
         # WAIT FOR GAME START
         if passageset:

@@ -51,6 +51,7 @@ def GetResult(driver):
                 config.log(win, 'success', False, 2)
                 while config.score_actuel == '30:30':
                     GetScoreActuel(driver)
+                result = win
                 return result
             if config.score_actuel in passed_score:
                 if win != 'WIN':
@@ -83,7 +84,7 @@ def GetResult(driver):
             ]
             if config.score_actuel == '15:15':
                 result = 'WIN'
-                config.log(win, 'success', False, 2)
+                config.log(result, 'success', False, 2)
                 while config.score_actuel == '15:15':
                     GetScoreActuel(driver)
                 return result

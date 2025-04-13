@@ -29,7 +29,7 @@ def all_script(driver):
     scriptDelRunning()
     # --------
     # SCRIPT RECHERCHE DE MATCH
-    while not rechercheDeMatch(driver):
+    while not rechercheDeMatch(driver) and not config.error:
         config.error = True
         current_frame = inspect.currentframe()
         config.log(
