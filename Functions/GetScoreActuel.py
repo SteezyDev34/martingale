@@ -17,7 +17,7 @@ def GetScoreActuel(driver):
     config.score_actuel = False
     get_score = False
     tentative = 0
-    while not get_score and not config.error:
+    while not get_score:
         try:
             score_teams = WebDriverWait(driver, 10).until(
                 EC.visibility_of_element_located((By.CLASS_NAME,
@@ -26,7 +26,8 @@ def GetScoreActuel(driver):
             score_teams = driver.find_elements(By.CLASS_NAME, 'scoreboard-scores__item')
         except Exception as e:
             print(f"#E0020\nUne erreur est survenue : {e}")
-            GetIfMatchPage(driver)
+            if not GetIfMatchPage(driver):
+                return False
             tentative = tentative + 1
             time.sleep(1)
             if tentative == 5:

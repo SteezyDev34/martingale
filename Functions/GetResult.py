@@ -19,9 +19,6 @@ def GetResult(driver):
         time.sleep(timesleep)
         previous_score = config.score_actuel
         GetScoreActuel(driver)
-        if not config.score_actuel:
-            config.error = True
-            break
         if config.scriptType == "40A":
             if config.score_actuel == '40:A' or config.score_actuel == 'A:40' or config.score_actuel == '40:40':
                 result = 'WIN'

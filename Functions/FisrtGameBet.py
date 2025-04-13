@@ -82,13 +82,10 @@ def FirstGameBet(driver):
                 config.log('GAME PASS WITHOUT VALIDATE ON FIRST', '', 2)
                 gamestart = False
                 break
-            elif nextBet or config.score_actuel == "40:40" or config.score_actuel == "40:A" or config.score_actuel == "A:4":
+            elif nextBet:
                 config.log('GAME PASS WITHOUT VALIDATE #2', '', 2)
                 gamestart = False
-                if not nextBet:
-                    break
-                else:
-                    GetIfGameEnd(driver)
+                GetIfGameEnd(driver)
             else:
                 gamestart = True
                 config.log('GAME START', '', 2)
