@@ -148,8 +148,8 @@ def GetBet(driver, nextBet=False):
             y = size['height'] / -2 + sautDeLigne
         x = decalageX
         # Calculer les coordonnées pour cliquer au centre du div
-        print('Y offset : ' + str(y))
-        print('X offset : ' + str(x))
+        # print('Y offset : ' + str(y))
+        # print('X offset : ' + str(x))
         # Créer une instance ActionChains
         actions = ActionChains(driver)
         # Cliquer aux coordonnées calculées
@@ -179,11 +179,11 @@ def GetBet(driver, nextBet=False):
                             decalageX = size['width'] / -2 + 50
                     else:
                         if i % 2 != 0:
-                            print('gauche')
+                            # print('gauche')
                             sautDeLigne = sautDeLigne
                             decalageX = 50
                         else:
-                            print('droite')
+                            # print('droite')
                             sautDeLigne = sautDeLigne + 30
                             decalageX = size['width'] / -2 + 50
                     if config.systeme == 'Darwin':
@@ -195,10 +195,10 @@ def GetBet(driver, nextBet=False):
                             decalageX = size['width'] / -2 + 50
                     else:
                         if i % 2 != 0:
-                            print('gauche')
+                            # print('gauche')
                             decalageX = 50
                         else:
-                            print('droite')
+                            # print('droite')
                             sautDeLigne = sautDeLigne + 30
                             decalageX = -50
                 else:
@@ -226,10 +226,10 @@ def GetBet(driver, nextBet=False):
                             decalageX = size['width'] / -2 + 50
                     else:
                         if i % 2 != 0:
-                            print('gauche')
+                            # print('gauche')
                             decalageX = 50
                         else:
-                            print('droite')
+                            # print('droite')
                             sautDeLigne = sautDeLigne + 30
                             decalageX = -50
                 else:
@@ -340,8 +340,8 @@ def GetBet(driver, nextBet=False):
                 i = 0
         elif config.systeme == 'Windows':
             if y > size['height'] or ligne > max_line:
-                print('size height :' + str(size['height']))
-                print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
+                # print('size height :' + str(size['height']))
+                # print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
                 if config.scriptType == '300' or config.scriptType == '030':
                     sautDeLigne = 50 * 3
                 else:
