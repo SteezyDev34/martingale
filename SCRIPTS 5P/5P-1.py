@@ -60,19 +60,19 @@ from Functions.GetJsonData import DispatchPerte
 
 while (config.win < 100):
     config.init_variable()
-    Functions_5P.all_script(driver)
     try:
-        print('pass')
+        Functions_5P.all_script(driver)
     except Exception as e:
-        print(f"ERROR SCRIPT : {e}")
-    if config.perte > 0:
-        DispatchPerte()
-    sucess = False
-    while not sucess:
-        try:
-            driver.get(config.site_url)
-        except:
-            continue
-        else:
-            sucess = True
+        config.log(f"ERROR SCRIPT : {e}", 'error', False)
+    else:
+        if config.perte > 0:
+            DispatchPerte()
+        sucess = False
+        while not sucess:
+            try:
+                driver.get(config.site_url)
+            except:
+                continue
+            else:
+                sucess = True
 print('TOTAL WIN : ' + str(config.win))
