@@ -47,7 +47,6 @@ def record_scores(driver):
     nouveau_score = {'set': config.set_actuel, 'jeu': config.jeu_actuel, 'score': config.score_actuel}
     # Si le dictionnaire n'existe pas encore, l'ajouter
     config.all_scores.update({len(config.all_scores): nouveau_score})
-    print(config.all_scores)
 
 
 if __name__ == "__main__":

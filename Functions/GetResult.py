@@ -15,7 +15,6 @@ def GetResult(driver):
     timesleep = 1  # TEMPS D'ATTENTE AVANT DE RECUPERER LE SCORE PASSE À 1 SI 40 DANS LE SCORE
     result = False
     win = False
-    # RetourTpsReg(driver)
     while not result and not config.error:
         time.sleep(timesleep)
         previous_score = config.score_actuel
