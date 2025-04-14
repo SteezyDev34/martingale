@@ -194,8 +194,8 @@ def all_script(driver):
                     config.perte = config.perte + config.mise
                     config.wantwin = float(config.wantwin) + float(config.increment)
                     # Calculate net profit based on stake, odds and losses
-                    config.global_match_win = (float(config.mise) * float(config.cote)) - float(config.perte)
-                    config.log(f'Potential Net profit: {config.global_match_win}')
+                    config.netprofit = (float(config.mise) * float(config.cote)) - float(config.perte)
+                    config.log(f'Potential Net profit: {config.netprofit}')
             # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
             RetourTpsReg(driver)
             GetIfGameEnd(driver)
@@ -227,6 +227,7 @@ def all_script(driver):
                 config.error = True
         elif result == 'WIN':
             config.init_variable()
+            config.global_match_win = config.global_match_win + config.netprofit
             config.perte = 0
             winmatch = winmatch + 1
             DeleteBet(driver)
@@ -265,6 +266,7 @@ def all_script(driver):
             config.rattrape_perte = 1
             if config.perte == 0 and config.global_match_win >= 1:
                 config.log(f'Net profit: {config.global_match_win}')
+                config.global_match_win = 0
                 break
     if config.perte > 0.2:
         DispatchPerte()
