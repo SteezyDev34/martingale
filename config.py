@@ -305,8 +305,9 @@ def log_clear_line(line_number=1):
 
 import ctypes
 
+
 # Obtenir un handle pour la console de sortie standard
-std_out_handle = ctypes.windll.kernel32.GetStdHandle(-11)
+# std_out_handle = ctypes.windll.kernel32.GetStdHandle(-11)
 
 
 # Fonction pour effacer la ligne précédente avec l'API Windows
