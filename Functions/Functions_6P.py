@@ -214,6 +214,9 @@ def all_script(driver):
                             validate_bet = True
                             config.perte = float(config.perte) + float(config.mise)
                             config.wantwin = float(config.wantwin) + float(config.increment)
+                            # Calculate net profit based on stake, odds and losses
+                            config.global_match_win = (float(config.mise) * float(config.cote)) - float(config.perte)
+                            config.log(f'Potential Net profit: {config.global_match_win}')
                     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
                     RetourTpsReg(driver)
             elif str(newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
@@ -258,6 +261,9 @@ def all_script(driver):
                     SendGlobalPerte(config.scriptType, m)
                     config.perte = float(infosperte['perte'])
                 config.rattrape_perte = 1
+            if config.perte == 0 and config.global_match_win >= 1:
+                config.log(f'Net profit: {config.global_match_win}')
+                break
     if config.perte > 0.2:
         DispatchPerte()
     print("update : " + config.newmatch)
