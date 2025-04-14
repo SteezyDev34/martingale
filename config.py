@@ -216,6 +216,7 @@ import colorama
 import codecs
 import sys
 import os
+import time
 
 # Forcer l'encodage en UTF-8 pour stdout
 print(sys.platform)
@@ -299,7 +300,7 @@ def log_clear_line(line_number=1):
             sys.stdout.write("clear\n")
     else:
         # Délai pour éviter les problèmes d'affichage
-        # time.sleep(0.5)
+        time.sleep(0.5)
         for _ in range(line_number):
             # Remonte d'une ligne et l'efface
             try:
