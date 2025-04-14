@@ -3,7 +3,6 @@ import inspect
 import config
 from Functions.AfficherParis import AfficherParis
 from Functions.GetBet import GetBet
-from Functions.GetIfGameStart import GetIfGameEnd
 from Functions.GetMise import GetMise
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.PlacerMise import PlacerMise
@@ -78,12 +77,10 @@ def FirstGameBet(driver):
                 config.log('        GAME NOT START', 1)
             elif config.score_actuel == "0:0" and gamestart:
                 config.log('GAME PASS WITHOUT VALIDATE ON FIRST', '', 2)
-                gamestart = False
                 break
             elif nextBet:
                 config.log('GAME PASS WITHOUT VALIDATE ', '', 2)
-                gamestart = False
-                GetIfGameEnd(driver)
+                break
             else:
                 gamestart = True
                 config.log('GAME START', '', 2)
@@ -92,6 +89,8 @@ def FirstGameBet(driver):
                 config.perte = float(config.perte) + float(config.mise)
                 config.wantwin = float(config.wantwin) + float(config.increment)
                 bet_40a = True
+            else:
+                break
 
 
 if __name__ == "__main__":
