@@ -270,6 +270,9 @@ def all_script(driver):
                 config.log(f'Net profit: {config.global_match_win}')
                 config.global_match_win = 0
                 break
+            elif config.nb_tour == winmatch:
+                break
+
     if config.perte > 0.2:
         DispatchPerte()
     print("update : " + config.newmatch)
