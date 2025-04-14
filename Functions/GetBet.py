@@ -53,7 +53,7 @@ def GetBet(driver, nextBet=False):
     ligne = 1
     i = 1
     print('error', config.error)
-    while not clic and tentative < 3 and tentative_clic > 4 and not config.error:
+    while not clic and tentative < 3 and tentative_clic < 4 and not config.error:
         GetJeuActuel(driver)
         GetScoreActuel(driver)
         print('nextBet', nextBet)
