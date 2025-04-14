@@ -1,5 +1,4 @@
 # Function_GetIfMatchPage
-import time
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -35,6 +34,7 @@ def GetIfMatchPage(driver):
             except Exception as e:
                 config.log('     Ce n\'est pas une page de match', 'warning', False)
                 config.log_clear_line()
+                config.error = True
                 return False
             else:
                 config.log_clear_line(5)
@@ -45,16 +45,19 @@ def GetIfMatchPage(driver):
                 if 'résume' in ul_text.lower():
                     config.log('     MATCH TERMINÉ!', 'info', False)
                     driver.get(config.site_url)
+                    config.error = True
                     return False
                 else:
                     config.log('     Ce n\'est pas une page de résumé', 'info', False)
                     config.log_clear_line()
                     driver.get(config.site_url)
+                    config.error = True
                     return False
 
         else:
             config.log('     MATCH TERMINÉ!', 'info', False)
             driver.get(config.site_url)
+            config.error = True
             return False
     else:
         config.log('     PAGE MATCH OK!', 'info', False)
