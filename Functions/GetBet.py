@@ -52,11 +52,12 @@ def GetBet(driver, nextBet=False):
 
     ligne = 1
     i = 1
+    print('error', config.error)
     while not clic and tentative < 3 and tentative_clic > 4 and not config.error:
         GetJeuActuel(driver)
         GetScoreActuel(driver)
-        # print('nextBet', nextBet)
-        # print('jeu ' + str(config.jeu_actuel))
+        print('nextBet', nextBet)
+        print('jeu ' + str(config.jeu_actuel))
         if nextBet:
             config.jeu_actuel = config.jeu_actuel + 1
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
