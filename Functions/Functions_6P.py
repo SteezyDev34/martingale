@@ -1,3 +1,4 @@
+import inspect
 import time
 
 import config
@@ -27,7 +28,10 @@ def all_script(driver):
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver) and not config.error:
-        config.error = True
+        current_frame = inspect.currentframe()
+        config.log(
+            f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+            'error', True)
     # --------
     config.match_found = True
     if config.match_found and not config.error:

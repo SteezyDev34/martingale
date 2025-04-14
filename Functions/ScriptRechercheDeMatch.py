@@ -27,7 +27,6 @@ def rechercheDeMatch(driver):
         GetIfScriptsRunning()
         # VERIFICATION SI PAGE DE LIST LIVE"""
         """if not VerificationListeMatchLive(driver):
-            config.error = True
             config.log("PAGE VIDE", 'error', True)
             driver.get(config.site_url)
             return False"""
@@ -162,7 +161,6 @@ def rechercheDeMatchNBA(driver):
         GetIfScriptsRunning()
         # VERIFICATION SI PAGE DE LIST LIVE"""
         if not VerificationListeMatchLive(driver):
-            config.error = True
             current_frame = inspect.currentframe()
             config.log(
                 f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',

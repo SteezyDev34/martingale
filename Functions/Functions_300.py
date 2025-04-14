@@ -1,3 +1,4 @@
+import inspect
 import time
 
 import config
@@ -23,20 +24,29 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 def all_script(driver):
     lose = True
+    config.log(
+        f'Error in file {config.error}',
+        'error', False)
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver) and not config.error:
-        config.error = True
+        current_frame = inspect.currentframe()
+        config.log(
+            f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+            'error', True)
     # --------
+
     config.match_found = True
     if config.match_found and not config.error:
         AddRunning.main(config.script_num, config.running_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
-
+        config.log(
+            f'Error in file {config.error}',
+            'error', False)
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
         if infosperte and config.perte == 0:
@@ -69,13 +79,24 @@ def all_script(driver):
         # END RECHERCHE INFOS DE MISE
         GetSetActuel(driver)
         config.saved_set = config.set_actuel
-
+        config.log(
+            f'Error in file {config.error}',
+            'error', False)
         if not config.set_actuel:
             config.error = True
+    config.log(
+        f'Error in file {config.error}',
+        'error', False)
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
+    config.log(
+        f'Error in file {config.error}',
+        'error', False)
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
     RetourTpsReg(driver)
+    config.log(
+        f'Error in file {config.error}',
+        'error', False)
     passageset = False
     winmatch = 0
     config.lose = False
@@ -274,4 +295,5 @@ def all_script(driver):
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)
+    config.error = False
     return True

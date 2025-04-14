@@ -35,7 +35,6 @@ def FirstGameBet(driver):
         config.log(f'Affichage de la liste des paris', 'info', True, 2)
 
         if not AfficherParis(driver):
-            config.error = True
             current_frame = inspect.currentframe()
             config.log(
                 f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
@@ -47,7 +46,6 @@ def FirstGameBet(driver):
             tentative = tentative + 1
             if tentative > 5:
                 config.log('error recup jeu #ERR345', 'error', True, 2)
-                config.error = True
                 current_frame = inspect.currentframe()
                 config.log(
                     f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',

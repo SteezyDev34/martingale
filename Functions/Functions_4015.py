@@ -1,3 +1,4 @@
+import inspect
 import time
 
 import config
@@ -28,7 +29,10 @@ def all_script(driver):
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver) and not config.error:
-        print('not rechercheDeMatch')
+        current_frame = inspect.currentframe()
+        config.log(
+            f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+            'error', True)
     config.error = False
     # --------
     config.match_found = True
@@ -70,8 +74,6 @@ def all_script(driver):
         GetSetActuel(driver)
         config.saved_set = config.set_actuel
 
-        if not config.set_actuel:
-            config.error = True
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
@@ -80,7 +82,7 @@ def all_script(driver):
     winmatch = 0
     config.lose = False
 
-    while (float(winmatch) < float(config.nb_tour) and not config.error):
+    while (float(winmatch) < float(config.nb_tour)):
         # WAIT FOR GAME START
         if passageset:
             config.saved_set = ""

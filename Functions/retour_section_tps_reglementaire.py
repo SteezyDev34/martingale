@@ -22,7 +22,7 @@ def RetourTpsReg(driver):
             config.log(f"#E0012\nUne erreur est survenue : {e}")
             config.log("ERROR : champ déroulant non trouvé")
             tentative = tentative + 1
-            if tentative == 9:
+            if tentative == 3:
                 config.error = True
                 current_frame = inspect.currentframe()
                 config.log(

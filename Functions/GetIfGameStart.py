@@ -14,7 +14,6 @@ def GetIfGameStart(driver):
         config.saved_score = config.saved_score
         if config.score_actuel == '0:0':
             if not config.score_actuel:
-                config.error = True
                 current_frame = inspect.currentframe()
                 config.log(
                     f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',

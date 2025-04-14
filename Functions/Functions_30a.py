@@ -27,10 +27,10 @@ def all_script(driver):
     lose = True
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
+
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver) and not config.error:
-        config.error = True
         current_frame = inspect.currentframe()
         config.log(
             f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',

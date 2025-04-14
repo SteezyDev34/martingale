@@ -28,7 +28,6 @@ def all_script(driver):
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver) and not config.error:
-        config.error = True
         current_frame = inspect.currentframe()
         config.log(
             f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
@@ -75,12 +74,6 @@ def all_script(driver):
         GetSetActuel(driver)
         config.saved_set = config.set_actuel
 
-        if not config.set_actuel:
-            config.error = True
-            current_frame = inspect.currentframe()
-            config.log(
-                f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
-                'error', True)
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
@@ -88,7 +81,7 @@ def all_script(driver):
     passageset = False
     winmatch = 0
     config.lose = False
-    while (float(winmatch) < float(config.nb_tour) and not config.error):
+    while (float(winmatch) < float(config.nb_tour)):
         # WAIT FOR GAME START
         if passageset:
             config.saved_set = ""
@@ -164,7 +157,7 @@ def all_script(driver):
             config.log('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
             if not GetBet(driver, True):
                 tentative = tentative + 1
-                if tentative > 5:
+                if tentative > 2:
                     config.log('error recup jeu #ERR345', config.newmatch)
                     config.error = True
                     current_frame = inspect.currentframe()
@@ -274,7 +267,6 @@ def all_script(driver):
             config.global_match_win = config.global_match_win + config.netprofit
             winmatch = winmatch + 1
             DeleteBet(driver)
-            passageset = True
             print("#RECHERCHE INFOS DE MISE")
             infosperte = getGlobalPerte()
             if infosperte:
