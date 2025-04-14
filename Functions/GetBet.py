@@ -31,6 +31,7 @@ def GetBet(driver, nextBet=False):
                                               'market-grid-canvas__container'))
         )
     except:
+        config.log('erreur recup market-grid-canvas__container', 'error', True, 2)
         return False
     # Récupérer les coordonnées du div
     location = canvas.location
