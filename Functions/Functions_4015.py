@@ -28,7 +28,8 @@ def all_script(driver):
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver) and not config.error:
-        config.error = True
+        print('not rechercheDeMatch')
+    config.error = False
     # --------
     config.match_found = True
     if config.match_found and not config.error:

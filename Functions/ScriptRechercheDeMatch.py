@@ -38,7 +38,6 @@ def rechercheDeMatch(driver):
                                                   'dashboard-champ')
         except:
             config.log('ligues introuvables!', 'warning', True, 2)
-            config.error = True
             current_frame = inspect.currentframe()
             config.log(
                 f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
