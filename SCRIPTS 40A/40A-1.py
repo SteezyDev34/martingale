@@ -33,9 +33,9 @@ if len(parts) > 1:
     print(config.localhost)
     # Demander confirmation à l'utilisateur
     if config.systeme == 'Windows':
-        command = f'start chrome --remote-debugging-port={config.localhost} --user-data-dir="{project_directory}\\ChromeDebugProfile{config.localhost}"'
+        command = f'start chrome --remote-debugging-port={config.localhost} --user-data-dir="{project_directory}\\ChromeDebugProfile"'
     else:
-        command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
+        command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile"'
 
     confirmation = input(f"Avez-vous exécuté la commande \n{command}\n? (Y/N): ")
 
