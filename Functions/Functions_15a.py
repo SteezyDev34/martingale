@@ -4,19 +4,16 @@ import time
 import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName, VerificationMatchTrouve, AddRunning
-from Functions.AfficherParis import AfficherParis
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
-from Functions.GetBet import GetBet
+from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameEnd
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
-from Functions.GetMise import GetMise
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
-from Functions.PlacerMise import PlacerMise
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.ValidationDuParis import ValidationDuParis
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
@@ -143,45 +140,7 @@ def all_script(driver):
         bet_40a = False
         tentative = 0
         passageset = False
-        while not bet_40a and not config.error:
-            # Affichage de la liste des paris
-            config.log('Affichage de la liste des paris', config.newmatch)
-            if not AfficherParis(driver):
-                config.error = True
-                current_frame = inspect.currentframe()
-                config.log(
-                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
-                    'error', True)
-                break
-            # On recherche le jeu actuel
-            config.log('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
-            if not GetBet(driver, True):
-                tentative = tentative + 1
-                if tentative > 5:
-                    config.log('error recup jeu #ERR345', config.newmatch)
-                    config.error = True
-                    current_frame = inspect.currentframe()
-                    config.log(
-                        f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
-                        'error', True)
-                    tentative = 0
-                continue
-            else:
-                print('passage prochain jeu')
-                bet_40a = True
-            config.log('prochain PAris 40A cliqué', config.newmatch)
-
-        # ON ENVOIE LA MISE
-        txtlog = "ON ENVOIE LA MISE"
-        config.log(txtlog, config.newmatch)
-        send_mise = False
-        # ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
-        GetMise(driver)
-        while not send_mise and not config.error:
-            if PlacerMise(driver):
-                send_mise = True
-            else:
-                config.error = True
+        GetAndPlaceBet(driver)
         result = GetResult(driver)
         if result == 'LOSE':
             ##VALIDATION DU PARIS SI SCORE OK
@@ -223,6 +182,8 @@ def all_script(driver):
                     # Calculate net profit based on stake, odds and losses
                     config.netprofit = (float(config.mise) * float(config.cote)) - float(config.perte)
                     config.log(f'Potential Net profit: {config.netprofit}')
+                else:
+                    GetAndPlaceBet(driver)
             # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
             RetourTpsReg(driver)
             GetIfGameEnd(driver)
