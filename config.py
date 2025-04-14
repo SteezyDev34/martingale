@@ -134,7 +134,7 @@ def init_variable():
     global mise, perte, wantwin, increment, probamini, cotemini, recup40, recup30
     global running_file_name, matchlist_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
     global print_match_live_text, devMode, match_list, match_done_key, match_found
-    global error, cotebase, nb_tour, restart_set2
+    global error, cotebase, nb_tour, restart_set2, validated_bet, ligue_name, match_Url, newmatch, all_scores
 
     match_list = []  # List des matchs
     match_done_key = ""  # Nom du match dans Gsheets
@@ -146,6 +146,12 @@ def init_variable():
     # Initialisation des variables avec valeurs par défaut si strategy est None
     devMode = strategy.get("devmode") == "1" if strategy else False
     error = False
+
+    validated_bet = {}  # Dictionnaire pour stocker les paris validés
+    ligue_name = ""
+    match_Url = ""
+    newmatch = ""
+    all_scores = {}
 
     mise = float(strategy.get("mise", 0)) if strategy else 0
     probamini = float(strategy.get("proba_mini", 0)) if strategy else 0
