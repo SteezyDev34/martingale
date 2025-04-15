@@ -59,7 +59,6 @@ from Functions import Functions_300
 from Functions.GetJsonData import DispatchPerte
 
 while (config.win < 100):
-    config.init_variable()
     try:
         Functions_300.all_script(driver)
     except Exception as e:
@@ -68,6 +67,7 @@ while (config.win < 100):
         if config.perte > 0:
             DispatchPerte()
         sucess = False
+        config.init_variable()
         while not sucess:
             try:
                 driver.get(config.site_url)

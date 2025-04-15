@@ -63,7 +63,7 @@ from Functions.ScriptRechercheDeMatch import classementeDeMatch
 classementeDeMatch(driver)
 
 while (config.win < 100):
-    config.init_variable()
+
     try:
         Functions_40a_proba.all_script(driver)
     except Exception as e:
@@ -71,6 +71,7 @@ while (config.win < 100):
     else:
         if config.perte > 0:
             DispatchPerte()
+        config.init_variable()
         sucess = False
         while not sucess:
             try:
