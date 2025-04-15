@@ -8,6 +8,7 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 def GetResult(driver):
     ##ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
+    print('error #5IYGJHKB ', config.error)
     RetourTpsReg(driver)
     txtlog = "ON ATTEND LE RESULTAT POUR VALIDER LE PARIS"
     config.log(txtlog, config.newmatch)
