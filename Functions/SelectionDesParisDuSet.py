@@ -1,20 +1,21 @@
 # SelectionDesParisDuSet.py
 import time
-from selenium.webdriver.support import expected_conditions as EC
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from config import matchlist_file_name
+
 from Functions import VerificationMatchTrouve
+from config import matchlist_file_name
 
 
-def selection_des_paris_du_set(driver,set):
-    #driver.switch_to.window(driver.window_handles[0])
+def selection_des_paris_du_set(driver, set):
+    driver.switch_to.window(driver.window_handles[0])
     print('recherche du champ déroulant...')
     selection = False
     tentative = 0
     clic = False
-    while selection == False and tentative <6:
+    while selection == False and tentative < 6:
         try:
             element = WebDriverWait(driver, 20).until(
                 EC.presence_of_element_located(
@@ -23,7 +24,7 @@ def selection_des_paris_du_set(driver,set):
         except Exception as e:
             print(f"#E0012\nUne erreur est survenue : {e}")
             print("ERROR : champ déroulant non trouvé")
-            tentative = tentative +1
+            tentative = tentative + 1
         else:
             select_form = driver.find_elements(By.CLASS_NAME, 'scoreboard-nav__select')
             try:
@@ -31,7 +32,7 @@ def selection_des_paris_du_set(driver,set):
                 time.sleep(1)
             except Exception as e:
                 print(f"#E0013\nUne erreur est survenue : {e}")
-                tentative = tentative+1
+                tentative = tentative + 1
             else:
                 print("ouverture du champ déroulant...")
                 try:
@@ -51,12 +52,13 @@ def selection_des_paris_du_set(driver,set):
                             if selection == True:
                                 break
                             try:
-                                select_span = select_option.find_elements(By.CLASS_NAME,'multiselect__option')[0]
-                                select_option_text = select_span.find_elements(By.TAG_NAME,'span')[0].get_attribute('title')
+                                select_span = select_option.find_elements(By.CLASS_NAME, 'multiselect__option')[0]
+                                select_option_text = select_span.find_elements(By.TAG_NAME, 'span')[0].get_attribute(
+                                    'title')
                             except Exception as e:
                                 print(f"#E0015\nUne erreur est survenue : {e}")
                                 print("no = select_option_text")
-                                tentative = tentative+1
+                                tentative = tentative + 1
                             else:
                                 if select_option_text.strip() == set:
                                     try:
@@ -85,7 +87,7 @@ def selection_des_paris_du_set(driver,set):
                                                 if l == "Paris":
                                                     paris = 1
                                                 else:
-                                                    tentative = tentative+1
+                                                    tentative = tentative + 1
                                                     time.sleep(1)
                                             except Exception as e:
                                                 print(f"#E0016\nUne erreur est survenue : {e}")
@@ -95,7 +97,7 @@ def selection_des_paris_du_set(driver,set):
                                             else:
                                                 selection = True
                                 else:
-                                    print('SET '+set+' non trouvé : error '+select_option_text)
+                                    print('SET ' + set + ' non trouvé : error ' + select_option_text)
                     time.sleep(2)
                 time.sleep(2)
     return selection

@@ -11,6 +11,7 @@ def GetJeuActuel(driver):
     config.jeu_actuel = False
     tentative = 0
     while not config.jeu_actuel:
+        driver.switch_to.window(driver.window_handles[0])
         try:
             WebDriverWait(driver, 20).until(
                 EC.visibility_of_element_located((By.CLASS_NAME,

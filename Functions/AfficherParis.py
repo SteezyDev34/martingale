@@ -9,7 +9,8 @@ from Functions.ModalHandler import ModalHandler
 
 
 def AfficherParis(driver):
-    config.log('recherche du champ déroulant...', '', False,2)
+    config.log('recherche du champ déroulant...', '', False, 2)
+    driver.switch_to.window(driver.window_handles[0])
     GetSetActuel(driver)
     selection = False
     tentative = 1
@@ -26,23 +27,23 @@ def AfficherParis(driver):
                     (By.CLASS_NAME, 'game-toolbar__sub-games-dropdown'))
             )
         except Exception as e:
-            config.log('Champ déroulant introuvable !', 'warning', False,2)
-            config.log(f'tentative {tentative}', 'warning', False,2)
+            config.log('Champ déroulant introuvable !', 'warning', False, 2)
+            config.log(f'tentative {tentative}', 'warning', False, 2)
             tentative = tentative + 1
             config.log_clear_line()
         else:
             select_form = driver.find_elements(By.CLASS_NAME, 'game-toolbar__sub-games-dropdown')
-            config.log('Champ déroulant trouvé !', 'success', False,2)
+            config.log('Champ déroulant trouvé !', 'success', False, 2)
             config.log_clear_line()
             try:
                 select_form[0].click()
             except Exception as e:
-                config.log("#E0013 Erreur lors du clic sur le champ deroulant", 'warning', False,2)
+                config.log("#E0013 Erreur lors du clic sur le champ deroulant", 'warning', False, 2)
                 config.log_clear_line()
                 ModalHandler(driver)
                 tentative = tentative + 1
             else:
-                config.log('ouverture du champ déroulant...', 'info', False,2)
+                config.log('ouverture du champ déroulant...', 'info', False, 2)
                 config.log_clear_line()
                 try:
                     element = WebDriverWait(driver, 5).until(
@@ -50,10 +51,10 @@ def AfficherParis(driver):
                             (By.CLASS_NAME, 'multiselect__content-wrapper'))
                     )
                 except Exception as e:
-                    config.log('#E0014 aucun element dans le champ déroulant', 'error', False,2)
+                    config.log('#E0014 aucun element dans le champ déroulant', 'error', False, 2)
                     config.log_clear_line()
                     tentative = tentative + 1
-                    config.log(f'tentative {tentative}', 'warning', False,2)
+                    config.log(f'tentative {tentative}', 'warning', False, 2)
                     config.log_clear_line()
                 else:
                     select_form_set_1 = driver.find_elements(By.CLASS_NAME,
@@ -65,10 +66,10 @@ def AfficherParis(driver):
                             try:
                                 select_option_text = select_option.text
                             except Exception as e:
-                                config.log('#E0015 ucun élements multiselect__option', 'error', False,2)
+                                config.log('#E0015 ucun élements multiselect__option', 'error', False, 2)
                                 config.log_clear_line()
                                 tentative = tentative + 1
-                                config.log(f'tentative {tentative}', 'warning', False,2)
+                                config.log(f'tentative {tentative}', 'warning', False, 2)
                                 config.log_clear_line()
 
                             else:
@@ -79,14 +80,14 @@ def AfficherParis(driver):
                                 if select_option_text.strip().lower() == str(
                                         theset).lower() + ' set Evénements rapides'.lower():
                                     config.log('            Lien ' + select_option_text.lower() + ' = ' + str(
-                                        theset).lower() + ' set Evénements rapides'.lower(), 'warning', False,2)
+                                        theset).lower() + ' set Evénements rapides'.lower(), 'warning', False, 2)
                                     config.log_clear_line()
                                     try:
                                         select_option.click()
                                     except Exception as e:
-                                        config.log(f'        #E0016 clic impossible menu 1set', 'warning', False,2)
+                                        config.log(f'        #E0016 clic impossible menu 1set', 'warning', False, 2)
                                         tentative = tentative + 1
-                                        config.log(f'        tentative {tentative}', 'warning', False,2)
+                                        config.log(f'        tentative {tentative}', 'warning', False, 2)
                                         config.log_clear_line()
                                         ModalHandler(driver)
                                     else:
@@ -125,7 +126,7 @@ def AfficherParis(driver):
                                                 selection = True
                                 else:
                                     config.log('Lien ' + select_option_text.lower() + ' > ' + str(
-                                        theset).lower() + ' set Evénements rapides'.lower(), 'warning', False,2)
+                                        theset).lower() + ' set Evénements rapides'.lower(), 'warning', False, 2)
                                     config.log_clear_line()
                         return selection
     return selection

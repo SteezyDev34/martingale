@@ -9,10 +9,12 @@ import config
 
 def RetourTpsReg(driver):
     config.log('recherche du champ déroulant...', config.newmatch)
+    driver.switch_to.window(driver.window_handles[0])
     selection = False
     tentative = 0
     temps_reg = False
     while not temps_reg and tentative < 10:
+        driver.switch_to.window(driver.window_handles[0])
         try:
             element = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located(
