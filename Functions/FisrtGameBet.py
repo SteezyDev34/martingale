@@ -88,6 +88,9 @@ def FirstGameBet(driver):
                 validate_bet = True
                 config.perte = float(config.perte) + float(config.mise)
                 config.wantwin = float(config.wantwin) + float(config.increment)
+                # Calculate net profit based on stake, odds and losses
+                config.netprofit = (float(config.mise) * float(config.cote)) - float(config.perte)
+                config.log(f'Potential Net profit: {config.netprofit}')
                 bet_40a = True
                 if nextBet:
                     config.log('GAME PASS WITHOUT VALIDATE ', '', 2)
