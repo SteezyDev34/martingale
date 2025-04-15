@@ -44,6 +44,7 @@ def FirstGameBet(driver):
         if not GetBet(driver, nextBet):
             tentative = tentative + 1
             if tentative > 5:
+                config.error = True
                 config.log('error recup jeu #ERR345', 'error', True, 2)
                 current_frame = inspect.currentframe()
                 config.log(
