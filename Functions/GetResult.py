@@ -15,6 +15,7 @@ def GetResult(driver):
     timesleep = 1  # TEMPS D'ATTENTE AVANT DE RECUPERER LE SCORE PASSE À 1 SI 40 DANS LE SCORE
     result = False
     win = False
+    print('error #3FRE ', config.error)
     while not result and not config.error:
         time.sleep(timesleep)
         previous_score = config.score_actuel
