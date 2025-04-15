@@ -96,6 +96,7 @@ error = False
 devMode = 1
 restart_set2 = 0
 log_message = ''
+newset = 2
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:

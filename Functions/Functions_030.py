@@ -194,7 +194,7 @@ def all_script(driver):
             # VÉRIFCATION DU SET ACTUEL
             config.saved_set = config.set_actuel
             GetSetActuel(driver)
-            newset = int(config.saved_set) + 1
+
             if not config.set_actuel:
                 config.error = True
             config.log('set ' + str(config.set_actuel) + ' - saved set ' + str(config.saved_set), config.newmatch)
@@ -204,7 +204,7 @@ def all_script(driver):
                     config.log("jeu " + str(config.jeu_actuel), config.newmatch)
                     config.log("attente fin de tie break", config.newmatch)
 
-            elif str(newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
+            elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                 txtlog = " ON EST SUR LE PROCHAIN SET"
                 passageset = True
                 config.perte = config.perte - config.mise
@@ -244,9 +244,8 @@ def all_script(driver):
                     config.perte = float(infosperte['perte'])
                 config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
-            if config.perte == 0 and config.global_match_win >= 1:
-                config.global_match_win = 0
-                break
+            if config.perte == 0 and config.global_match_win < 1:
+                continue
             elif config.nb_tour == winmatch:
                 break
     if config.perte > 0.2:

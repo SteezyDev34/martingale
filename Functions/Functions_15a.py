@@ -184,7 +184,7 @@ def all_script(driver):
             # VÉRIFCATION DU SET ACTUEL
             config.saved_set = config.set_actuel
             GetSetActuel(driver)
-            newset = int(config.saved_set) + 1
+
             if not config.set_actuel:
                 config.error = True
                 current_frame = inspect.currentframe()
@@ -198,7 +198,7 @@ def all_script(driver):
                     config.log("jeu " + str(config.jeu_actuel), config.newmatch)
                     config.log("attente fin de tie break", config.newmatch)
 
-            elif str(newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
+            elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                 txtlog = " ON EST SUR LE PROCHAIN SET"
                 passageset = True
                 config.perte = config.perte - config.mise

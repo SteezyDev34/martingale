@@ -1,26 +1,23 @@
+import re
 import time
 
-from Functions.DeleteBet import DeleteBet
-from Functions.GetIfGameStart import GetIfGameStart
-from Functions.Function_GetJeuActuel import GetJeuActuel
-from Functions.GetMise import GetMise
-from Functions.GetPlayersName import GetPlayersName
-from Functions.GetScoreActuel import GetScoreActuel
-from Functions.Function_GetSetActuel import GetQTtActuel
-from Functions.PlacerMise import PlacerMise
-from Functions.GetBet import GetBet, GetNextBet
-from Functions.ScriptRechercheDeMatch import rechercheDeMatch
-
-from Functions.ValidationDuParis import ValidationDuParis
 import config
-from Functions import GetLigueName, VerificationMatchTrouve, Functions_stats, Functions_stats1, AddRunning
 from Functions import Functions_1XBET
-import re
+from Functions import GetLigueName, VerificationMatchTrouve, AddRunning
 from Functions.AfficherParis import AfficherParisQT
+from Functions.DeleteBet import DeleteBet
+from Functions.Function_GetJeuActuel import GetJeuActuel
+from Functions.Function_GetSetActuel import GetQTtActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
-
-from Functions.retour_section_tps_reglementaire import RetourTpsReg
+from Functions.GetBet import GetBet, GetNextBet
+from Functions.GetIfGameStart import GetIfGameStart
 from Functions.GetJsonData import getPerte, delPerte, DispatchPerte
+from Functions.GetMise import GetMise
+from Functions.GetScoreActuel import GetScoreActuel
+from Functions.PlacerMise import PlacerMise
+from Functions.ScriptRechercheDeMatch import rechercheDeMatch
+from Functions.ValidationDuParis import ValidationDuParis
+from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def all_script(driver):
@@ -279,7 +276,7 @@ def all_script(driver):
                 config.set_actuel = False
                 config.log("vide sec actu " + str(config.set_actuel), config.newmatch)
                 GetQTtActuel(driver)
-                newset = int(config.saved_set) + 1
+
                 if not config.set_actuel:
                     config.error = True
                 config.log('set ' + str(config.set_actuel) + ' - saved set ' + str(config.saved_set), config.newmatch)
@@ -353,7 +350,7 @@ def all_script(driver):
                                     break
                         # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
                         RetourTpsReg(driver)
-                elif str(newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
+                elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                     txtlog = "SI ON EST SUR LE PROCHAIN SET"
                     print(txtlog)
                     config.log(txtlog, config.newmatch)
