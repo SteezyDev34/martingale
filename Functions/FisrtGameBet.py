@@ -84,7 +84,7 @@ def FirstGameBet(driver):
             else:
                 gamestart = True
                 config.log('GAME START', '', 2)
-            if ValidationDuParis(driver):
+            if ValidationDuParis(driver, nextBet):
                 validate_bet = True
                 config.perte = float(config.perte) + float(config.mise)
                 config.wantwin = float(config.wantwin) + float(config.increment)
