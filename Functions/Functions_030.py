@@ -10,6 +10,7 @@ from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
+from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetBet import GetBet
 from Functions.GetIfGameStart import GetIfGameEnd
 from Functions.GetIfGameStart import GetIfGameStart
@@ -185,11 +186,8 @@ def all_script(driver):
                     gamestart = True
                 if ValidationDuParis(driver, True):
                     validate_bet = True
-                    config.perte = config.perte + config.mise
-                    config.wantwin = float(config.wantwin) + float(config.increment)
-                    # Calculate net profit based on stake, odds and losses
-                    config.netprofit = (float(config.mise) * float(config.cote)) - float(config.perte)
-                    config.log(f'Potential Net profit: {config.netprofit}')
+                else:
+                    GetAndPlaceBet(driver)
             # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
             RetourTpsReg(driver)
             GetIfGameStart(driver)

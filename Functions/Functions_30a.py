@@ -161,11 +161,6 @@ def all_script(driver):
                     gamestart = True
                 if ValidationDuParis(driver, True):
                     validate_bet = True
-                    config.perte = config.perte + config.mise
-                    config.wantwin = float(config.wantwin) + float(config.increment)
-                    # Calculate net profit based on stake, odds and losses
-                    config.netprofit = (float(config.mise) * float(config.cote)) - float(config.perte)
-                    config.log(f'Potential Net profit: {config.netprofit}')
                 else:
                     GetAndPlaceBet(driver)
             # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
@@ -221,7 +216,7 @@ def all_script(driver):
                     SendGlobalPerte(config.scriptType, -1)
                     config.perte = 1
                     config.rattrape_perte = 1
-                elif float(infosperte['perte']) >= 0.2:
+                elif float(infosperte['perte']) > 0:
                     config.perte = float(infosperte['perte'])
                     m = 0 - config.perte
                     SendGlobalPerte(config.scriptType, m)

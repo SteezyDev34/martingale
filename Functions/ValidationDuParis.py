@@ -94,7 +94,14 @@ def ValidationDuParis(driver, nexbet=False):
                                             config.log('        loading...')
                                             printtext = 1
 
-                                validation = ModalHandler(driver)
+                                if ModalHandler(driver):
+                                    validation = True
+                                    config.perte = float(config.perte) + float(config.mise)
+                                    config.wantwin = float(config.wantwin) + float(config.increment)
+                                    # Calculate net profit based on stake, odds and losses
+                                    config.netprofit = round(
+                                        (float(config.mise) * float(config.cote)) - float(config.perte), 2)
+                                    config.log(f'Potential Net profit: {config.netprofit}')
                         else:
                             PlacerMise(driver)
                             tentative = tentative + 1
