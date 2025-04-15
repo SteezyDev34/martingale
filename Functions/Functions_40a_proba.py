@@ -161,12 +161,9 @@ def all_script(driver):
 
                 if (config.jeu_actuel + 1) >= 13:  # SI TIE BREAK
                     txtlog = "jeu " + str(config.jeu_actuel)
-                    print(txtlog)
                     config.log(txtlog, config.newmatch)
                     txtlog = "attente fin de tie break"
-                    print(txtlog)
                     config.log(txtlog, config.newmatch)
-                    passageset = True
                 else:
                     ##VALIDATION DU PARIS SI SCORE OK
                     validate_bet = False
