@@ -27,6 +27,7 @@ def GetScoreActuel(driver):
         except Exception as e:
             print(f"#E0020\nUne erreur est survenue : {e}")
             if not GetIfMatchPage(driver):
+                config.error = True
                 return False
             tentative = tentative + 1
             time.sleep(1)
