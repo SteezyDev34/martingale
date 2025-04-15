@@ -43,7 +43,7 @@ def FirstGameBet(driver):
         config.log('liste des pariis affichée', '', True, 2)
         if not GetBet(driver, nextBet):
             tentative = tentative + 1
-            if tentative > 5:
+            if tentative > 2:
                 config.error = True
                 config.log('error recup jeu #ERR345', 'error', True, 2)
                 current_frame = inspect.currentframe()
@@ -60,7 +60,7 @@ def FirstGameBet(driver):
         config.log_clear_line()
         while not PlacerMise(driver) and not config.error and tentative_placermise < 3:
             tentative_placermise += 1
-            if tentative_placermise == 5:
+            if tentative_placermise == 2:
                 validate_bet = True
             else:
                 validate_bet = False
