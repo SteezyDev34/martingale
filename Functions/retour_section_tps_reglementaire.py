@@ -29,7 +29,8 @@ def RetourTpsReg(driver):
                 current_frame = inspect.currentframe()
                 config.log(
                     f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
-                    'error', True)
+                    'error', False)
+                print('error champ deroul##12321')
                 break
             config.log(str(tentative), config.newmatch)
         else:
