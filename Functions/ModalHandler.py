@@ -44,6 +44,12 @@ def ModalHandler(driver):
                     'timestamp': current_timestamp
                 }
                 config.log(f'           {config.validated_bet}', 'info', True)
+                config.perte = float(config.perte) + float(config.mise)
+                config.wantwin = float(config.wantwin) + float(config.increment)
+                # Calculate net profit based on stake, odds and losses
+                config.netprofit = round(
+                    (float(config.mise) * float(config.cote)) - float(config.perte), 2)
+                config.log(f'Potential Net profit: {config.netprofit}')
                 config.log_clear_line()
                 return True
             elif len(re.findall("peut être accepté",
@@ -61,6 +67,12 @@ def ModalHandler(driver):
                     'timestamp': current_timestamp
                 }
                 config.log(f'           {config.validated_bet}', 'info', True)
+                config.perte = float(config.perte) + float(config.mise)
+                config.wantwin = float(config.wantwin) + float(config.increment)
+                # Calculate net profit based on stake, odds and losses
+                config.netprofit = round(
+                    (float(config.mise) * float(config.cote)) - float(config.perte), 2)
+                config.log(f'Potential Net profit: {config.netprofit}')
                 return True
             else:
                 driver.find_element(By.CLASS_NAME, 'ui-popup__submit').click()
@@ -99,6 +111,12 @@ def ModalHandler(driver):
                     'timestamp': current_timestamp
                 }
                 config.log(f'           {config.validated_bet}', 'info', True)
+                config.perte = float(config.perte) + float(config.mise)
+                config.wantwin = float(config.wantwin) + float(config.increment)
+                # Calculate net profit based on stake, odds and losses
+                config.netprofit = round(
+                    (float(config.mise) * float(config.cote)) - float(config.perte), 2)
+                config.log(f'Potential Net profit: {config.netprofit}')
                 return True
             elif len(re.findall("peut être accepté",
                                 driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
@@ -115,6 +133,12 @@ def ModalHandler(driver):
                     'timestamp': current_timestamp
                 }
                 config.log(f'           {config.validated_bet}', 'info', True)
+                config.perte = float(config.perte) + float(config.mise)
+                config.wantwin = float(config.wantwin) + float(config.increment)
+                # Calculate net profit based on stake, odds and losses
+                config.netprofit = round(
+                    (float(config.mise) * float(config.cote)) - float(config.perte), 2)
+                config.log(f'Potential Net profit: {config.netprofit}')
                 return True
             else:
                 driver.find_element(By.CLASS_NAME, 'ui-popup__submit').click()
@@ -145,6 +169,12 @@ def ModalHandler(driver):
                     'timestamp': current_timestamp
                 }
                 config.log(f'           {config.validated_bet}', 'info', True)
+                config.perte = float(config.perte) + float(config.mise)
+                config.wantwin = float(config.wantwin) + float(config.increment)
+                # Calculate net profit based on stake, odds and losses
+                config.netprofit = round(
+                    (float(config.mise) * float(config.cote)) - float(config.perte), 2)
+                config.log(f'Potential Net profit: {config.netprofit}')
                 config.log_clear_line()
                 try:
                     element = WebDriverWait(driver, 3).until(
