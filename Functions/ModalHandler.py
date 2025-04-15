@@ -50,7 +50,6 @@ def ModalHandler(driver):
                 config.netprofit = round(
                     (float(config.mise) * float(config.cote)) - float(config.perte), 2)
                 config.log(f'Potential Net profit: {config.netprofit}')
-                config.log_clear_line()
                 return True
             elif len(re.findall("peut être accepté",
                                 driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
@@ -174,8 +173,7 @@ def ModalHandler(driver):
                 # Calculate net profit based on stake, odds and losses
                 config.netprofit = round(
                     (float(config.mise) * float(config.cote)) - float(config.perte), 2)
-                config.log(f'Potential Net profit: {config.netprofit}')
-                config.log_clear_line()
+                config.log(f'Potential Net profit: {config.netprofit}', 'info', True)
                 try:
                     element = WebDriverWait(driver, 3).until(
                         EC.visibility_of_element_located(
