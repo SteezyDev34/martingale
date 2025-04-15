@@ -146,6 +146,8 @@ def all_script(driver):
         GetAndPlaceBet(driver)
         result = GetResult(driver)
 
+        print("result : " + result)
+
         if result == 'LOSE':
             # VÉRIFCATION DU SET ACTUEL
             config.saved_set = config.set_actuel
