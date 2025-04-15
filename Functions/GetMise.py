@@ -7,8 +7,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 import config
 from Functions.GetBet import GetBet
 
-config.wantwin = 0
-
 
 def GetMise(driver):
     if config.rattrape_perte == 3:
