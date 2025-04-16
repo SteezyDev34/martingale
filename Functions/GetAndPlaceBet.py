@@ -13,9 +13,12 @@ def GetAndPlaceBet(driver):
         # Affichage de la liste des paris
         config.log('Affichage de la liste des paris', config.newmatch)
         if not AfficherParis(driver):
-            config.error = True
-            print('error afficher paris')
-            break
+            tentative = tentative + 1
+            if tentative > 5:
+                config.log('error recup jeu #ERR345', config.newmatch)
+                config.error = True
+                tentative = 0
+            continue
         # On recherche le jeu actuel
         config.log('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
         if not GetBet(driver, True):
