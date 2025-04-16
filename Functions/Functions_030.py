@@ -137,24 +137,6 @@ def all_script(driver):
             while not validate_bet and not config.error and tentative < 3:
                 # VÉRIFICATION DU SCORE ACTUEL
                 GetScoreActuel(driver)
-                if config.score_actuel == False:
-                    config.error = True
-                    config.log("error pendant la récupération du score", config.newmatch)
-                    break
-                if (
-                        config.score_actuel == "0:15" or config.score_actuel == "15:15" or config.score_actuel == "15:0") and gamestart:
-                    config.log("GAME PASS WITHOUT VALIDATE", config.newmatch)
-                    FirstGameBet(driver)
-                    break
-                    ###ajouter ici les actions avant de reprendre
-                elif config.score_actuel == "15:15":
-                    config.error = True
-                    config.log("15A leave!", config.newmatch)
-                    FirstGameBet(driver)
-                    ###ajouter ici les actions avant de reprendre
-                    break
-                else:
-                    gamestart = True
                 if ValidationDuParis(driver, True):
                     validate_bet = True
                 else:
