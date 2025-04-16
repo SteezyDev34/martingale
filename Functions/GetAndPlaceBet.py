@@ -8,11 +8,13 @@ from Functions.PlacerMise import PlacerMise
 def GetAndPlaceBet(driver):
     bet_40a = False
     tentative = 0
+    print('GetAndPlaceBet error', config.error)
     while not bet_40a and not config.error:
         # Affichage de la liste des paris
         config.log('Affichage de la liste des paris', config.newmatch)
         if not AfficherParis(driver):
             config.error = True
+            print('error afficher paris')
             break
         # On recherche le jeu actuel
         config.log('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
@@ -39,3 +41,4 @@ def GetAndPlaceBet(driver):
             send_mise = True
         else:
             config.error = True
+            print('error placer mise')

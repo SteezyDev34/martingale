@@ -24,10 +24,12 @@ def GetJeuActuel(driver):
             tentative = tentative + 1
             if not GetIfMatchPage(driver):
                 config.error = True
+                return False
             else:
                 tentative = tentative + 1
                 if tentative == 5:
                     config.error = True
+                    return False
         else:
             try:
                 # print('get set')

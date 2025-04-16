@@ -150,13 +150,12 @@ def all_script(driver):
 
         if result == 'LOSE':
             # VÉRIFCATION DU SET ACTUEL
-            config.saved_set = config.set_actuel
             GetSetActuel(driver)
 
             if not config.set_actuel:
                 config.error = True
-            config.log('set ' + str(config.set_actuel) + ' - saved set ' + str(config.saved_set), config.newmatch)
-            if str(config.saved_set) == str(config.set_actuel):  ## si on est toujours sur le meme set
+            config.log('set ' + str(config.set_actuel) + ' - nex set ' + str(config.newset))
+            if str(int(config.newset) - 1) == str(config.set_actuel):  ## si on est toujours sur le meme set
                 config.log('on est toujours sur le meme set', config.newmatch)
 
                 if (config.jeu_actuel + 1) >= 13:  # SI TIE BREAK
@@ -196,14 +195,7 @@ def all_script(driver):
                             GetAndPlaceBet(driver)
                     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
                     RetourTpsReg(driver)
-            elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
-                txtlog = " ON EST SUR LE PROCHAIN SET"
-                config.log(txtlog, config.newmatch)
-                passageset = True
-                DeleteBet(driver)
-                txtlog = 'Wait 30 sec'
-                config.log(txtlog, config.newmatch)
-                time.sleep(30)
+
             else:
                 print("ERROR : ecup set " + str(config.set_actuel))
                 config.error = True

@@ -192,13 +192,12 @@ def all_script(driver):
             RetourTpsReg(driver)
             GetIfGameStart(driver)
             # VÉRIFCATION DU SET ACTUEL
-            config.saved_set = config.set_actuel
             GetSetActuel(driver)
 
             if not config.set_actuel:
                 config.error = True
-            config.log('set ' + str(config.set_actuel) + ' - saved set ' + str(config.saved_set), config.newmatch)
-            if str(config.saved_set) == str(config.set_actuel):  ## si on est toujours sur le meme set
+            config.log('set ' + str(config.set_actuel) + ' - nex set ' + str(config.newset))
+            if str(int(config.newset) - 1) == str(config.set_actuel):  ## si on est toujours sur le meme set
                 config.log('on est toujours sur le meme set', config.newmatch)
                 if (config.jeu_actuel + 1) >= 13:  # SI TIE BREAK
                     config.log("jeu " + str(config.jeu_actuel), config.newmatch)

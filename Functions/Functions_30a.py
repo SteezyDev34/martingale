@@ -106,10 +106,12 @@ def all_script(driver):
                 print('possible tie break, attente debut ...')
                 if config.score_actuel == "30:30":
                     print("WIN")
-                    bet_30a = True
-                    send_mise = True
-                    result = True
-                    lose = False
+                    config.perte = 0
+                    config.init_variable()
+                    config.global_match_win = config.global_match_win + config.netprofit
+                    winmatch = winmatch + 1
+                    DeleteBet(driver)
+                    result = 'WIN'
                     print('attende un peu que le score c')
                     while config.score_actuel == "30:30":
                         GetScoreActuel(driver)
@@ -132,6 +134,7 @@ def all_script(driver):
         txtlog = "JEU COMMENCÉ ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)
         passageset = False
+        print('error before place bet : ', config.error)
         GetAndPlaceBet(driver)
         result = GetResult(driver)
         if result == 'LOSE':
@@ -167,12 +170,11 @@ def all_script(driver):
             RetourTpsReg(driver)
             GetIfGameEnd(driver)
             # VÉRIFCATION DU SET ACTUEL
-            config.saved_set = config.set_actuel
             GetSetActuel(driver)
             if not config.set_actuel:
                 config.error = True
-            config.log('set ' + str(config.set_actuel) + ' - saved set ' + str(config.saved_set), config.newmatch)
-            if str(config.saved_set) == str(config.set_actuel):  ## si on est toujours sur le meme set
+            config.log('set ' + str(config.set_actuel) + ' - nex set ' + str(config.newset))
+            if str(int(config.newset) - 1) == str(config.set_actuel):  ## si on est toujours sur le meme set
                 config.log('on est toujours sur le meme set', config.newmatch)
                 if (config.jeu_actuel + 1) >= 13:  # SI TIE BREAK
                     config.log("jeu " + str(config.jeu_actuel), config.newmatch)
