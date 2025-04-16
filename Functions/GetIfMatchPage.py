@@ -56,8 +56,8 @@ def GetIfMatchPage(driver):
             driver.get(config.site_url)
             return False
     else:
-        config.log('     PAGE MATCH OK!', 'info', False)
-        config.log_clear_line()
+        # config.log('     PAGE MATCH OK!', 'info', False)
+        # config.log_clear_line()
         return True
 
 

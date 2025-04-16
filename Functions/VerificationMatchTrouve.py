@@ -17,6 +17,7 @@ def main(driver, bet_item, matchlist_file_name):
         newmatch = newmatchtxt.split(
             '-')
         config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
+        print(config.newmatch)
     except Exception as e:
         config.log('Impossible de lire le lien du match!', 'warning', False, 4)
         config.log_clear_line()
