@@ -129,6 +129,7 @@ def AfficherParis(driver):
                                         theset).lower() + ' set Evénements rapides'.lower(), 'warning', False, 2)
                                     config.log_clear_line()
                         return selection
+    print('error #3GHHE ', config.error)
     return selection
 
 
