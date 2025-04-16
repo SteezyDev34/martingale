@@ -44,6 +44,7 @@ def GetResult(driver):
                 '40:A',
                 'A:40'
             ]
+            print('verif')
             if config.score_actuel == '30:30':
                 win = 'WIN'
                 config.log(win, 'success', False, 2)
@@ -52,6 +53,7 @@ def GetResult(driver):
                 result = win
                 return result
             if config.score_actuel in passed_score:
+                print('passed score')
                 if win != 'WIN':
                     if any(score.get('set') == config.set_actuel and
                            score.get('jeu') == config.jeu_actuel and
