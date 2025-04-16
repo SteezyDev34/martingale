@@ -9,8 +9,8 @@ import config
 
 
 def GetSetActuel(driver):
-    config.log('Récupératon du set actuel', '', False, 3)
-    config.log_clear_line()
+    # config.log('Récupératon du set actuel', '', False, 3)
+    # config.log_clear_line()
     try:
         driver.switch_to.window(driver.window_handles[0])
         WebDriverWait(driver, 10).until(
@@ -33,12 +33,12 @@ def GetSetActuel(driver):
         else:
             config.set_actuel = str(numset)
             if config.saved_set != config.set_actuel:
-                config.log('Nouveau Set actuel : ' + str(config.set_actuel), '', True, 3)
-                config.log_clear_line()
+                # config.log('Nouveau Set actuel : ' + str(config.set_actuel), '', True, 3)
+                # config.log_clear_line()
                 return True
             else:
-                config.log('Set actuel : ' + str(config.set_actuel), '', True, 3)
-                config.log_clear_line()
+                # config.log('Set actuel : ' + str(config.set_actuel), '', True, 3)
+                # config.log_clear_line()
                 return True
 
     return True
