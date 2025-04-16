@@ -25,6 +25,11 @@ localhost = ''
 site_url = "https://ca.1xbet.com/fr/live/tennis"
 # Score configurations
 score_to_start = [
+    "01(0)00(0)",
+    "00(0)01(0)",
+    "01(0)01(0)",
+    "02(0)00(0)",
+    "00(0)02(0)",
     "00(0)00(0)",
     "00(15)00(0)",
     "00(0)00(15)",
