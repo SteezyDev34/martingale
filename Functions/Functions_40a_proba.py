@@ -117,6 +117,10 @@ def all_script(driver):
                     'error', True)
                 print("erreur perte en 1 set")
                 DispatchPerte()
+        elif result == 'WIN':
+            config.error = False
+            config.log("Restart", config.newmatch)
+            FirstGameBet(driver)
         elif (config.jeu_actuel + 1) == 13:
             while config.score_actuel != "0:1" and config.score_actuel != "1:0":
                 print("wait start tie break")
@@ -204,9 +208,6 @@ def all_script(driver):
             config.init_variable()
             config.global_match_win = config.global_match_win + config.netprofit
             winmatch = winmatch + 1
-            if float(winmatch) >= float(config.nb_tour):
-                break
-            passageset = True
             DeleteBet(driver)
             print("#RECHERCHE INFOS DE MISE")
             infosperte = getGlobalPerte()
