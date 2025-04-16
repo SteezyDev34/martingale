@@ -4,30 +4,27 @@ import time
 import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName, VerificationMatchTrouve, AddRunning
-from Functions.AfficherParis import AfficherParis
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetAndPlaceBet import GetAndPlaceBet
-from Functions.GetBet import GetBet
 from Functions.GetIfGameStart import GetIfGameEnd
-from Functions.GetIfGameStart import GetIfGameStart
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
-from Functions.GetMise import GetMise
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
-from Functions.PlacerMise import PlacerMise
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.ValidationDuParis import ValidationDuParis
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def all_script(driver):
+    driver.switch_to.window(driver.window_handles[0])
     lose = True
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
+
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver) and not config.error:
@@ -45,10 +42,15 @@ def all_script(driver):
 
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
+        print("PERTE : ")
         if infosperte and config.perte == 0:
-            if float(infosperte['perte']) > 10:
-                SendGlobalPerte(config.scriptType, -3)
-                config.perte = 3
+            if float(infosperte['perte']) > 100:
+                SendGlobalPerte(config.scriptType, -20)
+                config.perte = 20
+                config.rattrape_perte = 1
+            elif float(infosperte['perte']) > 10:
+                SendGlobalPerte(config.scriptType, -10)
+                config.perte = 10
                 config.rattrape_perte = 1
             elif float(infosperte['perte']) > 1:
                 SendGlobalPerte(config.scriptType, -1)
@@ -60,7 +62,6 @@ def all_script(driver):
                 SendGlobalPerte(config.scriptType, m)
                 config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
-
         # END RECHERCHE INFOS DE MISE
         GetSetActuel(driver)
         config.saved_set = config.set_actuel
@@ -85,13 +86,14 @@ def all_script(driver):
             config.jeu_actuel = 0
             config.error = False
             config.log("passage set 2", config.newmatch)
+            config.log("attente 30 sec", config.newmatch)
             time.sleep(30)
             FirstGameBet(driver)
         elif result == 'WIN':
+            config.error = False
             config.log("Restart", config.newmatch)
             FirstGameBet(driver)
-            result = False
-        elif (config.jeu_actuel + 1) == 13:
+        elif config.jeu_actuel == 12:
             GetJeuActuel(driver)
             GetIfGameEnd(driver)
             while config.score_actuel != "0:0":
@@ -121,44 +123,13 @@ def all_script(driver):
             ##ATTENTE QUE LE JEU COMMENCE
             GetIfGameEnd(driver)
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
-        txtlog = "JEU COMMENCÉ ON PREPARE LE PROCHAIN BET"
+        txtlog = "JEU TERMINÉ ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)
         bet_40a = False
         tentative = 0
         passageset = False
-        while not bet_40a and not config.error:
-            # Affichage de la liste des paris
-            config.log('Affichage de la liste des paris', config.newmatch)
-            if not AfficherParis(driver):
-                config.error = True
-                break
-            # On recherche le jeu actuel
-            config.log('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
-            if not GetBet(driver, True):
-                tentative = tentative + 1
-                if tentative > 5:
-                    config.log('error recup jeu #ERR345', config.newmatch)
-                    config.error = True
-                    tentative = 0
-                continue
-            else:
-                print('passage prochain jeu')
-                bet_40a = True
-            config.log('prochain PAris 40A cliqué', config.newmatch)
-
-        # ON ENVOIE LA MISE
-        txtlog = "ON ENVOIE LA MISE"
-        config.log(txtlog, config.newmatch)
-        send_mise = False
-        # ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
-        GetMise(driver)
-        while not send_mise and not config.error:
-            if PlacerMise(driver):
-                send_mise = True
-            else:
-                config.error = True
+        GetAndPlaceBet(driver)
         result = GetResult(driver)
-
         if result == 'LOSE':
             ##VALIDATION DU PARIS SI SCORE OK
             validate_bet = False
@@ -190,7 +161,7 @@ def all_script(driver):
                     GetAndPlaceBet(driver)
             # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
             RetourTpsReg(driver)
-            GetIfGameStart(driver)
+            GetIfGameEnd(driver)
             # VÉRIFCATION DU SET ACTUEL
             GetSetActuel(driver)
 
@@ -221,14 +192,25 @@ def all_script(driver):
             config.global_match_win = config.global_match_win + config.netprofit
             winmatch = winmatch + 1
             DeleteBet(driver)
-            # GetIfGameEnd(driver)
             if float(winmatch) >= float(config.nb_tour):
                 break
             print("#RECHERCHE INFOS DE MISE")
             infosperte = getGlobalPerte()
             print("PERTE : ")
             if infosperte:
-                if float(infosperte['perte']) > 10:
+                if float(infosperte['perte']) > 100:
+                    SendGlobalPerte(config.scriptType, -20)
+                    config.perte = 20
+                    config.rattrape_perte = 1
+                elif float(infosperte['perte']) > 50:
+                    SendGlobalPerte(config.scriptType, -10)
+                    config.perte = 10
+                    config.rattrape_perte = 1
+                elif float(infosperte['perte']) > 20:
+                    SendGlobalPerte(config.scriptType, -5)
+                    config.perte = 5
+                    config.rattrape_perte = 1
+                elif float(infosperte['perte']) > 10:
                     SendGlobalPerte(config.scriptType, -3)
                     config.perte = 3
                     config.rattrape_perte = 1
@@ -241,17 +223,19 @@ def all_script(driver):
                     m = 0 - config.perte
                     SendGlobalPerte(config.scriptType, m)
                     config.perte = float(infosperte['perte'])
-                config.rattrape_perte = 1
+            config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
-            if config.perte == 0 and config.global_match_win < 1:
-                continue
+            if config.perte == 0 and config.global_match_win >= 1:
+                config.global_match_win = 0
+                break
             elif config.nb_tour == winmatch:
                 break
     if config.perte > 0.2:
         DispatchPerte()
-    config.global_match_win = 0
     print("update " + config.newmatch)
+    config.global_match_win = 0
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)
+    config.error = False
     return True

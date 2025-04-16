@@ -72,17 +72,11 @@ def all_script(driver):
         config.saved_set = config.set_actuel
 
         if not config.set_actuel:
-            current_frame = inspect.currentframe()
-            config.log(
-                f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
-                'error', True)
-
+            config.error = True
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
-
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
     RetourTpsReg(driver)
-
     passageset = False
     winmatch = 0
     config.lose = False
@@ -101,12 +95,24 @@ def all_script(driver):
             time.sleep(30)
             FirstGameBet(driver)
         elif result == 'WIN':
+            config.error = False
             config.log("Restart", config.newmatch)
             FirstGameBet(driver)
-            result = False
-        elif (config.jeu_actuel + 1) == 13:
+        elif config.jeu_actuel == 12:
             GetJeuActuel(driver)
             GetIfGameEnd(driver)
+            while config.score_actuel != "0:0":
+                print('possible tie break, attente debut ...')
+                if config.score_actuel == "30:30":
+                    print("WIN")
+                    bet_30a = True
+                    send_mise = True
+                    result = True
+                    lose = False
+                    print('attende un peu que le score c')
+                    while config.score_actuel == "30:30":
+                        GetScoreActuel(driver)
+                GetScoreActuel(driver)
             GetJeuActuel(driver)
             if config.jeu_actuel == 13:
                 while config.score_actuel != "0:1" and config.score_actuel != "1:0" and config.score_actuel != "1:1" and config.score_actuel != "2:0" and config.score_actuel != "0:2":
@@ -114,15 +120,15 @@ def all_script(driver):
                     GetScoreActuel(driver)
                     time.sleep(30)
                 print('tie break commencé... attente fin')
-                GetIfGameEnd(driver)
-                time.sleep(30)
-                FirstGameBet(driver)
+                time.sleep(60)
+            passageset = True
+            continue
         else:
             gamestart = False
             ##ATTENTE QUE LE JEU COMMENCE
             GetIfGameEnd(driver)
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
-        txtlog = "JEU COMMENCÉ ON PREPARE LE PROCHAIN BET"
+        txtlog = "JEU TERMINÉ ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)
         bet_40a = False
         tentative = 0
@@ -138,10 +144,6 @@ def all_script(driver):
                 GetScoreActuel(driver)
                 if config.score_actuel == False:
                     config.error = True
-                    current_frame = inspect.currentframe()
-                    config.log(
-                        f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
-                        'error', True)
                     config.log("error pendant la récupération du score", config.newmatch)
                     break
                 if (
@@ -152,10 +154,6 @@ def all_script(driver):
                     ###ajouter ici les actions avant de reprendre
                 elif config.score_actuel == "15:15":
                     config.error = True
-                    current_frame = inspect.currentframe()
-                    config.log(
-                        f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
-                        'error', True)
                     config.log("15A leave!", config.newmatch)
                     FirstGameBet(driver)
                     ###ajouter ici les actions avant de reprendre
@@ -174,10 +172,6 @@ def all_script(driver):
 
             if not config.set_actuel:
                 config.error = True
-                current_frame = inspect.currentframe()
-                config.log(
-                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
-                    'error', True)
             config.log('set ' + str(config.set_actuel) + ' - nex set ' + str(config.newset))
             if str(int(config.newset) - 1) == str(config.set_actuel):  ## si on est toujours sur le meme set
                 config.log('on est toujours sur le meme set', config.newmatch)
@@ -244,4 +238,5 @@ def all_script(driver):
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)
+    config.error = False
     return True
