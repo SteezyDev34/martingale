@@ -78,8 +78,15 @@ def GetJeuActuel(driver):
                         config.error = True
                         return False
             else:
-                # config.log('Récupération du jeu actuel : ' + str(config.jeu_actuel))
-                return True
+                # Vérification que config.jeu_actuel est un entier valide
+                if isinstance(config.jeu_actuel, int):
+                    config.log('Récupération du jeu actuel : ' + str(config.jeu_actuel))
+                    return True
+                else:
+                    config.log(f"#JEUERR\nLe jeu actuel n'est pas un entier valide: {type(config.jeu_actuel)}")
+                    config.error = True
+                    return False
+
     return False
 
 
