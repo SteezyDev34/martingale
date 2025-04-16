@@ -71,11 +71,12 @@ def GetJeuActuel(driver):
                 config.log("erreur : numjeu")
                 if not GetIfMatchPage(driver):
                     config.error = True
+                    return False
                 else:
                     tentative = tentative + 1
                     if tentative == 5:
                         config.error = True
-                return False
+                        return False
             else:
                 # config.log('Récupération du jeu actuel : ' + str(config.jeu_actuel))
                 return True
