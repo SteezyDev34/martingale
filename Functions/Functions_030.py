@@ -21,7 +21,7 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 def all_script(driver):
     driver.switch_to.window(driver.window_handles[0])
-    lose = True
+    result = False
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
 
@@ -44,15 +44,7 @@ def all_script(driver):
         infosperte = getGlobalPerte()
         print("PERTE : ")
         if infosperte and config.perte == 0:
-            if float(infosperte['perte']) > 100:
-                SendGlobalPerte(config.scriptType, -20)
-                config.perte = 20
-                config.rattrape_perte = 1
-            elif float(infosperte['perte']) > 10:
-                SendGlobalPerte(config.scriptType, -10)
-                config.perte = 10
-                config.rattrape_perte = 1
-            elif float(infosperte['perte']) > 1:
+            if float(infosperte['perte']) > 1:
                 SendGlobalPerte(config.scriptType, -1)
                 config.perte = 1
                 config.rattrape_perte = 1
@@ -180,23 +172,7 @@ def all_script(driver):
             infosperte = getGlobalPerte()
             print("PERTE : ")
             if infosperte:
-                if float(infosperte['perte']) > 100:
-                    SendGlobalPerte(config.scriptType, -20)
-                    config.perte = 20
-                    config.rattrape_perte = 1
-                elif float(infosperte['perte']) > 50:
-                    SendGlobalPerte(config.scriptType, -10)
-                    config.perte = 10
-                    config.rattrape_perte = 1
-                elif float(infosperte['perte']) > 20:
-                    SendGlobalPerte(config.scriptType, -5)
-                    config.perte = 5
-                    config.rattrape_perte = 1
-                elif float(infosperte['perte']) > 10:
-                    SendGlobalPerte(config.scriptType, -3)
-                    config.perte = 3
-                    config.rattrape_perte = 1
-                elif float(infosperte['perte']) > 1:
+                if float(infosperte['perte']) > 1:
                     SendGlobalPerte(config.scriptType, -1)
                     config.perte = 1
                     config.rattrape_perte = 1
@@ -207,9 +183,8 @@ def all_script(driver):
                     config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
-            if config.perte == 0 and config.global_match_win >= 1:
-                config.global_match_win = 0
-                break
+            if config.perte == 0 and config.global_match_win < 1:
+                continue
             elif config.nb_tour == winmatch:
                 break
     if config.perte > 0.2:

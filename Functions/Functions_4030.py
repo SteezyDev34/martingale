@@ -235,8 +235,8 @@ def all_script(driver):
                     SendGlobalPerte(config.scriptType, m)
                     config.perte = float(infosperte['perte'])
             config.log(f'Net profit: {config.global_match_win}')
-            if config.perte == 0 and config.global_match_win >= 1:
-                break
+            if config.perte == 0 and config.global_match_win < 1:
+                continue
             elif config.nb_tour == winmatch:
                 break
     if config.perte > 0.2:

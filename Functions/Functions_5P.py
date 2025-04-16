@@ -39,16 +39,9 @@ def all_script(driver):
 
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
+        print("PERTE : ")
         if infosperte and config.perte == 0:
-            if float(infosperte['perte']) > 20:
-                SendGlobalPerte(config.scriptType, -5)
-                config.perte = 5
-                config.rattrape_perte = 1
-            elif float(infosperte['perte']) > 10:
-                SendGlobalPerte(config.scriptType, -3)
-                config.perte = 3
-                config.rattrape_perte = 1
-            elif float(infosperte['perte']) > 1:
+            if float(infosperte['perte']) > 1:
                 SendGlobalPerte(config.scriptType, -1)
                 config.perte = 1
                 config.rattrape_perte = 1
@@ -206,15 +199,7 @@ def all_script(driver):
             infosperte = getGlobalPerte()
             print("PERTE : ")
             if infosperte:
-                if float(infosperte['perte']) > 20:
-                    SendGlobalPerte(config.scriptType, -5)
-                    config.perte = 5
-                    config.rattrape_perte = 1
-                elif float(infosperte['perte']) > 10:
-                    SendGlobalPerte(config.scriptType, -3)
-                    config.perte = 3
-                    config.rattrape_perte = 1
-                elif float(infosperte['perte']) > 1:
+                if float(infosperte['perte']) > 1:
                     SendGlobalPerte(config.scriptType, -1)
                     config.perte = 1
                     config.rattrape_perte = 1
@@ -223,16 +208,18 @@ def all_script(driver):
                     m = 0 - config.perte
                     SendGlobalPerte(config.scriptType, m)
                     config.perte = float(infosperte['perte'])
+                config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
-            if config.perte == 0 and config.global_match_win >= 1:
-                break
+            if config.perte == 0 and config.global_match_win < 1:
+                continue
             elif config.nb_tour == winmatch:
                 break
     if config.perte > 0.2:
         DispatchPerte()
+    print("update " + config.newmatch)
     config.global_match_win = 0
-    print("update : " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)
+    config.error = False
     return True
