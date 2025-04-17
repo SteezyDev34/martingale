@@ -6,8 +6,10 @@ from Functions import Functions_1XBET
 from Functions import GetLigueName, VerificationMatchTrouve, AddRunning
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
+from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
+from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameStart, GetIfGameEnd
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
 from Functions.GetResult import GetResult

@@ -24,9 +24,7 @@ def all_script(driver):
     driver.switch_to.window(driver.window_handles[0])
     result = False
     # Mise à jour du fichier txt des script en cours
-    #
     scriptDelRunning()
-    config.error = False
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver) and not config.error:
