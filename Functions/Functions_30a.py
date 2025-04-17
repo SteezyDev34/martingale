@@ -209,6 +209,7 @@ def all_script(driver):
                 break
     if config.perte > 0.2:
         DispatchPerte()
+    print(result)
     print("update " + config.newmatch)
     config.global_match_win = 0
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
