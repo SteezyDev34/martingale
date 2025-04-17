@@ -185,9 +185,6 @@ def all_script(driver):
             config.global_match_win = config.global_match_win + config.netprofit
             winmatch = winmatch + 1
             DeleteBet(driver)
-            # GetIfGameEnd(driver)
-            if float(winmatch) >= float(config.nb_tour):
-                break
             print("#RECHERCHE INFOS DE MISE")
             infosperte = getGlobalPerte()
             print("PERTE : ")
