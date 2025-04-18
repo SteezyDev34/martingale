@@ -16,7 +16,7 @@ def FirstGameBet(driver):
     bet_40a = False
     tentative = 0
     nextBet = False
-    while not bet_40a and not config.error:
+    while not bet_40a and not config.error and tentative < 3:
         if config.scriptType == '30A':
             GetScoreActuel(driver)
             if config.score_actuel != "0:0" and config.score_actuel != "0:15" and config.score_actuel != "15:0" and config.score_actuel != "15:15":
@@ -40,7 +40,8 @@ def FirstGameBet(driver):
             config.log(
                 f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
                 'error', True)
-            break
+            tentative = tentative + 1
+            continue
         # On recherche le jeu actuel
         config.log('liste des pariis affichée', '', True, 2)
         if not GetBet(driver, nextBet):
