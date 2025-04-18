@@ -111,14 +111,14 @@ def all_script(driver):
                     time.sleep(30)
                 print('tie break commencé... attente fin')
                 time.sleep(60)
-                passageset = True
+            passageset = True
             continue
         else:
             gamestart = False
             ##ATTENTE QUE LE JEU COMMENCE
             GetIfGameEnd(driver)
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
-        txtlog = "JEU COMMENCÉ ON PREPARE LE PROCHAIN BET"
+        txtlog = "JEU TERMINÉ ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)
         passageset = False
         print('error before place bet : ', config.error)
@@ -200,7 +200,8 @@ def all_script(driver):
                     config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
-            if config.perte == 0 and config.global_match_win < 1:
+            if config.perte == 0 and float(config.global_match_win) < 1:
+                print('continue')
                 continue
             elif config.nb_tour == winmatch:
                 break
