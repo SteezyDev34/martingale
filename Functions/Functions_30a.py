@@ -10,7 +10,7 @@ from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetAndPlaceBet import GetAndPlaceBet
-from Functions.GetIfGameStart import GetIfGameEnd
+from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
@@ -88,7 +88,7 @@ def all_script(driver):
             FirstGameBet(driver)
         elif config.jeu_actuel == 12:
             GetJeuActuel(driver)
-            GetIfGameEnd(driver)
+            GetIfGameStart(driver)
             while config.score_actuel != "0:0":
                 print('possible tie break, attente debut ...')
                 if config.score_actuel == "30:30":
@@ -111,7 +111,7 @@ def all_script(driver):
                     time.sleep(30)
                 print('tie break commencé... attente fin')
                 time.sleep(60)
-            passageset = True
+                passageset = True
             continue
         else:
             gamestart = False
