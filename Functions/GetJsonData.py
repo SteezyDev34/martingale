@@ -237,6 +237,50 @@ def SendGlobalPerte(scriptType, mise):
             return False
 
 
+def SendBetPlaced(scriptType, mise):
+    # Construction de l'URL de l'API
+    url = "http://p-com.studio/api/strategy" + str(scriptType) + "/insert_bet_placed.php"
+    # URL du lien JSON de la strategy
+    try:
+        # Préparation des données à envoyer en POST
+        data = {
+            'mise': config.mise,
+            'jeu': config.jeu_actuel,
+            'set': config.set_actuel,
+            'cote': config.cote,
+            'script': config.scriptType,
+            'url': config.match_Url,
+            'perte': config.perte,
+            'compet': config.ligue_name,
+            'teams': config.teams,
+
+        }
+        # Envoi de la requête POST avec les données
+        response = requests.post(url, data=data)
+        # Vérifier que la requête a réussi
+        response.raise_for_status()
+        # Parser le JSON depuis la réponse
+        result = response.json()
+        # Afficher les données pour vérification
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de la récupération des données : {e}")
+        return
+    except json.JSONDecodeError as e:
+        print(f"Erreur lors du parsing du JSON : {e}")
+        return
+    except Exception as e:
+        print(f"Pas d'envoi de perte {e}")
+    else:
+        if result['status'] == "success":
+            config.log(f"{str(mise)} insert in strategy" + str(scriptType), 'info', False, 2)
+            config.log_clear_line()
+            return True
+        else:
+            config.log(f"        {result}", 'info', False)
+            config.log_clear_line()
+            return False
+
+
 def DispatchPerte():
     SendGlobalPerte(config.scriptType, config.perte)
 

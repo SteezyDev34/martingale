@@ -12,6 +12,7 @@ from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameStart, GetIfGameEnd
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
+from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
@@ -38,6 +39,7 @@ def all_script(driver):
         AddRunning.main(config.script_num, config.running_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
+        config.teams = GetPlayersName(driver)
         newmatchFromUrl(driver)
 
         config.log('💶 RECHERCHE INFOS DE MISE', 'title', False)
