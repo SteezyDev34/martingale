@@ -3,7 +3,7 @@ import time
 
 import config
 from Functions import Functions_1XBET
-from Functions import GetLigueName, VerificationMatchTrouve, AddRunning
+from Functions import GetLigueName, AddRunning
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetSetActuel import GetSetActuel
@@ -36,9 +36,10 @@ def all_script(driver):
         AddRunning.main(config.script_num, config.running_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
-        config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
+        config.teams = GetPlayersName(driver)
+        newmatchFromUrl(driver)
 
-        print("#RECHERCHE INFOS DE MISE")
+        config.log('💶 RECHERCHE INFOS DE MISE', 'title', False)
         infosperte = getGlobalPerte()
         if infosperte and config.perte == 0:
             if float(infosperte['perte']) > 100:
@@ -66,8 +67,6 @@ def all_script(driver):
                 m = 0 - config.perte
                 SendGlobalPerte(config.scriptType, m)
                 config.perte = float(infosperte['perte'])
-                config.rattrape_perte = 1
-
         # END RECHERCHE INFOS DE MISE
 
     GetSetActuel(driver)
@@ -203,7 +202,17 @@ def all_script(driver):
                             GetAndPlaceBet(driver)
                     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
                     RetourTpsReg(driver)
-
+            elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
+                txtlog = " ON EST SUR LE PROCHAIN SET"
+                passageset = True
+                config.newset = config.set_actuel + 1
+                config.perte = config.perte - config.mise
+                config.log(txtlog, config.newmatch)
+                passageset = True
+                DeleteBet(driver)
+                txtlog = 'Wait 30 sec'
+                config.log(txtlog, config.newmatch)
+                time.sleep(30)
             else:
                 print("ERROR : ecup set " + str(config.set_actuel))
                 config.error = True
@@ -215,9 +224,16 @@ def all_script(driver):
             DeleteBet(driver)
             print("#RECHERCHE INFOS DE MISE")
             infosperte = getGlobalPerte()
-            print("PERTE : ")
             if infosperte:
-                if float(infosperte['perte']) > 20:
+                if float(infosperte['perte']) > 100:
+                    SendGlobalPerte(config.scriptType, -20)
+                    config.perte = 20
+                    config.rattrape_perte = 1
+                elif float(infosperte['perte']) > 50:
+                    SendGlobalPerte(config.scriptType, -10)
+                    config.perte = 10
+                    config.rattrape_perte = 1
+                elif float(infosperte['perte']) > 20:
                     SendGlobalPerte(config.scriptType, -5)
                     config.perte = 5
                     config.rattrape_perte = 1

@@ -203,7 +203,16 @@ def all_script(driver):
                             GetAndPlaceBet(driver)
                     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
                     RetourTpsReg(driver)
-
+            elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
+                txtlog = " ON EST SUR LE PROCHAIN SET"
+                passageset = True
+                config.newset = config.set_actuel + 1
+                config.perte = config.perte - config.mise
+                config.log(txtlog, config.newmatch)
+                DeleteBet(driver)
+                txtlog = 'Wait 30 sec'
+                config.log(txtlog, config.newmatch)
+                time.sleep(30)
             else:
                 print("ERROR : ecup set " + str(config.set_actuel))
                 config.error = True
