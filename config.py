@@ -102,6 +102,7 @@ devMode = 1
 restart_set2 = 0
 log_message = ''
 newset = 2
+teams = False
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:
@@ -141,7 +142,7 @@ def init_variable():
     global mise, perte, wantwin, increment, probamini, cotemini, recup40, recup30
     global running_file_name, matchlist_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
     global print_match_live_text, devMode, match_list, match_done_key, match_found
-    global error, cotebase, nb_tour, restart_set2, validated_bet, ligue_name, match_Url, newmatch, all_scores
+    global error, cotebase, nb_tour, restart_set2, validated_bet, ligue_name, match_Url, newmatch, all_scores, teams
 
     match_list = []  # List des matchs
     match_done_key = ""  # Nom du match dans Gsheets
@@ -158,6 +159,7 @@ def init_variable():
     ligue_name = ""
     match_Url = ""
     newmatch = ""
+    teams = False
     all_scores = {}
 
     mise = float(strategy.get("mise", 0)) if strategy else 0
