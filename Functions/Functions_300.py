@@ -125,6 +125,7 @@ def all_script(driver):
                     GetScoreActuel(driver)
                     time.sleep(30)
                 print('tie break commencé... attente fin')
+                GetIfGameEnd(driver)
                 time.sleep(60)
             passageset = True
             continue
@@ -135,8 +136,6 @@ def all_script(driver):
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
         txtlog = "JEU TERMINÉ ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)
-        bet_40a = False
-        tentative = 0
         passageset = False
         GetAndPlaceBet(driver)
         result = GetResult(driver)

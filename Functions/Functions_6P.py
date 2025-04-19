@@ -12,6 +12,7 @@ from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameStart, GetIfGameEnd
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
+from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
@@ -38,9 +39,10 @@ def all_script(driver):
         AddRunning.main(config.script_num, config.running_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
+        config.teams = GetPlayersName(driver)
         newmatchFromUrl(driver)
 
-        config.log('💶 RECHERCHE INFOS DE MISE', 'title', False)
+        print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
         if infosperte and config.perte == 0:
             if float(infosperte['perte']) > 100:
@@ -88,8 +90,9 @@ def all_script(driver):
         GetJeuActuel(driver)
         # WAIT FOR GAME START
         if passageset:
-            config.saved_set = ""
-            config.set_actuel = GetSetActuel(driver)
+
+            GetSetActuel(driver)
+            config.newset = config.set_actuel + 1
             config.score_actuel = '0:0'
             gamestart = True
             if config.rattrape_perte == 1:
@@ -125,21 +128,29 @@ def all_script(driver):
             config.error = False
             config.log("Restart", config.newmatch)
             FirstGameBet(driver)
-        elif (config.jeu_actuel + 1) == 13:
-            while config.score_actuel != "0:1" and config.score_actuel != "1:0":
-                print("wait start tie break")
-                print('score actuel : ' + config.score_actuel)
-                saveset = config.set_actuel
-                GetSetActuel(driver)
-                if saveset != config.set_actuel:
-                    break
-                time.sleep(30)
-                GetScoreActuel(driver)
+        elif config.jeu_actuel == 12:
+            GetJeuActuel(driver)
+            GetIfGameStart(driver)
             while config.score_actuel != "0:0":
-                print("wait end tie break")
-                print('score actuel : ' + config.score_actuel)
-                time.sleep(30)
+                print('possible tie break, attente debut ...')
+                result = GetResult(driver)
+                if result == "WIN":
+                    config.perte = 0
+                    config.init_variable()
+                    config.global_match_win = config.global_match_win + config.netprofit
+                    winmatch = winmatch + 1
+                    DeleteBet(driver)
+                    result = 'WIN'
+                    config.error = True
                 GetScoreActuel(driver)
+            GetIfGameEnd(driver)
+            GetJeuActuel(driver)
+            if config.jeu_actuel == 13:
+                print('Tie break en cours attente début')
+                while config.score_actuel != "0:1" and config.score_actuel != "1:0" and config.score_actuel != "1:1" and config.score_actuel != "2:0" and config.score_actuel != "0:2":
+                        GetScoreActuel(driver)
+                print('tie break commencé... attente fin')
+                GetIfGameEnd(driver)
             passageset = True
             time.sleep(30)
             continue

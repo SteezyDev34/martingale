@@ -109,6 +109,7 @@ def all_script(driver):
                     GetScoreActuel(driver)
                     time.sleep(30)
                 print('tie break commencé... attente fin')
+                GetIfGameEnd(driver)
                 time.sleep(60)
             passageset = True
             continue
