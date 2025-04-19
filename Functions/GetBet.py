@@ -301,10 +301,10 @@ def GetBet(driver, nextBet=False):
                             return clic
                         else:
                             # print('mauvais jeu')
-                            sautDeLigne = sautDeLigne + 50
+                            sautDeLigne = sautDeLigne + 30
                     else:
                         # print('Mauvais paris')
-                        sautDeLigne = sautDeLigne + 50
+                        sautDeLigne = sautDeLigne + 30
                         ligne = ligne + 1
                         # print('ligne ' + str(ligne))
                 else:
