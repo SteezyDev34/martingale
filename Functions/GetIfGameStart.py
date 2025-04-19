@@ -4,11 +4,13 @@ import time
 import config
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetScoreActuel import GetScoreActuel
+from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def GetIfGameStart(driver):
     gamestart = False
     printext = False
+    RetourTpsReg(driver)
     while not gamestart and not config.error:
         GetScoreActuel(driver)
         config.saved_score = config.saved_score
@@ -65,6 +67,7 @@ def GetIfGameStart30A(driver):
 def GetIfGameEnd(driver):
     gameeend = False
     printext = False
+    RetourTpsReg(driver)
     config.log('ATTENTE FIN DE JEU', 'info', False, 4)
     while not gameeend and not config.error:
         GetScoreActuel(driver)
