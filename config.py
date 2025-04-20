@@ -366,7 +366,9 @@ def clear_previous_line_windows():
 # Utilisation avec fallback
 def clear_previous_line_cross_platform():
     try:
-        sys.stdout.write("\033[F\033[K\r")
-        sys.stdout.flush()
+        pass
+        # sys.stdout.write("\033[F\033[K\r")
+        # sys.stdout.flush()
     except:
-        clear_previous_line_windows()
+        # clear_previous_line_windows()
+        pass
