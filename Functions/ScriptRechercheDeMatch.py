@@ -116,6 +116,7 @@ def rechercheDeMatch(driver):
                                         # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
                                         config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
                                                                                        config.matchlist_file_name)
+                                        print('config.newmatch[0]', config.newmatch[0])
                                         if config.newmatch[0]:
                                             print('match rttrou')
                                             if OuverturePageMatch.main(bet_item, config.script_num,
