@@ -122,6 +122,7 @@ def rechercheDeMatch(driver):
                                                                        config.running_file_name,
                                                                        config.matchlist_file_name):
                                                 config.newmatch = config.newmatch[1]
+                                                print('oihoihets')
                                                 config.log(config.newmatch, 'info', False, 4)
                                                 config.match_found = True
                                                 break
