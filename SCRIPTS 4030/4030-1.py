@@ -57,6 +57,8 @@ from ChromeDriver.SetDriver import driver
 from Functions import Functions_4030
 from Functions.GetJsonData import DispatchPerte
 
+config.init_variable()
+
 while (config.win < 100):
     try:
         Functions_4030.all_script(driver)

@@ -61,6 +61,7 @@ from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch
 
 classementeDeMatch(driver)
+config.init_variable()
 
 while (config.win < 100):
 
