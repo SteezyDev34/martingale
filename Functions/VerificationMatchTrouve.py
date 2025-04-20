@@ -24,7 +24,6 @@ def main(driver, bet_item, matchlist_file_name):
         return [False, config.newmatch]
     else:
         match_list = GetMatchDone.main(config.matchlisttodo_file_name)
-        print(config.matchlisttodo_file_name)
         if any(config.newmatch in x for x in match_list):
             config.log('Le match autorisé!', 'success', False, 4)
             driver.get(newmatchtxt)
