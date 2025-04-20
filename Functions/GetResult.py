@@ -122,7 +122,7 @@ def GetResult(driver):
             if config.score_actuel in passed_score or config.set_actuel == float(config.validated_bet.get('set')) + 1:
                 print('passed score')
                 print('config.win_type = ' + config.win_type)
-                print('config.validated_bet = ' + config.validated_bet)
+                print('config.validated_bet = ', config.validated_bet)
                 if win != 'WIN':
                     if any(score.get('set') == config.validated_bet.get('set') and
                            score.get('jeu') == config.validated_bet.get('jeu') and
