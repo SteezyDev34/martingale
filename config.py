@@ -282,7 +282,7 @@ def log(message, type="", clear=True, indent=0):
 
     if clear:
         # Effacement de la ligne précédente
-        log_clear_line()
+        # log_clear_line()
         # Affichage du nouveau message sur la même ligne
         sys.stdout.write(f"{color}{indent}{message}{RESET}\n")
     else:
