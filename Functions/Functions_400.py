@@ -201,7 +201,7 @@ def all_script(driver):
             elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                 txtlog = " ON EST SUR LE PROCHAIN SET"
                 passageset = True
-                config.newset = config.set_actuel + 1
+                config.newset = float(config.set_actuel) + 1
                 config.perte = config.perte - config.mise
                 config.log(txtlog, config.newmatch)
                 passageset = True

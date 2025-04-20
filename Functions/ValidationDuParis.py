@@ -15,6 +15,7 @@ def ValidationDuParis(driver, nexbet=False):
     tentative = 0
     config.log('validation paris', 'info', False, 2)
     config.log_clear_line()
+    current_game = config.jeu_actuel
     while not validation and tentative < 2:
         config.log('Vérification des paris validés')
         config.log_clear_line()
@@ -69,7 +70,8 @@ def ValidationDuParis(driver, nexbet=False):
                     except Exception as e:
                         config.log(f"#E005689\nUne erreur est survenue : {e}")
                         tentative = tentative + 1
-                        validation = ModalHandler(driver)
+                        if ModalHandler(driver):
+                            validation = True
                     else:
                         if str(l) == str(config.mise):
                             getbtn = driver.find_element(By.CLASS_NAME, 'coupon-buttons')
@@ -77,7 +79,8 @@ def ValidationDuParis(driver, nexbet=False):
                                 getbtn.click()
                             except:
                                 tentative = tentative + 1
-                                validation = ModalHandler(driver)
+                                if ModalHandler(driver):
+                                    validation = True
                             else:
                                 tentative = tentative + 1
                                 preloader = 1
@@ -102,6 +105,23 @@ def ValidationDuParis(driver, nexbet=False):
             else:
                 PlacerMise(driver)
                 tentative = tentative + 1
+    if validation:
+        # Store bet information in validated_bet variable
+        from datetime import datetime
+        current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        config.validated_bet = {
+            'montant': config.mise,
+            'jeu': current_game,
+            'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
+            'timestamp': current_timestamp
+        }
+        config.log(f'           {config.validated_bet}', 'info', True)
+        config.perte = float(config.perte) + float(config.mise)
+        config.wantwin = float(config.wantwin) + float(config.increment)
+        # Calculate net profit based on stake, odds and losses
+        config.netprofit = round(
+            (float(config.mise) * float(config.cote)) - float(config.perte), 2)
+        config.log(f'Potential Net profit: {config.netprofit}')
     return validation
 
 
