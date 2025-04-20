@@ -24,7 +24,7 @@ def main(driver, bet_item, matchlist_file_name):
         return [False, config.newmatch]
     else:
         match_list = GetMatchDone.main(config.matchlisttodo_file_name)
-        if not any(config.newmatch in x for x in match_list):
+        if any(config.newmatch in x for x in match_list):
             config.log('Le match autorisé!', 'success', False, 4)
             driver.get(newmatchtxt)
             return [True, config.newmatch]
@@ -74,7 +74,7 @@ def fromUrl(driver, matchlist_file_name):
         return [False, config.newmatch]
     else:
         match_list = GetMatchDone.main(matchlist_file_name)
-        if not any(config.newmatch in x for x in match_list):
+        if any(config.newmatch in x for x in match_list):
             config.log('        Le match autorisé!', 'warning', True)
             return [True, config.newmatch]
         else:
