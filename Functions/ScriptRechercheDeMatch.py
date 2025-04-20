@@ -117,6 +117,7 @@ def rechercheDeMatch(driver):
                                         config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
                                                                                        config.matchlist_file_name)
                                         if config.newmatch[0]:
+                                            print('match rttrou')
                                             if OuverturePageMatch.main(bet_item, config.script_num,
                                                                        config.newmatch[1],
                                                                        config.running_file_name,
