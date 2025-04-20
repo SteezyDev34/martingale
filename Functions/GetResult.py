@@ -21,6 +21,7 @@ def GetResult(driver):
         time.sleep(timesleep)
         previous_score = config.score_actuel
         GetScoreActuel(driver)
+
         if config.scriptType == "40A":
             if config.score_actuel == '40:A' or config.score_actuel == 'A:40' or config.score_actuel == '40:40':
                 result = 'WIN'
@@ -44,7 +45,6 @@ def GetResult(driver):
                 '40:A',
                 'A:40'
             ]
-            print('verif')
             if config.score_actuel == '30:30':
                 win = 'WIN'
                 config.log(win, 'success', False, 2)
@@ -52,11 +52,11 @@ def GetResult(driver):
                     GetScoreActuel(driver)
                 result = win
                 return result
-            if config.score_actuel in passed_score:
+            if config.score_actuel in passed_score or config.set_actuel == config.validated_bet.get('set') + 1:
                 print('passed score')
                 if win != 'WIN':
-                    if any(score.get('set') == config.set_actuel and
-                           score.get('jeu') == config.jeu_actuel and
+                    if any(score.get('set') == config.validated_bet.get('set') and
+                           score.get('jeu') == config.validated_bet.get('jeu') and
                            score.get('score') == '30:30'
                            for score in config.all_scores.values()):
                         win = 'WIN'
@@ -88,10 +88,10 @@ def GetResult(driver):
                 while config.score_actuel == '15:15':
                     GetScoreActuel(driver)
                 return result
-            if config.score_actuel in passed_score:
+            if config.score_actuel in passed_score or config.set_actuel == config.validated_bet.get('set') + 1:
                 if win != 'WIN':
-                    if any(score.get('set') == config.set_actuel and
-                           score.get('jeu') == config.jeu_actuel and
+                    if any(score.get('set') == config.validated_bet.get('set') and
+                           score.get('jeu') == config.validated_bet.get('jeu') and
                            score.get('score') == '15:15'
                            for score in config.all_scores.values()):
                         win = 'WIN'
@@ -119,11 +119,11 @@ def GetResult(driver):
             if not win and config.score_actuel == config.win_type:
                 win = 'WIN'
                 config.log(win, 'success', False, 2)
-            if config.score_actuel in passed_score:
+            if config.score_actuel in passed_score or config.set_actuel == config.validated_bet.get('set') + 1:
                 print('passed score')
                 if win != 'WIN':
-                    if any(score.get('set') == config.set_actuel and
-                           score.get('jeu') == config.jeu_actuel and
+                    if any(score.get('set') == config.validated_bet.get('set') and
+                           score.get('jeu') == config.validated_bet.get('jeu') and
                            score.get('score') == config.win_type
                            for score in config.all_scores.values()):
                         win = 'WIN'
