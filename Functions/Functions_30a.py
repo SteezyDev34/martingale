@@ -3,7 +3,7 @@ import time
 
 import config
 from Functions import Functions_1XBET
-from Functions import GetLigueName, VerificationMatchTrouve, AddRunning
+from Functions import GetLigueName, AddRunning
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
@@ -12,10 +12,12 @@ from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
+from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.ValidationDuParis import ValidationDuParis
+from Functions.VerificationMatchTrouve import newmatchFromUrl
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
@@ -38,17 +40,18 @@ def all_script(driver):
         AddRunning.main(config.script_num, config.running_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
-        config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
+        config.teams = GetPlayersName(driver)
+        newmatchFromUrl(driver)
 
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
         print("PERTE : ")
         if infosperte and config.perte == 0:
-            if float(infosperte['perte']) > 1:
-                SendGlobalPerte(config.scriptType, -1)
-                config.perte = 1
+            if float(infosperte['perte']) > 20:
+                SendGlobalPerte(config.scriptType, -20)
+                config.perte = 20
                 config.rattrape_perte = 1
-            elif float(infosperte['perte']) >= 0.2:
+            elif float(infosperte['perte']) <= 20:
                 config.perte = float(infosperte['perte'])
                 m = 0 - config.perte
                 SendGlobalPerte(config.scriptType, m)
@@ -190,11 +193,11 @@ def all_script(driver):
             infosperte = getGlobalPerte()
             print("PERTE : ")
             if infosperte:
-                if float(infosperte['perte']) > 1:
-                    SendGlobalPerte(config.scriptType, -1)
-                    config.perte = 1
+                if float(infosperte['perte']) > 20:
+                    SendGlobalPerte(config.scriptType, -20)
+                    config.perte = 20
                     config.rattrape_perte = 1
-                elif float(infosperte['perte']) >= 0.2:
+                elif float(infosperte['perte']) <= 20:
                     config.perte = float(infosperte['perte'])
                     m = 0 - config.perte
                     SendGlobalPerte(config.scriptType, m)
