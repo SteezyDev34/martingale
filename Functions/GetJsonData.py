@@ -283,6 +283,7 @@ def SendBetPlaced(scriptType, mise):
 
 def DispatchPerte():
     SendGlobalPerte(config.scriptType, config.perte)
+    config.perte = 0
 
 
 def a_DispatchPerte():
