@@ -11,10 +11,12 @@ from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetIfGameStart import GetIfGameStart, GetIfGameEnd
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
+from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.ValidationDuParis import ValidationDuParis
+from Functions.VerificationMatchTrouve import newmatchFromUrl
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
@@ -67,7 +69,7 @@ def all_script(driver):
     passageset = False
     winmatch = 0
     config.lose = False
-    while (float(winmatch) < float(config.nb_tour) and not config.error):
+    while not config.error:
         GetJeuActuel(driver)
         # WAIT FOR GAME START
         if passageset:

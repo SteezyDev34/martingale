@@ -69,7 +69,7 @@ def all_script(driver):
     winmatch = 0
     config.lose = False
     result = False
-    while (float(winmatch) < float(config.nb_tour) and not config.error):
+    while not config.error:
         # WAIT FOR GAME START
         GetJeuActuel(driver)
 

@@ -86,7 +86,7 @@ def all_script(driver):
     passageset = False
     winmatch = 0
     config.lose = False
-    while (float(winmatch) < float(config.nb_tour) and not config.error):
+    while not config.error:
         GetJeuActuel(driver)
         # WAIT FOR GAME START
         if passageset:
