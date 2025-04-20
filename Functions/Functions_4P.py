@@ -3,20 +3,16 @@ import time
 
 import config
 from Functions import Functions_1XBET
-from Functions import GetLigueName, VerificationMatchTrouve, AddRunning
-from Functions.AfficherParis import AfficherParis
+from Functions import GetLigueName, AddRunning
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
-from Functions.GetBet import GetBet
 from Functions.GetIfGameStart import GetIfGameStart, GetIfGameEnd
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
-from Functions.GetMise import GetMise
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
-from Functions.PlacerMise import PlacerMise
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.ValidationDuParis import ValidationDuParis
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
@@ -46,23 +42,7 @@ def all_script(driver):
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
         if infosperte and config.perte == 0:
-            if float(infosperte['perte']) > 100:
-                SendGlobalPerte(config.scriptType, -20)
-                config.perte = 20
-                config.rattrape_perte = 1
-            elif float(infosperte['perte']) > 50:
-                SendGlobalPerte(config.scriptType, -10)
-                config.perte = 10
-                config.rattrape_perte = 1
-            elif float(infosperte['perte']) > 20:
-                SendGlobalPerte(config.scriptType, -5)
-                config.perte = 5
-                config.rattrape_perte = 1
-            elif float(infosperte['perte']) > 10:
-                SendGlobalPerte(config.scriptType, -3)
-                config.perte = 3
-                config.rattrape_perte = 1
-            elif float(infosperte['perte']) > 1:
+            if float(infosperte['perte']) > 1:
                 SendGlobalPerte(config.scriptType, -1)
                 config.perte = 1
                 config.rattrape_perte = 1
@@ -149,7 +129,7 @@ def all_script(driver):
             if config.jeu_actuel == 13:
                 print('Tie break en cours attente début')
                 while config.score_actuel != "0:1" and config.score_actuel != "1:0" and config.score_actuel != "1:1" and config.score_actuel != "2:0" and config.score_actuel != "0:2":
-                        GetScoreActuel(driver)
+                    GetScoreActuel(driver)
                 print('tie break commencé... attente fin')
                 GetIfGameEnd(driver)
             passageset = True
@@ -238,23 +218,7 @@ def all_script(driver):
             infosperte = getGlobalPerte()
             print("PERTE : ")
             if infosperte:
-                if float(infosperte['perte']) > 100:
-                    SendGlobalPerte(config.scriptType, -20)
-                    config.perte = 20
-                    config.rattrape_perte = 1
-                elif float(infosperte['perte']) > 50:
-                    SendGlobalPerte(config.scriptType, -10)
-                    config.perte = 10
-                    config.rattrape_perte = 1
-                elif float(infosperte['perte']) > 20:
-                    SendGlobalPerte(config.scriptType, -5)
-                    config.perte = 5
-                    config.rattrape_perte = 1
-                elif float(infosperte['perte']) > 10:
-                    SendGlobalPerte(config.scriptType, -3)
-                    config.perte = 3
-                    config.rattrape_perte = 1
-                elif float(infosperte['perte']) > 1:
+                if float(infosperte['perte']) > 1:
                     SendGlobalPerte(config.scriptType, -1)
                     config.perte = 1
                     config.rattrape_perte = 1
