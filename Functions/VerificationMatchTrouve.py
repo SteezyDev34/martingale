@@ -48,7 +48,7 @@ def getstats(driver, bet_item, matchlist_file_name):
         return [False, config.newmatch]
     else:
         print('newmatch : ' + config.newmatch)
-        match_list = GetMatchDone.main(matchlist_file_name)
+        match_list = GetMatchDone.main(config.matchlisttodo_file_name)
         config.log(match_list, config.newmatch)
         if any(config.newmatch in x for x in match_list):
             txtlog = "          Le match n\'a pas encore été parié!"
@@ -73,7 +73,7 @@ def fromUrl(driver, matchlist_file_name):
         config.log('            Impossible de lire le lien du match!', 'warning', False)
         return [False, config.newmatch]
     else:
-        match_list = GetMatchDone.main(matchlist_file_name)
+        match_list = GetMatchDone.main(config.matchlisttodo_file_name)
         if any(config.newmatch in x for x in match_list):
             config.log('        Le match autorisé!', 'warning', True)
             return [True, config.newmatch]
