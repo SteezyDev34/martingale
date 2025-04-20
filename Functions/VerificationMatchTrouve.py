@@ -49,14 +49,14 @@ def getstats(driver, bet_item, matchlist_file_name):
     else:
         print('newmatch : ' + config.newmatch)
         match_list = GetMatchDone.main(config.matchlisttodo_file_name)
-        config.log(match_list, config.newmatch)
+        config.log(match_list, 'info', False, 4)
         if any(config.newmatch in x for x in match_list):
-            txtlog = "          Le match n\'a pas encore été parié!"
+            txtlog = "          Le match n\'a pas encore été parié! 111"
             config.log(txtlog, config.newmatch)
             driver.get(newmatchtxt)
             return [True, config.newmatch]
         else:
-            txtlog = '          Le match a déjà été parié!'
+            txtlog = '          Le match a déjà été parié! 111'
             config.log(txtlog, config.newmatch)
             return [False, config.newmatch]
 
