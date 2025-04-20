@@ -58,9 +58,9 @@ from ChromeDriver.SetDriver import driver
 from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
 
-# from Functions.ScriptRechercheDeMatch import classementeDeMatch
+from Functions.ScriptRechercheDeMatch import classementeDeMatch
 
-# classementeDeMatch(driver)
+classementeDeMatch(driver)
 
 while (config.win < 100):
 
