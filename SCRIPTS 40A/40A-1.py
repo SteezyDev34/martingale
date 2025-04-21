@@ -60,7 +60,11 @@ from Functions.GetJsonData import DispatchPerte
 
 from Functions.ScriptRechercheDeMatch import classementeDeMatch
 
-classementeDeMatch(driver)
+confirmation = input(f"Classement ? (Y/N): ")
+
+if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
+    classementeDeMatch(driver)
+
 config.init_variable()
 
 while (config.win < 100):
