@@ -45,11 +45,11 @@ def all_script(driver):
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
         if infosperte and config.perte == 0:
-            if float(infosperte['perte']) > 1:
-                SendGlobalPerte(config.scriptType, -1)
-                config.perte = 1
+            if float(infosperte['perte']) > 20:
+                SendGlobalPerte(config.scriptType, -20)
+                config.perte = 20
                 config.rattrape_perte = 1
-            elif float(infosperte['perte']) >= 0.2:
+            elif float(infosperte['perte']) <= 20:
                 config.perte = float(infosperte['perte'])
                 m = 0 - config.perte
                 SendGlobalPerte(config.scriptType, m)
@@ -202,9 +202,7 @@ def all_script(driver):
                 txtlog = " ON EST SUR LE PROCHAIN SET"
                 passageset = True
                 config.newset = float(config.set_actuel) + 1
-                config.perte = config.perte - config.mise
                 config.log(txtlog, config.newmatch)
-                passageset = True
                 DeleteBet(driver)
                 txtlog = 'Wait 30 sec'
                 config.log(txtlog, config.newmatch)
@@ -220,12 +218,13 @@ def all_script(driver):
             DeleteBet(driver)
             print("#RECHERCHE INFOS DE MISE")
             infosperte = getGlobalPerte()
+            print("PERTE : ")
             if infosperte:
-                if float(infosperte['perte']) > 1:
-                    SendGlobalPerte(config.scriptType, -1)
-                    config.perte = 1
+                if float(infosperte['perte']) > 20:
+                    SendGlobalPerte(config.scriptType, -20)
+                    config.perte = 20
                     config.rattrape_perte = 1
-                elif float(infosperte['perte']) >= 0.2:
+                elif float(infosperte['perte']) <= 20:
                     config.perte = float(infosperte['perte'])
                     m = 0 - config.perte
                     SendGlobalPerte(config.scriptType, m)
