@@ -195,7 +195,7 @@ def all_script(driver):
                         if ValidationDuParis(driver, True):
                             validate_bet = True
                         else:
-                            GetAndPlaceBet(driver)
+                            FirstGameBet(driver)
                     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
                     RetourTpsReg(driver)
             elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET

@@ -150,7 +150,7 @@ def GetBet(driver, nextBet=False):
             if size['height'] > 68:
                 y = size['height'] / -2 + sautDeLigne
             else:
-                i = 1
+                i = -1
                 y = 0
         x = decalageX
         print('size', size['height'])
@@ -162,6 +162,9 @@ def GetBet(driver, nextBet=False):
         # Cliquer aux coordonnées calculées
         try:
             actions.move_to_element_with_offset(canvas, x, y).click().perform()
+            if i == -1:
+                i = 1
+                continue
         except:
             return False
         # print('Click sur la ligne')
