@@ -149,6 +149,7 @@ def GetBet(driver, nextBet=False):
             y = sautDeLigne
             y = size['height'] / -2 + sautDeLigne
         x = decalageX
+        print('size', size['height'])
         # Calculer les coordonnées pour cliquer au centre du div
         # print('Y offset : ' + str(y))
         # print('X offset : ' + str(x))
@@ -193,7 +194,7 @@ def GetBet(driver, nextBet=False):
                             sautDeLigne = sautDeLigne
                             decalageX = 50
                         else:
-                            sautDeLigne = sautDeLigne + 50
+                            sautDeLigne = sautDeLigne + 30
                             decalageX = size['width'] / -2 + 50
                     else:
                         if i % 2 != 0:
@@ -260,7 +261,7 @@ def GetBet(driver, nextBet=False):
                                     sautDeLigne = sautDeLigne
                                     decalageX = 50
                                 else:
-                                    sautDeLigne = sautDeLigne + 50
+                                    sautDeLigne = sautDeLigne + 30
                                     decalageX = size['width'] / -2 + 50
                             else:
                                 print('win')
@@ -278,7 +279,7 @@ def GetBet(driver, nextBet=False):
                                 sautDeLigne = sautDeLigne
                                 decalageX = 50
                             else:
-                                sautDeLigne = sautDeLigne + 50
+                                sautDeLigne = sautDeLigne + 30
                                 decalageX = size['width'] / -2 + 50
                         else:
                             # print('win')
