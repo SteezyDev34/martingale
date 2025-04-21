@@ -182,17 +182,17 @@ def all_script(driver):
                     config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
-            if float(config.perte) == 0 and float(config.global_match_win) < 1:
+            if float(config.global_match_win) < 1:
                 print('continue')
                 continue
-            elif config.nb_tour <= winmatch:
+            else:
+                print('xintor')
                 break
     if config.perte > 0.2:
         DispatchPerte()
-    print("update " + config.newmatch)
     config.global_match_win = 0
+    print("update : " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)
-    config.error = False
     return True
