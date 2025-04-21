@@ -157,6 +157,8 @@ def all_script(driver):
                     validate_bet = True
                 else:
                     GetAndPlaceBet(driver)
+                    validate_bet = True
+
             # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
             RetourTpsReg(driver)
             GetIfGameEnd(driver)

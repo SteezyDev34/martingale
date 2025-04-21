@@ -160,44 +160,38 @@ def all_script(driver):
             config.log('set ' + str(config.set_actuel) + ' - nex set ' + str(config.newset))
             if str(int(config.newset) - 1) == str(config.set_actuel):  ## si on est toujours sur le meme set
                 config.log('on est toujours sur le meme set', config.newmatch)
-
-                if (config.jeu_actuel + 1) >= 13:  # SI TIE BREAK
-                    txtlog = "jeu " + str(config.jeu_actuel)
-                    config.log(txtlog, config.newmatch)
-                    txtlog = "attente fin de tie break"
-                    config.log(txtlog, config.newmatch)
-                else:
-                    ##VALIDATION DU PARIS SI SCORE OK
-                    validate_bet = False
-                    tentative = 0
-                    while not validate_bet and not config.error and tentative < 3:
-                        # VÉRIFICATION DU SCORE ACTUEL
-                        tentative = tentative + 1
-                        print('tentative validation ' + str(tentative))
-                        GetScoreActuel(driver)
-                        if config.score_actuel == "0:0" and not gamestart:
-                            txtlog = "GAME NOT START"
-                            config.log(txtlog, config.newmatch)
-                        elif config.score_actuel == "0:0" and gamestart:
-                            txtlog = "GAME PASS WITHOUT VALIDATE ON FIRST"
-                            config.log(txtlog, config.newmatch)
-                            gamestart = False
-                            break
-                        elif config.score_actuel == "40:40" or config.score_actuel == "40:A" or config.score_actuel == "A:40":
-                            print("GAME PASS WITHOUT VALIDATE #2#")
-                            gamestart = False
-                            GetIfGameEnd(driver)
-                            break
-                        else:
-                            gamestart = True
-                            txtlog = "GAME START"
-                            config.log(txtlog, config.newmatch)
-                        if ValidationDuParis(driver, True):
-                            validate_bet = True
-                        else:
-                            FirstGameBet(driver)
-                    # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
-                    RetourTpsReg(driver)
+                ##VALIDATION DU PARIS SI SCORE OK
+                validate_bet = False
+                tentative = 0
+                while not validate_bet and not config.error and tentative < 3:
+                    # VÉRIFICATION DU SCORE ACTUEL
+                    tentative = tentative + 1
+                    print('tentative validation ' + str(tentative))
+                    GetScoreActuel(driver)
+                    if config.score_actuel == "0:0" and not gamestart:
+                        txtlog = "GAME NOT START"
+                        config.log(txtlog, config.newmatch)
+                    elif config.score_actuel == "0:0" and gamestart:
+                        txtlog = "GAME PASS WITHOUT VALIDATE ON FIRST"
+                        config.log(txtlog, config.newmatch)
+                        gamestart = False
+                        break
+                    elif config.score_actuel == "40:40" or config.score_actuel == "40:A" or config.score_actuel == "A:40":
+                        print("GAME PASS WITHOUT VALIDATE #2#")
+                        gamestart = False
+                        GetIfGameEnd(driver)
+                        break
+                    else:
+                        gamestart = True
+                        txtlog = "GAME START"
+                        config.log(txtlog, config.newmatch)
+                    if ValidationDuParis(driver, True):
+                        validate_bet = True
+                    else:
+                        FirstGameBet(driver)
+                        validate_bet = True
+                # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
+                RetourTpsReg(driver)
             elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                 txtlog = " ON EST SUR LE PROCHAIN SET"
                 passageset = True
