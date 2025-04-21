@@ -128,6 +128,7 @@ def GetResult(driver):
                            score.get('jeu') == config.validated_bet.get('jeu') and
                            score.get('score') == config.win_type
                            for score in config.all_scores.values()):
+                        print(config.all_scores)
                         win = 'WIN'
                         print(win)
                     else:

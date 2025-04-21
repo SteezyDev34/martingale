@@ -10,8 +10,10 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 def GetIfGameStart(driver):
     gamestart = False
     printext = False
+    driver.switch_to.window(driver.window_handles[0])
     RetourTpsReg(driver)
     while not gamestart and not config.error:
+        driver.switch_to.window(driver.window_handles[0])
         GetScoreActuel(driver)
         config.saved_score = config.saved_score
         if config.score_actuel == '0:0':
