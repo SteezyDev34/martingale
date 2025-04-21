@@ -147,7 +147,10 @@ def GetBet(driver, nextBet=False):
             x = decalageX
         elif config.systeme == 'Windows':
             y = sautDeLigne
-            y = size['height'] / -2 + sautDeLigne
+            if size['height'] > 68:
+                y = size['height'] / -2 + sautDeLigne
+            else:
+                y = 0
         x = decalageX
         print('size', size['height'])
         # Calculer les coordonnées pour cliquer au centre du div
