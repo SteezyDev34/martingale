@@ -150,6 +150,7 @@ def GetBet(driver, nextBet=False):
             if size['height'] > 68:
                 y = size['height'] / -2 + sautDeLigne
             else:
+                i = 1
                 y = 0
         x = decalageX
         print('size', size['height'])
