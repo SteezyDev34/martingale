@@ -45,22 +45,22 @@ def all_script(driver):
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
         if infosperte and config.perte == 0:
-            if float(infosperte['perte']) > 20:
-                SendGlobalPerte(config.scriptType, -20)
-                config.perte = 20
+            if float(infosperte['perte']) > 1:
+                SendGlobalPerte(config.scriptType, -1)
+                config.perte = 1
                 config.rattrape_perte = 1
-            elif float(infosperte['perte']) <= 20:
+            elif float(infosperte['perte']) <= 0.2:
                 config.perte = float(infosperte['perte'])
                 m = 0 - config.perte
                 SendGlobalPerte(config.scriptType, m)
                 config.perte = float(infosperte['perte'])
+            config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
+        GetSetActuel(driver)
+        config.saved_set = config.set_actuel
 
-    GetSetActuel(driver)
-    if not config.set_actuel:
-        config.error = True
-
-    config.log('🏁 DÉBUT DE LA MARTINGALE', 'title', False)
+        if not config.set_actuel:
+            config.error = True
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
 
@@ -221,15 +221,16 @@ def all_script(driver):
             infosperte = getGlobalPerte()
             print("PERTE : ")
             if infosperte:
-                if float(infosperte['perte']) > 20:
-                    SendGlobalPerte(config.scriptType, -20)
-                    config.perte = 20
+                if float(infosperte['perte']) > 1:
+                    SendGlobalPerte(config.scriptType, -1)
+                    config.perte = 1
                     config.rattrape_perte = 1
-                elif float(infosperte['perte']) <= 20:
+                elif float(infosperte['perte']) <= 0.2:
                     config.perte = float(infosperte['perte'])
                     m = 0 - config.perte
                     SendGlobalPerte(config.scriptType, m)
                     config.perte = float(infosperte['perte'])
+            config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
             if float(config.global_match_win) < 1:
                 print('continue')
