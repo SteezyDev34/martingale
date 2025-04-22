@@ -322,14 +322,14 @@ def GetBet(driver, nextBet=False):
                         getjeu_actuel = list_of_newbet_type[0].split("Jeu ")[1]
                         getjeu_actuel = ''.join(caractere for caractere in getjeu_actuel if caractere.isdigit())
                         if str(config.jeu_actuel) == str(getjeu_actuel):
-                            # print('paris trouvé')
+                            print('paris trouvé')
                             clic = True
                             return clic
                         else:
-                            # print('mauvais jeu')
+                            print('mauvais jeu')
                             sautDeLigne = sautDeLigne + 30
                     else:
-                        # print('Mauvais paris')
+                        print('Mauvais paris')
                         sautDeLigne = sautDeLigne + 30
                         ligne = ligne + 1
                         # print('ligne ' + str(ligne))
