@@ -64,6 +64,9 @@ confirmation = input(f"Classement ? (Y/N): ")
 
 if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
     classementeDeMatch(driver)
+# Accéder à une extension en utilisant son ID
+extension_id = "bhghoamapcdpbohphigoooaddinpkbai"
+driver.get(f"chrome-extension://{extension_id}/popup.html")
 
 config.init_variable()
 
