@@ -75,10 +75,6 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
     """
     Logs into the account using provided credentials
     """
-    # Setup Chrome driver
-    options = webdriver.ChromeOptions()
-    options.add_argument('--start-maximized')
-    driver = webdriver.Chrome(options=options)
     loginsuccessful = False
     while not loginsuccessful:
         try:
