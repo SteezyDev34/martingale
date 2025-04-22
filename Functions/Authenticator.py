@@ -73,7 +73,7 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
         password_field.send_keys(password)
 
         # Click submit button
-        submit_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+        submit_button = driver.find_element(By.CLASS_NAME, "auth-form-fields__submit")
         submit_button.click()
 
         # Wait for login to complete (auth dropdown to disappear)
