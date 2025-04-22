@@ -77,7 +77,7 @@ netprofit = 0
 matchlist_file_name = ""
 matchlisttodo_file_name = ""
 running_file_name = ""
-
+in_stat = False
 # Game variables
 match_list = []  # List des matchs
 match_done_key = ""  # Nom du match dans Gsheets
