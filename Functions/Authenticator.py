@@ -159,6 +159,7 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
             confirm_button.click()
             if is_code_valid(driver):
                 print("Login process completed successfully")
+                input('Press ENTER to continue')
                 return True
         except Exception as e:
             continue
