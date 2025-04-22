@@ -45,13 +45,6 @@ def GetResult(driver):
                 '40:A',
                 'A:40'
             ]
-            if config.score_actuel == '30:30':
-                win = 'WIN'
-                config.log(win, 'success', False, 2)
-                while config.score_actuel == '30:30':
-                    GetScoreActuel(driver)
-                result = win
-                return result
             if config.score_actuel in passed_score or config.set_actuel == float(config.validated_bet.get('set')) + 1:
                 print('passed score')
                 if win != 'WIN':
@@ -82,12 +75,6 @@ def GetResult(driver):
                 '40:A',
                 'A:40'
             ]
-            if config.score_actuel == '15:15':
-                result = 'WIN'
-                config.log(result, 'success', False, 2)
-                while config.score_actuel == '15:15':
-                    GetScoreActuel(driver)
-                return result
             if config.score_actuel in passed_score or config.set_actuel == float(config.validated_bet.get('set')) + 1:
                 if win != 'WIN':
                     if any(score.get('set') == config.validated_bet.get('set') and
