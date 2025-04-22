@@ -75,6 +75,7 @@ def GetResult(driver):
                 '40:A',
                 'A:40'
             ]
+
             if config.score_actuel in passed_score or config.set_actuel == float(config.validated_bet.get('set')) + 1:
                 if win != 'WIN':
                     if any(score.get('set') == config.validated_bet.get('set') and
