@@ -1,6 +1,8 @@
 import os
 import sys
 
+from Functions.Authenticator import is_logged_in, loginProcess
+
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
 
@@ -57,17 +59,16 @@ from ChromeDriver.SetDriver import driver
 
 from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
-
 from Functions.ScriptRechercheDeMatch import classementeDeMatch
 
 confirmation = input(f"Classement ? (Y/N): ")
 
 if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
     classementeDeMatch(driver)
-# Accéder à une extension en utilisant son ID
-extension_id = "bhghoamapcdpbohphigoooaddinpkbai"
-driver.get(f"chrome-extension://{extension_id}/popup.html")
 
+# Call the function to get the code
+if is_logged_in(driver):
+    loginProcess(driver)
 config.init_variable()
 
 while (config.win < 100):
