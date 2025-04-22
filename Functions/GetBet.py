@@ -247,6 +247,7 @@ def GetBet(driver, nextBet=False):
                 config.log(f"#E0015 Infos de paris non lisible")
             else:
                 list_of_newbet_type = list_of_bet_type.text
+                print(list_of_newbet_type)
                 if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
                     # print(sType)
                     list_of_newbet_type_text = list_of_newbet_type
