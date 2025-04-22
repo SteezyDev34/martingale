@@ -66,8 +66,10 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
     classementeDeMatch(driver)
 
 # Call the function to get the code
-if is_logged_in(driver):
+if not is_logged_in(driver):
     loginProcess(driver)
+else:
+    print("You are already logged in.")
 config.init_variable()
 
 while (config.win < 100):
