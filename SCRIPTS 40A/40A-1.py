@@ -1,8 +1,6 @@
 import os
 import sys
 
-from Functions.Authenticator import is_logged_in, loginProcess
-
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
 
@@ -60,6 +58,7 @@ from ChromeDriver.SetDriver import driver
 from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch
+from Functions.Authenticator import is_logged_in, loginProcess
 
 confirmation = input(f"Classement ? (Y/N): ")
 
