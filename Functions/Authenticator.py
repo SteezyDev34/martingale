@@ -66,18 +66,27 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
 
         # Find and fill username field
         print("Entering username...")
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "username"))
+        )
         username_field = driver.find_element(By.ID, "username")
         username_field.clear()
         username_field.send_keys(username)
 
         # Find and fill password field
         print("Entering password...")
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "username-password"))
+        )
         password_field = driver.find_element(By.ID, "username-password")
         password_field.clear()
         password_field.send_keys(password)
 
         # Click submit button
         print("Submitting login credentials...")
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "auth-form-fields__submit"))
+        )
         submit_button = driver.find_element(By.CLASS_NAME, "auth-form-fields__submit")
         submit_button.click()
 
