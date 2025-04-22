@@ -317,6 +317,7 @@ def GetBet(driver, nextBet=False):
                         ligne = ligne + 1
                         # print('ligne ' + str(ligne))
                 else:
+                    print('stype', sType)
                     list_of_newbet_type = list_of_newbet_type.split(sType + " - Oui")
                     if len(list_of_newbet_type) > 1:
                         getjeu_actuel = list_of_newbet_type[0].split("Jeu ")[1]
