@@ -11,7 +11,7 @@ def get_authenticator_code(driver):
     Opens the authenticator extension and retrieves the code from the HTML element
     """
     extension_id = "bhghoamapcdpbohphigoooaddinpkbai"
-    original_tab = driver.current_window_handle   # 1) onglet courant
+    original_tab = driver.current_window_handle  # 1) onglet courant
 
     driver.switch_to.new_window("tab")
 
@@ -83,10 +83,6 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
     """
     Logs into the account using provided credentials
     """
-    # Setup Chrome driver
-    options = webdriver.ChromeOptions()
-    options.add_argument('--start-maximized')
-    driver = webdriver.Chrome(options=options)
     loginsuccessful = False
     while not loginsuccessful:
         try:
@@ -147,7 +143,7 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
 
             # Get authentication code
             print("Getting 2FA code from authenticator...")
-            
+
             # Find and fill 2FA code input field
             print("Entering 2FA code...")
             code_field = driver.find_element(By.CSS_SELECTOR, ".auth-form-two-step__field input")
