@@ -47,6 +47,8 @@ def FirstGameBet(driver):
             continue
         # On recherche le jeu actuel
         config.log('liste des pariis affichée', '', True, 2)
+        config.log(f'jeu recherhcé : {config.looking_game}', 'info', True)
+
         if not GetBet(driver, nextBet):
             tentative = tentative + 1
             config.log('Boucle getbet', 'warning', True, 2)

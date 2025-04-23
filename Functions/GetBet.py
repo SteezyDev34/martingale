@@ -63,8 +63,10 @@ def GetBet(driver, nextBet=False):
         GetJeuActuel(driver)
         GetScoreActuel(driver)
         DeleteBet(driver)
+        config.log(f'jeu recherhcé : {config.looking_game}', 'info', True)
         if_get_jeu = False
         print('eher')
+
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
