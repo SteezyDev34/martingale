@@ -34,7 +34,6 @@ def selection_des_paris_du_set(driver, set):
                 print(f"#E0013\nUne erreur est survenue : {e}")
                 tentative = tentative + 1
             else:
-                time.sleep(1)
                 print("ouverture du champ déroulant...")
                 try:
                     element = WebDriverWait(driver, 20).until(
