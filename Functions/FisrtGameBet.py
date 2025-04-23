@@ -19,6 +19,7 @@ def FirstGameBet(driver):
     print(config.jeu_actuel)
     while not bet_40a and not config.error and tentative < 3:
         GetScoreActuel(driver)
+        config.looking_game = int(config.jeu_actuel)
         if config.scriptType == '30A':
             if config.score_actuel != "0:0" and config.score_actuel != "0:15" and config.score_actuel != "15:0" and config.score_actuel != "15:15":
                 config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
@@ -34,8 +35,6 @@ def FirstGameBet(driver):
                 config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
                 nextBet = True
                 config.looking_game = int(config.jeu_actuel) + 1
-        else:
-            config.looking_game = int(config.jeu_actuel)
 
         config.log(f'Affichage de la liste des paris', 'info', True, 2)
 
