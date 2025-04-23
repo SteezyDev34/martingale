@@ -58,11 +58,11 @@ def all_script(driver):
                 config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
-        GetSetActuel(driver)
-        config.saved_set = config.set_actuel
+    GetScoreActuel(driver)
+    config.saved_set = config.set_actuel
 
-        if not config.set_actuel:
-            config.error = True
+    if not config.set_actuel:
+        config.error = True
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE

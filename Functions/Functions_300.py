@@ -121,7 +121,7 @@ def all_script(driver):
         txtlog = "JEU TERMINÉ ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)
         passageset = False
-        GetScoreActuel(driver)
+        print('error before place bet : ', config.error)
         GetAndPlaceBet(driver)
         result = GetResult(driver)
         if result == 'LOSE':
@@ -155,6 +155,7 @@ def all_script(driver):
             elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                 txtlog = " ON EST SUR LE PROCHAIN SET"
                 passageset = True
+                config.newset = int(config.set_actuel) + 1
                 config.perte = config.perte - config.mise
                 config.log(txtlog, config.newmatch)
                 DeleteBet(driver)

@@ -3,7 +3,7 @@ import time
 
 import config
 from Functions import Functions_1XBET
-from Functions import GetLigueName, VerificationMatchTrouve, AddRunning
+from Functions import GetLigueName, AddRunning
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
@@ -38,7 +38,8 @@ def all_script(driver):
         AddRunning.main(config.script_num, config.running_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
-        config.newmatch = VerificationMatchTrouve.fromUrl(driver, config.matchlist_file_name)[1]
+        config.teams = GetPlayersName(driver)
+        newmatchFromUrl(driver)
 
         print("#RECHERCHE INFOS DE MISE")
         infosperte = getGlobalPerte()
@@ -54,13 +55,12 @@ def all_script(driver):
                 SendGlobalPerte(config.scriptType, m)
                 config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
-
         # END RECHERCHE INFOS DE MISE
-        GetSetActuel(driver)
-        config.saved_set = config.set_actuel
+    GetScoreActuel(driver)
+    config.saved_set = config.set_actuel
 
-        if not config.set_actuel:
-            config.error = True
+    if not config.set_actuel:
+        config.error = True
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
@@ -91,17 +91,15 @@ def all_script(driver):
             GetIfGameStart(driver)
             while config.score_actuel != "0:0":
                 print('possible tie break, attente debut ...')
-                if config.score_actuel == "15:15":
-                    print("WIN")
+                result = GetResult(driver)
+                if result == "WIN":
                     config.perte = 0
                     config.init_variable()
                     config.global_match_win = config.global_match_win + config.netprofit
                     winmatch = winmatch + 1
                     DeleteBet(driver)
                     result = 'WIN'
-                    print('attende un peu que le score c')
-                    while config.score_actuel == "30:30":
-                        GetScoreActuel(driver)
+                    GetIfGameEnd(driver)
                 GetScoreActuel(driver)
             GetJeuActuel(driver)
             if config.jeu_actuel == 13:
@@ -132,24 +130,6 @@ def all_script(driver):
             while not validate_bet and not config.error and tentative < 3:
                 # VÉRIFICATION DU SCORE ACTUEL
                 GetScoreActuel(driver)
-                if config.score_actuel == False:
-                    config.error = True
-                    config.log("error pendant la récupération du score", config.newmatch)
-                    break
-                if (
-                        config.score_actuel == "0:15" or config.score_actuel == "15:15" or config.score_actuel == "15:0") and gamestart:
-                    config.log("GAME PASS WITHOUT VALIDATE", config.newmatch)
-                    FirstGameBet(driver)
-                    break
-                    ###ajouter ici les actions avant de reprendre
-                elif config.score_actuel == "15:15":
-                    config.error = True
-                    config.log("15A leave!", config.newmatch)
-                    FirstGameBet(driver)
-                    ###ajouter ici les actions avant de reprendre
-                    break
-                else:
-                    gamestart = True
                 if ValidationDuParis(driver, True):
                     validate_bet = True
                 else:
