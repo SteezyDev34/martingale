@@ -78,7 +78,7 @@ def all_script(driver):
             GetSetActuel(driver)
             config.newset = int(config.set_actuel) + 1
             config.score_actuel = '0:0'
-            gamestart = True
+            config.game_start = True
             if config.rattrape_perte == 1:
                 config.error = False
                 txtlog = "passage set 2"
@@ -139,7 +139,7 @@ def all_script(driver):
             time.sleep(30)
             continue
         else:
-            gamestart = False
+            config.game_start = False
             if str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                 txtlog = " ON EST SUR LE PROCHAIN SET"
                 passageset = True
@@ -178,23 +178,19 @@ def all_script(driver):
                     tentative = tentative + 1
                     print('tentative validation ' + str(tentative))
                     GetScoreActuel(driver)
-                    if config.score_actuel == "0:0" and not gamestart:
+                    if config.score_actuel == "0:0" and not config.game_start:
                         txtlog = "GAME NOT START"
                         config.log(txtlog, config.newmatch)
-                    elif config.score_actuel == "0:0" and gamestart:
+                    elif config.score_actuel == "0:0" and config.game_start:
                         txtlog = "GAME PASS WITHOUT VALIDATE ON FIRST"
                         config.log(txtlog, config.newmatch)
-                        gamestart = False
+                        config.game_start = False
                         break
                     elif config.score_actuel == "40:40" or config.score_actuel == "40:A" or config.score_actuel == "A:40":
                         print("GAME PASS WITHOUT VALIDATE #2#")
-                        gamestart = False
+                        config.game_start = False
                         GetIfGameEnd(driver)
                         break
-                    else:
-                        gamestart = True
-                        txtlog = "GAME START"
-                        config.log(txtlog, config.newmatch)
                     if ValidationDuParis(driver, True):
                         validate_bet = True
                     else:
