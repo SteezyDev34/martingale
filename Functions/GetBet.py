@@ -179,7 +179,7 @@ def GetBet(driver, nextBet=False):
             return False
         # print('Click sur la ligne')
         try:
-            element = WebDriverWait(driver, 1).until(
+            element = WebDriverWait(driver, 2).until(
                 EC.visibility_of_element_located((By.CLASS_NAME,
                                                   'ui-coupon-bet-market__name'))
             )
