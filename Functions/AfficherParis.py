@@ -46,6 +46,7 @@ def AfficherParis(driver):
                 tentative = tentative + 1
             else:
                 config.log('ouverture du champ déroulant...', 'info', False, 2)
+                time.sleep(1)
                 config.log_clear_line()
                 try:
                     element = WebDriverWait(driver, 5).until(

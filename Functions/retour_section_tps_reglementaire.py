@@ -1,4 +1,5 @@
 import inspect
+import time
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -44,6 +45,7 @@ def RetourTpsReg(driver):
                 tentative = tentative + 1
             else:
                 config.log("ouverture du champ déroulant...", 0, config.newmatch)
+                time.sleep(1)
                 try:
                     element = WebDriverWait(driver, 5).until(
                         EC.visibility_of_element_located(
