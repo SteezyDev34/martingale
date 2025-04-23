@@ -143,6 +143,7 @@ def GetBet(driver, nextBet=False):
             win_texte = ', 4'
         # print('i '+str(i))
         GetJeuActuel(driver)
+        print('win_type', config.win_type)
         # print('Ligne suivante')
         canvas = driver.find_element(By.CLASS_NAME, 'market-grid-canvas__container')
         # Récupérer les coordonnées du div
