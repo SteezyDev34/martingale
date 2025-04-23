@@ -123,6 +123,7 @@ def all_script(driver):
         txtlog = "JEU TERMINÉ ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)
         passageset = False
+        GetScoreActuel(driver)
         GetAndPlaceBet(driver)
         result = GetResult(driver)
         if result == 'LOSE':

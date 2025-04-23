@@ -96,7 +96,7 @@ def FirstGameBet(driver):
                 validate_bet = True
                 bet_40a = True
                 if nextBet:
-                    config.log('GAME PASS WITHOUT VALIDATE ', '', 2)
+                    config.log('FIRST GAME PASS WITHOUT VALIDATE WAIT NEXT START ', '', 2)
                     GetIfGameEnd(driver)
                     config.game_end = True
                     break
