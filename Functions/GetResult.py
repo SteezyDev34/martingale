@@ -23,15 +23,27 @@ def GetResult(driver):
         GetScoreActuel(driver)
 
         if config.scriptType == "40A":
-            if config.score_actuel == '40:A' or config.score_actuel == 'A:40' or config.score_actuel == '40:40':
-                result = 'WIN'
-                config.log(result, 'success', False, 2)
-                while config.score_actuel == '40:A' or config.score_actuel == 'A:40' or config.score_actuel == '40:40':
-                    GetScoreActuel(driver)
-                return result
-            elif config.score_actuel == '0:0':
-                result = 'LOSE'
-                config.log(result, 'error', False, 2)
+            passed_score = [
+                '0:0'
+            ]
+            if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
+                print('passed score')
+                print('config.validated_bet = ', config.validated_bet)
+                if win != 'WIN':
+                    matching_scores = [score for score in config.all_scores.values()
+                                       if int(score.get('set')) == int(config.validated_bet.get('set'))
+                                       and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
+                                       and score.get('score') == config.validated_bet.get('winscore')]
+                    if matching_scores:
+                        print("Matching score found:", matching_scores[0])
+                        print(f"All recorded scores: {config.all_scores}")
+                        win = 'WIN'
+                        config.log(f"Result: {win}", 'success', False, 2)
+
+                else:
+                    win = 'LOSE'
+                    config.log(win, 'error', False, 2)
+                result = win
                 return result
         elif config.scriptType == "30A":
             passed_score = [
@@ -139,16 +151,33 @@ def GetResult(driver):
                 result = win
                 return result
         elif config.scriptType == '4030' or config.scriptType == '4015':
-            print('previous_score = ' + previous_score)
-            print('xin score = ' + config.win_type)
-            if config.score_actuel == '0:0' and previous_score == config.win_type:
-                result = 'WIN'
-                config.log(result, 'success', False, 2)
-                return result
-            elif config.score_actuel == '0:0' and previous_score != config.win_type:
-                result = 'LOSE'
-                config.log(result, 'error', False, 2)
-                return result
+            passed_score = [
+                '0:0'
+            ]
+            if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
+                # Check the last element in all_scores
+                # Filter scores for matching set and jeu, excluding 0:0 scores
+                matching_set_jeu_scores = {k: v for k, v in config.all_scores.items()
+                                           if int(v.get('set')) == int(config.validated_bet.get('set'))
+                                           and int(v.get('jeu')) == int(config.validated_bet.get('jeu'))
+                                           and v.get('score') != '0:0'}
+                print('matching_set_jeu_scores', matching_set_jeu_scores)
+
+                if matching_set_jeu_scores:
+                    last_score_key = max(matching_set_jeu_scores.keys())
+                    last_score = matching_set_jeu_scores[last_score_key]
+
+                    if last_score.get('score') == config.validated_bet.get('winscore'):
+                        print("Matching score found:", last_score)
+                        print(f"All recorded scores: {config.all_scores}")
+                        win = 'WIN'
+                        config.log(f"Result: {win}", 'success', False, 2)
+                    else:
+                        win = 'LOSE'
+                        config.log(win, 'error', False, 2)
+                else:
+                    win = 'LOSE'
+                    config.log(win, 'error', False, 2)
         elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
             if config.score_actuel == '0:0' and previous_score in config.win_type:
                 result = 'WIN'

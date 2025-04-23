@@ -110,7 +110,7 @@ def GetBet(driver, nextBet=False):
             if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                 first_player = 1
                 if config.scriptType == '030':
-                    config.win_type = ':30'  # inversé
+                    config.win_type = '0:30'  # inversé
                     win_texte = '30-0'
             else:
                 first_player = 2
