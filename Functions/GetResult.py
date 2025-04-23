@@ -8,14 +8,12 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 def GetResult(driver):
     ##ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
-    print('error #5IYGJHKB ', config.error)
     RetourTpsReg(driver)
     txtlog = "ON ATTEND LE RESULTAT POUR VALIDER LE PARIS"
     config.log(txtlog, config.newmatch)
     config.saved_set = ""
     timesleep = 1  # TEMPS D'ATTENTE AVANT DE RECUPERER LE SCORE PASSE À 1 SI 40 DANS LE SCORE
     result = False
-    print('error #3FRE ', config.error)
     while not result and not config.error:
         time.sleep(timesleep)
         GetScoreActuel(driver)

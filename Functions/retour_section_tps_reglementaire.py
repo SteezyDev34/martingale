@@ -15,7 +15,6 @@ def RetourTpsReg(driver):
     tentative = 0
     temps_reg = False
     while not temps_reg and tentative < 10:
-        print('error #3GHHE ', config.error)
         driver.switch_to.window(driver.window_handles[0])
         try:
             element = WebDriverWait(driver, 5).until(
