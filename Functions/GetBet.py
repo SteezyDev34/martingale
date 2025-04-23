@@ -15,6 +15,7 @@ def GetBet(driver, nextBet=False):
     config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', True, 2)
     if_get_jeu = False
     clic = False
+    print('nextbet', nextBet)
     if config.scriptType == "40A":
         sType = ": 40-40"
         config.win_type = '40:40'
@@ -125,10 +126,12 @@ def GetBet(driver, nextBet=False):
                 first_player = 1
                 config.win_type = '0:30'  # inversé
                 win_texte = '30-0'
+                print('plyer 1')
             else:
                 first_player = 2
                 config.win_type = '30:0'  # inversé
                 win_texte = '30-0'
+                print('plyer 2')
         if config.scriptType == '6P':
             sType = ", 6"
             config.win_type = ['40:30', '30:40']  # inversé
