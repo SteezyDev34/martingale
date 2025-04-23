@@ -162,6 +162,7 @@ def all_script(driver):
         print("result : " + result)
 
         if result == 'LOSE':
+            GetIfGameEnd(driver)
             # VÉRIFCATION DU SET ACTUEL
             GetSetActuel(driver)
 
