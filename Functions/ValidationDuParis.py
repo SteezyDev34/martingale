@@ -15,7 +15,6 @@ def ValidationDuParis(driver, nexbet=False):
     tentative = 0
     config.log('validation paris', 'info', False, 2)
     config.log_clear_line()
-    current_game = config.jeu_actuel
     while not validation and tentative < 2:
         config.log('Vérification des paris validés')
         config.log_clear_line()
@@ -24,15 +23,12 @@ def ValidationDuParis(driver, nexbet=False):
 
         # Vérification que le jeu actuel et le set actuel n'ont pas déjà été pariés
         if hasattr(config, 'validated_bet') and config.validated_bet is not None:
-            current_game = getattr(config, 'jeu_actuel', None)
             current_set = getattr(config, 'set_actuel', None)
-            if nexbet:
-                current_game = float(current_game) + 1
 
-            if (current_game is not None and current_set is not None and
-                    config.validated_bet.get('jeu') == current_game and
+            if (config.looking_game is not None and current_set is not None and
+                    config.validated_bet.get('jeu') == config.looking_game and
                     config.validated_bet.get('set') == current_set):
-                config.log(f"Ce jeu ({current_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.")
+                config.log(f"Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.")
                 validation = True
                 break  # Sortir de la boucle si le jeu et le set ont déjà été pariés
         config.log('boucle validation paris')
@@ -111,11 +107,12 @@ def ValidationDuParis(driver, nexbet=False):
         current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         config.validated_bet = {
             'montant': config.mise,
-            'jeu': current_game,
+            'jeu': config.looking_game,
             'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
             'winscore': config.win_type,
             'timestamp': current_timestamp
         }
+        config.placed_game = config.looking_game
         config.log(f'           {config.validated_bet}', 'info', True)
         config.perte = float(config.perte) + float(config.mise)
         config.wantwin = float(config.wantwin) + float(config.increment)
