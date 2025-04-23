@@ -22,7 +22,10 @@ def GetResult(driver):
 
         if config.scriptType == "40A":
             passed_score = [
-                '0:0'
+                '0:0',
+                '40:40',
+                '40:A',
+                'A:40'
             ]
             if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
                 print('passed score')
