@@ -195,7 +195,7 @@ def all_script(driver):
             elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                 txtlog = " ON EST SUR LE PROCHAIN SET"
                 passageset = True
-                config.newset = float(config.set_actuel) + 1
+                config.newset = int(config.set_actuel) + 1
                 config.log(txtlog, config.newmatch)
                 DeleteBet(driver)
                 txtlog = 'Wait 30 sec'

@@ -45,13 +45,13 @@ def GetResult(driver):
                 '40:A',
                 'A:40'
             ]
-            if config.score_actuel in passed_score or config.set_actuel == float(config.validated_bet.get('set')) + 1:
+            if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
                 print('passed score')
                 print('config.validated_bet = ', config.validated_bet)
                 if win != 'WIN':
                     matching_scores = [score for score in config.all_scores.values()
-                                       if float(score.get('set')) == float(config.validated_bet.get('set'))
-                                       and float(score.get('jeu')) == float(config.validated_bet.get('jeu'))
+                                       if int(score.get('set')) == int(config.validated_bet.get('set'))
+                                       and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
                                        and score.get('score') == config.validated_bet.get('win_type')]
                     if matching_scores:
                         print("Matching score found:", matching_scores[0])
@@ -81,13 +81,13 @@ def GetResult(driver):
                 'A:40'
             ]
 
-            if config.score_actuel in passed_score or config.set_actuel == float(config.validated_bet.get('set')) + 1:
+            if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
                 print('passed score')
                 print('config.validated_bet = ', config.validated_bet)
                 if win != 'WIN':
                     matching_scores = [score for score in config.all_scores.values()
-                                       if float(score.get('set')) == float(config.validated_bet.get('set'))
-                                       and float(score.get('jeu')) == float(config.validated_bet.get('jeu'))
+                                       if int(score.get('set')) == int(config.validated_bet.get('set'))
+                                       and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
                                        and score.get('score') == config.validated_bet.get('win_type')]
                     if matching_scores:
                         print("Matching score found:", matching_scores[0])
@@ -114,13 +114,13 @@ def GetResult(driver):
                 'A:40',
                 '15:15'
             ]
-            if config.score_actuel in passed_score or config.set_actuel == float(config.validated_bet.get('set')) + 1:
+            if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
                 print('passed score')
                 print('config.validated_bet = ', config.validated_bet)
                 if win != 'WIN':
                     matching_scores = [score for score in config.all_scores.values()
-                                       if float(score.get('set')) == float(config.validated_bet.get('set'))
-                                       and float(score.get('jeu')) == float(config.validated_bet.get('jeu'))
+                                       if int(score.get('set')) == int(config.validated_bet.get('set'))
+                                       and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
                                        and score.get('score') == config.validated_bet.get('win_type')]
                     if matching_scores:
                         print("Matching score found:", matching_scores[0])
