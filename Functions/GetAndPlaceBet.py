@@ -26,6 +26,7 @@ def GetAndPlaceBet(driver):
                 config.looking_game = float(config.jeu_actuel) + 1
         else:
             config.looking_game = float(config.jeu_actuel)
+
         # Affichage de la liste des paris
         config.log('Affichage de la liste des paris', config.newmatch)
         if not AfficherParis(driver):
