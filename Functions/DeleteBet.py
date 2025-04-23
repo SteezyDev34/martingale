@@ -6,7 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 def DeleteBet(driver):
     # driver.switch_to.window(driver.window_handles[0])
     try:
-        element = WebDriverWait(driver, 3).until(
+        element = WebDriverWait(driver, 1).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, "coupon-bet-remove"))
         )
@@ -15,7 +15,7 @@ def DeleteBet(driver):
 
     except:
         try:
-            element = WebDriverWait(driver, 3).until(
+            element = WebDriverWait(driver, 1).until(
                 EC.presence_of_element_located(
                     (By.CLASS_NAME, "coupon-bet-lock-remove"))
             )

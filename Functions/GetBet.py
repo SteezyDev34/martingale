@@ -13,8 +13,6 @@ from Functions.GetScoreActuel import GetScoreActuel
 
 def GetBet(driver, nextBet=False):
     config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', True, 2)
-    DeleteBet(driver)
-    DeleteBet(driver)
     if_get_jeu = False
     clic = False
     if config.scriptType == "40A":
@@ -61,7 +59,6 @@ def GetBet(driver, nextBet=False):
     while not clic and tentative < 3 and tentative_clic < 4 and not config.error:
         GetJeuActuel(driver)
         GetScoreActuel(driver)
-        DeleteBet(driver)
         DeleteBet(driver)
         if_get_jeu = False
         print('eher')
