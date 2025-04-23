@@ -28,16 +28,19 @@ def GetBet(driver, nextBet=False):
     tentative_clic = 0
     tentative = 0
     try:
-        canvas = WebDriverWait(driver, 2).until(
+        print('recup canvas')
+        canvas = WebDriverWait(driver, 1).until(
             EC.visibility_of_element_located((By.CLASS_NAME,
                                               'market-grid-canvas__container'))
         )
     except:
+        print('erreur recup canvas')
         config.log('erreur recup market-grid-canvas__container', 'error', True, 2)
         return False
     # Récupérer les coordonnées du div
     location = canvas.location
     size = canvas.size
+    print('continiue')
     if config.systeme == 'Darwin':
         if config.scriptType == '300' or config.scriptType == '030':
             sautDeLigne = 50 * 3
