@@ -37,7 +37,6 @@ def GetScoreActuel(driver):
             config.score_actuel = score_teams[0].text + ':' + score_teams[1].text
             get_score = True
             if config.saved_score != config.score_actuel:
-                config.log('Score actuel : ' + str(config.score_actuel), '', False, 2)
                 record_scores(driver)
             config.saved_score = config.score_actuel
     return True
@@ -47,7 +46,7 @@ def record_scores(driver):
     GetSetActuel(driver)
     GetJeuActuel(driver)
     nouveau_score = {'set': config.set_actuel, 'jeu': config.jeu_actuel, 'score': config.score_actuel}
-    print(nouveau_score)
+    config.log(nouveau_score, '', False, 2)
     # Si le dictionnaire n'existe pas encore, l'ajouter
     config.all_scores.update({len(config.all_scores): nouveau_score})
 

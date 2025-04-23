@@ -113,6 +113,7 @@ def ValidationDuParis(driver, nexbet=False):
             'montant': config.mise,
             'jeu': current_game,
             'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
+            'winscore': config.win_type,
             'timestamp': current_timestamp
         }
         config.log(f'           {config.validated_bet}', 'info', True)
