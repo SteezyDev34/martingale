@@ -14,7 +14,6 @@ from Functions.GetScoreActuel import GetScoreActuel
 def GetBet(driver, nextBet=False):
     config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', True, 2)
     DeleteBet(driver)
-    time.sleep(1)
     DeleteBet(driver)
     if_get_jeu = False
     clic = False
@@ -63,9 +62,9 @@ def GetBet(driver, nextBet=False):
         GetJeuActuel(driver)
         GetScoreActuel(driver)
         DeleteBet(driver)
-        time.sleep(1)
         DeleteBet(driver)
         if_get_jeu = False
+        print('eher')
         if nextBet:
             config.jeu_actuel = config.jeu_actuel + 1
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
