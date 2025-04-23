@@ -168,6 +168,7 @@ def getCompet():
                 return True
 
             else:
+                print(config.ligue_name)
                 config.log(f'Ligue NOT OK!', 'warning', True, 3)
                 config.log_clear_line()
                 return False
