@@ -34,11 +34,15 @@ def GetScoreActuel(driver):
             if tentative == 5:
                 config.error = True
         else:
-            config.score_actuel = score_teams[0].text + ':' + score_teams[1].text
-            get_score = True
-            if config.saved_score != config.score_actuel:
-                record_scores(driver)
-            config.saved_score = config.score_actuel
+            try:
+                config.score_actuel = score_teams[0].text + ':' + score_teams[1].text
+            except Exception as e:
+                continue
+            else:
+                get_score = True
+                if config.saved_score != config.score_actuel:
+                    record_scores(driver)
+                config.saved_score = config.score_actuel
     return True
 
 
