@@ -178,6 +178,8 @@ def GetResult(driver):
                 else:
                     win = 'LOSE'
                     config.log(win, 'error', False, 2)
+                result = win
+                return result
         elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
             if config.score_actuel == '0:0' and previous_score in config.win_type:
                 result = 'WIN'
