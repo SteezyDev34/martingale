@@ -9,7 +9,7 @@ from Functions import OuverturePageMatch
 from Functions import VerificationMatchTrouve
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetIfScriptsRunning import GetIfScriptsRunning
-from Functions.GetJsonData import getCompet
+from Functions.GetJsonData import getCompet, DispatchPerte
 from Functions.UpdateMatchDone import todo
 from Functions.VerificationListeMatchLive import VerificationListeMatchLive
 
@@ -21,6 +21,8 @@ def rechercheDeMatch(driver):
     while not config.match_found and not config.error:
         # config.init_variable()
         config.match_found = GetIfMatchPage(driver)
+        if not config.match_found and float(config.perte) > 0:
+            DispatchPerte()
         # config.match_found = False
         # SCRIPT RECHERCHE DE MATCH
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
