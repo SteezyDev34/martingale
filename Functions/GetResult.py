@@ -28,7 +28,6 @@ def GetResult(driver):
                 'A:40'
             ]
             if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
-                print('passed score')
                 print('config.validated_bet = ', config.validated_bet)
                 matching_scores = [score for score in config.all_scores.values()
                                    if int(score.get('set')) == int(config.validated_bet.get('set'))
@@ -42,7 +41,6 @@ def GetResult(driver):
                 else:
                     result = 'LOSE'
                     config.log(result, 'error', False, 2)
-
                 return result
         elif config.scriptType == "30A":
             passed_score = [
@@ -58,7 +56,6 @@ def GetResult(driver):
                 'A:40'
             ]
             if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
-                print('passed score')
                 print('config.validated_bet = ', config.validated_bet)
                 matching_scores = [score for score in config.all_scores.values()
                                    if int(score.get('set')) == int(config.validated_bet.get('set'))
@@ -94,7 +91,6 @@ def GetResult(driver):
             ]
 
             if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
-                print('passed score')
                 print('config.validated_bet = ', config.validated_bet)
                 matching_scores = [score for score in config.all_scores.values()
                                    if int(score.get('set')) == int(config.validated_bet.get('set'))
@@ -127,7 +123,6 @@ def GetResult(driver):
                 '15:15'
             ]
             if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
-                print('passed score')
                 print('config.validated_bet = ', config.validated_bet)
                 matching_scores = [score for score in config.all_scores.values()
                                    if int(score.get('set')) == int(config.validated_bet.get('set'))
