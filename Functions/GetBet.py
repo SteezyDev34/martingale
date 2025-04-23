@@ -110,12 +110,12 @@ def GetBet(driver, nextBet=False):
             if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                 first_player = 1
                 if config.scriptType == '030':
-                    config.win_type = '30:0'  # inversé
+                    config.win_type = ':30'  # inversé
                     win_texte = '30-0'
             else:
                 first_player = 2
                 if config.scriptType == '030':
-                    config.win_type = '0:30'  # inversé
+                    config.win_type = '30:0'  # inversé
                     win_texte = '30-0'
         if config.scriptType == '300':
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
@@ -124,14 +124,14 @@ def GetBet(driver, nextBet=False):
             sType = "Serveur va mener 30-0"
             if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                 first_player = 1
-                config.win_type = '0:30'  # inversé
-                win_texte = '30-0'
-                print('plyer 1')
-            else:
-                first_player = 2
                 config.win_type = '30:0'  # inversé
                 win_texte = '30-0'
-                print('plyer 2')
+                print('plyer 1 to win')
+            else:
+                first_player = 2
+                config.win_type = '0:30'  # inversé
+                win_texte = '30-0'
+                print('plyer 2 to win')
         if config.scriptType == '6P':
             sType = ", 6"
             config.win_type = ['40:30', '30:40']  # inversé
