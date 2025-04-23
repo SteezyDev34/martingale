@@ -140,6 +140,16 @@ def all_script(driver):
             continue
         else:
             gamestart = False
+            if str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
+                txtlog = " ON EST SUR LE PROCHAIN SET"
+                passageset = True
+                config.newset = int(config.set_actuel) + 1
+                config.log(txtlog, config.newmatch)
+                DeleteBet(driver)
+                txtlog = 'Wait 30 sec'
+                config.log(txtlog, config.newmatch)
+                time.sleep(30)
+                continue
             ##ATTENTE QUE LE JEU COMMENCE
             GetIfGameStart(driver)
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
