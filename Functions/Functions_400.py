@@ -220,11 +220,11 @@ def all_script(driver):
                     config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
-            if float(config.global_match_win) < 1:
-                print('continue')
+            if float(config.perte) == 0 and float(config.global_match_win) < 1:
+                print('pas de perte continue')
                 continue
-            else:
-                print('xintor')
+            elif config.nb_tour == winmatch:
+                print('fin de match')
                 break
     if config.perte > 0.2:
         DispatchPerte()
