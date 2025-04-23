@@ -35,6 +35,7 @@ def GetResult(driver):
                 return result
         elif config.scriptType == "30A":
             passed_score = [
+                '30:30',
                 '40:15',
                 '15:40',
                 '30:40',
@@ -57,14 +58,16 @@ def GetResult(driver):
                         print("Matching score found:", matching_scores[0])
                         print(f"All recorded scores: {config.all_scores}")
                         win = 'WIN'
-                        print(f"Result: {win}")
-                    else:
-                        win = 'LOSE'
-                        config.log(win, 'error', False, 2)
+                        config.log(f"Result: {win}", 'success', False, 2)
+
+                else:
+                    win = 'LOSE'
+                    config.log(win, 'error', False, 2)
                 result = win
                 return result
         elif config.scriptType == "15A":
             passed_score = [
+                '15:15',
                 '30:0',
                 '0:30',
                 '30:15',
@@ -93,7 +96,7 @@ def GetResult(driver):
                         print("Matching score found:", matching_scores[0])
                         print(f"All recorded scores: {config.all_scores}")
                         win = 'WIN'
-                        print(f"Result: {win}")
+                        config.log(f"Result: {win}", 'success', False, 2)
                     else:
                         win = 'LOSE'
                         config.log(win, 'error', False, 2)
@@ -101,6 +104,8 @@ def GetResult(driver):
                 return result
         elif config.scriptType == '030' or config.scriptType == '300':
             passed_score = [
+                '30:0',
+                '0:30',
                 '40:15',
                 '15:40',
                 '30:40',
@@ -126,7 +131,7 @@ def GetResult(driver):
                         print("Matching score found:", matching_scores[0])
                         print(f"All recorded scores: {config.all_scores}")
                         win = 'WIN'
-                        print(f"Result: {win}")
+                        config.log(f"Result: {win}", 'success', False, 2)
                     else:
                         print(config.all_scores)
                         win = 'LOSE'
