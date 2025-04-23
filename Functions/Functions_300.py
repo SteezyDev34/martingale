@@ -57,7 +57,7 @@ def all_script(driver):
                 config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
-        GetSetActuel(driver)
+        GetScoreActuel(driver)
         config.saved_set = config.set_actuel
 
         if not config.set_actuel:
