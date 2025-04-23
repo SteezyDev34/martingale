@@ -10,21 +10,16 @@ def GetAndPlaceBet(driver):
     bet_40a = False
     tentative = 0
     print('GetAndPlaceBet error', config.error)
+    config.game_start = False
     while not bet_40a and not config.error:
         GetScoreActuel(driver)
         config.looking_game = int(config.jeu_actuel) + 1
-        if config.scriptType == '30A':
-            if config.score_actuel != "0:0" and config.score_actuel != "0:15" and config.score_actuel != "15:0" and config.score_actuel != "15:15":
-                config.log(f'       score : {config.score_actuel} ... jeu commencé !', 'warning', True)
-                config.looking_game = int(config.jeu_actuel)
-        elif config.scriptType == '15A' or config.scriptType == '400' or config.scriptType == '030' or config.scriptType == '300' or config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
-            if config.score_actuel != "0:0":
-                config.log(f'       score : {config.score_actuel} ... jeu commencé !', 'warning', True)
-                config.looking_game = int(config.jeu_actuel)
-        elif config.scriptType == '40A':
-            if config.score_actuel == "40:40" or config.score_actuel == "A:40" or config.score_actuel == "40:A":
-                config.log(f'       score : {config.score_actuel} ... jeu commencé !', 'warning', True)
-                config.looking_game = int(config.jeu_actuel)
+        if not config.game_start and config.score_actuel != "0:0":
+            config.game_start = True
+        elif config.score_actuel == "0:0" and config.game_start:
+            print('NEXT GAME START SPEED UP!!!!!')
+            config.looking_game = int(config.jeu_actuel)
+
         config.log(f'jeu recherhcé : {config.looking_game}', 'info', True)
         # Affichage de la liste des paris
         config.log('Affichage de la liste des paris', config.newmatch)
