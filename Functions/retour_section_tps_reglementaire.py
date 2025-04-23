@@ -70,8 +70,7 @@ def RetourTpsReg(driver):
                             else:
                                 theset = "Temps réglementaire"
                                 if select_option_text.strip().lower() == str(theset).lower():
-                                    config.log('Lien ' + select_option_text.lower() + ' = ' + str(theset).lower(),
-                                               config.newmatch)
+                                    # config.log('Lien ' + select_option_text.lower() + ' = ' + str(theset).lower(),config.newmatch)
                                     try:
                                         select_option.click()
                                     except Exception as e:
@@ -81,9 +80,8 @@ def RetourTpsReg(driver):
                                         config.log(str(tentative), config.newmatch)
                                     else:
                                         return True
-                                else:
-                                    config.log('Lien ' + select_option_text.lower() + ' > ' + str(
-                                        theset).lower() + ' set Evénements rapides'.lower(), config.newmatch)
+                                # else:
+                                # config.log('Lien ' + select_option_text.lower() + ' > ' + str(theset).lower() + ' set Evénements rapides'.lower(), config.newmatch)
     return False
 
 
