@@ -12,6 +12,7 @@ def GetAndPlaceBet(driver):
     print('GetAndPlaceBet error', config.error)
     while not bet_40a and not config.error:
         GetScoreActuel(driver)
+        config.looking_game = int(config.jeu_actuel) + 1
         if config.scriptType == '30A':
             if config.score_actuel != "0:0" and config.score_actuel != "0:15" and config.score_actuel != "15:0" and config.score_actuel != "15:15":
                 config.log(f'       score : {config.score_actuel} ... jeu commencé !', 'warning', True)
@@ -24,8 +25,6 @@ def GetAndPlaceBet(driver):
             if config.score_actuel == "40:40" or config.score_actuel == "A:40" or config.score_actuel == "40:A":
                 config.log(f'       score : {config.score_actuel} ... jeu commencé !', 'warning', True)
                 config.looking_game = int(config.jeu_actuel)
-        else:
-            config.looking_game = int(config.jeu_actuel) + 1
         config.log(f'jeu recherhcé : {config.looking_game}', 'info', True)
         # Affichage de la liste des paris
         config.log('Affichage de la liste des paris', config.newmatch)
