@@ -128,6 +128,7 @@ def GetResult(driver):
                         win = 'WIN'
                         print(f"Result: {win}")
                     else:
+                        print(config.all_scores)
                         win = 'LOSE'
                         config.log(win, 'error', False, 2)
                 result = win
