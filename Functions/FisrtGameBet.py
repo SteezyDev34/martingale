@@ -16,6 +16,7 @@ def FirstGameBet(driver):
     bet_40a = False
     tentative = 0
     nextBet = False
+    print(config.jeu_actuel)
     while not bet_40a and not config.error and tentative < 3:
         GetScoreActuel(driver)
         if config.scriptType == '30A':
