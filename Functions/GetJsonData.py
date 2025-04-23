@@ -154,9 +154,9 @@ def getCompet():
         config.log(f'Pas de données de compet : {e}', 'warning', False, 3)
     else:
         compet_ok_list = compets["compet_ok"]
-        # config.log(compet_ok_list,0)
+        config.log(compet_ok_list, 0)
         compet_not_ok_list = compets["compet_not_ok"]
-        # config.log(compet_not_ok_list,0)
+        config.log(compet_not_ok_list, 0)
 
         try:
             if any(compet_ok in config.ligue_name for compet_ok in
