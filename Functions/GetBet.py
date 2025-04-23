@@ -59,14 +59,12 @@ def GetBet(driver, nextBet=False):
     i = 1
     GetScoreActuel(driver)
     print('error', config.error)
-    while not clic and tentative < 3 and tentative_clic < 4 and not config.error:
+    while not clic and tentative < 2 and tentative_clic < 2 and not config.error:
         GetJeuActuel(driver)
         GetScoreActuel(driver)
         DeleteBet(driver)
         if_get_jeu = False
         print('eher')
-        if nextBet:
-            config.jeu_actuel = config.jeu_actuel + 1
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
@@ -76,31 +74,32 @@ def GetBet(driver, nextBet=False):
                 if config.scriptType == '4030':
                     config.win_type = '30:40'  # inversé
                     win_texte = '40-30'
-                    sType = "Jeu " + str(config.jeu_actuel) + " 40-30, Joueur " + str(first_player)
+                    sType = "Jeu " + str(config.looking_game) + " 40-30, Joueur " + str(first_player)
                 elif config.scriptType == '4015':
                     config.win_type = '15:40'  # inversé
                     win_texte = '40-15'
-                    sType = "Jeu " + str(config.jeu_actuel) + " 40-15, Joueur " + str(first_player)
+                    sType = "Jeu " + str(config.looking_game) + " 40-15, Joueur " + str(first_player)
                 elif config.scriptType == '400':
                     config.win_type = '0:40'  # inversé
                     win_texte = '40-0'
-                    sType = "Jeu " + str(config.jeu_actuel) + " 40-0, Joueur " + str(first_player)
+                    sType = "Jeu " + str(config.looking_game) + " 40-0, Joueur " + str(first_player)
 
             else:
                 first_player = 2
                 if config.scriptType == '4030':
                     config.win_type = '40:30'  # inversé
                     win_texte = '30-40'
-                    sType = "Jeu " + str(config.jeu_actuel) + " 30-40, Joueur " + str(first_player)
+                    sType = "Jeu " + str(config.looking_game) + " 30-40, Joueur " + str(first_player)
                 elif config.scriptType == '4015':
                     config.win_type = '40:15'  # inversé
                     win_texte = '15-40'
-                    sType = "Jeu " + str(config.jeu_actuel) + " 15-40, Joueur " + str(first_player)
+                    sType = "Jeu " + str(config.looking_game) + " 15-40, Joueur " + str(first_player)
                 elif config.scriptType == '400':
                     win_texte = '0-40'
                     config.win_type = '40:0'  # inversé
-                    sType = "Jeu " + str(config.jeu_actuel) + " 0-40, Joueur " + str(first_player)
+                    sType = "Jeu " + str(config.looking_game) + " 0-40, Joueur " + str(first_player)
         if config.scriptType == '030':
+
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
             first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
@@ -142,8 +141,6 @@ def GetBet(driver, nextBet=False):
             win_texte = ', 4'
         # print('i '+str(i))
         GetJeuActuel(driver)
-        if nextBet:
-            config.jeu_actuel = config.jeu_actuel + 1
         # print('Ligne suivante')
         canvas = driver.find_element(By.CLASS_NAME, 'market-grid-canvas__container')
         # Récupérer les coordonnées du div
@@ -176,7 +173,7 @@ def GetBet(driver, nextBet=False):
             return False
         # print('Click sur la ligne')
         try:
-            element = WebDriverWait(driver, 2).until(
+            element = WebDriverWait(driver, 1).until(
                 EC.visibility_of_element_located((By.CLASS_NAME,
                                                   'ui-coupon-bet-market__name'))
             )
@@ -227,7 +224,7 @@ def GetBet(driver, nextBet=False):
             try:
                 # print('Lecture des infos')
                 time.sleep(1)
-                list_of_bet_type = WebDriverWait(driver, 2).until(
+                list_of_bet_type = WebDriverWait(driver, 1).until(
                     EC.visibility_of_element_located((By.CLASS_NAME,
                                                       'ui-coupon-bet-market__name'))
                 )
@@ -265,7 +262,7 @@ def GetBet(driver, nextBet=False):
                     if len(list_of_newbet_type) > 1:
                         list_of_newbet_type_text = list_of_newbet_type_text.split(" " + win_texte)[0]
                         getjeu_actuel = int(list_of_newbet_type_text.split("Jeu ")[1])
-                        if str(config.jeu_actuel) == str(getjeu_actuel):
+                        if str(config.looking_game) == str(getjeu_actuel):
                             # print('paris trouvé')
                             clic = True
                             return clic
@@ -311,7 +308,7 @@ def GetBet(driver, nextBet=False):
                     if len(list_of_newbet_type) > 1:
                         getjeu_actuel = list_of_newbet_type[0].split("Jeu ")[1]
                         getjeu_actuel = ''.join(caractere for caractere in getjeu_actuel if caractere.isdigit())
-                        if str(config.jeu_actuel) == str(getjeu_actuel):
+                        if str(config.looking_game) == str(getjeu_actuel):
                             # print('paris trouvé')
                             clic = True
                             return clic
@@ -329,7 +326,7 @@ def GetBet(driver, nextBet=False):
                     if len(list_of_newbet_type) > 1:
                         getjeu_actuel = list_of_newbet_type[0].split("Jeu ")[1]
                         getjeu_actuel = ''.join(caractere for caractere in getjeu_actuel if caractere.isdigit())
-                        if str(config.jeu_actuel) == str(getjeu_actuel):
+                        if str(config.looking_game) == str(getjeu_actuel):
                             print('paris trouvé')
                             clic = True
                             return clic

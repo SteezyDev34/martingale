@@ -17,21 +17,24 @@ def FirstGameBet(driver):
     tentative = 0
     nextBet = False
     while not bet_40a and not config.error and tentative < 3:
+        GetScoreActuel(driver)
         if config.scriptType == '30A':
-            GetScoreActuel(driver)
             if config.score_actuel != "0:0" and config.score_actuel != "0:15" and config.score_actuel != "15:0" and config.score_actuel != "15:15":
                 config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
                 nextBet = True
+                config.looking_game = float(config.jeu_actuel) + 1
         elif config.scriptType == '15A' or config.scriptType == '400' or config.scriptType == '030' or config.scriptType == '300' or config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
-            GetScoreActuel(driver)
             if config.score_actuel != "0:0":
                 config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
                 nextBet = True
+                config.looking_game = float(config.jeu_actuel) + 1
         elif config.scriptType == '40A':
-            GetScoreActuel(driver)
             if config.score_actuel == "40:40" or config.score_actuel == "A:40" or config.score_actuel == "40:A":
                 config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
                 nextBet = True
+                config.looking_game = float(config.jeu_actuel) + 1
+        else:
+            config.looking_game = float(config.jeu_actuel)
 
         config.log(f'Affichage de la liste des paris', 'info', True, 2)
 
@@ -78,20 +81,21 @@ def FirstGameBet(driver):
             # VÉRIFICATION DU SCORE ACTUEL
             tentative = tentative + 1
             GetScoreActuel(driver)
-            if config.score_actuel == "0:0" and not gamestart:
+            if config.score_actuel == "0:0" and not config.game_start:
                 config.log('        GAME NOT START', 1)
-            elif config.score_actuel == "0:0" and gamestart:
+            elif config.score_actuel == "0:0" and config.game_start:
                 config.log('GAME PASS WITHOUT VALIDATE ON FIRST', '', 2)
                 break
             else:
-                gamestart = True
-                config.log('GAME START', '', 2)
+                config.game_start = True
+                config.log('FIRST GAME START', '', 2)
             if ValidationDuParis(driver, nextBet):
                 validate_bet = True
                 bet_40a = True
                 if nextBet:
                     config.log('GAME PASS WITHOUT VALIDATE ', '', 2)
                     GetIfGameEnd(driver)
+                    config.game_end = True
                     break
             else:
                 break

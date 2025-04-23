@@ -8,11 +8,11 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def GetIfGameStart(driver):
-    gamestart = False
+    config.game_start = False
     printext = False
     driver.switch_to.window(driver.window_handles[0])
     RetourTpsReg(driver)
-    while not gamestart and not config.error:
+    while not config.game_start and not config.error:
         driver.switch_to.window(driver.window_handles[0])
         GetScoreActuel(driver)
         config.saved_score = config.saved_score
@@ -25,13 +25,14 @@ def GetIfGameStart(driver):
             if not printext:
                 config.log('GAME NOT START')
                 printext = True
+            config.game_end = True
             time.sleep(1)  # attente 20 sec que le jeu commence
             # END GET SCORE
         elif config.score_actuel == '15:0' or config.score_actuel == '0:15' or config.score_actuel == '15:15' or config.score_actuel == '30:15' or config.score_actuel == '15:30' or config.score_actuel == '40:15' or config.score_actuel == '15:40' or config.score_actuel == '0:30' or config.score_actuel == '30:0' or config.score_actuel == '30:30' or config.score_actuel == '30:40' or config.score_actuel == '40:30' or config.score_actuel == '0:40' or config.score_actuel == '40:0':
             print('GAME START')
-            gamestart = True
+            config.game_start = True
         elif not config.score_actuel:
-            gamestart = False
+            config.game_start = False
             if not GetIfMatchPage(driver):
                 print('Ce n\'est pas une page de match')
                 config.error = True
@@ -40,9 +41,9 @@ def GetIfGameStart(driver):
                     f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
                     'error', True)
         else:
-            gamestart = False
+            config.game_start = False
 
-    return gamestart
+    return config.game_start
 
 
 def GetIfGameStart30A(driver):
@@ -67,25 +68,26 @@ def GetIfGameStart30A(driver):
 
 
 def GetIfGameEnd(driver):
-    gameeend = False
+    config.game_end = False
     printext = False
     RetourTpsReg(driver)
     config.log('ATTENTE FIN DE JEU', 'info', False, 4)
-    while not gameeend and not config.error:
+    while not config.game_end and not config.error:
         GetScoreActuel(driver)
         if config.score_actuel == '0:0':
             config.log('FIN DE JEU', 'info', False, 4)
             config.log_clear_line()
-            gameeend = True
+            config.game_end = True
         else:
-            gameeend = False
+            config.game_end = False
+            config.game_start = True
             if not GetIfMatchPage(driver):
                 config.error = True
                 current_frame = inspect.currentframe()
                 config.log(
                     f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
                     'error', True)
-    return gameeend
+    return config.game_end
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@ import config
 from Functions.AfficherParis import AfficherParis
 from Functions.GetBet import GetBet
 from Functions.GetMise import GetMise
+from Functions.GetScoreActuel import GetScoreActuel
 from Functions.PlacerMise import PlacerMise
 
 
@@ -10,6 +11,21 @@ def GetAndPlaceBet(driver):
     tentative = 0
     print('GetAndPlaceBet error', config.error)
     while not bet_40a and not config.error:
+        GetScoreActuel(driver)
+        if config.scriptType == '30A':
+            if config.score_actuel != "0:0" and config.score_actuel != "0:15" and config.score_actuel != "15:0" and config.score_actuel != "15:15":
+                config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
+                config.looking_game = float(config.jeu_actuel) + 1
+        elif config.scriptType == '15A' or config.scriptType == '400' or config.scriptType == '030' or config.scriptType == '300' or config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
+            if config.score_actuel != "0:0":
+                config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
+                config.looking_game = float(config.jeu_actuel) + 1
+        elif config.scriptType == '40A':
+            if config.score_actuel == "40:40" or config.score_actuel == "A:40" or config.score_actuel == "40:A":
+                config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
+                config.looking_game = float(config.jeu_actuel) + 1
+        else:
+            config.looking_game = float(config.jeu_actuel)
         # Affichage de la liste des paris
         config.log('Affichage de la liste des paris', config.newmatch)
         if not AfficherParis(driver):
