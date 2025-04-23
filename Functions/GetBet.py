@@ -60,7 +60,7 @@ def GetBet(driver, nextBet=False):
     i = 1
     GetScoreActuel(driver)
     print('error', config.error)
-    while not clic and tentative < 2 and tentative_clic < 2 and not config.error:
+    while not clic and tentative < 4 and tentative_clic < 4 and not config.error:
         GetJeuActuel(driver)
         GetScoreActuel(driver)
         DeleteBet(driver)
