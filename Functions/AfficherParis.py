@@ -84,8 +84,7 @@ def AfficherParis(driver):
                                     theset = str(config.set_actuel) + "ème"
                                 if select_option_text.strip().lower() == str(
                                         theset).lower() + ' set Evénements rapides'.lower():
-                                    config.log('            Lien ' + select_option_text.lower() + ' = ' + str(
-                                        theset).lower() + ' set Evénements rapides'.lower(), 'warning', False, 2)
+                                    # config.log('            Lien ' + select_option_text.lower() + ' = ' + str(theset).lower() + ' set Evénements rapides'.lower(), 'warning', False, 2)
                                     config.log_clear_line()
                                     try:
                                         select_option.click()
@@ -130,8 +129,7 @@ def AfficherParis(driver):
                                                 config.log_clear_line()
                                                 selection = True
                                 else:
-                                    config.log('Lien ' + select_option_text.lower() + ' > ' + str(
-                                        theset).lower() + ' set Evénements rapides'.lower(), 'warning', False, 2)
+                                    # config.log('Lien ' + select_option_text.lower() + ' > ' + str(theset).lower() + ' set Evénements rapides'.lower(), 'warning', False, 2)
                                     config.log_clear_line()
                         return selection
     return selection
