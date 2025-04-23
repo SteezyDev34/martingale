@@ -20,11 +20,14 @@ def GetBet(driver, nextBet=False):
     clic = False
     if config.scriptType == "40A":
         sType = ": 40-40"
+        config.win_type = '40:40'
 
     elif config.scriptType == "30A":
         sType = " 30-30"
+        config.win_type = '30:30'
     elif config.scriptType == "15A":
         sType = " 15-15"
+        config.win_type = '15:15'
     tentative_clic = 0
     tentative = 0
     try:
