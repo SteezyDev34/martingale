@@ -5,6 +5,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 import config
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.GetIfMatchPage import GetIfMatchPage
+from Functions.GetScoreActuel import GetScoreActuel
 from Functions.ModalHandler import ModalHandler
 
 
@@ -12,6 +13,7 @@ def AfficherParis(driver):
     config.log('recherche du champ déroulant...', '', False, 2)
     driver.switch_to.window(driver.window_handles[0])
     GetSetActuel(driver)
+    GetScoreActuel(driver)
     selection = False
     tentative = 1
     clic = False
