@@ -58,6 +58,10 @@ def GetBet(driver, nextBet=False):
     while not clic and tentative < 3 and tentative_clic < 4 and not config.error:
         GetJeuActuel(driver)
         GetScoreActuel(driver)
+        DeleteBet(driver)
+        time.sleep(1)
+        DeleteBet(driver)
+        if_get_jeu = False
         if nextBet:
             config.jeu_actuel = config.jeu_actuel + 1
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':

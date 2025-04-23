@@ -112,19 +112,23 @@ def GetResult(driver):
                 print('config.win_type = ' + config.win_type)
                 print('config.validated_bet = ', config.validated_bet)
                 if win != 'WIN':
-                    if any(score.get('set') == config.validated_bet.get('set') and
-                           score.get('jeu') == config.validated_bet.get('jeu') and
-                           score.get('score') == config.win_type
-                           for score in config.all_scores.values()):
-                        print(config.all_scores)
+                    matching_scores = [score for score in config.all_scores.values() 
+                                    if score.get('set') == config.validated_bet.get('set') 
+                                    and score.get('jeu') == config.validated_bet.get('jeu')
+                                    and score.get('score') == config.win_type]
+                    if matching_scores:
+                        print("Matching score found:", matching_scores[0])
+                        print(f"All recorded scores: {config.all_scores}")
                         win = 'WIN'
-                        print(win)
+                        print(f"Result: {win}")
                     else:
                         win = 'LOSE'
                         config.log(win, 'error', False, 2)
                 result = win
                 return result
         elif config.scriptType == '4030' or config.scriptType == '4015':
+            print('previous_score = ' + previous_score)
+            print('xin score = ' + config.win_type)
             if config.score_actuel == '0:0' and previous_score == config.win_type:
                 result = 'WIN'
                 config.log(result, 'success', False, 2)
