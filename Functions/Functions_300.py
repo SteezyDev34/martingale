@@ -92,17 +92,15 @@ def all_script(driver):
             GetIfGameStart(driver)
             while config.score_actuel != "0:0":
                 print('possible tie break, attente debut ...')
-                if config.score_actuel == "30:30":
-                    print("WIN")
+                result = GetResult(driver)
+                if result == "WIN":
                     config.perte = 0
                     config.init_variable()
                     config.global_match_win = config.global_match_win + config.netprofit
                     winmatch = winmatch + 1
                     DeleteBet(driver)
                     result = 'WIN'
-                    print('attende un peu que le score c')
-                    while config.score_actuel == "30:30":
-                        GetScoreActuel(driver)
+                    GetIfGameEnd(driver)
                 GetScoreActuel(driver)
             GetJeuActuel(driver)
             if config.jeu_actuel == 13:
