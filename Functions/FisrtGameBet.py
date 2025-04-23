@@ -13,6 +13,7 @@ from Functions.ValidationDuParis import ValidationDuParis
 def FirstGameBet(driver):
     config.log('PREPARATTION PREMIER PARIS', 'title', False, 1)
     config.newset = int(config.set_actuel) + 1
+    config.looking_game = config.jeu_actuel
     bet_40a = False
     tentative = 0
     nextBet = False
