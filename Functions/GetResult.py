@@ -52,7 +52,7 @@ def GetResult(driver):
                     matching_scores = [score for score in config.all_scores.values()
                                        if int(score.get('set')) == int(config.validated_bet.get('set'))
                                        and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
-                                       and score.get('score') == config.validated_bet.get('win_type')]
+                                       and score.get('score') == config.validated_bet.get('winscore')]
                     if matching_scores:
                         print("Matching score found:", matching_scores[0])
                         print(f"All recorded scores: {config.all_scores}")
@@ -88,7 +88,7 @@ def GetResult(driver):
                     matching_scores = [score for score in config.all_scores.values()
                                        if int(score.get('set')) == int(config.validated_bet.get('set'))
                                        and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
-                                       and score.get('score') == config.validated_bet.get('win_type')]
+                                       and score.get('score') == config.validated_bet.get('winscore')]
                     if matching_scores:
                         print("Matching score found:", matching_scores[0])
                         print(f"All recorded scores: {config.all_scores}")
@@ -121,7 +121,7 @@ def GetResult(driver):
                     matching_scores = [score for score in config.all_scores.values()
                                        if int(score.get('set')) == int(config.validated_bet.get('set'))
                                        and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
-                                       and score.get('score') == config.validated_bet.get('win_type')]
+                                       and score.get('score') == config.validated_bet.get('winscore')]
                     if matching_scores:
                         print("Matching score found:", matching_scores[0])
                         print(f"All recorded scores: {config.all_scores}")
