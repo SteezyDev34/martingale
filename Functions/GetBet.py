@@ -100,7 +100,7 @@ def GetBet(driver, nextBet=False):
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
             first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
-            sType = "Receveur va mener 30-0"
+            sType = "Receveur Va Mener 30-0"
             if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                 first_player = 1
                 if config.scriptType == '030':
@@ -321,7 +321,7 @@ def GetBet(driver, nextBet=False):
                     # print('stype', sType)
                     list_of_newbet_type = list_of_newbet_type.lower().split(sType.lower() + " - Oui".lower())
                     if len(list_of_newbet_type) > 1:
-                        getjeu_actuel = list_of_newbet_type[0].split("Jeu ")[1]
+                        getjeu_actuel = list_of_newbet_type[0].split("jeu ")[1]
                         getjeu_actuel = ''.join(caractere for caractere in getjeu_actuel if caractere.isdigit())
                         if str(config.looking_game) == str(getjeu_actuel):
                             # print('paris trouvé')
