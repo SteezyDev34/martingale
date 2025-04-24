@@ -264,11 +264,11 @@ def log(message, type="", clear=True, indent=0):
     handler.setFormatter(colorlog.ColoredFormatter(
         '%(log_color)s%(asctime)s - %(levelname)s - %(message)s',
         log_colors={
-            'DEBUG': 'cyan',
-            'INFO': 'green',
-            'WARNING': 'yellow',
-            'ERROR': 'red',
-            'CRITICAL': 'red,bg_white',
+            'DEBUG': CYAN,
+            'INFO': GREEN,
+            'WARNING': YELLOW,
+            'ERROR': RED,
+            'CRITICAL': 'white,' + BGPURPLE,
         }
     ))
     logger = colorlog.getLogger()
@@ -283,37 +283,25 @@ def log(message, type="", clear=True, indent=0):
     :param clear: Booléen indiquant si la ligne précédente doit être effacée.
     :return: La longueur du message actuel, pour l'utiliser dans l'appel suivant.
     """
+    # Gestion de l'indentation
+    indent = "    " * indent if indent > 0 else ""
     # Détermination de la couleur en fonction du type de message
     if type == "info":
         color = BOLD
+        logger.debug(message)
     elif type == "title":
         color = CYAN
     elif type == "success":
         color = GREEN
+        logger.info(message)
     elif type == "warning":
         color = YELLOW
+        logger.warning(message)
     elif type == "error":
         color = RED
+        logger.error(message)
     else:
         color = RESET  # Pas de couleur par défaut
-
-    # Gestion de l'indentation
-    indent = "    " * indent if indent > 0 else ""
-
-    if clear:
-        # Effacement de la ligne précédente
-        # log_clear_line()
-        # Affichage du nouveau message sur la même ligne
-        sys.stdout.write(f"{color}{indent}{message}{RESET}\n")
-    else:
-        # Affichage du message sur une nouvelle ligne
-        sys.stdout.write(f"{color}{indent}{message}{RESET}\n")
-
-    # Force l'écriture du buffer
-    sys.stdout.flush()
-    # Mise à jour du message global
-    log_message = message
-    saveLog(message)
 
 
 def log_clear_line(line_number=1):
