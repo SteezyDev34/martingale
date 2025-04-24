@@ -102,7 +102,7 @@ def all_script(driver):
                     winmatch = winmatch + 1
                     DeleteBet(driver)
                     result = 'WIN'
-                    GetIfGameEnd(driver)
+                GetIfGameEnd(driver)
                 GetScoreActuel(driver)
             GetJeuActuel(driver)
             if config.jeu_actuel == 13:

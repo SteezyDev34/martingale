@@ -128,7 +128,7 @@ def all_script(driver):
                     result = 'WIN'
                     config.error = True
                 GetScoreActuel(driver)
-            GetIfGameEnd(driver)
+                GetIfGameEnd(driver)
             GetJeuActuel(driver)
             if config.jeu_actuel == 13:
                 print('Tie break en cours attente début')

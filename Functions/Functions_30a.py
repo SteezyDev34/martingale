@@ -11,6 +11,7 @@ from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
+from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
@@ -100,7 +101,7 @@ def all_script(driver):
                     winmatch = winmatch + 1
                     DeleteBet(driver)
                     result = 'WIN'
-                    GetIfGameEnd(driver)
+                GetIfGameEnd(driver)
                 GetScoreActuel(driver)
             GetJeuActuel(driver)
             if config.jeu_actuel == 13:
