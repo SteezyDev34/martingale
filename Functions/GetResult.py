@@ -10,6 +10,7 @@ def GetResult(driver):
     ##ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
     RetourTpsReg(driver)
     txtlog = "ON ATTEND LE RESULTAT POUR VALIDER LE PARIS"
+    print('validated_bet = ', config.validated_bet)
     config.log(txtlog, config.newmatch)
     config.saved_set = ""
     timesleep = 1  # TEMPS D'ATTENTE AVANT DE RECUPERER LE SCORE PASSE À 1 SI 40 DANS LE SCORE
