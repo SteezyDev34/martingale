@@ -11,6 +11,7 @@ from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameStart, GetIfGameEnd
+from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
@@ -133,6 +134,9 @@ def all_script(driver):
                 print('Tie break en cours attente début')
                 while config.score_actuel != "0:1" and config.score_actuel != "1:0" and config.score_actuel != "1:1" and config.score_actuel != "2:0" and config.score_actuel != "0:2":
                     GetScoreActuel(driver)
+                    if not GetIfMatchPage(driver):
+                        config.error = True
+                        break
                 print('tie break commencé... attente fin')
                 GetIfGameEnd(driver)
             passageset = True

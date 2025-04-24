@@ -130,7 +130,7 @@ def all_script(driver):
                 GetScoreActuel(driver)
             GetIfGameEnd(driver)
             GetJeuActuel(driver)
-            if config.jeu_actuel == 13:
+            if config.jeu_actuel == 13 and str(config.newset) == str(config.set_actuel) + 1:
                 print('Tie break en cours attente début')
                 while config.score_actuel != "0:1" and config.score_actuel != "1:0" and config.score_actuel != "1:1" and config.score_actuel != "2:0" and config.score_actuel != "0:2":
                     GetScoreActuel(driver)

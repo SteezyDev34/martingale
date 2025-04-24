@@ -134,6 +134,9 @@ def all_script(driver):
                 print('Tie break en cours attente début')
                 while config.score_actuel != "0:1" and config.score_actuel != "1:0" and config.score_actuel != "1:1" and config.score_actuel != "2:0" and config.score_actuel != "0:2":
                     GetScoreActuel(driver)
+                    if not GetIfMatchPage(driver):
+                        config.error = True
+                        break
                 print('tie break commencé... attente fin')
                 GetIfGameEnd(driver)
             passageset = True
