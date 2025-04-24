@@ -310,7 +310,7 @@ def log(message, type="", clear=True, indent=0):
 
     if clear:
         time.sleep(0.3)  # Wait 1 second
-        print("\033[2J\033[H")  # Clear terminal screen
+    print("\033[2J\033[H")  # Clear terminal screen
 
 
 def log_clear_line(line_number=1):
