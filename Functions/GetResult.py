@@ -31,6 +31,7 @@ def GetResult(driver):
                                    if int(score.get('set')) == int(config.validated_bet.get('set'))
                                    and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
                                    and score.get('score') == config.validated_bet.get('winscore')]
+                print(f"All recorded scores: {config.all_scores}")
                 if matching_scores:
                     print("Matching score found:", matching_scores[0])
                     print(f"All recorded scores: {config.all_scores}")

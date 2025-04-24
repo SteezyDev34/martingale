@@ -78,6 +78,7 @@ def GetIfGameEnd(driver):
             config.log('FIN DE JEU', 'info', False, 4)
             config.log_clear_line()
             config.game_end = True
+            config.game_start = False
         else:
             config.game_end = False
             config.game_start = True
