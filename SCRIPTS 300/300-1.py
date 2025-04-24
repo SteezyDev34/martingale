@@ -63,8 +63,6 @@ is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
 if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
     config.in_stat = True
 while (config.win < 100):
-    Functions_300.all_script(driver)
-
     try:
         Functions_300.all_script(driver)
     except Exception as e:
