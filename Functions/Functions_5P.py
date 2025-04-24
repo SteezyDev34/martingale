@@ -54,6 +54,7 @@ def all_script(driver):
                 m = 0 - config.perte
                 SendGlobalPerte(config.scriptType, m)
                 config.perte = float(infosperte['perte'])
+        config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
 
     GetSetActuel(driver)
@@ -78,7 +79,7 @@ def all_script(driver):
             GetSetActuel(driver)
             config.newset = int(config.set_actuel) + 1
             config.score_actuel = '0:0'
-            gamestart = True
+            config.game_start = True
             if config.rattrape_perte == 1:
                 config.error = False
                 txtlog = "passage set 2"
@@ -139,7 +140,17 @@ def all_script(driver):
             time.sleep(30)
             continue
         else:
-            gamestart = False
+            config.game_start = False
+            if str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
+                txtlog = " ON EST SUR LE PROCHAIN SET"
+                passageset = True
+                config.newset = int(config.set_actuel) + 1
+                config.log(txtlog, config.newmatch)
+                DeleteBet(driver)
+                txtlog = 'Wait 30 sec'
+                config.log(txtlog, config.newmatch)
+                time.sleep(30)
+                continue
             ##ATTENTE QUE LE JEU COMMENCE
             GetIfGameStart(driver)
         # JEU COMMENCÉ ON PREPARE LE PROCHAIN BET
@@ -152,6 +163,7 @@ def all_script(driver):
         print("result : " + result)
 
         if result == 'LOSE':
+            GetIfGameEnd(driver)
             # VÉRIFCATION DU SET ACTUEL
             GetSetActuel(driver)
 
@@ -168,18 +180,19 @@ def all_script(driver):
                     tentative = tentative + 1
                     print('tentative validation ' + str(tentative))
                     GetScoreActuel(driver)
-                    if config.score_actuel == "0:0" and not gamestart:
+                    if config.score_actuel == "0:0" and not config.game_start:
                         txtlog = "GAME NOT START"
                         config.log(txtlog, config.newmatch)
-                    elif config.score_actuel == "0:0" and gamestart:
+                    elif config.score_actuel == "0:0" and config.game_start:
                         txtlog = "GAME PASS WITHOUT VALIDATE ON FIRST"
                         config.log(txtlog, config.newmatch)
-                        gamestart = False
+                        config.game_start = False
                         break
-                    else:
-                        gamestart = True
-                        txtlog = "GAME START"
-                        config.log(txtlog, config.newmatch)
+                    elif config.score_actuel == "40:40" or config.score_actuel == "40:A" or config.score_actuel == "A:40":
+                        print("GAME PASS WITHOUT VALIDATE #2#")
+                        config.game_start = False
+                        GetIfGameEnd(driver)
+                        break
                     if ValidationDuParis(driver, True):
                         validate_bet = True
                     else:
@@ -218,9 +231,10 @@ def all_script(driver):
                     m = 0 - config.perte
                     SendGlobalPerte(config.scriptType, m)
                     config.perte = float(infosperte['perte'])
+            config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
-            if float(config.perte) == 0 and float(config.global_match_win) < 1:
-                print('pas de perte continue')
+            if float(config.global_match_win) < 1:
+                print('continue')
                 continue
             elif config.nb_tour < winmatch:
                 print('fin de match')

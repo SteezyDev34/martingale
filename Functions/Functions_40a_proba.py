@@ -54,6 +54,7 @@ def all_script(driver):
                 m = 0 - config.perte
                 SendGlobalPerte(config.scriptType, m)
                 config.perte = float(infosperte['perte'])
+        config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
 
     GetSetActuel(driver)
