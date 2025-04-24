@@ -112,7 +112,7 @@ def all_script(driver):
             config.error = False
             config.log("Restart", config.newmatch)
             FirstGameBet(driver)
-        elif config.jeu_actuel == 12:
+        elif config.jeu_actuel >= 12:
             GetJeuActuel(driver)
             GetIfGameStart(driver)
             while config.score_actuel != "0:0":
