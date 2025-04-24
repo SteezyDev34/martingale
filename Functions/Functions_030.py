@@ -191,7 +191,7 @@ def all_script(driver):
             if float(config.global_match_win) < 1:
                 print('continue')
                 continue
-            elif config.nb_tour < winmatch:
+            elif config.nb_tour <= winmatch:
                 print('fin de match')
                 break
     if config.perte > 0.2:
