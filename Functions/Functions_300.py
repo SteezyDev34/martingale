@@ -189,8 +189,8 @@ def all_script(driver):
             if float(config.global_match_win) < 1:
                 print('continue')
                 continue
-            else:
-                print('xintor')
+            elif config.nb_tour < winmatch:
+                print('fin de match')
                 break
     if config.perte > 0.2:
         DispatchPerte()
