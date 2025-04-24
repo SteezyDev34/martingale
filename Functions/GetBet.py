@@ -319,7 +319,7 @@ def GetBet(driver, nextBet=False):
                         # print('ligne ' + str(ligne))
                 else:
                     # print('stype', sType)
-                    list_of_newbet_type = list_of_newbet_type.split(sType + " - Oui")
+                    list_of_newbet_type = list_of_newbet_type.lower().split(sType.lower() + " - Oui".lower())
                     if len(list_of_newbet_type) > 1:
                         getjeu_actuel = list_of_newbet_type[0].split("Jeu ")[1]
                         getjeu_actuel = ''.join(caractere for caractere in getjeu_actuel if caractere.isdigit())
