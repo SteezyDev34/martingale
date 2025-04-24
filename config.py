@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 import platform
+import time
 from typing import Dict, Any, Optional
 
 import requests
@@ -253,29 +254,10 @@ BGPURPLE = colorama.Back.MAGENTA  # Fond magenta
 BGCYAN = colorama.Back.CYAN  # Fond cyan
 BGBLUE = colorama.Back.BLUE  # Fond bleu
 BGRESET = colorama.Back.BLACK  # Fond noir (réinitialisation)
-import logging
-# Ajouter l'import en haut du fichier
-import colorlog
 
 
 def log(message, type="", clear=True, indent=0):
-    # Configure logging
-    handler = colorlog.StreamHandler()
-    handler.setFormatter(colorlog.ColoredFormatter(
-        '%(log_color)s%(asctime)s - %(levelname)s - %(message)s',
-        log_colors={
-            'DEBUG': CYAN,
-            'INFO': GREEN,
-            'WARNING': YELLOW,
-            'ERROR': RED,
-            'CRITICAL': 'white,' + BGPURPLE,
-        }
-    ))
-    logger = colorlog.getLogger()
-    logger.addHandler(handler)
-    logger.addHandler(logging.FileHandler(f"{projectPath}/Logs/logScript{scriptType}-{script_num}-{newmatch}"))
-    logger.setLevel(logging.INFO)
-
+    clear = False
     """
     Affiche un message dans le terminal tout en effaçant dynamiquement la ligne précédente si demandé.
 
@@ -283,25 +265,35 @@ def log(message, type="", clear=True, indent=0):
     :param clear: Booléen indiquant si la ligne précédente doit être effacée.
     :return: La longueur du message actuel, pour l'utiliser dans l'appel suivant.
     """
-    # Gestion de l'indentation
-    indent = "    " * indent if indent > 0 else ""
+    global log_message
     # Détermination de la couleur en fonction du type de message
     if type == "info":
         color = BOLD
-        logger.debug(message)
     elif type == "title":
         color = CYAN
     elif type == "success":
         color = GREEN
-        logger.info(message)
     elif type == "warning":
         color = YELLOW
-        logger.warning(message)
     elif type == "error":
         color = RED
-        logger.error(message)
     else:
         color = RESET  # Pas de couleur par défaut
+
+    # Gestion de l'indentation
+    indent = "    " * indent if indent > 0 else ""
+    sys.stdout.write(f"{color}{indent}{message}{RESET}\n")
+
+    if clear:
+        # Effacement de la ligne précédente
+        # Affichage du nouveau message sur la même ligne
+        log_clear_line()
+
+    # Force l'écriture du buffer
+    sys.stdout.flush()
+    # Mise à jour du message global
+    log_message = message
+    saveLog(message)
 
 
 def log_clear_line(line_number=1):
@@ -316,11 +308,11 @@ def log_clear_line(line_number=1):
             sys.stdout.write("clear\n")
     else:
         # Délai pour éviter les problèmes d'affichage
-        # time.sleep(0.5)
+        time.sleep(0.3)
         for _ in range(line_number):
             # Remonte d'une ligne et l'efface
             try:
-                # sys.stdout.write("\033[F\033[K\r")
+                sys.stdout.write("\033[F\033[K\r")
                 sys.stdout.flush()
             except:
                 clear_previous_line_windows()
