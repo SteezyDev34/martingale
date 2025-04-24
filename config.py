@@ -2,7 +2,6 @@ import datetime
 import json
 import os
 import platform
-import time
 from typing import Dict, Any, Optional
 
 import requests
@@ -258,22 +257,20 @@ import logging
 # Ajouter l'import en haut du fichier
 import colorlog
 
-# Configure logging
-handler = colorlog.StreamHandler()
-handler.setFormatter(colorlog.ColoredFormatter(
-    '%(log_color)s%(asctime)s - %(levelname)s - %(message)s',
-    log_colors={
-        'DEBUG': 'cyan',
-        'INFO': 'green',
-        'WARNING': 'yellow',
-        'ERROR': 'red',
-        'CRITICAL': 'red,bg_white',
-        'SUCCESS': 'green',
-    }
-))
-
 
 def log(message, type="", clear=True, indent=0):
+    # Configure logging
+    handler = colorlog.StreamHandler()
+    handler.setFormatter(colorlog.ColoredFormatter(
+        '%(log_color)s%(asctime)s - %(levelname)s - %(message)s',
+        log_colors={
+            'DEBUG': 'cyan',
+            'INFO': 'green',
+            'WARNING': 'yellow',
+            'ERROR': 'red',
+            'CRITICAL': 'red,bg_white',
+        }
+    ))
     logger = colorlog.getLogger()
     logger.addHandler(handler)
     logger.addHandler(logging.FileHandler(f"{projectPath}/Logs/logScript{scriptType}-{script_num}-{newmatch}"))
@@ -286,31 +283,37 @@ def log(message, type="", clear=True, indent=0):
     :param clear: Booléen indiquant si la ligne précédente doit être effacée.
     :return: La longueur du message actuel, pour l'utiliser dans l'appel suivant.
     """
-    # Gestion de l'indentation
-    indent = "    " * indent if indent > 0 else ""
     # Détermination de la couleur en fonction du type de message
     if type == "info":
         color = BOLD
-        logger.debug(f"{color}{indent}{message}{RESET}\n")
     elif type == "title":
         color = CYAN
-        logger.info(f"{color}{indent}{message}{RESET}\n")
     elif type == "success":
         color = GREEN
-        logger.success(f"{color}{indent}{message}{RESET}\n")
     elif type == "warning":
         color = YELLOW
-        logger.warning(f"{color}{indent}{message}{RESET}\n")
     elif type == "error":
         color = RED
-        logger.error(f"{color}{indent}{message}{RESET}\n")
     else:
         color = RESET  # Pas de couleur par défaut
-        logger.debug(f"{color}{indent}{message}{RESET}\n")
+
+    # Gestion de l'indentation
+    indent = "    " * indent if indent > 0 else ""
 
     if clear:
-        time.sleep(0.3)  # Wait 1 second
-    print("\033[2J\033[H")  # Clear terminal screen
+        # Effacement de la ligne précédente
+        # log_clear_line()
+        # Affichage du nouveau message sur la même ligne
+        sys.stdout.write(f"{color}{indent}{message}{RESET}\n")
+    else:
+        # Affichage du message sur une nouvelle ligne
+        sys.stdout.write(f"{color}{indent}{message}{RESET}\n")
+
+    # Force l'écriture du buffer
+    sys.stdout.flush()
+    # Mise à jour du message global
+    log_message = message
+    saveLog(message)
 
 
 def log_clear_line(line_number=1):
@@ -319,5 +322,73 @@ def log_clear_line(line_number=1):
 
     :param line_number: Nombre de lignes à effacer (par défaut 1)
     """
-    time.sleep(0.3)  # Wait 1 second
-    print("\033[2J\033[H")  # Clear terminal screen
+    if os.getenv('PYCHARM_HOSTED') == '1':  # Si exécuté dans PyCharm
+        # Simple écriture de lignes vides pour PyCharm
+        for _ in range(line_number):
+            sys.stdout.write("clear\n")
+    else:
+        # Délai pour éviter les problèmes d'affichage
+        # time.sleep(0.5)
+        for _ in range(line_number):
+            # Remonte d'une ligne et l'efface
+            try:
+                # sys.stdout.write("\033[F\033[K\r")
+                sys.stdout.flush()
+            except:
+                clear_previous_line_windows()
+
+
+import ctypes
+
+# Obtenir un handle pour la console de sortie standard
+std_out_handle = ctypes.windll.kernel32.GetStdHandle(-11)
+
+
+# Fonction pour effacer la ligne précédente avec l'API Windows
+def clear_previous_line_windows():
+    # Obtenir la position actuelle du curseur
+    csbi = ctypes.create_string_buffer(22)
+    res = ctypes.windll.kernel32.GetConsoleScreenBufferInfo(std_out_handle, csbi)
+
+    if res:
+        from ctypes import Structure, c_short, c_long
+
+        class COORD(Structure):
+            _fields_ = [("X", c_short), ("Y", c_short)]
+
+        class SMALL_RECT(Structure):
+            _fields_ = [("Left", c_short), ("Top", c_short),
+                        ("Right", c_short), ("Bottom", c_short)]
+
+        class CONSOLE_SCREEN_BUFFER_INFO(Structure):
+            _fields_ = [("dwSize", COORD),
+                        ("dwCursorPosition", COORD),
+                        ("wAttributes", c_long),
+                        ("srWindow", SMALL_RECT),
+                        ("dwMaximumWindowSize", COORD)]
+
+        info = CONSOLE_SCREEN_BUFFER_INFO()
+        ctypes.windll.kernel32.GetConsoleScreenBufferInfo(std_out_handle, ctypes.byref(info))
+
+        # Déplacer le curseur à la ligne précédente
+        new_pos = COORD(0, info.dwCursorPosition.Y - 1)
+        ctypes.windll.kernel32.SetConsoleCursorPosition(std_out_handle, new_pos)
+
+        # Effacer la ligne
+        chars_written = ctypes.c_long()
+        console_size = info.dwSize.X
+        ctypes.windll.kernel32.FillConsoleOutputCharacterA(
+            std_out_handle, ord(' '), console_size, new_pos, ctypes.byref(chars_written))
+        ctypes.windll.kernel32.FillConsoleOutputAttribute(
+            std_out_handle, info.wAttributes, console_size, new_pos, ctypes.byref(chars_written))
+
+
+# Utilisation avec fallback
+def clear_previous_line_cross_platform():
+    try:
+        pass
+        # sys.stdout.write("\033[F\033[K\r")
+        # sys.stdout.flush()
+    except:
+        # clear_previous_line_windows()
+        pass
