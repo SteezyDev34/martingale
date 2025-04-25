@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
-
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
 
 def GetPlayersName(driver):
     try:
@@ -12,16 +12,17 @@ def GetPlayersName(driver):
     except:
         players_name = []
     else:
-        players = driver.find_elements(By.CLASS_NAME,'scoreboard-intro__team')
-        print(str(len(players)))
-        players_name=[]
+        players = driver.find_elements(By.CLASS_NAME, 'scoreboard-intro__team')
+        players_name = []
         for player in players:
             name = player.find_element(By.CLASS_NAME, 'scoreboard-team-name__text').text
             name = name.split('(')[0]
             name = name.strip()
-            print(name)
             players_name.append(name)
     return players_name
+
+
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
+
     GetPlayersName(driver)

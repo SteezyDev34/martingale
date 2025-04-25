@@ -30,10 +30,8 @@ def all_script(driver):
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver) and not config.error:
-        current_frame = inspect.currentframe()
-        config.log(
-            f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
-            'error', True)
+        config.log('Erreur lors de la recherche de match!', 'error', False, 2)
+
     # --------
     config.match_found = True
     if config.match_found and not config.error:
@@ -43,7 +41,7 @@ def all_script(driver):
         config.teams = GetPlayersName(driver)
         newmatchFromUrl(driver)
 
-        print("#RECHERCHE INFOS DE MISE")
+        config.log('RECHERCHE INFOS DE MISE', 'title', False)
         infosperte = getGlobalPerte()
         if infosperte and config.perte == 0:
             if float(infosperte['perte']) > 20:
@@ -62,7 +60,6 @@ def all_script(driver):
     if not config.set_actuel:
         config.error = True
 
-    config.log('🏁 DÉBUT DE LA MARTINGALE', 'title', False)
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
 

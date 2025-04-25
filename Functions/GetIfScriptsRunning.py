@@ -36,8 +36,8 @@ def GetIfScriptsRunning():
                         config.log_clear_line()
                     # Afficher le nouveau message sur la même ligne
                     sys.stdout.write("\033[F\033[K\r")  # Remonter et effacer une ligne
-                    sys.stdout.write("🛑 script " + str(config.script_num) + " STOP!")
-                    sys.stdout.write("  Waiting" + "." * dot_count + "\n")
+                    sys.stdout.write("script " + str(config.script_num) + " STOP!")
+                    sys.stdout.write("Waiting" + "." * dot_count + "\n")
                     time.sleep(0.5)
                     # Augmenter le nombre de points jusqu'à 5, puis recommencer à 1
                     dot_count = dot_count + 1 if dot_count < 5 else 1

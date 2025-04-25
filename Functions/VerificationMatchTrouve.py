@@ -9,7 +9,7 @@ from Functions import GetMatchDone
 
 def main(driver, bet_item, matchlist_file_name):
     try:
-        config.log('Vérification si match déjà parié', 'info', False, 4)
+        config.log('Vérification si match déjà parié', 'info', True, 4)
         newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
                                              'dashboard-game-block__link')[
             0].get_attribute(
@@ -17,7 +17,6 @@ def main(driver, bet_item, matchlist_file_name):
         newmatch = newmatchtxt.split(
             '-')
         config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
-        print(config.newmatch)
     except Exception as e:
         config.log('Impossible de lire le lien du match!', 'warning', False, 4)
         config.log_clear_line()
@@ -33,7 +32,7 @@ def main(driver, bet_item, matchlist_file_name):
             driver.get(newmatchtxt)
             return [True, config.newmatch]
         else:
-            config.log('Le match  n\'est pas autorisé!', 'warning', False, 4)
+            config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
             return [False, config.newmatch]
 
 

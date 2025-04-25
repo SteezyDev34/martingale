@@ -11,8 +11,7 @@ from Functions.DeleteBet import DeleteBet
 def ModalHandler(driver):
     validation = False
     tentative = 1
-    config.log("        GESTION DE MODAL", 'info', False)
-    config.log_clear_line()
+    config.log("GESTION DE MODAL", 'info', True, 2)
     fenetre_validation = 0
     while fenetre_validation == 0 and tentative <= 2:
         tentative = tentative + 1
@@ -21,8 +20,7 @@ def ModalHandler(driver):
             element = WebDriverWait(driver, 1).until(EC.presence_of_element_located(
                 (By.CLASS_NAME, 'notification-question')))
         except:
-            config.log('            pas de fenetre de question', 'warning', False)
-            config.log_clear_line()
+            config.log('            pas de fenetre de question', 'warning', True)
         else:
             if len(re.findall("Maximum", driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
                 driver.find_element(By.CLASS_NAME, 'ui-popup__submit').click()
@@ -51,8 +49,7 @@ def ModalHandler(driver):
             element = WebDriverWait(driver, 1).until(EC.presence_of_element_located(
                 (By.CLASS_NAME, 'notification-alert')))
         except:
-            config.log('            pas de fenetre de notif', 'warning', False)
-            config.log_clear_line()
+            config.log('            pas de fenetre de notif', 'warning', True)
 
         else:
             if len(re.findall("Maximum", driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
@@ -106,7 +103,7 @@ def ModalHandler(driver):
                              'coupon-success-modal-controls__item'))
                     )
                 except:
-                    config.log(f'            Impossible de lciquer sur Ok', 'warning', False)
+                    config.log(f'            Impossible de cliquer sur Ok', 'warning', False)
                 else:
                     modal_wrapper = driver.find_elements(By.CLASS_NAME, 'coupon-success-modal-controls__item')[0]
                     modal_wrapper.click()

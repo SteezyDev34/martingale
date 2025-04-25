@@ -11,12 +11,11 @@ from Functions.ValidationDuParis import ValidationDuParis
 
 
 def FirstGameBet(driver):
-    config.log('PREPARATTION PREMIER PARIS', 'title', False, 1)
+    config.log('PREPARATTION PREMIER PARIS', 'title', False, 0)
     config.newset = int(config.set_actuel) + 1
     bet_40a = False
     tentative = 0
     nextBet = False
-    print(config.jeu_actuel)
     while not bet_40a and not config.error and tentative < 3:
         GetScoreActuel(driver)
         config.looking_game = int(config.jeu_actuel)
@@ -36,8 +35,6 @@ def FirstGameBet(driver):
                 nextBet = True
                 config.looking_game = int(config.jeu_actuel) + 1
 
-        config.log(f'Affichage de la liste des paris', 'info', True, 2)
-
         if not AfficherParis(driver):
             current_frame = inspect.currentframe()
             config.log(
@@ -45,13 +42,9 @@ def FirstGameBet(driver):
                 'error', True)
             tentative = tentative + 1
             continue
-        # On recherche le jeu actuel
-        config.log('liste des pariis affichée', '', True, 2)
-        config.log(f'jeu recherhcé : {config.looking_game}', 'info', True)
 
         if not GetBet(driver, nextBet):
             tentative = tentative + 1
-            config.log('Boucle getbet', 'warning', True, 2)
             if tentative > 5:
                 config.error = True
                 config.log('error recup jeu #ERR345', 'error', True, 2)

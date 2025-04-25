@@ -63,7 +63,7 @@ def getGlobalPerte():
     else:
         if float(pertes["perte"]) > 0:
             config.rattrape_perte = 1
-        config.log(f'Perte global : {str(pertes["perte"])}', 'info', False, 2)
+        config.log(f'Perte global : {str(pertes["perte"])}', 'info', False, 1)
 
         return pertes
 

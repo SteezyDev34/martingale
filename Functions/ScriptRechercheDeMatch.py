@@ -34,19 +34,14 @@ def rechercheDeMatch(driver):
             return False"""
         try:
             # RECUPERATION DES LIGUES EN COURS
-            config.log(' Récupération des ligues', 'info', False, 1)
+            config.log(' Récupération des ligues', 'info', True, 1)
             bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                                   'dashboard-champ')
         except:
             config.log('ligues introuvables!', 'warning', True, 2)
-            current_frame = inspect.currentframe()
-            config.log(
-                f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
-                'error', True)
-            config.log_clear_line()
             return False
         else:
-            config.log('ligues trouvées!', 'success', False, 2)
+            config.log('ligues trouvées!', 'success', True, 2)
             # POUR CHAQUE LIGUE RÉCUPÉRÉE
             for bet_ligue in bet_list_ligue:
                 # ON RÉCUPÈRE LE NOM DE LA LIGUE
@@ -139,11 +134,12 @@ def rechercheDeMatch(driver):
 
         if not config.match_found:
             config.log('PAS DE MATCH TROUVE!', 'warning', True, 2)
-            config.log_clear_line(2)
+            config.log_clear_line(3)
             driver.get(config.site_url)
             time.sleep(5)
         else:
-            config.log('MATCH TROUVE!', 'success', True, 2)
+
+            config.log('MATCH TROUVE!', 'success', False, 2)
             time.sleep(5)
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE
     # END SCRIPT RECHERCHE DE MATCH
