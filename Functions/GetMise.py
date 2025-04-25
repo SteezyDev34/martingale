@@ -38,10 +38,10 @@ def GetMise(driver):
     config.mise = round(config.mise, 2)
     if config.mise < 0.2:
         config.mise = 0.2
-    txtlog = "cote : " + str(config.cote) + " | perte : " + str(
+    """txtlog = "cote : " + str(config.cote) + " | perte : " + str(
         config.perte) + " | wantwin : " + str(
         config.wantwin) + " | mise : " + str(config.mise)
-    config.log(txtlog, 'info', '', 3)
+    config.log(txtlog, 'info', '', 3)"""
     getmisemax = True
     tentative = 0
     while not getmisemax:

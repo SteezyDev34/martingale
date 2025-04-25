@@ -33,7 +33,6 @@ def RetourTpsReg(driver):
                     'error', False)
                 print('error champ deroul##12321')
                 break
-            config.log(str(tentative), config.newmatch)
         else:
             select_form = driver.find_elements(By.CLASS_NAME, 'game-toolbar__sub-games-dropdown')
             try:

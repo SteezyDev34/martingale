@@ -32,7 +32,7 @@ def AfficherParis(driver):
             )
         except Exception as e:
             config.log('Champ déroulant introuvable !', 'warning', False, 2)
-            config.log(f'tentative {tentative}', 'warning', False, 2)
+            config.log(f'tentative {tentative}', 'warning', True, 2)
             tentative = tentative + 1
         else:
             select_form = driver.find_elements(By.CLASS_NAME, 'game-toolbar__sub-games-dropdown')
