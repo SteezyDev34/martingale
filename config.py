@@ -310,6 +310,6 @@ def log_clear_line(line_number=1):
         time.sleep(0.3)
         for _ in range(line_number):
             # Remonte d'une ligne et l'efface
-            sys.stdout.write("clear\n")
-            # sys.stdout.write("\033[F\033[K\r")
+            # sys.stdout.write("clear\n")
+            sys.stdout.write("\033[F\033[K\r")
             sys.stdout.flush()
