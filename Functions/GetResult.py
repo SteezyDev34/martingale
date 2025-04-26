@@ -27,12 +27,10 @@ def GetResult(driver):
                 'A:40'
             ]
             if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
-                print('config.validated_bet = ', config.validated_bet)
                 matching_scores = [score for score in config.all_scores.values()
                                    if int(score.get('set')) == int(config.validated_bet.get('set'))
                                    and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
                                    and score.get('score') == config.validated_bet.get('winscore')]
-                print(f"All recorded scores: {config.all_scores}")
                 if matching_scores:
                     print("Matching score found:", matching_scores[0])
                     print(f"All recorded scores: {config.all_scores}")
@@ -56,14 +54,12 @@ def GetResult(driver):
                 'A:40'
             ]
             if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
-                print('config.validated_bet = ', config.validated_bet)
                 matching_scores = [score for score in config.all_scores.values()
                                    if int(score.get('set')) == int(config.validated_bet.get('set'))
                                    and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
                                    and score.get('score') == config.validated_bet.get('winscore')]
                 if matching_scores:
                     print("Matching score found:", matching_scores[0])
-                    print(f"All recorded scores: {config.all_scores}")
                     result = 'WIN'
                     config.log(f"Result: {result}", 'success', False, 2)
 
@@ -91,14 +87,12 @@ def GetResult(driver):
             ]
 
             if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
-                print('config.validated_bet = ', config.validated_bet)
                 matching_scores = [score for score in config.all_scores.values()
                                    if int(score.get('set')) == int(config.validated_bet.get('set'))
                                    and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
                                    and score.get('score') == config.validated_bet.get('winscore')]
                 if matching_scores:
                     print("Matching score found:", matching_scores[0])
-                    print(f"All recorded scores: {config.all_scores}")
                     result = 'WIN'
                     config.log(f"Result: {result}", 'success', False, 2)
                 else:
@@ -123,18 +117,15 @@ def GetResult(driver):
                 '15:15'
             ]
             if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
-                print('config.validated_bet = ', config.validated_bet)
                 matching_scores = [score for score in config.all_scores.values()
                                    if int(score.get('set')) == int(config.validated_bet.get('set'))
                                    and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
                                    and score.get('score') == config.validated_bet.get('winscore')]
                 if matching_scores:
                     print("Matching score found:", matching_scores[0])
-                    print(f"All recorded scores: {config.all_scores}")
                     result = 'WIN'
                     config.log(f"Result: {result}", 'success', False, 2)
                 else:
-                    print(config.all_scores)
                     result = 'LOSE'
                     config.log(result, 'error', False, 2)
                 return result
@@ -149,7 +140,6 @@ def GetResult(driver):
                                            if int(v.get('set')) == int(config.validated_bet.get('set'))
                                            and int(v.get('jeu')) == int(config.validated_bet.get('jeu'))
                                            and v.get('score') != '0:0'}
-                print('matching_set_jeu_scores', matching_set_jeu_scores)
 
                 if matching_set_jeu_scores:
                     last_score_key = max(matching_set_jeu_scores.keys())
@@ -157,7 +147,6 @@ def GetResult(driver):
 
                     if last_score.get('score') == config.validated_bet.get('winscore'):
                         print("Matching score found:", last_score)
-                        print(f"All recorded scores: {config.all_scores}")
                         result = 'WIN'
                         config.log(f"Result: {result}", 'success', False, 2)
                     else:
@@ -178,7 +167,6 @@ def GetResult(driver):
                                            if int(v.get('set')) == int(config.validated_bet.get('set'))
                                            and int(v.get('jeu')) == int(config.validated_bet.get('jeu'))
                                            and v.get('score') != '0:0'}
-                print('matching_set_jeu_scores', matching_set_jeu_scores)
 
                 if matching_set_jeu_scores:
                     last_score_key = max(matching_set_jeu_scores.keys())
@@ -186,7 +174,6 @@ def GetResult(driver):
 
                     if last_score.get('score') in config.validated_bet.get('winscore'):
                         print("Matching score found:", last_score)
-                        print(f"All recorded scores: {config.all_scores}")
                         result = 'WIN'
                         config.log(f"Result: {result}", 'success', False, 2)
                     else:
@@ -211,7 +198,6 @@ def GetResult(driver):
                                            if int(v.get('set')) == int(config.validated_bet.get('set'))
                                            and int(v.get('jeu')) == int(config.validated_bet.get('jeu'))
                                            and v.get('score') != '0:0'}
-                print('matching_set_jeu_scores', matching_set_jeu_scores)
 
                 if matching_set_jeu_scores:
                     last_score_key = max(matching_set_jeu_scores.keys())
@@ -219,7 +205,6 @@ def GetResult(driver):
 
                     if last_score.get('score') in config.validated_bet.get('winscore'):
                         print("Matching score found:", last_score)
-                        print(f"All recorded scores: {config.all_scores}")
                         result = 'WIN'
                         config.log(f"Result: {result}", 'success', False, 2)
                     else:

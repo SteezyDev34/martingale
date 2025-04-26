@@ -16,6 +16,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
+scriptTypeList = ['15A', '300', '030', '30A', '40A']
 
 # Script configuration
 script_num = 0  # Numéro du Script
@@ -78,6 +79,7 @@ game_start = False
 gain = 0
 global_match_win = 0
 netprofit = 0
+result = False
 # File paths
 matchlist_file_name = ""
 matchlisttodo_file_name = ""
@@ -89,7 +91,6 @@ match_done_key = ""  # Nom du match dans Gsheets
 match_found = False  # Match valide trouvé
 mise = 0.2
 probamini = 0.4
-cotemini = 1
 cotebase = 1
 misemax = 0
 perte = 0
@@ -97,7 +98,7 @@ win_type = ''
 wantwin = 0.2
 nb_tour = 1
 increment = 0
-recup40 = 0
+mtt_recup = 0
 recup30 = 0
 rattrape_perte = 0
 print_running_text = False
@@ -108,6 +109,7 @@ restart_set2 = 0
 log_message = ''
 newset = 2
 teams = False
+winmatch = 0
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:
@@ -143,47 +145,152 @@ def getJsonData(url: str) -> Optional[Dict[str, Any]]:
 
 
 def init_variable():
-    """Initialise les variables globales à partir des données de stratégie"""
-    global mise, perte, wantwin, increment, probamini, cotemini, recup40, recup30
+    """Initialize global variables from strategy data"""
+    global mise, perte, wantwin, increment, probamini
     global running_file_name, matchlist_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
-    global print_match_live_text, devMode, match_list, match_done_key, match_found
-    global error, cotebase, nb_tour, restart_set2, validated_bet, ligue_name, match_Url, newmatch, all_scores, teams
+    global print_match_live_text, devMode, gain, global_match_win, netprofit, perte, placed_game, looking_game, saved_score
+    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, winmatch
+    config_global = ScriptConfig(scriptType)
 
-    match_list = []  # List des matchs
-    match_done_key = ""  # Nom du match dans Gsheets
-    match_found = False  # Match valide trouvé
+    # Initialize variables from config
+    devMode = config_global.get("devmode")
+    error = config_global.get("error")
+    validated_bet = config_global.get("validated_bet")
 
-    url = f"http://p-com.studio/api/strategy{scriptType}/"
-    strategy = getJsonData(url)
+    # Game settings
+    cotebase = float(config_global.get("cote_base"))
+    mise = float(config_global.get("mise"))
+    nb_tour = int(config_global.get("nb_tour"))
+    probamini = float(config_global.get("proba_mini"))
 
-    # Initialisation des variables avec valeurs par défaut si strategy est None
-    devMode = strategy.get("devmode") == "1" if strategy else False
-    error = False
+    # Game state
+    gain = float(config_global.get("gain"))
+    global_match_win = float(config_global.get("global_match_win"))
+    increment = float(config_global.get("increment"))
+    looking_game = int(config_global.get("looking_game"))
+    netprofit = float(config_global.get("netprofit"))
+    perte = float(config_global.get("perte"))
+    placed_game = int(config_global.get("placed_game"))
+    rattrape_perte = int(config_global.get("rattrape_perte"))
+    restart_set2 = int(config_global.get("restart_set2"))
+    saved_score = config_global.get("saved_score")
+    validated_bet = config_global.get("validated_bet")
+    wantwin = float(config_global.get("wantwin"))
+    win_type = config_global.get("win_type")
+    mtt_recup = float(config_global.get("mtt_recup"))
+    result = config_global.get('result')
+    winmatch = config_global.get('winmatch')
 
-    validated_bet = {}  # Dictionnaire pour stocker les paris validés
-    ligue_name = ""
-    match_Url = ""
-    newmatch = ""
-    teams = False
-    all_scores = {}
+    # Display settings
+    print_match_live_text = config_global.get("print_match_live_text")
+    print_running_text = config_global.get("print_running_text")
 
-    mise = float(strategy.get("mise", 0)) if strategy else 0
-    probamini = float(strategy.get("proba_mini", 0)) if strategy else 0
-    cotemini = float(strategy.get("cote_recup", 0)) if strategy else 0
-    cotebase = float(strategy.get("cote_base", 0)) if strategy else 0
-    nb_tour = float(strategy.get("nb_tour", 0)) if strategy else 0
-    restart_set2 = float(strategy.get("restart_set2", 0)) if strategy else 0
-    perte = 0
-    wantwin = float(strategy.get("wantwin", 0)) if strategy else 0
-    increment = float(strategy.get("increment", 0)) if strategy else 0
-    recup40 = float(strategy.get("mtt_recup", 0)) if strategy else 0
-    recup30 = float(strategy.get("mtt_recup", 0)) if strategy else 0
-    rattrape_perte = 0
-
-    # Configuration des chemins de fichiers
+    # File paths configuration
     running_file_name = f"{projectPath}/SCRIPTS {scriptType}/running"
     matchlist_file_name = f"{projectPath}/SCRIPTS {scriptType}/matchlist"
     matchlisttodo_file_name = f"{projectPath}/matchlisttodo"
+
+
+def save_variables():
+    """Initialize global variables from strategy data"""
+    global mise, perte, wantwin, increment, probamini
+    global running_file_name, matchlist_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
+    global print_match_live_text, devMode, gain, global_match_win, netprofit, perte, placed_game, looking_game, saved_score
+    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, winmatch
+
+    """Save current variables state back to config"""
+    config_global = ScriptConfig(scriptType)
+
+    # Save game settings
+    config_global.set("cote_base", cotebase)
+    config_global.set("mise", mise)
+    config_global.set("nb_tour", nb_tour)
+    config_global.set("proba_mini", probamini)
+
+    # Save game state
+    config_global.set("gain", gain)
+    config_global.set("global_match_win", global_match_win)
+    config_global.set("increment", increment)
+    config_global.set("looking_game", looking_game)
+    config_global.set("netprofit", netprofit)
+    config_global.set("perte", perte)
+    config_global.set("placed_game", placed_game)
+    config_global.set("rattrape_perte", rattrape_perte)
+    config_global.set("restart_set2", restart_set2)
+    config_global.set("saved_score", saved_score)
+    config_global.set("validated_bet", validated_bet)
+    config_global.set("wantwin", wantwin)
+    config_global.set("win_type", win_type)
+    config_global.set("mtt_recup", mtt_recup)
+    config_global.set("result", result)
+    config_global.set('winmatch', winmatch)
+
+    # Save display settings
+    config_global.set("print_match_live_text", print_match_live_text)
+    config_global.set("print_running_text", print_running_text)
+
+
+def switchScript(newScriptType):
+    global scriptType
+    save_variables()
+    scriptType = newScriptType
+    init_variable()
+
+
+class ScriptConfig:
+    _instances = {}  # Dictionnaire pour stocker les instances par type de script
+
+    def __init__(self, script_type):
+        self.script_type = script_type
+        # Récupérer l'instance existante si elle existe, sinon en créer une nouvelle
+        if script_type in ScriptConfig._instances:
+            self.variables = ScriptConfig._instances[script_type].variables
+        else:
+            self.variables = self._init_variables()
+            ScriptConfig._instances[script_type] = self
+
+    def _init_variables(self):
+
+        url = f"http://p-com.studio/api/strategy{self.script_type}/"
+        strategy = getJsonData(url)
+        print('init scriptconfig')
+        # Configuration par défaut selon le type de script
+        default_configs = {
+        }
+        config = default_configs.get(self.script_type, {})
+        if strategy:
+            for key, strat in strategy.items():
+                config[key] = strat
+            config['error'] = False
+            config['validated_bet'] = {}
+            config['print_running_text'] = False
+            config['print_match_live_text'] = False
+            config['win_type'] = ''
+            config['netprofit'] = 0
+            config['gain'] = 0
+            config['global_match_win'] = 0
+            config['looking_game'] = False
+            config['placed_game'] = False
+            config['saved_score'] = False
+            config['rattrape_perte'] = False
+            config['result'] = False
+            config['winmatch'] = 0
+
+        return config
+
+    def get(self, var_name):
+        """Récupère une variable par son nom"""
+        return self.variables.get(var_name)
+
+    def set(self, var_name, value):
+        """Définit une variable"""
+        self.variables[var_name] = value
+
+    def reset(self):
+        """Force la réinitialisation de la configuration"""
+        self.variables = self._init_variables()
+        ScriptConfig._instances[self.script_type] = self
+        return self
 
 
 def saveLog(txt):
@@ -307,7 +414,7 @@ def log_clear_line(line_number=1):
             sys.stdout.write("clear\n")
     else:
         # Délai pour éviter les problèmes d'affichage
-        time.sleep(0.3)
+        time.sleep(2)
         for _ in range(line_number):
             # Remonte d'une ligne et l'efface
             # sys.stdout.write("clear\n")

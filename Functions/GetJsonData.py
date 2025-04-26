@@ -64,7 +64,14 @@ def getGlobalPerte():
         if float(pertes["perte"]) > 0:
             config.rattrape_perte = 1
         config.log(f'Perte global : {str(pertes["perte"])}', 'info', False, 1)
-
+        if float(pertes['perte']) > float(config.mtt_recup):
+            SendGlobalPerte(config.scriptType, float(0 - config.mtt_recup))
+            config.perte = config.mtt_recup
+        elif float(pertes['perte']) <= float(config.mtt_recup):
+            config.perte = float(pertes['perte'])
+            m = 0 - config.perte
+            SendGlobalPerte(config.scriptType, m)
+        config.rattrape_perte = 1
         return pertes
 
 

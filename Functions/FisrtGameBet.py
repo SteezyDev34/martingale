@@ -3,7 +3,6 @@ import inspect
 import config
 from Functions.AfficherParis import AfficherParis
 from Functions.GetBet import GetBet
-from Functions.GetIfGameStart import GetIfGameEnd
 from Functions.GetMise import GetMise
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.PlacerMise import PlacerMise
@@ -87,11 +86,6 @@ def FirstGameBet(driver):
             if ValidationDuParis(driver, nextBet):
                 validate_bet = True
                 bet_40a = True
-                if nextBet:
-                    config.log('FIRST GAME PASS WITHOUT VALIDATE WAIT NEXT START ', '', 2)
-                    GetIfGameEnd(driver)
-                    config.game_end = True
-                    break
             else:
                 break
 
