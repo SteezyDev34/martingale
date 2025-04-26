@@ -16,7 +16,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['15A', '300', '030', '30A', '40A']
+scriptTypeList = ['QT']
 
 # Script configuration
 script_num = 0  # Numéro du Script
@@ -24,39 +24,10 @@ win = 0  # Nombre de victoire
 cote = 3
 scriptType = "40A"
 localhost = ''
-site_url = "https://ca.1xbet.com/fr/live/tennis"
+site_url = "https://ca.1xbet.com/fr/live/basketball"
 # Score configurations
 score_to_start = [
-    "01(0)00(0)",
-    "00(0)01(0)",
-    "01(0)01(0)",
-    "02(0)00(0)",
-    "00(0)02(0)",
-    "00(0)00(0)",
-    "00(15)00(0)",
-    "00(0)00(15)",
-    "00(15)00(15)",
-    "00(30)00(15)",
-    "00(15)00(30)",
-    "00(30)00(0)",
-    "00(0)00(30)",
-    "0000(0)(0)",
-    "00(0)(0)",
-    "0000(15)(0)",
-    "0000(30)(0)",
-    "0000(40)(0)",
-    "0000(0)(15)",
-    "0000(0)(30)",
-    "0000(0)(40)",
-    "0000(15)(15)",
-    "0000(30)(30)",
-    "0000(40)(40)",
-    "0000(30)(15)",
-    "0000(15)(30)",
-    "0000(40)(15)",
-    "0000(15)(40)",
-    "0000(40)(30)",
-    "0000(30)(40)"
+    '0000'
 ]
 # Game state variables
 validated_bet = {}  # Dictionnaire pour stocker les paris validés
@@ -409,6 +380,8 @@ def log_clear_line(line_number=1):
     :param line_number: Nombre de lignes à effacer (par défaut 1)
     """
     if os.getenv('PYCHARM_HOSTED') == '1':  # Si exécuté dans PyCharm
+        time.sleep(2)
+
         # Simple écriture de lignes vides pour PyCharm
         for _ in range(line_number):
             sys.stdout.write("clear\n")
