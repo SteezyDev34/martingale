@@ -17,6 +17,8 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
 scriptTypeList = ['15A', '300', '30A', '40A']
+scriptTypeList2 = ['030', '6P', '4030']
+scriptTypeList3 = ['4P', '5P', '4015']
 
 # Script configuration
 script_num = 0  # Numéro du Script
@@ -407,7 +409,8 @@ def log_clear_line(line_number=1):
     if os.getenv('PYCHARM_HOSTED') == '1':  # Si exécuté dans PyCharm
         # Simple écriture de lignes vides pour PyCharm
         for _ in range(line_number):
-            sys.stdout.write("clear\n")
+            # sys.stdout.write("clear\n")
+            continue
     else:
         # Délai pour éviter les problèmes d'affichage
         time.sleep(2)
