@@ -16,7 +16,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['15A', '300', '030', '30A', '40A']
+scriptTypeList = ['15A', '300', '30A', '40A']
 
 # Script configuration
 script_num = 0  # Numéro du Script
@@ -77,7 +77,6 @@ set = ""
 game_end = False
 game_start = False
 gain = 0
-global_match_win = 0
 netprofit = 0
 result = False
 # File paths
@@ -109,7 +108,9 @@ restart_set2 = 0
 log_message = ''
 newset = 2
 teams = False
-winmatch = 0
+# Initialize dictionaries to track wins per script type
+winmatch = {script_type: 0 for script_type in scriptTypeList}
+global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:
@@ -148,8 +149,8 @@ def init_variable():
     """Initialize global variables from strategy data"""
     global mise, perte, wantwin, increment, probamini
     global running_file_name, matchlist_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
-    global print_match_live_text, devMode, gain, global_match_win, netprofit, perte, placed_game, looking_game, saved_score
-    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, winmatch
+    global print_match_live_text, devMode, gain, netprofit, perte, placed_game, looking_game, saved_score
+    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result
     config_global = ScriptConfig(scriptType)
 
     # Initialize variables from config
@@ -165,7 +166,6 @@ def init_variable():
 
     # Game state
     gain = float(config_global.get("gain"))
-    global_match_win = float(config_global.get("global_match_win"))
     increment = float(config_global.get("increment"))
     looking_game = int(config_global.get("looking_game"))
     netprofit = float(config_global.get("netprofit"))
@@ -179,7 +179,6 @@ def init_variable():
     win_type = config_global.get("win_type")
     mtt_recup = float(config_global.get("mtt_recup"))
     result = config_global.get('result')
-    winmatch = config_global.get('winmatch')
 
     # Display settings
     print_match_live_text = config_global.get("print_match_live_text")
@@ -195,8 +194,8 @@ def save_variables():
     """Initialize global variables from strategy data"""
     global mise, perte, wantwin, increment, probamini
     global running_file_name, matchlist_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
-    global print_match_live_text, devMode, gain, global_match_win, netprofit, perte, placed_game, looking_game, saved_score
-    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, winmatch
+    global print_match_live_text, devMode, gain, netprofit, perte, placed_game, looking_game, saved_score
+    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result
 
     """Save current variables state back to config"""
     config_global = ScriptConfig(scriptType)
@@ -209,7 +208,6 @@ def save_variables():
 
     # Save game state
     config_global.set("gain", gain)
-    config_global.set("global_match_win", global_match_win)
     config_global.set("increment", increment)
     config_global.set("looking_game", looking_game)
     config_global.set("netprofit", netprofit)
@@ -223,7 +221,6 @@ def save_variables():
     config_global.set("win_type", win_type)
     config_global.set("mtt_recup", mtt_recup)
     config_global.set("result", result)
-    config_global.set('winmatch', winmatch)
 
     # Save display settings
     config_global.set("print_match_live_text", print_match_live_text)
@@ -263,18 +260,17 @@ class ScriptConfig:
                 config[key] = strat
             config['error'] = False
             config['validated_bet'] = {}
+
             config['print_running_text'] = False
             config['print_match_live_text'] = False
             config['win_type'] = ''
             config['netprofit'] = 0
             config['gain'] = 0
-            config['global_match_win'] = 0
             config['looking_game'] = False
             config['placed_game'] = False
             config['saved_score'] = False
             config['rattrape_perte'] = False
             config['result'] = False
-            config['winmatch'] = 0
 
         return config
 
@@ -388,7 +384,7 @@ def log(message, type="", clear=True, indent=0):
 
     # Gestion de l'indentation
     indent = "    " * indent if indent > 0 else ""
-    sys.stdout.write(f"{color}{indent}{message}{RESET}\n")
+    sys.stdout.write(f"{color}{scriptType}__{indent}{message}{RESET}\n")
 
     if clear:
         # Effacement de la ligne précédente

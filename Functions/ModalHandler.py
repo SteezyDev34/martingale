@@ -15,6 +15,35 @@ def ModalHandler(driver):
     fenetre_validation = 0
     while fenetre_validation == 0 and tentative <= 2:
         tentative = tentative + 1
+        # NOTIF VALIDATION
+        try:
+            element = WebDriverWait(driver, 2).until(
+                EC.visibility_of_element_located(
+                    (By.CLASS_NAME,
+                     'ui-coupon-modal-header__title'))
+            )  ###vérifaction d'affichage pop up validation
+        except:
+            config.log('            pas de fenetre de validation', 'warning', True)
+
+        else:
+            validation = driver.find_elements(By.CLASS_NAME,
+                                              'ui-coupon-modal-header__title')[
+                0].text
+            if re.search("VOTRE PARI EST ACCEPTÉ !", validation, re.IGNORECASE) is not None:
+                config.log(f'            PARIS VALIDÉ', 'success', False)
+
+                try:
+                    element = WebDriverWait(driver, 3).until(
+                        EC.visibility_of_element_located(
+                            (By.CLASS_NAME,
+                             'coupon-success-modal-controls__item'))
+                    )
+                except:
+                    config.log(f'            Impossible de cliquer sur Ok', 'warning', False)
+                else:
+                    modal_wrapper = driver.find_elements(By.CLASS_NAME, 'coupon-success-modal-controls__item')[0]
+                    modal_wrapper.click()
+                    return True
         # NOTIF QUESTION
         try:
             element = WebDriverWait(driver, 1).until(EC.presence_of_element_located(

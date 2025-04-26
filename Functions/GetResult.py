@@ -15,10 +15,15 @@ def GetResult(driver):
     config.saved_set = ""
     timesleep = 1  # TEMPS D'ATTENTE AVANT DE RECUPERER LE SCORE PASSE À 1 SI 40 DANS LE SCORE
     result = False
+    print('is error ', config.error)
+    print('is result ', result)
+    print('jeu ', config.jeu_actuel)
+    print('set ', config.set_actuel)
+    print('scriptype ', config.scriptType)
     while not result and not config.error:
         time.sleep(timesleep)
         GetScoreActuel(driver)
-
+        print('wait resukt')
         if config.scriptType == "40A":
             passed_score = [
                 '0:0',
@@ -26,14 +31,19 @@ def GetResult(driver):
                 '40:A',
                 'A:40'
             ]
-            if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
+            if config.score_actuel in passed_score or config.set_actuel == int(
+                    config.validated_bet.get('set')) + 1 or config.jeu_actuel == int(
+                config.validated_bet.get('jeu')) + 1:
                 matching_scores = [score for score in config.all_scores.values()
-                                   if int(score.get('set')) == int(config.validated_bet.get('set'))
+                                   if score.get('set') is not None
+                                   and config.validated_bet.get('set') is not None
+                                   and int(score.get('set')) == int(config.validated_bet.get('set'))
+                                   and score.get('jeu') is not None
+                                   and config.validated_bet.get('jeu') is not None
                                    and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
                                    and score.get('score') == config.validated_bet.get('winscore')]
                 if matching_scores:
                     print("Matching score found:", matching_scores[0])
-                    print(f"All recorded scores: {config.all_scores}")
                     result = 'WIN'
                     config.log(f"Result: {result}", 'success', False, 2)
                 else:
@@ -53,9 +63,15 @@ def GetResult(driver):
                 '40:A',
                 'A:40'
             ]
-            if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
+            if config.score_actuel in passed_score or config.set_actuel == int(
+                    config.validated_bet.get('set')) + 1 or config.jeu_actuel == int(
+                config.validated_bet.get('jeu')) + 1:
                 matching_scores = [score for score in config.all_scores.values()
-                                   if int(score.get('set')) == int(config.validated_bet.get('set'))
+                                   if score.get('set') is not None
+                                   and config.validated_bet.get('set') is not None
+                                   and int(score.get('set')) == int(config.validated_bet.get('set'))
+                                   and score.get('jeu') is not None
+                                   and config.validated_bet.get('jeu') is not None
                                    and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
                                    and score.get('score') == config.validated_bet.get('winscore')]
                 if matching_scores:
@@ -86,9 +102,15 @@ def GetResult(driver):
                 'A:40'
             ]
 
-            if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
+            if config.score_actuel in passed_score or int(config.set_actuel) == int(
+                    config.validated_bet.get('set')) + 1 or int(config.jeu_actuel) == int(
+                config.validated_bet.get('jeu')) + 1:
                 matching_scores = [score for score in config.all_scores.values()
-                                   if int(score.get('set')) == int(config.validated_bet.get('set'))
+                                   if score.get('set') is not None
+                                   and config.validated_bet.get('set') is not None
+                                   and int(score.get('set')) == int(config.validated_bet.get('set'))
+                                   and score.get('jeu') is not None
+                                   and config.validated_bet.get('jeu') is not None
                                    and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
                                    and score.get('score') == config.validated_bet.get('winscore')]
                 if matching_scores:
@@ -116,9 +138,15 @@ def GetResult(driver):
                 'A:40',
                 '15:15'
             ]
-            if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
+            if config.score_actuel in passed_score or config.set_actuel == int(
+                    config.validated_bet.get('set')) + 1 or config.jeu_actuel == int(
+                config.validated_bet.get('jeu')) + 1:
                 matching_scores = [score for score in config.all_scores.values()
-                                   if int(score.get('set')) == int(config.validated_bet.get('set'))
+                                   if score.get('set') is not None
+                                   and config.validated_bet.get('set') is not None
+                                   and int(score.get('set')) == int(config.validated_bet.get('set'))
+                                   and score.get('jeu') is not None
+                                   and config.validated_bet.get('jeu') is not None
                                    and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
                                    and score.get('score') == config.validated_bet.get('winscore')]
                 if matching_scores:
@@ -133,11 +161,17 @@ def GetResult(driver):
             passed_score = [
                 '0:0'
             ]
-            if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
+            if config.score_actuel in passed_score or config.set_actuel == int(
+                    config.validated_bet.get('set')) + 1 or config.jeu_actuel == int(
+                config.validated_bet.get('jeu')) + 1:
                 # Check the last element in all_scores
                 # Filter scores for matching set and jeu, excluding 0:0 scores
                 matching_set_jeu_scores = {k: v for k, v in config.all_scores.items()
-                                           if int(v.get('set')) == int(config.validated_bet.get('set'))
+                                           if v.get('set') is not None
+                                           and v.get('jeu') is not None
+                                           and config.validated_bet.get('set') is not None
+                                           and config.validated_bet.get('jeu') is not None
+                                           and int(v.get('set')) == int(config.validated_bet.get('set'))
                                            and int(v.get('jeu')) == int(config.validated_bet.get('jeu'))
                                            and v.get('score') != '0:0'}
 
@@ -160,11 +194,17 @@ def GetResult(driver):
             passed_score = [
                 '0:0'
             ]
-            if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
+            if config.score_actuel in passed_score or config.set_actuel == int(
+                    config.validated_bet.get('set')) + 1 or config.jeu_actuel == int(
+                config.validated_bet.get('jeu')) + 1:
                 # Check the last element in all_scores
                 # Filter scores for matching set and jeu, excluding 0:0 scores
                 matching_set_jeu_scores = {k: v for k, v in config.all_scores.items()
-                                           if int(v.get('set')) == int(config.validated_bet.get('set'))
+                                           if v.get('set') is not None
+                                           and v.get('jeu') is not None
+                                           and config.validated_bet.get('set') is not None
+                                           and config.validated_bet.get('jeu') is not None
+                                           and int(v.get('set')) == int(config.validated_bet.get('set'))
                                            and int(v.get('jeu')) == int(config.validated_bet.get('jeu'))
                                            and v.get('score') != '0:0'}
 
@@ -191,11 +231,17 @@ def GetResult(driver):
                 result = 'LOSE'
                 config.log(result, config.newmatch)
                 return result
-            if config.score_actuel in passed_score or config.set_actuel == int(config.validated_bet.get('set')) + 1:
+            if config.score_actuel in passed_score or config.set_actuel == int(
+                    config.validated_bet.get('set')) + 1 or config.jeu_actuel == int(
+                config.validated_bet.get('jeu')) + 1:
                 # Check the last element in all_scores
                 # Filter scores for matching set and jeu, excluding 0:0 scores
                 matching_set_jeu_scores = {k: v for k, v in config.all_scores.items()
-                                           if int(v.get('set')) == int(config.validated_bet.get('set'))
+                                           if v.get('set') is not None
+                                           and v.get('jeu') is not None
+                                           and config.validated_bet.get('set') is not None
+                                           and config.validated_bet.get('jeu') is not None
+                                           and int(v.get('set')) == int(config.validated_bet.get('set'))
                                            and int(v.get('jeu')) == int(config.validated_bet.get('jeu'))
                                            and v.get('score') != '0:0'}
 
@@ -221,5 +267,5 @@ if __name__ == "__main__":
 
     config.scriptType = '030'
     GetBet(driver, True)
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.switch_to.window(driver.window_handles[0])
     GetResult(driver)

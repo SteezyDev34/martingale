@@ -39,15 +39,31 @@ def GetBet(driver, nextBet=False):
     location = canvas.location
     size = canvas.size
     if config.systeme == 'Darwin':
-        if config.scriptType == '300' or config.scriptType == '030':
+        if config.scriptType == '300':
             sautDeLigne = 50 * 3
+        elif config.scriptType == '030':
+            sautDeLigne = 50 * 4
+        elif config.scriptType == '30A' and nextBet:
+            sautDeLigne = 50 * 2
+        elif config.scriptType == '15A' and nextBet:
+            sautDeLigne = 50 * 2
+        elif config.scriptType == '30A' or config.scriptType == '15A':
+            sautDeLigne = 50 * 2
         else:
             sautDeLigne = 50
         decalageX = size['width'] / -2 + 50
     elif config.systeme == 'Windows':
         y = 0
-        if config.scriptType == '300' or config.scriptType == '030':
+        if config.scriptType == '300':
             sautDeLigne = 50 * 3
+        elif config.scriptType == '030':
+            sautDeLigne = 50 * 4
+        elif config.scriptType == '30A' and nextBet:
+            sautDeLigne = 50 * 5
+        elif config.scriptType == '15A' and nextBet:
+            sautDeLigne = 50 * 2
+        elif config.scriptType == '30A' or config.scriptType == '15A':
+            sautDeLigne = 50 * 2
         else:
             sautDeLigne = 68
         decalageX = -50

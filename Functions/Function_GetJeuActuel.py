@@ -8,10 +8,11 @@ from Functions.GetIfMatchPage import GetIfMatchPage
 
 
 def GetJeuActuel(driver):
+    savedjeu = config.jeu_actuel
     config.jeu_actuel = False
     tentative = 0
     while not config.jeu_actuel:
-        driver.switch_to.window(driver.window_handles[0])
+        # driver.switch_to.window(driver.window_handles[0])
         try:
             WebDriverWait(driver, 20).until(
                 EC.visibility_of_element_located((By.CLASS_NAME,
@@ -24,10 +25,12 @@ def GetJeuActuel(driver):
             tentative = tentative + 1
             if not GetIfMatchPage(driver):
                 config.error = True
+                config.jeu_actuel = savedjeu
                 return False
             else:
                 tentative = tentative + 1
                 if tentative == 5:
+                    config.jeu_actuel = savedjeu
                     config.error = True
                     return False
         else:
@@ -65,10 +68,12 @@ def GetJeuActuel(driver):
                         config.jeu_actuel[5].find_elements(By.CLASS_NAME, 'scoreboard-periods-table-cell--td')[1]
                     config.jeu_actuel = int(jeu_actuel_player1.text) + int(jeu_actuel_player2.text) + 1
                 else:
+                    config.jeu_actuel = savedjeu
                     return False
             except Exception as e:
                 config.log(f"#JEU0010\nUne erreur est survenue : {e}")
                 config.log("erreur : numjeu")
+                config.jeu_actuel = savedjeu
                 if not GetIfMatchPage(driver):
                     config.error = True
                     return False
@@ -86,6 +91,7 @@ def GetJeuActuel(driver):
                 else:
                     config.log(f"#JEUERR\nLe jeu actuel n'est pas un entier valide: {type(config.jeu_actuel)}")
                     config.error = True
+                    config.jeu_actuel = savedjeu
                     return False
 
     return False

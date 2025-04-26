@@ -75,14 +75,6 @@ def FirstGameBet(driver):
             # VÉRIFICATION DU SCORE ACTUEL
             tentative = tentative + 1
             GetScoreActuel(driver)
-            if config.score_actuel == "0:0" and not config.game_start:
-                config.log('        GAME NOT START', 1)
-            elif config.score_actuel == "0:0" and config.game_start:
-                config.log('GAME PASS WITHOUT VALIDATE ON FIRST', '', 2)
-                break
-            else:
-                config.game_start = True
-                config.log('FIRST GAME START', '', 2)
             if ValidationDuParis(driver, nextBet):
                 validate_bet = True
                 bet_40a = True
@@ -93,6 +85,6 @@ def FirstGameBet(driver):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.switch_to.window(driver.window_handles[0])
 
     print(FirstGameBet(driver))
