@@ -76,10 +76,15 @@ else:
 is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
 if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
     config.in_stat = True
+config.scriptTypeList = ['030', '4P', '5P', '6P']
+config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
+config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
 
 while (config.win < 100):
+    print(config.scriptTypeList)
+
     try:
         Functions_431a.all_script(driver)
     except Exception as e:
@@ -88,7 +93,7 @@ while (config.win < 100):
         if config.perte > 0:
             DispatchPerte()
         for i in config.scriptTypeList:
-            config.switchScript('4315A')
+            config.switchScript('456')
             config.ScriptConfig(i).reset()
         sucess = False
         while not sucess:

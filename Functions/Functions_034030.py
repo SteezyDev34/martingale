@@ -40,7 +40,7 @@ def all_script(driver):
         newmatchFromUrl(driver)
     if config.error:
         return False
-    for scriptType in config.scriptTypeList:
+    for scriptType in config.scriptTypeList2:
         config.switchScript(scriptType)
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
         getGlobalPerte()
@@ -50,7 +50,7 @@ def all_script(driver):
         config.error = True
     firstjeu = True
     current_game = int(config.jeu_actuel)
-    for scriptType in config.scriptTypeList:
+    for scriptType in config.scriptTypeList2:
         config.switchScript(scriptType)
         ##PREPARATTION PREMIER PARIS
         FirstGameBet(driver)
@@ -74,7 +74,7 @@ def all_script(driver):
                 txtlog = "attente 30 sec"
                 print(txtlog)
                 config.log(txtlog, config.newmatch)
-                for scriptType in config.scriptTypeList:
+                for scriptType in config.scriptTypeList2:
                     config.switchScript(scriptType)
                     config.result = GetResult(driver)
                     if config.result == 'WIN':
@@ -134,12 +134,12 @@ def all_script(driver):
         config.log(txtlog, config.newmatch)
         passageset = False
         current_game = int(config.jeu_actuel)
-        for scriptType in config.scriptTypeList:
+        for scriptType in config.scriptTypeList2:
             config.switchScript(scriptType)
             # Check if all script types have global_match_win > 1
-            all_below_one = all(float(config.global_match_win[st]) > 1 for st in config.scriptTypeList)
+            all_below_one = all(float(config.global_match_win[st]) > 1 for st in config.scriptTypeList2)
             if all_below_one:
-                for st in config.scriptTypeList:
+                for st in config.scriptTypeList2:
                     config.log(f'Net profit: {config.global_match_win[st]}', 'success', False)
                 return True
             if float(config.global_match_win[scriptType]) < 1:
@@ -209,6 +209,10 @@ def all_script(driver):
                     DeleteBet(driver)
                     txtlog = 'Wait 30 sec'
                     config.log(txtlog, config.newmatch)
+                    for s in config.scriptTypeList2:
+                        config.switchScript(s)
+                        if s in ['15A', '30A', '300', '030']:
+                            config.perte = config.perte - config.mise
                     time.sleep(30)
                     break
                 else:
@@ -233,7 +237,7 @@ def all_script(driver):
                     config.log(f'Net profit: {config.global_match_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
 
-    for scriptType in config.scriptTypeList:
+    for scriptType in config.scriptTypeList2:
         config.switchScript(scriptType)
         DispatchPerte()
         config.global_match_win[scriptType] = 0  # Initialize win counter for script type

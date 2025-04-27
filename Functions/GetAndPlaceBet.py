@@ -14,6 +14,13 @@ def GetAndPlaceBet(driver):
     while not bet_40a and not config.error:
         GetScoreActuel(driver)
         config.looking_game = int(config.jeu_actuel) + 1
+        if config.scriptType == '40A':
+            if config.score_actuel != "40:40" and config.score_actuel != "A:40" and config.score_actuel != "40:A":
+                if config.jeu_actuel != int(config.validated_bet.get('jeu')):
+                    config.looking_game = int(config.jeu_actuel)
+        if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400' or config.scriptType == '4P' or config.scriptType == '5P' or config.scriptType == '6P':
+            if config.jeu_actuel != int(config.validated_bet.get('jeu')):
+                config.looking_game = int(config.jeu_actuel)
         if not config.game_start and config.score_actuel != "0:0":
             config.game_start = True
         elif config.score_actuel == "0:0" and config.game_start:

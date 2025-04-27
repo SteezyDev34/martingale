@@ -17,8 +17,6 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
 scriptTypeList = ['15A', '300', '30A', '40A']
-scriptTypeList2 = ['030', '6P', '4030']
-scriptTypeList3 = ['4P', '5P', '4015']
 
 # Script configuration
 script_num = 0  # Numéro du Script
@@ -413,7 +411,7 @@ def log_clear_line(line_number=1):
             continue
     else:
         # Délai pour éviter les problèmes d'affichage
-        time.sleep(2)
+        time.sleep(0.5)
         for _ in range(line_number):
             # Remonte d'une ligne et l'efface
             # sys.stdout.write("clear\n")

@@ -15,15 +15,9 @@ def GetResult(driver):
     config.saved_set = ""
     timesleep = 1  # TEMPS D'ATTENTE AVANT DE RECUPERER LE SCORE PASSE À 1 SI 40 DANS LE SCORE
     result = False
-    print('is error ', config.error)
-    print('is result ', result)
-    print('jeu ', config.jeu_actuel)
-    print('set ', config.set_actuel)
-    print('scriptype ', config.scriptType)
     while not result and not config.error:
         time.sleep(timesleep)
         GetScoreActuel(driver)
-        print('wait resukt')
         if config.scriptType == "40A":
             passed_score = [
                 '0:0',
@@ -225,7 +219,17 @@ def GetResult(driver):
                 return result
         elif config.scriptType == '400':
             passed_score = [
-                '0:0'
+                '0:0',
+                '15:15',
+                '30:15',
+                '15:30',
+                '30:30',
+                '40:15',
+                '15:40',
+                '40:30',
+                '30:40',
+                '40:40',
+
             ]
             if config.score_actuel == '40:15' or config.score_actuel == '15:40' or config.score_actuel == '40:30' or config.score_actuel == '30:40':
                 result = 'LOSE'
