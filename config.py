@@ -417,4 +417,4 @@ def log_clear_line(line_number=1):
             # sys.stdout.write("clear\n")
             pass
             # sys.stdout.write("\033[F\033[K\r")
-            sys.stdout.flush()
+            # sys.stdout.flush()
