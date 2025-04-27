@@ -29,7 +29,7 @@ def main(bet_ligue):
 def fromUrl(driver):
     get_url = driver.current_url
     # print(" url = "+get_url)
-    get_url = get_url.split('tennis/')
+    get_url = get_url.split('basketball/')
     get_url = get_url[1].split('/')
     get_url = get_url[0]
     get_url = get_url.split('-')

@@ -4,36 +4,18 @@ import config
 from Functions.AfficherParis import AfficherParis
 from Functions.GetBet import GetBet
 from Functions.GetMise import GetMise
-from Functions.GetScoreActuel import GetScoreActuel
+from Functions.GetScoreActuel import GetQTScoreActuel
 from Functions.PlacerMise import PlacerMise
 from Functions.ValidationDuParis import ValidationDuParis
 
 
-def FirstGameBet(driver):
+def FirstQTBet(driver):
     config.log('PREPARATTION PREMIER PARIS', 'title', False, 0)
-    config.newset = int(config.set_actuel) + 1
-    bet_40a = False
+    bet_qt = False
     tentative = 0
     nextBet = False
-    while not bet_40a and not config.error and tentative < 3:
-        GetScoreActuel(driver)
-        config.looking_game = int(config.jeu_actuel)
-        if config.scriptType == '30A':
-            if config.score_actuel != "0:0" and config.score_actuel != "0:15" and config.score_actuel != "15:0" and config.score_actuel != "15:15":
-                config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
-                nextBet = True
-                config.looking_game = int(config.jeu_actuel) + 1
-        elif config.scriptType == '15A' or config.scriptType == '400' or config.scriptType == '030' or config.scriptType == '300' or config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
-            if config.score_actuel != "0:0":
-                config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
-                nextBet = True
-                config.looking_game = int(config.jeu_actuel) + 1
-        elif config.scriptType == '40A':
-            if config.score_actuel == "40:40" or config.score_actuel == "A:40" or config.score_actuel == "40:A":
-                config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
-                nextBet = True
-                config.looking_game = int(config.jeu_actuel) + 1
-
+    while not bet_qt and not config.error and tentative < 3:
+        GetQTScoreActuel(driver)
         if not AfficherParis(driver):
             current_frame = inspect.currentframe()
             config.log(
@@ -74,7 +56,7 @@ def FirstGameBet(driver):
         while not validate_bet and not config.error and tentative < 3:
             # VÉRIFICATION DU SCORE ACTUEL
             tentative = tentative + 1
-            GetScoreActuel(driver)
+            GetQTScoreActuel(driver)
             if config.score_actuel == "0:0" and not config.game_start:
                 config.log('        GAME NOT START', 1)
             elif config.score_actuel == "0:0" and config.game_start:
@@ -85,7 +67,7 @@ def FirstGameBet(driver):
                 config.log('FIRST GAME START', '', 2)
             if ValidationDuParis(driver, nextBet):
                 validate_bet = True
-                bet_40a = True
+                bet_qt = True
             else:
                 break
 
@@ -93,6 +75,4 @@ def FirstGameBet(driver):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    driver.switch_to.window(driver.window_handles[0])
-
-    print(FirstGameBet(driver))
+    print(FirstQTBet(driver))

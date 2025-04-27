@@ -5,25 +5,20 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 import config
-from Functions.Function_GetSetActuel import GetSetActuel
+from Functions.Function_GetSetActuel import GetQTActuel
 from Functions.GetIfMatchPage import GetIfMatchPage
-from Functions.GetScoreActuel import GetScoreActuel
+from Functions.GetScoreActuel import GetQTScoreActuel
 from Functions.ModalHandler import ModalHandler
 
 
 def AfficherParis(driver):
     config.log('recherche du champ déroulant...', '', True, 2)
-    driver.switch_to.window(driver.window_handles[0])
-    GetSetActuel(driver)
-    GetScoreActuel(driver)
+    GetQTActuel(driver)
+    GetQTScoreActuel(driver)
     selection = False
     tentative = 1
     clic = False
-    key = 'Paris'
-    if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
-        key = 'Score du Jeu.'
-    elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
-        key = 'Nombre exact de points dans un jeu'
+    key = '1X2'
     while not selection and tentative < 6:
         try:
             element = WebDriverWait(driver, 5).until(
@@ -70,14 +65,14 @@ def AfficherParis(driver):
                                 config.log(f'tentative {tentative}', 'warning', False, 2)
 
                             else:
-                                if str(config.set_actuel) == "1":
+                                if str(config.qt_actuel) == "1":
                                     theset = "1er"
                                 else:
-                                    theset = str(config.set_actuel) + "ème"
+                                    theset = str(config.qt_actuel) + "ème"
                                 if select_option_text.strip().lower() == str(
-                                        theset).lower() + ' set Evénements rapides'.lower():
+                                        theset).lower() + ' quart-temps'.lower():
                                     config.log('            Lien ' + select_option_text.lower() + ' = ' + str(
-                                        theset).lower() + ' set Evénements rapides'.lower(), 'warning', True, 2)
+                                        theset).lower() + ' quart-temps'.lower(), 'warning', True, 2)
                                     try:
                                         select_option.click()
                                     except Exception as e:
@@ -120,7 +115,7 @@ def AfficherParis(driver):
                                                 selection = True
                                 else:
                                     config.log('Lien ' + select_option_text.lower() + ' > ' + str(
-                                        theset).lower() + ' set Evénements rapides'.lower(), 'warning', True, 2)
+                                        theset).lower() + ' quart-temps'.lower(), 'warning', True, 2)
                         return selection
     return selection
 

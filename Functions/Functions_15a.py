@@ -5,8 +5,8 @@ import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName, AddRunning
 from Functions.DeleteBet import DeleteBet
-from Functions.FisrtGameBet import FirstGameBet
-from Functions.Function_GetJeuActuel import GetJeuActuel
+from Functions.FisrtQTBet import FirstGameBet
+from Functions.Function_GetQTScoreActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetAndPlaceBet import GetAndPlaceBet
