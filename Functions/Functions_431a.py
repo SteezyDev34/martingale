@@ -145,9 +145,9 @@ def all_script(driver):
                 return True
             if float(config.global_match_win[scriptType]) < 1:
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
-            elif int(config.nb_tour) <= int(config.winmatch[scriptType]):
+            else:
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
-                config.log(f'Nombre de tour {scriptType} atteint: {config.nb_tour}')
+                config.log(f"FIN {config.scriptType}", 'success', False)
                 continue
             if config.jeu_actuel == 13:
                 config.log('Tie break en cours attente début')
@@ -182,6 +182,8 @@ def all_script(driver):
             else:
                 GetAndPlaceBet(driver)
                 print(config.global_match_win)
+            if config.scriptType in ['40A', '4P', '5P', '6P', '400', '4030', '4015']:
+                GetIfGameStart(driver)
             config.result = GetResult(driver)
             if config.result == 'LOSE':
                 # VÉRIFCATION DU SET ACTUEL
