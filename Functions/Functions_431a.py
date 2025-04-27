@@ -16,6 +16,7 @@ from Functions.GetJsonData import DispatchPerte, getGlobalPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
+from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.ValidationDuParis import ValidationDuParis
 from Functions.VerificationMatchTrouve import newmatchFromUrl
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
@@ -27,9 +28,9 @@ def all_script(driver):
     scriptDelRunning()
     # --------
     # SCRIPT RECHERCHE DE MATCH
-    """ while not rechercheDeMatch(driver) and not config.error:
+    while not rechercheDeMatch(driver) and not config.error:
         config.log('Erreur lors de la recherche de match!', 'error', False, 2)
-    """
+
     # --------
     config.match_found = True
     if config.match_found and not config.error:
