@@ -407,11 +407,11 @@ def log_clear_line(line_number=1):
     if os.getenv('PYCHARM_HOSTED') == '1':  # Si exécuté dans PyCharm
         # Simple écriture de lignes vides pour PyCharm
         for _ in range(line_number):
+            time.sleep(0.5)
             # sys.stdout.write("clear\n")
             continue
     else:
         # Délai pour éviter les problèmes d'affichage
-        time.sleep(0.5)
         for _ in range(line_number):
             # Remonte d'une ligne et l'efface
             # sys.stdout.write("clear\n")
