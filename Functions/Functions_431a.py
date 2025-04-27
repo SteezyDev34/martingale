@@ -233,8 +233,9 @@ def all_script(driver):
                 else:
                     config.log(f'Net profit: {config.global_match_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
-
+    config.switchScript('4315A')
     for scriptType in config.scriptTypeList:
+        config.ScriptConfig(scriptType).reset()
         config.switchScript(scriptType)
         DispatchPerte()
         config.global_match_win[scriptType] = 0  # Initialize win counter for script type
