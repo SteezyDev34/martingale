@@ -232,11 +232,9 @@ def all_script(driver):
                     m = 0 - config.perte
                     SendGlobalPerte(config.scriptType, m)
                     config.perte = float(infosperte['perte'])
+            config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
-            if float(config.global_match_win) < 1:
-                print('continue')
-                continue
-            elif config.nb_tour <= winmatch:
+            if config.nb_tour <= winmatch:
                 print('fin de match')
                 break
     if config.perte > 0.2:

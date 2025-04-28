@@ -48,16 +48,16 @@ def all_script(driver):
         infosperte = getGlobalPerte()
         print("PERTE : ")
         if infosperte and config.perte == 0:
-            if float(infosperte['perte']) > 1:
-                SendGlobalPerte(config.scriptType, -1)
-                config.perte = 1
+            if float(infosperte['perte']) > 20:
+                SendGlobalPerte(config.scriptType, -20)
+                config.perte = 20
                 config.rattrape_perte = 1
-            elif float(infosperte['perte']) <= 0.2:
+            elif float(infosperte['perte']) <= 20:
                 config.perte = float(infosperte['perte'])
                 m = 0 - config.perte
                 SendGlobalPerte(config.scriptType, m)
                 config.perte = float(infosperte['perte'])
-            config.rattrape_perte = 1
+        config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
     GetScoreActuel(driver)
     config.saved_set = config.set_actuel
@@ -182,21 +182,18 @@ def all_script(driver):
             infosperte = getGlobalPerte()
             print("PERTE : ")
             if infosperte:
-                if float(infosperte['perte']) > 1:
-                    SendGlobalPerte(config.scriptType, -1)
-                    config.perte = 1
+                if float(infosperte['perte']) > 20:
+                    SendGlobalPerte(config.scriptType, -20)
+                    config.perte = 20
                     config.rattrape_perte = 1
-                elif float(infosperte['perte']) <= 0.2:
+                elif float(infosperte['perte']) <= 20:
                     config.perte = float(infosperte['perte'])
                     m = 0 - config.perte
                     SendGlobalPerte(config.scriptType, m)
                     config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
-            if float(config.global_match_win) < 1:
-                print('continue')
-                continue
-            elif config.nb_tour <= winmatch:
+            if config.nb_tour <= winmatch:
                 print('fin de match')
                 break
     if config.perte > 0.2:
