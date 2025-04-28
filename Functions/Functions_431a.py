@@ -184,7 +184,10 @@ def all_script(driver):
                 print(config.global_match_win)
             if config.scriptType in ['40A', '4P', '5P', '6P', '400', '4030', '4015']:
                 GetIfGameStart(driver)
-            config.result = GetResult(driver)
+            if config.looking_game == config.jeu_actuel:
+                config.result = 'LOSE'
+            else:
+                config.result = GetResult(driver)
             if config.result == 'LOSE':
                 # VÉRIFCATION DU SET ACTUEL
                 GetScoreActuel(driver)
@@ -212,7 +215,6 @@ def all_script(driver):
                     DeleteBet(driver)
                     txtlog = 'Wait 30 sec'
                     config.log(txtlog, config.newmatch)
-                    time.sleep(30)
                     break
                 else:
                     print("ERROR : ecup set " + str(config.set_actuel))
