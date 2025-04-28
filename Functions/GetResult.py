@@ -52,9 +52,9 @@ def GetResult(driver):
                 '0:0'
             ]
         if config.scriptType == "40A" or config.scriptType == "30A" or config.scriptType == "15A" or config.scriptType == '030' or config.scriptType == '300':
-            if config.score_actuel in passed_score or config.set_actuel == int(
-                    config.validated_bet.get('set')) + 1 or config.jeu_actuel == int(
-                config.validated_bet.get('jeu')) + 1:
+            if config.score_actuel in passed_score or config.set_actuel != int(
+                    config.validated_bet.get('set')) or config.jeu_actuel != int(
+                config.validated_bet.get('jeu')):
                 matching_scores = [score for score in config.all_scores.values()
                                    if score.get('set') is not None
                                    and config.validated_bet.get('set') is not None
@@ -73,8 +73,8 @@ def GetResult(driver):
                 return result
         elif config.scriptType == '400' or config.scriptType == '4030' or config.scriptType == '4015':
 
-            if config.score_actuel in passed_score or config.set_actuel == int(
-                    config.validated_bet.get('set')) + 1 or config.jeu_actuel == int(
+            if config.score_actuel in passed_score or config.set_actuel != int(
+                    config.validated_bet.get('set')) + 1 or config.jeu_actuel != int(
                 config.validated_bet.get('jeu')) + 1:
                 # Check the last element in all_scores
                 # Filter scores for matching set and jeu, excluding 0:0 scores
@@ -103,9 +103,9 @@ def GetResult(driver):
                     config.log(result, 'error', False, 2)
                 return result
         elif config.scriptType == '4P' or config.scriptType == '6P' or config.scriptType == '5P':
-            if config.score_actuel in passed_score or config.set_actuel == int(
-                    config.validated_bet.get('set')) + 1 or config.jeu_actuel == int(
-                config.validated_bet.get('jeu')) + 1:
+            if config.score_actuel in passed_score or config.set_actuel != int(
+                    config.validated_bet.get('set')) or config.jeu_actuel != int(
+                config.validated_bet.get('jeu')):
                 # Check the last element in all_scores
                 # Filter scores for matching set and jeu, excluding 0:0 scores
                 matching_set_jeu_scores = {k: v for k, v in config.all_scores.items()
