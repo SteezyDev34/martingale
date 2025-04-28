@@ -70,6 +70,7 @@ for i in config.scriptTypeList:
 confirmation = input(f"Classement ? (Y/N): ")
 
 if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
+    config.switchScript(config.scriptTypeList[0])
     classementeDeMatch(driver)
 
 # Call the function to get the code
