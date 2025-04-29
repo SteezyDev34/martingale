@@ -62,6 +62,7 @@ validated_bet = {}  # Dictionnaire pour stocker les paris validés
 ligue_name = ""
 match_Url = ""
 newmatch = ""
+match_end = False
 proba40A = 0
 saved_set = ""
 set_actuel = ""

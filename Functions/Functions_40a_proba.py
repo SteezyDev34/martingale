@@ -69,7 +69,7 @@ def all_script(driver):
     passageset = False
     winmatch = 0
     config.lose = False
-    while not config.error:
+    while not config.error and not config.match_end:
         GetJeuActuel(driver)
         # WAIT FOR GAME START
         if passageset:
@@ -158,6 +158,8 @@ def all_script(driver):
         txtlog = "JEU COMMENCÉ ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)
         passageset = False
+        if config.match_end:
+            break
         GetAndPlaceBet(driver)
         result = GetResult(driver)
 
@@ -240,6 +242,8 @@ def all_script(driver):
             elif config.nb_tour <= winmatch:
                 print('fin de match')
                 break
+        if config.match_end:
+            break
     if config.perte > 0.2:
         DispatchPerte()
     config.global_match_win = 0
