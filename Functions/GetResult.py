@@ -16,6 +16,7 @@ def GetResult(driver):
     timesleep = 1  # TEMPS D'ATTENTE AVANT DE RECUPERER LE SCORE PASSE À 1 SI 40 DANS LE SCORE
     result = False
     while not result and not config.error:
+        getresult = False
         time.sleep(timesleep)
         GetScoreActuel(driver)
         if config.scriptType == "40A" or config.scriptType == '40:30' or config.scriptType == '6P':
@@ -52,9 +53,16 @@ def GetResult(driver):
                 '0:0'
             ]
         if config.scriptType == "40A" or config.scriptType == "30A" or config.scriptType == "15A" or config.scriptType == '030' or config.scriptType == '300':
-            if config.score_actuel in passed_score or config.set_actuel != int(
-                    config.validated_bet.get('set')) or config.jeu_actuel != int(
-                config.validated_bet.get('jeu')):
+            if config.score_actuel in passed_score:
+                print('passed score', passed_score)
+                getresult = True
+            if int(config.set_actuel) != int(config.validated_bet.get('set')):
+                print('set actuel différent', config.validated_bet.get('set'))
+                getresult = True
+            if config.jeu_actuel != int(config.validated_bet.get('jeu')):
+                print('jeu actuel différent', config.validated_bet.get('set'))
+                getresult = True
+            if getresult:
                 matching_scores = [score for score in config.all_scores.values()
                                    if score.get('set') is not None
                                    and config.validated_bet.get('set') is not None
@@ -71,6 +79,8 @@ def GetResult(driver):
                     result = 'LOSE'
                     config.log(result, 'error', False, 2)
                 return result
+            else:
+                print('pas de condition de resulat')
         elif config.scriptType == '400' or config.scriptType == '4030' or config.scriptType == '4015':
 
             if config.score_actuel in passed_score or config.set_actuel != int(

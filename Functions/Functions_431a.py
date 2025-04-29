@@ -138,6 +138,7 @@ def all_script(driver):
         current_game = int(config.jeu_actuel)
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
+            print('passage prochain script')
             # Check if all script types have global_match_win > 1
             all_below_one = all(float(config.global_match_win[st]) >= 1 for st in config.scriptTypeList)
             if all_below_one:

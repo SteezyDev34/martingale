@@ -1,5 +1,7 @@
+import json
 import re
 
+import requests
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -8,6 +10,67 @@ import config
 from Functions.DeleteBet import DeleteBet
 from Functions.ModalHandler import ModalHandler
 from Functions.PlacerMise import PlacerMise
+
+
+def SendBetData():
+    """
+    Envoie les données du pari à l'API.
+    
+    Args:
+        coupon_number (str): Numéro du coupon
+        cote_globale (str): Cote globale du pari
+        type_pari (str): Type de pari
+        mise (float): Montant de la mise
+        gains_potentiels (float): Gains potentiels
+        match_details (dict): Détails du match (équipes, ligue)
+        cote (str): Cote du pari
+        statut (str): Statut du pari
+        script (str): Type de script
+        
+    Returns:
+        bool: True si l'envoi a réussi, False sinon
+    """
+
+    # Construction de l'URL de l'API
+    url = "http://p-com.studio/api/insert_paris.php"
+
+    try:
+        # Préparation des données à envoyer en POST
+        data = {
+            'coupon_number': 0,
+            'type_pari': config.win_type,
+            'mise': config.mise,
+            'gains_potentiels': config.netprofit,
+            'match_details': json.dumps({'teams': config.teams, 'league': config.ligue_name}),
+            'cote': config.cote,
+            'script': config.scriptType
+        }
+
+        # Envoi de la requête POST avec les données
+        response = requests.post(url, data=data)
+
+        # Vérifier que la requête a réussi
+        response.raise_for_status()
+
+        # Parser le JSON depuis la réponse
+        result = response.json()
+
+        if result['status'] == "success":
+            print(f"✅ Paris enregistré avec succès (ID: {result['id']})")
+            return True
+        else:
+            print(f"❌ Erreur lors de l'enregistrement : {result['message']}")
+            return False
+
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Erreur lors de la requête HTTP : {e}")
+        return False
+    except json.JSONDecodeError as e:
+        print(f"❌ Erreur lors du parsing du JSON : {e}")
+        return False
+    except Exception as e:
+        print(f"❌ Erreur inattendue : {e}")
+        return False
 
 
 def ValidationDuParis(driver, nexbet=False):
@@ -104,6 +167,7 @@ def ValidationDuParis(driver, nexbet=False):
     if validation:
         # Store bet information in validated_bet variable
         from datetime import datetime
+        SendBetData()
         current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         config.validated_bet = {
             'montant': config.mise,
