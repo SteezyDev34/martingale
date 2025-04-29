@@ -10,6 +10,7 @@ import config
 # VÉRIFIERR SI PAGE DE MATCH
 def GetIfMatchPage(driver):
     # driver.switch_to.window(driver.window_handles[0])
+    config.match_end = False
     try:
         WebDriverWait(driver, 2).until(
             EC.presence_of_element_located(
