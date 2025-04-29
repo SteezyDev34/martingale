@@ -23,7 +23,7 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def all_script(driver):
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.switch_to.window(driver.window_handles[0])
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
     # --------
@@ -44,7 +44,8 @@ def all_script(driver):
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
-        getGlobalPerte()
+        if config.perte == 0:
+            getGlobalPerte()
         # END RECHERCHE INFOS DE MISE
     GetScoreActuel(driver)
     if not config.set_actuel:

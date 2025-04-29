@@ -10,7 +10,7 @@ from config import matchlist_file_name
 
 
 def selection_des_paris_du_set(driver, set):
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.switch_to.window(driver.window_handles[0])
     print('recherche du champ déroulant...')
     selection = False
     tentative = 0

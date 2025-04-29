@@ -302,6 +302,6 @@ def ValidationDuParis4030(driver, mise):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.switch_to.window(driver.window_handles[0])
     config.mise = 0.2
     ValidationDuParis(driver)

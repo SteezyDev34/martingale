@@ -1,9 +1,11 @@
 import config
 from Functions.AfficherParis import AfficherParis
+from Functions.FisrtGameBet import FirstGameBet
 from Functions.GetBet import GetBet
 from Functions.GetMise import GetMise
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.PlacerMise import PlacerMise
+from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def GetAndPlaceBet(driver):
@@ -13,21 +15,25 @@ def GetAndPlaceBet(driver):
     config.game_start = False
     while not bet_40a and not config.error:
         GetScoreActuel(driver)
-        config.looking_game = int(config.jeu_actuel) + 1
+        if config.scriptType == '15A' or config.scriptType == '300' or config.scriptType == '030':
+            if config.score_actuel == '0:0':
+                if config.jeu_actuel != int(config.validated_bet.get('jeu')):
+                    FirstGameBet(driver)
+        if config.scriptType == '30A':
+            if config.score_actuel == '0:0' or config.score_actuel == '15:15' or config.score_actuel == '15:0' or config.score_actuel == '0:15':
+                if config.jeu_actuel != int(config.validated_bet.get('jeu')):
+                    FirstGameBet(driver)
         if config.scriptType == '40A':
             if config.score_actuel != "40:40" and config.score_actuel != "A:40" and config.score_actuel != "40:A":
                 if config.jeu_actuel != int(config.validated_bet.get('jeu')):
-                    config.looking_game = int(config.jeu_actuel)
+                    FirstGameBet(driver)
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400' or config.scriptType == '4P' or config.scriptType == '5P' or config.scriptType == '6P':
             if config.jeu_actuel != int(config.validated_bet.get('jeu')):
-                config.looking_game = int(config.jeu_actuel)
-        if not config.game_start and config.score_actuel != "0:0":
-            config.game_start = True
-        elif config.score_actuel == "0:0" and config.game_start:
-            print('NEXT GAME START SPEED UP!!!!!')
-            config.looking_game = int(config.jeu_actuel)
-
+                FirstGameBet(driver)
+        config.looking_game = int(config.jeu_actuel) + 1
         config.log(f'jeu recherhcé : {config.looking_game}', 'info', True)
+
+        RetourTpsReg(driver)
         # Affichage de la liste des paris
         config.log('Affichage de la liste des paris', config.newmatch)
         if not AfficherParis(driver):

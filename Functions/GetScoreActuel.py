@@ -58,5 +58,5 @@ def record_scores(driver):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.switch_to.window(driver.window_handles[0])
     GetScoreActuel(driver)

@@ -12,7 +12,7 @@ def GetSetActuel(driver):
     # config.log('Récupératon du set actuel', '', False, 3)
     # config.log_clear_line()
     try:
-        driver.switch_to.window(driver.window_handles[0])
+        # driver.switch_to.window(driver.window_handles[0])
         WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CLASS_NAME,
                                               'ui-game-timer__label'))

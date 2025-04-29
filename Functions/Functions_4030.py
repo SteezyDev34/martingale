@@ -22,7 +22,7 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def all_script(driver):
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.switch_to.window(driver.window_handles[0])
     result = False
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()

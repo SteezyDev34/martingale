@@ -10,10 +10,10 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 def GetIfGameStart(driver):
     config.game_start = False
     printext = False
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.switch_to.window(driver.window_handles[0])
     RetourTpsReg(driver)
     while not config.game_start and not config.error:
-        driver.switch_to.window(driver.window_handles[0])
+        # driver.switch_to.window(driver.window_handles[0])
         GetScoreActuel(driver)
         config.saved_score = config.saved_score
         if config.score_actuel == '0:0':
@@ -94,5 +94,5 @@ def GetIfGameEnd(driver):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    driver.switch_to.window(driver.window_handles[0])
+    # driver.switch_to.window(driver.window_handles[0])
     GetIfGameStart(driver)
