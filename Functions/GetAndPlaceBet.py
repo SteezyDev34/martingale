@@ -32,7 +32,8 @@ def GetAndPlaceBet(driver):
                 FirstGameBet(driver)
         config.looking_game = int(config.jeu_actuel) + 1
         config.log(f'jeu recherhcé : {config.looking_game}', 'info', True)
-
+        if int(config.looking_game) == 0:
+            config.looking_game = 1
         RetourTpsReg(driver)
         # Affichage de la liste des paris
         config.log('Affichage de la liste des paris', config.newmatch)
