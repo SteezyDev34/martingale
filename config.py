@@ -2,7 +2,6 @@ import datetime
 import json
 import os
 import platform
-import time
 from typing import Dict, Any, Optional
 
 import requests
@@ -407,7 +406,6 @@ def log_clear_line(line_number=1):
     if os.getenv('PYCHARM_HOSTED') == '1':  # Si exécuté dans PyCharm
         # Simple écriture de lignes vides pour PyCharm
         for _ in range(line_number):
-            time.sleep(0.5)
             # sys.stdout.write("clear\n")
             continue
     else:

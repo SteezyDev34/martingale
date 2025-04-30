@@ -32,12 +32,12 @@ def SendBetData():
     """
 
     # Construction de l'URL de l'API
-    url = "http://p-com.studio/api/insert_paris.php"
+    url = "https://p-com.studio/api/insert_paris.php"
 
     try:
         # Préparation des données à envoyer en POST
         data = {
-            'coupon_number': 0,
+            'coupon_number': '0',
             'type_pari': config.win_type,
             'mise': config.mise,
             'gains_potentiels': config.netprofit,
