@@ -25,6 +25,8 @@ def GetBet(driver, nextBet=False):
     elif config.scriptType == "15A":
         sType = " 15-15"
         config.win_type = '15:15'
+    if config.scriptType == "1SET":
+        sType = config.win_type
     tentative_clic = 0
     tentative = 0
     try:
@@ -51,7 +53,11 @@ def GetBet(driver, nextBet=False):
             sautDeLigne = 50 * 2
         else:
             sautDeLigne = 50
-        decalageX = size['width'] / -2 + 50
+
+        if config.scriptType == "1SET" and config.win_type == 'V2':
+            decalageX = size['width'] / 2 - 50
+        else:
+            decalageX = size['width'] / -2 + 50
     elif config.systeme == 'Windows':
         y = 0
         if config.scriptType == '300':
@@ -333,6 +339,15 @@ def GetBet(driver, nextBet=False):
                         sautDeLigne = sautDeLigne + 30
                         ligne = ligne + 1
                         # print('ligne ' + str(ligne))
+                elif config.scriptType == '1SET':
+                    list_of_newbet_type = list_of_bet_type.text
+                    print(list_of_newbet_type)
+
+                    # print('stype', sType)
+                    list_of_newbet_type = list_of_newbet_type.lower().split(sType.lower())
+                    if len(list_of_newbet_type) > 1:
+                        clic = True
+                        return clic
                 else:
                     # print('stype', sType)
                     list_of_newbet_type = list_of_newbet_type.lower().split(sType.lower() + " - Oui".lower())
@@ -387,5 +402,5 @@ def GetBet(driver, nextBet=False):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    config.scriptType = '030'
+    config.scriptType = '1SET'
     GetBet(driver, True)

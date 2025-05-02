@@ -1,7 +1,7 @@
 import time
 
 import config
-from Functions.GetBet import GetBet
+from Functions.Function_GetJeuActuel import GetSetScoreActuel
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
@@ -19,6 +19,11 @@ def GetResult(driver):
         getresult = False
         time.sleep(timesleep)
         GetScoreActuel(driver)
+        if not config.validated_bet:
+            result = 'LOSE'
+            config.log(result, 'error', False, 2)
+            return result
+
         if config.scriptType == "40A" or config.scriptType == '40:30' or config.scriptType == '6P':
             passed_score = ['0:0', '40:40', '40:A', 'A:40']
         elif config.scriptType == "30A":
@@ -79,8 +84,7 @@ def GetResult(driver):
                     result = 'LOSE'
                     config.log(result, 'error', False, 2)
                 return result
-            else:
-                print('pas de condition de resulat')
+
         elif config.scriptType == '400' or config.scriptType == '4030' or config.scriptType == '4015':
 
             if config.score_actuel in passed_score or config.set_actuel != int(
@@ -142,12 +146,33 @@ def GetResult(driver):
                     result = 'LOSE'
                     config.log(result, 'error', False, 2)
                 return result
+        elif config.scriptType == '1SET':
+            config.set_actuel = int(config.validated_bet.get('set'))
+            GetSetScoreActuel(driver)
+            if config.validated_bet.get('win') == 'V1' and config.score_actuel[0] > \
+                    config.score_actuel[1]:
+                print(config.score_actuel[0], config.score_actuel[1])
+                result = 'WIN'
+                config.log(f"Result: {result}", 'success', False, 2)
+            elif config.validated_bet.get('win') == 'V2' and config.score_actuel[0] < \
+                    config.score_actuel[1]:
+                result = 'WIN'
+                config.log(f"Result: {result}", 'success', False, 2)
+            else:
+                result = 'LOSE'
+                config.log(result, 'error', False, 2)
+
+            return result
 
 
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    config.scriptType = '030'
-    GetBet(driver, True)
+    config.scriptType = '1SET'
+    config.validated_bet = {
+        'set': 1,
+        'win': 'V2'
+    }
+    # GetBet(driver, True)
     # driver.switch_to.window(driver.window_handles[0])
     GetResult(driver)

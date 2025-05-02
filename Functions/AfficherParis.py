@@ -24,6 +24,8 @@ def AfficherParis(driver):
         key = 'Score du Jeu.'
     elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
         key = 'Nombre exact de points dans un jeu'
+    elif config.scriptType == '1SET':
+        key = '1X2'
     while not selection and tentative < 6:
         try:
             element = WebDriverWait(driver, 5).until(
@@ -74,8 +76,12 @@ def AfficherParis(driver):
                                     theset = "1er"
                                 else:
                                     theset = str(config.set_actuel) + "ème"
+                                if config.scriptType == '1SET':
+                                    args = ' set'
+                                else:
+                                    args = ' set Evénements rapides'
                                 if select_option_text.strip().lower() == str(
-                                        theset).lower() + ' set Evénements rapides'.lower():
+                                        theset).lower() + f'{args}'.lower():
                                     config.log('            Lien ' + select_option_text.lower() + ' = ' + str(
                                         theset).lower() + ' set Evénements rapides'.lower(), 'warning', True, 2)
                                     try:
@@ -120,7 +126,7 @@ def AfficherParis(driver):
                                                 selection = True
                                 else:
                                     config.log('Lien ' + select_option_text.lower() + ' > ' + str(
-                                        theset).lower() + ' set Evénements rapides'.lower(), 'warning', True, 2)
+                                        theset).lower() + f'{args}'.lower(), 'warning', True, 2)
                         return selection
     return selection
 
@@ -128,4 +134,5 @@ def AfficherParis(driver):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
+    config.scriptType = '1SET'
     AfficherParis(driver)

@@ -78,6 +78,18 @@ def all_script(driver):
                 config.log(txtlog, config.newmatch)
                 for scriptType in config.scriptTypeList:
                     config.switchScript(scriptType)
+                    # Check if all script types have global_match_win > 1
+                    all_below_one = all(float(config.global_match_win[st]) >= 1 for st in config.scriptTypeList)
+                    if all_below_one:
+                        for st in config.scriptTypeList:
+                            config.log(f'Net profit: {config.global_match_win[st]}', 'success', False)
+                        return True
+                    if float(config.global_match_win[scriptType]) < 1:
+                        config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                    else:
+                        config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                        config.log(f"FIN {config.scriptType}", 'success', False)
+                        continue
                     config.result = GetResult(driver)
                     if config.result == 'WIN':
                         config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
@@ -184,12 +196,9 @@ def all_script(driver):
             else:
                 GetAndPlaceBet(driver)
                 print(config.global_match_win)
-            if config.scriptType in ['40A', '4P', '5P', '6P', '400', '4030', '4015']:
-                GetIfGameStart(driver)
-            if config.looking_game == config.jeu_actuel:
-                config.result = 'LOSE'
-            else:
-                config.result = GetResult(driver)
+            if config.result == 'RUN':
+                continue
+            config.result = GetResult(driver)
             if config.result == 'LOSE':
                 # VÉRIFCATION DU SET ACTUEL
                 GetScoreActuel(driver)

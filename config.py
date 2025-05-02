@@ -81,6 +81,7 @@ result = False
 # File paths
 matchlist_file_name = ""
 matchlisttodo_file_name = ""
+matchlist1set_name = ""
 running_file_name = ""
 in_stat = False
 # Game variables
@@ -149,7 +150,7 @@ def init_variable():
     global mise, perte, wantwin, increment, probamini
     global running_file_name, matchlist_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
     global print_match_live_text, devMode, gain, netprofit, perte, placed_game, looking_game, saved_score
-    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result
+    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, matchlist1set_name
     config_global = ScriptConfig(scriptType)
 
     # Initialize variables from config
@@ -187,6 +188,7 @@ def init_variable():
     running_file_name = f"{projectPath}/SCRIPTS {scriptType}/running"
     matchlist_file_name = f"{projectPath}/SCRIPTS {scriptType}/matchlist"
     matchlisttodo_file_name = f"{projectPath}/matchlisttodo"
+    matchlist1set_name = f"{projectPath}/matchlist1set"
 
 
 def save_variables():
@@ -194,7 +196,7 @@ def save_variables():
     global mise, perte, wantwin, increment, probamini
     global running_file_name, matchlist_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
     global print_match_live_text, devMode, gain, netprofit, perte, placed_game, looking_game, saved_score
-    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result
+    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, matchlist1set_name
 
     """Save current variables state back to config"""
     config_global = ScriptConfig(scriptType)

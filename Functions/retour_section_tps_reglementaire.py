@@ -42,7 +42,7 @@ def RetourTpsReg(driver):
                 config.log("Erreur lors du clic sur le champ deroulant", config.newmatch)
                 tentative = tentative + 1
             else:
-                config.log("ouverture du champ déroulant...", 0, config.newmatch)
+                config.log("souverture du champ déroulant...", 0, config.newmatch)
                 time.sleep(1)
                 try:
                     element = WebDriverWait(driver, 5).until(

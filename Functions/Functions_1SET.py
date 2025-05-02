@@ -2,26 +2,25 @@ import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName, AddRunning
 from Functions.DeleteBet import DeleteBet
-from Functions.FisrtQTBet import FirstQTBet
-from Functions.Function_GetSetActuel import GetQTActuel
+from Functions.FisrtGameBet import FirstGameBet
+from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
-from Functions.GetIfGameStart import GetIfQTEnd, GetIfQTStart
+from Functions.GetIfGameStart import GetIfGameStart
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
-from Functions.ScriptRechercheDeMatch import rechercheDeMatch
+from Functions.GetScoreActuel import GetScoreActuel
+from Functions.ScriptRechercheDeMatch import rechercheDeMatch1set
 from Functions.VerificationMatchTrouve import newmatchFromUrl
-from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def all_script(driver):
-    driver.switch_to.window(driver.window_handles[0])
-    result = False
+    # driver.switch_to.window(driver.window_handles[0])
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
     # --------
     # SCRIPT RECHERCHE DE MATCH
-    while not rechercheDeMatch(driver) and not config.error:
+    while not rechercheDeMatch1set(driver) and not config.error:
         config.log('Erreur lors de la recherche de match!', 'error', False, 2)
 
     # --------
@@ -50,11 +49,11 @@ def all_script(driver):
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
         print('wintwin', config.wantwin)
-        GetQTActuel(driver)
+        GetSetActuel(driver)
         ##PREPARATTION PREMIER PARIS
-        FirstQTBet(driver)
+        FirstGameBet(driver)
 
-    GetIfQTStart(driver)
+    GetIfGameStart(driver)
     config.lose = False
     while not config.error:
         for scriptType in config.scriptTypeList:
@@ -72,25 +71,22 @@ def all_script(driver):
                 config.log(f'Nombre de tour {scriptType} atteint: {config.nb_tour}')
                 continue
             ##ATTENTE QUE LE QT SE TERMINE
-            GetIfQTEnd(driver)
-            txtlog = "QT TERMINÉ ON PREPARE LE PROCHAIN BET"
+            saved_set = config.set_actuel
+            while int(saved_set) == int(config.set_actuel):
+                GetScoreActuel(driver)
+            txtlog = "SET TERMINÉ ON VERIFIE LE SCORE"
             config.log(txtlog, config.newmatch)
-            result = GetResult(driver)
-            GetQTActuel(driver)
-            if result == 'LOSE':
-                FirstQTBet(driver)
-            elif result == 'WIN':
-                config.perte = 0
-                config.init_variable()
-                config.global_match_win = config.global_match_win + config.netprofit
-                DeleteBet(driver)
-                config.log(f'Net profit: {config.global_match_win}')
-                continue
+            config.result = GetResult(driver)
+        if config.result == 'LOSE':
+            DispatchPerte()
+        elif config.result == 'WIN':
+            config.perte = 0
+            config.init_variable()
+            config.global_match_win = config.global_match_win + config.netprofit
+            DeleteBet(driver)
+            config.log(f'Net profit: {config.global_match_win}')
+            continue
             ##PREPARATTION PREMIER PARIS
-
-        # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
-        RetourTpsReg(driver)
-        GetIfQTStart(driver)
 
     if config.perte > 0.2:
         DispatchPerte()

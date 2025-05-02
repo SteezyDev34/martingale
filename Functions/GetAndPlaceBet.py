@@ -13,27 +13,42 @@ def GetAndPlaceBet(driver):
     tentative = 0
     print('GetAndPlaceBet error', config.error)
     config.game_start = False
+    actual_scryptType = config.scriptType
     while not bet_40a and not config.error:
         GetScoreActuel(driver)
-        if config.scriptType == '15A' or config.scriptType == '300' or config.scriptType == '030':
-            if config.score_actuel == '0:0':
-                if config.jeu_actuel != int(config.validated_bet.get('jeu')):
+        print('verification du jeu actuel dans tous les script')
+        for scriptType in config.scriptTypeList:
+            config.switchScript(scriptType)
+            if float(config.global_match_win[scriptType]) < 1:
+                config.log(f'Net profit: {config.global_match_win[scriptType]}')
+            else:
+                config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                config.log(f"FIN {config.scriptType}", 'success', False)
+                continue
+            if config.scriptType == '15A' or config.scriptType == '300' or config.scriptType == '030':
+                if config.score_actuel == '0:0':
+                    if not config.validated_bet or config.jeu_actuel != int(config.validated_bet.get('jeu', -1)):
+                        FirstGameBet(driver)
+            if config.scriptType == '30A':
+                if config.score_actuel == '0:0' or config.score_actuel == '15:15' or config.score_actuel == '15:0' or config.score_actuel == '0:15':
+                    if not config.validated_bet or config.jeu_actuel != int(config.validated_bet.get('jeu')):
+                        FirstGameBet(driver)
+            if config.scriptType == '40A':
+                if config.score_actuel != "40:40" and config.score_actuel != "A:40" and config.score_actuel != "40:A":
+                    if not config.validated_bet or config.jeu_actuel != int(config.validated_bet.get('jeu')):
+                        FirstGameBet(driver)
+            if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400' or config.scriptType == '4P' or config.scriptType == '5P' or config.scriptType == '6P':
+                if not config.validated_bet or config.jeu_actuel != int(config.validated_bet.get('jeu')):
                     FirstGameBet(driver)
-        if config.scriptType == '30A':
-            if config.score_actuel == '0:0' or config.score_actuel == '15:15' or config.score_actuel == '15:0' or config.score_actuel == '0:15':
-                if config.jeu_actuel != int(config.validated_bet.get('jeu')):
-                    FirstGameBet(driver)
-        if config.scriptType == '40A':
-            if config.score_actuel != "40:40" and config.score_actuel != "A:40" and config.score_actuel != "40:A":
-                if config.jeu_actuel != int(config.validated_bet.get('jeu')):
-                    FirstGameBet(driver)
-        if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400' or config.scriptType == '4P' or config.scriptType == '5P' or config.scriptType == '6P':
-            if config.jeu_actuel != int(config.validated_bet.get('jeu')):
-                FirstGameBet(driver)
+        config.switchScript(actual_scryptType)
         config.looking_game = int(config.jeu_actuel) + 1
         config.log(f'jeu recherhcé : {config.looking_game}', 'info', True)
         if int(config.looking_game) == 0:
             config.looking_game = 1
+        elif int(config.looking_game) >= 13:
+            config.result = 'RUN'
+            return
+
         RetourTpsReg(driver)
         # Affichage de la liste des paris
         config.log('Affichage de la liste des paris', config.newmatch)
