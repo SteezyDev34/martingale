@@ -2,6 +2,7 @@ import time
 
 import config
 from Functions.Function_GetJeuActuel import GetSetScoreActuel
+from Functions.GetIfGameStart import GetIfGameStart
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
@@ -58,14 +59,17 @@ def GetResult(driver):
                 '0:0'
             ]
         if config.scriptType == "40A" or config.scriptType == "30A" or config.scriptType == "15A" or config.scriptType == '030' or config.scriptType == '300':
-            if config.score_actuel in passed_score:
-                print('passed score', passed_score)
-                getresult = True
             if int(config.set_actuel) != int(config.validated_bet.get('set')):
                 print('set actuel différent', config.validated_bet.get('set'))
                 getresult = True
-            if config.jeu_actuel != int(config.validated_bet.get('jeu')):
+            elif config.jeu_actuel != int(config.validated_bet.get('jeu')):
                 print('jeu actuel différent', config.validated_bet.get('set'))
+                getresult = True
+            elif config.jeu_actuel == int(config.validated_bet.get('jeu')):
+                print('jeu actuel similaire', config.validated_bet.get('set'))
+                GetIfGameStart(driver)
+            elif config.score_actuel in passed_score:
+                print('passed score', passed_score)
                 getresult = True
             if getresult:
                 matching_scores = [score for score in config.all_scores.values()

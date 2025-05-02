@@ -111,6 +111,8 @@ def all_script(driver):
                             config.log(f"FIN {config.scriptType}", 'success', False)
                             continue
                     else:
+                        firstjeu = True
+                        current_game = int(config.jeu_actuel)
                         FirstGameBet(driver)
             elif config.perte > 0:
                 DispatchPerte()
@@ -123,6 +125,8 @@ def all_script(driver):
                 if config.result != 'WIN':
                     time.sleep(30)
                 FirstGameBet(driver)
+                firstjeu = True
+                current_game = int(config.jeu_actuel)
             else:
                 current_frame = inspect.currentframe()
                 config.log(
@@ -218,6 +222,8 @@ def all_script(driver):
                             validate_bet = True
                         else:
                             FirstGameBet(driver)
+                            firstjeu = True
+                            current_game = int(config.jeu_actuel)
                 elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                     txtlog = " ON EST SUR LE PROCHAIN SET"
                     passageset = True
@@ -245,6 +251,8 @@ def all_script(driver):
                     config.log(f"Restart {config.scriptType}", 'success', False)
                     ##VALIDATION DU PARIS SI SCORE OK
                     FirstGameBet(driver)
+                    firstjeu = True
+                    current_game = int(config.jeu_actuel)
                 else:
                     config.log(f'Net profit: {config.global_match_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
