@@ -55,14 +55,14 @@ def all_script(driver):
                 config.perte = float(infosperte['perte'])
         config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
-
+    print('error ', config.error)
     GetSetActuel(driver)
     if not config.set_actuel:
         GetSetActuel(driver)
 
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
-
+    print('error', config.error)
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
     RetourTpsReg(driver)
     GetSetActuel(driver)
