@@ -69,7 +69,7 @@ def all_script(driver):
     passageset = False
     winmatch = 0
     config.lose = False
-    print('error', config.error)
+    print('error', config.match_end)
     while not config.error and not config.match_end:
         GetJeuActuel(driver)
         # WAIT FOR GAME START
