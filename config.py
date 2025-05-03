@@ -2,7 +2,6 @@ import datetime
 import json
 import os
 import platform
-import time
 from typing import Dict, Any, Optional
 
 import requests
@@ -279,7 +278,6 @@ def log(message, type="", clear=True, indent=0):
         color = RED
     else:
         color = RESET  # Pas de couleur par défaut
-    time.sleep(1)
     # Gestion de l'indentation
     indent = "    " * indent if indent > 0 else ""
     sys.stdout.write(f"{color}{indent}{message}{RESET}\n")
@@ -308,7 +306,6 @@ def log_clear_line(line_number=1):
             sys.stdout.write("clear\n")
     else:
         # Délai pour éviter les problèmes d'affichage
-        time.sleep(1)
         for _ in range(line_number):
             # Remonte d'une ligne et l'efface
             # sys.stdout.write("clear\n")

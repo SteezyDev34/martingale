@@ -9,10 +9,13 @@ parent_directory = os.path.dirname(current_file_path)
 # ajouter un autre niveau parent si nécessaire
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
-# Vérification de l'environnement
-import VenvDependencyManager
+if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
+    # Simple écriture de lignes vides pour PyCharm
 
-VenvDependencyManager.main()
+    # Vérification de l'environnement
+    import VenvDependencyManager
+
+    VenvDependencyManager.main()
 from art import *
 
 # Chargement des variables globales
@@ -53,7 +56,7 @@ else:
 
 # Chargement des functions
 # Chargement de Chrome driver
-from ChromeDriver.SetDriver import driver
+from ChromeDriver.SetDriver1 import driver
 
 from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
