@@ -56,7 +56,7 @@ else:
 
 # Chargement des functions
 # Chargement de Chrome driver
-from ChromeDriver.SetDriver1 import driver
+from ChromeDriver.SetDriver import driver
 
 from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
