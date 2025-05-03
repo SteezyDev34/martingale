@@ -140,7 +140,8 @@ def rechercheDeMatch(driver):
         else:
 
             config.log('MATCH TROUVE!', 'success', False, 2)
-            time.sleep(5)
+            config.match_end = False
+            time.sleep(3)
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE
     # END SCRIPT RECHERCHE DE MATCH
     return config.match_found
