@@ -58,14 +58,14 @@ def all_script(driver):
 
     GetSetActuel(driver)
     if not config.set_actuel:
-        config.error = True
+        GetSetActuel(driver)
 
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
 
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
     RetourTpsReg(driver)
-
+    GetSetActuel(driver)
     passageset = False
     winmatch = 0
     config.lose = False
@@ -174,7 +174,7 @@ def all_script(driver):
             GetSetActuel(driver)
 
             if not config.set_actuel:
-                config.error = True
+                GetSetActuel(driver)
             config.log('set ' + str(config.set_actuel) + ' - nex set ' + str(config.newset))
             if str(int(config.newset) - 1) == str(config.set_actuel):  ## si on est toujours sur le meme set
                 config.log('on est toujours sur le meme set', config.newmatch)
