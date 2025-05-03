@@ -91,6 +91,7 @@ def all_script(driver):
                 if result != 'WIN':
                     time.sleep(30)
                 FirstGameBet(driver)
+                GetIfGameStart(driver)
             elif config.perte > 0:
                 DispatchPerte()
                 config.init_variable()
@@ -102,6 +103,7 @@ def all_script(driver):
                 if result != 'WIN':
                     time.sleep(30)
                 FirstGameBet(driver)
+                GetIfGameStart(driver)
             else:
                 current_frame = inspect.currentframe()
                 config.log(
