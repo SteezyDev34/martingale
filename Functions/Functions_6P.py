@@ -62,7 +62,7 @@ def all_script(driver):
     if not config.set_actuel:
         config.error = True
 
-    config.log('🏁 DÉBUT DE LA MARTINGALE', 'title', False)
+    config.log('DÉBUT DE LA MARTINGALE', 'title', False)
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
 
