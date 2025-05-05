@@ -259,6 +259,7 @@ def all_script(driver):
     config.switchScript('4315A')
     for scriptType in config.scriptTypeList:
         config.ScriptConfig(scriptType).reset()
+        config.init_variable()
         config.switchScript(scriptType)
         DispatchPerte()
         config.global_match_win[scriptType] = 0  # Initialize win counter for script type
