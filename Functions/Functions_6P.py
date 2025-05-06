@@ -92,6 +92,7 @@ def all_script(driver):
                 if result != 'WIN':
                     time.sleep(30)
                 FirstGameBet(driver)
+                GetIfGameStart(driver)
             elif config.perte > 0:
                 DispatchPerte()
                 config.init_variable()
@@ -103,6 +104,7 @@ def all_script(driver):
                 if result != 'WIN':
                     time.sleep(30)
                 FirstGameBet(driver)
+                GetIfGameStart(driver)
             else:
                 current_frame = inspect.currentframe()
                 config.log(
@@ -114,6 +116,7 @@ def all_script(driver):
             config.error = False
             config.log("Restart", config.newmatch)
             FirstGameBet(driver)
+            GetIfGameStart(driver)
         elif config.jeu_actuel >= 12:
             GetJeuActuel(driver)
             GetIfGameStart(driver)
@@ -161,6 +164,8 @@ def all_script(driver):
         txtlog = "JEU COMMENCÉ ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)
         passageset = False
+        if config.match_end:
+            break
         GetAndPlaceBet(driver)
         result = GetResult(driver)
 
@@ -172,7 +177,7 @@ def all_script(driver):
             GetSetActuel(driver)
 
             if not config.set_actuel:
-                config.error = True
+                GetSetActuel(driver)
             config.log('set ' + str(config.set_actuel) + ' - nex set ' + str(config.newset))
             if str(int(config.newset) - 1) == str(config.set_actuel):  ## si on est toujours sur le meme set
                 config.log('on est toujours sur le meme set', config.newmatch)

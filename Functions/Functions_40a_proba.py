@@ -62,7 +62,7 @@ def all_script(driver):
 
     ##PREPARATTION PREMIER PARIS
     FirstGameBet(driver)
-    print('error', config.error)
+
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
     RetourTpsReg(driver)
     GetSetActuel(driver)
