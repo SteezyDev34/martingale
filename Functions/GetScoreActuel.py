@@ -47,8 +47,16 @@ def GetScoreActuel(driver):
 
 
 def record_scores(driver):
+    saved_jeu_actuel = config.jeu_actuel
     GetSetActuel(driver)
     GetJeuActuel(driver)
+    if saved_jeu_actuel != config.jeu_actuel:
+        time.sleep(1)
+        '''# Pour éviter de recupérer des faux scores dû au chargement js ex: 
+            {'set': '1', 'jeu': 9, 'score': '30:40'}
+            {'set': '1', 'jeu': 10, 'score': '30:0'}
+            {'set': '1', 'jeu': 10, 'score': '0:0'}'''
+        return
     nouveau_score = {'set': config.set_actuel, 'jeu': config.jeu_actuel, 'score': config.score_actuel}
     config.log(nouveau_score, '', False, 2)
     # Si le dictionnaire n'existe pas encore, l'ajouter
