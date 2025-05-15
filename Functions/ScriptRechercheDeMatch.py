@@ -261,21 +261,56 @@ def classementeDeMatch(driver):
             driver.get('https://ca.1xbet.com/fr/line/tennis')
             return False
         # RECUPERATION DES LIGUES EN COURS
-        bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                              'dashboard-champ')
+        tennis_menu = driver.find_elements(By.CLASS_NAME,
+                                           'sports-menu-app-sport')
+
+        for menu in tennis_menu:
+            sport_link = menu.find_element(By.CLASS_NAME, 'sports-menu-app-sport__link')
+            sport = sport_link.find_element(By.CLASS_NAME, 'ui-nav-link-caption__label').text
+            if 'tennis de table' in sport.lower():
+                continue
+            elif 'tennis' not in sport.lower():
+                continue
+            else:
+                print('tennis trouvé')
+                print('click ok')
+                break
+        country = driver.find_element(By.CLASS_NAME, 'sports-menu-group-by-country')
+        print('find countries')
+        countrybutton = country.find_elements(By.CLASS_NAME, 'sports-menu-group-by-champ')
+        for cntrybtn in countrybutton:
+            print('contry')
+            cntrybtn.click()
+            print('click cntry')
+            if 'itf' in cntrybtn.text.lower():
+                break
+
+        liguebtn = driver.find_elements(By.CLASS_NAME, 'sports-menu-app-champ-with-sub-champs-group__item')
+        links = []
+        for lbtn in liguebtn:
+            link = lbtn.find_element(By.CLASS_NAME, 'ui-nav-link__content').get_attribute(
+                "href")
+            links.append(link)
+        print(links)
         matchlist = []
         liguelist = []
-        for bet_ligue in bet_list_ligue:
-            # ON RÉCUPÈRE LE NOM DE LA LIGUE
-            config.ligue_name = GetLigueName.main(bet_ligue)
-            # EN CAS D'ERREUR
-            if not config.ligue_name:
-                config.error = False
-                break
-            liguelist.append([bet_ligue.find_elements(By.CLASS_NAME,
-                                                      'ui-dashboard-champ-name__link')[
-                0].get_attribute(
-                "href"), config.ligue_name])
+        for link in links:
+            driver.get(link)
+            time.sleep(5)
+            bet_list_ligue = driver.find_elements(By.CLASS_NAME,
+                                                  'dashboard-champ')
+
+            for bet_ligue in bet_list_ligue:
+                # ON RÉCUPÈRE LE NOM DE LA LIGUE
+                config.ligue_name = GetLigueName.main(bet_ligue)
+                # EN CAS D'ERREUR
+                if not config.ligue_name:
+                    config.error = False
+                    break
+                liguelist.append([bet_ligue.find_elements(By.CLASS_NAME,
+                                                          'ui-dashboard-champ-name__link')[
+                    0].get_attribute(
+                    "href"), config.ligue_name])
 
         for link in liguelist:
             driver.get(link[0])

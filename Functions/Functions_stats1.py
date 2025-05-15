@@ -131,6 +131,7 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
     while ok == 0 and tentative < 4:
         i = 1
         try:
+            print(playersName)
             for playerName in playersName:
                 print(playerName)
                 driver.get('https://www.wtatennis.com/rankings/singles')
@@ -139,23 +140,24 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
                         (By.CLASS_NAME, 'rankings__list'))
                 )
 
-                fieldplayer1 = driver.find_elements(By.CLASS_NAME, 'player-search')[0]
+                fieldplayer1 = driver.find_elements(By.CLASS_NAME, 'js-player-search-button')[0]
                 fieldplayer1.click()
                 time.sleep(2)
-                fieldplayer1 = driver.find_elements(By.CLASS_NAME, 'player-search__input')[0]
+                fieldplayer1 = driver.find_elements(By.CLASS_NAME, 'js-player-search-input')[0]
                 fieldplayer1.send_keys(playerName)
                 element = WebDriverWait(driver, 10).until(
                     EC.visibility_of_element_located(
-                        (By.CLASS_NAME, 'rankings__row'))
+                        (By.CLASS_NAME, 'js-rankings-body'))
                 )
                 time.sleep(5)
                 player_block = driver.find_elements(By.CLASS_NAME, 'js-rankings-body')[0]
-                player_list = player_block.find_elements(By.CLASS_NAME, 'rankings__row')
+                player_list = player_block.find_elements(By.CLASS_NAME, 'player-row')
                 print('lplayer list le,')
                 print(len(player_list))
                 for player in player_list:
                     print('eaach player')
-                    player_name = player.find_elements(By.CLASS_NAME, 'player-name')[0].text.strip().replace('\n', ' ')
+                    player_name = player.find_elements(By.CLASS_NAME, 'player-cell__name-wrap')[0].text.strip().replace(
+                        '\n', ' ')
                     print(player_name.lower())
                     if re.search(playerName.lower(), player_name.lower()):
                         print('find')
@@ -163,11 +165,9 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
                     else:
                         print('not found')
                     try:
-                        statTab = WebDriverWait(driver, 10).until(
-                            EC.presence_of_element_located((By.CSS_SELECTOR, "ul.tabs__list"))
-                        )
-                        stats_tab = driver.find_element(By.CSS_SELECTOR, "li.js-tab-item[data-tab='#stats']")
-                        stats_tab.click()
+                        time.sleep(2)
+                        curretn = driver.current_url + '/stats'
+                        driver.get(curretn)
                         # Attendre que le conteneur des stats soit chargé
                         WebDriverWait(driver, 10).until(
                             EC.presence_of_element_located((By.CLASS_NAME, "player-stats__secondary-stats"))
@@ -188,8 +188,8 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
                         time.sleep(3)
 
                         # Sélectionner l'option "2024"
-                        option_2024 = driver.find_element(By.XPATH, "//div[@data-value='2024']")
-                        option_2024.click()
+                        option_2025 = driver.find_element(By.XPATH, "//div[@data-value='2025']")
+                        option_2025.click()
                         time.sleep(3)
                         # Localiser les stats
                         stats = driver.find_elements(By.CLASS_NAME, "player-stats__secondary")
@@ -236,22 +236,25 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
                                         prob_retour_joueur1 = float(prob_retour_joueur1) / 100
                                         print('prob_retour_joueur1 : ' + str(prob_retour_joueur1))
                         if i == 2:
+                            print('break')
                             break
                         else:
                             i = i + 1
+                        print('end')
                     except:
                         print('no stats found')
-                # Calcul de la probabilité pour le joueur et l'adversaire
-                prob_40_40_joueur1 = prob_service_joueur1 * prob_retour_joueur1
-                prob_40_40_joueur2 = prob_service_joueur2 * prob_retour_joueur2
 
-                # Calcul de la probabilité totale
-                prob_40_40_totale = prob_40_40_joueur1 + prob_40_40_joueur2
-                prob = prob_40_40_totale
-                print('Proba 40 A = ' + str(prob))
-                return prob
+            # Calcul de la probabilité pour le joueur et l'adversaire
+            prob_40_40_joueur1 = prob_service_joueur1 * prob_retour_joueur1
+            prob_40_40_joueur2 = prob_service_joueur2 * prob_retour_joueur2
+
+            # Calcul de la probabilité totale
+            prob_40_40_totale = prob_40_40_joueur1 + prob_40_40_joueur2
+            prob = prob_40_40_totale
+            print('Proba 40 A = ' + str(prob))
+            return prob
         except:
-            tentative = tentative+1
+            tentative = tentative + 1
             continue
     if link:
         driver.get(link)
@@ -437,4 +440,4 @@ def get_wta_proba_40A(playerName1, playerName2):
 if __name__ == '__main__':
     from ChromeDriver.SetDriver1 import driver
 
-    print(get_wta_proba_40A_other('Julieta Pareja', 'Leolia Jeanjean', driver))
+    print(get_wta_proba_40A_other('aryna sabalenka', 'Leolia Jeanjean', driver))
