@@ -128,14 +128,14 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
     prob = 0
     ok = 0
     playersName = [playerName1, playerName2]
-    while ok == 0 and tentative < 4:
+    while ok == 0 and tentative < 2:
         i = 1
         try:
             print(playersName)
             for playerName in playersName:
                 print(playerName)
                 driver.get('https://www.wtatennis.com/rankings/singles')
-                element = WebDriverWait(driver, 10).until(
+                element = WebDriverWait(driver, 5).until(
                     EC.presence_of_element_located(
                         (By.CLASS_NAME, 'rankings__list'))
                 )
@@ -145,7 +145,7 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
                 time.sleep(2)
                 fieldplayer1 = driver.find_elements(By.CLASS_NAME, 'js-player-search-input')[0]
                 fieldplayer1.send_keys(playerName)
-                element = WebDriverWait(driver, 10).until(
+                element = WebDriverWait(driver, 5).until(
                     EC.visibility_of_element_located(
                         (By.CLASS_NAME, 'js-rankings-body'))
                 )
@@ -169,10 +169,10 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
                         curretn = driver.current_url + '/stats'
                         driver.get(curretn)
                         # Attendre que le conteneur des stats soit chargé
-                        WebDriverWait(driver, 10).until(
+                        WebDriverWait(driver, 5).until(
                             EC.presence_of_element_located((By.CLASS_NAME, "player-stats__secondary-stats"))
                         )
-                        WebDriverWait(driver, 10).until(
+                        WebDriverWait(driver, 5).until(
                             EC.presence_of_element_located((By.CLASS_NAME, "tournament-year-dropdown"))
                         )
 

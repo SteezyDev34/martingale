@@ -1,0 +1,30 @@
+
+['Jannik Sinner', 'Tommy Paul']|atp rome terre battue|sinner-tommy-paul|0.56
+['Cori Gauff', 'Jasmine Paolini']|wta rome terre battue|gauff-jasmine-paolini|0.56
+['Carlos Alcaraz Garfia', 'Lorenzo Musetti']|atp rome terre battue|garfia-lorenzo-musetti|0.51
+['Amanda Anisimova', 'Chloe Paquet']|wta paris terre battue|anisimova-chloe-paquet|0.49
+['Mayar Sherif', 'Simona Waltert']|wta parme terre battue|sherif-simona-waltert|0.46
+['Roman Andres Burruchaga', 'Christian Garin']|challenger oeiras 5 terre battue|burruchaga-christian-garin|0.46
+['Brandon Nakashima', 'Nikoloz Basilashvili']|challenger bordeaux terre battue|nakashima-nikoloz-basilashvili|0.45
+['Tomas Martin Etcheverry', 'Alexander Bublik']|challenger turin terre battue|etcheverry-alexander-bublik|0.45
+['Jonas Forejtek', 'Yanaki Milev']|itf kursumlijska banja terre battue|forejtek-yanaki-milev|0.44
+['Liam Broady', 'Kyle Edmund']|itf reggio d'émilie terre battue|broady-kyle-edmund|0.44
+['Tallon Griekspoor', 'Terence Atmane']|challenger bordeaux terre battue|griekspoor-terence-atmane|0.42
+['Flavio Cobolli', 'Daniel Altmaier']|challenger turin terre battue|cobolli-daniel-altmaier|0.42
+['Zarina Diyas', 'Meiling Wang']|itf kurume femmes moquette|diyas-meiling-wang|0.42
+['Renata Jamrichova', 'Mai Hontama']|itf trnava femmes terre battue|jamrichova-mai-hontama|0.41107400000000005
+['Priska Madelyn Nugroho', 'Jiaqi Wang']|itf maanshan femmes dur intérieur (en salle)|nugroho-jiaqi-wang|0.36
+['Hernan Casanova', 'Patrick Kypson']|challenger bogota terre battue|casanova-patrick-kypson|0.34
+['Maxwell Mckennon', 'Juan Carlos Prado Angelo']|itf xalapa dur|carlos-prado-angelo|0.34
+['Andres Andrade', 'Corey Craig']|itf pensacola terre battue|andrade-corey-craig|0.26
+['Irina-Camelia Begu', 'Victoria Mboko']|wta parme terre battue|begu-victoria-mboko|0.24006700000000003
+['Jagger Leach', 'Yassine Dlimi']|itf orlando terre battue|leach-yassine-dlimi|0.24
+['Julie Belgraver', 'Aliaksandra Sasnovich']|wta paris terre battue|belgraver-aliaksandra-sasnovich|0.23620800000000003
+['Pedro Rodrigues', 'Nicolas Alvarez Varona']|challenger bogota terre battue|nicolas-alvarez-varona|0.23
+['Felix Gill', 'Alex Molcan']|itf reggio d'émilie terre battue|gill-alex-molcan|0.23
+['Chris Rodesch', 'Titouan Droguet']|challenger tunisie terre battue|rodesch-titouan-droguet|0.21
+['Liam Krall', 'Garrett Johns']|itf pensacola terre battue|krall-garrett-johns|0.2
+['Stefan Kozlov', 'Aidan Mayo']|itf xalapa dur|kozlov-aidan-mayo|0.2
+['Alexis Gurmendi', 'Alex Rybakov']|itf pensacola terre battue|gurmendi-alex-rybakov|0.18
+['Jie Cui', 'Taiyo Yamanaka']|itf luan dur|cui-taiyo-yamanaka|0.16
+['Mateo Barreiros Reyes', 'Pedro Sakamoto']|challenger bogota terre battue|reyes-pedro-sakamoto|0.15
