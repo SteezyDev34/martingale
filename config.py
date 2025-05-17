@@ -80,7 +80,7 @@ netprofit = 0
 result = False
 # File paths
 matchlist_file_name = ""
-matchlisttodo_file_name = ""
+matchlisttodo_file_name = f"{projectPath}/matchlisttodo"
 matchlist1set_name = ""
 running_file_name = ""
 in_stat = False
@@ -226,6 +226,7 @@ def save_variables():
     # Save display settings
     config_global.set("print_match_live_text", print_match_live_text)
     config_global.set("print_running_text", print_running_text)
+    matchlisttodo_file_name = f"{projectPath}/matchlisttodo"
 
 
 def switchScript(newScriptType):

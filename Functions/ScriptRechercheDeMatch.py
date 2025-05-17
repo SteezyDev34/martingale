@@ -107,7 +107,7 @@ def rechercheDeMatch(driver):
                                     config.log_clear_line()
                                     bet_score = GetMatchScore.main(div_bet_score[0],
                                                                    config.score_to_start)
-                                    if bet_score:  # SI LE MATCH EST PRET
+                                    if not bet_score:  # SI LE MATCH EST PRET
                                         config.log('Score ok', 'info', False, 4)
                                         config.log_clear_line()
                                         # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
