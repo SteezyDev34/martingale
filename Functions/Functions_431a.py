@@ -144,7 +144,10 @@ def all_script(driver):
                 DeleteBet(driver)
                 continue
             if firstjeu or int(current_game) != int(config.jeu_actuel):
+                print('firstgame')
+                time.sleep(2)
                 firstjeu = False
+                current_game = config.jeu_actuel
             else:
                 GetIfGameEnd(driver)
         # JEU FINI ON PREPARE LE IPROCHAIN BET
@@ -202,6 +205,8 @@ def all_script(driver):
                 print(config.global_match_win)
             if config.result == 'RUN':
                 continue
+            if int(config.jeu_actuel) < int(config.validated_bet.get('jeu')):
+                continue
             config.result = GetResult(driver)
             if config.result == 'LOSE':
                 # VÉRIFCATION DU SET ACTUEL
@@ -236,6 +241,7 @@ def all_script(driver):
                 else:
                     print("ERROR : ecup set " + str(config.set_actuel))
                     config.error = True
+
             elif config.result == 'WIN':
                 config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
                     config.netprofit)
