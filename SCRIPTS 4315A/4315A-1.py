@@ -81,7 +81,6 @@ for i in config.scriptTypeList:
 
 while (config.win < 100):
     Functions_431a.all_script(driver)
-
     try:
         pass
     except Exception as e:
