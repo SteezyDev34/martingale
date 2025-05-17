@@ -210,6 +210,7 @@ def all_script(driver):
                 if int(config.jeu_actuel) < int(config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
                         config.validated_bet.get('set')):
                     continue
+
             config.result = GetResult(driver)
             if config.result == 'LOSE':
                 # VÉRIFCATION DU SET ACTUEL
