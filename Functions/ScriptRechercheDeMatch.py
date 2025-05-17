@@ -377,7 +377,7 @@ def classementeDeMatch(driver):
 def newclassementeDeMatch(driver):
     driver.get('https://ca.1xbet.com/fr/line/tennis')
     config.error = False
-    print('RECHERCHE DE MATCH')
+    print('RECHERCHE DE MATCH NEW WLAASSEME')
     config.match_found = False
     while not config.match_found and not config.error:
         config.init_variable()
