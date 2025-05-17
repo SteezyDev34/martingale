@@ -60,13 +60,17 @@ from ChromeDriver.SetDriver import driver
 
 from Functions import Functions_40a_proba
 from Functions.GetJsonData import DispatchPerte
-from Functions.ScriptRechercheDeMatch import classementeDeMatch
+from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
 from Functions.Authenticator import is_logged_in, loginProcess
 
 confirmation = input(f"Classement ? (Y/N): ")
 
 if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
-    classementeDeMatch(driver)
+    confirmation = input(f"type de Classement ? (1/2): ")
+    if confirmation == '1':
+        classementeDeMatch(driver)
+    else:
+        newclassementeDeMatch(driver)
 
 # Call the function to get the code
 if not is_logged_in(driver):
