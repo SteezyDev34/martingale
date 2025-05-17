@@ -205,8 +205,10 @@ def all_script(driver):
                 print(config.global_match_win)
             if config.result == 'RUN':
                 continue
-            if int(config.jeu_actuel) < int(config.validated_bet.get('jeu')):
-                continue
+            GetScoreActuel(driver)
+            if config.validated_bet:
+                if int(config.jeu_actuel) < int(config.validated_bet.get('jeu')):
+                    continue
             config.result = GetResult(driver)
             if config.result == 'LOSE':
                 # VÉRIFCATION DU SET ACTUEL
