@@ -133,8 +133,9 @@ def getCompetRecup():
 
 def getCompet():
     config.log('Recherche compet', 'info', False, 3)
+    scriptType = '40A'
     config.log_clear_line()
-    url = "http://p-com.studio/api/strategy" + config.scriptType + "/get_compet.php"
+    url = "http://p-com.studio/api/strategy" + scriptType + "/get_compet.php"
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
