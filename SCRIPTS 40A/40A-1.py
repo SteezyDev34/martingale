@@ -70,6 +70,7 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
     if confirmation == '1':
         classementeDeMatch(driver)
     else:
+        print('new class')
         newclassementeDeMatch(driver)
 
 # Call the function to get the code
