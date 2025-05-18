@@ -22,7 +22,7 @@ def todo(action, values, matchlisttodo_file_name):
 
     if action == "add":
         # Lire le contenu existant
-        with open(file_path, "r", encoding="utf-8") as file:
+        with open(file_path, "r") as file:
             existing_matches = file.read().splitlines()
 
         # Vérifier si l'élément existe déjà
@@ -30,19 +30,19 @@ def todo(action, values, matchlisttodo_file_name):
             print(f"L'élément '{values}' existe déjà dans le fichier.")
         else:
             # Ajouter le nouvel élément
-            with open(file_path, "a", encoding="utf-8") as file:
+            with open(file_path, "a") as file:
                 file.write("\n" + str(values))
             print(f"L'élément '{values}' a été ajouté avec succès.")
 
     elif action == "del":
         # Lire le contenu existant
-        with open(file_path, "r", encoding="utf-8") as file:
+        with open(file_path, "r") as file:
             existing_matches = file.read().splitlines()
 
         # Supprimer l'élément s'il existe
         if str(values) in existing_matches:
             updated_matches = [match for match in existing_matches if match != str(values)]
-            with open(file_path, "w", encoding="utf-8") as file:
+            with open(file_path, "w") as file:
                 file.write("\n".join(updated_matches))
             print(f"L'élément '{values}' a été supprimé avec succès.")
         else:
