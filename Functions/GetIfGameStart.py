@@ -7,11 +7,12 @@ from Functions.GetScoreActuel import GetScoreActuel
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
-def GetIfGameStart(driver):
+def GetIfGameStart(driver, retTmpsReg=False):
     config.game_start = False
     printext = False
     driver.switch_to.window(driver.window_handles[0])
-    RetourTpsReg(driver)
+    if retTmpsReg:
+        RetourTpsReg(driver)
     while not config.game_start and not config.error:
         driver.switch_to.window(driver.window_handles[0])
         GetScoreActuel(driver)
@@ -67,10 +68,11 @@ def GetIfGameStart30A(driver):
     return gamestart
 
 
-def GetIfGameEnd(driver):
+def GetIfGameEnd(driver, retTmpsReg=False):
     config.game_end = False
     printext = False
-    RetourTpsReg(driver)
+    if retTmpsReg:
+        RetourTpsReg(driver)
     config.log('ATTENTE FIN DE JEU', 'info', False, 4)
     while not config.game_end and not config.error:
         GetScoreActuel(driver)
