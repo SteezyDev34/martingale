@@ -1,8 +1,24 @@
-# Function_GetMatchDone
+import chardet
+
+
+# Détecte l'encodage réel du fichier
+def detect_encoding(file_path):
+    with open(file_path, 'rb') as f:
+        raw_data = f.read()
+        result = chardet.detect(raw_data)
+        return result['encoding'] or 'utf-8'
+
+
 # RÉCUPÉRER LES MATCHS EFFECTUÉS
 def main(matchlist_file_name):
-    get_matchlist_file = open(matchlist_file_name + ".txt", "r")
-    get_matchlist = get_matchlist_file.read()
-    get_matchlist_file.close()
-    match_list = get_matchlist.split('\n')
+    file_path = matchlist_file_name + ".txt"
+    encoding = detect_encoding(file_path)
+
+    try:
+        with open(file_path, "r", encoding=encoding) as f:
+            match_list = f.read().splitlines()
+    except UnicodeDecodeError as e:
+        print(f"Erreur de décodage du fichier '{file_path}': {e}")
+        return []
+
     return match_list
