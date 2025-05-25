@@ -120,6 +120,7 @@ def rechercheDeMatch(driver):
                                                                        config.matchlist_file_name):
                                                 config.newmatch = config.newmatch[1]
                                                 config.log(config.newmatch, 'info', False, 4)
+                                                print('MATCH OK')
                                                 config.match_found = True
                                                 break
                                             else:
