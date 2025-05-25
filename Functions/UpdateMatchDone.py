@@ -1,6 +1,19 @@
 import chardet
 
 
+def main(action, values, matchlist_file_name):
+    if action == "add":
+        newmatch = values
+        with open(matchlist_file_name + ".txt", "a", encoding="utf-8") as f:
+            f.write("\n" + str(newmatch))
+    elif action == "del":
+        with open(matchlist_file_name + ".txt", "r", encoding="utf-8") as f:
+            content = f.read()
+        match_list = content.replace("\n" + str(values), "")
+        with open(matchlist_file_name + ".txt", "w", encoding="utf-8") as f:
+            f.write(match_list)
+
+
 def detect_encoding(file_path):
     with open(file_path, 'rb') as f:
         raw_data = f.read()
