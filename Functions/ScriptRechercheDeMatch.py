@@ -370,7 +370,10 @@ def classementeDeMatch(driver):
         top_10 = tableau_trie[:200]
         for m in top_10:
             # Join array elements with pipe separator before adding to todo
-            todo("add", "|".join(str(x) for x in m), config.matchlisttodo_file_name)
+            try:
+                todo("add", "|".join(str(x) for x in m), config.matchlisttodo_file_name)
+            except:
+                pass
         break
 
 
@@ -537,7 +540,10 @@ def newclassementeDeMatch(driver):
         top_10 = tableau_trie[:100]
         for m in top_10:
             # Join array elements with pipe separator before adding to todo
-            todo("add", "|".join(str(x) for x in m), config.matchlisttodo_file_name)
+            try:
+                todo("add", "|".join(str(x) for x in m), config.matchlisttodo_file_name)
+            except:
+                pass
         break
 
 
