@@ -367,7 +367,7 @@ def classementeDeMatch(driver):
         tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
 
         # Retenir les 10 premières lignes
-        top_10 = tableau_trie[:20]
+        top_10 = tableau_trie[:200]
         for m in top_10:
             # Join array elements with pipe separator before adding to todo
             todo("add", "|".join(str(x) for x in m), config.matchlisttodo_file_name)
