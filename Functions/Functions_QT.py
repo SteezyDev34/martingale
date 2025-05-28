@@ -1,8 +1,9 @@
+from Functions.FisrtQTBet import FirstQTBet
+
 import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName, AddRunning
 from Functions.DeleteBet import DeleteBet
-from Functions.FisrtQTBet import FirstQTBet
 from Functions.Function_GetSetActuel import GetQTActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetIfGameStart import GetIfQTEnd, GetIfQTStart
@@ -60,7 +61,8 @@ def all_script(driver):
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
             # Check if all script types have global_match_win > 1
-            all_below_one = all(float(config.global_match_win[st]) > 1 for st in config.scriptTypeList)
+            all_below_one = all(
+                float(config.global_match_win[st]) > config.total_want_win for st in config.scriptTypeList)
             if all_below_one:
                 for st in config.scriptTypeList:
                     config.log(f'Net profit: {config.global_match_win[st]}', 'success', False)

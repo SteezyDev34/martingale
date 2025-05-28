@@ -108,9 +108,12 @@ restart_set2 = 0
 log_message = ''
 newset = 2
 teams = False
+
 # Initialize dictionaries to track wins per script type
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
+
+total_want_win = 0.2
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:

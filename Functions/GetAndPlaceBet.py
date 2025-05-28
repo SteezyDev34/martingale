@@ -19,7 +19,7 @@ def GetAndPlaceBet(driver):
         print('verification du jeu actuel dans tous les script')
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
-            if float(config.global_match_win[scriptType]) < 1:
+            if float(config.global_match_win[scriptType]) < config.total_want_win:
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
 
             else:

@@ -193,7 +193,7 @@ def all_script(driver):
                     config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
-            if float(config.global_match_win) < 1:
+            if float(config.global_match_win) < config.total_want_win:
                 print('continue')
                 continue
             elif config.nb_tour <= winmatch:

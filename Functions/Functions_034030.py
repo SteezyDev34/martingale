@@ -84,7 +84,7 @@ def all_script(driver):
                         config.ScriptConfig(scriptType).reset()
                         config.init_variable()
                         DeleteBet(driver)
-                        if float(config.global_match_win[scriptType]) < 1:
+                        if float(config.global_match_win[scriptType]) < config.total_want_win:
                             print("#RECHERCHE INFOS DE MISE")
 
                             getGlobalPerte()
