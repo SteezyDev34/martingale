@@ -13,7 +13,7 @@ from Functions.ModalHandler import ModalHandler
 
 def AfficherParis(driver):
     config.log('recherche du champ déroulant...', '', True, 2)
-    # driver.switch_to.window(driver.window_handles[0])
+    driver.switch_to.window(driver.window_handles[0])
     GetSetActuel(driver)
     GetScoreActuel(driver)
     selection = False

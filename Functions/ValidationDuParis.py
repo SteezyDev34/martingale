@@ -164,26 +164,7 @@ def ValidationDuParis(driver, nexbet=False):
             else:
                 PlacerMise(driver)
                 tentative = tentative + 1
-    if validation:
-        # Store bet information in validated_bet variable
-        from datetime import datetime
-        SendBetData()
-        current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        config.validated_bet = {
-            'montant': config.mise,
-            'jeu': config.looking_game,
-            'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
-            'winscore': config.win_type,
-            'timestamp': current_timestamp
-        }
-        config.placed_game = config.looking_game
-        config.log(f'           {config.validated_bet}', 'info', True)
-        config.perte = float(config.perte) + float(config.mise)
-        config.wantwin = float(config.wantwin) + float(config.increment)
-        # Calculate net profit based on stake, odds and losses
-        config.netprofit = round(
-            (float(config.mise) * float(config.cote)) - float(config.perte), 2)
-        config.log(f'Potential Net profit: {config.netprofit}')
+
     return validation
 
 

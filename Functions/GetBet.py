@@ -125,6 +125,7 @@ def GetBet(driver, nextBet=False):
             sType = "Receveur Va Mener 30-0"
             if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                 first_player = 1
+
                 if config.scriptType == '030':
                     config.win_type = '0:30'  # inversé
                     win_texte = '30-0'
@@ -133,6 +134,7 @@ def GetBet(driver, nextBet=False):
                 if config.scriptType == '030':
                     config.win_type = '30:0'  # inversé
                     win_texte = '30-0'
+            print('first_player :', first_player)
         if config.scriptType == '300':
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
@@ -146,18 +148,19 @@ def GetBet(driver, nextBet=False):
                 first_player = 2
                 config.win_type = '0:30'  # inversé
                 win_texte = '30-0'
+            print('first_player :', first_player)
         if config.scriptType == '6P':
-            sType = ", 6"
+            sType = "de Points 6"
             config.win_type = ['40:30', '30:40']  # inversé
-            win_texte = ', 6'
+            win_texte = 'de Points 6'
         if config.scriptType == '5P':
-            sType = ", 5"
+            sType = "de Points 5"
             config.win_type = ['40:15', '15:40']  # inversé
-            win_texte = ', 5'
+            win_texte = 'de points 5'
         if config.scriptType == '4P':
-            sType = ", 4"
+            sType = "de Points 4"
             config.win_type = ['40:0', '0:40']  # inversé
-            win_texte = ', 4'
+            win_texte = 'de Points 4'
         # print('i '+str(i))
         GetJeuActuel(driver)
         print('win_type', config.win_type)
@@ -323,19 +326,20 @@ def GetBet(driver, nextBet=False):
                                 decalageX = -50
                         ligne = ligne + 1
                 elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
+                    print('sType', sType)
                     list_of_newbet_type = list_of_newbet_type.split(sType)
                     if len(list_of_newbet_type) > 1:
                         getjeu_actuel = list_of_newbet_type[0].split("Jeu ")[1]
                         getjeu_actuel = ''.join(caractere for caractere in getjeu_actuel if caractere.isdigit())
                         if str(config.looking_game) == str(getjeu_actuel):
-                            # print('paris trouvé')
+                            print('paris trouvé')
                             clic = True
                             return clic
                         else:
-                            # print('mauvais jeu')
+                            print('mauvais jeu')
                             sautDeLigne = sautDeLigne + 30
                     else:
-                        # print('Mauvais paris')
+                        print('Mauvais paris')
                         sautDeLigne = sautDeLigne + 30
                         ligne = ligne + 1
                         # print('ligne ' + str(ligne))

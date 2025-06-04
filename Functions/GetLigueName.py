@@ -15,7 +15,7 @@ def main(bet_ligue):
     else:
         try:
             config.ligue_name = div_ligue_name.find_element(By.CLASS_NAME,
-                                                            'ui-dashboard-champ-name__caption')
+                                                            'dashboard-champ-name__caption')
             config.ligue_name = config.ligue_name.text.lower()
             config.ligue_name = config.ligue_name.replace('.', '')
         except Exception as e:

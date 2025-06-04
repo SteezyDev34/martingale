@@ -9,12 +9,13 @@ parent_directory = os.path.dirname(current_file_path)
 # ajouter un autre niveau parent si nécessaire
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
-# Vérification de l'environnement
 if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
+    # Simple écriture de lignes vides pour PyCharm
+
+    # Vérification de l'environnement
     import VenvDependencyManager
 
     VenvDependencyManager.main()
-
 from art import *
 
 # Chargement des variables globales
@@ -59,13 +60,19 @@ from ChromeDriver.SetDriver import driver
 
 from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte
-from Functions.ScriptRechercheDeMatch import classementeDeMatch
+from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
 from Functions.Authenticator import is_logged_in, loginProcess
 
 confirmation = input(f"Classement ? (Y/N): ")
 
 if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
-    classementeDeMatch(driver)
+    confirmation = input(f"type de Classement ? (1/2): ")
+    if confirmation == '1':
+        classementeDeMatch(driver)
+    else:
+        print('new class')
+        newclassementeDeMatch(driver)
+        classementeDeMatch(driver)
 
 # Call the function to get the code
 if not is_logged_in(driver):
@@ -91,7 +98,12 @@ while (config.win < 100):
         for i in config.scriptTypeList:
             config.switchScript('4315A')
             config.ScriptConfig(i).reset()
-        sucess = False
+            config.init_variable()
+            config.switchScript(i)
+            DispatchPerte()
+            config.global_match_win[i] = 0  # Initialize win counter for script type
+            config.winmatch[i] = 0  # Initialize match counter for script type
+            sucess = False
         while not sucess:
             try:
                 driver.get(config.site_url)

@@ -15,8 +15,9 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['15A', '300', '30A']
-
+scriptTypeList = ['030', '300', '15A', '30A']
+scriptTypeList2 = ['030', '4P', '5P', '6P']
+scriptTypeList3 = ['400', '4015', '4030', '40A']
 # Script configuration
 script_num = 0  # Numéro du Script
 win = 0  # Nombre de victoire
@@ -57,6 +58,7 @@ score_to_start = [
     "0000(40)(30)",
     "0000(30)(40)"
 ]
+passed_score = []
 # Game state variables
 validated_bet = {}  # Dictionnaire pour stocker les paris validés
 ligue_name = ""
@@ -91,6 +93,7 @@ match_found = False  # Match valide trouvé
 mise = 0.2
 probamini = 0.4
 cotebase = 1
+cote_base = 1
 misemax = 0
 perte = 0
 win_type = ''
@@ -113,7 +116,7 @@ teams = False
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
-total_want_win = 0.2
+total_want_win = 1
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:
@@ -161,27 +164,83 @@ def init_variable():
     error = config_global.get("error")
     validated_bet = config_global.get("validated_bet")
 
+    # On suppose que chacune de ces variables a déjà une valeur par défaut
+    # définie avant ce bloc. On ne modifie la variable que si la clé existe
+    # dans config_global et que sa valeur n’est pas None.
+
     # Game settings
-    cotebase = float(config_global.get("cote_base"))
-    mise = float(config_global.get("mise"))
-    nb_tour = int(config_global.get("nb_tour"))
-    probamini = float(config_global.get("proba_mini"))
+    val = config_global.get("cote_base")
+    if val is not None:
+        cotebase = float(val)
+
+    val = config_global.get("mise")
+    if val is not None:
+        mise = float(val)
+
+    val = config_global.get("nb_tour")
+    if val is not None:
+        nb_tour = int(val)
+
+    val = config_global.get("proba_mini")
+    if val is not None:
+        probamini = float(val)
 
     # Game state
-    gain = float(config_global.get("gain"))
-    increment = float(config_global.get("increment"))
-    looking_game = int(config_global.get("looking_game"))
-    netprofit = float(config_global.get("netprofit"))
-    perte = float(config_global.get("perte"))
-    placed_game = int(config_global.get("placed_game"))
-    rattrape_perte = int(config_global.get("rattrape_perte"))
-    restart_set2 = int(config_global.get("restart_set2"))
-    saved_score = config_global.get("saved_score")
-    validated_bet = config_global.get("validated_bet")
-    wantwin = float(config_global.get("wantwin"))
-    win_type = config_global.get("win_type")
-    mtt_recup = float(config_global.get("mtt_recup"))
-    result = config_global.get('result')
+    val = config_global.get("gain")
+    if val is not None:
+        gain = float(val)
+
+    val = config_global.get("increment")
+    if val is not None:
+        increment = float(val)
+
+    val = config_global.get("looking_game")
+    if val is not None:
+        looking_game = int(val)
+
+    val = config_global.get("netprofit")
+    if val is not None:
+        netprofit = float(val)
+
+    val = config_global.get("perte")
+    if val is not None:
+        perte = float(val)
+
+    val = config_global.get("placed_game")
+    if val is not None:
+        placed_game = int(val)
+
+    val = config_global.get("rattrape_perte")
+    if val is not None:
+        rattrape_perte = int(val)
+
+    val = config_global.get("restart_set2")
+    if val is not None:
+        restart_set2 = int(val)
+
+    val = config_global.get("saved_score")
+    if val is not None:
+        saved_score = val
+
+    val = config_global.get("validated_bet")
+    if val is not None:
+        validated_bet = val
+
+    val = config_global.get("wantwin")
+    if val is not None:
+        wantwin = float(val)
+
+    val = config_global.get("win_type")
+    if val is not None:
+        win_type = val
+
+    val = config_global.get("mtt_recup")
+    if val is not None:
+        mtt_recup = float(val)
+
+    val = config_global.get("result")
+    if val is not None:
+        result = val
 
     # Display settings
     print_match_live_text = config_global.get("print_match_live_text")
@@ -276,6 +335,7 @@ class ScriptConfig:
             config['saved_score'] = False
             config['rattrape_perte'] = False
             config['result'] = False
+            config['cote_base'] = 1
 
         return config
 

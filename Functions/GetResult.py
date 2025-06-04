@@ -39,12 +39,15 @@ def GetResult(driver):
                 '15:15', '30:0', '0:30', '30:15', '15:30', '30:30', '40:15',
                 '15:40', '30:40', '40:30', '40:0', '0:40', '40:40', '40:A', 'A:40'
             ]
-
         elif config.scriptType == '030' or config.scriptType == '300':
             passed_score = [
                 '30:0', '0:30', '40:15', '15:40', '30:40', '40:30', '40:0',
                 '0:40', '30:15', '15:30', '40:40', '40:A', 'A:40', '15:15'
             ]
+            if config.validated_bet.get('winscore') is not None and config.validated_bet.get('winscore') == '0:30':
+                passed_score.append('15:0')
+            elif config.validated_bet.get('winscore') is not None and config.validated_bet.get('winscore') == '30:0':
+                passed_score.append('0:15')
         elif config.scriptType == '400' or config.scriptType == '4P':
             passed_score = [
                 '0:0', '15:15', '30:15', '15:30', '30:30',
@@ -86,6 +89,7 @@ def GetResult(driver):
                 else:
                     result = 'LOSE'
                     config.log(result, 'error', False, 2)
+                config.validated_bet['result'] = result
                 return result
 
         elif config.scriptType == '400' or config.scriptType == '4030' or config.scriptType == '4015':
@@ -120,9 +124,16 @@ def GetResult(driver):
                     config.log(result, 'error', False, 2)
                 return result
         elif config.scriptType == '4P' or config.scriptType == '6P' or config.scriptType == '5P':
-            if config.score_actuel in passed_score or config.set_actuel != int(
-                    config.validated_bet.get('set')) or config.jeu_actuel != int(
-                config.validated_bet.get('jeu')):
+            if int(config.set_actuel) != int(config.validated_bet.get('set')):
+                print('set actuel différent', config.validated_bet.get('set'))
+                getresult = True
+            elif int(config.jeu_actuel) != int(config.validated_bet.get('jeu')):
+                print('jeu actuel différent', config.validated_bet.get('set'))
+                getresult = True
+            elif config.score_actuel in passed_score:
+                print('passed score', passed_score)
+                getresult = True
+            if getresult:
                 # Check the last element in all_scores
                 # Filter scores for matching set and jeu, excluding 0:0 scores
                 matching_set_jeu_scores = {k: v for k, v in config.all_scores.items()
@@ -137,6 +148,7 @@ def GetResult(driver):
                 if matching_set_jeu_scores:
                     last_score_key = max(matching_set_jeu_scores.keys())
                     last_score = matching_set_jeu_scores[last_score_key]
+                    print('last_score', last_score.get('score'))
 
                     if last_score.get('score') in config.validated_bet.get('winscore'):
                         print("Matching score found:", last_score)

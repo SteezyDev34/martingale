@@ -113,6 +113,7 @@ def rechercheDeMatch(driver):
                                         # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
                                         config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
                                                                                        config.matchlist_file_name)
+                                        print(config.newmatch[0])
                                         if config.newmatch[0]:
                                             if OuverturePageMatch.main(bet_item, config.script_num,
                                                                        config.newmatch[1],
@@ -120,6 +121,7 @@ def rechercheDeMatch(driver):
                                                                        config.matchlist_file_name):
                                                 config.newmatch = config.newmatch[1]
                                                 config.log(config.newmatch, 'info', False, 4)
+                                                print('MATCH OK')
                                                 config.match_found = True
                                                 break
                                             else:
@@ -416,9 +418,10 @@ def classementeDeMatch(driver):
             return False
         # RECUPERATION DES LIGUES EN COURS
         bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                              'dashboard-champ')
+                                              'dashboard__champ')
         matchlist = []
         liguelist = []
+        print(str(len(bet_list_ligue)))
         for bet_ligue in bet_list_ligue:
             # ON RÉCUPÈRE LE NOM DE LA LIGUE
             config.ligue_name = GetLigueName.main(bet_ligue)
@@ -427,7 +430,7 @@ def classementeDeMatch(driver):
                 config.error = False
                 break
             liguelist.append([bet_ligue.find_elements(By.CLASS_NAME,
-                                                      'ui-dashboard-champ-name__link')[
+                                                      'dashboard-champ-name__label')[
                 0].get_attribute(
                 "href"), config.ligue_name])
 
@@ -435,7 +438,7 @@ def classementeDeMatch(driver):
             driver.get(link[0])
             config.ligue_name = link[1]
             bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                                  'ui-dashboard-champ__games')
+                                                  'dashboard-champ-body__games')
             # POUR CHAQUE LIGUE RÉCUPÉRÉE
             for bet_ligue in bet_list_ligue:
 
@@ -521,9 +524,188 @@ def classementeDeMatch(driver):
         tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
 
         # Retenir les 10 premières lignes
-        top_10 = tableau_trie[:50]
+        top_10 = tableau_trie[:200]
         for m in top_10:
-            todo("add", m[2], config.matchlisttodo_file_name)
+            # Join array elements with pipe separator before adding to todo
+            try:
+                todo("add", "|".join(str(x) for x in m), config.matchlisttodo_file_name)
+            except:
+                pass
+        break
+
+
+def newclassementeDeMatch(driver):
+    driver.get('https://ca.1xbet.com/fr/line/tennis')
+    config.error = False
+    print('RECHERCHE DE MATCH')
+    config.match_found = False
+    while not config.match_found and not config.error:
+        config.init_variable()
+        """On vérifie si c'est la page d'un match """
+        config.match_found = GetIfMatchPage(driver)
+        # SCRIPT RECHERCHE DE MATCH
+        # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
+        GetIfScriptsRunning()
+        # VERIFICATION SI PAGE DE LIST LIVE"""
+        if not VerificationListeMatchLive(driver):
+            config.error = True
+            print("PAGE VIDE")
+            driver.get('https://ca.1xbet.com/fr/line/tennis')
+            return False
+        # RECUPERATION DES LIGUES EN COURS
+        tennis_menu = driver.find_elements(By.CLASS_NAME,
+                                           'sports-menu-app-sport')
+
+        for menu in tennis_menu:
+            sport_link = menu.find_element(By.CLASS_NAME, 'sports-menu-app-sport__link')
+            sport = sport_link.find_element(By.CLASS_NAME, 'ui-nav-link-caption__label').text
+            if 'tennis de table' in sport.lower():
+                continue
+            elif 'tennis' not in sport.lower():
+                continue
+            else:
+                print('tennis trouvé')
+                print('click ok')
+                break
+        country = driver.find_element(By.CLASS_NAME, 'sports-menu-group-by-country')
+        print('find countries')
+        countrybutton = country.find_elements(By.CLASS_NAME, 'sports-menu-group-by-champ')
+        for cntrybtn in countrybutton:
+            print('country', cntrybtn.text.lower())
+            if ('double' in cntrybtn.text.lower()
+                    or 'spéciaux' in cntrybtn.text.lower()
+                    or 'itf' in cntrybtn.text.lower()
+                    or 'mixte' in cntrybtn.text.lower()
+                    or 'gagnant' in cntrybtn.text.lower()
+                    or 'winner' in cntrybtn.text.lower()
+                    or 'utr' in cntrybtn.text.lower()
+                    or 'couple' in cntrybtn.text.lower()):
+                continue
+            cntrybtn.click()
+            print('click cntry')
+            if 'itf' in cntrybtn.text.lower():
+                break
+
+        liguebtn = driver.find_elements(By.CLASS_NAME, 'sports-menu-app-champ-with-sub-champs-group__item')
+        links = []
+        for lbtn in liguebtn:
+            link = lbtn.find_element(By.CLASS_NAME, 'ui-nav-link__content').get_attribute(
+                "href")
+            links.append(link)
+        print('links', links)
+        matchlist = []
+        liguelist = []
+        for link in links:
+            driver.get(link)
+            time.sleep(5)
+            bet_list_ligue = driver.find_elements(By.CLASS_NAME,
+                                                  'dashboard-champ')
+            print('bet_list_ligue', bet_list_ligue)
+
+            for bet_ligue in bet_list_ligue:
+                # ON RÉCUPÈRE LE NOM DE LA LIGUE
+                config.ligue_name = GetLigueName.main(bet_ligue)
+                print('config.ligue_nam', config.ligue_name)
+                # EN CAS D'ERREUR
+                if not config.ligue_name:
+                    config.error = False
+                    continue
+                liguelist.append([bet_ligue.find_elements(By.CLASS_NAME,
+                                                          'dashboard-champ__more')[
+                    0].get_attribute(
+                    "href"), config.ligue_name])
+            print('liguelist', liguelist)
+            bet_list_ligue = driver.find_elements(By.CLASS_NAME,
+                                                  'dashboard-champ-body__games')
+            print('len bet_list_ligue', len(bet_list_ligue))
+            # POUR CHAQUE LIGUE RÉCUPÉRÉE
+            for bet_ligue in bet_list_ligue:
+
+                # ON VÉRIFIE QUE LA COMPET EST JOUABLE
+                if getCompet():
+                    print(config.ligue_name)
+                    print('get comp')
+                    # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
+                    try:
+                        bet_items = driver.find_elements(By.CLASS_NAME,
+                                                         'dashboard-game-block__row')
+                    except:
+                        print(' c-events-scoreboard__item')
+                        # s'il y une erreur on passe au suivant
+                        continue
+                    else:
+                        if len(bet_items) <= 0:
+                            continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
+                        i = 0
+                        for bet_item in bet_items:
+                            try:
+                                teams_name = bet_item.find_element(By.CLASS_NAME,
+                                                                   'dashboard-game-block__teams')
+                                players = teams_name.find_elements(By.CLASS_NAME, 'dashboard-game-team-info')
+                                players_name = []
+                                match = []
+                                if len(players) <= 1:
+                                    continue
+                                for player in players:
+                                    player = player.text.split('(')[0]
+                                    player = player.strip()
+                                    config.log(player, config.newmatch)
+                                    players_name.append(player)
+                                match.append(players_name)
+                                match.append(config.ligue_name)
+                                newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
+                                                                     'dashboard-game-block-link')[
+                                    0].get_attribute(
+                                    "href")
+                                newmatch = newmatchtxt.split(
+                                    '-')
+                                config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
+                                match.append(config.newmatch)
+                                matchlist.append(match)
+
+                            except Exception as e:
+                                continue
+                            else:
+                                print('ok')
+                else:
+                    print('not comp')
+
+        print(len(matchlist))
+        goodmatch = []
+        for matchItem in matchlist:
+            players_name = matchItem[0]
+            ligue_name = matchItem[1]
+            print(matchItem)
+            # goodmatch.append(matchItem)#ajout dasn tou sles cas pour faire tous ls match
+            if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
+                config.proba40A = Functions_stats.get_wta_proba_40A(players_name[0], players_name[1])
+                # config.proba40A = 0.5
+                time.sleep(1)
+                if config.proba40A == 0:
+                    config.proba40A = Functions_stats1.get_wta_proba_40A_other(players_name[0], players_name[1], driver)
+            else:
+                config.proba40A = Functions_stats1.get_proba_40A(players_name[0], players_name[1])
+                # config.proba40A = 0.5
+                time.sleep(1)
+                if config.proba40A == 0:
+                    config.proba40A = Functions_stats1.get_proba_40A_other(players_name[0], players_name[1], driver)
+            print('proba ' + str(config.proba40A))
+            if float(config.proba40A) >= float(config.probamini):
+                matchItem.append(config.proba40A)
+                print(matchItem)
+                goodmatch.append(matchItem)
+
+        # Tri en fonction de la dernière valeur (indice -1) en ordre décroissant
+        tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
+
+        # Retenir les 10 premières lignes
+        top_10 = tableau_trie[:100]
+        for m in top_10:
+            # Join array elements with pipe separator before adding to todo
+            try:
+                todo("add", "|".join(str(x) for x in m), config.matchlisttodo_file_name)
+            except:
+                pass
         break
 
 
