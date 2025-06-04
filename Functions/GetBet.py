@@ -71,30 +71,30 @@ def GetBet(driver, nextBet=False):
                 if config.scriptType == '4030':
                     config.win_type = '40:30'
                     win_texte = '40-30'
-                    sType = "Jeu " + str(config.looking_game) + " 40-30, Joueur " + str(first_player)
+                    sType = "Joueur " + str(first_player) + " va gagner le Jeu " + str(config.looking_game) + " 40-30"
                 elif config.scriptType == '4015':
                     config.win_type = '40:15'  # inversé
                     win_texte = '40-15'
-                    sType = "Jeu " + str(config.looking_game) + " 40-15, Joueur " + str(first_player)
+                    sType = "Joueur " + str(first_player) + " va gagner le Jeu " + str(config.looking_game) + " 40-15"
                 elif config.scriptType == '400':
                     config.win_type = '40:0'  # inversé
                     win_texte = '40-0'
-                    sType = "Jeu " + str(config.looking_game) + " 40-0, Joueur " + str(first_player)
+                    sType = "Joueur " + str(first_player) + " va gagner le Jeu " + str(config.looking_game) + " 40-0"
 
             else:
                 first_player = 2
                 if config.scriptType == '4030':
                     config.win_type = '30:40'  # inversé
-                    win_texte = '30-40'
-                    sType = "Jeu " + str(config.looking_game) + " 30-40, Joueur " + str(first_player)
+                    win_texte = '40-30'
+                    sType = "Joueur " + str(first_player) + " va gagner le Jeu " + str(config.looking_game) + " 40-30"
                 elif config.scriptType == '4015':
                     config.win_type = '15:40'  # inversé
-                    win_texte = '15-40'
-                    sType = "Jeu " + str(config.looking_game) + " 15-40, Joueur " + str(first_player)
+                    win_texte = '40-15'
+                    sType = "Joueur " + str(first_player) + " va gagner le Jeu " + str(config.looking_game) + " 40-15"
                 elif config.scriptType == '400':
-                    win_texte = '0-40'
+                    win_texte = '40-0'
                     config.win_type = '0:40'  # inversé
-                    sType = "Jeu " + str(config.looking_game) + " 0-40, Joueur " + str(first_player)
+                    sType = "Joueur " + str(first_player) + " va gagner le Jeu " + str(config.looking_game) + " 40-0"
         if config.scriptType == '030':
 
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
