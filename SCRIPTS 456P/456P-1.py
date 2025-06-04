@@ -57,12 +57,12 @@ else:
 # Chargement de Chrome driver
 from ChromeDriver.SetDriver1 import driver
 
-from Functions import Functions_431a
+from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch
 from Functions.Authenticator import is_logged_in, loginProcess
 
-config.scriptTypeList = ['030', '4P', '5P', '6P']
+config.scriptTypeList = config.scriptTypeList2
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
 config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
 for i in config.scriptTypeList:
@@ -86,7 +86,7 @@ while (config.win < 100):
     print(config.scriptTypeList)
 
     try:
-        Functions_431a.all_script(driver)
+        Functions_456P.all_script(driver)
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:

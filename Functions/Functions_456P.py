@@ -41,7 +41,7 @@ def all_script(driver):
         newmatchFromUrl(driver)
     if config.error:
         return False
-    for scriptType in config.scriptTypeList2:
+    for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
         if config.perte == 0:
@@ -52,7 +52,7 @@ def all_script(driver):
         config.error = True
     firstjeu = True
     current_game = int(config.jeu_actuel)
-    for scriptType in config.scriptTypeList2:
+    for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
         ##PREPARATTION PREMIER PARIS
         FirstGameBet(driver)
@@ -76,13 +76,13 @@ def all_script(driver):
                 txtlog = "attente 30 sec"
                 print(txtlog)
                 config.log(txtlog, config.newmatch)
-                for scriptType in config.scriptTypeList2:
+                for scriptType in config.scriptTypeList:
                     config.switchScript(scriptType)
                     # Check if all script types have global_match_win > 1
                     all_below_one = all(
-                        float(config.global_match_win[st]) >= config.total_want_win for st in config.scriptTypeList2)
+                        float(config.global_match_win[st]) >= config.total_want_win for st in config.scriptTypeList)
                     if all_below_one:
-                        for st in config.scriptTypeList2:
+                        for st in config.scriptTypeList:
                             config.log(f' {st} : Net profit: {config.global_match_win[st]}', 'success', False)
                         return True
                     if float(config.global_match_win[scriptType]) < config.total_want_win:
@@ -155,14 +155,14 @@ def all_script(driver):
         config.log(txtlog, config.newmatch)
         passageset = False
         current_game = int(config.jeu_actuel)
-        for scriptType in config.scriptTypeList2:
+        for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
             print('passage prochain script')
             # Check if all script types have global_match_win > 1
             all_below_one = all(
-                float(config.global_match_win[st]) >= config.total_want_win for st in config.scriptTypeList2)
+                float(config.global_match_win[st]) >= config.total_want_win for st in config.scriptTypeList)
             if all_below_one:
-                for st in config.scriptTypeList2:
+                for st in config.scriptTypeList:
                     config.log(f'Net profit: {config.global_match_win[st]}', 'success', False)
                 return True
             if float(config.global_match_win[scriptType]) < config.total_want_win:

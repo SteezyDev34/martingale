@@ -212,8 +212,9 @@ def all_script(driver):
                 continue
             GetScoreActuel(driver)
             if config.validated_bet:
-                if int(config.jeu_actuel) < int(config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
+                if int(config.jeu_actuel) == int(config.validated_bet.get('jeu')) - 1 and int(config.set_actuel) == int(
                         config.validated_bet.get('set')):
+                    print('set du paris supérieur!')
                     continue
             if config.validated_bet.get('result') is None:
                 GetResult(driver)
