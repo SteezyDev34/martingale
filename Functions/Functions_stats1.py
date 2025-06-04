@@ -116,6 +116,7 @@ def get_proba_40A_other(playerName1, playerName2, driver, link=False):
 
 
 def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
+    print('get proba other')
     prob_service_joueur1 = 0
     prob_service_joueur2 = 0
     prob_retour_joueur1 = 0
@@ -127,6 +128,7 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
     tentative = 0
     prob = 0
     ok = 0
+    driver.set_page_load_timeout(10)  # 30 secondes max
     playersName = [playerName1, playerName2]
     while ok == 0 and tentative < 2:
         i = 1
@@ -134,7 +136,9 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
             print(playersName)
             for playerName in playersName:
                 print(playerName)
+                print('try driver get')
                 driver.get('https://www.wtatennis.com/rankings/singles')
+                print('drvier get done')
                 element = WebDriverWait(driver, 5).until(
                     EC.presence_of_element_located(
                         (By.CLASS_NAME, 'rankings__list'))
@@ -253,7 +257,9 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
             prob = prob_40_40_totale
             print('Proba 40 A = ' + str(prob))
             return prob
-        except:
+        except Exception as e:
+            print('une erreur est survenue lors de la proba')
+            print(e)
             tentative = tentative + 1
             continue
     if link:

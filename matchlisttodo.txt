@@ -40,3 +40,13 @@
 ['Alexander Zverev', 'Novak Djokovic']|atp roland-garros terre battue|zverev-novak-djokovic|0.53
 ['Jannik Sinner', 'Alexander Bublik']|atp roland-garros terre battue|sinner-alexander-bublik|0.52
 ['Lorenzo Musetti', 'Frances Tiafoe']|atp roland-garros terre battue|musetti-frances-tiafoe|0.46
+['Lorenzo Musetti', 'Carlos Alcaraz Garfia']|atp roland-garros terre battue|carlos-alcaraz-garfia|0.51
+['Maja Chwalinska', 'Ana Bogdan']|wta bari terre battue|chwalinska-ana-bogdan|0.47
+['Nuria Parrizas-Diaz', 'Ena Shibahara']|wta bari terre battue|diaz-ena-shibahara|0.46143899999999993
+['Mayar Sherif', 'Elena Pridankina']|wta makarska terre battue|sherif-elena-pridankina|0.46
+['Astra Sharma', 'Kathinka Von Deichmann']|wta bari terre battue|kathinka-von-deichmann|0.46
+['Elsa Jacquemot', 'Viktoriya Tomova']|wta bari terre battue|jacquemot-viktoriya-tomova|0.46
+['Maya Joint', 'Louisa Chirico']|wta makarska terre battue|joint-louisa-chirico|0.43
+['Han Shi', 'Nuria Brancaccio']|itf caserte femmes terre battue|shi-nuria-brancaccio|0.43
+['Marina Bassols Ribera', 'Xinxin Yao']|itf caserte femmes terre battue|ribera-xinxin-yao|0.41
+['Margaux Rouvroy', 'Petra Martić']|wta makarska terre battue|rouvroy-petra-martic|0.401321

@@ -158,6 +158,9 @@ def all_script(driver):
         current_game = int(config.jeu_actuel)
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
+            if config.error:
+                print('ERROR QUIT !!!')
+                break
             print('passage prochain script')
             # Check if all script types have global_match_win > 1
             all_below_one = all(
@@ -205,77 +208,69 @@ def all_script(driver):
             else:
                 GetAndPlaceBet(driver)
                 print(config.global_match_win)
-            getresult0300 = False
-            while not getresult0300:
-                if config.result == 'RUN':
+            if config.result == 'RUN':
+                continue
+            GetScoreActuel(driver)
+            if config.validated_bet:
+                if int(config.jeu_actuel) < int(config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
+                        config.validated_bet.get('set')):
                     continue
+            if config.validated_bet.get('result') is None:
+                GetResult(driver)
+
+            if config.validated_bet.get('result') == 'LOSE':
+                # VÉRIFCATION DU SET ACTUEL
                 GetScoreActuel(driver)
-                if config.validated_bet:
-                    if int(config.jeu_actuel) < int(config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
-                            config.validated_bet.get('set')):
-                        continue
-                if config.validated_bet.get('result') is None:
-                    GetResult(driver)
-                if config.validated_bet.get('result') == 'LOSE':
-                    # VÉRIFCATION DU SET ACTUEL
-                    GetScoreActuel(driver)
-                    if not config.set_actuel:
-                        config.error = True
-                    config.log('set ' + str(config.set_actuel) + ' - nex set ' + str(config.newset))
-                    if str(int(config.newset) - 1) == str(config.set_actuel):  ## si on est toujours sur le meme set
-                        config.log('on est toujours sur le meme set', config.newmatch)
-                        ##VALIDATION DU PARIS SI SCORE OK
-                        validate_bet = False
-                        tentative = 0
-                        while not validate_bet and not config.error and tentative < 3:
-                            # VÉRIFICATION DU SCORE ACTUEL
-                            tentative = tentative + 1
-                            print('tentative validation ' + str(tentative))
-                            if ValidationDuParis(driver, True):
-                                validate_bet = True
-                            else:
-                                FirstGameBet(driver)
-                                firstjeu = True
-                                current_game = int(config.jeu_actuel)
-                    elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
-                        txtlog = " ON EST SUR LE PROCHAIN SET"
-                        passageset = True
-                        config.newset = int(config.set_actuel) + 1
-                        config.log(txtlog, config.newmatch)
-                        DeleteBet(driver)
-                        txtlog = 'Wait 30 sec'
-                        config.log(txtlog, config.newmatch)
-                        break
-                    else:
-                        print("ERROR : ecup set " + str(config.set_actuel))
-                        config.error = True
-                elif config.validated_bet.get('result') == 'WIN':
-                    config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
-                        config.netprofit)
-                    config.winmatch[scriptType] = config.winmatch[scriptType] + 1
-                    config.ScriptConfig(scriptType).reset()
-                    config.init_variable()
+                if not config.set_actuel:
+                    config.error = True
+                config.log('set ' + str(config.set_actuel) + ' - nex set ' + str(config.newset))
+                if str(int(config.newset) - 1) == str(config.set_actuel):  ## si on est toujours sur le meme set
+                    config.log('on est toujours sur le meme set', config.newmatch)
+                    ##VALIDATION DU PARIS SI SCORE OK
+                    validate_bet = False
+                    tentative = 0
+                    while not validate_bet and not config.error and tentative < 3:
+                        # VÉRIFICATION DU SCORE ACTUEL
+                        tentative = tentative + 1
+                        print('tentative validation ' + str(tentative))
+                        if ValidationDuParis(driver, True):
+                            validate_bet = True
+                        else:
+                            FirstGameBet(driver)
+                            firstjeu = True
+                            current_game = int(config.jeu_actuel)
+                elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
+                    txtlog = " ON EST SUR LE PROCHAIN SET"
+                    passageset = True
+                    config.newset = int(config.set_actuel) + 1
+                    config.log(txtlog, config.newmatch)
                     DeleteBet(driver)
-                    if float(config.global_match_win[scriptType]) < config.total_want_win:
-                        print("#RECHERCHE INFOS DE MISE")
-                        getGlobalPerte()
-                        config.error = False
-                        config.log(f'Net profit: {config.global_match_win[scriptType]}')
-                        config.log(f"Restart {config.scriptType}", 'success', False)
-                        ##VALIDATION DU PARIS SI SCORE OK
-                        FirstGameBet(driver)
-                        firstjeu = True
-                        current_game = int(config.jeu_actuel)
-                    else:
-                        config.log(f'Net profit: {config.global_match_win[scriptType]}')
-                        config.log(f"FIN {config.scriptType}", 'success', False)
-                if config.scriptType == '300':
-                    print('Verif script 030')
-                    config.switchScript('030')
-                    if config.validated_bet.get('result') is None and int(config.validated_bet.get('jeu')) == int(
-                            config.jeu_actuel):
-                        continue
-                getresult0300 = True
+                    txtlog = 'Wait 30 sec'
+                    config.log(txtlog, config.newmatch)
+                    break
+                else:
+                    print("ERROR : ecup set " + str(config.set_actuel))
+                    config.error = True
+            elif config.validated_bet.get('result') == 'WIN':
+                config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
+                    config.netprofit)
+                config.winmatch[scriptType] = config.winmatch[scriptType] + 1
+                config.ScriptConfig(scriptType).reset()
+                config.init_variable()
+                DeleteBet(driver)
+                if float(config.global_match_win[scriptType]) < config.total_want_win:
+                    print("#RECHERCHE INFOS DE MISE")
+                    getGlobalPerte()
+                    config.error = False
+                    config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                    config.log(f"Restart {config.scriptType}", 'success', False)
+                    ##VALIDATION DU PARIS SI SCORE OK
+                    FirstGameBet(driver)
+                    firstjeu = True
+                    current_game = int(config.jeu_actuel)
+                else:
+                    config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                    config.log(f"FIN {config.scriptType}", 'success', False)
     config.switchScript('4315A')
     print("update : " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)

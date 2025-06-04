@@ -16,19 +16,19 @@ else:
 try:
     opt.add_experimental_option("debuggerAddress", "localhost:43151")
     # Utilisation correcte du chemin pour macOS
-    driver = webdriver.Chrome(executable_path=Path, options=opt)
+    driver = webdriver.Chrome(executable_path=Path, options=opt, timeout=60)
 except Exception as e:
     try:
         opt.add_experimental_option("debuggerAddress", "localhost:43151")
         service = Service(executable_path=Path)  # Modification du chemin
-        driver = webdriver.Chrome(service=service, options=opt)
+        driver = webdriver.Chrome(service=service, options=opt, timeout=60)
     except Exception as e:
         try:
             opt = webdriver.ChromeOptions()
             opt.add_experimental_option("debuggerAddress", "localhost:43151")
             opt.binary_location = Path  # Chemin binaire adapté pour macOS
             # Initialiser l'instance de WebDriver avec les options
-            driver = webdriver.Chrome(options=opt)
+            driver = webdriver.Chrome(options=opt, timeout=60)
         except Exception as e:
             sys.stdout.write(f'\rUne erreur est survenue : {e}\n')
             sys.stdout.write('Merci de réessayer.\n')
