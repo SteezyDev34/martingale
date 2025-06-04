@@ -128,7 +128,6 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
     tentative = 0
     prob = 0
     ok = 0
-    driver.set_page_load_timeout(10)  # 30 secondes max
     playersName = [playerName1, playerName2]
     while ok == 0 and tentative < 2:
         i = 1

@@ -172,7 +172,6 @@ def init_variable():
     val = config_global.get("cote_base")
     if val is not None:
         cotebase = float(val)
-
     val = config_global.get("mise")
     if val is not None:
         mise = float(val)
@@ -335,7 +334,6 @@ class ScriptConfig:
             config['saved_score'] = False
             config['rattrape_perte'] = False
             config['result'] = False
-            config['cote_base'] = 1
 
         return config
 

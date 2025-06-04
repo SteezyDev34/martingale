@@ -28,7 +28,7 @@ def GetIfGameStart(driver):
             config.game_end = True
             time.sleep(1)  # attente 20 sec que le jeu commence
             # END GET SCORE
-        elif config.score_actuel == '15:0' or config.score_actuel == '0:15' or config.score_actuel == '15:15' or config.score_actuel == '30:15' or config.score_actuel == '15:30' or config.score_actuel == '40:15' or config.score_actuel == '15:40' or config.score_actuel == '0:30' or config.score_actuel == '30:0' or config.score_actuel == '30:30' or config.score_actuel == '30:40' or config.score_actuel == '40:30' or config.score_actuel == '0:40' or config.score_actuel == '40:0':
+        elif config.score_actuel == '40:40' or config.score_actuel == '40:A' or config.score_actuel == 'A:40' or config.score_actuel == '15:0' or config.score_actuel == '0:15' or config.score_actuel == '15:15' or config.score_actuel == '30:15' or config.score_actuel == '15:30' or config.score_actuel == '40:15' or config.score_actuel == '15:40' or config.score_actuel == '0:30' or config.score_actuel == '30:0' or config.score_actuel == '30:30' or config.score_actuel == '30:40' or config.score_actuel == '40:30' or config.score_actuel == '0:40' or config.score_actuel == '40:0':
             print('GAME START')
             config.game_start = True
         elif not config.score_actuel:

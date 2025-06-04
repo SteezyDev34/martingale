@@ -58,8 +58,8 @@ def all_script(driver):
         FirstGameBet(driver)
 
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
+    GetIfGameEnd(driver)
     RetourTpsReg(driver)
-
     passageset = False
     while not config.error:
         GetJeuActuel(driver)
@@ -143,13 +143,7 @@ def all_script(driver):
                 config.log(txtlog, config.newmatch)
                 DeleteBet(driver)
                 continue
-            if firstjeu or int(current_game) != int(config.jeu_actuel):
-                print('firstgame')
-                time.sleep(2)
-                firstjeu = False
-                current_game = config.jeu_actuel
-            else:
-                GetIfGameStart(driver)
+            GetIfGameStart(driver)
         # JEU FINI ON PREPARE LE IPROCHAIN BET
         txtlog = "JEU START ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)
@@ -211,7 +205,8 @@ def all_script(driver):
                 if int(config.jeu_actuel) < int(config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
                         config.validated_bet.get('set')):
                     continue
-
+            GetIfGameStart(driver)
+            print('get result')
             config.result = GetResult(driver)
             if config.result == 'LOSE':
                 # VÉRIFCATION DU SET ACTUEL
@@ -267,6 +262,7 @@ def all_script(driver):
                 else:
                     config.log(f'Net profit: {config.global_match_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
+        GetIfGameEnd(driver)
     config.switchScript('4315A')
     print("update : " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)

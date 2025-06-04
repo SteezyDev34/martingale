@@ -2,7 +2,6 @@ import time
 
 import config
 from Functions.Function_GetJeuActuel import GetSetScoreActuel
-from Functions.GetIfGameStart import GetIfGameStart
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
@@ -27,8 +26,6 @@ def GetResult(driver):
 
         if config.scriptType == "40A" or config.scriptType == '40:30' or config.scriptType == '6P':
             passed_score = ['0:0', '40:40', '40:A', 'A:40']
-            if config.jeu_actuel == int(config.validated_bet.get('jeu')):
-                GetIfGameStart(driver)
         elif config.scriptType == "30A":
             passed_score = [
                 '30:30', '40:15', '15:40', '30:40',
