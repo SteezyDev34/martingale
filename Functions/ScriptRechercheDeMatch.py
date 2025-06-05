@@ -275,7 +275,7 @@ def classementeDeMatch(driver):
                 config.error = False
                 break
             liguelist.append([bet_ligue.find_elements(By.CLASS_NAME,
-                                                      'ui-dashboard-champ-name__link')[
+                                                      'dashboard-champ-name__label')[
                 0].get_attribute(
                 "href"), config.ligue_name])
 
@@ -283,7 +283,7 @@ def classementeDeMatch(driver):
             driver.get(link[0])
             config.ligue_name = link[1]
             bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                                  'ui-dashboard-champ__games')
+                                                  'dashboard-champ-body__games')
             # POUR CHAQUE LIGUE RÉCUPÉRÉE
             for bet_ligue in bet_list_ligue:
 
@@ -416,7 +416,16 @@ def newclassementeDeMatch(driver):
         print('find countries')
         countrybutton = country.find_elements(By.CLASS_NAME, 'sports-menu-group-by-champ')
         for cntrybtn in countrybutton:
-            print('contry')
+            print('country', cntrybtn.text.lower())
+            if ('double' in cntrybtn.text.lower()
+                    or 'spéciaux' in cntrybtn.text.lower()
+                    or 'itf' in cntrybtn.text.lower()
+                    or 'mixte' in cntrybtn.text.lower()
+                    or 'gagnant' in cntrybtn.text.lower()
+                    or 'winner' in cntrybtn.text.lower()
+                    or 'utr' in cntrybtn.text.lower()
+                    or 'couple' in cntrybtn.text.lower()):
+                continue
             cntrybtn.click()
             print('click cntry')
             if 'itf' in cntrybtn.text.lower():
@@ -428,7 +437,7 @@ def newclassementeDeMatch(driver):
             link = lbtn.find_element(By.CLASS_NAME, 'ui-nav-link__content').get_attribute(
                 "href")
             links.append(link)
-        print(links)
+        print('links', links)
         matchlist = []
         liguelist = []
         for link in links:
@@ -436,24 +445,24 @@ def newclassementeDeMatch(driver):
             time.sleep(5)
             bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                                   'dashboard-champ')
+            print('bet_list_ligue', bet_list_ligue)
 
             for bet_ligue in bet_list_ligue:
                 # ON RÉCUPÈRE LE NOM DE LA LIGUE
                 config.ligue_name = GetLigueName.main(bet_ligue)
+                print('config.ligue_nam', config.ligue_name)
                 # EN CAS D'ERREUR
                 if not config.ligue_name:
                     config.error = False
-                    break
+                    continue
                 liguelist.append([bet_ligue.find_elements(By.CLASS_NAME,
-                                                          'ui-dashboard-champ-name__link')[
+                                                          'dashboard-champ__more')[
                     0].get_attribute(
                     "href"), config.ligue_name])
-
-        for link in liguelist:
-            driver.get(link[0])
-            config.ligue_name = link[1]
+            print('liguelist', liguelist)
             bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                                  'ui-dashboard-champ__games')
+                                                  'dashboard-champ-body__games')
+            print('len bet_list_ligue', len(bet_list_ligue))
             # POUR CHAQUE LIGUE RÉCUPÉRÉE
             for bet_ligue in bet_list_ligue:
 
@@ -490,7 +499,7 @@ def newclassementeDeMatch(driver):
                                 match.append(players_name)
                                 match.append(config.ligue_name)
                                 newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
-                                                                     'dashboard-game-block__link')[
+                                                                     'dashboard-game-block-link')[
                                     0].get_attribute(
                                     "href")
                                 newmatch = newmatchtxt.split(
@@ -500,10 +509,6 @@ def newclassementeDeMatch(driver):
                                 matchlist.append(match)
 
                             except Exception as e:
-                                print(e)
-                                txtlog = "Impossible de récupérer le score"
-                                config.log(txtlog, 0, config.newmatch)
-                                print(txtlog)
                                 continue
                             else:
                                 print('ok')
