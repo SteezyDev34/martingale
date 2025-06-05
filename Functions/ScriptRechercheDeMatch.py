@@ -673,6 +673,7 @@ def newclassementeDeMatch(driver):
         print(len(matchlist))
         goodmatch = []
         for matchItem in matchlist:
+            from ChromeDriver.SetDriver1 import driver
             players_name = matchItem[0]
             ligue_name = matchItem[1]
             print(matchItem)

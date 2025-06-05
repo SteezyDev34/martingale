@@ -68,7 +68,7 @@ def GetBet(driver, nextBet=False):
             sautDeLigne = 50 * 2
         elif config.scriptType == '15A' and nextBet:
             sautDeLigne = 50 * 2
-        elif config.scriptType == '30A' or config.scriptType == '15A':
+        elif config.scriptType == '30A' or config.scriptType == '15A' or config.scriptType == '6P':
             sautDeLigne = 50 * 2
         else:
             sautDeLigne = 68

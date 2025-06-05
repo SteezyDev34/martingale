@@ -34,6 +34,7 @@ def GetIfMatchPage(driver):
             except Exception as e:
                 config.log('     Ce n\'est pas une page de match', 'warning', False)
                 config.log_clear_line()
+                config.error = True
                 return False
             else:
                 config.log_clear_line(5)

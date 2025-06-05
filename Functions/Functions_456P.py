@@ -9,7 +9,6 @@ from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
-from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte
@@ -17,7 +16,6 @@ from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
-from Functions.ValidationDuParis import ValidationDuParis
 from Functions.VerificationMatchTrouve import newmatchFromUrl
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
@@ -58,7 +56,18 @@ def all_script(driver):
         FirstGameBet(driver)
 
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
-    GetIfGameEnd(driver)
+    print('FIRST GAME DONE')
+    waitendgame = True
+    firstjeu = True
+    for scriptType in config.scriptTypeList:
+        config.switchScript(scriptType)
+        if int(config.jeu_actuel) == int(config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
+                config.validated_bet.get('set')):
+            waitendgame = False
+            break
+
+    if waitendgame:
+        GetIfGameEnd(driver)
     RetourTpsReg(driver)
     passageset = False
     while not config.error:
@@ -113,7 +122,6 @@ def all_script(driver):
                             continue
                     else:
                         firstjeu = True
-                        current_game = int(config.jeu_actuel)
                         FirstGameBet(driver)
             elif config.perte > 0:
                 DispatchPerte()
@@ -127,7 +135,6 @@ def all_script(driver):
                     time.sleep(30)
                 FirstGameBet(driver)
                 firstjeu = True
-                current_game = int(config.jeu_actuel)
             else:
                 current_frame = inspect.currentframe()
                 config.log(
@@ -143,6 +150,7 @@ def all_script(driver):
                 config.log(txtlog, config.newmatch)
                 DeleteBet(driver)
                 continue
+            print('ATTENTE DEBUT DE JEU')
             GetIfGameStart(driver)
         # JEU FINI ON PREPARE LE IPROCHAIN BET
         txtlog = "JEU START ON PREPARE LE PROCHAIN BET"
@@ -151,7 +159,7 @@ def all_script(driver):
         current_game = int(config.jeu_actuel)
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
-            print('passage prochain script')
+            print('passage prochain script ', scriptType)
             # Check if all script types have global_match_win > 1
             all_below_one = all(
                 float(config.global_match_win[st]) >= config.total_want_win for st in config.scriptTypeList)
@@ -196,16 +204,17 @@ def all_script(driver):
                 passageset = True
                 break
             else:
-                GetAndPlaceBet(driver)
+                # GetAndPlaceBet(driver)
                 print(config.global_match_win)
             if config.result == 'RUN':
+                print('RUN')
                 continue
             GetScoreActuel(driver)
             if config.validated_bet:
                 if int(config.jeu_actuel) < int(config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
                         config.validated_bet.get('set')):
+                    print('already bet')
                     continue
-            GetIfGameStart(driver)
             print('get result')
             config.result = GetResult(driver)
             if config.result == 'LOSE':
@@ -219,16 +228,11 @@ def all_script(driver):
                     ##VALIDATION DU PARIS SI SCORE OK
                     validate_bet = False
                     tentative = 0
-                    while not validate_bet and not config.error and tentative < 3:
-                        # VÉRIFICATION DU SCORE ACTUEL
-                        tentative = tentative + 1
-                        print('tentative validation ' + str(tentative))
-                        if ValidationDuParis(driver, True):
-                            validate_bet = True
-                        else:
-                            FirstGameBet(driver)
-                            firstjeu = True
-                            current_game = int(config.jeu_actuel)
+                    # VÉRIFICATION DU SCORE ACTUEL
+                    tentative = tentative + 1
+                    print('tentative validation ' + str(tentative))
+                    FirstGameBet(driver)
+                    firstjeu = True
                 elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                     txtlog = " ON EST SUR LE PROCHAIN SET"
                     passageset = True
@@ -258,11 +262,11 @@ def all_script(driver):
                     ##VALIDATION DU PARIS SI SCORE OK
                     FirstGameBet(driver)
                     firstjeu = True
-                    current_game = int(config.jeu_actuel)
                 else:
                     config.log(f'Net profit: {config.global_match_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
-        GetIfGameEnd(driver)
+        if current_game == int(config.jeu_actuel):
+            GetIfGameEnd(driver)
     config.switchScript('4315A')
     print("update : " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
