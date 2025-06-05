@@ -86,7 +86,7 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
     loginsuccessful = False
     while not loginsuccessful:
         try:
-            auth_code = get_authenticator_code(driver)
+            # auth_code = get_authenticator_code(driver)
             # Navigate to Lollybet
             driver.get("https://ca.1xbet.com/fr/")
 
