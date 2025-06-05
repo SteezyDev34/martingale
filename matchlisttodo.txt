@@ -50,3 +50,20 @@
 ['Han Shi', 'Nuria Brancaccio']|itf caserte femmes terre battue|shi-nuria-brancaccio|0.43
 ['Marina Bassols Ribera', 'Xinxin Yao']|itf caserte femmes terre battue|ribera-xinxin-yao|0.41
 ['Margaux Rouvroy', 'Petra Martić']|wta makarska terre battue|rouvroy-petra-martic|0.401321
+['Anna Bondar', 'Jil Belen Teichmann']|wta bari terre battue|jil-belen-teichmann|0.49
+['Sijia Wei', 'Kimberly Birrell']|wta birmingham gazon|wei-kimberly-birrell|0.48
+['Linda Fruhvirtova', 'Lucrezia Stefanini']|wta birmingham gazon|fruhvirtova-lucrezia-stefanini|0.47
+['Rinky Hijikata', 'Alex Bolt']|challenger birmingham gazon|hijikata-alex-bolt|0.47
+['Paul Jubb', 'Patrick Kypson']|challenger tyler dur|jubb-patrick-kypson|0.47
+['Robin Montgomery', 'Zeynep Sonmez']|wta birmingham gazon|montgomery-zeynep-sonmez|0.46
+['Sara Bejlek', 'Petra Martić']|wta makarska terre battue|bejlek-petra-martic|0.46
+['Mona Barthel', 'Katie Volynets']|wta makarska terre battue|barthel-katie-volynets|0.46
+['Viktorija Golubic', 'Rebeka Masarova']|wta birmingham gazon|golubic-rebeka-masarova|0.45
+['Hugo Dellien', 'Dimitar Kuzmanov']|challenger prostějov terre battue|dellien-dimitar-kuzmanov|0.45
+['Iryna Shymanovich', 'Anca Alexia Todoni']|wta bari terre battue|anca-alexia-todoni|0.44
+['Greet Minnen', 'Tereza Martincova']|wta birmingham gazon|minnen-tereza-martincova|0.44
+['Rio Noguchi', 'Yi Zhou']|challenger tyler dur|noguchi-yi-zhou|0.44
+['Francesco Passaro', 'Ignacio Buse']|heilbronn challenger terre battue|passaro-ignacio-buse|0.43
+['Marc-Andrea Huesler', 'Otto Virtanen']|challenger birmingham gazon|huesler-otto-virtanen|0.42
+['Daniel Rincon', 'Facundo Mena']|heilbronn challenger terre battue|rincon-facundo-mena|0.42
+['Zachary Svajda', 'Chak Lam Coleman Wong']|challenger birmingham gazon|lam-coleman-wong|0.41
