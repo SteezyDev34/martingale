@@ -79,7 +79,7 @@ def is_code_valid(driver, timeout=5):
         return True
 
 
-def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
+def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet4"):
     """
     Logs into the account using provided credentials
     """
