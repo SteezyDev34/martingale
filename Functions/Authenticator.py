@@ -135,7 +135,7 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
                 EC.presence_of_element_located((By.CLASS_NAME, 'auth-form-fields'))
             )
 
-            # Wait for two-factor authentication form
+            '''# Wait for two-factor authentication form
             print("Waiting for 2FA form...")
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "auth-form-two-step"))
@@ -156,7 +156,7 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
             WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, ".auth-form-two-step__submit"))
             )
-            confirm_button.click()
+            confirm_button.click()'''
             if is_code_valid(driver):
                 print("Login process completed successfully")
                 input('Press ENTER to continue')
