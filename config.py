@@ -116,7 +116,7 @@ teams = False
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
-total_want_win = 0.2
+total_want_win = 1
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:
