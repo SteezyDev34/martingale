@@ -136,6 +136,7 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
             for playerName in playersName:
                 print(playerName)
                 print('try driver get')
+                driver.switch_to.window(driver.window_handles[0])
                 driver.get('https://www.wtatennis.com/rankings/singles')
                 print('drvier get done')
                 element = WebDriverWait(driver, 5).until(
@@ -170,15 +171,19 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
                     try:
                         time.sleep(2)
                         curretn = driver.current_url + '/stats'
+                        print('driver get stats', curretn)
+                        driver.switch_to.window(driver.window_handles[0])
                         driver.get(curretn)
+                        print('driver ok')
                         # Attendre que le conteneur des stats soit chargé
                         WebDriverWait(driver, 5).until(
                             EC.presence_of_element_located((By.CLASS_NAME, "player-stats__secondary-stats"))
                         )
+                        print('player-stats__secondary-stats')
                         WebDriverWait(driver, 5).until(
                             EC.presence_of_element_located((By.CLASS_NAME, "tournament-year-dropdown"))
                         )
-
+                        print('tournament-year-dropdown')
                         # Cliquer sur le bouton du menu déroulant
                         dropdown_button = driver.find_element(By.CLASS_NAME, "tournament-year-dropdown__clickzone")
                         dropdown_button.click()
@@ -187,6 +192,7 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
                         WebDriverWait(driver, 10).until(
                             EC.presence_of_element_located((By.CLASS_NAME, "tournament-year-dropdown__option"))
                         )
+                        print('tournament-year-dropdown__option')
 
                         time.sleep(3)
 
@@ -244,8 +250,9 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
                         else:
                             i = i + 1
                         print('end')
-                    except:
+                    except Exception as e:
                         print('no stats found')
+                        print(e)
 
             # Calcul de la probabilité pour le joueur et l'adversaire
             prob_40_40_joueur1 = prob_service_joueur1 * prob_retour_joueur1
@@ -262,6 +269,7 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
             tentative = tentative + 1
             continue
     if link:
+        driver.switch_to.window(driver.window_handles[0])
         driver.get(link)
     return prob
 

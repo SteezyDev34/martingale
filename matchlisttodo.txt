@@ -67,3 +67,4 @@
 ['Marc-Andrea Huesler', 'Otto Virtanen']|challenger birmingham gazon|huesler-otto-virtanen|0.42
 ['Daniel Rincon', 'Facundo Mena']|heilbronn challenger terre battue|rincon-facundo-mena|0.42
 ['Zachary Svajda', 'Chak Lam Coleman Wong']|challenger birmingham gazon|lam-coleman-wong|0.41
+['Aryna Sabalenka', 'Iga Swiatek']|wta roland garros terre battue|sabalenka-iga-swiatek|0.6
