@@ -243,7 +243,7 @@ def all_script(driver):
                     config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
             config.log(f'Net profit: {config.global_match_win}')
-            if float(config.global_match_win) >= 0.2:
+            if float(config.global_match_win) >= 1:
                 break
     if config.perte > 0.2:
         DispatchPerte()
