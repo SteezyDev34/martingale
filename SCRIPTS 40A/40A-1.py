@@ -84,7 +84,7 @@ if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in
     config.in_stat = True
 config.init_variable()
 
-while (config.win < 100):
+while (config.win < 20):
 
     try:
         Functions_40a_proba.all_script(driver)
