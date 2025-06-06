@@ -115,7 +115,7 @@ def get_proba_40A_other(playerName1, playerName2, driver, link=False):
     return prob
 
 
-def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
+def get_wta_proba_40A_other(playerName1, playerName2, driver1, link=False):
     print('get proba other')
     prob_service_joueur1 = 0
     prob_service_joueur2 = 0
@@ -130,14 +130,18 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
     ok = 0
     playersName = [playerName1, playerName2]
     while ok == 0 and tentative < 2:
+        from ChromeDriver.SetDriver import driver
         i = 1
         try:
             print(playersName)
             for playerName in playersName:
                 print(playerName)
                 print('try driver get')
-                driver.switch_to.window(driver.window_handles[0])
-                driver.get('https://www.wtatennis.com/rankings/singles')
+                try:
+                    driver.switch_to.window(driver.window_handles[0])
+                    driver.get('https://www.wtatennis.com/rankings/singles')
+                except:
+                    print('te')
                 print('drvier get done')
                 element = WebDriverWait(driver, 5).until(
                     EC.presence_of_element_located(
@@ -173,7 +177,10 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
                         curretn = driver.current_url + '/stats'
                         print('driver get stats', curretn)
                         driver.switch_to.window(driver.window_handles[0])
-                        driver.get(curretn)
+                        try:
+                            driver.get(curretn)
+                        except:
+                            print('te')
                         print('driver ok')
                         # Attendre que le conteneur des stats soit chargé
                         WebDriverWait(driver, 5).until(
@@ -270,7 +277,10 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver, link=False):
             continue
     if link:
         driver.switch_to.window(driver.window_handles[0])
-        driver.get(link)
+        try:
+            driver.get(link)
+        except:
+            print('te')
     return prob
 
 

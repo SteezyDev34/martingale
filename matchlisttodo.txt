@@ -1,26 +1,13 @@
 
-['Anna Bondar', 'Jil Belen Teichmann']|wta bari terre battue|jil-belen-teichmann|0.49
-['Sijia Wei', 'Kimberly Birrell']|wta birmingham gazon|wei-kimberly-birrell|0.48
-['Maja Chwalinska', 'Ana Bogdan']|wta bari terre battue|chwalinska-ana-bogdan|0.47
-['Linda Fruhvirtova', 'Lucrezia Stefanini']|wta birmingham gazon|fruhvirtova-lucrezia-stefanini|0.47
-['Rinky Hijikata', 'Alex Bolt']|challenger birmingham gazon|hijikata-alex-bolt|0.47
-['Paul Jubb', 'Patrick Kypson']|challenger tyler dur|jubb-patrick-kypson|0.47
-['Nuria Parrizas-Diaz', 'Ena Shibahara']|wta bari terre battue|diaz-ena-shibahara|0.46143899999999993
-['Astra Sharma', 'Kathinka Von Deichmann']|wta bari terre battue|kathinka-von-deichmann|0.46
-['Elsa Jacquemot', 'Viktoriya Tomova']|wta bari terre battue|jacquemot-viktoriya-tomova|0.46
-['Robin Montgomery', 'Zeynep Sonmez']|wta birmingham gazon|montgomery-zeynep-sonmez|0.46
-['Mayar Sherif', 'Elena Pridankina']|wta makarska terre battue|sherif-elena-pridankina|0.46
-['Sara Bejlek', 'Petra Martić']|wta makarska terre battue|bejlek-petra-martic|0.46
-['Mona Barthel', 'Katie Volynets']|wta makarska terre battue|barthel-katie-volynets|0.46
-['Viktorija Golubic', 'Rebeka Masarova']|wta birmingham gazon|golubic-rebeka-masarova|0.45
-['Hugo Dellien', 'Dimitar Kuzmanov']|challenger prostějov terre battue|dellien-dimitar-kuzmanov|0.45
-['Iryna Shymanovich', 'Anca Alexia Todoni']|wta bari terre battue|anca-alexia-todoni|0.44
-['Greet Minnen', 'Tereza Martincova']|wta birmingham gazon|minnen-tereza-martincova|0.44
+['Sijia Wei', 'Kimberly Birrell']|wta birmingham gazon|wei-kimberly-birrell|0.442481
+['Kathinka Von Deichmann', 'Ana Bogdan']|wta bari terre battue|deichmann-ana-bogdan|0.440336
+['Chun Hsin Tseng', 'Alejandro Tabilo']|challenger prostějov terre battue|tseng-alejandro-tabilo|0.44
 ['Rio Noguchi', 'Yi Zhou']|challenger tyler dur|noguchi-yi-zhou|0.44
-['Maya Joint', 'Louisa Chirico']|wta makarska terre battue|joint-louisa-chirico|0.43
+['Brandon Holt', 'Adrian Mannarino']|challenger birmingham gazon|holt-adrian-mannarino|0.43
+['Rinky Hijikata', 'Alex Bolt']|challenger birmingham gazon|hijikata-alex-bolt|0.43
 ['Francesco Passaro', 'Ignacio Buse']|heilbronn challenger terre battue|passaro-ignacio-buse|0.43
-['Marc-Andrea Huesler', 'Otto Virtanen']|challenger birmingham gazon|huesler-otto-virtanen|0.42
-['Zachary Svajda', 'Chak Lam Coleman Wong']|challenger birmingham gazon|lam-coleman-wong|0.41
-['Sumit Nagal', 'Rodrigo Pacheco Mendez']|heilbronn challenger terre battue|rodrigo-pacheco-mendez|0.4
-['Daniel Rincon', 'Facundo Mena']|heilbronn challenger terre battue|rincon-facundo-mena|0.42
-['Aryna Sabalenka', 'Iga Swiatek']|wta roland garros terre battue|sabalenka-iga-swiatek|0.6
+['Rodrigo Pacheco Mendez', 'Marco Trungelliti']|heilbronn challenger terre battue|mendez-marco-trungelliti|0.42
+['Vitaliy Sachko', 'Hugo Dellien']|challenger prostějov terre battue|sachko-hugo-dellien|0.41
+['Facundo Mena', 'Marko Topo']|heilbronn challenger terre battue|mena-marko-topo|0.4
+['Robin Montgomery', 'Zeynep Sonmez']|wta birmingham gazon|montgomery-zeynep-sonmez|0.47637000000000007
+['Yan Bai', 'Wishaya Trongcharoenchaikul']|itf luan dur|bai-wishaya-trongcharoenchaikul|0.42
