@@ -138,6 +138,7 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver1, link=False):
                 print(playerName)
                 print('try driver get')
                 try:
+                    from ChromeDriver.SetDriver1 import driver
                     driver.switch_to.window(driver.window_handles[0])
                     driver.get('https://www.wtatennis.com/rankings/singles')
                 except:
@@ -174,8 +175,11 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver1, link=False):
                         print('not found')
                     try:
                         time.sleep(2)
+                        from ChromeDriver.SetDriver1 import driver
                         curretn = driver.current_url + '/stats'
+                        driver.get("https://ca.1xbet.com/fr/live/tennis")
                         print('driver get stats', curretn)
+                        from ChromeDriver.SetDriver1 import driver
                         driver.switch_to.window(driver.window_handles[0])
                         try:
                             driver.get(curretn)
@@ -257,9 +261,12 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver1, link=False):
                         else:
                             i = i + 1
                         print('end')
+                        from ChromeDriver.SetDriver1 import driver
+                        driver.get("https://ca.1xbet.com/fr/live/tennis")
                     except Exception as e:
+                        from ChromeDriver.SetDriver1 import driver
                         print('no stats found')
-                        print(e)
+                        driver.get("https://ca.1xbet.com/fr/live/tennis")
 
             # Calcul de la probabilité pour le joueur et l'adversaire
             prob_40_40_joueur1 = prob_service_joueur1 * prob_retour_joueur1
@@ -276,6 +283,7 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver1, link=False):
             tentative = tentative + 1
             continue
     if link:
+        from ChromeDriver.SetDriver1 import driver
         driver.switch_to.window(driver.window_handles[0])
         try:
             driver.get(link)

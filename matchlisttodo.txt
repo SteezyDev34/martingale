@@ -1,13 +1,13 @@
 
-['Sijia Wei', 'Kimberly Birrell']|wta birmingham gazon|wei-kimberly-birrell|0.442481
-['Kathinka Von Deichmann', 'Ana Bogdan']|wta bari terre battue|deichmann-ana-bogdan|0.440336
-['Chun Hsin Tseng', 'Alejandro Tabilo']|challenger prostějov terre battue|tseng-alejandro-tabilo|0.44
-['Rio Noguchi', 'Yi Zhou']|challenger tyler dur|noguchi-yi-zhou|0.44
-['Brandon Holt', 'Adrian Mannarino']|challenger birmingham gazon|holt-adrian-mannarino|0.43
-['Rinky Hijikata', 'Alex Bolt']|challenger birmingham gazon|hijikata-alex-bolt|0.43
-['Francesco Passaro', 'Ignacio Buse']|heilbronn challenger terre battue|passaro-ignacio-buse|0.43
-['Rodrigo Pacheco Mendez', 'Marco Trungelliti']|heilbronn challenger terre battue|mendez-marco-trungelliti|0.42
-['Vitaliy Sachko', 'Hugo Dellien']|challenger prostějov terre battue|sachko-hugo-dellien|0.41
+['Raul Brancaccio', 'Iliyan Radulov']|itf cordoba terre battue|brancaccio-iliyan-radulov|0.58
+['James Duckworth', 'Benjamin Hassan']|atp stuttgart qualification gazon|duckworth-benjamin-hassan|0.46
+['Mackenzie Mcdonald', 'Ryan Peniston']|atp bois-le-duc qualification gazon|mcdonald-ryan-peniston|0.45
+['Adam Walton', 'Daniel Evans']|atp bois-le-duc qualification gazon|walton-daniel-evans|0.44
+['Marco Trungelliti', 'Ignacio Buse']|heilbronn challenger terre battue|trungelliti-ignacio-buse|0.44
+['Reilly Opelka', 'Denis Yevseyev']|atp bois-le-duc qualification gazon|opelka-denis-yevseyev|0.42
+['Maximilian Marterer', 'Pierre-Hugues Herbert']|atp stuttgart qualification gazon|pierre-hugues-herbert|0.42
+['Hugo Grenier', 'Nikoloz Basilashvili']|atp stuttgart qualification gazon|grenier-nikoloz-basilashvili|0.42
+['Beibit Zhukayev', 'Marc-Andrea Huesler']|atp stuttgart qualification gazon|marc-andrea-huesler|0.42
+['Hugo Dellien', 'Chun Hsin Tseng']|challenger prostejov terre battue|chun-hsin-tseng|0.42
+['Otto Virtanen', 'Brandon Holt']|challenger birmingham gazon|virtanen-brandon-holt|0.41
 ['Facundo Mena', 'Marko Topo']|heilbronn challenger terre battue|mena-marko-topo|0.4
-['Robin Montgomery', 'Zeynep Sonmez']|wta birmingham gazon|montgomery-zeynep-sonmez|0.47637000000000007
-['Yan Bai', 'Wishaya Trongcharoenchaikul']|itf luan dur|bai-wishaya-trongcharoenchaikul|0.42
