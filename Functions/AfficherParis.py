@@ -121,6 +121,7 @@ def AfficherParis(driver):
                                                            False)
                                                 config.log_clear_line()
                                                 if GetIfMatchPage(driver) != True:
+                                                    config.error = True
                                                     break
                                             else:
                                                 selection = True
