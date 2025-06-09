@@ -31,7 +31,8 @@ def all_script(driver):
     print('test')
     while not rechercheDeMatch(driver) and not config.error:
         config.log('Erreur lors de la recherche de match!', 'error', False, 2)
-
+    print('test2')
+    print('error', config.error)
     # --------
     config.match_found = True
     if config.match_found and not config.error:
@@ -40,6 +41,7 @@ def all_script(driver):
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.teams = GetPlayersName(driver)
         newmatchFromUrl(driver)
+    print('error', config.error)
     if config.error:
         return False
     for scriptType in config.scriptTypeList:

@@ -19,6 +19,8 @@ def rechercheDeMatch(driver):
     config.log(' RECHERCHE DE MATCH', 'title', False)
     config.match_found = False
     while not config.match_found and not config.error:
+        print('error@lifzer', config.error)
+
         # config.init_variable()
         config.match_found = GetIfMatchPage(driver)
         if not config.match_found and float(config.perte) > 0:
@@ -26,6 +28,7 @@ def rechercheDeMatch(driver):
         # config.match_found = False
         # SCRIPT RECHERCHE DE MATCH
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
+        print('error@zldcizoc', config.error)
         GetIfScriptsRunning()
         # VERIFICATION SI PAGE DE LIST LIVE"""
         """if not VerificationListeMatchLive(driver):
@@ -33,6 +36,8 @@ def rechercheDeMatch(driver):
             driver.get(config.site_url)
             return False"""
         try:
+            print('erro#Piojpever', config.error)
+
             # RECUPERATION DES LIGUES EN COURS
             config.log(' Récupération des ligues', 'info', True, 1)
             bet_list_ligue = driver.find_elements(By.CLASS_NAME,
@@ -41,6 +46,8 @@ def rechercheDeMatch(driver):
             config.log('ligues introuvables!', 'warning', True, 2)
             return False
         else:
+            print('error#oiznvozeirnv', config.error)
+
             config.log('ligues trouvées!', 'success', True, 2)
             # POUR CHAQUE LIGUE RÉCUPÉRÉE
             for bet_ligue in bet_list_ligue:
@@ -54,6 +61,8 @@ def rechercheDeMatch(driver):
                     continue
                 # ON VÉRIFIE QUE LA COMPET EST JOUABLE
                 config.log(' ' + config.ligue_name, 'info', False, 2)
+                print('error#zdcpirncz', config.error)
+
                 if getCompet():
                     # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
                     try:
@@ -107,7 +116,7 @@ def rechercheDeMatch(driver):
                                     config.log_clear_line()
                                     bet_score = GetMatchScore.main(div_bet_score[0],
                                                                    config.score_to_start)
-                                    if bet_score:  # SI LE MATCH EST PRET
+                                    if not bet_score:  # SI LE MATCH EST PRET
                                         config.log('Score ok', 'info', False, 4)
                                         config.log_clear_line()
                                         # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
