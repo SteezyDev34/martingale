@@ -1,7 +1,6 @@
 /dist/
 /build/
 /venv/
-*.json
 logScript*
 .eggs
 chromedriver.exe
