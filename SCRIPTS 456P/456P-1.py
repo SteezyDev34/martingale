@@ -59,19 +59,20 @@ from ChromeDriver.SetDriver1 import driver
 
 from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
-from Functions.ScriptRechercheDeMatch import classementeDeMatch
+from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
 from Functions.Authenticator import is_logged_in, loginProcess
 
-config.scriptTypeList = config.scriptTypeList2
-config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
-config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
-for i in config.scriptTypeList:
-    config.ScriptConfig(i)
 confirmation = input(f"Classement ? (Y/N): ")
 
 if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
-    config.switchScript(config.scriptTypeList[0])
-    classementeDeMatch(driver)
+    confirmation = input(f"type de Classement ? (1/2): ")
+    if confirmation == '1':
+        classementeDeMatch(driver)
+    else:
+        print('new class')
+        newclassementeDeMatch(driver)
+        print('new class')
+        classementeDeMatch(driver)
 
 # Call the function to get the code
 if not is_logged_in(driver):
@@ -97,9 +98,14 @@ while (config.win < 100):
         if config.perte > 0:
             DispatchPerte()
         for i in config.scriptTypeList:
-            config.switchScript('456')
+            config.switchScript('456P')
             config.ScriptConfig(i).reset()
-        sucess = False
+            config.init_variable()
+            config.switchScript(i)
+            DispatchPerte()
+            config.global_match_win[i] = 0  # Initialize win counter for script type
+            config.winmatch[i] = 0  # Initialize match counter for script type
+            sucess = False
         while not sucess:
             try:
                 driver.get(config.site_url)

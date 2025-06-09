@@ -71,8 +71,19 @@ def all_script(driver):
         FirstGameBet(driver)
 
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
-    RetourTpsReg(driver)
+    print('FIRST GAME DONE')
+    waitendgame = True
+    firstjeu = True
+    for scriptType in config.scriptTypeList:
+        config.switchScript(scriptType)
+        if int(config.jeu_actuel) == int(config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
+                config.validated_bet.get('set')):
+            waitendgame = False
+            break
 
+    if waitendgame:
+        GetIfGameEnd(driver)
+    RetourTpsReg(driver)
     passageset = False
     while not config.error:
         GetJeuActuel(driver)
@@ -126,7 +137,6 @@ def all_script(driver):
                             continue
                     else:
                         firstjeu = True
-                        current_game = int(config.jeu_actuel)
                         FirstGameBet(driver)
             elif config.perte > 0:
                 DispatchPerte()
@@ -140,7 +150,6 @@ def all_script(driver):
                     time.sleep(30)
                 FirstGameBet(driver)
                 firstjeu = True
-                current_game = int(config.jeu_actuel)
             else:
                 current_frame = inspect.currentframe()
                 config.log(
@@ -148,7 +157,6 @@ def all_script(driver):
                     'error', True)
                 print("erreur perte en 1 set")
                 DispatchPerte()
-
         else:
             if str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                 txtlog = " ON EST SUR LE PROCHAIN SET"
@@ -171,10 +179,7 @@ def all_script(driver):
         current_game = int(config.jeu_actuel)
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
-            if config.error:
-                print('ERROR QUIT !!!')
-                break
-            print('passage prochain script')
+            print('passage prochain script ', scriptType)
             # Check if all script types have global_match_win > 1
             all_below_one = all(
                 float(config.global_match_win[st]) >= config.total_want_win for st in config.scriptTypeList)
