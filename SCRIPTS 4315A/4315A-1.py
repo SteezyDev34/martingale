@@ -86,7 +86,8 @@ if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in
     config.in_stat = True
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
-
+config.running_file_name = f"{config.projectPath}/SCRIPTS 4315A/running"
+config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 4315A/matchlist"
 while (config.win < 100):
     Functions_431a.all_script(driver)
 
