@@ -1,13 +1,26 @@
-
-['Raul Brancaccio', 'Iliyan Radulov']|itf cordoba terre battue|brancaccio-iliyan-radulov|0.58
-['James Duckworth', 'Benjamin Hassan']|atp stuttgart qualification gazon|duckworth-benjamin-hassan|0.46
-['Mackenzie Mcdonald', 'Ryan Peniston']|atp bois-le-duc qualification gazon|mcdonald-ryan-peniston|0.45
-['Adam Walton', 'Daniel Evans']|atp bois-le-duc qualification gazon|walton-daniel-evans|0.44
-['Marco Trungelliti', 'Ignacio Buse']|heilbronn challenger terre battue|trungelliti-ignacio-buse|0.44
-['Reilly Opelka', 'Denis Yevseyev']|atp bois-le-duc qualification gazon|opelka-denis-yevseyev|0.42
-['Maximilian Marterer', 'Pierre-Hugues Herbert']|atp stuttgart qualification gazon|pierre-hugues-herbert|0.42
-['Hugo Grenier', 'Nikoloz Basilashvili']|atp stuttgart qualification gazon|grenier-nikoloz-basilashvili|0.42
-['Beibit Zhukayev', 'Marc-Andrea Huesler']|atp stuttgart qualification gazon|marc-andrea-huesler|0.42
-['Hugo Dellien', 'Chun Hsin Tseng']|challenger prostejov terre battue|chun-hsin-tseng|0.42
-['Otto Virtanen', 'Brandon Holt']|challenger birmingham gazon|virtanen-brandon-holt|0.41
-['Facundo Mena', 'Marko Topo']|heilbronn challenger terre battue|mena-marko-topo|0.4
+['Roberto Bautista-Agut', 'Hubert Hurkacz']|atp bois-le-duc gazon|agut-hubert-hurkacz|0.48962400000000006
+['Alex Michelsen', 'Gaël Monfils']|atp stuttgart gazon|michelsen-gael-monfils|0.482484
+['Yannick Hanfmann', 'Marton Fucsovics']|atp stuttgart gazon|hanfmann-marton-fucsovics|0.468696
+['Matteo Arnaldi', 'Jan-Lennard Struff']|atp stuttgart gazon|jan-lennard-struff|0.459863
+['Fabio Fognini', 'Corentin Moutet']|atp stuttgart gazon|fognini-corentin-moutet|0.458715
+['Denis Shapovalov', 'Arthur Rinderknech']|atp stuttgart gazon|shapovalov-arthur-rinderknech|0.45341600000000004
+['Damir Dzumhur', 'Pierre-Hugues Herbert']|atp stuttgart gazon|pierre-hugues-herbert|0.45176399999999994
+['Botic Van De Zandschulp', 'Mattia Bellucci']|atp bois-le-duc gazon|zandschulp-mattia-bellucci|0.45048
+['Nicolas Jarry', 'Luciano Darderi']|atp bois-le-duc gazon|jarry-luciano-darderi|0.448581
+['Jacob Fearnley', 'Brandon Nakashima']|atp stuttgart gazon|fearnley-brandon-nakashima|0.446089
+['Otto Virtanen', 'Tomas Martin Etcheverry']|atp bois-le-duc gazon|tomas-martin-etcheverry|0.445744
+['Quentin Halys', 'Lorenzo Sonego']|atp stuttgart gazon|halys-lorenzo-sonego|0.44308900000000007
+['Learner Tien', 'Yoshihito Nishioka']|atp stuttgart gazon|tien-yoshihito-nishioka|0.44065699999999997
+['Justin Engel', 'James Duckworth']|atp stuttgart gazon|engel-james-duckworth|0.43465999999999994
+['Roman Safiullin', 'Giovanni Mpetshi Perricard']|atp stuttgart gazon|giovanni-mpetshi-perricard|0.434419
+['Jordan Thompson', 'Aleksandar Kovacevic']|atp bois-le-duc gazon|thompson-aleksandar-kovacevic|0.43277
+['Alejandro Tabilo', 'Jesper De Jong']|atp bois-le-duc gazon|jesper-de-jong|0.426205
+['Alex Michelsen', 'Gaël Monfils']|atp stuttgart gazon|michelsen-gael-monfils|0.48
+['Matteo Arnaldi', 'Jan-Lennard Struff']|atp stuttgart gazon|jan-lennard-struff|0.46
+['Fabio Fognini', 'Corentin Moutet']|atp stuttgart gazon|fognini-corentin-moutet|0.46
+['Jacob Fearnley', 'Brandon Nakashima']|atp stuttgart gazon|fearnley-brandon-nakashima|0.45
+['Damir Dzumhur', 'Pierre-Hugues Herbert']|atp stuttgart gazon|pierre-hugues-herbert|0.45
+['Denis Shapovalov', 'Arthur Rinderknech']|atp stuttgart gazon|shapovalov-arthur-rinderknech|0.45
+['Learner Tien', 'Yoshihito Nishioka']|atp stuttgart gazon|tien-yoshihito-nishioka|0.44
+['Roman Safiullin', 'Giovanni Mpetshi Perricard']|atp stuttgart gazon|giovanni-mpetshi-perricard|0.43
+['Justin Engel', 'James Duckworth']|atp stuttgart gazon|engel-james-duckworth|0.43

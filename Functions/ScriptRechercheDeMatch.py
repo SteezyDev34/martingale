@@ -564,24 +564,23 @@ def newclassementeDeMatch(driver):
             elif 'tennis' not in sport.lower():
                 continue
             else:
-                print('tennis trouvé')
-                print('click ok')
+                # print('tennis trouvé')
+                # print('click ok')
                 break
         country = driver.find_element(By.CLASS_NAME, 'sports-menu-group-by-country')
-        print('find countries')
+        # print('find countries')
         countrybutton = country.find_elements(By.CLASS_NAME, 'sports-menu-group-by-champ')
         for cntrybtn in countrybutton:
-            print('country', cntrybtn.text.lower())
+            # print('country', cntrybtn.text.lower())
             if ('double' in cntrybtn.text.lower()
                     or 'spéciaux' in cntrybtn.text.lower()
                     or 'mixte' in cntrybtn.text.lower()
                     or 'gagnant' in cntrybtn.text.lower()
                     or 'winner' in cntrybtn.text.lower()
-                    or 'utr' in cntrybtn.text.lower()
-                    or 'couple' in cntrybtn.text.lower()):
+                    or 'utr' in cntrybtn.text.lower()):
                 continue
             cntrybtn.click()
-            print('click cntry')
+            # print('click cntry')
 
         liguebtn = driver.find_elements(By.CLASS_NAME, 'sports-menu-app-champ-with-sub-champs-group__item')
         links = []
@@ -594,10 +593,14 @@ def newclassementeDeMatch(driver):
                     or 'gagnant' in link.lower()
                     or 'winner' in link.lower()
                     or 'utr' in link.lower()
+                    or 'double' in link.lower()
+                    or 'itf' in link.lower()
+                    or 'double' in link.lower()
+                    or 'wta' in link.lower()
+                    or 'challenger' in link.lower()
                     or 'couple' in link.lower()):
                 continue
             links.append(link)
-        print('links', links)
         matchlist = []
         liguelist = []
         for link in links:
@@ -619,17 +622,12 @@ def newclassementeDeMatch(driver):
                                                           'dashboard-champ__more')[
                     0].get_attribute(
                     "href"), config.ligue_name])
-            print('liguelist', liguelist)
             bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                                   'dashboard-champ-body__games')
-            print('len bet_list_ligue', len(bet_list_ligue))
             # POUR CHAQUE LIGUE RÉCUPÉRÉE
             for bet_ligue in bet_list_ligue:
-
                 # ON VÉRIFIE QUE LA COMPET EST JOUABLE
                 if getCompet():
-                    print(config.ligue_name)
-                    print('get comp')
                     # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
                     try:
                         bet_items = driver.find_elements(By.CLASS_NAME,
@@ -676,29 +674,29 @@ def newclassementeDeMatch(driver):
                     print('not comp')
 
         print(len(matchlist))
+        print('matchlist', matchlist)
         goodmatch = []
         for matchItem in matchlist:
             from ChromeDriver.SetDriver1 import driver
             players_name = matchItem[0]
             ligue_name = matchItem[1]
-            print(matchItem)
+            print('matchitem', matchItem)
             # goodmatch.append(matchItem)#ajout dasn tou sles cas pour faire tous ls match
             if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
-                config.proba40A = 0.1
                 print('wta get proba')
-                '''config.proba40A = Functions_stats.get_wta_proba_40A(players_name[0], players_name[1])
+                config.proba40A = Functions_stats.get_wta_proba_40A(players_name[0], players_name[1])
                 print('tentative proba 1 : ', config.proba40A)
                 # config.proba40A = 0.5
                 time.sleep(1)
                 if config.proba40A == 0:
-                    config.proba40A = Functions_stats1.get_wta_proba_40A_other(players_name[0], players_name[1], driver)
-                    print('tentative proba 2 : ', config.proba40A)'''
+                    config.proba40A = Functions_stats.get_wta_proba_40A_other(players_name[0], players_name[1], driver)
+                    print('tentative proba 2 : ', config.proba40A)
             else:
-                config.proba40A = Functions_stats1.get_proba_40A(players_name[0], players_name[1])
+                config.proba40A = Functions_stats.get_proba_40A(players_name[0], players_name[1])
                 # config.proba40A = 0.5
                 time.sleep(1)
                 if config.proba40A == 0:
-                    config.proba40A = Functions_stats1.get_proba_40A_other(players_name[0], players_name[1], driver)
+                    config.proba40A = Functions_stats.get_proba_40A_other(players_name[0], players_name[1], driver)
             print('proba ' + str(config.proba40A))
             if float(config.proba40A) >= float(config.probamini):
                 matchItem.append(config.proba40A)
