@@ -39,9 +39,19 @@ def GetScoreActuel(driver):
             except Exception as e:
                 continue
             else:
-                get_score = True
+                first = True
                 if config.saved_score != config.score_actuel:
-                    record_scores(driver)
+                    if not first:
+                        first = True
+                        record_scores(driver)
+                        print('score change')
+                    else:
+                        print('first time score change')
+                        first = False
+                        time.sleep(5)
+                        continue
+                else:
+                    get_score = True
                 config.saved_score = config.score_actuel
     return True
 
