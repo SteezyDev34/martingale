@@ -68,7 +68,8 @@ def all_script(driver):
     firstjeu = True
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
-        if int(config.jeu_actuel) == int(config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
+        if config.validated_bet and int(config.jeu_actuel) == int(config.validated_bet.get('jeu')) and int(
+                config.set_actuel) == int(
                 config.validated_bet.get('set')):
             waitendgame = False
             break
