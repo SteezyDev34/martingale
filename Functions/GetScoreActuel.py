@@ -17,6 +17,7 @@ def GetScoreActuel(driver):
     config.score_actuel = False
     get_score = False
     tentative = 0
+    first = True
     while not get_score:
         try:
             score_teams = WebDriverWait(driver, 10).until(
@@ -39,10 +40,9 @@ def GetScoreActuel(driver):
             except Exception as e:
                 continue
             else:
-                first = True
                 if config.saved_score != config.score_actuel:
                     if not first:
-                        first = True
+                        first = False
                         record_scores(driver)
                         print('score change')
                     else:
