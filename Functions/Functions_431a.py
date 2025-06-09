@@ -100,10 +100,10 @@ def all_script(driver):
                             config.log(f' {st} : Net profit: {config.global_match_win[st]}', 'success', False)
                         return True
                     if float(config.global_match_win[scriptType]) < config.total_want_win:
-                        config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                        config.log(f' {scriptType}Net profit: {config.global_match_win[scriptType]}')
                     else:
-                        config.log(f'Net profit: {config.global_match_win[scriptType]}')
-                        config.log(f"FIN {config.scriptType}", 'success', False)
+                        config.log(f' {scriptType}Net profit: {config.global_match_win[scriptType]}')
+                        config.log(f" {scriptType}FIN {config.scriptType}", 'success', False)
                         continue
                     config.result = GetResult(driver)
                     if config.result == 'WIN':
