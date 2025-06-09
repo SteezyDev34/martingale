@@ -15,7 +15,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['030', '300', '15A', '30A']
+scriptTypeList = ['030', '300', '30A']
 scriptTypeList2 = ['4P', '5P', '6P', '40A']
 scriptTypeList3 = ['400', '4015', '4030', '40A']
 # Script configuration
@@ -117,7 +117,7 @@ winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
 total_want_win = 0.2
- 
+
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:
     """

@@ -55,7 +55,7 @@ else:
 
 # Chargement des functions
 # Chargement de Chrome driver
-from ChromeDriver.SetDriver import driver
+from ChromeDriver.SetDriver1 import driver
 
 from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
@@ -82,11 +82,15 @@ else:
 is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
 if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
     config.in_stat = True
+for i in config.scriptTypeList:
+    config.ScriptConfig(i)
+
 while (config.win < 100):
     print(config.scriptTypeList)
+    Functions_456P.all_script(driver)
 
     try:
-        Functions_456P.all_script(driver)
+        pass
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
