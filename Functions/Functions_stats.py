@@ -15,14 +15,29 @@ CACHE_FILE = "tennis_stats_cache.json"
 
 
 def load_cache():
-    if os.path.exists(CACHE_FILE):
-        try:
-            with open(CACHE_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception as e:
-            print('error', e)
-            return {}
-    return {}
+    """
+    Charge le cache JSON depuis CACHE_FILE.
+    - Si le fichier n'existe pas ou est vide, renvoie {}.
+    - Si le JSON est invalide, renvoie {} sans lever d'erreur.
+    """
+    # 1. Fichier absent ou vide → cache vide
+    if not os.path.isfile(CACHE_FILE) or os.path.getsize(CACHE_FILE) == 0:
+        return {}
+
+    # 2. Lecture protégée
+    try:
+        with open(CACHE_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            print("Cache chargé :", data)  # print facultatif pour debug
+            return data
+    except json.JSONDecodeError:
+        # JSON corrompu ou vide → retour d'un cache vide
+        print("Attention : cache JSON invalide, on repart avec {}")
+        return {}
+    except Exception as e:
+        # Autre erreur d'I/O (permissions, etc.)
+        print(f"Erreur lecture cache ({e}), retour de {{}}")
+        return {}
 
 
 def save_cache(cache):
@@ -87,9 +102,16 @@ def getPlayerWtaApiId(playerName):
 # Probabilité 40-40 via API Ultimate Tennis
 
 def get_proba_40A(playerName1, playerName2, cat='atp', surface='hard'):
-    key = f"api_{playerName1}_{playerName2}_{cat}_{surface}".lower()
-    if key in cache:
-        return cache[key]
+    # Initialise cache en mémoire
+    cache = load_cache()
+    p1_key = f"player_{unidecode(playerName1).strip().lower().replace('-', ' ')}_40-40"
+    p2_key = f"player_{unidecode(playerName2).strip().lower().replace('-', ' ')}_40-40"
+    print(cache)
+    print(p1_key)
+    print(p2_key)
+    if p1_key in cache and p2_key in cache:
+        print('proba found in cache')
+        return cache[p1_key] + cache[p2_key]
     id1 = getPlayerApiId(playerName1)
     id2 = getPlayerApiId(playerName2)
     if not id1 or not id2:
@@ -109,7 +131,6 @@ def get_proba_40A(playerName1, playerName2, cat='atp', surface='hard'):
         prob2 = svc2 * ret2
         cache[f"player_{playerName1.lower()}_40-40"] = prob1
         cache[f"player_{playerName2.lower()}_40-40"] = prob2
-        cache[key] = prob1 + prob2
         save_cache(cache)
         return prob1 + prob2
     except:
@@ -151,9 +172,14 @@ def get_wta_proba_40A(playerName1, playerName2):
 # Probabilité 40-40 via scraping head-to-head UltimateStatistics
 
 def get_proba_40A_other(playerName1, playerName2, driver1, link=False):
+    # Initialise cache en mémoire
+    cache = load_cache()
     # Vérifier cache pour chaque joueur
     p1_key = f"player_{unidecode(playerName1).strip().lower().replace('-', ' ')}_40-40"
     p2_key = f"player_{unidecode(playerName2).strip().lower().replace('-', ' ')}_40-40"
+    print(cache)
+    print(p1_key)
+    print(p2_key)
     if p1_key in cache and p2_key in cache:
         print('proba found in cache')
         return cache[p1_key] + cache[p2_key]

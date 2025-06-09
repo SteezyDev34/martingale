@@ -150,17 +150,17 @@ def GetBet(driver, nextBet=False):
                 win_texte = '30-0'
             print('first_player :', first_player)
         if config.scriptType == '6P':
-            sType = "de Points 6"
+            sType = ", 6"
             config.win_type = ['40:30', '30:40']  # inversé
-            win_texte = 'de Points 6'
+            win_texte = ', 6'
         if config.scriptType == '5P':
-            sType = "de Points 5"
+            sType = ", 5"
             config.win_type = ['40:15', '15:40']  # inversé
-            win_texte = 'de points 5'
+            win_texte = ', 5'
         if config.scriptType == '4P':
-            sType = "de Points 4"
+            sType = ", 4"
             config.win_type = ['40:0', '0:40']  # inversé
-            win_texte = 'de Points 4'
+            win_texte = ', 4'
         # print('i '+str(i))
         GetJeuActuel(driver)
         print('win_type', config.win_type)

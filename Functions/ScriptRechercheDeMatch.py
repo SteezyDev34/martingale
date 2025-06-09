@@ -4,7 +4,7 @@ import time
 from selenium.webdriver.common.by import By
 
 import config
-from Functions import GetMatchScore, GetLigueName, AddRunning, Functions_stats, Functions_stats1
+from Functions import GetMatchScore, GetLigueName, AddRunning, Functions_stats
 from Functions import OuverturePageMatch
 from Functions import VerificationMatchTrouve
 from Functions.GetIfMatchPage import GetIfMatchPage
@@ -507,13 +507,13 @@ def classementeDeMatch(driver):
                 # config.proba40A = 0.5
                 time.sleep(1)
                 if config.proba40A == 0:
-                    config.proba40A = Functions_stats1.get_wta_proba_40A_other(players_name[0], players_name[1], driver)
+                    config.proba40A = Functions_stats.get_wta_proba_40A_other(players_name[0], players_name[1], driver)
             else:
-                config.proba40A = Functions_stats1.get_proba_40A(players_name[0], players_name[1])
+                config.proba40A = Functions_stats.get_proba_40A(players_name[0], players_name[1])
                 # config.proba40A = 0.5
                 time.sleep(1)
                 if config.proba40A == 0:
-                    config.proba40A = Functions_stats1.get_proba_40A_other(players_name[0], players_name[1], driver)
+                    config.proba40A = Functions_stats.get_proba_40A_other(players_name[0], players_name[1], driver)
             print('proba ' + str(config.proba40A))
             if float(config.proba40A) >= float(config.probamini):
                 matchItem.append(config.proba40A)
@@ -597,7 +597,6 @@ def newclassementeDeMatch(driver):
                     or 'itf' in link.lower()
                     or 'double' in link.lower()
                     or 'wta' in link.lower()
-                    or 'challenger' in link.lower()
                     or 'couple' in link.lower()):
                 continue
             links.append(link)

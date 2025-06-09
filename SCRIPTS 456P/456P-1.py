@@ -55,7 +55,7 @@ else:
 
 # Chargement des functions
 # Chargement de Chrome driver
-from ChromeDriver.SetDriver1 import driver
+from ChromeDriver.SetDriver import driver
 
 from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
@@ -86,7 +86,8 @@ if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in
 config.scriptTypeList = config.scriptTypeList2
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
-
+config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
+config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
 while (config.win < 100):
     print(config.scriptTypeList)
     Functions_456P.all_script(driver)

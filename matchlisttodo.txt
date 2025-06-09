@@ -24,3 +24,14 @@
 ['Learner Tien', 'Yoshihito Nishioka']|atp stuttgart gazon|tien-yoshihito-nishioka|0.44
 ['Roman Safiullin', 'Giovanni Mpetshi Perricard']|atp stuttgart gazon|giovanni-mpetshi-perricard|0.43
 ['Justin Engel', 'James Duckworth']|atp stuttgart gazon|engel-james-duckworth|0.43
+['Pablo Carreno Busta', 'Titouan Droguet']|challenger lyon terre battue|busta-titouan-droguet|0.463296
+['Jenson Brooksby', 'Yosuke Watanuki']|challenger ilkley gazon|brooksby-yosuke-watanuki|0.46319699999999997
+['Valentin Vacherot', 'Alex Molcan']|challenger bratislava terre battue|vacherot-alex-molcan|0.45717700000000006
+['Dino Prizmic', 'Jurij Rodionov']|challenger bratislava terre battue|prizmic-jurij-rodionov|0.44328799999999996
+['Christian Garin', 'Abedallah Shelbayh']|challenger bratislava terre battue|garin-abedallah-shelbayh|0.43847200000000003
+['Harold Mayot', 'Tristan Schoolkate']|challenger ilkley gazon|mayot-tristan-schoolkate|0.433216
+['Alexey Vatutin', 'Marcelo Tomas Barrios Vera']|challenger bratislava terre battue|tomas-barrios-vera|0.425655
+['Jan Choinski', 'Jozef Kovalik']|challenger bratislava terre battue|choinski-jozef-kovalik|0.420075
+['Kamil Majchrzak', 'Sho Shimabukuro']|challenger ilkley gazon|majchrzak-sho-shimabukuro|0.418674
+['Martin Landaluce', 'Hady Habib']|challenger ilkley gazon|landaluce-hady-habib|0.409215
+['Andrej Martin', 'Emilio Nava']|challenger bratislava terre battue|martin-emilio-nava|0.403332
