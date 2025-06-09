@@ -70,7 +70,7 @@ def all_script(driver):
         config.switchScript(scriptType)
         if config.validated_bet and int(config.jeu_actuel) == int(config.validated_bet.get('jeu')) and int(
                 config.set_actuel) == int(
-                config.validated_bet.get('set')):
+            config.validated_bet.get('set')):
             waitendgame = False
             break
 
@@ -103,10 +103,10 @@ def all_script(driver):
                             config.log(f' {st} : Net profit: {config.global_match_win[st]}', 'success', False)
                         return True
                     if float(config.global_match_win[scriptType]) < config.total_want_win:
-                        config.log(f' {scriptType}Net profit: {config.global_match_win[scriptType]}')
+                        config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
                     else:
-                        config.log(f' {scriptType}Net profit: {config.global_match_win[scriptType]}')
-                        config.log(f" {scriptType}FIN {config.scriptType}", 'success', False)
+                        config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
+                        config.log(f" {scriptType} FIN {config.scriptType}", 'success', False)
                         continue
                     config.result = GetResult(driver)
                     if config.result == 'WIN':
@@ -121,11 +121,11 @@ def all_script(driver):
 
                             getGlobalPerte()
                             config.error = False
-                            config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                            config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
                             config.log(f"Restart {config.scriptType}", 'success', False)
 
                         else:
-                            config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                            config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
                             config.log(f"FIN {config.scriptType}", 'success', False)
                             continue
                     else:
@@ -178,12 +178,12 @@ def all_script(driver):
                 float(config.global_match_win[st]) >= config.total_want_win for st in config.scriptTypeList)
             if all_below_one:
                 for st in config.scriptTypeList:
-                    config.log(f'Net profit: {config.global_match_win[st]}', 'success', False)
+                    config.log(f' {scriptType} Net profit: {config.global_match_win[st]}', 'success', False)
                 return True
             if float(config.global_match_win[scriptType]) < config.total_want_win:
-                config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
             else:
-                config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
                 config.log(f"FIN {config.scriptType}", 'success', False)
                 continue
             if config.jeu_actuel == 13:
@@ -274,14 +274,14 @@ def all_script(driver):
                     print("#RECHERCHE INFOS DE MISE")
                     getGlobalPerte()
                     config.error = False
-                    config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                    config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
                     config.log(f"Restart {config.scriptType}", 'success', False)
                     ##VALIDATION DU PARIS SI SCORE OK
                     FirstGameBet(driver)
                     firstjeu = True
                     current_game = int(config.jeu_actuel)
                 else:
-                    config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                    config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
     config.switchScript('4315A')
     print("update : " + config.newmatch)
