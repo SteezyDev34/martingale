@@ -1,7 +1,7 @@
 import platform
-import pyautogui
 import time
 
+import pyautogui
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -93,7 +93,7 @@ def click_with_real_mouse_input(driver, css_selector, timeout=5, move_duration=0
         screen_x = int(css_center_x * data['dpr'])
         screen_y = int(css_center_y)
     else:
-        screen_x = int(css_center_x)
+        screen_x = int(css_center_x * 0.25)
         screen_y = int(css_center_y)
     driver.switch_to.window(driver.window_handles[0])
     # 6) Déplacer la souris et cliquer
