@@ -132,6 +132,7 @@ def add_running(script_num, running_file_name):
 
 # INDIQUER SCRIPT STOP
 def del_running(script_num, running_file_name):
+    return
     get_running_file = open(running_file_name + ".txt", "r")
     get_running = get_running_file.read()
     get_running_file.close()
@@ -597,7 +598,7 @@ def validation_du_paris(driver, jeu, mise):
                                             print('impossible de cliqué sur ok')
                                         else:
                                             modal_wrapper = \
-                                            driver.find_elements(By.CLASS_NAME, 'c-coupon-modal__wrapper')[0]
+                                                driver.find_elements(By.CLASS_NAME, 'c-coupon-modal__wrapper')[0]
                                             modal_wrapper.find_elements(By.TAG_NAME,
                                                                         'button')[0].click()
                                             fenetre_validation = 1

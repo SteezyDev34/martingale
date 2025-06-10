@@ -1,8 +1,9 @@
-from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+
+from Functions.SimulateClick import click_with_real_mouse_login_button, click_with_real_mouse_input
 
 
 # Accéder à une extension en utilisant son ID
@@ -50,7 +51,7 @@ def is_logged_in(driver):
     """
     try:
         # Check if AuthDropdown element exists
-        auth_dropdown = driver.find_elements(By.CSS_SELECTOR, '[data-component="AuthDropdown"]')
+        auth_dropdown = driver.find_elements(By.CLASS_NAME, 'auth-dropdown-trigger')
         # If element exists (length > 0), user is not logged in
         return len(auth_dropdown) == 0
     except Exception as e:
@@ -86,19 +87,20 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
     loginsuccessful = False
     while not loginsuccessful:
         try:
-            auth_code = get_authenticator_code(driver)
+            # auth_code = get_authenticator_code(driver)
             # Navigate to Lollybet
             driver.get("https://ca.1xbet.com/fr/")
 
             auth_dropdown = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-component="AuthDropdown"]'))
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '.auth-dropdown-trigger'))
             )
-            auth_dropdown.click()
+            click_with_real_mouse_login_button(driver, '.auth-dropdown-trigger')
+            # auth_dropdown.click()
 
             # Wait for form fields to be present
             print("Waiting for login form fields...")
             authFields = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "auth-form-fields"))
+                EC.presence_of_element_located((By.CSS_SELECTOR, ".auth-form-fields"))
             )
 
             # Find and fill username field
@@ -109,6 +111,9 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
             print("elemnt visible...")
 
             username_field = authFields.find_element(By.CSS_SELECTOR, "input#username")
+            click_with_real_mouse_input(driver, 'input#username')
+            username_field.clear()
+            username_field.send_keys(username)
             username_field.clear()
             username_field.send_keys(username)
 
@@ -118,6 +123,9 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
                 EC.presence_of_element_located((By.CSS_SELECTOR, "input#username-password"))
             )
             password_field = authFields.find_element(By.CSS_SELECTOR, "input#username-password")
+            click_with_real_mouse_input(driver, 'input#username-password')
+            password_field.clear()
+            password_field.send_keys(password)
             password_field.clear()
             password_field.send_keys(password)
 
@@ -127,7 +135,8 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
                 EC.presence_of_element_located((By.CLASS_NAME, "auth-form-fields__submit"))
             )
             submit_button = driver.find_element(By.CLASS_NAME, "auth-form-fields__submit")
-            submit_button.click()
+            click_with_real_mouse_login_button(driver, '.auth-form-fields__submit')
+            # submit_button.click()
 
             # Wait for login to complete (auth dropdown to disappear)
             print("Waiting for initial login to complete...")
@@ -135,7 +144,7 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
                 EC.presence_of_element_located((By.CLASS_NAME, 'auth-form-fields'))
             )
 
-            # Wait for two-factor authentication form
+            """# Wait for two-factor authentication form
             print("Waiting for 2FA form...")
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "auth-form-two-step"))
@@ -156,7 +165,7 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
             WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, ".auth-form-two-step__submit"))
             )
-            confirm_button.click()
+            confirm_button.click()"""
             if is_code_valid(driver):
                 print("Login process completed successfully")
                 input('Press ENTER to continue')
@@ -165,11 +174,21 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
             continue
 
 
+def processClick(driver, timeout=10):
+    driver.switch_to.window(driver.window_handles[0])
+    auth_dropdown = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.CLASS_NAME, 'auth-dropdown-trigger'))
+    )
+
+    click_with_real_mouse_input(driver, 'auth-dropdown-trigger')
+
+
 if __name__ == "__main__":
+    from ChromeDriver.SetDriver1 import driver
+
     # Setup Chrome driver
-    options = webdriver.ChromeOptions()
-    options.add_argument('--start-maximized')
-    driver = webdriver.Chrome(options=options)
+    # 1) Lancez Chrome et ouvrez la page
+    driver.get("https://ca.1xbet.com/fr/live/tennis")
 
     # Attempt login
-    loginProcess(driver)
+    processClick(driver)
