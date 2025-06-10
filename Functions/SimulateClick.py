@@ -44,7 +44,7 @@ def click_with_real_mouse_login_button(driver, css_selector, timeout=5, move_dur
             screen_x = int(css_x * data['dpr'])
             screen_y = int(css_y * data['dpr'])
         else:
-            screen_x = int(css_x)
+            screen_x = int(css_x) * 0.25
             screen_y = int(css_y)
 
         # 7) Revenir sur la bonne fenêtre handle (si besoin)
