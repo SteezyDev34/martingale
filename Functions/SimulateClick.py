@@ -36,6 +36,7 @@ def click_with_real_mouse_login_button(driver, css_selector, timeout=5, move_dur
         screen_x = int(css_center_x * data['dpr'])
         screen_y = int(css_center_y)
     else:
+        print('screen_x', css_center_x)
         screen_x = int(css_center_x)
         screen_y = int(css_center_y)
     driver.switch_to.window(driver.window_handles[0])
