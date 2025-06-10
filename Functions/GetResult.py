@@ -71,6 +71,7 @@ def GetResult(driver):
                 print('passed score', passed_score)
                 getresult = True
             if getresult:
+                print('config.all_scores', config.all_scores)
                 matching_scores = [score for score in config.all_scores.values()
                                    if score.get('set') is not None
                                    and config.validated_bet.get('set') is not None
