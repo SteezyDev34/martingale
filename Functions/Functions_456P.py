@@ -92,6 +92,9 @@ def all_script(driver):
         GetJeuActuel(driver)
         # WAIT FOR GAME START
         if passageset:
+            if not is_logged_in(driver):
+                print('not logged in ')
+                loginProcess(driver)
             GetSetActuel(driver)
             config.game_start = True
             if config.rattrape_perte == 1:
@@ -104,6 +107,9 @@ def all_script(driver):
                 print(txtlog)
                 config.log(txtlog, config.newmatch)
                 for scriptType in config.scriptTypeList:
+                    if not is_logged_in(driver):
+                        print('not logged in ')
+                        loginProcess(driver)
                     config.switchScript(scriptType)
                     # Check if all script types have global_match_win > 1
                     all_below_one = all(
@@ -176,6 +182,9 @@ def all_script(driver):
         passageset = False
         current_game = int(config.jeu_actuel)
         for scriptType in config.scriptTypeList:
+            if not is_logged_in(driver):
+                print('not logged in ')
+                loginProcess(driver)
             config.switchScript(scriptType)
             print('passage prochain script ', scriptType)
             # Check if all script types have global_match_win > 1
