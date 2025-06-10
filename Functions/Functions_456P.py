@@ -282,8 +282,11 @@ def all_script(driver):
         if current_game == int(config.jeu_actuel):
             for scriptType in config.scriptTypeList:
                 config.switchScript(scriptType)
-                if config.validated_bet and not config.validated_bet.get('result') and float(
-                        config.global_match_win[scriptType]) < config.total_want_win:
+                if config.validated_bet and int(config.jeu_actuel) == int(config.validated_bet.get('jeu')) and int(
+                        config.set_actuel) == int(
+                    config.validated_bet.get('set')) and float(
+                    config.global_match_win[scriptType]) < config.total_want_win and not config.validated_bet.get(
+                    'result'):
                     continue
             GetIfGameEnd(driver)
     config.switchScript('4315A')
