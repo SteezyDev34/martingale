@@ -122,7 +122,6 @@ def get_if_running(script_num, running_file_name):
 
 # INDIQUER QUE LE SCRIPT EST EN COURS
 def add_running(script_num, running_file_name):
-    return
     if script_num == '#1#':
         script_num = 1
     get_running_file = open(running_file_name + ".txt", "a")
@@ -132,7 +131,6 @@ def add_running(script_num, running_file_name):
 
 # INDIQUER SCRIPT STOP
 def del_running(script_num, running_file_name):
-    return
     get_running_file = open(running_file_name + ".txt", "r")
     get_running = get_running_file.read()
     get_running_file.close()
