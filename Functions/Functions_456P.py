@@ -4,6 +4,7 @@ import time
 import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName, AddRunning
+from Functions.Authenticator import loginProcess, is_logged_in
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
@@ -39,6 +40,9 @@ def all_script(driver):
         newmatchFromUrl(driver)
     if config.error:
         return False
+    if not is_logged_in(driver):
+        print('not logged in ')
+        loginProcess(driver)
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)

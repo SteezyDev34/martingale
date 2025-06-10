@@ -4,6 +4,7 @@ import time
 import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName, AddRunning
+from Functions.Authenticator import is_logged_in, loginProcess
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
@@ -33,6 +34,9 @@ def all_script(driver):
         config.log('Erreur lors de la recherche de match!', 'error', False, 2)
     print('test2')
     print('error', config.error)
+    if not is_logged_in(driver):
+        print('not logged in ')
+        loginProcess(driver)
     # --------
     config.match_found = True
     if config.match_found and not config.error:
