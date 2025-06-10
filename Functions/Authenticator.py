@@ -96,6 +96,7 @@ def clear_field(driver, field):
 def loginProcess(driver, username="7696755", password="…"):
     loginsuccessful = False
     while not loginsuccessful:
+        print('try login')
         try:
             driver.get("https://ca.1xbet.com/fr/")
             print('auht')
