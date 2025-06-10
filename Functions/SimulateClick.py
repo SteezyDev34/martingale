@@ -37,7 +37,7 @@ def click_with_real_mouse_login_button(driver, css_selector, timeout=5, move_dur
 
         # 5) Calcul du centre en CSS px
         css_x = data['screenX'] + data['left'] + data['width'] / 2
-        css_y = data['screenY'] + data['top'] + data['height'] / 2
+        css_y = data['screenY'] + data['top'] + data['height'] + 50
 
         # 6) Conversion selon OS
         if platform.system() == "Darwin":
