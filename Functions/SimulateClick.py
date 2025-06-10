@@ -85,7 +85,7 @@ def click_with_real_mouse_input(driver, css_selector, timeout=5, move_duration=0
     """, elem)
 
     # 4) Calculer le centre en CSS pixels absolus
-    css_center_x = data['screenX'] + data['left'] + data['width'] / 2
+    css_center_x = data['screenX'] + data['left'] + data['width'] / 8
     css_center_y = data['screenY'] + data['top'] + data['height'] + 30
 
     # 5) Si macOS, convertir en device pixels (Retina)
@@ -93,7 +93,7 @@ def click_with_real_mouse_input(driver, css_selector, timeout=5, move_duration=0
         screen_x = int(css_center_x * data['dpr'])
         screen_y = int(css_center_y)
     else:
-        screen_x = int(css_center_x * 0.25)
+        screen_x = int(css_center_x * 0.1)
         screen_y = int(css_center_y)
     driver.switch_to.window(driver.window_handles[0])
     # 6) Déplacer la souris et cliquer
