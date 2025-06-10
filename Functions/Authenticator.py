@@ -54,6 +54,7 @@ def is_logged_in(driver):
     Returns True if logged in, False otherwise
     """
     try:
+        print('if logg')
         # Check if AuthDropdown element exists
         auth_dropdown = driver.find_elements(By.CLASS_NAME, 'auth-dropdown-trigger')
         # If element exists (length > 0), user is not logged in
