@@ -28,7 +28,7 @@ def click_with_real_mouse_login_button(driver, css_selector, timeout=5, move_dur
     """, elem)
 
     # 4) Calculer le centre en CSS pixels absolus
-    css_center_x = data['screenX'] + data['left'] + data['width'] / 4
+    css_center_x = data['screenX'] + data['left'] + data['width'] / 2
     css_center_y = data['screenY'] + data['top'] + data['height'] + 50
 
     # 5) Si macOS, convertir en device pixels (Retina)
