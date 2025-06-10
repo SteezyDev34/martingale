@@ -1,9 +1,13 @@
+import platform
+import time
+
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from Functions.SimulateClick import click_with_real_mouse_login_button, click_with_real_mouse_input
+from Functions.SimulateClick import click_with_real_mouse_input, click_with_real_mouse_login_button
 
 
 # Accéder à une extension en utilisant son ID
@@ -80,54 +84,39 @@ def is_code_valid(driver, timeout=5):
         return True
 
 
-def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
-    """
-    Logs into the account using provided credentials
-    """
+def clear_field(driver, field):
+    try:
+        driver.execute_script("arguments[0].value = '';", field)
+    except:
+        mod = Keys.COMMAND if platform.system() == "Darwin" else Keys.CONTROL
+        field.send_keys(mod, 'a')
+        field.send_keys(Keys.BACKSPACE)
+
+
+def loginProcess(driver, username="7696755", password="…"):
     loginsuccessful = False
     while not loginsuccessful:
         try:
-            # auth_code = get_authenticator_code(driver)
-            # Navigate to Lollybet
             driver.get("https://ca.1xbet.com/fr/")
-
-            auth_dropdown = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, '.auth-dropdown-trigger'))
-            )
+            # --- ouverture du formulaire
+            WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.auth-dropdown-trigger')))
             click_with_real_mouse_login_button(driver, '.auth-dropdown-trigger')
-            # auth_dropdown.click()
 
-            # Wait for form fields to be present
-            print("Waiting for login form fields...")
+            # --- attente du formulaire
             authFields = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, ".auth-form-fields"))
-            )
+                EC.presence_of_element_located((By.CSS_SELECTOR, ".auth-form-fields")))
 
-            # Find and fill username field
-            print("Entering username...")
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "input#username"))
-            )
-            print("elemnt visible...")
+            # --- username
+            user = authFields.find_element(By.CSS_SELECTOR, "input#username")
+            # click_with_real_mouse_input(driver, 'input#username')
+            # clear_field(driver, user)
+            # user.send_keys(username)
 
-            username_field = authFields.find_element(By.CSS_SELECTOR, "input#username")
-            click_with_real_mouse_input(driver, 'input#username')
-            username_field.clear()
-            username_field.send_keys(username)
-            username_field.clear()
-            username_field.send_keys(username)
-
-            # Find and fill password field
-            print("Entering password...")
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "input#username-password"))
-            )
-            password_field = authFields.find_element(By.CSS_SELECTOR, "input#username-password")
-            click_with_real_mouse_input(driver, 'input#username-password')
-            password_field.clear()
-            password_field.send_keys(password)
-            password_field.clear()
-            password_field.send_keys(password)
+            # --- password
+            pw = authFields.find_element(By.CSS_SELECTOR, "input#username-password")
+            # click_with_real_mouse_input(driver, 'input#username-password')
+            # clear_field(driver, pw)
+            ##pw.send_keys(password)
 
             # Click submit button
             print("Submitting login credentials...")
@@ -135,43 +124,17 @@ def loginProcess(driver, username="7696755", password="Scorpio971n#1xbet3"):
                 EC.presence_of_element_located((By.CLASS_NAME, "auth-form-fields__submit"))
             )
             submit_button = driver.find_element(By.CLASS_NAME, "auth-form-fields__submit")
-            click_with_real_mouse_login_button(driver, '.auth-form-fields__submit')
-            # submit_button.click()
+            submit_button.click()
 
-            # Wait for login to complete (auth dropdown to disappear)
-            print("Waiting for initial login to complete...")
-            WebDriverWait(driver, 10).until_not(
-                EC.presence_of_element_located((By.CLASS_NAME, 'auth-form-fields'))
-            )
+            # --- attente de disparition du formulaire
+            WebDriverWait(driver, 10).until_not(EC.presence_of_element_located((By.CSS_SELECTOR, '.auth-form-fields')))
+            loginsuccessful = True
+            return True
 
-            """# Wait for two-factor authentication form
-            print("Waiting for 2FA form...")
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "auth-form-two-step"))
-            )
-
-            # Get authentication code
-            print("Getting 2FA code from authenticator...")
-
-            # Find and fill 2FA code input field
-            print("Entering 2FA code...")
-            code_field = driver.find_element(By.CSS_SELECTOR, ".auth-form-two-step__field input")
-            code_field.clear()
-            code_field.send_keys(auth_code)
-
-            # Click confirm button
-            print("Submitting 2FA code...")
-            confirm_button = driver.find_element(By.CSS_SELECTOR, ".auth-form-two-step__submit")
-            WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, ".auth-form-two-step__submit"))
-            )
-            confirm_button.click()"""
-            if is_code_valid(driver):
-                print("Login process completed successfully")
-                input('Press ENTER to continue')
-                return True
         except Exception as e:
-            continue
+            print("Erreur loginProcess, retrying:", e)
+            time.sleep(1)
+            # on retentera sans lever d'exception bloquante
 
 
 def processClick(driver, timeout=10):
