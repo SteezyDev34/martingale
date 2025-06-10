@@ -98,6 +98,7 @@ def loginProcess(driver, username="7696755", password="…"):
     while not loginsuccessful:
         try:
             driver.get("https://ca.1xbet.com/fr/")
+            print('auht')
             # --- ouverture du formulaire
             WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.auth-dropdown-trigger')))
             click_with_real_mouse_login_button(driver, '.auth-dropdown-trigger')
