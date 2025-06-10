@@ -57,10 +57,13 @@ def is_logged_in(driver):
         # Check if AuthDropdown element exists
         auth_dropdown = driver.find_elements(By.CLASS_NAME, 'auth-dropdown-trigger')
         # If element exists (length > 0), user is not logged in
+
         return len(auth_dropdown) == 0
     except Exception as e:
         print(f"Error checking login status: {e}")
         return False
+    print('no connect')
+    return False
 
 
 def is_code_valid(driver, timeout=5):
