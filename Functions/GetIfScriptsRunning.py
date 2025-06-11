@@ -26,6 +26,7 @@ def GetIfScriptsRunning():
                 get_running = get_running_file.read()
                 # on ferme le fichier
                 get_running_file.close()
+                print(get_running)
                 # si on ne trouve pas un script inférieur on
                 if len(re.findall(str(autre_script), get_running)) <= 0:
                     # on passe go à False car le script ne peut pas démarrer
