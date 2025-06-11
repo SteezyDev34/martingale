@@ -233,6 +233,7 @@ def all_script(driver):
                 GetAndPlaceBet(driver)
                 print(config.global_match_win)
             if config.result == 'RUN':
+                print('RUN')
                 continue
             GetScoreActuel(driver)
             if config.validated_bet:
@@ -306,6 +307,7 @@ def all_script(driver):
         DispatchPerte()
         config.global_match_win[i] = 0  # Initialize win counter for script type
         config.winmatch[i] = 0  # Initialize match counter for script type
+        print('perte', config.perte)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)

@@ -192,7 +192,6 @@ def init_variable():
     val = config_global.get("increment")
     if val is not None:
         increment = float(val)
-        print('cotebase', cotebase)
 
     val = config_global.get("looking_game")
     if val is not None:
@@ -201,12 +200,10 @@ def init_variable():
     val = config_global.get("netprofit")
     if val is not None:
         netprofit = float(val)
-        print('netprofit', netprofit)
 
     val = config_global.get("perte")
     if val is not None:
         perte = float(val)
-        print('perte', perte)
 
     val = config_global.get("placed_game")
     if val is not None:
