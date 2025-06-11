@@ -154,7 +154,7 @@ def getJsonData(url: str) -> Optional[Dict[str, Any]]:
 def init_variable():
     """Initialize global variables from strategy data"""
     global mise, perte, wantwin, increment, probamini
-    global running_file_name, matchlist_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
+    global running_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
     global print_match_live_text, devMode, gain, netprofit, perte, placed_game, looking_game, saved_score
     global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, matchlist1set_name
     config_global = ScriptConfig(scriptType)
@@ -246,16 +246,13 @@ def init_variable():
     print_running_text = config_global.get("print_running_text")
 
     # File paths configuration
-    running_file_name = f"{projectPath}/SCRIPTS {scriptType}/running"
-    matchlist_file_name = f"{projectPath}/SCRIPTS {scriptType}/matchlist"
     matchlisttodo_file_name = f"{projectPath}/matchlisttodo"
-    matchlist1set_name = f"{projectPath}/matchlist1set"
 
 
 def save_variables():
     """Initialize global variables from strategy data"""
     global mise, perte, wantwin, increment, probamini
-    global running_file_name, matchlist_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
+    global running_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
     global print_match_live_text, devMode, gain, netprofit, perte, placed_game, looking_game, saved_score
     global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, matchlist1set_name
 

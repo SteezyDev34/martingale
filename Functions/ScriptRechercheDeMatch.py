@@ -594,7 +594,6 @@ def newclassementeDeMatch(driver):
                     or 'winner' in link.lower()
                     or 'utr' in link.lower()
                     or 'double' in link.lower()
-                    or 'itf' in link.lower()
                     or 'couple' in link.lower()):
                 continue
             links.append(link)
