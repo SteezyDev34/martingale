@@ -44,11 +44,11 @@ def all_script(driver):
         print('config.script_num', config.script_num)
         print('config.running_file_name', config.running_file_name)
         AddRunning.main(config.script_num, config.running_file_name)
-        update_match_done("add", config.newmatch, config.matchlist_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.teams = GetPlayersName(driver)
         newmatchFromUrl(driver)
+        update_match_done("add", config.newmatch, config.matchlist_file_name)
     print('error', config.error)
     if config.error:
         return False
