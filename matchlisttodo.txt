@@ -1,53 +1,11 @@
-['Roberto Bautista-Agut', 'Hubert Hurkacz']|atp bois-le-duc gazon|agut-hubert-hurkacz|0.48962400000000006
-['Alex Michelsen', 'Gaël Monfils']|atp stuttgart gazon|michelsen-gael-monfils|0.482484
-['Yannick Hanfmann', 'Marton Fucsovics']|atp stuttgart gazon|hanfmann-marton-fucsovics|0.468696
-['Matteo Arnaldi', 'Jan-Lennard Struff']|atp stuttgart gazon|jan-lennard-struff|0.459863
-['Fabio Fognini', 'Corentin Moutet']|atp stuttgart gazon|fognini-corentin-moutet|0.458715
-['Denis Shapovalov', 'Arthur Rinderknech']|atp stuttgart gazon|shapovalov-arthur-rinderknech|0.45341600000000004
-['Damir Dzumhur', 'Pierre-Hugues Herbert']|atp stuttgart gazon|pierre-hugues-herbert|0.45176399999999994
-['Botic Van De Zandschulp', 'Mattia Bellucci']|atp bois-le-duc gazon|zandschulp-mattia-bellucci|0.45048
-['Nicolas Jarry', 'Luciano Darderi']|atp bois-le-duc gazon|jarry-luciano-darderi|0.448581
-['Jacob Fearnley', 'Brandon Nakashima']|atp stuttgart gazon|fearnley-brandon-nakashima|0.446089
-['Otto Virtanen', 'Tomas Martin Etcheverry']|atp bois-le-duc gazon|tomas-martin-etcheverry|0.445744
-['Quentin Halys', 'Lorenzo Sonego']|atp stuttgart gazon|halys-lorenzo-sonego|0.44308900000000007
-['Learner Tien', 'Yoshihito Nishioka']|atp stuttgart gazon|tien-yoshihito-nishioka|0.44065699999999997
-['Justin Engel', 'James Duckworth']|atp stuttgart gazon|engel-james-duckworth|0.43465999999999994
-['Roman Safiullin', 'Giovanni Mpetshi Perricard']|atp stuttgart gazon|giovanni-mpetshi-perricard|0.434419
-['Jordan Thompson', 'Aleksandar Kovacevic']|atp bois-le-duc gazon|thompson-aleksandar-kovacevic|0.43277
-['Alejandro Tabilo', 'Jesper De Jong']|atp bois-le-duc gazon|jesper-de-jong|0.426205
-['Alex Michelsen', 'Gaël Monfils']|atp stuttgart gazon|michelsen-gael-monfils|0.48
-['Matteo Arnaldi', 'Jan-Lennard Struff']|atp stuttgart gazon|jan-lennard-struff|0.46
-['Fabio Fognini', 'Corentin Moutet']|atp stuttgart gazon|fognini-corentin-moutet|0.46
-['Jacob Fearnley', 'Brandon Nakashima']|atp stuttgart gazon|fearnley-brandon-nakashima|0.45
-['Damir Dzumhur', 'Pierre-Hugues Herbert']|atp stuttgart gazon|pierre-hugues-herbert|0.45
-['Denis Shapovalov', 'Arthur Rinderknech']|atp stuttgart gazon|shapovalov-arthur-rinderknech|0.45
-['Learner Tien', 'Yoshihito Nishioka']|atp stuttgart gazon|tien-yoshihito-nishioka|0.44
-['Roman Safiullin', 'Giovanni Mpetshi Perricard']|atp stuttgart gazon|giovanni-mpetshi-perricard|0.43
-['Justin Engel', 'James Duckworth']|atp stuttgart gazon|engel-james-duckworth|0.43
-['Pablo Carreno Busta', 'Titouan Droguet']|challenger lyon terre battue|busta-titouan-droguet|0.463296
-['Jenson Brooksby', 'Yosuke Watanuki']|challenger ilkley gazon|brooksby-yosuke-watanuki|0.46319699999999997
-['Valentin Vacherot', 'Alex Molcan']|challenger bratislava terre battue|vacherot-alex-molcan|0.45717700000000006
-['Dino Prizmic', 'Jurij Rodionov']|challenger bratislava terre battue|prizmic-jurij-rodionov|0.44328799999999996
-['Christian Garin', 'Abedallah Shelbayh']|challenger bratislava terre battue|garin-abedallah-shelbayh|0.43847200000000003
-['Harold Mayot', 'Tristan Schoolkate']|challenger ilkley gazon|mayot-tristan-schoolkate|0.433216
-['Alexey Vatutin', 'Marcelo Tomas Barrios Vera']|challenger bratislava terre battue|tomas-barrios-vera|0.425655
-['Jan Choinski', 'Jozef Kovalik']|challenger bratislava terre battue|choinski-jozef-kovalik|0.420075
-['Kamil Majchrzak', 'Sho Shimabukuro']|challenger ilkley gazon|majchrzak-sho-shimabukuro|0.418674
-['Martin Landaluce', 'Hady Habib']|challenger ilkley gazon|landaluce-hady-habib|0.409215
-['Andrej Martin', 'Emilio Nava']|challenger bratislava terre battue|martin-emilio-nava|0.403332
-['Marin Cilic', 'Paul Jubb']|challenger ilkley gazon|cilic-paul-jubb|0.47972099999999995
+
 ['Jordan Thompson', 'Gabriel Diallo']|atp bois-le-duc gazon|thompson-gabriel-diallo|0.45933599999999997
+['Arthur Rinderknech', 'Marton Fucsovics']|atp stuttgart gazon|rinderknech-marton-fucsovics|0.457304
+['Quentin Halys', 'Taylor Harry Fritz']|atp stuttgart gazon|taylor-harry-fritz|0.456925
 ['Jan-Lennard Struff', 'Jiri Lehecka']|atp stuttgart gazon|struff-jiri-lehecka|0.45508099999999996
-['Rinky Hijikata', 'Daniel Evans']|atp bois-le-duc gazon|hijikata-daniel-evans|0.45297600000000005
-['Mackenzie Mcdonald', 'Mattia Bellucci']|atp bois-le-duc gazon|mcdonald-mattia-bellucci|0.448236
-['Laslo Djere', 'Mark Lajal']|atp bois-le-duc gazon|djere-mark-lajal|0.44528399999999996
+['Dino Prizmic', 'Jurij Rodionov']|challenger bratislava terre battue|prizmic-jurij-rodionov|0.44328799999999996
 ['Giovanni Mpetshi Perricard', 'Félix Auger-Aliassime']|atp stuttgart gazon|felix-auger-aliassime|0.438583
-['Joaquin Aguilar Cardozo', 'Santiago Fa Rodriguez Taverna']|challenger santa fe terre battue|fa-rodriguez-taverna|0.43145
-['Alex Bolt', 'Zachary Svajda']|challenger ilkley gazon|bolt-zachary-svajda|0.430944
-['Borna Gojo', 'Billy Harris']|challenger ilkley gazon|gojo-billy-harris|0.4252889999999999
+['Ben Shelton', 'Pierre-Hugues Herbert']|atp stuttgart gazon|pierre-hugues-herbert|0.43830199999999997
+['Marco Trungelliti', 'Ivan Gakhov']|challenger lyon terre battue|trungelliti-ivan-gakhov|0.42478
 ['Pablo Carreno Busta', 'Javier Barranco Cosano']|challenger lyon terre battue|javier-barranco-cosano|0.420693
-['Luca Van Assche', 'Michael Vrbensky']|challenger lyon terre battue|assche-michael-vrbensky|0.416841
-['Nicolas Alvarez Varona', 'Henri Squire']|challenger lyon terre battue|varona-henri-squire|0.416636
-['Zizou Bergs', 'Alexander Blockx']|atp bois-le-duc gazon|bergs-alexander-blockx|0.41568
-['Maxime Janvier', 'Arthur Cazaux']|challenger lyon terre battue|janvier-arthur-cazaux|0.40590599999999993
-['Patricia Maria Tig', 'Leyre Romero Gormaz']|wta valence terre battue|leyre-romero-gormaz|0.498896
+['Andrej Martin', 'Emilio Nava']|challenger bratislava terre battue|martin-emilio-nava|0.403332

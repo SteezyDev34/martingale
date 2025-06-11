@@ -192,7 +192,7 @@ def all_script(driver):
                 float(config.global_match_win[st]) >= config.total_want_win for st in config.scriptTypeList)
             if all_below_one:
                 for st in config.scriptTypeList:
-                    config.log(f' {scriptType} Net profit: {config.global_match_win[st]}', 'success', False)
+                    config.log(f' {st} Net profit: {config.global_match_win[st]}', 'success', False)
                 return True
             if float(config.global_match_win[scriptType]) < config.total_want_win:
                 config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
