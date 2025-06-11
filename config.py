@@ -81,7 +81,7 @@ gain = 0
 netprofit = 0
 result = False
 # File paths
-matchlist_file_name = ""
+matchlist_file_name = f"{projectPath}/matchlist"
 matchlisttodo_file_name = f"{projectPath}/matchlisttodo"
 matchlist1set_name = ""
 running_file_name = ""

@@ -10,6 +10,7 @@ from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
+from Functions.Functions_1XBET import update_match_done
 from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetIfMatchPage import GetIfMatchPage
@@ -43,6 +44,7 @@ def all_script(driver):
         print('config.script_num', config.script_num)
         print('config.running_file_name', config.running_file_name)
         AddRunning.main(config.script_num, config.running_file_name)
+        update_match_done("add", config.newmatch, config.matchlist_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.teams = GetPlayersName(driver)
@@ -242,6 +244,7 @@ def all_script(driver):
                     print('set du paris supérieur!')
                     continue
             if config.validated_bet.get('result') is None:
+                print('result', config.validated_bet.get('result'))
                 GetResult(driver)
 
             if config.validated_bet.get('result') == 'LOSE':
