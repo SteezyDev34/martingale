@@ -20,13 +20,14 @@ def GetIfScriptsRunning():
         if config.script_num > 1:  # si le script n'est pas le 1 car il doit forcément se lancer
             autre_script = 1
             while autre_script < config.script_num:
+                print('running_file_name', config.running_file_name)
                 # on ouvre le fichier texte en mode lecture
                 get_running_file = open(config.running_file_name + ".txt", "r")
                 # on lit le contenu du fichier
                 get_running = get_running_file.read()
                 # on ferme le fichier
                 get_running_file.close()
-                print(get_running)
+                print('get_running', get_running)
                 # si on ne trouve pas un script inférieur on
                 if len(re.findall(str(autre_script), get_running)) <= 0:
                     # on passe go à False car le script ne peut pas démarrer
