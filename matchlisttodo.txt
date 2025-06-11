@@ -1,11 +1,17 @@
 
-['Jordan Thompson', 'Gabriel Diallo']|atp bois-le-duc gazon|thompson-gabriel-diallo|0.45933599999999997
-['Arthur Rinderknech', 'Marton Fucsovics']|atp stuttgart gazon|rinderknech-marton-fucsovics|0.457304
+['Alexander Zverev', 'Corentin Moutet']|atp stuttgart gazon|zverev-corentin-moutet|0.47998299999999994
+['Mackenzie Mcdonald', 'Karen Khachanov']|atp bois-le-duc gazon|mcdonald-karen-khachanov|0.47279600000000005
+['Marin Cilic', 'Zachary Svajda']|challenger ilkley gazon|cilic-zachary-svajda|0.46665
+['Alex Michelsen', 'Justin Engel']|atp stuttgart gazon|michelsen-justin-engel|0.4620559999999999
 ['Quentin Halys', 'Taylor Harry Fritz']|atp stuttgart gazon|taylor-harry-fritz|0.456925
 ['Jan-Lennard Struff', 'Jiri Lehecka']|atp stuttgart gazon|struff-jiri-lehecka|0.45508099999999996
-['Dino Prizmic', 'Jurij Rodionov']|challenger bratislava terre battue|prizmic-jurij-rodionov|0.44328799999999996
+['Alexei Popyrin', 'Zizou Bergs']|atp bois-le-duc gazon|popyrin-zizou-bergs|0.4499
+['Learner Tien', 'Brandon Nakashima']|atp stuttgart gazon|tien-brandon-nakashima|0.449338
+['Dimitar Kuzmanov', 'Arthur Cazaux']|challenger lyon terre battue|kuzmanov-arthur-cazaux|0.445442
+['Laslo Djere', 'Mark Lajal']|atp bois-le-duc gazon|djere-mark-lajal|0.44528399999999996
 ['Giovanni Mpetshi Perricard', 'Félix Auger-Aliassime']|atp stuttgart gazon|felix-auger-aliassime|0.438583
-['Ben Shelton', 'Pierre-Hugues Herbert']|atp stuttgart gazon|pierre-hugues-herbert|0.43830199999999997
+['Nuno Borges', 'Otto Virtanen']|atp bois-le-duc gazon|borges-otto-virtanen|0.437426
 ['Marco Trungelliti', 'Ivan Gakhov']|challenger lyon terre battue|trungelliti-ivan-gakhov|0.42478
+['Reilly Opelka', 'Nicolas Jarry']|atp bois-le-duc gazon|opelka-nicolas-jarry|0.421947
 ['Pablo Carreno Busta', 'Javier Barranco Cosano']|challenger lyon terre battue|javier-barranco-cosano|0.420693
 ['Andrej Martin', 'Emilio Nava']|challenger bratislava terre battue|martin-emilio-nava|0.403332

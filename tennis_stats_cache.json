@@ -1,8 +1,8 @@
 {
   "atp_ids": [],
-  "atp_ranking_date": "2025-06-10",
+  "atp_ranking_date": "2025-06-11",
   "wta_ids": [],
-  "wta_ranking_date": "2025-06-10",
+  "wta_ranking_date": "2025-06-11",
   "player_max houkes_40-40": 0.0,
   "player_alexander blockx_40-40": 0.1842,
   "player_reilly opelka_40-40": 0.199515,
@@ -385,5 +385,18 @@
   "player_tyler zink_40-40": 0,
   "player_alan magadan_40-40": 0,
   "player_alex rybakov_40-40": 0.1776,
-  "player_justin boulais_40-40": 0.0
+  "player_justin boulais_40-40": 0.0,
+  "player_karen khachanov_40-40": 0.24104,
+  "player_alexei popyrin_40-40": 0.21842000000000003,
+  "player_alexander zverev_40-40": 0.254695,
+  "player_filip cristian jianu_40-40": 0.0,
+  "player_murphy cassone_40-40": 0.0,
+  "player_johannus monday_40-40": 0.0,
+  "player_yu hsiou hsu_40-40": 0.22116799999999998,
+  "player_dali blanch_40-40": 0,
+  "player_bruno kuzuhara_40-40": 0,
+  "player_mariano kestelboim_40-40": 0,
+  "player_luciano emanuel ambrogi_40-40": 0.0,
+  "player_andrea collarini_40-40": 0.16864,
+  "player_john sperle_40-40": 0.0
 }
