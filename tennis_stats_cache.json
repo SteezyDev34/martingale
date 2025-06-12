@@ -1,8 +1,8 @@
 {
   "atp_ids": [],
-  "atp_ranking_date": "2025-06-11",
+  "atp_ranking_date": "2025-06-12",
   "wta_ids": [],
-  "wta_ranking_date": "2025-06-11",
+  "wta_ranking_date": "2025-06-12",
   "player_max houkes_40-40": 0.0,
   "player_alexander blockx_40-40": 0.1842,
   "player_reilly opelka_40-40": 0.199515,
@@ -511,5 +511,6 @@
   "player_momoko kobori_40-40": 0,
   "player_eudice chong_40-40": 0,
   "player_saki imamura_40-40": 0,
-  "player_priska madelyn nugroho_40-40": 0
+  "player_priska madelyn nugroho_40-40": 0,
+  "player_ugo humbert_40-40": 0.23187
 }

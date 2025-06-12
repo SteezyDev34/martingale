@@ -1,28 +1,10 @@
 
-['Alexander Zverev', 'Corentin Moutet']|atp stuttgart gazon|zverev-corentin-moutet|0.47998299999999994
-['Mackenzie Mcdonald', 'Karen Khachanov']|atp bois-le-duc gazon|mcdonald-karen-khachanov|0.47279600000000005
-['Marin Cilic', 'Zachary Svajda']|challenger ilkley gazon|cilic-zachary-svajda|0.46665
-['Alex Michelsen', 'Justin Engel']|atp stuttgart gazon|michelsen-justin-engel|0.4620559999999999
-['Quentin Halys', 'Taylor Harry Fritz']|atp stuttgart gazon|taylor-harry-fritz|0.456925
-['Jan-Lennard Struff', 'Jiri Lehecka']|atp stuttgart gazon|struff-jiri-lehecka|0.45508099999999996
-['Alexei Popyrin', 'Zizou Bergs']|atp bois-le-duc gazon|popyrin-zizou-bergs|0.4499
+['Gabriel Diallo', 'Karen Khachanov']|atp bois-le-duc gazon|diallo-karen-khachanov|0.47304599999999997
+['Nuno Borges', 'Ugo Humbert']|atp bois-le-duc gazon|borges-ugo-humbert|0.456694
+['Marton Fucsovics', 'Taylor Harry Fritz']|atp stuttgart gazon|taylor-harry-fritz|0.478968
+['Justin Engel', 'Félix Auger-Aliassime']|atp stuttgart gazon|felix-auger-aliassime|0.4674319999999999
 ['Learner Tien', 'Brandon Nakashima']|atp stuttgart gazon|tien-brandon-nakashima|0.449338
+['Ben Shelton', 'Jiri Lehecka']|atp stuttgart gazon|shelton-jiri-lehecka|0.44607300000000005
 ['Dimitar Kuzmanov', 'Arthur Cazaux']|challenger lyon terre battue|kuzmanov-arthur-cazaux|0.445442
-['Laslo Djere', 'Mark Lajal']|atp bois-le-duc gazon|djere-mark-lajal|0.44528399999999996
-['Giovanni Mpetshi Perricard', 'Felix Auger-Aliassime']|atp stuttgart gazon|felix-auger-aliassime|0.438583
-['Nuno Borges', 'Otto Virtanen']|atp bois-le-duc gazon|borges-otto-virtanen|0.437426
-['Marco Trungelliti', 'Ivan Gakhov']|challenger lyon terre battue|trungelliti-ivan-gakhov|0.42478
-['Reilly Opelka', 'Nicolas Jarry']|atp bois-le-duc gazon|opelka-nicolas-jarry|0.421947
-['Pablo Carreno Busta', 'Javier Barranco Cosano']|challenger lyon terre battue|javier-barranco-cosano|0.420693
-['Andrej Martin', 'Emilio Nava']|challenger bratislava terre battue|martin-emilio-nava|0.403332
-['Solana Sierra', 'Ariana Geerlings Martinez']|wta valence terre battue|ariana-geerlings-martinez|0.5255210000000001
-['Qinwen Zheng', 'McCartney Kessler']|wta londres gazon|zheng-mccartney-kessler|0.511644
-['Sonay Kartal', 'Amanda Anisimova']|wta londres gazon|kartal-amanda-anisimova|0.5029330000000001
-['Diana Shnaider', 'Katie Boulter']|wta londres gazon|shnaider-katie-boulter|0.491746
-['Emma Raducanu', 'Rebecca Šramková']|wta londres gazon|raducanu-rebecca-sramkova|0.491536
-['Suzan Lamens', 'Ann Li']|wta bois-le-duc gazon|lamens-ann-li|0.491347
-['Karolina Muchova', 'Tatjana Maria']|wta londres gazon|muchova-tatjana-maria|0.474207
-['Anastasia Zakharova', 'Madison Keys']|wta londres gazon|zakharova-madison-keys|0.4573729999999999
-['Kimberly Birrell', 'Yue Yuan']|wta bois-le-duc gazon|birrell-yue-yuan|0.455264
-['Renata Zarazua', 'Tereza Valentova']|wta grado terre battue|zarazua-tereza-valentova|0.44974000000000003
-['Varvara Lepchenko', 'Iva Jovic']|wta ilkley gazon|lepchenko-iva-jovic|0.43640099999999993
+['Sho Shimabukuro', 'Tristan Schoolkate']|challenger ilkley gazon|shimabukuro-tristan-schoolkate|0.41533
+['Zachary Svajda', 'Leandro Riedi']|challenger ilkley gazon|svajda-leandro-riedi|0.409173
