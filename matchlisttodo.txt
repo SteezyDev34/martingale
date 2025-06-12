@@ -8,3 +8,8 @@
 ['Dimitar Kuzmanov', 'Arthur Cazaux']|challenger lyon terre battue|kuzmanov-arthur-cazaux|0.445442
 ['Sho Shimabukuro', 'Tristan Schoolkate']|challenger ilkley gazon|shimabukuro-tristan-schoolkate|0.41533
 ['Zachary Svajda', 'Leandro Riedi']|challenger ilkley gazon|svajda-leandro-riedi|0.409173
+['Diana Shnaider', 'Madison Keys']|wta londres gazon|shnaider-madison-keys|0.531532
+['Emma Navarro', 'Amanda Anisimova']|wta londres gazon|navarro-amanda-anisimova|0.523011
+['Qinwen Zheng', 'McCartney Kessler']|wta londres gazon|zheng-mccartney-kessler|0.511644
+['Sinja Kraus', 'Dominika Salkova']|wta grado terre battue|kraus-dominika-salkova|0.443215
+['Tereza Valentova', 'Veronika Erjavec']|wta grado terre battue|valentova-veronika-erjavec|0.43781400000000004
