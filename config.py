@@ -17,7 +17,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 projectPath = os.path.dirname(os.path.abspath(__file__))
 scriptTypeList = ['030', '300', '30A']
 scriptTypeList2 = ['5P', '6P', '40A']
-scriptTypeList3 = ['400', '4015', '4030']
+scriptTypeList3 = ['4015', '4030']
 # Script configuration
 script_num = 0  # Numéro du Script
 win = 0  # Nombre de victoire
@@ -118,7 +118,7 @@ global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
 total_want_win = {'030': 0.2, '300': 1, '15A': 1, '30A': 1}
 total_want_win2 = {'4P': 0.2, '5P': 1, '6P': 1, '40A': 1}
-total_want_win3 = {'400': 0.2, '4015': 1, '4030': 1}
+total_want_win3 = {'400': 0.2, '4015': 0.2, '4030': 0.2}
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:
