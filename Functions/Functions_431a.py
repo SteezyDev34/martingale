@@ -28,6 +28,7 @@ def all_script(driver):
     # driver.switch_to.window(driver.window_handles[0])
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
+    config.all_scores = {}
     # --------
     # SCRIPT RECHERCHE DE MATCH
     print('test')
@@ -324,6 +325,7 @@ def all_script(driver):
         config.global_match_win[i] = 0  # Initialize win counter for script type
         config.winmatch[i] = 0  # Initialize match counter for script type
         print('perte', config.perte)
+    config.all_scores = {}
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)
