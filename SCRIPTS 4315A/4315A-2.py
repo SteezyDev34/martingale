@@ -72,14 +72,11 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
     else:
         print('new class')
         newclassementeDeMatch(driver)
+        print('new class')
         classementeDeMatch(driver)
-else:
-    print('pas de classement')
 
 # Call the function to get the code
 if not is_logged_in(driver):
-    print('not logged in ')
-
     loginProcess(driver)
 else:
     print("You are already logged in.")
@@ -102,7 +99,12 @@ while (config.win < 100):
         for i in config.scriptTypeList:
             config.switchScript('4315A')
             config.ScriptConfig(i).reset()
-        sucess = False
+            config.init_variable()
+            config.switchScript(i)
+            DispatchPerte()
+            config.global_match_win[i] = 0  # Initialize win counter for script type
+            config.winmatch[i] = 0  # Initialize match counter for script type
+            sucess = False
         while not sucess:
             try:
                 driver.get(config.site_url)
