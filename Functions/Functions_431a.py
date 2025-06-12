@@ -109,12 +109,13 @@ def all_script(driver):
                     config.switchScript(scriptType)
                     # Check if all script types have global_match_win > 1
                     all_below_one = all(
-                        float(config.global_match_win[st]) >= config.total_want_win for st in config.scriptTypeList)
+                        float(config.global_match_win[st]) >= config.total_want_win[scriptType] for st in
+                        config.scriptTypeList)
                     if all_below_one:
                         for st in config.scriptTypeList:
                             config.log(f' {st} : Net profit: {config.global_match_win[st]}', 'success', False)
                         return True
-                    if float(config.global_match_win[scriptType]) < config.total_want_win:
+                    if float(config.global_match_win[scriptType]) < config.total_want_win[scriptType]:
                         config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
                     else:
                         config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
@@ -128,7 +129,7 @@ def all_script(driver):
                         config.ScriptConfig(scriptType).reset()
                         config.init_variable()
                         DeleteBet(driver)
-                        if float(config.global_match_win[scriptType]) < config.total_want_win:
+                        if float(config.global_match_win[scriptType]) < config.total_want_win[scriptType]:
                             print("#RECHERCHE INFOS DE MISE")
 
                             getGlobalPerte()
@@ -190,12 +191,12 @@ def all_script(driver):
             print('passage prochain script ', scriptType)
             # Check if all script types have global_match_win > 1
             all_below_one = all(
-                float(config.global_match_win[st]) >= config.total_want_win for st in config.scriptTypeList)
+                float(config.global_match_win[st]) >= config.total_want_win[scriptType] for st in config.scriptTypeList)
             if all_below_one:
                 for st in config.scriptTypeList:
                     config.log(f' {st} Net profit: {config.global_match_win[st]}', 'success', False)
                 return True
-            if float(config.global_match_win[scriptType]) < config.total_want_win:
+            if float(config.global_match_win[scriptType]) < config.total_want_win[scriptType]:
                 config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
             else:
                 config.log(f' {scriptType} Net profit: {config.global_match_win[scriptType]}')
@@ -287,7 +288,7 @@ def all_script(driver):
                 config.ScriptConfig(scriptType).reset()
                 config.init_variable()
                 DeleteBet(driver)
-                if float(config.global_match_win[scriptType]) < config.total_want_win:
+                if float(config.global_match_win[scriptType]) < config.total_want_win[scriptType]:
                     print("#RECHERCHE INFOS DE MISE")
                     getGlobalPerte()
                     config.error = False
