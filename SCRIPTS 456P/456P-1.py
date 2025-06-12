@@ -92,9 +92,8 @@ config.running_file_name = f"{config.projectPath}/SCRIPTS 456P/running"
 config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 456P/matchlist"
 config.total_want_win = config.total_want_win2
 while (config.win < 100):
-    Functions_456P.all_script(driver)
     try:
-        print('e')
+        Functions_456P.all_script(driver)
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
