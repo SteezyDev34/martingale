@@ -593,8 +593,7 @@ def newclassementeDeMatch(driver):
                     or 'gagnant' in link.lower()
                     or 'winner' in link.lower()
                     or 'utr' in link.lower()
-                    or 'double' in link.lower()
-                    or 'wta' in link.lower()):
+                    or 'double' in link.lower()):
                 break
             links.append(link)
         matchlist = []

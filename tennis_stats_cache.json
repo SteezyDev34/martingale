@@ -1,8 +1,8 @@
 {
   "atp_ids": [],
-  "atp_ranking_date": "2025-06-12",
+  "atp_ranking_date": "2025-06-13",
   "wta_ids": [],
-  "wta_ranking_date": "2025-06-12",
+  "wta_ranking_date": "2025-06-13",
   "player_max houkes_40-40": 0.0,
   "player_alexander blockx_40-40": 0.1842,
   "player_reilly opelka_40-40": 0.199515,
@@ -512,5 +512,20 @@
   "player_eudice chong_40-40": 0,
   "player_saki imamura_40-40": 0,
   "player_priska madelyn nugroho_40-40": 0,
-  "player_ugo humbert_40-40": 0.23187
+  "player_ugo humbert_40-40": 0.23187,
+  "player_daniil medvedev_40-40": 0.26162300000000005,
+  "player_elisabetta cocciaretto_40-40": 0.21874700000000002,
+  "player_juan sebastian osorio_40-40": 0,
+  "player_semen pankin_40-40": 0,
+  "player_ali yazdani_40-40": 0,
+  "player_axel nefve_40-40": 0,
+  "player_alp horoz_40-40": 0,
+  "player_samuel heredia_40-40": 0,
+  "player_andrea fiorentini_40-40": 0,
+  "player_millen hurrion_40-40": 0,
+  "player_casper christensen_40-40": 0,
+  "player_melvin kumar_40-40": 0,
+  "player_aleksi lofman_40-40": 0,
+  "player_martin damm_40-40": 0.221328,
+  "player_moritz kudernatsch_40-40": 0.0
 }
