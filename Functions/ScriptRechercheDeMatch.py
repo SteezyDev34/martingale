@@ -594,7 +594,7 @@ def newclassementeDeMatch(driver):
                     or 'winner' in link.lower()
                     or 'utr' in link.lower()
                     or 'double' in link.lower()):
-                break
+                continue
             links.append(link)
         matchlist = []
         liguelist = []

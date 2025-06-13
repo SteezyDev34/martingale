@@ -120,7 +120,7 @@ def all_script(driver):
                     config.switchScript(scriptType)
                     # Check if all script types have global_match_win > 1
                     all_below_one = all(
-                        float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
+                        float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                         config.scriptTypeList)
                     if all_below_one:
                         for st in config.scriptTypeList:
@@ -203,7 +203,7 @@ def all_script(driver):
             print('passage prochain script ', scriptType)
             # Check if all script types have global_match_win > 1
             all_below_one = all(
-                float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
+                float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                 config.scriptTypeList)
             if all_below_one:
                 for st in config.scriptTypeList:

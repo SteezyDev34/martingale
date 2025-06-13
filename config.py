@@ -72,7 +72,7 @@ score_actuel = False
 looking_game = False
 placed_game = False
 saved_score = False
-all_scores = {}
+       
 numset = ""
 set = ""
 game_end = False
