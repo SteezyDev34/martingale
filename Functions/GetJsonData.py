@@ -320,3 +320,7 @@ def a_DispatchPerte():
     if config.perte > 0:
         # SendPerte(config.scriptType,config.perte)
         SendPerte("15A", config.perte)
+
+
+def set1DispatchPerte():
+    SendPerte("1SET", config.perte)

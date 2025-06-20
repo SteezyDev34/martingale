@@ -194,7 +194,7 @@ def rechercheDeMatch1set(driver):
                     config.log('Récupération des matchs', 'info', False, 3)
                     config.log_clear_line()
                     bet_items = bet_ligue.find_elements(By.CLASS_NAME,
-                                                        'ui-dashboard-game')
+                                                        'dashboard-champ__game')
                 except:
                     config.log('Listes des matchs introuvables!', 'warning', False, 3)
                     # s'il y une erreur on passe au suivant
@@ -244,25 +244,25 @@ def rechercheDeMatch1set(driver):
 
                                 try:
                                     div_bet_cote = bet_item.find_element(By.CLASS_NAME,
-                                                                         'ui-dashboard-markets-cell-group')
-                                    btn_cote = div_bet_cote.find_elements(By.CLASS_NAME, 'dashboard-markets__item')
+                                                                         'dashboard-markets__group')
+                                    btn_cote = div_bet_cote.find_elements(By.CLASS_NAME, 'dashboard-markets__market')
                                     cotev1 = float(btn_cote[0].text)
                                     print('cote v1', cotev1)
                                     cotev2 = float(btn_cote[2].text)
                                     print('cote v2', cotev2)
-                                except:
-                                    print('erreur de cote')
+                                except Exception as e:
+                                    print(f'erreur de cote {e}')
                                     continue
                                 else:
-                                    if cotev1 > 1.2 and cotev1 < 1.4:
+                                    if cotev1 > 1.2 and cotev1 < 1.9:
                                         config.win_type = 'V1'
                                         print('1SET')
-                                    elif cotev2 > 1.2 and cotev2 < 1.4:
+                                    elif cotev2 > 1.2 and cotev2 < 1.9:
                                         config.win_type = 'V2'
                                         print('1SETV2')
                                     else:
                                         continue
-                                if bet_score:  # SI LE MATCH EST PRET
+                                if not bet_score:  # SI LE MATCH EST PRET
 
                                     config.log('Score ok', 'info', False, 4)
                                     config.log_clear_line()

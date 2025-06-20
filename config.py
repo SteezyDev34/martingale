@@ -27,21 +27,6 @@ localhost = ''
 site_url = "https://ca.1xbet.com/fr/live/tennis"
 # Score configurations
 score_to_start = [
-    "01(0)00(0)",
-    "00(0)01(0)",
-    "01(0)01(0)",
-    "02(0)00(0)",
-    "00(0)02(0)",
-    "00(0)00(0)",
-    "00(15)00(0)",
-    "00(0)00(15)",
-    "00(15)00(15)",
-    "00(30)00(15)",
-    "00(15)00(30)",
-    "00(30)00(0)",
-    "00(0)00(30)",
-    "0000(0)(0)",
-    "00(0)(0)",
     "0000(15)(0)",
     "0000(30)(0)",
     "0000(40)(0)",
@@ -119,6 +104,7 @@ global_match_win = {script_type: 0 for script_type in scriptTypeList}
 total_want_win = {'030': 0.2, '300': 0.2, '15A': 0.2, '30A': 0.2}
 total_want_win2 = {'4P': 0.2, '5P': 0.2, '6P': 0.2, '40A': 0.2}
 total_want_win3 = {'400': 0.2, '4015': 0.2, '4030': 0.2}
+total_want_winset1 = {'1SET': 0.2}
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:

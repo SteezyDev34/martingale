@@ -6,7 +6,7 @@ from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetIfGameStart import GetIfGameStart
-from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
+from Functions.GetJsonData import SendGlobalPerte, getPerte, set1DispatchPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
@@ -18,6 +18,8 @@ def all_script(driver):
     # driver.switch_to.window(driver.window_handles[0])
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
+    config.all_scores = {}
+
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch1set(driver) and not config.error:
@@ -31,9 +33,11 @@ def all_script(driver):
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.teams = GetPlayersName(driver)
         newmatchFromUrl(driver)
+        if not config.win_type:
+            config.win_type = input("Quel est le win type V1/V2")
 
         config.log('RECHERCHE INFOS DE MISE', 'title', False)
-        infosperte = getGlobalPerte()
+        infosperte = getPerte()
         if infosperte and config.perte == 0:
             if float(infosperte['perte']) > 20:
                 SendGlobalPerte(config.scriptType, -20)
@@ -60,16 +64,16 @@ def all_script(driver):
             config.switchScript(scriptType)
             # Check if all script types have global_match_win > 1
             all_below_one = all(
-                float(config.global_match_win[st]) > config.total_want_win for st in config.scriptTypeList)
+                float(config.global_match_win[st]) > float(config.total_want_win[st]) for st in config.scriptTypeList)
             if all_below_one:
                 for st in config.scriptTypeList:
                     config.log(f'Net profit: {config.global_match_win[st]}', 'success', False)
                 return True
-            if float(config.global_match_win[scriptType]) < config.total_want_win:
+            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
-            elif int(config.nb_tour) <= int(config.winmatch[scriptType]):
+            elif int(config.nb_tour[scriptType]) <= int(config.winmatch[scriptType]):
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
-                config.log(f'Nombre de tour {scriptType} atteint: {config.nb_tour}')
+                config.log(f'Nombre de tour {scriptType} atteint: {config.nb_tour[scriptType]}')
                 continue
             ##ATTENTE QUE LE QT SE TERMINE
             saved_set = config.set_actuel
@@ -79,18 +83,21 @@ def all_script(driver):
             config.log(txtlog, config.newmatch)
             config.result = GetResult(driver)
         if config.result == 'LOSE':
-            DispatchPerte()
+            set1DispatchPerte()
+            config.error = 'LOSE'
+            break
         elif config.result == 'WIN':
             config.perte = 0
             config.init_variable()
             config.global_match_win = config.global_match_win + config.netprofit
             DeleteBet(driver)
             config.log(f'Net profit: {config.global_match_win}')
-            continue
+            config.error = 'WIN'
+            break
             ##PREPARATTION PREMIER PARIS
 
     if config.perte > 0.2:
-        DispatchPerte()
+        set1DispatchPerte()
     config.global_match_win = 0
     print("update : " + config.newmatch)
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)

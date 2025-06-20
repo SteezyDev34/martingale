@@ -32,6 +32,8 @@ if len(parts) > 1:
     config.script_num = int(parts[1])  # Suppose que le numéro est avant le tiret
     localhost = str(config.scriptType) + str(config.script_num)
     config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
+    if int(config.localhost) < 1024:
+        config.localhost = 1024 + int(config.localhost)
     print(config.localhost)
     # Demander confirmation à l'utilisateur
     if config.systeme == 'Windows':
@@ -55,10 +57,10 @@ else:
 
 # Chargement des functions
 # Chargement de Chrome driver
-from ChromeDriver.SetDriver1 import driver
+from ChromeDriver.SetDriver import driver
 
 from Functions import Functions_1SET
-from Functions.GetJsonData import DispatchPerte
+from Functions.GetJsonData import set1DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch
 from Functions.Authenticator import is_logged_in, loginProcess
 
@@ -79,6 +81,8 @@ if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in
 config.scriptTypeList = ['1SET']
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
 config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
+config.total_want_win = config.total_want_winset1
+
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
 
@@ -91,7 +95,7 @@ while (config.win < 100):
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
         if config.perte > 0:
-            DispatchPerte()
+            set1DispatchPerte()
         for i in config.scriptTypeList:
             config.switchScript('1SETRESET')
             config.ScriptConfig(i).reset()
