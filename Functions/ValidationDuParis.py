@@ -169,14 +169,35 @@ def ValidationDuParis(driver, nexbet=False):
         from datetime import datetime
         SendBetData()
         current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # Create validated bet dictionary
         config.validated_bet = {
             'montant': config.mise,
             'cote': config.cote,
             'jeu': config.looking_game,
             'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
             'winscore': config.win_type,
+            'url': driver.current_url,
             'timestamp': current_timestamp
         }
+        
+        # Save validated bet to JSON file
+        try:
+            # Load existing bets if file exists
+            try:
+                with open('validated_bets.json', 'r') as f:
+                    validated_bets = json.load(f)
+            except FileNotFoundError:
+                validated_bets = []
+            
+            # Append new bet
+            validated_bets.append(config.validated_bet)
+            
+            # Write updated bets back to file
+            with open('validated_bets.json', 'w') as f:
+                json.dump(validated_bets, f, indent=4)
+        except Exception as e:
+            config.log(f"Error saving validated bet to JSON: {e}")
+        
         config.placed_game = config.looking_game
         config.log(f'           {config.validated_bet}', 'info', True)
         config.perte = float(config.perte) + float(config.mise)
