@@ -1,6 +1,3 @@
-import json
-import time
-
 import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName, AddRunning
@@ -8,6 +5,7 @@ from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
+from Functions.GetIfGameStart import GetIfGameStart
 from Functions.GetJsonData import SendGlobalPerte, getPerte, set1DispatchPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
@@ -24,9 +22,11 @@ def all_script(driver):
 
     # --------
     # SCRIPT RECHERCHE DE MATCH
-    rechercheDeMatch1set(driver)
+    while not rechercheDeMatch1set(driver) and not config.error:
+        config.log('Erreur lors de la recherche de match!', 'error', False, 2)
 
     # --------
+    config.match_found = True
     if config.match_found and not config.error:
         AddRunning.main(config.script_num, config.running_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
@@ -50,58 +50,51 @@ def all_script(driver):
                 config.perte = float(infosperte['perte'])
         config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
-        for scriptType in config.scriptTypeList:
-            config.switchScript(scriptType)
-            print('wintwin', config.wantwin)
-            GetSetActuel(driver)
-            ##PREPARATTION PREMIER PARIS
-            FirstGameBet(driver)
+    for scriptType in config.scriptTypeList:
+        config.switchScript(scriptType)
+        print('wintwin', config.wantwin)
+        GetSetActuel(driver)
+        ##PREPARATTION PREMIER PARIS
+        FirstGameBet(driver)
 
+    GetIfGameStart(driver)
     config.lose = False
     while not config.error:
-        # Read and iterate through bets from validated_bets.json
-        with open('validated_bets.json', 'r') as f:
-            validated_bets = json.load(f)
-            for bet in validated_bets:
-                print(bet)
-                time.sleep(500)
-                exit()
-                for scriptType in config.scriptTypeList:
-                    config.switchScript(scriptType)
-                    # Check if all script types have global_match_win > 1
-                    all_below_one = all(
-                        float(config.global_match_win[st]) > float(config.total_want_win[st]) for st in
-                        config.scriptTypeList)
-                    if all_below_one:
-                        for st in config.scriptTypeList:
-                            config.log(f'Net profit: {config.global_match_win[st]}', 'success', False)
-                        return True
-                    if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
-                        config.log(f'Net profit: {config.global_match_win[scriptType]}')
-                    elif int(config.nb_tour[scriptType]) <= int(config.winmatch[scriptType]):
-                        config.log(f'Net profit: {config.global_match_win[scriptType]}')
-                        config.log(f'Nombre de tour {scriptType} atteint: {config.nb_tour[scriptType]}')
-                        continue
-                    ##ATTENTE QUE LE QT SE TERMINE
-                    saved_set = config.set_actuel
-                    while int(saved_set) == int(config.set_actuel):
-                        GetScoreActuel(driver)
-                    txtlog = "SET TERMINÉ ON VERIFIE LE SCORE"
-                    config.log(txtlog, config.newmatch)
-                    config.result = GetResult(driver)
-                if config.result == 'LOSE':
-                    set1DispatchPerte()
-                    config.error = 'LOSE'
-                    break
-                elif config.result == 'WIN':
-                    config.perte = 0
-                    config.init_variable()
-                    config.global_match_win = config.global_match_win + config.netprofit
-                    DeleteBet(driver)
-                    config.log(f'Net profit: {config.global_match_win}')
-                    config.error = 'WIN'
-                    break
-                    ##PREPARATTION PREMIER PARIS
+        for scriptType in config.scriptTypeList:
+            config.switchScript(scriptType)
+            # Check if all script types have global_match_win > 1
+            all_below_one = all(
+                float(config.global_match_win[st]) > float(config.total_want_win[st]) for st in config.scriptTypeList)
+            if all_below_one:
+                for st in config.scriptTypeList:
+                    config.log(f'Net profit: {config.global_match_win[st]}', 'success', False)
+                return True
+            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
+                config.log(f'Net profit: {config.global_match_win[scriptType]}')
+            elif int(config.nb_tour[scriptType]) <= int(config.winmatch[scriptType]):
+                config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                config.log(f'Nombre de tour {scriptType} atteint: {config.nb_tour[scriptType]}')
+                continue
+            ##ATTENTE QUE LE QT SE TERMINE
+            saved_set = config.set_actuel
+            while int(saved_set) == int(config.set_actuel):
+                GetScoreActuel(driver)
+            txtlog = "SET TERMINÉ ON VERIFIE LE SCORE"
+            config.log(txtlog, config.newmatch)
+            config.result = GetResult(driver)
+        if config.result == 'LOSE':
+            set1DispatchPerte()
+            config.error = 'LOSE'
+            break
+        elif config.result == 'WIN':
+            config.perte = 0
+            config.init_variable()
+            config.global_match_win = config.global_match_win + config.netprofit
+            DeleteBet(driver)
+            config.log(f'Net profit: {config.global_match_win}')
+            config.error = 'WIN'
+            break
+            ##PREPARATTION PREMIER PARIS
 
     if config.perte > 0.2:
         set1DispatchPerte()
