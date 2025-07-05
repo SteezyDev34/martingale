@@ -182,6 +182,7 @@ def ValidationDuParis(driver, nexbet=False):
         config.perte = float(config.perte) + float(config.mise)
         config.wantwin = float(config.wantwin) + float(config.increment)
         # Calculate net profit based on stake, odds and losses
+        print('mise ' + str(config.mise), 'cote ' + str(config.cote), 'perte ' + str(config.perte))
         config.netprofit = round(
             (float(config.mise) * float(config.cote)) - float(config.perte), 2)
         config.log(f'Potential Net profit: {config.netprofit}')
