@@ -1,3 +1,5 @@
+import json
+
 import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName, AddRunning
@@ -61,40 +63,42 @@ def all_script(driver):
     config.lose = False
     while not config.error:
         for scriptType in config.scriptTypeList:
-            config.switchScript(scriptType)
-            # Check if all script types have global_match_win > 1
-            all_below_one = all(
-                float(config.global_match_win[st]) > float(config.total_want_win[st]) for st in config.scriptTypeList)
-            if all_below_one:
-                for st in config.scriptTypeList:
-                    config.log(f'Net profit: {config.global_match_win[st]}', 'success', False)
-                return True
-            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
-                config.log(f'Net profit: {config.global_match_win[scriptType]}')
-            elif int(config.nb_tour[scriptType]) <= int(config.winmatch[scriptType]):
-                config.log(f'Net profit: {config.global_match_win[scriptType]}')
-                config.log(f'Nombre de tour {scriptType} atteint: {config.nb_tour[scriptType]}')
-                continue
-            ##ATTENTE QUE LE QT SE TERMINE
-            saved_set = config.set_actuel
-            while int(saved_set) == int(config.set_actuel):
-                GetScoreActuel(driver)
-            txtlog = "SET TERMINÉ ON VERIFIE LE SCORE"
-            config.log(txtlog, config.newmatch)
-            config.result = GetResult(driver)
-        if config.result == 'LOSE':
-            set1DispatchPerte()
-            config.error = 'LOSE'
-            break
-        elif config.result == 'WIN':
-            config.perte = 0
-            config.init_variable()
-            config.global_match_win = config.global_match_win + config.netprofit
-            DeleteBet(driver)
-            config.log(f'Net profit: {config.global_match_win}')
-            config.error = 'WIN'
-            break
+            # Load and process validated bets from JSON file
+            validated_bets_file = f"{scriptType}_validated_bets.json"
+            try:
+                with open(validated_bets_file, 'r') as f:
+                    validated_bets = json.load(f)
+                    for bet_entry in validated_bets:
+                        driver.get(bet_entry['url'])
+                        config.switchScript(scriptType)
+                        GetScoreActuel(driver)
+                        config.validated_bet = bet_entry
+                        ##ATTENTE QUE LE QT SE TERMINE
+                        if int(config.set_actuel) == int(bet_entry['set']):
+                            continue
+                        GetScoreActuel(driver)
+                        txtlog = "SET TERMINÉ ON VERIFIE LE SCORE"
+                        config.log(txtlog, config.newmatch)
+                        config.result = GetResult(driver)
+                        if config.result == 'LOSE':
+                            config.perte = float(config.validated_bet['montant']) * float(config.validated_bet['cote'])
+                            set1DispatchPerte()
+                            config.error = 'LOSE'
+                            break
+                        elif config.result == 'WIN':
+                            # Remove the bet entry from the JSON file
+                            with open(validated_bets_file, 'r') as f:
+                                validated_bets = json.load(f)
+                            validated_bets.remove(config.validated_bet)
+                            with open(validated_bets_file, 'w') as f:
+                                json.dump(validated_bets, f)
+                            config.perte = 0
+                            config.error = 'WIN'
             ##PREPARATTION PREMIER PARIS
+            except FileNotFoundError:
+                config.log(f"No validated bets file found for {scriptType}", "warning", False)
+            except json.JSONDecodeError:
+                config.log(f"Error reading validated bets file for {scriptType}", "error", False)
 
     if config.perte > 0.2:
         set1DispatchPerte()

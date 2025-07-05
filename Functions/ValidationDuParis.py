@@ -169,40 +169,41 @@ def ValidationDuParis(driver, nexbet=False):
         from datetime import datetime
         SendBetData()
         current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        # Create validated bet dictionary
+        # Create validated bet data
         config.validated_bet = {
             'montant': config.mise,
             'cote': config.cote,
             'jeu': config.looking_game,
             'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
-            'winscore': config.win_type,
-            'url': driver.current_url,
-            'timestamp': current_timestamp
+            'win': config.win_type,
+            'timestamp': current_timestamp,
+            'url': driver.current_url
         }
-        
-        # Save validated bet to JSON file
+
+        # Save validated bet to JSON file named after script type
+        json_filename = f"{config.scriptType}_validated_bets.json"
         try:
             # Load existing bets if file exists
             try:
-                with open('validated_bets.json', 'r') as f:
-                    validated_bets = json.load(f)
+                with open(json_filename, 'r') as f:
+                    existing_bets = json.load(f)
             except FileNotFoundError:
-                validated_bets = []
-            
+                existing_bets = []
+
             # Append new bet
-            validated_bets.append(config.validated_bet)
-            
-            # Write updated bets back to file
-            with open('validated_bets.json', 'w') as f:
-                json.dump(validated_bets, f, indent=4)
+            existing_bets.append(config.validated_bet)
+
+            # Save updated bets
+            with open(json_filename, 'w') as f:
+                json.dump(existing_bets, f, indent=4)
         except Exception as e:
-            config.log(f"Error saving validated bet to JSON: {e}")
-        
+            print(f"Error saving validated bet to JSON: {e}")
         config.placed_game = config.looking_game
         config.log(f'           {config.validated_bet}', 'info', True)
         config.perte = float(config.perte) + float(config.mise)
         config.wantwin = float(config.wantwin) + float(config.increment)
         # Calculate net profit based on stake, odds and losses
+        print('mise ' + str(config.mise), 'cote ' + str(config.cote), 'perte ' + str(config.perte))
         config.netprofit = round(
             (float(config.mise) * float(config.cote)) - float(config.perte), 2)
         config.log(f'Potential Net profit: {config.netprofit}')
