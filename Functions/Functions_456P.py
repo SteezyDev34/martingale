@@ -323,17 +323,16 @@ def all_script(driver):
                     'result'):
                     continue
             GetIfGameEnd(driver)
-    config.switchScript('4315A')
+    config.switchScript('456P')
     print("update : " + config.newmatch)
     for i in config.scriptTypeList:
-        config.switchScript('456P')
+        config.switchScript(i)
+        print('perte', config.perte)
+        DispatchPerte()
         config.ScriptConfig(i).reset()
         config.init_variable()
-        config.switchScript(i)
-        DispatchPerte()
         config.global_match_win[i] = 0  # Initialize win counter for script type
         config.winmatch[i] = 0  # Initialize match counter for script type
-        print('perte', config.perte)
     config.all_scores = {}
     Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
