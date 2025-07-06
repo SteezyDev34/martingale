@@ -123,7 +123,8 @@ def GetBet(driver, nextBet=False):
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
             first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
             sType = "Receveur Va Mener 30-0"
-            if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
+            if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
+                    len(first_player) > 0 and int(config.jeu_actuel) == int(config.looking_game)):
                 first_player = 1
 
                 if config.scriptType == '030':
