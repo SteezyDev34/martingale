@@ -52,7 +52,7 @@ if len(parts) > 1:
 else:
     print("Le format du nom du fichier est incorrect.")
     exit()
-
+config.scriptType = '456P'
 # Chargement des functions
 # Chargement de Chrome driver
 from ChromeDriver.SetDriver import driver
