@@ -48,7 +48,7 @@ def GetScoreActuel(driver):
                     else:
                         print('first time score change')
                         first = False
-                        time.sleep(5)
+                        time.sleep(2)
                         continue
                 else:
                     get_score = True

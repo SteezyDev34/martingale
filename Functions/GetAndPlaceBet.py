@@ -52,7 +52,8 @@ def GetAndPlaceBet(driver):
             config.result = 'RUN'
             return
 
-        RetourTpsReg(driver)
+        if config.jeu_actuel and int(config.jeu_actuel) > 6:
+            RetourTpsReg(driver)
         # Affichage de la liste des paris
         config.log('Affichage de la liste des paris', config.newmatch)
         if not AfficherParis(driver):

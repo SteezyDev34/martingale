@@ -306,9 +306,33 @@ def all_script(driver):
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                     config.log(f"Restart {config.scriptType}", 'success', False)
-                    ##VALIDATION DU PARIS SI SCORE OK
-                    FirstGameBet(driver)
-                    firstjeu = True
+                    # VÉRIFCATION DU SET ACTUEL
+                    GetScoreActuel(driver)
+                    if not config.set_actuel:
+                        config.error = True
+                    config.log('set ' + str(config.set_actuel) + ' - nex set ' + str(config.newset))
+                    if str(int(config.newset) - 1) == str(config.set_actuel):  ## si on est toujours sur le meme set
+                        config.log('on est toujours sur le meme set', config.newmatch)
+                        ##VALIDATION DU PARIS SI SCORE OK
+                        validate_bet = False
+                        tentative = 0
+                        # VÉRIFICATION DU SCORE ACTUEL
+                        tentative = tentative + 1
+                        print('tentative validation ' + str(tentative))
+                        FirstGameBet(driver)
+                        firstjeu = True
+                    elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
+                        txtlog = " ON EST SUR LE PROCHAIN SET"
+                        passageset = True
+                        config.newset = int(config.set_actuel) + 1
+                        config.log(txtlog, config.newmatch)
+                        DeleteBet(driver)
+                        txtlog = 'Wait 30 sec'
+                        config.log(txtlog, config.newmatch)
+                        break
+                    else:
+                        print("ERROR : ecup set " + str(config.set_actuel))
+                        config.error = True
                 else:
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
