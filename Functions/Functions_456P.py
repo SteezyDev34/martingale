@@ -329,7 +329,6 @@ def all_script(driver):
                         DeleteBet(driver)
                         txtlog = 'Wait 30 sec'
                         config.log(txtlog, config.newmatch)
-                        break
                     else:
                         print("ERROR : ecup set " + str(config.set_actuel))
                         config.error = True
@@ -356,7 +355,6 @@ def all_script(driver):
                 DeleteBet(driver)
                 txtlog = 'Wait 30 sec'
                 config.log(txtlog, config.newmatch)
-                break
     config.switchScript('456P')
     print("update : " + config.newmatch)
     for i in config.scriptTypeList:
