@@ -344,11 +344,11 @@ def GetBet(driver, nextBet=False):
                     # print(sType)
                     list_of_newbet_type_text = list_of_newbet_type
                     # print(list_of_newbet_type_text)
-                    list_of_newbet_type = list_of_newbet_type_text.split(sType)
+                    list_of_newbet_type = list_of_newbet_type_text.split(' - ' + win_texte)
                     print(len(list_of_newbet_type))
                     print(list_of_newbet_type)
                     if len(list_of_newbet_type) > 1:
-                        list_of_newbet_type_text = list_of_newbet_type_text.split(" - " + win_texte)[0]
+                        list_of_newbet_type_text = list_of_newbet_type[0]
                         print(win_texte)
                         print(list_of_newbet_type_text)
                         getjeu_actuel = int(list_of_newbet_type_text.split("Game ")[1])
