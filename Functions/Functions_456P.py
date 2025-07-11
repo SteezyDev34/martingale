@@ -11,6 +11,7 @@ from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import update_match_done
+from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte
@@ -249,7 +250,7 @@ def all_script(driver):
                 passageset = True
                 break
             else:
-                # GetAndPlaceBet(driver)
+                GetAndPlaceBet(driver)
                 print(config.global_match_win)
             if config.result == 'RUN':
                 print('RUN')
@@ -323,6 +324,15 @@ def all_script(driver):
                     'result'):
                     continue
             GetIfGameEnd(driver)
+            if str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
+                txtlog = " ON EST SUR LE PROCHAIN SET"
+                passageset = True
+                config.newset = int(config.set_actuel) + 1
+                config.log(txtlog, config.newmatch)
+                DeleteBet(driver)
+                txtlog = 'Wait 30 sec'
+                config.log(txtlog, config.newmatch)
+                break
     config.switchScript('456P')
     print("update : " + config.newmatch)
     for i in config.scriptTypeList:

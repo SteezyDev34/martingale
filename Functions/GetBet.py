@@ -150,6 +150,20 @@ def GetBet(driver, nextBet=False):
                 config.win_type = '0:30'  # inversé
                 win_texte = '30-0'
             print('first_player :', first_player)
+        if config.scriptType == 'BREAK':
+            scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
+            scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
+            first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
+            sType = "gne dans le jeu"
+            if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
+                first_player = 1
+                config.win_type = ['0:40', '15:40', '30:40', '40:A']
+                win_texte = 'W1'
+            else:
+                first_player = 2
+                config.win_type = ['40:0', '40:15', '40:30', 'A:40']
+                win_texte = 'W2'
+            print('first_player :', first_player)
         if config.scriptType == '6P':
             sType = ", 6"
             config.win_type = ['40:30', '30:40']  # inversé
@@ -252,7 +266,7 @@ def GetBet(driver, nextBet=False):
                                                       'ui-coupon-bet-market__name'))
                 )
             except Exception as e:
-                if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
+                if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400' or config.scriptType == 'BREAK':
 
                     if config.systeme == 'Darwin':
                         if i % 2 != 0:
@@ -285,6 +299,57 @@ def GetBet(driver, nextBet=False):
                     if len(list_of_newbet_type) > 1:
                         list_of_newbet_type_text = list_of_newbet_type_text.split(" " + win_texte)[0]
                         getjeu_actuel = int(list_of_newbet_type_text.split("Jeu ")[1])
+                        if str(config.looking_game) == str(getjeu_actuel):
+                            # print('paris trouvé')
+                            clic = True
+                            return clic
+                        else:
+                            # print('mauvais jeu')
+                            if config.systeme == 'Darwin':
+                                if i % 2 != 0:
+                                    sautDeLigne = sautDeLigne
+                                    decalageX = 50
+                                else:
+                                    sautDeLigne = sautDeLigne + 30
+                                    decalageX = size['width'] / -2 + 50
+                            else:
+                                # print('win')
+                                if i % 2 != 0:
+                                    print('gauche')
+                                    decalageX = 50
+                                else:
+                                    print('droite')
+                                    sautDeLigne = sautDeLigne + 30
+                                    decalageX = -50
+                    else:
+                        # print('Mauvais paris')
+                        if config.systeme == 'Darwin':
+                            if i % 2 != 0:
+                                sautDeLigne = sautDeLigne
+                                decalageX = 50
+                            else:
+                                sautDeLigne = sautDeLigne + 30
+                                decalageX = size['width'] / -2 + 50
+                        else:
+                            # print('win')
+                            if i % 2 != 0:
+                                print('gauche')
+                                decalageX = 50
+                            else:
+                                # print('droite')
+                                sautDeLigne = sautDeLigne + 30
+                                decalageX = -50
+                        ligne = ligne + 1
+                elif config.scriptType == 'BREAK':
+                    # print(sType)
+                    list_of_newbet_type_text = list_of_newbet_type
+                    # print(list_of_newbet_type_text)
+                    list_of_newbet_type = list_of_newbet_type_text.split(sType)
+                    # print(len(list_of_newbet_type))
+                    # print(list_of_newbet_type)
+                    if len(list_of_newbet_type) > 1:
+                        list_of_newbet_type_text = list_of_newbet_type_text.split(" " + win_texte)[0]
+                        getjeu_actuel = int(list_of_newbet_type_text.split("Game ")[1])
                         if str(config.looking_game) == str(getjeu_actuel):
                             # print('paris trouvé')
                             clic = True

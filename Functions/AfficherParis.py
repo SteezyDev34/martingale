@@ -26,6 +26,8 @@ def AfficherParis(driver):
         key = 'Nombre exact de points dans un jeu'
     elif config.scriptType == '1SET':
         key = '1X2'
+    elif config.scriptType == 'BREAK':
+        key = 'Gagne dans le jeu'
     while not selection and tentative < 6:
         try:
             element = WebDriverWait(driver, 5).until(
@@ -76,7 +78,7 @@ def AfficherParis(driver):
                                     theset = "1er"
                                 else:
                                     theset = str(config.set_actuel) + "ème"
-                                if config.scriptType == '1SET':
+                                if config.scriptType == '1SET' or config.scriptType == 'BREAK':
                                     args = ' set'
                                 else:
                                     args = ' set Evénements rapides'
