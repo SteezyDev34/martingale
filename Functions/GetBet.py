@@ -349,6 +349,8 @@ def GetBet(driver, nextBet=False):
                     # print(list_of_newbet_type)
                     if len(list_of_newbet_type) > 1:
                         list_of_newbet_type_text = list_of_newbet_type_text.split(" - " + win_texte)[0]
+                        print(win_texte)
+                        print(list_of_newbet_type_text)
                         getjeu_actuel = int(list_of_newbet_type_text.split("Game ")[1])
                         if str(config.looking_game) == str(getjeu_actuel):
                             # print('paris trouvé')
