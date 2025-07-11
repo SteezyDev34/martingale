@@ -120,7 +120,7 @@ def AfficherParis(driver):
                                                     try:
                                                         time.sleep(2)
                                                         print('wait for market grid container')
-                                                        element = WebDriverWait(driver, 5).until(
+                                                        element = WebDriverWait(driver, 2).until(
                                                             EC.visibility_of_element_located(
                                                                 (By.CLASS_NAME, 'market-grid-canvas__container'))
                                                         )
