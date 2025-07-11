@@ -118,6 +118,7 @@ def AfficherParis(driver):
 
                                                 if l == key:
                                                     try:
+                                                        time.sleep(2)
                                                         print('wait for market grid container')
                                                         element = WebDriverWait(driver, 5).until(
                                                             EC.visibility_of_element_located(
