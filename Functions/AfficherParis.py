@@ -30,7 +30,7 @@ def AfficherParis(driver):
         args = ' set Evénements rapides'
     key = 'Paris'
     if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
-        key = 'Score du Jeu.'
+        key = 'Gagne le jeu avec le score.'
     elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
         key = 'Nombre exact de points dans un jeu'
     elif config.scriptType == '1SET':
