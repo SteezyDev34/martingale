@@ -9,13 +9,12 @@ parent_directory = os.path.dirname(current_file_path)
 # ajouter un autre niveau parent si nécessaire
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
+# Vérification de l'environnement
 if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
-    # Simple écriture de lignes vides pour PyCharm
-
-    # Vérification de l'environnement
     import VenvDependencyManager
 
     VenvDependencyManager.main()
+
 from art import *
 
 # Chargement des variables globales
@@ -84,11 +83,14 @@ else:
 is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
 if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
     config.in_stat = True
-config.scriptTypeList = config.scriptTypeList1
+config.scriptTypeList = config.scriptTypeList2
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
-config.running_file_name = f"{config.projectPath}/SCRIPTS 30A/running"
-config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 30A/matchlist"
+config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
+config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
+config.running_file_name = f"{config.projectPath}/SCRIPTS 456P/running"
+config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 456P/matchlist"
+config.total_want_win = config.total_want_win
 while (config.win < 100):
     try:
         Functions_431a.all_script(driver)
@@ -98,7 +100,7 @@ while (config.win < 100):
         if config.perte > 0:
             DispatchPerte()
         for i in config.scriptTypeList:
-            config.switchScript('4315A')
+            config.switchScript('456P')
             config.ScriptConfig(i).reset()
             config.init_variable()
             config.switchScript(i)
