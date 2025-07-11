@@ -28,7 +28,7 @@ def AfficherParis(driver):
         args = ' set'
     else:
         args = ' set Evénements rapides'
-    key = 'Game Score. ' + theset + args
+    key = 'Paris'
     if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
         key = 'Score du Jeu.'
     elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
@@ -98,7 +98,7 @@ def AfficherParis(driver):
                                     else:
                                         paris = 0
                                         tentative = 0
-                                        while paris == 0 and tentative < 10:
+                                        while paris == 0 and tentative < 5:
                                             try:
                                                 toolbar = driver.find_elements(By.CLASS_NAME,
                                                                                'game-toolbar')[
@@ -120,6 +120,11 @@ def AfficherParis(driver):
                                                     paris = 1
                                                 else:
                                                     tentative = tentative + 1
+                                                    if key == 'Paris':
+                                                        key = 'Game Score. ' + theset + args
+                                                    else:
+                                                        key = 'Paris'
+
                                             except Exception as e:
                                                 config.log(f'        #ERROR16 : impossible ecrire {key}', 'warning',
                                                            False)
