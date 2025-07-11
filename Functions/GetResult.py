@@ -121,7 +121,7 @@ def GetResult(driver):
                     result = 'LOSE'
                     config.log(result, 'error', False, 2)
                 return result
-        elif config.scriptType == '4P' or config.scriptType == '6P' or config.scriptType == '5P':
+        elif config.scriptType == '4P' or config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == 'BREAK':
             if int(config.set_actuel) != int(config.validated_bet.get('set')):
                 print('set actuel différent', config.validated_bet.get('set'))
                 getresult = True
