@@ -19,7 +19,16 @@ def AfficherParis(driver):
     selection = False
     tentative = 1
     clic = False
-    key = 'Game Score'
+
+    if str(config.set_actuel) == "1":
+        theset = "1er"
+    else:
+        theset = str(config.set_actuel) + "ème"
+    if config.scriptType == '1SET' or config.scriptType == 'BREAK':
+        args = ' set'
+    else:
+        args = ' set Evénements rapides'
+    key = 'Game Score ' + theset + args
     if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
         key = 'Score du Jeu.'
     elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
@@ -74,14 +83,7 @@ def AfficherParis(driver):
                                 config.log(f'tentative {tentative}', 'warning', False, 2)
 
                             else:
-                                if str(config.set_actuel) == "1":
-                                    theset = "1er"
-                                else:
-                                    theset = str(config.set_actuel) + "ème"
-                                if config.scriptType == '1SET' or config.scriptType == 'BREAK':
-                                    args = ' set'
-                                else:
-                                    args = ' set Evénements rapides'
+
                                 if select_option_text.strip().lower() == str(
                                         theset).lower() + f'{args}'.lower():
                                     config.log('            Lien ' + select_option_text.lower() + ' = ' + str(
