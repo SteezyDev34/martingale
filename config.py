@@ -121,8 +121,9 @@ all_scores = {}
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
-total_want_win = {'030': 2, '300': 2, '15A': 2, '30A': 2, 'BREAK': 0.2, '400': 2, '4015': 2, '4030': 2, '4P': 2,
-                  '5P': 2, '6P': 2, '40A': 2}
+total_want_win = {'030': 1, '300': 1, '15A': 0.2, '30A': 1, 'BREAK': 1, '400': 1, '4015': 1, '4030': 1, '4P': 0.2,
+                  '5P': 0.2, '6P': 0.2, '40A': 0.2}
+total_want_winset1 = {'1SET': 0.2}
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:

@@ -189,99 +189,100 @@ def rechercheDeMatch1set(driver):
             # ON VÉRIFIE QUE LA COMPET EST JOUABLE
             config.log(' ' + config.ligue_name, 'info', False, 2)
             # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
-            try:
-                config.log('Récupération des matchs', 'info', False, 3)
-                config.log_clear_line()
-                bet_items = bet_ligue.find_elements(By.CLASS_NAME,
-                                                    'dashboard-champ__game')
-            except:
-                config.log('Listes des matchs introuvables!', 'warning', False, 3)
-                # s'il y une erreur on passe au suivant
-                continue
-            else:
-                if len(bet_items) <= 0:
+            if getCompet():
+                try:
+                    config.log('Récupération des matchs', 'info', False, 3)
+                    config.log_clear_line()
+                    bet_items = bet_ligue.find_elements(By.CLASS_NAME,
+                                                        'dashboard-champ__game')
+                except:
                     config.log('Listes des matchs introuvables!', 'warning', False, 3)
                     # s'il y une erreur on passe au suivant
-                    config.log_clear_line(2)
-                    continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
-                for bet_item in bet_items:
-                    try:
-                        config.log('On récupère le nom des joueurs', 'info', False, 3)
-                        config.log_clear_line()
-                        div_bet_player = bet_item.find_element(By.CLASS_NAME, 'ui-team-scores__teams')
-                    except:
-                        config.log('Impossible de récpérer les joueurs!', 'warning', False, 3)
-                        config.log_clear_line()
-                        continue
-                    else:
-                        if div_bet_player:
-                            div_bet_player = div_bet_player.text.split('\n')
-                            config.log(str(div_bet_player), 'info', False, 3)
-                            config.log_clear_line()
+                    continue
+                else:
+                    if len(bet_items) <= 0:
+                        config.log('Listes des matchs introuvables!', 'warning', False, 3)
+                        # s'il y une erreur on passe au suivant
+                        config.log_clear_line(2)
+                        continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
+                    for bet_item in bet_items:
                         try:
-                            # on récupère le score
-                            div_bet_score = bet_item.find_elements(By.CLASS_NAME,
-                                                                   'ui-game-scores')
+                            config.log('On récupère le nom des joueurs', 'info', False, 3)
+                            config.log_clear_line()
+                            div_bet_player = bet_item.find_element(By.CLASS_NAME, 'ui-team-scores__teams')
                         except:
-
-                            config.log('Impossible de récupérer le score!', 'warning', False, 4)
-                            time.sleep(2)
+                            config.log('Impossible de récpérer les joueurs!', 'warning', False, 3)
                             config.log_clear_line()
                             continue
                         else:
-                            # si le score est récupéré
-                            if len(div_bet_score) <= 0:
-                                config.log('Pas de score!', 'warning', False, 4)
+                            if div_bet_player:
+                                div_bet_player = div_bet_player.text.split('\n')
+                                config.log(str(div_bet_player), 'info', False, 3)
+                                config.log_clear_line()
+                            try:
+                                # on récupère le score
+                                div_bet_score = bet_item.find_elements(By.CLASS_NAME,
+                                                                       'ui-game-scores')
+                            except:
+
+                                config.log('Impossible de récupérer le score!', 'warning', False, 4)
                                 time.sleep(2)
                                 config.log_clear_line()
                                 continue
-                            # on le vérifie
-                            config.log('Vérification du score!', 'info', False, 4)
-                            config.log_clear_line()
-                            bet_score = GetMatchScore.set1main(div_bet_score[0],
-                                                               config.score_to_start)
-
-                            try:
-                                div_bet_cote = bet_item.find_element(By.CLASS_NAME,
-                                                                     'dashboard-markets__group')
-                                btn_cote = div_bet_cote.find_elements(By.CLASS_NAME, 'dashboard-markets__market')
-                                cotev1 = float(btn_cote[0].text)
-                                print('cote v1', cotev1)
-                                cotev2 = float(btn_cote[2].text)
-                                print('cote v2', cotev2)
-                            except Exception as e:
-                                print(f'erreur de cote {e}')
-                                continue
                             else:
-                                if cotev1 > 1.2 and cotev1 < 1.9:
-                                    config.win_type = 'V1'
-                                    print('1SET')
-                                elif cotev2 > 1.2 and cotev2 < 1.9:
-                                    config.win_type = 'V2'
-                                    print('1SETV2')
-                                else:
+                                # si le score est récupéré
+                                if len(div_bet_score) <= 0:
+                                    config.log('Pas de score!', 'warning', False, 4)
+                                    time.sleep(2)
+                                    config.log_clear_line()
                                     continue
-                            if not bet_score:  # SI LE MATCH EST PRET
-
-                                config.log('Score ok', 'info', False, 4)
+                                # on le vérifie
+                                config.log('Vérification du score!', 'info', False, 4)
                                 config.log_clear_line()
-                                # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
-                                config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
-                                                                               config.matchlist_file_name)
-                                if config.newmatch[0]:
-                                    if OuverturePageMatch.main(bet_item, config.script_num,
-                                                               config.newmatch[1],
-                                                               config.running_file_name,
-                                                               config.matchlist_file_name):
-                                        config.newmatch = config.newmatch[1]
-                                        config.log(config.newmatch, 'info', False, 4)
-                                        config.match_found = True
-                                        break
+                                bet_score = GetMatchScore.set1main(div_bet_score[0],
+                                                                   config.score_to_start)
+
+                                try:
+                                    div_bet_cote = bet_item.find_element(By.CLASS_NAME,
+                                                                         'dashboard-markets__group')
+                                    btn_cote = div_bet_cote.find_elements(By.CLASS_NAME, 'dashboard-markets__market')
+                                    cotev1 = float(btn_cote[0].text)
+                                    print('cote v1', cotev1)
+                                    cotev2 = float(btn_cote[2].text)
+                                    print('cote v2', cotev2)
+                                except Exception as e:
+                                    print(f'erreur de cote {e}')
+                                    continue
+                                else:
+                                    if cotev1 > 1.2 and cotev1 < 1.9:
+                                        config.win_type = 'V1'
+                                        print('1SET')
+                                    elif cotev2 > 1.2 and cotev2 < 1.9:
+                                        config.win_type = 'V2'
+                                        print('1SETV2')
                                     else:
                                         continue
-                            else:
-                                config.log('Score NOT ok', 'warning', False, 4)
-                                config.log_clear_line()
+                                if not bet_score:  # SI LE MATCH EST PRET
+
+                                    config.log('Score ok', 'info', False, 4)
+                                    config.log_clear_line()
+                                    # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
+                                    config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
+                                                                                   config.matchlist_file_name)
+                                    if config.newmatch[0]:
+                                        if OuverturePageMatch.main(bet_item, config.script_num,
+                                                                   config.newmatch[1],
+                                                                   config.running_file_name,
+                                                                   config.matchlist_file_name):
+                                            config.newmatch = config.newmatch[1]
+                                            config.log(config.newmatch, 'info', False, 4)
+                                            config.match_found = True
+                                            break
+                                        else:
+                                            continue
+                                else:
+                                    config.log('Score NOT ok', 'warning', False, 4)
+                                    config.log_clear_line()
             config.log_clear_line()
             if config.match_found:
                 AddRunning.main(config.script_num, config.running_file_name)
