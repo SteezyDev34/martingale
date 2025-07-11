@@ -19,7 +19,7 @@ def AfficherParis(driver):
     selection = False
     tentative = 1
     clic = False
-    key = 'Paris'
+    key = 'Game Score'
     if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
         key = 'Score du Jeu.'
     elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
