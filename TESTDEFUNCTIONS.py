@@ -1,25 +1,12 @@
-print('START')
-import os
+import json
 
-#Chargement de Chrome driver
-from ChromeDriver.SetDriver1 import driver
+# Charger le fichier JSON
+with open("tennis_stats_cache.json", "r") as f:
+    data = json.load(f)
 
-#Chargement des variables globales
-import config
+# Supprimer les stats des joueurs ayant une valeur de 0
+data_filtré = {k: v for k, v in data.items() if not (k.startswith("player_") and v == 0)}
 
-# Récupérer le nom du script
-# Nom du fichier
-file_name = os.path.basename(__file__)  # ou directement '40-1.py' pour l'exemple
-# Séparer le nom du fichier et l'extension
-name_part = os.path.splitext(file_name)[0]
-# Séparer les parties du nom
-parts = name_part.split('-')
-
-
-#Chargement des fonctions
-from Functions import Functions_15a
-from Functions.GetJsonData import DispatchPerte
-
-from Functions.ScriptRechercheDeMatch import rechercheDeMatch
-
-rechercheDeMatch(driver)
+# Sauvegarder le fichier nettoyé
+with open("fichier_nettoye.json", "w") as f:
+    json.dump(data_filtré, f, indent=2)
