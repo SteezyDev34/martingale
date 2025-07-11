@@ -117,13 +117,22 @@ def AfficherParis(driver):
                                                     0].get_attribute("value")
 
                                                 if l == key:
-                                                    paris = 1
+                                                    try:
+                                                        element = WebDriverWait(driver, 5).until(
+                                                            EC.visibility_of_element_located(
+                                                                (By.CLASS_NAME, 'market-grid-canvas__container'))
+                                                        )
+                                                    except:
+                                                        if key == 'Paris':
+                                                            key = 'Game Score. ' + theset + args
+                                                        else:
+                                                            key = 'Paris'
+                                                    else:
+                                                
+                                                        paris = 1
                                                 else:
                                                     tentative = tentative + 1
-                                                    if key == 'Paris':
-                                                        key = 'Game Score. ' + theset + args
-                                                    else:
-                                                        key = 'Paris'
+
 
                                             except Exception as e:
                                                 config.log(f'        #ERROR16 : impossible ecrire {key}', 'warning',
