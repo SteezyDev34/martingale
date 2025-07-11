@@ -102,6 +102,7 @@ wantwin = 0.2
 nb_tour = 1
 increment = 0
 mtt_recup = 0
+
 recup30 = 0
 rattrape_perte = 0
 print_running_text = False
