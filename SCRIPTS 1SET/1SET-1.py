@@ -60,7 +60,6 @@ else:
 from ChromeDriver.SetDriver import driver
 
 from Functions import Functions_1SET
-from Functions.GetJsonData import set1DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch
 from Functions.Authenticator import is_logged_in, loginProcess
 
@@ -94,10 +93,8 @@ while (config.win < 100):
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
-        if config.perte > 0:
-            set1DispatchPerte()
         for i in config.scriptTypeList:
-            config.switchScript('1SETRESET')
+            config.switchScript('1SET')
             config.ScriptConfig(i).reset()
         sucess = False
         while not sucess:

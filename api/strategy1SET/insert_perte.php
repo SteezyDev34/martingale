@@ -30,14 +30,15 @@ if (!$conn->set_charset("utf8")) {
 $response = array("status" => "error", "message" => "Paramètres d'URL manquants.");
 
 // Vérifier si les paramètres d'URL nécessaires sont définis
-if (isset($_GET['perte'])) {
+if (isset($_GET['perte']) && isset($_GET['ligue'])) {
     // Récupérer les données des paramètres d'URL
     $perte = $_GET['perte'];
+    $ligue = $_GET['ligue'];
 
     // Préparer la requête SQL pour éviter les injections SQL
-    $stmt = $conn->prepare("INSERT INTO 0_perte1SET (perte) VALUES (?)");
+    $stmt = $conn->prepare("INSERT INTO 0_perte1SET (perte, ligue) VALUES (?, ?)");
     if ($stmt) {
-        $stmt->bind_param("d", $perte);
+        $stmt->bind_param("ds", $perte, $ligue);
 
         // Exécuter la requête
         if ($stmt->execute()) {

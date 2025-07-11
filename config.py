@@ -102,6 +102,11 @@ teams = False
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
+# Variables supplémentaires pour Functions_1SET.py
+all_scores = {}
+lose = False
+wantwin = False
+
 total_want_win = {'030': 0.2, '300': 0.2, '15A': 0.2, '30A': 0.2}
 total_want_win2 = {'4P': 0.2, '5P': 0.2, '6P': 0.2, '40A': 0.2}
 total_want_win3 = {'400': 0.2, '4015': 0.2, '4030': 0.2}
