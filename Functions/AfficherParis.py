@@ -118,17 +118,19 @@ def AfficherParis(driver):
 
                                                 if l == key:
                                                     try:
+                                                        print('wait for market grid container')
                                                         element = WebDriverWait(driver, 5).until(
                                                             EC.visibility_of_element_located(
                                                                 (By.CLASS_NAME, 'market-grid-canvas__container'))
                                                         )
                                                     except:
+                                                        print('no market grid')
                                                         if key == 'Paris':
                                                             key = 'Game Score. ' + theset + args
                                                         else:
                                                             key = 'Paris'
                                                     else:
-                                                
+                                                        print('find market grid')
                                                         paris = 1
                                                 else:
                                                     tentative = tentative + 1

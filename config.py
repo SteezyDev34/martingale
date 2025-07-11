@@ -15,7 +15,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['030', '300', '15A', '30A']
+scriptTypeList = ['030', '300', '15A']
 scriptTypeList1 = ['30A']
 scriptTypeList2 = ['4P', '6P']
 scriptTypeList3 = ['5P', '40A']
@@ -115,6 +115,7 @@ restart_set2 = 0
 log_message = ''
 newset = 2
 teams = False
+all_scores = {}
 
 # Initialize dictionaries to track wins per script type
 winmatch = {script_type: 0 for script_type in scriptTypeList}
