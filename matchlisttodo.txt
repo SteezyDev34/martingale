@@ -21,3 +21,21 @@
 ['Sara Bejlek', 'Nuria Parrizas-Diaz']|wta valence terre battue|nuria-parrizas-diaz|0.43725900000000006
 ['Diane Parry', 'Viktorija Golubic']|wta ilkley gazon|parry-viktorija-golubic|0.435739
 https://ca.1xbet.com/fr/live/tennis/2722752-itf-bissy-chambery-women/635053048-chloe-noel-louna-zoppas
+https://ca.1xbet.com/fr/live/tennis/69371-wimbledon/635335427-nicolas-jarry-cameron-norrie
+['Linda Noskova', 'Amanda Anisimova']|wimbledon femmes gazon|noskova-amanda-anisimova|0.514065
+['Taylor Harry Fritz', 'Karen Khachanov']|wimbledon gazon|fritz-karen-khachanov|0.48116000000000003
+['Yi Zhou', 'Tung-Lin Wu']|challenger winnipeg dur|tung-lin-wu|0.45547799999999994
+['Nicolas Mejia', 'Andres Andrade']|challenger winnipeg dur|mejia-andres-andrade|0.453133
+['Ben Shelton', 'Lorenzo Sonego']|wimbledon gazon|shelton-lorenzo-sonego|0.4472520000000001
+['Thiago Seyboth Wild', 'Stefano Travaglia']|challenger modena terre battue|wild-stefano-travaglia|0.43489599999999995
+['Iga Swiatek', 'Clara Tauson']|wimbledon femmes gazon|swiatek-clara-tauson|0.54192
+['Aryna Sabalenka', 'Laura Siegemund']|wimbledon femmes gazon|sabalenka-laura-siegemund|0.5202899999999999
+['Cameron Norrie', 'Carlos Alcaraz Garfia']|wimbledon gazon|carlos-alcaraz-garfia|0.51647
+['Amanda Anisimova', 'Anastasia Pavlyuchenkova']|wimbledon femmes gazon|anisimova-anastasia-pavlyuchenkova|0.513375
+['Chloe Paquet', 'Lois Boisson']|wta bastad terre battue|paquet-lois-boisson|0.47099
+['Leyre Romero Gormaz', 'Julia Grabher']|wta bastad terre battue|gormaz-julia-grabher|0.443597
+['Jule Niemeier', 'Nao Hibino']|wta bastad terre battue|niemeier-nao-hibino|0.44243699999999997
+['Panna Udvardy', 'Antonia Ruzic']|wta bastad terre battue|udvardy-antonia-ruzic|0.40356400000000003
+['Dalma Galfi', 'Kaja Juvan']|wta bastad terre battue|galfi-kaja-juvan|0.40090400000000004
+https://ca.1xbet.com/fr/live/tennis/2126995-challenger-trieste-qualification/635515945-andrea-picchione-lorenzo-carboni
+https://ca.1xbet.com/fr/live/tennis/69371-wimbledon/635526563-marin-cilic-flavio-cobolli
