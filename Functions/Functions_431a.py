@@ -278,6 +278,7 @@ def all_script(driver):
                             validate_bet = True
                         else:
                             FirstGameBet(driver)
+                            validate_bet = True
                             firstjeu = True
                             current_game = int(config.jeu_actuel)
                 elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
@@ -306,9 +307,27 @@ def all_script(driver):
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                     config.log(f"Restart {config.scriptType}", 'success', False)
-                    ##VALIDATION DU PARIS SI SCORE OK
-                    FirstGameBet(driver)
-                    firstjeu = True
+                    # VÉRIFCATION DU SET ACTUEL
+                    GetScoreActuel(driver)
+                    if not config.set_actuel:
+                        config.error = True
+                    config.log('set ' + str(config.set_actuel) + ' - nex set ' + str(config.newset))
+                    if str(int(config.newset) - 1) == str(config.set_actuel):  ## si on est toujours sur le meme set
+                        config.log('on est toujours sur le meme set', config.newmatch)
+                        ##VALIDATION DU PARIS SI SCORE OK
+                        validate_bet = False
+                        tentative = 0
+                        while not validate_bet and not config.error and tentative < 3:
+                            # VÉRIFICATION DU SCORE ACTUEL
+                            tentative = tentative + 1
+                            print('tentative validation ' + str(tentative))
+                            if ValidationDuParis(driver, True):
+                                validate_bet = True
+                            else:
+                                FirstGameBet(driver)
+                                validate_bet = True
+                                firstjeu = True
+                                current_game = int(config.jeu_actuel)
                     current_game = int(config.jeu_actuel)
                 else:
                     config.log(
