@@ -345,8 +345,8 @@ def GetBet(driver, nextBet=False):
                     list_of_newbet_type_text = list_of_newbet_type
                     # print(list_of_newbet_type_text)
                     list_of_newbet_type = list_of_newbet_type_text.split(sType)
-                    # print(len(list_of_newbet_type))
-                    # print(list_of_newbet_type)
+                    print(len(list_of_newbet_type))
+                    print(list_of_newbet_type)
                     if len(list_of_newbet_type) > 1:
                         list_of_newbet_type_text = list_of_newbet_type_text.split(" - " + win_texte)[0]
                         print(win_texte)
