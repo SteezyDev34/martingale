@@ -215,6 +215,37 @@ def SendPerte(scriptType, perte):
             return False
 
 
+def SendPerte1set(scriptType, perte):
+    url = "http://p-com.studio/api/strategy" + str(scriptType) + "/insert_perte.php?perte=" + str(
+        perte) + "&ligue=" + config.ligue_name
+    # URL du lien JSON de la strategy
+    try:
+        # Envoyer une requête GET à l'URL
+        response = requests.get(url)
+        # Vérifier que la requête a réussi
+        response.raise_for_status()
+        # Parser le JSON depuis la réponse
+        result = response.json()
+        # Afficher les données pour vérification
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de la récupération des données : {e}")
+        return
+    except json.JSONDecodeError as e:
+        print(f"Erreur lors du parsing du JSON : {e}")
+        return
+    except Exception as e:
+        print(f"Pas d'envoi de perte {e}")
+    else:
+        if result['status'] == "success":
+            config.log(str(perte) + "> Perte insert in strategy" + str(scriptType) + " ligue : " + config.ligue_name)
+            config.log_clear_line()
+            config.perte -= perte
+            return True
+        else:
+            print(result)
+            return False
+
+
 def SendGlobalPerte(scriptType, mise):
     url = "http://p-com.studio/api/strategy" + str(scriptType) + "/insert_global_perte.php?mise=" + str(mise)
     # URL du lien JSON de la strategy
@@ -320,3 +351,7 @@ def a_DispatchPerte():
     if config.perte > 0:
         # SendPerte(config.scriptType,config.perte)
         SendPerte("15A", config.perte)
+
+
+def set1DispatchPerte():
+    SendPerte("1SET", config.perte)
