@@ -76,7 +76,6 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
 
 # Call the function to get the code
 if not is_logged_in(driver):
-    print('not logged in ')
     loginProcess(driver)
 else:
     print("You are already logged in.")
@@ -91,7 +90,11 @@ config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
 config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
 config.running_file_name = f"{config.projectPath}/SCRIPTS 456P/running"
 config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 456P/matchlist"
+<<<<<<< HEAD
 config.total_want_win = config.total_want_win2
+=======
+config.total_want_win = config.total_want_win
+>>>>>>> a81017e1a4467310d54a361ac8502aa207604b39
 while (config.win < 100):
     try:
         Functions_456P.all_script(driver)

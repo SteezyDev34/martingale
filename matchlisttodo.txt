@@ -1,41 +1,6 @@
 
-['Gabriel Diallo', 'Karen Khachanov']|atp bois-le-duc gazon|diallo-karen-khachanov|0.47304599999999997
-['Daniil Medvedev', 'Reilly Opelka']|atp bois-le-duc gazon|medvedev-reilly-opelka|0.46113800000000005
-['Nuno Borges', 'Ugo Humbert']|atp bois-le-duc gazon|borges-ugo-humbert|0.456694
-['Zizou Bergs', 'Mark Lajal']|atp bois-le-duc gazon|bergs-mark-lajal|0.44853599999999993
-['Diana Shnaider', 'Madison Keys']|wta londres gazon|shnaider-madison-keys|0.531532
-['Emma Navarro', 'Amanda Anisimova']|wta londres gazon|navarro-amanda-anisimova|0.523011
-['Qinwen Zheng', 'Emma Raducanu']|wta londres gazon|zheng-emma-raducanu|0.5201560000000001
-['Veronika Kudermetova', 'Ekaterina Alexandrova']|wta bois-le-duc gazon|kudermetova-ekaterina-alexandrova|0.517021
-['Alexander Zverev', 'Brandon Nakashima']|atp stuttgart gazon|zverev-brandon-nakashima|0.48857300000000004
-['Yue Yuan', 'Elise Mertens']|wta bois-le-duc gazon|yuan-elise-mertens|0.480645
-['Alexandra Eala', 'Rebecca Marino']|wta ilkley gazon|eala-rebecca-marino|0.479036
-['Marton Fucsovics', 'Taylor Harry Fritz']|atp stuttgart gazon|taylor-harry-fritz|0.478968
-['Xinyu Gao', 'Iryna Shymanovich']|wta valence terre battue|gao-iryna-shymanovich|0.47436
-['Iva Jovic', 'Talia Gibson']|wta ilkley gazon|jovic-talia-gibson|0.47099
-['Justin Engel', 'Félix Auger-Aliassime']|atp stuttgart gazon|felix-auger-aliassime|0.4674319999999999
-['Elisabetta Cocciaretto', 'Suzan Lamens']|wta bois-le-duc gazon|cocciaretto-suzan-lamens|0.45854700000000004
-['Ben Shelton', 'Jiri Lehecka']|atp stuttgart gazon|shelton-jiri-lehecka|0.44607300000000005
-['Sinja Kraus', 'Dominika Salkova']|wta grado terre battue|kraus-dominika-salkova|0.443215
-['Tereza Valentova', 'Veronika Erjavec']|wta grado terre battue|valentova-veronika-erjavec|0.43781400000000004
-['Sara Bejlek', 'Nuria Parrizas-Diaz']|wta valence terre battue|nuria-parrizas-diaz|0.43725900000000006
-['Diane Parry', 'Viktorija Golubic']|wta ilkley gazon|parry-viktorija-golubic|0.435739
-https://ca.1xbet.com/fr/live/tennis/2722752-itf-bissy-chambery-women/635053048-chloe-noel-louna-zoppas
-https://ca.1xbet.com/fr/live/tennis/69371-wimbledon/635335427-nicolas-jarry-cameron-norrie
-['Linda Noskova', 'Amanda Anisimova']|wimbledon femmes gazon|noskova-amanda-anisimova|0.514065
-['Taylor Harry Fritz', 'Karen Khachanov']|wimbledon gazon|fritz-karen-khachanov|0.48116000000000003
-['Yi Zhou', 'Tung-Lin Wu']|challenger winnipeg dur|tung-lin-wu|0.45547799999999994
-['Nicolas Mejia', 'Andres Andrade']|challenger winnipeg dur|mejia-andres-andrade|0.453133
-['Ben Shelton', 'Lorenzo Sonego']|wimbledon gazon|shelton-lorenzo-sonego|0.4472520000000001
-['Thiago Seyboth Wild', 'Stefano Travaglia']|challenger modena terre battue|wild-stefano-travaglia|0.43489599999999995
-['Iga Swiatek', 'Clara Tauson']|wimbledon femmes gazon|swiatek-clara-tauson|0.54192
-['Aryna Sabalenka', 'Laura Siegemund']|wimbledon femmes gazon|sabalenka-laura-siegemund|0.5202899999999999
-['Cameron Norrie', 'Carlos Alcaraz Garfia']|wimbledon gazon|carlos-alcaraz-garfia|0.51647
-['Amanda Anisimova', 'Anastasia Pavlyuchenkova']|wimbledon femmes gazon|anisimova-anastasia-pavlyuchenkova|0.513375
-['Chloe Paquet', 'Lois Boisson']|wta bastad terre battue|paquet-lois-boisson|0.47099
-['Leyre Romero Gormaz', 'Julia Grabher']|wta bastad terre battue|gormaz-julia-grabher|0.443597
-['Jule Niemeier', 'Nao Hibino']|wta bastad terre battue|niemeier-nao-hibino|0.44243699999999997
-['Panna Udvardy', 'Antonia Ruzic']|wta bastad terre battue|udvardy-antonia-ruzic|0.40356400000000003
-['Dalma Galfi', 'Kaja Juvan']|wta bastad terre battue|galfi-kaja-juvan|0.40090400000000004
-https://ca.1xbet.com/fr/live/tennis/2126995-challenger-trieste-qualification/635515945-andrea-picchione-lorenzo-carboni
-https://ca.1xbet.com/fr/live/tennis/69371-wimbledon/635526563-marin-cilic-flavio-cobolli
+['Jannik Sinner', 'Novak Djokovic']|wimbledon gazon|sinner-novak-djokovic|0.552994
+['Taylor Harry Fritz', 'Carlos Alcaraz Garfia']|wimbledon gazon|carlos-alcaraz-garfia|0.5140199999999999
+['Andres Andrade', 'Yi Zhou']|challenger winnipeg dur|andrade-yi-zhou|0.505795
+['Francesca Jones', 'Rebeka Masarova']|wta contrexeville terre battue|jones-rebeka-masarova|0.482175
+['Sho Shimabukuro', 'Yu Hsiou Hsu']|challenger winnipeg dur|yu-hsiou-hsu|0.41340199999999994

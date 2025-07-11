@@ -102,6 +102,7 @@ wantwin = 0.2
 nb_tour = 1
 increment = 0
 mtt_recup = 0
+
 recup30 = 0
 rattrape_perte = 0
 print_running_text = False
@@ -117,9 +118,8 @@ teams = False
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
-total_want_win = {'030': 2, '300': 2, '15A': 2, '30A': 2, 'BREAK': 0.2}
-total_want_win2 = {'4P': 2, '5P': 2, '6P': 2, '40A': 2}
-total_want_win3 = {'400': 2, '4015': 2, '4030': 2}
+total_want_win = {'030': 2, '300': 2, '15A': 2, '30A': 2, 'BREAK': 0.2, '400': 2, '4015': 2, '4030': 2, '4P': 2,
+                  '5P': 2, '6P': 2, '40A': 2}
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:
