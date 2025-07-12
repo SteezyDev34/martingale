@@ -11,7 +11,6 @@ from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import update_match_done
-from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte
@@ -250,7 +249,7 @@ def all_script(driver):
                 passageset = True
                 break
             else:
-                GetAndPlaceBet(driver)
+                # GetAndPlaceBet(driver)
                 print(config.global_match_win)
             if config.result == 'RUN':
                 print('RUN')
@@ -336,27 +335,34 @@ def all_script(driver):
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
-        if current_game == int(config.jeu_actuel):
-            for scriptType in config.scriptTypeList:
-                config.switchScript(scriptType)
-                if config.validated_bet and int(config.jeu_actuel) == int(config.validated_bet.get('jeu')) and int(
-                        config.set_actuel) == int(
-                    config.validated_bet.get('set')) and float(
-                    config.global_match_win[scriptType]) < float(
-                    config.total_want_win[scriptType]) and not config.validated_bet.get(
-                    'result'):
-                    continue
-                else:
+        for scriptType in config.scriptTypeList:
+            config.switchScript(scriptType)
+
+            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
+                config.log(f'Net profit: {config.global_match_win[scriptType]}')
+
+            else:
+                config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                config.log(f"FIN {config.scriptType}", 'success', False)
+                continue
+
+            if config.scriptType == '15A' or config.scriptType == '300' or config.scriptType == '030':
+                if config.score_actuel == '0:0':
+                    if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu', -1)):
+                        FirstGameBet(driver)
+            if config.scriptType == '30A':
+                if config.score_actuel == '0:0' or config.score_actuel == '15:15' or config.score_actuel == '15:0' or config.score_actuel == '0:15':
+                    if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu')):
+                        FirstGameBet(driver)
+            if config.scriptType == '40A':
+                if config.score_actuel != "40:40" and config.score_actuel != "A:40" and config.score_actuel != "40:A":
+                    if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu')):
+                        FirstGameBet(driver)
+            if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400' or config.scriptType == '4P' or config.scriptType == '5P' or config.scriptType == '6P':
+                if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu')):
                     FirstGameBet(driver)
-            GetIfGameEnd(driver)
-            if str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
-                txtlog = " ON EST SUR LE PROCHAIN SET"
-                passageset = True
-                config.newset = int(config.set_actuel) + 1
-                config.log(txtlog, config.newmatch)
-                DeleteBet(driver)
-                txtlog = 'Wait 30 sec'
-                config.log(txtlog, config.newmatch)
+            if scriptType == actual_scryptType:
+                break
     config.switchScript('456P')
     print("update : " + config.newmatch)
     for i in config.scriptTypeList:
