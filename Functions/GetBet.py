@@ -60,7 +60,7 @@ def GetBet(driver, nextBet=False):
             decalageX = size['width'] / -2 + 50
     elif config.systeme == 'Windows':
         y = 0
-        if config.scriptType == '300' or config.scriptType == '6P':
+        if config.scriptType == '300':
             sautDeLigne = 50 * 3
         elif config.scriptType == '030':
             sautDeLigne = 50 * 4
@@ -68,7 +68,7 @@ def GetBet(driver, nextBet=False):
             sautDeLigne = 50 * 2
         elif config.scriptType == '15A' and nextBet:
             sautDeLigne = 50 * 2
-        elif config.scriptType == '30A' or config.scriptType == '15A':
+        elif config.scriptType == '30A' or config.scriptType == '15A' or config.scriptType == '6P':
             sautDeLigne = 50 * 2
         else:
             sautDeLigne = 68
