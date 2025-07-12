@@ -19,6 +19,7 @@ def GetAndPlaceBet(driver):
         print('verification du jeu actuel dans tous les script')
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
+
             if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
 
@@ -26,6 +27,7 @@ def GetAndPlaceBet(driver):
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
                 config.log(f"FIN {config.scriptType}", 'success', False)
                 continue
+
             if config.scriptType == '15A' or config.scriptType == '300' or config.scriptType == '030':
                 if config.score_actuel == '0:0':
                     if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu', -1)):
@@ -41,8 +43,8 @@ def GetAndPlaceBet(driver):
             if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400' or config.scriptType == '4P' or config.scriptType == '5P' or config.scriptType == '6P':
                 if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu')):
                     FirstGameBet(driver)
-                if scriptType == actual_scryptType:
-                    break
+            if scriptType == actual_scryptType:
+                break
         config.switchScript(actual_scryptType)
         config.looking_game = int(config.jeu_actuel) + 1
         config.log(f'jeu recherhcé : {config.looking_game}', 'info', True)

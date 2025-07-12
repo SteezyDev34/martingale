@@ -346,6 +346,8 @@ def all_script(driver):
                     config.total_want_win[scriptType]) and not config.validated_bet.get(
                     'result'):
                     continue
+                else:
+                    FirstGameBet(driver)
             GetIfGameEnd(driver)
             if str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                 txtlog = " ON EST SUR LE PROCHAIN SET"
