@@ -333,6 +333,7 @@ def all_script(driver):
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
+        GetIfMatchPage(driver)
     config.switchScript('4315A')
     print("update : " + config.newmatch)
     for i in config.scriptTypeList:
