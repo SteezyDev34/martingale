@@ -335,6 +335,7 @@ def all_script(driver):
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
+        actual_scryptType = config.scriptType
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
 
@@ -363,6 +364,7 @@ def all_script(driver):
                     FirstGameBet(driver)
             if scriptType == actual_scryptType:
                 break
+        GetIfMatchPage(driver)
     config.switchScript('456P')
     print("update : " + config.newmatch)
     for i in config.scriptTypeList:
