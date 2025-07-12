@@ -19,6 +19,7 @@ from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
+from Functions.ValidationDuParis import ValidationDuParis
 from Functions.VerificationMatchTrouve import newmatchFromUrl
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
@@ -274,11 +275,17 @@ def all_script(driver):
                     ##VALIDATION DU PARIS SI SCORE OK
                     validate_bet = False
                     tentative = 0
-                    # VÉRIFICATION DU SCORE ACTUEL
-                    tentative = tentative + 1
-                    print('tentative validation ' + str(tentative))
-                    FirstGameBet(driver)
-                    firstjeu = True
+                    while not validate_bet and not config.error and tentative < 3:
+                        # VÉRIFICATION DU SCORE ACTUEL
+                        tentative = tentative + 1
+                        print('tentative validation ' + str(tentative))
+                        if ValidationDuParis(driver, True):
+                            validate_bet = True
+                        else:
+                            FirstGameBet(driver)
+                            validate_bet = True
+                            firstjeu = True
+                            current_game = int(config.jeu_actuel)
                 elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                     txtlog = " ON EST SUR LE PROCHAIN SET"
                     passageset = True
@@ -316,11 +323,17 @@ def all_script(driver):
                         ##VALIDATION DU PARIS SI SCORE OK
                         validate_bet = False
                         tentative = 0
-                        # VÉRIFICATION DU SCORE ACTUEL
-                        tentative = tentative + 1
-                        print('tentative validation ' + str(tentative))
-                        FirstGameBet(driver)
-                        firstjeu = True
+                        while not validate_bet and not config.error and tentative < 3:
+                            # VÉRIFICATION DU SCORE ACTUEL
+                            tentative = tentative + 1
+                            print('tentative validation ' + str(tentative))
+                            if ValidationDuParis(driver, True):
+                                validate_bet = True
+                            else:
+                                FirstGameBet(driver)
+                                validate_bet = True
+                                firstjeu = True
+                                current_game = int(config.jeu_actuel)
                     elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                         txtlog = " ON EST SUR LE PROCHAIN SET"
                         passageset = True
