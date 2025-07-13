@@ -61,7 +61,7 @@ def GetResult(driver):
             passed_score = [
                 '0:0'
             ]
-        if config.scriptType == "40A" or config.scriptType == "30A" or config.scriptType == "15A" or config.scriptType == '030' or config.scriptType == '300' or config.scriptType == 'BREAK':
+        if config.scriptType == "40A" or config.scriptType == "30A" or config.scriptType == "15A" or config.scriptType == '030' or config.scriptType == '300':
             if int(config.set_actuel) != int(config.validated_bet.get('set')):
                 print('set actuel différent', config.validated_bet.get('set'))
                 getresult = True
@@ -122,7 +122,7 @@ def GetResult(driver):
                     result = 'LOSE'
                     config.log(result, 'error', False, 2)
                 return result
-        elif config.scriptType == '4P' or config.scriptType == '6P' or config.scriptType == '5P':
+        elif config.scriptType == '4P' or config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == 'BREAK':
             if int(config.set_actuel) != int(config.validated_bet.get('set')):
                 print('set actuel différent', config.validated_bet.get('set'))
                 getresult = True
@@ -159,6 +159,7 @@ def GetResult(driver):
                 else:
                     result = 'LOSE'
                     config.log(result, 'error', False, 2)
+                config.validated_bet['result'] = result
                 return result
         elif config.scriptType == '1SET':
             config.set_actuel = int(config.validated_bet.get('set'))
