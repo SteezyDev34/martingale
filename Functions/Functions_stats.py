@@ -28,7 +28,7 @@ def load_cache():
     try:
         with open(CACHE_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
-            print("Cache chargé :", data)  # print facultatif pour debug
+            # print("Cache chargé :", data)  # print facultatif pour debug
             return data
     except json.JSONDecodeError:
         # JSON corrompu ou vide → retour d'un cache vide
