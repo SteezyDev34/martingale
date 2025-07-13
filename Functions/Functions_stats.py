@@ -183,7 +183,6 @@ def get_proba_40A_other(playerName1, playerName2, driver1, link=False):
     # Vérifier cache pour chaque joueur
     p1_key = f"player_{unidecode(playerName1).strip().lower().replace('-', ' ')}_40-40"
     p2_key = f"player_{unidecode(playerName2).strip().lower().replace('-', ' ')}_40-40"
-    print(cache)
     print(p1_key)
     print(p2_key)
     if p1_key in cache and p2_key in cache:
