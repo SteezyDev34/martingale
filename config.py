@@ -15,7 +15,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['030', '300', '15A', '30A', 'BREAK']
+scriptTypeList = ['300', '15A', '30A', 'BREAK']
 scriptTypeList1 = ['30A']
 scriptTypeList2 = ['4P', '5P', '6P', '40A']
 scriptTypeList3 = ['5P', '40A']
@@ -121,9 +121,9 @@ all_scores = {}
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
-total_want_win = {'030': 0.2, '300': 0.2, '15A': 0.2, '30A': 0.2, 'BREAK': 0.2, '400': 0.2, '4015': 0.2, '4030': 0.2,
-                  '4P': 0.2,
-                  '5P': 0.2, '6P': 0.2, '40A': 0.2}
+total_want_win = {'030': 0.2, '300': 1, '15A': 1, '30A': 1, 'BREAK': 1, '400': 1, '4015': 0.2, '4030': 0.2,
+                  '4P': 1,
+                  '5P': 1, '6P': 1, '40A': 1}
 total_want_winset1 = {'1SET': 0.2}
 
 
