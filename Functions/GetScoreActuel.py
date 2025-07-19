@@ -38,6 +38,7 @@ def GetScoreActuel(driver):
             try:
                 config.score_actuel = score_teams[0].text + ':' + score_teams[1].text
             except Exception as e:
+                print('no score')
                 continue
             else:
                 if config.saved_score != config.score_actuel:

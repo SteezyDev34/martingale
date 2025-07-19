@@ -43,5 +43,86 @@
         "winscore": "V2",
         "timestamp": "2025-07-11 22:02:55",
         "url": "https://ca.1xbet.com/fr/live/tennis/2785307-daily-premier-tour-belarus/636612047-nikita-evseev-ivan-volodkevich"
+    },
+    {
+        "montant": 0.6,
+        "cote": "1.336",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2025-07-19 16:10:55",
+        "url": "https://ca.1xbet.com/fr/live/tennis/842057-atp-gstaad/638539816-arthur-cazaux-alexander-bublik"
+    },
+    {
+        "montant": 3.12,
+        "cote": "1.064",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2025-07-19 16:32:07",
+        "url": "https://ca.1xbet.com/fr/live/tennis/74369-atp-umag-qualification/638573858-pablo-llamas-ruiz-kyrian-jacquet"
+    },
+    {
+        "montant": 0.26,
+        "cote": "1.78",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2025-07-19 16:33:00",
+        "url": "https://ca.1xbet.com/fr/live/tennis/82265-atp-washington-qualification/638573095-tyler-zink-taro-daniel"
+    },
+    {
+        "montant": 0.71,
+        "cote": "1.28",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2025-07-19 16:48:22",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2714552-itf-hillcrest/638588674-marc-van-der-merwe-filip-peliwo"
+    },
+    {
+        "montant": 0.28,
+        "cote": "1.704",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2025-07-19 16:52:36",
+        "url": "https://ca.1xbet.com/fr/live/tennis/74369-atp-umag-qualification/638589157-marco-cecchinato-luca-van-assche"
+    },
+    {
+        "montant": 0.62,
+        "cote": "1.32",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2025-07-19 21:08:15",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1271597-itf-gubbio/638644234-samuele-pieri-gabriele-piraino"
+    },
+    {
+        "montant": 0.27,
+        "cote": "1.74",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2025-07-19 21:11:59",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1048499-itf-bucaramanga/638644789-eduardo-ribeiro-johan-alexander-rodriguez-rodriguez"
+    },
+    {
+        "montant": 0.24,
+        "cote": "1.825",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2025-07-19 21:17:33",
+        "url": "https://ca.1xbet.com/fr/live/tennis/84673-challenger-san-marino/638645855-lukas-klein-matteo-gigante"
+    },
+    {
+        "montant": 0.49,
+        "cote": "1.41",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2025-07-19 21:22:22",
+        "url": "https://ca.1xbet.com/fr/live/tennis/224619-itf-granby-women/638646721-fiona-crawley-haley-giavara"
     }
 ]

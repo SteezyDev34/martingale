@@ -262,7 +262,7 @@ def rechercheDeMatch1set(driver):
                                         print('1SETV2')
                                     else:
                                         continue
-                                if not bet_score:  # SI LE MATCH EST PRET
+                                if bet_score:  # SI LE MATCH EST PRET
 
                                     config.log('Score ok', 'info', False, 4)
                                     config.log_clear_line()

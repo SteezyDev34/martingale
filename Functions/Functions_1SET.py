@@ -1,14 +1,17 @@
 import json
+import time
+from time import sleep
 
 from selenium.webdriver.common.by import By
 
 import config
-from Functions import Functions_1XBET, VerificationMatchTrouve
+from Functions import Functions_1XBET
 from Functions import GetLigueName, AddRunning
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
+from Functions.Functions_1XBET import remove_match_from_json_file
 from Functions.GetJsonData import SendGlobalPerte, getPerte, set1DispatchPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
@@ -27,7 +30,9 @@ def all_script(driver):
     # SCRIPT RECHERCHE DE MATCH
     config.match_found = rechercheDeMatch1set(driver)
     # --------
+    print('match found ', config.match_found)
     if config.match_found and not config.error:
+        sleep(1)
         AddRunning.main(config.script_num, config.running_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
@@ -58,6 +63,9 @@ def all_script(driver):
             FirstGameBet(driver)
 
     config.lose = False
+    print('START CHEKING LIST')
+    time.sleep(5)
+
     try:
         # RECUPERATION DES LIGUES EN COURS
         config.log(' Récupération des ligues', 'info', True, 1)
@@ -99,29 +107,55 @@ def all_script(driver):
                 for bet_item in bet_items:
 
                     # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
-                    config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
-                                                                   config.matchlist_file_name)
-                    config.newmatch = config.newmatch[1]
+                    newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
+                                                         'dashboard-game-block__link')[
+                        0].get_attribute(
+                        "href")
+                    newmatch = newmatchtxt.split(
+                        '-')
+                    config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
                     config.log(config.newmatch, 'info', False, 4)
-
+                    print('config new match ', config.newmatch)
                     # Check if newmatch exists in JSON file
                     try:
-                        with open(config.matchlist_file_name, 'r') as f:
+                        with open('1SET_validated_bets.json', 'r') as f:
                             match_data = json.load(f)
                             # Vérifie si config.newmatch est présent dans l'URL du fichier JSON
+                            original_tab = driver.current_window_handle  # Mémorise l'onglet actuel
                             for match in match_data:
+                                print('get match')
                                 if 'url' in match and config.newmatch in match['url']:
-                                    driver.get(bet_item.find_elements(By.CLASS_NAME,
-                                                                      'dashboard-game-block__link')[
+                                    div_bet_score = bet_item.find_elements(By.CLASS_NAME,
+                                                                           'ui-game-scores')
+                                    text = div_bet_score[0].text
+                                    text = text.replace(
+                                        '\n', '')
+                                    print(text)
+                                    if '6' not in text and '7' not in text:
+                                        print('MATCH NON TERMINÉ SELON SCORE')
+                                        continue
+                                    elif '0066' in text or '0065' in text or '0056' in text:
+                                        print('TIE BREAK MATCH NON TERMINÉ SELON SCORE')
+                                        continue
+                                    else:
+                                        print('MATCH TROUVÉ')
+                                    # ✅ Ouvre un nouvel onglet via JavaScript
+                                    newurl = bet_item.find_elements(By.CLASS_NAME, 'dashboard-game-block__link')[
                                         0].get_attribute(
-                                        "href"))
+                                        "href")
+                                    print('# ✅ Ouvre un nouvel onglet via JavaScript')
+                                    driver.get(newurl)
+                                    time.sleep(5)
                                     config.switchScript(config.scriptType)
                                     GetScoreActuel(driver)
                                     config.validated_bet = match
+                                    print(config.validated_bet)
+                                    print(config.set_actuel)
+                                    print(config.validated_bet['set'])
                                     ##ATTENTE QUE LE QT SE TERMINE
                                     if int(config.set_actuel) == int(config.validated_bet['set']):
                                         print('1ER SET NON TERMINÉ')
-                                        continue
+                                        return
                                     GetScoreActuel(driver)
                                     txtlog = "SET TERMINÉ ON VERIFIE LE SCORE"
                                     config.log(txtlog, config.newmatch)
@@ -133,37 +167,21 @@ def all_script(driver):
                                         config.error = 'LOSE'
                                         Functions_1XBET.update_match_done("del", config.newmatch,
                                                                           config.matchlist_file_name)
+                                        # Supprime l’entrée immédiatement
+                                        remove_match_from_json_file('1SET_validated_bets.json', config.newmatch)
                                         break
                                     elif config.result == 'WIN':
                                         # Load and process validated bets from JSON file
-                                        validated_bets_file = f"{config.scriptType}_validated_bets.json"
-                                        try:
-                                            with open(validated_bets_file, 'r') as f:
-                                                validated_bets = json.load(f)
-
-                                        except FileNotFoundError:
-                                            config.log(f"No validated bets file found for {config.scriptType}",
-                                                       "warning",
-                                                       False)
-                                        except json.JSONDecodeError:
-                                            config.log(f"Error reading validated bets file for {config.scriptType}",
-                                                       "error",
-                                                       False)
-
-                                        # Remove the bet entry from the JSON file
-                                        with open(validated_bets_file, 'r') as f:
-                                            validated_bets = json.load(f)
-                                        validated_bets.remove(config.validated_bet)
-                                        with open(validated_bets_file, 'w') as f:
-                                            json.dump(validated_bets, f)
+                                        remove_match_from_json_file('1SET_validated_bets.json', config.newmatch)
                                         config.perte = 0
                                         config.error = 'WIN'
                                         Functions_1XBET.update_match_done("del", config.newmatch,
                                                                           config.matchlist_file_name)
+                                    return
 
 
-                    except:
-                        pass
+                    except Exception as e:
+                        print(e)
 
     DeleteBet(driver)
     return True

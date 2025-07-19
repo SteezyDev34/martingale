@@ -1,3 +1,4 @@
+import json
 import re
 import time
 from datetime import datetime
@@ -5,6 +6,35 @@ from datetime import datetime
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+
+
+def remove_match_from_json_file(file_path, match_url):
+    """Supprime la première entrée du fichier JSON contenant match_url dans 'url'."""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        # Nouvelle liste sans l'entrée à supprimer
+        new_data = []
+        match_removed = False
+
+        for match in data:
+            if not match_removed and 'url' in match and match_url in match['url']:
+                match_removed = True
+                continue  # Ne pas ajouter cette entrée (on la supprime)
+            new_data.append(match)
+
+        if match_removed:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(new_data, f, ensure_ascii=False, indent=4)
+            print(f"✅ Entrée avec URL contenant '{match_url}' supprimée.")
+        else:
+            print(f"⚠️ Aucun match avec '{match_url}' trouvé dans le fichier.")
+
+    except FileNotFoundError:
+        print(f"❌ Fichier introuvable : {file_path}")
+    except json.JSONDecodeError:
+        print(f"❌ Fichier JSON invalide : {file_path}")
 
 
 # RÉCUPÉRER LES MATCHS EFFECTUÉS

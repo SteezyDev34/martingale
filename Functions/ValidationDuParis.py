@@ -90,7 +90,8 @@ def ValidationDuParis(driver, nexbet=False):
 
             if (config.looking_game is not None and current_set is not None and
                     config.validated_bet.get('jeu') == config.looking_game and
-                    config.validated_bet.get('set') == current_set):
+                    config.validated_bet.get('set') == current_set and config.validated_bet.get(
+                        'url') == driver.current_url):
                 config.log(f"Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.")
                 validation = True
                 break  # Sortir de la boucle si le jeu et le set ont déjà été pariés
@@ -189,10 +190,10 @@ def ValidationDuParis(driver, nexbet=False):
                     existing_bets = json.load(f)
             except FileNotFoundError:
                 existing_bets = []
-            
+
             # Append new bet
             existing_bets.append(config.validated_bet)
-            
+
             # Save updated bets
             with open(json_filename, 'w') as f:
                 json.dump(existing_bets, f, indent=4)

@@ -162,15 +162,18 @@ def GetResult(driver):
                 config.validated_bet['result'] = result
                 return result
         elif config.scriptType == '1SET':
+            print('gettin result')
+            print(config.validated_bet)
             config.set_actuel = int(config.validated_bet.get('set'))
             GetSetScoreActuel(driver)
-            if config.validated_bet.get('win') == 'V1' and config.score_actuel[0] > \
-                    config.score_actuel[1]:
-                print(config.score_actuel[0], config.score_actuel[1])
+            print('score_actuel ', config.jeu_actuel)
+            if config.validated_bet.get('winscore') == 'V1' and config.jeu_actuel[0] > \
+                    config.jeu_actuel[1]:
+                print(config.jeu_actuel[0], config.jeu_actuel[1])
                 result = 'WIN'
                 config.log(f"Result: {result}", 'success', False, 2)
-            elif config.validated_bet.get('win') == 'V2' and config.score_actuel[0] < \
-                    config.score_actuel[1]:
+            elif config.validated_bet.get('winscore') == 'V2' and config.jeu_actuel[0] < \
+                    config.jeu_actuel[1]:
                 result = 'WIN'
                 config.log(f"Result: {result}", 'success', False, 2)
             else:

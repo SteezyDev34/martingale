@@ -13,6 +13,9 @@ import config
 def getPerte():
     if getCompetRecup():
         url = "http://p-com.studio/api/strategy" + config.scriptType + "/get_perte.php"
+        if config.scriptType == '1SET':
+            url = url + '?ligue=' + config.ligue_name
+            print(url)
         try:
             # Envoyer une requête GET à l'URL
             response = requests.get(url)
@@ -186,7 +189,12 @@ def getCompet():
 
 
 def SendPerte(scriptType, perte):
+    print(config.ligue_name)
     url = "http://p-com.studio/api/strategy" + str(scriptType) + "/insert_perte.php?perte=" + str(perte)
+    if config.scriptType == '1SET':
+        url = url + '&ligue=' + config.ligue_name
+        print(url)
+
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
@@ -354,4 +362,5 @@ def a_DispatchPerte():
 
 
 def set1DispatchPerte():
+    print('perte ', config.perte)
     SendPerte("1SET", config.perte)
