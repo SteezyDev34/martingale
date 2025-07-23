@@ -14,8 +14,6 @@ if ($conn->connect_error) {
     die("Échec de la connexion : " . $conn->connect_error);
 }
 
-// Définir le type de contenu comme JSON
-header('Content-Type: application/json');
 
 // Vérifier si le paramètre "ligue" est fourni
 if (!isset($_GET['ligue']) || empty($_GET['ligue'])) {
@@ -24,19 +22,21 @@ if (!isset($_GET['ligue']) || empty($_GET['ligue'])) {
 }
 
 $ligue = $conn->real_escape_string($_GET['ligue']);
-
+$ligue = urldecode($ligue);
 // Requête SQL : sélectionner la dernière perte pour la ligue donnée
 // On suppose qu'il y a un champ "id" ou un champ "date" pour trier par ordre décroissant
 $sql = "SELECT * FROM 0_perte1SET WHERE ligue = '$ligue' ORDER BY id DESC LIMIT 1";
 $result = $conn->query($sql);
 
-$data = null;
+$data = array();
 if ($result && $result->num_rows > 0) {
-    $data = $result->fetch_assoc();
+    $data[] = $result->fetch_assoc();
 }
 
 // Fermer la connexion
 $conn->close();
+// Définir le type de contenu comme JSON
+header('Content-Type: application/json');
 
 // Retourner les données en JSON (ou null si aucune ligne trouvée)
 echo json_encode($data);

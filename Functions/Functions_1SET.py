@@ -4,15 +4,16 @@ from time import sleep
 
 from selenium.webdriver.common.by import By
 
+import Functions.GetJsonData
 import config
-from Functions import Functions_1XBET
+from Functions import Functions_1XBET, UpdateMatchDone
 from Functions import GetLigueName, AddRunning
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import remove_match_from_json_file
-from Functions.GetJsonData import SendGlobalPerte, getPerte, set1DispatchPerte
+from Functions.GetJsonData import getPerte, set1DispatchPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
@@ -44,15 +45,8 @@ def all_script(driver):
         config.log('RECHERCHE INFOS DE MISE', 'title', False)
         infosperte = getPerte()
         if infosperte and config.perte == 0:
-            if float(infosperte['perte']) > 20:
-                SendGlobalPerte(config.scriptType, -20)
-                config.perte = 20
-                config.rattrape_perte = 1
-            elif float(infosperte['perte']) <= 20:
-                config.perte = float(infosperte['perte'])
-                m = 0 - config.perte
-                SendGlobalPerte(config.scriptType, m)
-                config.perte = float(infosperte['perte'])
+            config.perte = float(infosperte['perte'])
+            Functions.GetJsonData.delPerte(infosperte['id'])
         config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
         for scriptType in config.scriptTypeList:
@@ -61,6 +55,7 @@ def all_script(driver):
             GetSetActuel(driver)
             ##PREPARATTION PREMIER PARIS
             FirstGameBet(driver)
+            UpdateMatchDone.main("add", config.newmatch, config.matchlist_file_name)
 
     config.lose = False
     print('START CHEKING LIST')
@@ -147,11 +142,12 @@ def all_script(driver):
                                     driver.get(newurl)
                                     time.sleep(5)
                                     config.switchScript(config.scriptType)
-                                    GetScoreActuel(driver)
+                                    GetSetActuel(driver)
                                     config.validated_bet = match
                                     print(config.validated_bet)
                                     print(config.set_actuel)
                                     print(config.validated_bet['set'])
+                                    config.ligue_name = GetLigueName.fromUrl(driver)[0]
                                     ##ATTENTE QUE LE QT SE TERMINE
                                     if int(config.set_actuel) == int(config.validated_bet['set']):
                                         print('1ER SET NON TERMINÉ')
@@ -169,7 +165,6 @@ def all_script(driver):
                                                                           config.matchlist_file_name)
                                         # Supprime l’entrée immédiatement
                                         remove_match_from_json_file('1SET_validated_bets.json', config.newmatch)
-                                        break
                                     elif config.result == 'WIN':
                                         # Load and process validated bets from JSON file
                                         remove_match_from_json_file('1SET_validated_bets.json', config.newmatch)

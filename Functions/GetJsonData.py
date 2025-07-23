@@ -22,11 +22,13 @@ def getPerte():
             # Vérifier que la requête a réussi
             response.raise_for_status()
             print(response.json())
+            print('cibtbue')
             # Parser le JSON depuis la réponse
             if len(response.json()) > 0:
                 pertes = response.json()[0]
             else:
                 return False
+            print(pertes)
             # Afficher les données pour vérification
         except requests.exceptions.RequestException as e:
             print(f"Erreur lors de la récupération des données : {e}")
@@ -364,3 +366,9 @@ def a_DispatchPerte():
 def set1DispatchPerte():
     print('perte ', config.perte)
     SendPerte("1SET", config.perte)
+
+
+if __name__ == "__main__":
+    config.scriptType = '1SET'
+    config.ligue_name = 'challenger zug qualification'
+    getPerte()

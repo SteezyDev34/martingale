@@ -1,3 +1,4 @@
+y
 <?php
 
 // Configurer les paramètres de la base de données

@@ -2,6 +2,7 @@ import inspect
 
 import config
 from Functions.AfficherParis import AfficherParis
+from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.GetBet import GetBet
 from Functions.GetMise import GetMise
 from Functions.GetScoreActuel import GetScoreActuel
@@ -15,6 +16,7 @@ def FirstGameBet(driver):
     bet_40a = False
     tentative = 0
     nextBet = False
+    GetJeuActuel(driver)
     while not bet_40a and not config.error and tentative < 3:
         GetScoreActuel(driver)
         config.looking_game = int(config.jeu_actuel)
