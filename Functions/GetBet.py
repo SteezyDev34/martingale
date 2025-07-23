@@ -72,7 +72,10 @@ def GetBet(driver, nextBet=False):
             sautDeLigne = 50 * 2
         else:
             sautDeLigne = 68
-        decalageX = -50
+        if config.scriptType == "1SET" and config.win_type == 'V2':
+            decalageX = 50
+        else:
+            decalageX = -50
 
     ligne = 1
     i = 1
