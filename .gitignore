@@ -3,7 +3,6 @@
 /venv/
 logScript*
 .eggs
-chromedriver.exe
 /GsheetsJson
 DataFiles/*
 .idea/prettier.xml
