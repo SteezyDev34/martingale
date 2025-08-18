@@ -17,6 +17,8 @@ from Functions.VerificationListeMatchLive import VerificationListeMatchLive
 
 
 def charger_matchlist_depuis_json():
+    import os
+
     """
     Fonction pour charger la liste des matchs depuis le fichier JSON le plus récent
     
