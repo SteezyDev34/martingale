@@ -57,7 +57,7 @@ def AfficherParis(driver):
                 ModalHandler(driver)
                 tentative = tentative + 1
             else:
-                config.log('ouverture du champ déroulant...', 'info', True, 2)
+                # config.log('ouverture du champ déroulant...', 'info', True, 2)
                 time.sleep(1)
                 try:
                     element = WebDriverWait(driver, 5).until(
@@ -86,8 +86,7 @@ def AfficherParis(driver):
 
                                 if select_option_text.strip().lower() == str(
                                         theset).lower() + f'{args}'.lower():
-                                    config.log('            Lien ' + select_option_text.lower() + ' = ' + str(
-                                        theset).lower() + ' set Evénements rapides'.lower(), 'warning', True, 2)
+                                    # config.log('            Lien ' + select_option_text.lower() + ' = ' + str(theset).lower() + ' set Evénements rapides'.lower(), 'warning', True, 2)
                                     try:
                                         select_option.click()
                                     except Exception as e:
@@ -147,8 +146,8 @@ def AfficherParis(driver):
                                             else:
                                                 selection = True
                                 else:
-                                    config.log('Lien ' + select_option_text.lower() + ' > ' + str(
-                                        theset).lower() + f'{args}'.lower(), 'warning', True, 2)
+                                    # config.log('Lien ' + select_option_text.lower() + ' > ' + str(theset).lower() + f'{args}'.lower(), 'warning', True, 2)
+                                    continue
                         return selection
     return selection
 

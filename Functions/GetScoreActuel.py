@@ -45,9 +45,9 @@ def GetScoreActuel(driver):
                     if not first:
                         first = False
                         record_scores(driver)
-                        print('score change')
+                        # print('score change')
                     else:
-                        print('first time score change')
+                        # print('first time score change')
                         first = False
                         time.sleep(2)
                         continue

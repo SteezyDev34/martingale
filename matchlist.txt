@@ -104,3 +104,6 @@ nicolai-budkov-kjaer
 noskova-elisabetta-cocciaretto
 shevchenko-marton-fucsovics
 thiago-agustin-tirante
+gil-mikel-martinez
+izquierdo-raul-brancaccio
+ursu-ioannis-xilas

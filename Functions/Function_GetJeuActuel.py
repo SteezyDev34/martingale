@@ -85,7 +85,7 @@ def GetJeuActuel(driver):
             else:
                 # Vérification que config.jeu_actuel est un entier valide
                 if isinstance(config.jeu_actuel, int):
-                    config.log('Récupération du jeu actuel : ' + str(config.jeu_actuel), 'info')
+                    # config.log('Récupération du jeu actuel : ' + str(config.jeu_actuel), 'info')
                     config.log_clear_line()
                     return True
                 else:

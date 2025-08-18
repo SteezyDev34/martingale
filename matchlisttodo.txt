@@ -4,3 +4,16 @@
 ['Andres Andrade', 'Yi Zhou']|challenger winnipeg dur|andrade-yi-zhou|0.505795
 ['Francesca Jones', 'Rebeka Masarova']|wta contrexeville terre battue|jones-rebeka-masarova|0.482175
 ['Sho Shimabukuro', 'Yu Hsiou Hsu']|challenger winnipeg dur|yu-hsiou-hsu|0.41340199999999994
+['Jannik Sinner', 'Carlos Alcaraz Garfia']|atp cincinnati dur|carlos-alcaraz-garfia|0.542298
+['Ann Li', 'Iva Jovic']|wta cleveland dur|li-iva-jovic|0.502721
+['Vit Kopriva', 'Sebastian Korda']|atp winston-salem dur|kopriva-sebastian-korda|0.46410799999999997
+['Suzan Lamens', 'Xinyu Wang']|wta cleveland dur|lamens-xinyu-wang|0.459642
+['Hugo Gaston', 'Marton Fucsovics']|atp winston-salem dur|gaston-marton-fucsovics|0.45843199999999995
+['Nuno Borges', 'Kamil Majchrzak']|atp winston-salem dur|borges-kamil-majchrzak|0.451264
+['Katie Boulter', 'Yue Yuan']|wta cleveland dur|boulter-yue-yuan|0.45034300000000005
+['Francisco Comesana', 'Mattia Bellucci']|atp winston-salem dur|comesana-mattia-bellucci|0.43023
+['Aleksandar Kovacevic', 'Filip Misolic']|atp winston-salem dur|kovacevic-filip-misolic|0.419882
+['Borna Coric', 'Darwin Blanch']|atp winston-salem dur|coric-darwin-blanch|0.376729
+['Roman Safiullin', "Christopher O'Connell"]|atp winston-salem dur|safiullin-christopher-oconnell|0.237168
+['Mariano Navone', 'Dhakshineswar Suresh']|atp winston-salem dur|navone-dhakshineswar-suresh|0.23333699999999996
+['Stefan Dostanic', 'Aleksandar Vukic']|atp winston-salem dur|dostanic-aleksandar-vukic|0.21545099999999998

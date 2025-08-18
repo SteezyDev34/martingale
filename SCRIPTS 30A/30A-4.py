@@ -9,12 +9,13 @@ parent_directory = os.path.dirname(current_file_path)
 # ajouter un autre niveau parent si nécessaire
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
-# Vérification de l'environnement
 if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
+    # Simple écriture de lignes vides pour PyCharm
+
+    # Vérification de l'environnement
     import VenvDependencyManager
 
     VenvDependencyManager.main()
-
 from art import *
 
 # Chargement des variables globales
@@ -30,8 +31,10 @@ parts = name_part.split('-')
 if len(parts) > 1:
     config.scriptType = parts[0]  # Suppose que le type est avant le tiret
     config.script_num = int(parts[1])  # Suppose que le numéro est avant le tiret
-    localhost = '7' + str(config.scriptType) + str(config.script_num)
+    localhost = str(config.scriptType) + str(config.script_num)
     config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
+    if int(config.localhost) < 1024:
+        config.localhost = 1024 + int(config.localhost)
     print(config.localhost)
     # Demander confirmation à l'utilisateur
     if config.systeme == 'Windows':
@@ -83,14 +86,15 @@ else:
 is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
 if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
     config.in_stat = True
-config.scriptTypeList = config.scriptTypeList1
+config.scriptTypeList = [config.scriptType]
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
-config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
-config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
-config.running_file_name = f"{config.projectPath}/SCRIPTS 456P/running"
-config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 456P/matchlist"
-config.total_want_win = config.total_want_win
+
+config.running_file_name = f"{config.projectPath}/SCRIPTS {config.scriptType}/running"
+config.matchlist_file_name = f"{config.projectPath}/SCRIPTS {config.scriptType}/matchlist"
+
+print('config.running_file_name', config.running_file_name)
+print('config.matchlist_file_name', config.matchlist_file_name)
 while (config.win < 100):
     try:
         Functions_431a.all_script(driver)
@@ -100,7 +104,7 @@ while (config.win < 100):
         if config.perte > 0:
             DispatchPerte()
         for i in config.scriptTypeList:
-            config.switchScript('456P')
+            config.switchScript('4315A')
             config.ScriptConfig(i).reset()
             config.init_variable()
             config.switchScript(i)

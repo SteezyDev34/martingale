@@ -664,5 +664,32 @@
         "winscore": "30:30",
         "timestamp": "2025-07-11 16:56:11",
         "url": "https://ca.1xbet.com/fr/live/tennis/831001-challenger-braunschweig/636550450-filip-misolic-mariano-navone"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.65",
+        "jeu": 6,
+        "set": "3",
+        "winscore": "30:30",
+        "timestamp": "2025-08-18 16:34:29",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1980049-challenger-augsburg/646333990-max-schoenhaus-jakub-nicod"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.65",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-08-18 16:46:28",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1980049-challenger-augsburg/646330805-nikolas-sanchez-izquierdo-raul-brancaccio"
+    },
+    {
+        "montant": 0.24,
+        "cote": "2.65",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-08-18 16:48:34",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1980049-challenger-augsburg/646330742-nikolas-sanchez-izquierdo-raul-brancaccio"
     }
 ]

@@ -1,5 +1,8 @@
 import inspect
+import json
+import os
 import time
+from datetime import datetime
 
 from selenium.webdriver.common.by import By
 
@@ -12,6 +15,48 @@ from Functions.GetIfScriptsRunning import GetIfScriptsRunning
 from Functions.GetJsonData import getCompet, DispatchPerte
 from Functions.UpdateMatchDone import todo
 from Functions.VerificationListeMatchLive import VerificationListeMatchLive
+
+
+def charger_matchlist_depuis_json():
+    """
+    Fonction pour charger la liste des matchs depuis le fichier JSON le plus récent
+    
+    Returns:
+        list: Liste des matchs si un fichier JSON valide existe, None sinon
+    """
+    try:
+        datafiles_path = os.path.join(config.projectPath, "DataFiles")
+        if not os.path.exists(datafiles_path):
+            return None
+
+        # Rechercher tous les fichiers matchlist_*.json
+        json_files = [f for f in os.listdir(datafiles_path) if f.startswith('matchlist_') and f.endswith('.json')]
+
+        if not json_files:
+            config.log("Aucun fichier JSON de matchlist trouvé", 'info', True)
+            return None
+
+        # Trier par date de modification (le plus récent en premier)
+        json_files.sort(key=lambda x: os.path.getmtime(os.path.join(datafiles_path, x)), reverse=True)
+        latest_file = os.path.join(datafiles_path, json_files[0])
+
+        # Charger le fichier JSON
+        with open(latest_file, 'r', encoding='utf-8') as json_file:
+            data = json.load(json_file)
+
+        matchlist = data.get('matches', [])
+
+        if matchlist and len(matchlist) > 0:
+            config.log(f"Matchlist chargée depuis {latest_file} - {len(matchlist)} matchs trouvés", 'info', True)
+            print(f"Matchlist chargée depuis {latest_file} - {len(matchlist)} matchs trouvés")
+            return matchlist
+        else:
+            config.log(f"Fichier JSON {latest_file} existe mais est vide", 'info', True)
+            return None
+
+    except Exception as e:
+        config.log(f"Erreur lors du chargement du fichier JSON: {str(e)}", 'error', True)
+        return None
 
 
 def rechercheDeMatch(driver):
@@ -524,7 +569,7 @@ def classementeDeMatch(driver):
         tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
 
         # Retenir les 10 premières lignes
-        top_10 = tableau_trie[:10]
+        top_10 = tableau_trie[:50]
         for m in top_10:
             # Join array elements with pipe separator before adding to todo
             try:
@@ -552,88 +597,120 @@ def newclassementeDeMatch(driver):
             print("PAGE VIDE")
             driver.get('https://ca.1xbet.com/fr/line/tennis')
             return False
-        # RECUPERATION DES LIGUES EN COURS
-        tennis_menu = driver.find_elements(By.CLASS_NAME,
-                                           'sports-menu-app-sport')
+        # VÉRIFICATION S'IL EXISTE UN FICHIER JSON DE MATCHLIST
+        matchlist_from_json = charger_matchlist_depuis_json()
 
-        for menu in tennis_menu:
-            sport_link = menu.find_element(By.CLASS_NAME, 'sports-menu-app-sport__link')
-            sport = sport_link.find_element(By.CLASS_NAME, 'ui-nav-link-caption__label').text
-            if 'tennis de table' in sport.lower():
-                continue
-            elif 'tennis' not in sport.lower():
-                continue
-            else:
-                # print('tennis trouvé')
-                # print('click ok')
-                break
-        country = driver.find_element(By.CLASS_NAME, 'sports-menu-group-by-country')
-        # print('find countries')
-        countrybutton = country.find_elements(By.CLASS_NAME, 'sports-menu-group-by-champ')
-        for cntrybtn in countrybutton:
-            # print('country', cntrybtn.text.lower())
-            if ('double' in cntrybtn.text.lower()
-                    or 'spéciaux' in cntrybtn.text.lower()
-                    or 'mixte' in cntrybtn.text.lower()
-                    or 'gagnant' in cntrybtn.text.lower()
-                    or 'winner' in cntrybtn.text.lower()
-                    or 'utr' in cntrybtn.text.lower()):
-                continue
-            cntrybtn.click()
-            # print('click cntry')
+        if matchlist_from_json is not None:
+            # Utiliser la matchlist du fichier JSON
+            matchlist = matchlist_from_json
+            print(f"Utilisation de la matchlist depuis le fichier JSON - {len(matchlist)} matchs")
+            config.log(f"Matchlist chargée depuis JSON - {len(matchlist)} matchs", 'info', True)
+        else:
+            # Procéder au scraping normal
+            print("Aucun fichier JSON valide trouvé, procédure de scraping normale")
+            config.log("Aucun fichier JSON valide trouvé, procédure de scraping normale", 'info', True)
 
-        liguebtn = driver.find_elements(By.CLASS_NAME, 'sports-menu-app-champ-with-sub-champs-group__item')
-        links = []
-        for lbtn in liguebtn:
-            link = lbtn.find_element(By.CLASS_NAME, 'ui-nav-link__content').get_attribute(
-                "href")
-            if ('double' in link.lower()
-                    or 'spéciaux' in link.lower()
-                    or 'mixte' in link.lower()
-                    or 'gagnant' in link.lower()
-                    or 'winner' in link.lower()
-                    or 'utr' in link.lower()
-                    or 'double' in link.lower()):
-                continue
-            links.append(link)
-        matchlist = []
-        liguelist = []
-        for link in links:
-            driver.get(link)
-            time.sleep(5)
-            bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                                  'dashboard-champ')
-            print('bet_list_ligue', bet_list_ligue)
+            # RECUPERATION DES LIGUES EN COURS
+            tennis_menu = driver.find_elements(By.CLASS_NAME,
+                                               'sports-menu-app-sport')
 
-            for bet_ligue in bet_list_ligue:
-                # ON RÉCUPÈRE LE NOM DE LA LIGUE
-                config.ligue_name = GetLigueName.main(bet_ligue)
-                print('config.ligue_nam', config.ligue_name)
-                # EN CAS D'ERREUR
-                if not config.ligue_name:
-                    config.error = False
+            for menu in tennis_menu:
+                sport_link = menu.find_element(By.CLASS_NAME, 'sports-menu-app-sport__link')
+                sport = sport_link.find_element(By.CLASS_NAME, 'ui-nav-link-caption__label').text
+                if 'tennis de table' in sport.lower():
                     continue
-                liguelist.append([bet_ligue.find_elements(By.CLASS_NAME,
-                                                          'dashboard-champ__more')[
-                    0].get_attribute(
-                    "href"), config.ligue_name])
-            bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                                  'dashboard-champ-body__games')
-            # POUR CHAQUE LIGUE RÉCUPÉRÉE
-            for bet_ligue in bet_list_ligue:
-                # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-                if getCompet():
-                    # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
-                    try:
-                        bet_items = driver.find_elements(By.CLASS_NAME,
-                                                         'dashboard-game-block__row')
-                    except:
-                        print(' c-events-scoreboard__item')
-                        # s'il y une erreur on passe au suivant
+                elif 'tennis' not in sport.lower():
+                    continue
+                else:
+                    # print('tennis trouvé')
+                    # print('click ok')
+                    break
+            country = driver.find_element(By.CLASS_NAME, 'sports-menu-group-by-country')
+            # print('find countries')
+            countrybutton = country.find_elements(By.CLASS_NAME, 'sports-menu-group-by-champ')
+            links = []
+            for cntrybtn in countrybutton:
+                # print('country', cntrybtn.text.lower())
+                if ('double' in cntrybtn.text.lower()
+                        or 'spéciaux' in cntrybtn.text.lower()
+                        or 'mixte' in cntrybtn.text.lower()
+                        or 'gagnant' in cntrybtn.text.lower()
+                        or 'winner' in cntrybtn.text.lower()
+                        or 'utr' in cntrybtn.text.lower()
+                        or 'itf' in cntrybtn.text.lower()
+                        or 'challenger' in cntrybtn.text.lower()
+                        or 'wta' in cntrybtn.text.lower()):
+                    continue
+                classes = cntrybtn.get_attribute("class")  # récupère toutes les classes dans une string
+                linkcontent = cntrybtn.find_element(By.CLASS_NAME, 'ui-nav-link__content')
+                link = linkcontent.get_attribute(
+                    "href")
+                # Vérifier si 'nav_link' est absent
+                if "sports-menu-app-champ-with-sub-champs-group__item" not in classes.split() and link:
+                    print('link', link)
+                    links.append(link)
+                    continue
+                elif linkcontent:
+                    linkcontent.click()
+                    print('click country', linkcontent.text)
+                else:
+                    continue
+
+                liguebtn = driver.find_elements(By.CLASS_NAME, 'sports-menu-app-champ-with-sub-champs-group__item')
+                for lbtn in liguebtn:
+                    link = lbtn.find_element(By.CLASS_NAME, 'ui-nav-link__content').get_attribute(
+                        "href")
+                    if ('double' in link.lower()
+                            or 'spéciaux' in link.lower()
+                            or 'mixte' in link.lower()
+                            or 'gagnant' in link.lower()
+                            or 'winner' in link.lower()
+                            or 'utr' in link.lower()
+                            or 'double' in link.lower()):
                         continue
-                    else:
-                        if len(bet_items) <= 0:
-                            continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
+                    print('link', link)
+                    links.append(link)
+                linkcontent.click()
+                time.sleep(2)
+                print('fermeture')
+            matchlist = []
+            liguelist = []
+            for link in links:
+                driver.get(link)
+                time.sleep(5)
+                bet_list_ligue = driver.find_elements(By.CLASS_NAME,
+                                                      'dashboard-champ')
+                print('bet_list_ligue', bet_list_ligue)
+
+                for bet_ligue in bet_list_ligue:
+                    # ON RÉCUPÈRE LE NOM DE LA LIGUE
+                    config.ligue_name = GetLigueName.main(bet_ligue)
+                    print('config.ligue_nam', config.ligue_name)
+                    # EN CAS D'ERREUR
+                    if not config.ligue_name:
+                        config.error = False
+                        continue
+                    liguelist.append([bet_ligue.find_elements(By.CLASS_NAME,
+                                                              'dashboard-champ__more')[
+                        0].get_attribute(
+                        "href"), config.ligue_name])
+                bet_list_ligue = driver.find_elements(By.CLASS_NAME,
+                                                      'dashboard-champ-body__games')
+                # POUR CHAQUE LIGUE RÉCUPÉRÉE
+                for bet_ligue in bet_list_ligue:
+                    # ON VÉRIFIE QUE LA COMPET EST JOUABLE
+                    if getCompet():
+                        # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
+                        try:
+                            bet_items = driver.find_elements(By.CLASS_NAME,
+                                                             'dashboard-game-block__row')
+                        except:
+                            print(' c-events-scoreboard__item')
+                            # s'il y une erreur on passe au suivant
+                            continue
+                        else:
+                            if len(bet_items) <= 0:
+                                continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
                         i = 0
                         for bet_item in bet_items:
                             try:
@@ -670,9 +747,36 @@ def newclassementeDeMatch(driver):
 
         print(len(matchlist))
         print('matchlist', matchlist)
+
+        # Enregistrement de matchlist dans un fichier JSON
+        try:
+            # Créer un nom de fichier avec timestamp
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            json_filename = f"matchlist_{timestamp}.json"
+            json_filepath = os.path.join(config.projectPath, "DataFiles", json_filename)
+
+            # Créer le dossier DataFiles s'il n'existe pas
+            os.makedirs(os.path.dirname(json_filepath), exist_ok=True)
+
+            # Préparer les données à enregistrer
+            data_to_save = {
+                "timestamp": datetime.now().isoformat(),
+                "total_matches": len(matchlist),
+                "matches": matchlist
+            }
+
+            # Enregistrer dans le fichier JSON
+            with open(json_filepath, 'w', encoding='utf-8') as json_file:
+                json.dump(data_to_save, json_file, ensure_ascii=False, indent=2)
+
+            config.log(f"Matchlist enregistrée dans: {json_filepath}", 'info', True)
+            print(f"Matchlist enregistrée dans: {json_filepath}")
+
+        except Exception as e:
+            config.log(f"Erreur lors de l'enregistrement de matchlist: {str(e)}", 'error', True)
+            print(f"Erreur lors de l'enregistrement de matchlist: {str(e)}")
         goodmatch = []
         for matchItem in matchlist:
-            from ChromeDriver.SetDriver1 import driver
             players_name = matchItem[0]
             ligue_name = matchItem[1]
             print('matchitem', matchItem)
