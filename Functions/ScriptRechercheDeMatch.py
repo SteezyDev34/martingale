@@ -579,6 +579,7 @@ def classementeDeMatch(driver):
 
 
 def newclassementeDeMatch(driver):
+    import os
     driver.get('https://ca.1xbet.com/fr/line/tennis')
     config.error = False
     print('RECHERCHE DE MATCH')
@@ -635,7 +636,10 @@ def newclassementeDeMatch(driver):
                         or 'mixte' in cntrybtn.text.lower()
                         or 'gagnant' in cntrybtn.text.lower()
                         or 'winner' in cntrybtn.text.lower()
-                        or 'utr' in cntrybtn.text.lower()):
+                        or 'utr' in cntrybtn.text.lower()
+                        or 'itf' in cntrybtn.text.lower()
+                        or 'challenger' in cntrybtn.text.lower()
+                        or 'wta' in cntrybtn.text.lower()):
                     continue
                 classes = cntrybtn.get_attribute("class")  # récupère toutes les classes dans une string
                 linkcontent = cntrybtn.find_element(By.CLASS_NAME, 'ui-nav-link__content')
