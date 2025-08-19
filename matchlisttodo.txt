@@ -17,3 +17,28 @@
 ['Roman Safiullin', "Christopher O'Connell"]|atp winston-salem dur|safiullin-christopher-oconnell|0.237168
 ['Mariano Navone', 'Dhakshineswar Suresh']|atp winston-salem dur|navone-dhakshineswar-suresh|0.23333699999999996
 ['Stefan Dostanic', 'Aleksandar Vukic']|atp winston-salem dur|dostanic-aleksandar-vukic|0.21545099999999998
+['Stefanos Tsitsipas', 'Bu Yunchaokete']|atp winston-salem dur|tsitsipas-bu-yunchaokete|0.48179799999999995
+['Sebastian Baez', 'Pablo Carreno Busta']|atp winston-salem dur|pablo-carreno-busta|0.47986399999999996
+['Renata Zarazua', 'Ajla Tomljanovic']|wta monterrey dur|zarazua-ajla-tomljanovic|0.473084
+['Kamil Majchrzak', 'Sebastian Korda']|atp winston-salem dur|majchrzak-sebastian-korda|0.47051600000000005
+['Roberto Bautista-Agut', "Christopher O'Connell"]|atp winston-salem dur|agut-christopher-oconnell|0.467403
+['Botic Van De Zandschulp', 'Matteo Arnaldi']|atp winston-salem dur|zandschulp-matteo-arnaldi|0.463887
+['Mackenzie Mcdonald', 'Luciano Darderi']|atp winston-salem dur|mcdonald-luciano-darderi|0.457905
+['Mariano Navone', 'Marcos Giron']|atp winston-salem dur|navone-marcos-giron|0.45713899999999996
+['Marton Fucsovics', 'Tallon Griekspoor']|atp winston-salem dur|fucsovics-tallon-griekspoor|0.454995
+['Marco Cecchinato', 'Franco Roncadelli']|challenger sofia 2 terre battue|cecchinato-franco-roncadelli|0.44353
+['Miomir Kecmanovic', 'Aleksandar Kovacevic']|atp winston-salem dur|kecmanovic-aleksandar-kovacevic|0.44039
+['Hamad Medjedovic', 'Jacob Fearnley']|atp winston-salem dur|medjedovic-jacob-fearnley|0.43086599999999997
+['Giovanni Mpetshi Perricard', 'Pedro Martinez Portero']|atp winston-salem dur|pedro-martinez-portero|0.425519
+['Jakub Paul', 'Blaise Bicknell']|challenger hersonissos 4 dur|paul-blaise-bicknell|0.377
+['Darwin Blanch', 'Alexandre Muller']|atp winston-salem dur|blanch-alexandre-muller|0.36840000000000006
+['Ioannis Xilas', 'Stuart Parker']|challenger hersonissos 4 dur|xilas-stuart-parker|0.33554799999999996
+['Stefanos Sakellaridis', 'Maximus Jones']|challenger hersonissos 4 dur|sakellaridis-maximus-jones|0.33303000000000005
+['Alexander Donski', 'Matej Dodig']|challenger sofia 2 terre battue|donski-matej-dodig|0.311848
+['Marat Sharipov', 'Alvaro Guillen Meza']|challenger sofia 2 terre battue|alvaro-guillen-meza|0.25608200000000003
+['Milos Karol', 'Franco Agamenone']|challenger sofia 2 terre battue|karol-franco-agamenone|0.246706
+['Gabriel Diallo', 'Nishesh Basavareddy']|atp winston-salem dur|diallo-nishesh-basavareddy|0.232006
+['Lorenzo Sonego', 'Stefan Dostanic']|atp winston-salem dur|sonego-stefan-dostanic|0.22628400000000004
+['Frederico Ferreira Silva', 'Mika Brunold']|challenger sofia 2 terre battue|silva-mika-brunold|0.21844800000000003
+['Mattia Bellucci', 'Jaume Antoni Munar Clar']|atp winston-salem dur|antoni-munar-clar|0.21647999999999998
+['Nikolas Sanchez Izquierdo', 'Diego Dedura-Palomero']|challenger augsburg terre battue|diego-dedura-palomero|0.215384

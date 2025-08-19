@@ -198,131 +198,307 @@ def get_proba_40A_other(playerName1, playerName2, driver1, link=False):
     while attempt < 2:
 
         print('attempt', attempt)
-        # try:
-        driver1.get('https://www.ultimatetennisstatistics.com/headToHead?tab=statistics')
-        WebDriverWait(driver1, 20).until(
-            EC.presence_of_element_located((By.ID, 'player1'))
-        )
-        # Input and player selection with nickname fallback
-        fld1 = driver1.find_element(By.ID, 'player1')
-        found = False
-
-        # Try with original name first
-        fld1.send_keys(playerName1)
-        WebDriverWait(driver1, 20).until(
-            EC.visibility_of_element_located((By.ID, 'ui-id-1'))
-        )
-        for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-1 .ui-menu-item'):
-            if p1.lower() in item.text.lower():
-                item.click()
-                found = True
-                break
-
-        # If not found, try with nicknames
-        if not found:
-            nicknames = get_player_nickname(playerName1)
-            if nicknames:
-                for nickname in nicknames:
-                    fld1 = WebDriverWait(driver1, 20).until(
-                        EC.visibility_of_element_located((By.ID, 'player1'))
-                    )
-                    fld1.clear()
-                    fld1.send_keys(nickname)
-                    WebDriverWait(driver1, 20).until(
-                        EC.visibility_of_element_located((By.ID, 'ui-id-1'))
-                    )
-                    for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-1 .ui-menu-item'):
-                        if nickname.lower() in item.text.lower():
-                            print('item.text.lower', item.text.lower)
-                            item.click()
-                            found = True
-                            break
-                    if found:
-                        break
-                    else:
-                        for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-1 .ui-menu-item'):
-                            item.click()
-                            p1_key = 'player1'
-                            break
-        time.sleep(1)
-        fld2 = WebDriverWait(driver1, 20).until(
-            EC.visibility_of_element_located((By.ID, 'player2'))
-        )
-        found = False
-
-        # Try with original name first
-        fld2.send_keys(playerName2)
-        WebDriverWait(driver1, 20).until(
-            EC.visibility_of_element_located((By.ID, 'ui-id-2'))
-        )
-        for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-2 .ui-menu-item'):
-            if p2.lower() in item.text.lower():
-                print('found', item.text.lower)
-                item.click()
-                found = True
-                break
-
-        # If not found, try with nicknames
-        if not found:
-            nicknames = get_player_nickname(playerName2)
-            if nicknames:
-                for nickname in nicknames:
-                    fld2 = WebDriverWait(driver1, 20).until(
-                        EC.visibility_of_element_located((By.ID, 'player2'))
-                    )
-                    print('nickname', nickname)
-                    fld2.clear()
-                    fld2.send_keys(nickname)
-                    WebDriverWait(driver1, 20).until(
-                        EC.visibility_of_element_located((By.ID, 'ui-id-2'))
-                    )
-                    for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-2 .ui-menu-item'):
-                        if nickname.lower() in item.text.lower():
-                            print('item.text.lower', item.text.lower)
-                            item.click()
-                            found = True
-                            break
-                    if found:
-                        break
-                    else:
-                        for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-2 .ui-menu-item'):
-                            item.click()
-                            p2_key = 'player2'
-                            break
-        # Rechargement avec IDs
-        m = re.search(r'playerId1=(\d+)&playerId2=(\d+)', driver1.current_url)
-        if m:
-            driver1.get(
-                f"https://www.ultimatetennisstatistics.com/headToHead?tab=statistics&playerId1={m.group(1)}&playerId2={m.group(2)}"
+        try:
+            driver1.get('https://www.ultimatetennisstatistics.com/headToHead?tab=statistics')
+            WebDriverWait(driver1, 5).until(
+                EC.presence_of_element_located((By.ID, 'player1'))
             )
-        WebDriverWait(driver1, 20).until(
-            EC.visibility_of_element_located((By.ID, 'statisticsOverview'))
-        )
-        rows = driver1.find_element(By.ID, 'statisticsOverview').find_elements(By.TAG_NAME, 'tr')
-        for tr in rows:
-            txt = tr.text.lower()
-            if 'service points won %' in txt:
-                a, b = tr.text.split('Service Points Won %')
-                prob_service_joueur1 = float(a.replace('%', '').strip()) / 100 if a else 0.0
-                prob_service_joueur2 = float(b.replace('%', '').strip()) / 100 if b else 0.0
-            if 'return points won %' in txt:
-                a, b = tr.text.split('Return Points Won %')
-                prob_retour_joueur1 = float(a.replace('%', '').strip()) / 100 if a else 0.0
-                prob_retour_joueur2 = float(b.replace('%', '').strip()) / 100 if b else 0.0
-                break
-        # Calcul et cache individuel
-        p1_c = prob_service_joueur1 * prob_retour_joueur1
-        p2_c = prob_service_joueur2 * prob_retour_joueur2
-        cache[p1_key] = p1_c
-        cache[p2_key] = p2_c
-        save_cache(cache)
-        total_prob = p1_c + p2_c
-        print('Proba 40-40 h2h =', total_prob)
-        return total_prob
-    # except Exception as e:
-    # print('Erreur get_proba_40A_other :', e)
-    # attempt += 1
-    # time.sleep(1)
+            # Input and player selection with nickname fallback
+            fld1 = driver1.find_element(By.ID, 'player1')
+            found = False
+
+            # Try with original name first
+            fld1.send_keys(playerName1)
+            time.sleep(1)
+            WebDriverWait(driver1, 5).until(
+                EC.visibility_of_element_located((By.ID, 'ui-id-1'))
+            )
+            for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-1 .ui-menu-item'):
+                if p1.lower() in item.text.lower():
+                    item.click()
+                    found = True
+                    break
+
+            # If not found, try with nicknames
+            if not found:
+                nicknames = get_player_nickname(playerName1)
+                if nicknames:
+                    for nickname in nicknames:
+                        fld1 = WebDriverWait(driver1, 20).until(
+                            EC.visibility_of_element_located((By.ID, 'player1'))
+                        )
+                        fld1.clear()
+                        fld1.send_keys(nickname)
+                        time.sleep(1)
+                        WebDriverWait(driver1, 20).until(
+                            EC.visibility_of_element_located((By.ID, 'ui-id-1'))
+                        )
+                        for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-1 .ui-menu-item'):
+                            if nickname.lower() in item.text.lower():
+                                print('item.text.lower', item.text.lower)
+                                item.click()
+                                found = True
+                                break
+                        if found:
+                            break
+                        else:
+                            for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-1 .ui-menu-item'):
+                                item.click()
+                                p1_key = 'player1'
+                                break
+            time.sleep(1)
+            fld2 = WebDriverWait(driver1, 5).until(
+                EC.visibility_of_element_located((By.ID, 'player2'))
+            )
+            found = False
+
+            # Try with original name first
+            fld2.send_keys(playerName2)
+            time.sleep(1)
+            WebDriverWait(driver1, 5).until(
+                EC.visibility_of_element_located((By.ID, 'ui-id-2'))
+            )
+            for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-2 .ui-menu-item'):
+                if p2.lower() in item.text.lower():
+                    print('found', item.text.lower())
+                    item.click()
+                    found = True
+                    break
+
+            # If not found, try with nicknames
+            if not found:
+                nicknames = get_player_nickname(playerName2)
+                if nicknames:
+                    for nickname in nicknames:
+                        fld2 = WebDriverWait(driver1, 5).until(
+                            EC.visibility_of_element_located((By.ID, 'player2'))
+                        )
+                        print('nickname', nickname)
+                        fld2.clear()
+                        fld2.send_keys(nickname)
+                        WebDriverWait(driver1, 5).until(
+                            EC.visibility_of_element_located((By.ID, 'ui-id-2'))
+                        )
+                        for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-2 .ui-menu-item'):
+                            if nickname.lower() in item.text.lower():
+                                print('item.text.lower', item.text.lower())
+                                item.click()
+                                found = True
+                                break
+                if found:
+                    print('found, ', p2_key)
+                else:
+                    for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-2 .ui-menu-item'):
+                        item.click()
+                        print('not found, ', p2_key)
+                        p2_key = 'player2'
+            # Rechargement avec IDs
+            m = re.search(r'playerId1=(\d+)&playerId2=(\d+)', driver1.current_url)
+            if m:
+                driver1.get(
+                    f"https://www.ultimatetennisstatistics.com/headToHead?tab=statistics&playerId1={m.group(1)}&playerId2={m.group(2)}"
+                )
+            WebDriverWait(driver1, 5).until(
+                EC.visibility_of_element_located((By.ID, 'statisticsOverview'))
+            )
+            rows = driver1.find_element(By.ID, 'statisticsOverview').find_elements(By.TAG_NAME, 'tr')
+            for tr in rows:
+                txt = tr.text.lower()
+                if 'service points won %' in txt:
+                    a, b = tr.text.split('Service Points Won %')
+                    prob_service_joueur1 = float(a.replace('%', '').strip()) / 100 if a else 0.0
+                    prob_service_joueur2 = float(b.replace('%', '').strip()) / 100 if b else 0.0
+                if 'return points won %' in txt:
+                    a, b = tr.text.split('Return Points Won %')
+                    prob_retour_joueur1 = float(a.replace('%', '').strip()) / 100 if a else 0.0
+                    prob_retour_joueur2 = float(b.replace('%', '').strip()) / 100 if b else 0.0
+                    break
+            # Calcul et cache individuel
+            p1_c = prob_service_joueur1 * prob_retour_joueur1
+            p2_c = prob_service_joueur2 * prob_retour_joueur2
+            print('p1_key', p1_key)
+            print('p2_key', p2_key)
+            cache[p1_key] = p1_c
+            cache[p2_key] = p2_c
+            save_cache(cache)
+            total_prob = p1_c + p2_c
+            print('Proba 40-40 h2h =', total_prob)
+            return total_prob
+        except Exception as e:
+            print('Erreur get_proba_40A_other :', e)
+            attempt += 1
+            time.sleep(1)
+    if link:
+        try:
+            driver1.get(link)
+        except:
+            pass
+    p1_key = f"player_{unidecode(playerName1).strip().lower().replace('-', ' ')}_40-40"
+    p2_key = f"player_{unidecode(playerName2).strip().lower().replace('-', ' ')}_40-40"
+    cache[p1_key] = 0
+    cache[p2_key] = 0
+    save_cache(cache)
+    return total_prob
+
+
+# Probabilité 40-40 via scraping head-to-head Sofascore
+
+def get_proba_40A_other_sofascore_tofinishdev(playerName1, playerName2, driver1, link=False):
+    # Initialise cache en mémoire
+    cache = load_cache()
+    # Vérifier cache pour chaque joueur
+    p1_key = f"player_{unidecode(playerName1).strip().lower().replace('-', ' ')}_40-40"
+    p2_key = f"player_{unidecode(playerName2).strip().lower().replace('-', ' ')}_40-40"
+    print(p1_key)
+    print(p2_key)
+    if p1_key in cache and p2_key in cache:
+        print('proba found in cache')
+        return cache[p1_key] + cache[p2_key]
+    prob_service_joueur1 = 0.0
+    prob_service_joueur2 = 0.0
+    prob_retour_joueur1 = 0.0
+    prob_retour_joueur2 = 0.0
+    p1 = unidecode(playerName1).replace('-', ' ').strip()
+    p2 = unidecode(playerName2).replace('-', ' ').strip()
+    attempt = 0
+    total_prob = 0.0
+
+    while attempt < 2:
+
+        print('attempt', attempt)
+        try:
+            driver1.get('https://www.sofascore.com/fr/tennis/team/compare')
+            WebDriverWait(driver1, 20).until(
+                EC.presence_of_element_located(
+                    (By.XPATH, '//*[@id="__next"]/main/div/div/div/div[1]/div[3]/div/div[2]'))
+            )
+            h2h_block = driver1.find_element(By.XPATH, '//*[@id="__next"]/main/div/div/div/div[1]/div[3]/div/div[2]')
+            # Input and player selection with nickname fallback
+            flds = h2h_block.find_elements(By.TAG_NAME, 'input')
+            fld1 = flds[0]
+            found = False
+
+            # Try with original name first
+            fld1.send_keys(playerName1)
+            time.sleep(2)
+            WebDriverWait(driver1, 20).until(
+                EC.visibility_of_element_located((By.ID, 'ui-id-1'))
+            )
+            for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-1 .ui-menu-item'):
+                if p1.lower() in item.text.lower():
+                    item.click()
+                    found = True
+                    break
+
+            # If not found, try with nicknames
+            if not found:
+                nicknames = get_player_nickname(playerName1)
+                if nicknames:
+                    for nickname in nicknames:
+                        fld1 = WebDriverWait(driver1, 20).until(
+                            EC.visibility_of_element_located((By.ID, 'player1'))
+                        )
+                        fld1.clear()
+                        fld1.send_keys(nickname)
+                        time.sleep(1)
+                        WebDriverWait(driver1, 20).until(
+                            EC.visibility_of_element_located((By.ID, 'ui-id-1'))
+                        )
+                        for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-1 .ui-menu-item'):
+                            if nickname.lower() in item.text.lower():
+                                print('item.text.lower', item.text.lower)
+                                item.click()
+                                found = True
+                                break
+                        if found:
+                            break
+                        else:
+                            for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-1 .ui-menu-item'):
+                                item.click()
+                                p1_key = 'player1'
+                                break
+            time.sleep(1)
+            fld2 = WebDriverWait(driver1, 20).until(
+                EC.visibility_of_element_located((By.ID, 'player2'))
+            )
+            found = False
+
+            # Try with original name first
+            fld2.send_keys(playerName2)
+            time.sleep(1)
+            WebDriverWait(driver1, 20).until(
+                EC.visibility_of_element_located((By.ID, 'ui-id-2'))
+            )
+            for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-2 .ui-menu-item'):
+                if p2.lower() in item.text.lower():
+                    print('found', item.text.lower())
+                    item.click()
+                    found = True
+                    break
+
+            # If not found, try with nicknames
+            if not found:
+                nicknames = get_player_nickname(playerName2)
+                if nicknames:
+                    for nickname in nicknames:
+                        fld2 = WebDriverWait(driver1, 20).until(
+                            EC.visibility_of_element_located((By.ID, 'player2'))
+                        )
+                        print('nickname', nickname)
+                        fld2.clear()
+                        fld2.send_keys(nickname)
+                        WebDriverWait(driver1, 20).until(
+                            EC.visibility_of_element_located((By.ID, 'ui-id-2'))
+                        )
+                        for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-2 .ui-menu-item'):
+                            if nickname.lower() in item.text.lower():
+                                print('item.text.lower', item.text.lower())
+                                item.click()
+                                found = True
+                                break
+                if found:
+                    print('found, ', p2_key)
+                else:
+                    for item in driver1.find_elements(By.CSS_SELECTOR, '#ui-id-2 .ui-menu-item'):
+                        item.click()
+                        print('not found, ', p2_key)
+                        p2_key = 'player2'
+            # Rechargement avec IDs
+            m = re.search(r'playerId1=(\d+)&playerId2=(\d+)', driver1.current_url)
+            if m:
+                driver1.get(
+                    f"https://www.ultimatetennisstatistics.com/headToHead?tab=statistics&playerId1={m.group(1)}&playerId2={m.group(2)}"
+                )
+            WebDriverWait(driver1, 20).until(
+                EC.visibility_of_element_located((By.ID, 'statisticsOverview'))
+            )
+            rows = driver1.find_element(By.ID, 'statisticsOverview').find_elements(By.TAG_NAME, 'tr')
+            for tr in rows:
+                txt = tr.text.lower()
+                if 'service points won %' in txt:
+                    a, b = tr.text.split('Service Points Won %')
+                    prob_service_joueur1 = float(a.replace('%', '').strip()) / 100 if a else 0.0
+                    prob_service_joueur2 = float(b.replace('%', '').strip()) / 100 if b else 0.0
+                if 'return points won %' in txt:
+                    a, b = tr.text.split('Return Points Won %')
+                    prob_retour_joueur1 = float(a.replace('%', '').strip()) / 100 if a else 0.0
+                    prob_retour_joueur2 = float(b.replace('%', '').strip()) / 100 if b else 0.0
+                    break
+            # Calcul et cache individuel
+            p1_c = prob_service_joueur1 * prob_retour_joueur1
+            p2_c = prob_service_joueur2 * prob_retour_joueur2
+            print('p1_key', p1_key)
+            print('p2_key', p2_key)
+            cache[p1_key] = p1_c
+            cache[p2_key] = p2_c
+            save_cache(cache)
+            total_prob = p1_c + p2_c
+            print('Proba 40-40 h2h =', total_prob)
+            return total_prob
+        except Exception as e:
+            print('Erreur get_proba_40A_other :', e)
+            attempt += 1
+            time.sleep(1)
     if link:
         try:
             driver1.get(link)
@@ -455,7 +631,7 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver1, link=False):
                         dropdown_button.click()
 
                         # Attendre que les options soient visibles
-                        WebDriverWait(driver, 10).until(
+                        WebDriverWait(driver, 5).until(
                             EC.presence_of_element_located((By.CLASS_NAME, "tournament-year-dropdown__option"))
                         )
                         print('tournament-year-dropdown__option')
