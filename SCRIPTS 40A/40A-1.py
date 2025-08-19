@@ -31,8 +31,10 @@ parts = name_part.split('-')
 if len(parts) > 1:
     config.scriptType = parts[0]  # Suppose que le type est avant le tiret
     config.script_num = int(parts[1])  # Suppose que le numéro est avant le tiret
-    localhost = '7' + str(config.scriptType) + str(config.script_num)
+    localhost = str(config.scriptType) + str(config.script_num)
     config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
+    if int(config.localhost) < 1024:
+        config.localhost = 1024 + int(config.localhost)
     print(config.localhost)
     # Demander confirmation à l'utilisateur
     if config.systeme == 'Windows':
@@ -58,7 +60,7 @@ else:
 # Chargement de Chrome driver
 from ChromeDriver.SetDriver import driver
 
-from Functions import Functions_40a_proba
+from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
 from Functions.Authenticator import is_logged_in, loginProcess
@@ -72,6 +74,8 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
     else:
         print('new class')
         newclassementeDeMatch(driver)
+        print('new class')
+        classementeDeMatch(driver)
 
 # Call the function to get the code
 if not is_logged_in(driver):
@@ -82,19 +86,32 @@ else:
 is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
 if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
     config.in_stat = True
-config.init_variable()
+config.scriptTypeList = [config.scriptType]
+for i in config.scriptTypeList:
+    config.ScriptConfig(i)
 
+config.running_file_name = f"{config.projectPath}/SCRIPTS {config.scriptType}/running"
+config.matchlist_file_name = f"{config.projectPath}/SCRIPTS {config.scriptType}/matchlist"
+
+print('config.running_file_name', config.running_file_name)
+print('config.matchlist_file_name', config.matchlist_file_name)
 while (config.win < 100):
-
     try:
-        Functions_40a_proba.all_script(driver)
+        Functions_431a.all_script(driver)
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
         if config.perte > 0:
             DispatchPerte()
-        config.init_variable()
-        sucess = False
+        for i in config.scriptTypeList:
+            config.switchScript('4315A')
+            config.ScriptConfig(i).reset()
+            config.init_variable()
+            config.switchScript(i)
+            DispatchPerte()
+            config.global_match_win[i] = 0  # Initialize win counter for script type
+            config.winmatch[i] = 0  # Initialize match counter for script type
+            sucess = False
         while not sucess:
             try:
                 driver.get(config.site_url)
