@@ -27,7 +27,7 @@ def main(driver, bet_item, matchlist_file_name):
         print('matchlisfole', config.matchlisttodo_file_name)
         print('in stat', config.in_stat)
         print(match_list)
-        if config.scriptType != '1SET':
+        if config.scriptType == '1SET':
             config.log('TOUT match autorisé!', 'success', False, 4)
             driver.get(newmatchtxt)
             return [True, config.newmatch]
