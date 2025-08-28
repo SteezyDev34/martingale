@@ -20,7 +20,7 @@ def GetScoreActuel(driver):
     first = True
     while not get_score:
         try:
-            score_teams = WebDriverWait(driver, 10).until(
+            score_teams = WebDriverWait(driver, 5).until(
                 EC.visibility_of_element_located((By.CLASS_NAME,
                                                   'scoreboard-scores__item'))
             )
@@ -34,6 +34,7 @@ def GetScoreActuel(driver):
             time.sleep(1)
             if tentative == 5:
                 config.error = True
+                return False
         else:
             try:
                 config.score_actuel = score_teams[0].text + ':' + score_teams[1].text
