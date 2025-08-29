@@ -22,9 +22,9 @@ def GetScoreActuel(driver):
         try:
             score_teams = WebDriverWait(driver, 5).until(
                 EC.visibility_of_element_located((By.CLASS_NAME,
-                                                  'scoreboard-scores__item'))
+                                                  'scoreboard-scores__score'))
             )
-            score_teams = driver.find_elements(By.CLASS_NAME, 'scoreboard-scores__item')
+            score_teams = driver.find_elements(By.CLASS_NAME, 'scoreboard-scores__score')
         except Exception as e:
             print(f"#E0020\nUne erreur est survenue : {e}")
             if not GetIfMatchPage(driver):
