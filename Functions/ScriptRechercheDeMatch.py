@@ -302,9 +302,13 @@ def rechercheDeMatch1set(driver):
                                 else:
                                     if cotev1 > 1.2 and cotev1 < 1.9:
                                         config.win_type = 'V1'
+                                        if 'wta' in config.ligue_name or 'women' in config.ligue_name or 'femmes' in config.ligue_name:
+                                            config.win_type = 'V2'
                                         print('1SET')
                                     elif cotev2 > 1.2 and cotev2 < 1.9:
                                         config.win_type = 'V2'
+                                        if 'wta' in config.ligue_name or 'women' in config.ligue_name or 'femmes' in config.ligue_name:
+                                            config.win_type = 'V1'
                                         print('1SETV2')
                                     else:
                                         continue
