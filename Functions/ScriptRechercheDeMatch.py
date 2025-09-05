@@ -11,7 +11,7 @@ from Functions import OuverturePageMatch
 from Functions import VerificationMatchTrouve
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetIfScriptsRunning import GetIfScriptsRunning
-from Functions.GetJsonData import getCompet, DispatchPerte
+from Functions.GetJsonData import getCompet, DispatchPerte, set1DispatchPerte
 from Functions.UpdateMatchDone import todo
 from Functions.VerificationListeMatchLive import VerificationListeMatchLive
 
@@ -68,7 +68,10 @@ def rechercheDeMatch(driver):
         # config.init_variable()
         config.match_found = GetIfMatchPage(driver)
         if not config.match_found and float(config.perte) > 0:
-            DispatchPerte()
+            if config.scriptType == '1SET':
+                set1DispatchPerte()
+            else:
+                DispatchPerte()
         # config.match_found = False
         # SCRIPT RECHERCHE DE MATCH
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
@@ -202,7 +205,10 @@ def rechercheDeMatch1set(driver):
     # config.init_variable()
     config.match_found = GetIfMatchPage(driver)
     if not config.match_found and float(config.perte) > 0:
-        DispatchPerte()
+        if config.scriptType == '1SET':
+            set1DispatchPerte()
+        else:
+            DispatchPerte()
     # config.match_found = False
     # SCRIPT RECHERCHE DE MATCH
     # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)

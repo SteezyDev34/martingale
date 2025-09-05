@@ -365,7 +365,7 @@ def a_DispatchPerte():
 
 def set1DispatchPerte():
     print('perte ', config.perte)
-    SendPerte("1SET", config.perte)
+    SendPerte1set("1SET", config.perte)
 
 
 if __name__ == "__main__":
