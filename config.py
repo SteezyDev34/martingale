@@ -15,11 +15,11 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['300', '30A']
+scriptTypeList = ['300', '15A', '30A']
 scriptTypeList1 = ['30A']
-scriptTypeList2 = ['BREAK', '6P']
+scriptTypeList2 = ['5P', '6P']
 # scriptTypeList2 = ['4P', '5P', '6P', '40A']
-scriptTypeList3 = ['5P', '40A']
+scriptTypeList3 = ['40A']
 scriptTypeList4 = ['400', '4015', '4030', 'BREAK']
 
 # Script configuration
@@ -122,9 +122,9 @@ all_scores = {}
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
-total_want_win = {'030': 0.2, '300': 0.2, '15A': 0.2, '30A': 0.2, 'BREAK': 0.2, '400': 0.2, '4015': 0.2, '4030': 0.2,
+total_want_win = {'030': 0.2, '300': 3, '15A': 3, '30A': 3, 'BREAK': 0.2, '400': 0.2, '4015': 2, '4030': 2,
                   '4P': 0.2,
-                  '5P': 0.2, '6P': 0.2, '40A': 0.2}
+                  '5P': 3, '6P': 3, '40A': 3}
 total_want_winset1 = {'1SET': 0.2}
 
 
@@ -486,3 +486,16 @@ def log_clear_line(line_number=1):
             pass
             # sys.stdout.write("\033[F\033[K\r")
             # sys.stdout.flush()
+
+
+win_session = False
+win = False
+min_unit = float(0.00000001)
+unit = min_unit
+old_unit = False
+perte = float(0.00003000)
+side = 'over'
+old_side = 'under'
+old_result = False
+xpath_over = '//*[@id="root"]/div[1]/div[2]/div[1]/div/section/div/div[4]/div[2]/button'
+xpath_under = '//*[@id="root"]/div[1]/div[2]/div[1]/div/section/div/div[4]/div[1]/button'

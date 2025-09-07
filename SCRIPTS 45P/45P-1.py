@@ -52,7 +52,7 @@ if len(parts) > 1:
 else:
     print("Le format du nom du fichier est incorrect.")
     exit()
-config.scriptType = '456P'
+
 # Chargement des functions
 # Chargement de Chrome driver
 from ChromeDriver.SetDriver import driver
@@ -88,8 +88,8 @@ for i in config.scriptTypeList:
     config.ScriptConfig(i)
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
 config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
-config.running_file_name = f"{config.projectPath}/SCRIPTS 45P/running"
-config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 45P/matchlist"
+config.running_file_name = f"{config.projectPath}/SCRIPTS 456P/running"
+config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 456P/matchlist"
 config.total_want_win = config.total_want_win
 while (config.win < 100):
     try:
@@ -100,7 +100,7 @@ while (config.win < 100):
         if config.perte > 0:
             DispatchPerte()
         for i in config.scriptTypeList:
-            config.switchScript('45P')
+            config.switchScript('456P')
             config.ScriptConfig(i).reset()
             config.init_variable()
             config.switchScript(i)

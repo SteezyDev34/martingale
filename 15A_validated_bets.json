@@ -655,5 +655,68 @@
         "winscore": "15:15",
         "timestamp": "2025-07-11 16:55:36",
         "url": "https://ca.1xbet.com/fr/live/tennis/831001-challenger-braunschweig/636550450-filip-misolic-mariano-navone"
+    },
+    {
+        "montant": 0.21,
+        "cote": "1.95",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-07 20:50:21",
+        "url": "https://ca.1xbet.com/fr/live/tennis/78875-us-open/651710868-jannik-sinner-carlos-alcaraz-garfia"
+    },
+    {
+        "montant": 0.21,
+        "cote": "1.95",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-07 20:59:51",
+        "url": "https://ca.1xbet.com/fr/live/tennis/78875-us-open/651710868-jannik-sinner-carlos-alcaraz-garfia"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-07 21:03:54",
+        "url": "https://ca.1xbet.com/fr/live/tennis/78875-us-open/651710868-jannik-sinner-carlos-alcaraz-garfia"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-07 21:09:21",
+        "url": "https://ca.1xbet.com/fr/live/tennis/78875-us-open/651710868-jannik-sinner-carlos-alcaraz-garfia"
+    },
+    {
+        "montant": 0.6,
+        "cote": "2",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-07 21:13:28",
+        "url": "https://ca.1xbet.com/fr/live/tennis/78875-us-open/651710868-jannik-sinner-carlos-alcaraz-garfia"
+    },
+    {
+        "montant": 1.4,
+        "cote": "2",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-07 21:18:12",
+        "url": "https://ca.1xbet.com/fr/live/tennis/78875-us-open/651710840-jannik-sinner-carlos-alcaraz-garfia"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.03",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-07 21:21:23",
+        "url": "https://ca.1xbet.com/fr/live/tennis/78875-us-open/651710868-jannik-sinner-carlos-alcaraz-garfia"
     }
 ]

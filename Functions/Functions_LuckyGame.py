@@ -52,17 +52,17 @@ def getSolde(driver, older_solde):
 
 
 def all_script(driver):
-    win_session = False
+    win_session = config.win_session
     win = False
-    min_unit = float(0.00000001)
-    unit = min_unit
-    old_unit = False
-    perte = float(0.00000000)
-    side = 'over'
-    old_side = 'under'
-    old_result = False
-    xpath_over = '//*[@id="root"]/div[1]/div[2]/div[1]/div/section/div/div[4]/div[2]/button'
-    xpath_under = '//*[@id="root"]/div[1]/div[2]/div[1]/div/section/div/div[4]/div[1]/button'
+    min_unit = config.min_unit
+    unit = config.unit
+    old_unit = config.old_unit
+    perte = config.perte
+    side = config.side
+    old_side = config.old_side
+    old_result = config.old_result
+    xpath_over = config.xpath_over
+    xpath_under = config.xpath_under
     time.sleep(3)
     while not win or win < 100:
 
@@ -82,7 +82,6 @@ def all_script(driver):
                                                    '//*[@id="root"]/div[1]/div[2]/div[1]/div/section/div/div[3]/div/div[1]/div/div/input')
         except Exception as e:
             print(f"#E0001\nUne erreur est suggestedNumbers : {e}")
-            exit()
         else:
             try:
 
@@ -110,12 +109,19 @@ def all_script(driver):
                                       '//*[@id="root"]/div[1]/div[2]/div[1]/div/div/div/div[2]/div[1]/div[1]/div[2]/input')
         except Exception as e:
             print(f"#E0003\nUne erreur send key suggestedNumbers : {e}")
-            exit()
         else:
-            if unit != old_unit:
+            print(unit, min_unit)
+            if unit <= min_unit:
+                print('unit < min_unit', unit)
+                driver.find_element(By.XPATH,
+                                    '//*[@id="root"]/div[1]/div[2]/div[1]/div/div/div/div[2]/div[1]/div[1]/div[1]/div/div[3]').click()
+                unit = min_unit
+                old_unit = unit
+            else:
                 bet.clear()
                 bet.send_keys(f"{unit:.8f}")  # Format with 9 decimal places to ensure proper decimal representation
                 old_unit = unit
+                print('put unit : ', )
         # BET
         try:
             bet_button = WebDriverWait(driver, 20).until(
@@ -125,22 +131,29 @@ def all_script(driver):
                                              '//*[@id="root"]/div[1]/div[2]/div[1]/div/div/div/div[2]/div[2]/button[1]')
         except Exception as e:
             print(f"#E0004\nUne erreur send key suggestedNumbers : {e}")
-            exit()
         else:
 
             bet_button.click()
-            time.sleep(0.5)
+            time.sleep(1)
             old_side = side
-            solde = getSolde(driver, old_solde)
+            # solde = getSolde(driver, old_solde)
             result = get_result(driver)
             if str(result) == str(old_result):
                 print('result == old_result')
                 old_result = False
                 old_side = False
-                old_solde = 0
-                continue
+                # solde = 0
+                # old_solde = 1
+                driver.get('https://luckygames.io/')
+                win = False
+            elif side == 'under' and int(result) < 48:
+                win = True
+            elif side == 'over' and int(result) > 50:
+                win = True
+            else:
+                win = False
             old_result = result
-        if solde > old_solde:
+        if win:
             print(f'{config.GREEN}WIN')
             print(f"result : {result}")
             print('side :', side)
@@ -149,7 +162,7 @@ def all_script(driver):
             print(f"unit : {unit:.8f}")
             print(f"gain : {gain:.8f}")
             print(f"perte total : {perte:.8f}")
-            print(f"solde : {solde}")
+            # print(f"solde : {solde}")
             if perte > 0.00000000:
                 unit = (unit * 2) + min_unit
                 if unit - perte > min_unit:
@@ -169,7 +182,7 @@ def all_script(driver):
                 'unit': f"{unit:.8f}",
                 'perte': f"{perte:.8f}",
                 'side': old_side,
-                'solde': solde,
+                # 'solde': solde,
                 'result': result,
                 'gain': f"{gain:.8f}",
                 'win_session': win_session,
@@ -189,7 +202,7 @@ def all_script(driver):
             print(f"unit : {unit:.8f}")
             print(f"gain : {gain:.8f}")
             print(f"perte total : {perte:.8f}")
-            print(f"solde : {solde}")
+            # print(f"solde : {solde}")
             unit = unit - min_unit
             if unit < min_unit:
                 unit = min_unit
@@ -199,7 +212,7 @@ def all_script(driver):
                 'perte': f"{perte:.8f}",
                 'gain': f"{gain:.8f}",
                 'side': old_side,
-                'solde': solde,
+                # 'solde': solde,
                 'result': result,
                 'time': datetime.datetime.now().strftime("%H:%M:%S")
             })
