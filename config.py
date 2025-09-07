@@ -15,7 +15,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['300', '30A']
+scriptTypeList = ['300', '15A' '30A']
 scriptTypeList1 = ['30A']
 scriptTypeList2 = ['BREAK', '6P']
 # scriptTypeList2 = ['4P', '5P', '6P', '40A']
@@ -28,6 +28,7 @@ win = 0  # Nombre de victoire
 cote = 3
 scriptType = "40A"
 localhost = ''
+
 site_url = "https://ca.1xbet.com/fr/live/tennis"
 # Score configurations
 score_to_start = [
@@ -111,20 +112,172 @@ rattrape_perte = 0
 print_running_text = False
 print_match_live_text = False
 error = False
-devMode = 1
+devMode = True
 restart_set2 = 0
 log_message = ''
 newset = 2
 teams = False
 all_scores = {}
 
+site_type = False
+
+classes = {
+    'go_to_new_platform_link':
+        {
+            'old_site': 'go-to-new-platform',
+
+        },
+    'scoreboard':
+        {
+            'old_site': 'c-scoreboard-score__period',
+            'new_site': 'scoreboard-status'
+        },
+    'end_match_stats':
+        {
+            'old_site': 'after-game-info__text',
+            'new_site': 'game-over-panel-banner'
+        },
+    'resume_text_content':
+        {
+            'old_site': 'after-game-info__text',
+            'new_site': 'game-over-panel-banner'
+        },
+    'set_container':
+        {
+            'old_site': 'c-scoreboard-score__period',
+            'new_site': 'ui-game-timer__label'
+        },
+    'score_container':
+        {
+            'old_site': 'c-scoreboard-score__ball',
+            'new_site': 'scoreboard-scores__score'
+        },
+    'jeu_container':
+        {
+            'old_site': 'c-scoreboard-player-score__row',
+            'new_site': 'scoreboard-periods-table__col'
+        },
+    'jeu_cell':
+        {
+            'old_site': 'c-scoreboard-player-score__cell',
+            'new_site': 'scoreboard-periods-table-cell--td'
+        },
+    'period_select':
+        {
+            'old_site': 'scoreboard-nav__select',
+            'new_site': 'game-toolbar__sub-games-dropdown'
+        },
+    'multiselect_container_wrapper':
+        {
+            'old_site': 'multiselect__content-wrapper',
+            'new_site': 'multiselect__content-wrapper'
+        },
+    'multiselect_element':
+        {
+            'old_site': 'multiselect__element',
+            'new_site': 'multiselect__element'
+        },
+    'search_toolbar':
+        {
+            'old_site': 'scoreboard-nav-items-search',
+            'new_site': 'game-toolbar'
+        },
+    'ui_search_to_click':
+        {
+            'old_site': 'scoreboard-nav-items-search__input',
+            'new_site': 'ui-search'
+        },
+    'search_input':
+        {
+            'old_site': 'scoreboard-nav-items-search__input',
+            'nex_site': 'ui-search__input'
+        },
+    'bet_list_container':
+        {
+            'old_site': 'bet_group',
+            'new_site': 'market-grid-canvas__container'
+        },
+    'coupon_bet_remove':
+        {
+            'old_site': 'cpn-btn cpn-bet__remove',
+            'new_site': 'coupon-bet-remove'
+
+        },
+    'coupon_bet_remove_lock':
+        {
+            'old_site': 'cpn-btn__close',
+            'new_site': 'coupon-bet-lock-remove'
+
+        },
+    'coef_value':
+        {
+            'old_site': 'cpn-total__coef',
+            'new_site': 'coupon-result-coef-value'
+        },
+    'cpn_amount':
+        {
+            'old_site': 'cpn-value-controls',
+            'new_site': 'coupon-amount'
+        },
+    'cpn_amount_input':
+        {
+            'old_site': 'cpn-value-controls__input',
+            'new_site': 'ui-number-input__field'
+        },
+    'coupon_buttons':
+        {
+            'old_site': 'cpn-btns-group__item',
+            'new_site': 'coupon-buttons'
+        },
+    'modal_header':
+        {
+            'old_site': 'c-coupon-modal__header',
+            'new_site': 'ui-coupon-modal-header__title'
+        },
+    'close_modal_btn':
+        {
+            'old_site': 'c-coupon-modal__close',
+            'new_site': 'coupon-success-modal-controls__item'
+        },
+    'notification_alert':
+        {
+            'old_site': 'swal2-error',
+            'new_site': 'notification-alert'
+        },
+    'notification_question':
+        {
+            'old_site': 'swal2-question',
+            'new_site': 'notification-question'
+        },
+    'popup_content':
+        {
+            'old_site': 'swal2-content',
+            'new_site': 'ui-popup__content'
+        },
+    'popup_submit':
+        {
+            'old_site': 'swal2-confirm',
+            'new_site': 'popup__submit'
+        },
+    'popup_cancel':
+        {
+            'old_site': 'swal2-cancel',
+            'new_site': 'ui-popup__cancel'
+        },
+    'preloader':
+        {
+            'old_site': 'cpn-preloader',
+            'new_site': 'coupon-main-tab__preloader'
+        }
+
+}
 # Initialize dictionaries to track wins per script type
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
-total_want_win = {'030': 0.2, '300': 0.2, '15A': 0.2, '30A': 0.2, 'BREAK': 0.2, '400': 0.2, '4015': 0.2, '4030': 0.2,
+total_want_win = {'030': 0.2, '300': 2, '15A': 2, '30A': 2, 'BREAK': 0.2, '400': 0.2, '4015': 2, '4030': 2,
                   '4P': 0.2,
-                  '5P': 0.2, '6P': 0.2, '40A': 0.2}
+                  '5P': 2, '6P': 2, '40A': 2}
 total_want_winset1 = {'1SET': 0.2}
 
 
@@ -169,7 +322,7 @@ def init_variable():
     config_global = ScriptConfig(scriptType)
 
     # Initialize variables from config
-    devMode = config_global.get("devmode")
+    # devMode = config_global.get("devmode")
     error = config_global.get("error")
     validated_bet = config_global.get("validated_bet")
 
@@ -486,3 +639,16 @@ def log_clear_line(line_number=1):
             pass
             # sys.stdout.write("\033[F\033[K\r")
             # sys.stdout.flush()
+
+
+win_session = False
+win = False
+min_unit = float(0.00000001)
+unit = min_unit
+old_unit = False
+perte = float(0.00000000)
+side = 'over'
+old_side = 'under'
+old_result = False
+xpath_over = '//*[@id="root"]/div[1]/div[2]/div[1]/div/section/div/div[4]/div[2]/button'
+xpath_under = '//*[@id="root"]/div[1]/div[2]/div[1]/div/section/div/div[4]/div[1]/button'

@@ -10,7 +10,7 @@ from Functions import Functions_1XBET, UpdateMatchDone
 from Functions import GetLigueName, AddRunning
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
-from Functions.Function_GetSetActuel import GetSetActuel
+from Functions.GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import remove_match_from_json_file
 from Functions.GetJsonData import getPerte, set1DispatchPerte

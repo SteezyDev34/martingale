@@ -2,10 +2,12 @@ import inspect
 
 import config
 from Functions.AfficherParis import AfficherParis
-from Functions.Function_GetJeuActuel import GetJeuActuel
 from Functions.GetBet import GetBet
+from Functions.GetIfNewSite import GetIfNewSite
+from Functions.GetJeuActuel import GetJeuActuel
 from Functions.GetMise import GetMise
 from Functions.GetScoreActuel import GetScoreActuel
+from Functions.GetSetActuel import GetSetActuel
 from Functions.PlacerMise import PlacerMise
 from Functions.ValidationDuParis import ValidationDuParis
 
@@ -59,7 +61,6 @@ def FirstGameBet(driver):
             continue
         # ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
         GetMise(driver)
-        config.log('Rattrapage : ' + str(config.rattrape_perte), 'error', True, 2)
         tentative_placermise = 0
         validate_bet = False
         config.log('On place la mise', 'infos', True, 2)
@@ -91,5 +92,9 @@ if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
     # driver.switch_to.window(driver.window_handles[0])
+    GetIfNewSite(driver)
+    config.newset = 1
+    GetSetActuel(driver)
+    config.scriptType = '40A'
 
     print(FirstGameBet(driver))

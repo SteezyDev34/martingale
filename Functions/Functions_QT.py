@@ -4,7 +4,7 @@ import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName, AddRunning
 from Functions.DeleteBet import DeleteBet
-from Functions.Function_GetSetActuel import GetQTActuel
+from Functions.GetSetActuel import GetQTActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetIfGameStart import GetIfQTEnd, GetIfQTStart
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte

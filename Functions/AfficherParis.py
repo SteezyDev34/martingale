@@ -5,15 +5,15 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 import config
-from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.GetIfMatchPage import GetIfMatchPage
+from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetScoreActuel import GetScoreActuel
+from Functions.GetSetActuel import GetSetActuel
 from Functions.ModalHandler import ModalHandler
 
 
 def AfficherParis(driver):
     config.log('recherche du champ déroulant...', '', True, 2)
-    driver.switch_to.window(driver.window_handles[0])
     GetSetActuel(driver)
     GetScoreActuel(driver)
     selection = False
@@ -28,7 +28,7 @@ def AfficherParis(driver):
         args = ' set'
     else:
         args = ' set Evénements rapides'
-    key = 'Score du jeu. ' + theset + args
+
     if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
         key = 'Gagne le jeu avec le score.'
     elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
@@ -37,19 +37,26 @@ def AfficherParis(driver):
         key = '1X2'
     elif config.scriptType == 'BREAK':
         key = 'Gagne dans le jeu'
+    else:
+        if config.site_type == 'old_site':
+            key = 'Score de la partie. ' + theset + args
+        else:
+            key = 'Score du jeu. ' + theset + args
+
     while not selection and tentative < 6:
         try:
             element = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located(
-                    (By.CLASS_NAME, 'game-toolbar__sub-games-dropdown'))
+                    (By.CLASS_NAME, config.classes['period_select'][config.site_type]))
             )
         except Exception as e:
-            config.log('Champ déroulant introuvable !', 'warning', False, 2)
+            config.log(f"Champ déroulant {config.classes['period_select'][config.site_type]} introuvable !", "warning",
+                       False, 2)
             config.log(f'tentative {tentative}', 'warning', True, 2)
             tentative = tentative + 1
         else:
-            select_form = driver.find_elements(By.CLASS_NAME, 'game-toolbar__sub-games-dropdown')
-            config.log('Champ déroulant trouvé !', 'success', True, 2)
+            select_form = driver.find_elements(By.CLASS_NAME, config.classes['period_select'][config.site_type])
+            # config.log('Champ déroulant trouvé !', 'success', True, 2)
             try:
                 select_form[0].click()
             except Exception as e:
@@ -57,12 +64,12 @@ def AfficherParis(driver):
                 ModalHandler(driver)
                 tentative = tentative + 1
             else:
-                # config.log('ouverture du champ déroulant...', 'info', True, 2)
+                config.log('ouverture du champ déroulant...', 'info', True, 2)
                 time.sleep(1)
                 try:
                     element = WebDriverWait(driver, 5).until(
                         EC.visibility_of_element_located(
-                            (By.CLASS_NAME, 'multiselect__content-wrapper'))
+                            (By.CLASS_NAME, config.classes['multiselect_container_wrapper'][config.site_type]))
                     )
                 except Exception as e:
                     config.log('#E0014 aucun element dans le champ déroulant', 'error', False, 2)
@@ -70,7 +77,7 @@ def AfficherParis(driver):
                     config.log(f'tentative {tentative}', 'warning', False, 2)
                 else:
                     select_form_set_1 = driver.find_elements(By.CLASS_NAME,
-                                                             'multiselect__element')
+                                                             config.classes['multiselect_element'][config.site_type])
                     if len(select_form_set_1) > 0:
                         for select_option in select_form_set_1:
                             if selection == True:
@@ -100,33 +107,47 @@ def AfficherParis(driver):
                                         while paris == 0 and tentative < 5:
                                             try:
                                                 toolbar = driver.find_elements(By.CLASS_NAME,
-                                                                               'game-toolbar')[
+                                                                               config.classes['search_toolbar'][
+                                                                                   config.site_type]
+                                                                               )[
                                                     0]
-                                                searchbutton = toolbar.find_elements(By.CLASS_NAME, 'ui-search')[0]
+                                                searchbutton = toolbar.find_elements(By.CLASS_NAME, config.classes[
+                                                    'ui_search_to_click'][
+                                                    config.site_type])[0]
                                                 searchbutton.click()
                                                 toolbar.find_elements(By.CLASS_NAME,
-                                                                      'ui-search__input')[
+                                                                      config.classes[
+                                                                          'search_input'][
+                                                                          config.site_type])[
                                                     0].clear()
                                                 toolbar.find_elements(By.CLASS_NAME,
-                                                                      'ui-search__input')[
+                                                                      config.classes[
+                                                                          'search_input'][
+                                                                          config.site_type])[
                                                     0].send_keys(
                                                     key)
                                                 l = toolbar.find_elements(By.CLASS_NAME,
-                                                                          'ui-search__input')[
+                                                                          config.classes[
+                                                                              'search_input'][
+                                                                              config.site_type])[
                                                     0].get_attribute("value")
 
                                                 if l == key:
                                                     try:
-                                                        time.sleep(2)
                                                         print('wait for market grid container')
                                                         element = WebDriverWait(driver, 2).until(
-                                                            EC.visibility_of_element_located(
-                                                                (By.CLASS_NAME, 'market-grid-canvas__container'))
+                                                            EC.presence_of_element_located(
+                                                                (By.CLASS_NAME, config.classes[
+                                                                    'bet_list_container'][
+                                                                    config.site_type]))
                                                         )
                                                     except:
-                                                        print('no market grid')
+                                                        print(
+                                                            f"no market grid {config.classes['bet_list_container'][config.site_type]}")
                                                         if key == 'Paris':
                                                             key = 'Game Score. ' + theset + args
+                                                        elif key == 'Game Score. ' + theset + args:
+                                                            key = 'Score de la partie'
                                                         else:
                                                             key = 'Paris'
                                                     else:
@@ -155,5 +176,7 @@ def AfficherParis(driver):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    config.scriptType = '1SET'
+    config.scriptType = '40A'
+    GetIfNewSite(driver)
+    print(config.site_type)
     AfficherParis(driver)

@@ -7,11 +7,20 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 import config
 from Functions.DeleteBet import DeleteBet
-from Functions.Function_GetJeuActuel import GetJeuActuel
+from Functions.GetBetOld import GetBetOld
+from Functions.GetIfNewSite import GetIfNewSite
+from Functions.GetJeuActuel import GetJeuActuel
 from Functions.GetScoreActuel import GetScoreActuel
 
 
 def GetBet(driver, nextBet=False):
+    if config.site_type == 'old_site':
+        GetBetOld(driver, nextBet)
+    else:
+        GetBetNew(driver, nextBet)
+
+
+def GetBetNew(driver, nextBet=False):
     config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', True, 2)
     if_get_jeu = False
     clic = False
@@ -477,5 +486,6 @@ def GetBet(driver, nextBet=False):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    config.scriptType = '1SET'
+    config.scriptType = '40A'
+    GetIfNewSite(driver)
     GetBet(driver, True)

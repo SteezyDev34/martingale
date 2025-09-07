@@ -67,6 +67,7 @@ def rechercheDeMatch(driver):
     while not config.match_found and not config.error:
         # config.init_variable()
         config.match_found = GetIfMatchPage(driver)
+        config.newsite = True
         if not config.match_found and float(config.perte) > 0:
             if config.scriptType == '1SET':
                 set1DispatchPerte()

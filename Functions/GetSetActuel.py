@@ -1,4 +1,4 @@
-# Function_GetSetActuel.py
+# GetSetActuel.py
 # OBTENIR LE SET ACTUEL
 
 from selenium.webdriver.common.by import By
@@ -14,12 +14,13 @@ def GetSetActuel(driver):
     try:
         # w
         WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.CLASS_NAME,
-                                              'ui-game-timer__label'))
+            EC.visibility_of_element_located((By.CLASS_NAME, config.classes['set_container'][config.site_type]
+                                              ))
         )
-        config.set_actuel = driver.find_elements(By.CLASS_NAME, 'ui-game-timer__label')[0].text
+        config.set_actuel = driver.find_elements(By.CLASS_NAME, config.classes['set_container'][config.site_type])[
+            0].text
     except Exception as e:
-        config.log('        #E0009 ui-game-timer__label introuvable', 'warning', True)
+        config.log(f'#E0009 {config.classes["set_container"][config.site_type]} introuvable', 'warning', True)
         config.log_clear_line()
         return False
     else:
@@ -33,11 +34,11 @@ def GetSetActuel(driver):
         else:
             config.set_actuel = str(numset)
             if config.saved_set != config.set_actuel:
-                # config.log('Nouveau Set actuel : ' + str(config.set_actuel), '', True, 3)
+                config.log('Nouveau Set actuel : ' + str(config.set_actuel), '', True, 3)
                 # config.log_clear_line()
                 return True
             else:
-                # config.log('Set actuel : ' + str(config.set_actuel), '', True, 3)
+                config.log('Set actuel : ' + str(config.set_actuel), '', True, 3)
                 # config.log_clear_line()
                 return True
 
@@ -73,4 +74,6 @@ def GetQTtActuel(driver):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
+    config.saved_set = 1
+    config.site_type = 'old_site'
     print(GetSetActuel(driver))

@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 import config
-from Functions.GetBet import GetBet
+from Functions.GetIfNewSite import GetIfNewSite
 
 
 def GetMise(driver):
@@ -20,7 +20,7 @@ def GetMise(driver):
         config.log_clear_line()
         try:
             config.cote = driver.find_elements(By.CLASS_NAME,
-                                               'coupon-result-coef-value')[
+                                               config.classes['coef_value'][config.site_type])[
                 0].text
         except:
             txtlog = 'erreur recup cote : 3'
@@ -92,6 +92,6 @@ def GetMise(driver):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
+    GetIfNewSite(driver)
     print(config.perte)
-    GetBet(driver)
     GetMise(driver)

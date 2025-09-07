@@ -1,7 +1,7 @@
 import time
 
 import config
-from Functions.Function_GetJeuActuel import GetSetScoreActuel
+from Functions.GetJeuActuel import GetSetScoreActuel
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 

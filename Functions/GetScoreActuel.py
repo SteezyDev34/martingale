@@ -5,9 +5,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 import config
-from Functions.Function_GetJeuActuel import GetJeuActuel
-from Functions.Function_GetSetActuel import GetSetActuel
 from Functions.GetIfMatchPage import GetIfMatchPage
+from Functions.GetJeuActuel import GetJeuActuel
+from Functions.GetSetActuel import GetSetActuel
 
 
 # from ChromeDriver.SetDriver1 import driver
@@ -22,11 +22,12 @@ def GetScoreActuel(driver):
         try:
             score_teams = WebDriverWait(driver, 5).until(
                 EC.visibility_of_element_located((By.CLASS_NAME,
-                                                  'scoreboard-scores__score'))
+                                                  config.classes['score_container'][config.site_type]))
             )
-            score_teams = driver.find_elements(By.CLASS_NAME, 'scoreboard-scores__score')
+            score_teams = driver.find_elements(By.CLASS_NAME, config.classes['score_container'][config.site_type])
         except Exception as e:
-            print(f"#E0020\nUne erreur est survenue : {e}")
+            print('test')
+            print(f"#E0020\nUne erreur est survenue : {config.classes['score_container'][config.site_type]}")
             if not GetIfMatchPage(driver):
                 config.error = True
                 return False
@@ -71,4 +72,5 @@ if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
     # driver.switch_to.window(driver.window_handles[0])
+    config.site_type = 'old_site'
     GetScoreActuel(driver)

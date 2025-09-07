@@ -7,8 +7,8 @@ from Functions import GetLigueName, AddRunning
 from Functions.Authenticator import is_logged_in, loginProcess
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
-from Functions.Function_GetJeuActuel import GetJeuActuel
-from Functions.Function_GetSetActuel import GetSetActuel
+from Functions.GetJeuActuel import GetJeuActuel
+from Functions.GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import update_match_done
 from Functions.GetAndPlaceBet import GetAndPlaceBet

@@ -6,6 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 import config
 from Functions.DeleteBet import DeleteBet
+from Functions.GetIfNewSite import GetIfNewSite
 
 
 def ModalHandler(driver):
@@ -20,14 +21,14 @@ def ModalHandler(driver):
             element = WebDriverWait(driver, 2).until(
                 EC.visibility_of_element_located(
                     (By.CLASS_NAME,
-                     'ui-coupon-modal-header__title'))
+                     config.classes['modal_header'][config.site_type]))
             )  ###vérifaction d'affichage pop up validation
         except:
             config.log('            pas de fenetre de validation', 'warning', True)
 
         else:
             validation = driver.find_elements(By.CLASS_NAME,
-                                              'ui-coupon-modal-header__title')[
+                                              config.classes['modal_header'][config.site_type])[
                 0].text
             if re.search("VOTRE PARI EST ACCEPTÉ !", validation, re.IGNORECASE) is not None:
                 config.log(f'            PARIS VALIDÉ', 'success', False)
@@ -36,91 +37,106 @@ def ModalHandler(driver):
                     element = WebDriverWait(driver, 3).until(
                         EC.visibility_of_element_located(
                             (By.CLASS_NAME,
-                             'coupon-success-modal-controls__item'))
+                             config.classes['close_modal_btn'][config.site_type]))
                     )
                 except:
                     config.log(f'            Impossible de cliquer sur Ok', 'warning', False)
                 else:
-                    modal_wrapper = driver.find_elements(By.CLASS_NAME, 'coupon-success-modal-controls__item')[0]
+                    modal_wrapper = \
+                        driver.find_elements(By.CLASS_NAME, config.classes['close_modal_btn'][config.site_type])[0]
                     modal_wrapper.click()
                     return True
         # NOTIF QUESTION
         try:
-            element = WebDriverWait(driver, 1).until(EC.presence_of_element_located(
-                (By.CLASS_NAME, 'notification-question')))
+            element = WebDriverWait(driver, 1).until(EC.visibility_of_element_located(
+                (By.CLASS_NAME, config.classes['notification_question'][config.site_type])))
         except:
             config.log('            pas de fenetre de question', 'warning', True)
         else:
-            if len(re.findall("Maximum", driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
-                driver.find_element(By.CLASS_NAME, 'ui-popup__submit').click()
+            if len(re.findall("Maximum",
+                              driver.find_elements(By.CLASS_NAME, config.classes['popup_content'][config.site_type])[
+                                  0].text)) > 0:
+                driver.find_element(By.CLASS_NAME, config.classes['popup_submit'][config.site_type]).click()
                 return False
-            elif len(re.findall("modifiées", driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
-                driver.find_element(By.CLASS_NAME, 'ui-popup__submit').click()
+            elif len(re.findall("modifiées",
+                                driver.find_elements(By.CLASS_NAME, config.classes['popup_content'][config.site_type])[
+                                    0].text)) > 0:
+                driver.find_element(By.CLASS_NAME, config.classes['popup_submit'][config.site_type]).click()
                 return False
-            elif len(re.findall("déjà", driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
-                driver.find_element(By.CLASS_NAME, 'ui-popup__cancel').click()
+            elif len(re.findall("déjà",
+                                driver.find_elements(By.CLASS_NAME, config.classes['popup_content'][config.site_type])[
+                                    0].text)) > 0:
+                driver.find_element(By.CLASS_NAME, config.classes['popup_cancel'][config.site_type]).click()
                 config.log(f'            Paris déjà placé', 'info', False)
                 DeleteBet(driver)
 
                 return True
             elif len(re.findall("peut être accepté",
-                                driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
-                driver.find_element(By.CLASS_NAME, 'ui-popup__cancel').click()
+                                driver.find_elements(By.CLASS_NAME, config.classes['popup_content'][config.site_type])[
+                                    0].text)) > 0:
+                driver.find_element(By.CLASS_NAME, config.classes['popup_cancel'][config.site_type]).click()
                 config.log(f'            Paris déjà placé', 'info', False)
                 DeleteBet(driver)
 
                 return True
             else:
-                driver.find_element(By.CLASS_NAME, 'ui-popup__submit').click()
+                driver.find_element(By.CLASS_NAME, config.classes['popup_submit'][config.site_type]).click()
 
         # NOTIF ALERT
         try:
-            element = WebDriverWait(driver, 1).until(EC.presence_of_element_located(
-                (By.CLASS_NAME, 'notification-alert')))
+            element = WebDriverWait(driver, 1).until(EC.visibility_of_element_located(
+                (By.CLASS_NAME, config.classes['notification_alert'][config.site_type])))
         except:
             config.log('            pas de fenetre de notif', 'warning', True)
 
         else:
-            if len(re.findall("Maximum", driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
-                driver.find_element(By.CLASS_NAME, 'ui-popup__submit').click()
+            if len(re.findall("Maximum",
+                              driver.find_elements(By.CLASS_NAME, config.classes['popup_content'][config.site_type])[
+                                  0].text)) > 0:
+                driver.find_element(By.CLASS_NAME, config.classes['popup_submit'][config.site_type]).click()
                 return False
             elif len(re.findall("modifiées",
-                                driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
-                driver.find_element(By.CLASS_NAME, 'ui-popup__submit').click()
+                                driver.find_elements(By.CLASS_NAME, config.classes['popup_content'][config.site_type])[
+                                    0].text)) > 0:
+                driver.find_element(By.CLASS_NAME, config.classes['popup_submit'][config.site_type]).click()
                 return False
             elif len(re.findall("plus possible",
-                                driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
-                driver.find_element(By.CLASS_NAME, 'ui-popup__submit').click()
+                                driver.find_elements(By.CLASS_NAME, config.classes['popup_content'][config.site_type])[
+                                    0].text)) > 0:
+                driver.find_element(By.CLASS_NAME, config.classes['popup_submit'][config.site_type]).click()
                 return False
-            elif len(re.findall("déjà", driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
-                driver.find_element(By.CLASS_NAME, 'ui-popup__submit').click()
+            elif len(re.findall("déjà",
+                                driver.find_elements(By.CLASS_NAME, config.classes['popup_content'][config.site_type])[
+                                    0].text)) > 0:
+                driver.find_element(By.CLASS_NAME, config.classes['popup_submit'][config.site_type]).click()
                 config.log(f'            Paris déjà placé', 'info', False)
                 DeleteBet(driver)
 
                 return True
             elif len(re.findall("peut être accepté",
-                                driver.find_elements(By.CLASS_NAME, 'ui-popup__content')[0].text)) > 0:
-                driver.find_element(By.CLASS_NAME, 'ui-popup__submit').click()
+                                driver.find_elements(By.CLASS_NAME, config.classes['popup_content'][config.site_type])[
+                                    0].text)) > 0:
+                driver.find_element(By.CLASS_NAME, config.classes['popup_submit'][config.site_type]).click()
                 config.log(f'            Paris déjà placé', 'info', False)
                 DeleteBet(driver)
 
                 return True
             else:
-                driver.find_element(By.CLASS_NAME, 'ui-popup__submit').click()
+                driver.find_element(By.CLASS_NAME, config.classes['popup_submit'][config.site_type]).click()
                 return False
         # NOTIF VALIDATION
         try:
             element = WebDriverWait(driver, 2).until(
                 EC.visibility_of_element_located(
                     (By.CLASS_NAME,
-                     'ui-coupon-modal-header__title'))
+                     config.classes['modal_header'][config.site_type]))
             )  ###vérifaction d'affichage pop up validation
         except:
             config.log('            pas de fenetre de validation', 'warning', True)
 
         else:
             validation = driver.find_elements(By.CLASS_NAME,
-                                              'ui-coupon-modal-header__title')[
+                                              config.classes['modal_header'][config.site_type])[
                 0].text
             if re.search("VOTRE PARI EST ACCEPTÉ !", validation, re.IGNORECASE) is not None:
                 config.log(f'            PARIS VALIDÉ', 'success', False)
@@ -129,12 +145,13 @@ def ModalHandler(driver):
                     element = WebDriverWait(driver, 3).until(
                         EC.visibility_of_element_located(
                             (By.CLASS_NAME,
-                             'coupon-success-modal-controls__item'))
+                             config.classes['close_modal_btn'][config.site_type]))
                     )
                 except:
                     config.log(f'            Impossible de cliquer sur Ok', 'warning', False)
                 else:
-                    modal_wrapper = driver.find_elements(By.CLASS_NAME, 'coupon-success-modal-controls__item')[0]
+                    modal_wrapper = \
+                        driver.find_elements(By.CLASS_NAME, config.classes['close_modal_btn'][config.site_type])[0]
                     modal_wrapper.click()
                     return True
         config.log(f'            tentative {tentative}', 'warning', True)
@@ -146,4 +163,5 @@ if __name__ == "__main__":
 
     # driver.switch_to.window(driver.window_handles[0])
     config.mise = 0.2
+    GetIfNewSite(driver)
     ModalHandler(driver)
