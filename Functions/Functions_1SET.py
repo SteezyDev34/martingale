@@ -55,6 +55,7 @@ def all_script(driver):
             GetSetActuel(driver)
             ##PREPARATTION PREMIER PARIS
             FirstGameBet(driver)
+            config.perte = 0
             UpdateMatchDone.main("add", config.newmatch, config.matchlist_file_name)
 
     config.lose = False
