@@ -13,6 +13,9 @@ def main(div_bet_score: object, score_to_start: list[str]) -> bool:
                                                        config.classes[
                                                            'score_ball'][
                                                            config.site_type])
+        if config.site_type == 'old_site':
+            icon_elements = div_bet_score.find_elements(By.CLASS_NAME, 'c-events-scoreboard__icon')
+            get_if_icon_ball = [icon for icon in icon_elements if icon.is_displayed()]
 
         bet_score = div_bet_score.text
         bet_score = bet_score.replace(

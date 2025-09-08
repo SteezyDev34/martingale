@@ -18,8 +18,8 @@ def GetIfMatchPage(driver):
                 (By.CLASS_NAME, config.classes['scoreboard'][config.site_type]))
         )
     except:
-        config.log('        Tableau des scores introuvable!', 'warning', False)
-        config.log_clear_line()
+        # config.log('        Tableau des scores introuvable!', 'warning', False)
+        # config.log_clear_line()
         return False
     else:
         try:
@@ -28,9 +28,9 @@ def GetIfMatchPage(driver):
                     (By.CLASS_NAME, config.classes['end_match_stats'][config.site_type]))
             )
         except:
-            config.log('        Tableau des stats introuvable!', 'warning', False)
-            config.log_clear_line()
-            config.log('PAGE DE MATCH!', 'info', False)
+            # config.log('        Tableau des stats introuvable!', 'warning', False)
+            # config.log_clear_line()
+            # config.log('PAGE DE MATCH!', 'info', False)
             return True
         else:
             try:
@@ -45,7 +45,7 @@ def GetIfMatchPage(driver):
                 return False
             else:
                 ul_text = ul_element.text
-                print(ul_text)
+                # print(ul_text)
                 # Vérifier si le texte contient le mot "résume", indépendamment de la casse
                 if 'résume' in ul_text.lower() or 'terminé' in ul_text.lower():
                     config.log('     MATCH TERMINÉ!', 'info', False)

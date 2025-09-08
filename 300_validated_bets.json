@@ -736,5 +736,113 @@
         "winscore": "30:0",
         "timestamp": "2025-07-11 16:55:10",
         "url": "https://ca.1xbet.com/fr/live/tennis/831001-challenger-braunschweig/636550450-filip-misolic-mariano-navone"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.4",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-09-08 13:39:52",
+        "url": "https://1xbet.com/fr/live/tennis/2600340-wta-ljubljana/651876556-kristina-novak-anastasia-soboleva"
+    },
+    {
+        "montant": 0.27,
+        "cote": "3.3",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-09-08 13:43:01",
+        "url": "https://1xbet.com/fr/live/tennis/2600340-wta-ljubljana/651876556-kristina-novak-anastasia-soboleva"
+    },
+    {
+        "montant": 0.81,
+        "cote": "2.35",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-09-08 13:46:07",
+        "url": "https://1xbet.com/fr/live/tennis/2600340-wta-ljubljana/651876529-kristina-novak-anastasia-soboleva"
+    },
+    {
+        "montant": 0.88,
+        "cote": "3.4",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-09-08 13:50:16",
+        "url": "https://1xbet.com/fr/live/tennis/2600340-wta-ljubljana/651876529-kristina-novak-anastasia-soboleva"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.13",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-09-08 14:00:27",
+        "url": "https://1xbet.com/fr/live/tennis/105749-challenger-szczecin-qualification/651882673-alexey-vatutin-niels-visker"
+    },
+    {
+        "montant": 0.32,
+        "cote": "2.85",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-09-08 14:05:10",
+        "url": "https://1xbet.com/fr/live/tennis/105749-challenger-szczecin-qualification/651882644-alexey-vatutin-niels-visker"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.7",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-09-08 14:10:52",
+        "url": "https://1xbet.com/fr/live/tennis/2901694-challenger-targu-mures/651883610-franco-agamenone-max-alcala-gurri"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.35",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-09-08 14:20:17",
+        "url": "https://1xbet.com/fr/live/tennis/880963-challenger-biella/651885778-eric-vanshelboim-jelle-sels"
+    },
+    {
+        "montant": 0.41,
+        "cote": "2.45",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-09-08 14:24:56",
+        "url": "https://1xbet.com/fr/live/tennis/880963-challenger-biella/651885739-eric-vanshelboim-jelle-sels"
+    },
+    {
+        "montant": 0.86,
+        "cote": "2.4",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-09-08 14:32:07",
+        "url": "https://1xbet.com/fr/live/tennis/880963-challenger-biella/651885739-eric-vanshelboim-jelle-sels"
+    },
+    {
+        "montant": 1.68,
+        "cote": "2.35",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-09-08 14:34:52",
+        "url": "https://1xbet.com/fr/live/tennis/880963-challenger-biella/651885739-eric-vanshelboim-jelle-sels"
+    },
+    {
+        "montant": 2.96,
+        "cote": "2.4",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-09-08 14:45:05",
+        "url": "https://1xbet.com/fr/live/tennis/880963-challenger-biella/651885739-eric-vanshelboim-jelle-sels"
     }
 ]

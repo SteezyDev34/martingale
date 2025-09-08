@@ -15,7 +15,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['300', '15A' '30A']
+scriptTypeList = ['300', '15A', '30A']
 scriptTypeList1 = ['30A']
 scriptTypeList2 = ['BREAK', '6P']
 # scriptTypeList2 = ['4P', '5P', '6P', '40A']
@@ -30,8 +30,10 @@ scriptType = "40A"
 localhost = ''
 wich_site = input("1XBET CA? (Y/N): ")
 site_url = 'https://1xbet.com/fr/live/tennis'
+site_type = 'old_site'
 if wich_site.upper() == 'Y' or wich_site.upper() == 'y' or wich_site.upper() == 'O' or wich_site.upper() == 'o':
     site_url = "https://ca.1xbet.com/fr/live/tennis"
+    site_type = 'new_site'
 # Score configurations
 score_to_start = [
     "01(0)00(0)",
@@ -120,8 +122,6 @@ log_message = ''
 newset = 2
 teams = False
 all_scores = {}
-
-site_type = False
 
 classes = {
     'go_to_new_platform_link':
@@ -316,6 +316,11 @@ classes = {
 
             'old_site': 'c-events__name',
             'new_site': 'dashboard-game-block__link'
+        },
+    'scoreboard_periods_body_container':
+        {
+            'old_site': 'c-events__name',
+            'new_site': 'dashboard-game-block__link'
         }
 
 }
@@ -323,9 +328,20 @@ classes = {
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
-total_want_win = {'030': 0.2, '300': 2, '15A': 2, '30A': 2, 'BREAK': 0.2, '400': 0.2, '4015': 2, '4030': 2,
-                  '4P': 0.2,
-                  '5P': 2, '6P': 2, '40A': 2}
+total_want_win = {
+    '030': 0.2,
+    '300': 0.2,
+    '15A': 0.2,
+    '30A': 0.2,
+    '40A': 0.2,
+    '4P': 0.2,
+    '5P': 0.2,
+    '6P': 0.2,
+    'BREAK': 0.2,
+    '400': 0.2,
+    '4015': 0.2,
+    '4030': 0.2,
+}
 total_want_winset1 = {'1SET': 0.2}
 
 

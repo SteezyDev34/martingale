@@ -44,7 +44,6 @@ def getSolde(driver, older_solde):
         'value')
     while str(solde) == str(older_solde) and i < 100:
         i = i + 1
-        print('solde == older_solde')
         solde = driver.find_element(By.XPATH,
                                     '//*[@id="root"]/div[1]/div[2]/div[1]/div/div/div/div[1]/div[2]/div[1]/div/input').get_attribute(
             'value')
@@ -98,7 +97,6 @@ def all_script(driver):
 
             except Exception as e:
                 print(f"#E0002\nUne erreur send key suggestedNumbers : {e}")
-                exit()
         # AMOUNT
         try:
             bet = WebDriverWait(driver, 20).until(
@@ -110,9 +108,7 @@ def all_script(driver):
         except Exception as e:
             print(f"#E0003\nUne erreur send key suggestedNumbers : {e}")
         else:
-            print(unit, min_unit)
             if unit <= min_unit:
-                print('unit < min_unit', unit)
                 driver.find_element(By.XPATH,
                                     '//*[@id="root"]/div[1]/div[2]/div[1]/div/div/div/div[2]/div[1]/div[1]/div[1]/div/div[3]').click()
                 unit = min_unit
@@ -121,7 +117,6 @@ def all_script(driver):
                 bet.clear()
                 bet.send_keys(f"{unit:.8f}")  # Format with 9 decimal places to ensure proper decimal representation
                 old_unit = unit
-                print('put unit : ', )
         # BET
         try:
             bet_button = WebDriverWait(driver, 20).until(
@@ -134,18 +129,29 @@ def all_script(driver):
         else:
 
             bet_button.click()
-            time.sleep(1)
+            i = 0
+            while 'danger' in driver.find_element(By.XPATH,
+                                                  '//*[@id="root"]/div[1]/div[2]/div[1]/div/div/div/div[2]/div[2]/button[1]').get_attribute(
+                'color'):
+                i += 1
+                if i > 20:
+                    time.sleep(1)
+                    if i > 25:
+                        driver.get('https://luckygames.io/')
             old_side = side
             # solde = getSolde(driver, old_solde)
             result = get_result(driver)
             if str(result) == str(old_result):
-                print('result == old_result')
-                old_result = False
-                old_side = False
-                # solde = 0
-                # old_solde = 1
-                driver.get('https://luckygames.io/')
-                win = False
+                time.sleep(1)
+                result = get_result(driver)
+                if str(result) == str(old_result):
+                    print('result == old_result')
+                    old_result = False
+                    old_side = False
+                    # solde = 0
+                    # old_solde = 1
+                    driver.get('https://luckygames.io/')
+                    win = False
             elif side == 'under' and int(result) < 48:
                 win = True
             elif side == 'over' and int(result) > 50:

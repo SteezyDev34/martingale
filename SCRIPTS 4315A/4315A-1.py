@@ -89,8 +89,9 @@ for i in config.scriptTypeList:
 config.running_file_name = f"{config.projectPath}/SCRIPTS 4315A/running"
 config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 4315A/matchlist"
 while (config.win < 100):
+    Functions_431a.all_script(driver)
     try:
-        Functions_431a.all_script(driver)
+        pass
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:

@@ -12,6 +12,7 @@ from Functions.Functions_1XBET import update_match_done
 from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetIfMatchPage import GetIfMatchPage
+from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetJeuActuel import GetJeuActuel
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte
 from Functions.GetPlayersName import GetPlayersName
@@ -25,6 +26,7 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def all_script(driver):
+    GetIfNewSite(driver)
     # driver.switch_to.window(driver.window_handles[0])
     # Mise à jour du fichier txt des script en cours
     scriptDelRunning()
