@@ -10,7 +10,9 @@ def main(div_bet_score: object, score_to_start: list[str]) -> bool:
         config.log('Récupération du score', 'info', True, 4)
         config.log_clear_line()
         get_if_icon_ball = div_bet_score.find_elements(By.CLASS_NAME,
-                                                       'ui-game-scores__item--inning')
+                                                       config.classes[
+                                                           'score_ball'][
+                                                           config.site_type])
 
         bet_score = div_bet_score.text
         bet_score = bet_score.replace(

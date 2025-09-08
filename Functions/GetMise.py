@@ -32,7 +32,7 @@ def GetMise(driver):
             txtlog = 'cote recupéré ' + str(config.cote)
             config.log(txtlog, 'info', '', 3)
             config.log_clear_line()
-            if config.cote == '' or str(config.cote) == '0':
+            if config.cote == '' or str(config.cote) == '0' or str(config.cote) == '1' or config.cote == 0:
                 config.cote = config.cotebase
     config.mise = (float(config.wantwin) + float(config.perte)) / (float(config.cote) - 1)
     config.mise = round(config.mise, 2)

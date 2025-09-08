@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 import config
+from Functions.GetIfNewSite import GetIfNewSite
 
 
 def RetourTpsReg(driver):
@@ -19,7 +20,7 @@ def RetourTpsReg(driver):
         try:
             element = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located(
-                    (By.CLASS_NAME, 'game-toolbar__sub-games-dropdown'))
+                    (By.CLASS_NAME, config.classes['period_select'][config.site_type]))
             )
         except Exception as e:
             config.log(f"#E0012\nUne erreur est survenue : {e}")
@@ -34,7 +35,7 @@ def RetourTpsReg(driver):
                 print('error champ deroul##12321')
                 break
         else:
-            select_form = driver.find_elements(By.CLASS_NAME, 'game-toolbar__sub-games-dropdown')
+            select_form = driver.find_elements(By.CLASS_NAME, config.classes['period_select'][config.site_type])
             try:
                 select_form[0].click()
             except Exception as e:
@@ -47,14 +48,14 @@ def RetourTpsReg(driver):
                 try:
                     element = WebDriverWait(driver, 5).until(
                         EC.visibility_of_element_located(
-                            (By.CLASS_NAME, 'multiselect__content-wrapper'))
+                            (By.CLASS_NAME, config.classes['multiselect_container_wrapper'][config.site_type]))
                     )
                 except Exception as e:
                     config.log(f"#E0014\nUne erreur est survenue : {e}")
                     config.log("ERROR : aucun element dans le champ déroulant ")
                 else:
                     select_form_set_1 = driver.find_elements(By.CLASS_NAME,
-                                                             'multiselect__element')
+                                                             config.classes['multiselect_element'][config.site_type])
                     if len(select_form_set_1) > 0:
                         for select_option in select_form_set_1:
                             if selection == True:
@@ -86,6 +87,8 @@ def RetourTpsReg(driver):
 
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
+
+    GetIfNewSite(driver)
 
     # driver.switch_to.window(driver.window_handles[0])
     RetourTpsReg(driver)

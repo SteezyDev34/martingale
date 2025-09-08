@@ -7,17 +7,17 @@ from Functions import GetLigueName, AddRunning
 from Functions.Authenticator import is_logged_in, loginProcess
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
-from Functions.GetJeuActuel import GetJeuActuel
-from Functions.GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import update_match_done
 from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetIfMatchPage import GetIfMatchPage
+from Functions.GetJeuActuel import GetJeuActuel
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
+from Functions.GetSetActuel import GetSetActuel
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.ValidationDuParis import ValidationDuParis
 from Functions.VerificationMatchTrouve import newmatchFromUrl
@@ -36,9 +36,9 @@ def all_script(driver):
         config.log('Erreur lors de la recherche de match!', 'error', False, 2)
     print('test2')
     print('error', config.error)
-    if not is_logged_in(driver):
-        print('not logged in ')
-        loginProcess(driver)
+    # if not is_logged_in(driver):
+    # print('not logged in ')
+    # loginProcess(driver)
     # --------
     config.match_found = True
     if config.match_found and not config.error:

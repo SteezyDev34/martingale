@@ -28,8 +28,10 @@ win = 0  # Nombre de victoire
 cote = 3
 scriptType = "40A"
 localhost = ''
-
-site_url = "https://ca.1xbet.com/fr/live/tennis"
+wich_site = input("1XBET CA? (Y/N): ")
+site_url = 'https://1xbet.com/fr/live/tennis'
+if wich_site.upper() == 'Y' or wich_site.upper() == 'y' or wich_site.upper() == 'O' or wich_site.upper() == 'o':
+    site_url = "https://ca.1xbet.com/fr/live/tennis"
 # Score configurations
 score_to_start = [
     "01(0)00(0)",
@@ -211,7 +213,7 @@ classes = {
         },
     'coef_value':
         {
-            'old_site': 'cpn-total__coef',
+            'old_site': 'cpn-bet__coef',
             'new_site': 'coupon-result-coef-value'
         },
     'cpn_amount':
@@ -268,6 +270,52 @@ classes = {
         {
             'old_site': 'cpn-preloader',
             'new_site': 'coupon-main-tab__preloader'
+        },
+    'team_name_container':
+        {
+            'old_site': 'c-tablo__team',
+            'news_site': 'scoreboard-intro__team'
+        },
+    'team_name_text':
+        {
+            'old_site': 'c-tablo-container__text',
+            'new_site': 'scoreboard-team-name__text'
+        },
+    'dashboard_champ':
+        {
+            'old_site': 'dashboard-champ-content',
+            'new_site': 'dashboard-champ'
+        },
+    'dashboard_champ_name':
+        {
+            'old_site': 'c-events__liga',
+            'new_site': 'dashboard-champ-name__caption'
+        },
+    'dashboard_champ_matchlist':
+        {
+            'old_site': 'c-events-scoreboard__item',
+            'new_site': 'dashboard-game-block'
+        },
+    'dashboard_champ_match_teams_name':
+        {
+            'old_site': 'c-events__teams',
+            'new_site': 'ui-team-scores__teams'
+        },
+    'dashboard_champ_match_teams_score':
+        {
+            'old_site': 'c-events-scoreboard__lines',
+            'new_site': 'ui-game-scores'
+        },
+    'score_ball':
+        {
+            'old_site': 'c-events-scoreboard__ball',
+            'new_site': 'ui-game-scores__item--inning'
+        },
+    'match_link':
+        {
+
+            'old_site': 'c-events__name',
+            'new_site': 'dashboard-game-block__link'
         }
 
 }

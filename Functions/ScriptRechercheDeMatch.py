@@ -10,10 +10,12 @@ from Functions import GetMatchScore, GetLigueName, AddRunning, Functions_stats
 from Functions import OuverturePageMatch
 from Functions import VerificationMatchTrouve
 from Functions.GetIfMatchPage import GetIfMatchPage
+from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetIfScriptsRunning import GetIfScriptsRunning
 from Functions.GetJsonData import getCompet, DispatchPerte, set1DispatchPerte
 from Functions.UpdateMatchDone import todo
 from Functions.VerificationListeMatchLive import VerificationListeMatchLive
+from config import site_url
 
 
 def charger_matchlist_depuis_json():
@@ -86,7 +88,7 @@ def rechercheDeMatch(driver):
             # RECUPERATION DES LIGUES EN COURS
             config.log(' Récupération des ligues', 'info', True, 1)
             bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                                  'dashboard-champ')
+                                                  config.classes['dashboard_champ'][config.site_type])
         except:
             config.log('ligues introuvables!', 'warning', True, 2)
             return False
@@ -110,7 +112,8 @@ def rechercheDeMatch(driver):
                         config.log('Récupération des matchs', 'info', False, 3)
                         config.log_clear_line()
                         bet_items = bet_ligue.find_elements(By.CLASS_NAME,
-                                                            'dashboard-game-block')
+                                                            config.classes['dashboard_champ_matchlist'][
+                                                                config.site_type])
                     except:
                         config.log('Listes des matchs introuvables!', 'warning', False, 3)
                         # s'il y une erreur on passe au suivant
@@ -125,7 +128,9 @@ def rechercheDeMatch(driver):
                             try:
                                 config.log('On récupère le nom des joueurs', 'info', False, 3)
                                 config.log_clear_line()
-                                div_bet_player = bet_item.find_element(By.CLASS_NAME, 'ui-team-scores__teams')
+                                div_bet_player = bet_item.find_element(By.CLASS_NAME, config.classes[
+                                    'dashboard_champ_match_teams_name'][
+                                    config.site_type])
                             except:
                                 config.log('Impossible de récpérer les joueurs!', 'warning', False, 3)
                                 config.log_clear_line()
@@ -137,8 +142,9 @@ def rechercheDeMatch(driver):
                                     config.log_clear_line()
                                 try:
                                     # on récupère le score
-                                    div_bet_score = bet_item.find_elements(By.CLASS_NAME,
-                                                                           'ui-game-scores')
+                                    div_bet_score = bet_item.find_elements(By.CLASS_NAME, config.classes[
+                                        'dashboard_champ_match_teams_score'][
+                                        config.site_type])
                                 except:
 
                                     config.log('Impossible de récupérer le score!', 'warning', False, 4)
@@ -456,7 +462,7 @@ def rechercheDeMatchNBA(driver):
 
 
 def classementeDeMatch(driver):
-    driver.get('https://ca.1xbet.com/fr/line/tennis')
+    driver.get(config.site_url)
     config.error = False
     print('RECHERCHE DE MATCH')
     config.match_found = False
@@ -471,7 +477,7 @@ def classementeDeMatch(driver):
         if not VerificationListeMatchLive(driver):
             config.error = True
             print("PAGE VIDE")
-            driver.get('https://ca.1xbet.com/fr/line/tennis')
+            driver.get(config.site_url)
             return False
         # RECUPERATION DES LIGUES EN COURS
         bet_list_ligue = driver.find_elements(By.CLASS_NAME,
@@ -593,7 +599,7 @@ def classementeDeMatch(driver):
 
 def newclassementeDeMatch(driver):
     import os
-    driver.get('https://ca.1xbet.com/fr/line/tennis')
+    driver.get(site_url)
     config.error = False
     print('RECHERCHE DE MATCH')
     config.match_found = False
@@ -608,7 +614,7 @@ def newclassementeDeMatch(driver):
         if not VerificationListeMatchLive(driver):
             config.error = True
             print("PAGE VIDE")
-            driver.get('https://ca.1xbet.com/fr/line/tennis')
+            driver.get(config.site_url)
             return False
         # VÉRIFICATION S'IL EXISTE UN FICHIER JSON DE MATCHLIST
         matchlist_from_json = charger_matchlist_depuis_json()
@@ -833,6 +839,7 @@ if __name__ == "__main__":
     import sys
     import os
 
+    GetIfNewSite(driver)
     # Récupérer le chemin absolu du fichier actuel
     current_file_path = os.path.abspath(__file__)
 

@@ -11,7 +11,7 @@ def main(driver, bet_item, matchlist_file_name):
     try:
         config.log('Vérification si match déjà parié', 'info', True, 4)
         newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
-                                             'dashboard-game-block__link')[
+                                             config.classes['match_link'][config.site_type])[
             0].get_attribute(
             "href")
         newmatch = newmatchtxt.split(

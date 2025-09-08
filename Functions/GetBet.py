@@ -15,9 +15,9 @@ from Functions.GetScoreActuel import GetScoreActuel
 
 def GetBet(driver, nextBet=False):
     if config.site_type == 'old_site':
-        GetBetOld(driver, nextBet)
+        return GetBetOld(driver, nextBet)
     else:
-        GetBetNew(driver, nextBet)
+        return GetBetNew(driver, nextBet)
 
 
 def GetBetNew(driver, nextBet=False):
