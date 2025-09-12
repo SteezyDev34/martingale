@@ -12,7 +12,7 @@ import config
 
 def getPerte():
     if getCompetRecup():
-        url = "http://p-com.studio/api/strategy" + config.scriptType + "/get_perte.php"
+        url = f"{config.api_url}/strategy" + config.scriptType + "/get_perte.php"
         if config.scriptType == '1SET':
             url = url + '?ligue=' + config.ligue_name
             print(url)
@@ -44,8 +44,77 @@ def getPerte():
         return
 
 
+def get1setGlobalPerte():
+    url = f"{config.api_url}/strategy1SET/get_last_perte.php"
+    try:
+        # Envoyer une requête GET à l'URL
+        response = requests.get(url)
+        # Vérifier que la requête a réussi
+        response.raise_for_status()
+        # Parser le JSON depuis la réponse
+        if len(response.json()) > 0:
+            pertes = response.json()[0]
+        else:
+            return False
+        # Afficher les données pour vérification
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de la récupération des données : {e}")
+        return
+    except json.JSONDecodeError as e:
+        print(f"Erreur lors du parsing du JSON : {e}")
+        return
+    except Exception as e:
+        print(f"pas de perte {e}")
+    else:
+        if float(pertes["perte"]) > 0:
+            config.rattrape_perte = 1
+        config.log(f'Perte global : {str(pertes["perte"])}', 'info', False, 1)
+        print('config.mtt_recup', config.mtt_recup)
+        if float(pertes['perte']) > float(config.mtt_recup):
+            SendGlobalPerte(config.scriptType, float(pertes['perte']) - float(config.mtt_recup))
+            print('pertes[id]', pertes['id'])
+            del1setPerte(pertes['id'])
+            config.perte = config.mtt_recup
+            config.log(f'Perte : {str(config.perte)}', 'info', False, 1)
+        elif float(pertes['perte']) <= float(config.mtt_recup):
+            print('config.mtt_recup', config.mtt_recup)
+            config.perte = float(pertes['perte'])
+            m = config.perte
+            print('pertes[id]', pertes['id'])
+            del1setPerte(pertes['id'])
+            config.log(f'Perte : {str(config.perte)}', 'info', False, 1)
+        config.rattrape_perte = 1
+        return pertes
+
+
+def getIf1setGlobalPerte():
+    url = f"{config.api_url}/strategy1SET/get_last_perte.php"
+    try:
+        # Envoyer une requête GET à l'URL
+        response = requests.get(url)
+        # Vérifier que la requête a réussi
+        response.raise_for_status()
+        # Parser le JSON depuis la réponse
+        if len(response.json()) > 0:
+            pertes = response.json()[0]
+        else:
+            return False
+        # Afficher les données pour vérification
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de la récupération des données : {e}")
+        return
+    except json.JSONDecodeError as e:
+        print(f"Erreur lors du parsing du JSON : {e}")
+        return
+    except Exception as e:
+        print(f"pas de perte {e}")
+    else:
+        config.log(f'Perte global 1SET : {str(pertes["perte"])}', 'info', False, 1)
+        return float(pertes["perte"])
+
+
 def getGlobalPerte():
-    url = "http://p-com.studio/api/strategy40A/get_global_perte.php"
+    url = f"{config.api_url}/strategy40A/get_global_perte.php"
     try:
         # Envoyer une requête GET à l'URL
         response = requests.get(url)
@@ -80,8 +149,57 @@ def getGlobalPerte():
         return pertes
 
 
+def getIfGlobalPerte():
+    url = f"{config.api_url}/strategy40A/get_global_perte.php"
+    try:
+        # Envoyer une requête GET à l'URL
+        response = requests.get(url)
+        # Vérifier que la requête a réussi
+        response.raise_for_status()
+        # Parser le JSON depuis la réponse
+        if len(response.json()) > 0:
+            pertes = response.json()[0]
+        else:
+            return False
+        # Afficher les données pour vérification
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de la récupération des données : {e}")
+        return
+    except json.JSONDecodeError as e:
+        print(f"Erreur lors du parsing du JSON : {e}")
+        return
+    except Exception as e:
+        print(f"pas de perte {e}")
+    else:
+        return float(pertes["perte"])
+
+
 def delPerte(id):
-    url = "http://p-com.studio/api/strategy" + config.scriptType + "/del_perte.php?id=" + str(id)
+    url = f"{config.api_url}/strategy" + config.scriptType + "/del_perte.php?id=" + str(id)
+    try:
+        # Envoyer une requête GET à l'URL
+        response = requests.get(url)
+        # Vérifier que la requête a réussi
+        response.raise_for_status()
+        # Parser le JSON depuis la réponse
+        print(response.json())
+        result = response.json()
+        # Afficher les données pour vérification
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de la récupération des données : {e}")
+        return
+    except json.JSONDecodeError as e:
+        print(f"Erreur lors du parsing du JSON : {e}")
+        return
+    except Exception as e:
+        print(f"Pas de suppression de perte {e}")
+    else:
+        print(result)
+        return True
+
+
+def del1setPerte(id):
+    url = f"{config.api_url}/strategy1SET/del_perte.php?id=" + str(id)
     try:
         # Envoyer une requête GET à l'URL
         response = requests.get(url)
@@ -105,7 +223,7 @@ def delPerte(id):
 
 
 def getCompetRecup():
-    url = "http://p-com.studio/api/strategy" + config.scriptType + "/get_compet_recup.php"
+    url = f"{config.api_url}/strategy" + config.scriptType + "/get_compet_recup.php"
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
@@ -147,7 +265,7 @@ def getCompet():
     config.log('Recherche compet', 'info', False, 3)
     scriptType = '40A'
     config.log_clear_line()
-    url = "http://p-com.studio/api/strategy" + scriptType + "/get_compet.php"
+    url = f"{config.api_url}/strategy" + scriptType + "/get_compet.php"
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
@@ -176,13 +294,13 @@ def getCompet():
                    compet_ok_list) and not any(
                 compet_not_ok in config.ligue_name for
                 compet_not_ok in compet_not_ok_list):
-                config.log(f'Ligue OK!', 'info', True, 3)
-                config.log_clear_line()
+                # config.log(f'Ligue OK!', 'info', True, 3)
+                # config.log_clear_line()
                 return True
 
             else:
-                config.log(f'Ligue NOT OK!', 'warning', True, 3)
-                config.log_clear_line()
+                # config.log(f'Ligue NOT OK!', 'warning', True, 3)
+                # config.log_clear_line()
                 return False
 
         except Exception as e:
@@ -192,7 +310,7 @@ def getCompet():
 
 def SendPerte(scriptType, perte):
     print(config.ligue_name)
-    url = "http://p-com.studio/api/strategy" + str(scriptType) + "/insert_perte.php?perte=" + str(perte)
+    url = f"{config.api_url}/strategy" + str(scriptType) + "/insert_perte.php?perte=" + str(perte)
     if config.scriptType == '1SET':
         url = url + '&ligue=' + config.ligue_name
         print(url)
@@ -226,7 +344,7 @@ def SendPerte(scriptType, perte):
 
 
 def SendPerte1set(scriptType, perte):
-    url = "http://p-com.studio/api/strategy" + str(scriptType) + "/insert_perte.php?perte=" + str(
+    url = f"{config.api_url}/strategy" + str(scriptType) + "/insert_perte.php?perte=" + str(
         perte) + "&ligue=" + config.ligue_name
     # URL du lien JSON de la strategy
     try:
@@ -257,7 +375,7 @@ def SendPerte1set(scriptType, perte):
 
 
 def SendGlobalPerte(scriptType, mise):
-    url = "http://p-com.studio/api/strategy" + str(scriptType) + "/insert_global_perte.php?mise=" + str(mise)
+    url = f"{config.api_url}/strategy" + str(scriptType) + "/insert_global_perte.php?mise=" + str(mise)
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
@@ -288,7 +406,7 @@ def SendGlobalPerte(scriptType, mise):
 
 def SendBetPlaced(scriptType, mise):
     # Construction de l'URL de l'API
-    url = "http://p-com.studio/api/strategy" + str(scriptType) + "/insert_bet_placed.php"
+    url = f"{config.api_url}/strategy" + str(scriptType) + "/insert_bet_placed.php"
     # URL du lien JSON de la strategy
     try:
         # Préparation des données à envoyer en POST

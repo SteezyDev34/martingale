@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 
 import config
 from Functions import GetMatchDone
+from Functions.GetJsonData import getIfGlobalPerte, getIf1setGlobalPerte
 
 
 def main(driver, bet_item, matchlist_file_name):
@@ -34,9 +35,18 @@ def main(driver, bet_item, matchlist_file_name):
             return [True, config.newmatch]
         elif not config.in_stat and not any(config.newmatch in x for x in match_list) and not any(
                 config.newmatch in x for x in match_done):
-            config.log('Le match autorisé!', 'success', False, 4)
-            driver.get(newmatchtxt)
-            return [True, config.newmatch]
+            p = config.perte
+            if not p or p == 0:
+                p = getIfGlobalPerte()
+            if not p or p == 0:
+                p = getIf1setGlobalPerte()
+            if not p or p == 0:
+                config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
+                return [False, config.newmatch]
+            else:
+                config.log('Le match  non autorisé mais perte en cours', 'sucess', True, 4)
+                driver.get(newmatchtxt)
+                return [True, config.newmatch]
         else:
             config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
             return [False, config.newmatch]

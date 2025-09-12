@@ -29,10 +29,13 @@ cote = 3
 scriptType = "40A"
 localhost = ''
 wich_site = input("1XBET CA? (Y/N): ")
+api_url = "http://auxobetbot.sc2vagr6376.universe.wf"
 site_url = 'https://1xbet.com/fr/live/tennis'
+site_line_url = 'https://1xbet.com/fr/line/tennis'
 site_type = 'old_site'
 if wich_site.upper() == 'Y' or wich_site.upper() == 'y' or wich_site.upper() == 'O' or wich_site.upper() == 'o':
     site_url = "https://ca.1xbet.com/fr/live/tennis"
+    site_line_url = "https://ca.1xbet.com/fr/line/tennis"
     site_type = 'new_site'
 # Score configurations
 score_to_start = [
@@ -49,6 +52,9 @@ score_to_start = [
     "00(15)00(30)",
     "00(30)00(0)",
     "00(0)00(30)",
+    "00(40)00(40)",
+    "00(A)00(40)",
+    "00(40)00(A)",
     "0000(0)(0)",
     "00(0)(0)",
     "0000(15)(0)",
@@ -321,7 +327,32 @@ classes = {
         {
             'old_site': 'c-events__name',
             'new_site': 'dashboard-game-block__link'
-        }
+        },
+    'live_content':
+        {
+            'old_site': 'live-content',
+            'new_site': 'betting-content__main'
+        },
+    'dashboard_champ_body_games':
+        {
+            'old_site': 'dashboard-champ-content',
+            'new_site': 'dashboard-champ-body__games'
+        },
+    'dashboard_game_block_row':
+        {
+            'old_site': 'c-events__item_game',
+            'new_site': 'dashboard-game-block__row'
+        },
+    'team_wrap':
+        {
+            'old_site': 'c-events__teams',
+            'new_site': 'dashboard-game-block__teams'
+        },
+    'team_name':
+        {
+            'old_site': 'c-events__team',
+            'new_site': 'dashboard-game-team-info'
+        },
 
 }
 # Initialize dictionaries to track wins per script type
@@ -534,7 +565,7 @@ class ScriptConfig:
 
     def _init_variables(self):
 
-        url = f"http://p-com.studio/api/strategy{self.script_type}/"
+        url = f"{api_url}/strategy{self.script_type}/"
         strategy = getJsonData(url)
         print('init scriptconfig')
         # Configuration par défaut selon le type de script

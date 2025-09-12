@@ -72,8 +72,8 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
     else:
         print('new class')
         newclassementeDeMatch(driver)
-        print('new class')
-        classementeDeMatch(driver)
+        # print('new class')
+        # classementeDeMatch(driver)
 
 # Call the function to get the code
 if not is_logged_in(driver):

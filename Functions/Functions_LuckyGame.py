@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 import config
+import random
 
 
 def save_session_data(data):
@@ -198,10 +199,7 @@ def all_script(driver):
             print(f'{config.RED}LOSE')
             print('side :', side)
             print(f"result : {result}")
-            if side == 'over':
-                side = 'under'
-            else:
-                side = 'over'
+            side = random.choice(['over', 'under'])
             perte = perte + unit + min_unit
             gain = -unit
             print(f"perte : {perte:.8f}")

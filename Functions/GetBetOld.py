@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -19,13 +21,7 @@ def GetBetOld(driver, nextBet=False):
     if_get_jeu = False
     clic = False
     tentative_clic = 0
-    scoreboard_player = driver.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score')
-    scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__row')[0]
-    first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__ball')
-    if first_player:
-        print('PLAYER 1')
-    else:
-        print('PLAYER 2')
+
     if config.scriptType == "40A":
         sType = ": 40-40"
         config.win_type = '40:40'
@@ -37,66 +33,6 @@ def GetBetOld(driver, nextBet=False):
         sType = " 15-15"
         config.win_type = '15:15'
 
-    if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
-        if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
-            first_player = 1
-            if config.scriptType == '4030':
-                config.win_type = '40:30'
-                win_texte = '40+:30'
-                sType = "Game " + str(config.looking_game) + " 40+:30, Player " + str(first_player)
-            elif config.scriptType == '4015':
-                config.win_type = '40:15'  # inversé
-                win_texte = '40+:15'
-                sType = "Game " + str(config.looking_game) + " 40+:15, Player " + str(first_player)
-            elif config.scriptType == '400':
-                config.win_type = '40:0'  # inversé
-                win_texte = '40+:0'
-                sType = "Game " + str(config.looking_game) + " 40+:0, Player " + str(first_player)
-        else:
-            first_player = 2
-            if config.scriptType == '4030':
-                config.win_type = '30:40'  # inversé
-                win_texte = '30:40+'
-                sType = "Game " + str(config.looking_game) + " 30:40+, Player " + str(first_player)
-            elif config.scriptType == '4015':
-                config.win_type = '15:40'  # inversé
-                win_texte = '15:40+'
-                sType = "Game " + str(config.looking_game) + " 15:40+, Player " + str(first_player)
-            elif config.scriptType == '400':
-                win_texte = '0:40+'
-                config.win_type = '0:40'  # inversé
-                sType = "Game " + str(config.looking_game) + " 0:40+, Player " + str(first_player)
-    if config.scriptType == '030':
-        sType = "Receveur Va Mener 30-0"
-        if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
-                len(first_player) > 0 and int(config.jeu_actuel) == int(config.looking_game)):
-            first_player = 1
-
-            if config.scriptType == '030':
-                config.win_type = '0:30'  # inversé
-        else:
-            first_player = 2
-            if config.scriptType == '030':
-                config.win_type = '30:0'  # inversé
-        print('first_player :', first_player)
-    if config.scriptType == '300':
-        sType = "Serveur va mener 30-0"
-        if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
-            first_player = 1
-            config.win_type = '30:0'  # inversé
-        else:
-            first_player = 2
-            config.win_type = '0:30'  # inversé
-        print('first_player :', first_player)
-    if config.scriptType == 'BREAK':
-        sType = "gne dans le jeu"
-        if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
-            first_player = 1
-            config.win_type = ['0:40', '15:40', '30:40', '40:A']
-        else:
-            first_player = 2
-            config.win_type = ['40:0', '40:15', '40:30', 'A:40']
-        print('first_player :', first_player)
     if config.scriptType == '6P':
         sType = ", 6"
         config.win_type = ['40:30', '30:40']  # inversé
@@ -107,7 +43,75 @@ def GetBetOld(driver, nextBet=False):
         sType = ", 4"
         config.win_type = ['40:0', '0:40']  # inversé
     # print('i '+str(i))
-    while not clic and tentative_clic < 30:
+    while not clic and tentative_clic < 5:
+        scoreboard_player = driver.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score')
+        scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__row')[0]
+        first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__ball')
+        if first_player:
+            print('PLAYER 1')
+        else:
+            print('PLAYER 2')
+        if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
+            if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
+                first_player = 1
+                if config.scriptType == '4030':
+                    config.win_type = '40:30'
+                    win_texte = '40+:30'
+                    sType = "Game " + str(config.looking_game) + " 40+:30, Player " + str(first_player)
+                elif config.scriptType == '4015':
+                    config.win_type = '40:15'  # inversé
+                    win_texte = '40+:15'
+                    sType = "Game " + str(config.looking_game) + " 40+:15, Player " + str(first_player)
+                elif config.scriptType == '400':
+                    config.win_type = '40:0'  # inversé
+                    win_texte = '40+:0'
+                    sType = "Game " + str(config.looking_game) + " 40+:0, Player " + str(first_player)
+            else:
+                first_player = 2
+                if config.scriptType == '4030':
+                    config.win_type = '30:40'  # inversé
+                    win_texte = '30:40+'
+                    sType = "Game " + str(config.looking_game) + " 30:40+, Player " + str(first_player)
+                elif config.scriptType == '4015':
+                    config.win_type = '15:40'  # inversé
+                    win_texte = '15:40+'
+                    sType = "Game " + str(config.looking_game) + " 15:40+, Player " + str(first_player)
+                elif config.scriptType == '400':
+                    win_texte = '0:40+'
+                    config.win_type = '0:40'  # inversé
+                    sType = "Game " + str(config.looking_game) + " 0:40+, Player " + str(first_player)
+        if config.scriptType == '030':
+            sType = "Receveur Va Mener 30-0"
+            if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
+                    len(first_player) > 0 and int(config.jeu_actuel) == int(config.looking_game)):
+                first_player = 1
+
+                if config.scriptType == '030':
+                    config.win_type = '0:30'  # inversé
+            else:
+                first_player = 2
+                if config.scriptType == '030':
+                    config.win_type = '30:0'  # inversé
+            print('first_player :', first_player)
+        if config.scriptType == '300':
+            sType = "Serveur va mener 30-0"
+            if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
+                first_player = 1
+                config.win_type = '30:0'  # inversé
+            else:
+                first_player = 2
+                config.win_type = '0:30'  # inversé
+            print('first_player :', first_player)
+        if config.scriptType == 'BREAK':
+            sType = "gne dans le jeu"
+            if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
+                first_player = 1
+                config.win_type = ['0:40', '15:40', '30:40', '40:A']
+            else:
+                first_player = 2
+                config.win_type = ['40:0', '40:15', '40:30', 'A:40']
+            print('first_player :', first_player)
+        print('config.win_type', config.win_type)
         x_path = (
                 '//div[contains(@class, "bet_group_col")]'
                 '//div[not(contains(@style, "display: none;"))]'
@@ -142,16 +146,20 @@ def GetBetOld(driver, nextBet=False):
                             )
                         except Exception as e:
                             config.log('Pas de paris affiché!', 'error', True, 2)
+                            tentative += 1
                         else:
+                            time.sleep(1)
                             cpn_bet_market_label = driver.find_element(By.CLASS_NAME, 'cpn-bet-market__label').text
                             if 'Jeu ' + str(jeu) in cpn_bet_market_label and sType + ' - Oui' in cpn_bet_market_label:
                                 clic = True
                                 return clic
                             else:
+                                tentative += 1
                                 DeleteBet(driver)
                 else:
                     config.log("pas de btn 40 recuperé")
                     return clic
+    return False
 
 
 if __name__ == "__main__":

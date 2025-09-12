@@ -1,30 +1,10 @@
 <?php
 
+// Inclure le fichier de configuration
+require_once __DIR__ . '/../config.php';
 
-// Configurer les paramètres de la base de données
-$servername = "pcomstd757.mysql.db";
-$username = "pcomstd757";
-$password = "RgzQzGkXvsMK";
-$database = "pcomstd757";
-
-// Créer une connexion à la base de données
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Vérifier la connexion
-if ($conn->connect_error) {
-    $response = array("status" => "error", "message" => "Échec de la connexion : " . $conn->connect_error);
-    header('Content-Type: application/json');
-    echo json_encode($response);
-    exit();
-}
-
-// Définir l'encodage de la connexion en UTF-8
-if (!$conn->set_charset("utf8")) {
-    $response = array("status" => "error", "message" => "Erreur lors du chargement du jeu de caractères utf8 : " . $conn->error);
-    header('Content-Type: application/json');
-    echo json_encode($response);
-    exit();
-}
+// Obtenir la connexion à la base de données
+$conn = getDbConnection();
 
 // Préparer la réponse
 $response = array("status" => "error", "message" => "Paramètres d'URL manquants.");

@@ -173,6 +173,202 @@ def get_wta_proba_40A(playerName1, playerName2):
         return 0.0
 
 
+# Désactiver les avertissements liés à la désactivation de la vérification SSL
+import warnings
+from urllib3.exceptions import InsecureRequestWarning
+
+warnings.simplefilter('ignore', InsecureRequestWarning)
+
+
+def get_wta_proba_40A_sofascore(playerName1, playerName2):
+    # Initialise cache en mémoire
+    print("\n===== DÉBUT FONCTION get_wta_proba_40A_sofascore =====")
+    print(f"Joueurs: {playerName1} vs {playerName2}")
+    cache = load_cache()
+    p1_key = f"player_{unidecode(playerName1).strip().lower().replace('-', ' ')}_40-40"
+    p2_key = f"player_{unidecode(playerName2).strip().lower().replace('-', ' ')}_40-40"
+    print(f"Clés de cache: {p1_key}, {p2_key}")
+    if p1_key in cache and p2_key in cache:
+        print('Probabilités trouvées dans le cache')
+        result = cache[p1_key] + cache[p2_key]
+        print(f"Résultat depuis cache: {result}")
+        # return result
+
+    print("Recherche des IDs des joueurs via API...")
+    url1 = f"https://api.auxotracker.lan/api/sports/2/teams/search?search={playerName1.replace(' ', '+')}"
+    url2 = f"https://api.auxotracker.lan/api/sports/2/teams/search?search={playerName2.replace(' ', '+')}"
+    try:
+        print(f"Requête API pour {playerName1}: {url1}")
+        # Désactiver la vérification SSL pour les certificats auto-signés
+        d1 = requests.get(url1, headers=headers, verify=False).json()
+        print(f"Réponse API pour {playerName1}: {d1}")
+        time.sleep(1)
+        print(f"Requête API pour {playerName2}: {url2}")
+        d2 = requests.get(url2, headers=headers, verify=False).json()
+        print(f"Réponse API pour {playerName2}: {d2}")
+        time.sleep(1)
+
+        # Vérifier si des résultats ont été trouvés
+        if not d1.get('data') or len(d1['data']) == 0:
+            print(f"Aucun résultat trouvé pour {playerName1}")
+        if not d2.get('data') or len(d2['data']) == 0:
+            print(f"Aucun résultat trouvé pour {playerName2}")
+
+        # Afficher les résultats trouvés pour aider au débogage
+        print(f"Résultats pour {playerName1}:")
+        for i, player in enumerate(d1['data']):
+            print(
+                f"  {i + 1}. {player.get('name')} (ID: {player.get('sofascore_id')}, Ligue: {player.get('league', {}).get('name', 'Inconnue')})")
+
+        print(f"Résultats pour {playerName2}:")
+        for i, player in enumerate(d2['data']):
+            print(
+                f"  {i + 1}. {player.get('name')} (ID: {player.get('sofascore_id')}, Ligue: {player.get('league', {}).get('name', 'Inconnue')})")
+
+        # Sélectionner le joueur individuel (non double) si possible
+        pid1 = None
+        for player in d1['data']:
+            # Éviter les équipes de double (contiennent souvent '/')
+            if '/' not in player.get('name', ''):
+                pid1 = player.get('sofascore_id')
+                print(f"Sélectionné pour {playerName1}: {player.get('name')} (ID: {pid1})")
+                break
+
+        pid2 = None
+        for player in d2['data']:
+            if '/' not in player.get('name', ''):
+                pid2 = player.get('sofascore_id')
+                print(f"Sélectionné pour {playerName2}: {player.get('name')} (ID: {pid2})")
+                break
+
+        # Si aucun joueur individuel n'a été trouvé, utiliser le premier résultat
+        if pid1 is None and d1['data']:
+            pid1 = d1['data'][0]['sofascore_id']
+            print(f"Aucun joueur individuel trouvé pour {playerName1}, utilisation du premier résultat (ID: {pid1})")
+
+        if pid2 is None and d2['data']:
+            pid2 = d2['data'][0]['sofascore_id']
+            print(f"Aucun joueur individuel trouvé pour {playerName2}, utilisation du premier résultat (ID: {pid2})")
+
+        if not pid1 or not pid2:
+            print("Impossible de récupérer les IDs des joueurs")
+            return 0.0
+
+        print(f"IDs récupérés: {pid1} pour {playerName1}, {pid2} pour {playerName2}")
+    except Exception as e:
+        print(f"Erreur lors de la récupération des IDs: {e}")
+        # Ajouter un avertissement sur la désactivation de la vérification SSL
+        print("Note: Si l'erreur persiste, vérifiez la configuration SSL ou le certificat du serveur.")
+        return 0.0
+    else:
+        url1 = f"https://www.sofascore.com/api/v1/team/{pid1}/year-statistics/2025"
+        url2 = f"https://www.sofascore.com/api/v1/team/{pid2}/year-statistics/2025"
+        print(f"URLs des statistiques: \n{url1}\n{url2}")
+        try:
+            print(f"Récupération des statistiques pour {playerName1}...")
+            d1 = requests.get(url1, headers=headers, verify=False).json()
+            time.sleep(1)
+            print(f"Récupération des statistiques pour {playerName2}...")
+            d2 = requests.get(url2, headers=headers, verify=False).json()
+            time.sleep(1)
+            print("Statistiques récupérées avec succès")
+
+            # Calcul des statistiques globales pour le joueur 1
+            total_first_serve_points_scored1 = 0
+            total_first_serve_points_total1 = 0
+            total_second_serve_points_scored1 = 0
+            total_second_serve_points_total1 = 0
+            total_break_points_scored1 = 0
+            total_break_points_total1 = 0
+
+            # Parcourir toutes les surfaces pour le joueur 1
+            print(f"Structure des données pour {playerName1}: {list(d1.keys())}")
+            print(f"Nombre de statistiques pour {playerName1}: {len(d1.get('statistics', []))}")
+            for i, stat in enumerate(d1.get('statistics', [])):
+                print(f"Surface {i + 1} pour {playerName1}: {stat.get('surfaceType', 'Inconnue')}")
+                total_first_serve_points_scored1 += stat.get('firstServePointsScored', 0)
+                total_first_serve_points_total1 += stat.get('firstServePointsTotal', 0)
+                total_second_serve_points_scored1 += stat.get('secondServePointsScored', 0)
+                total_second_serve_points_total1 += stat.get('secondServePointsTotal', 0)
+                total_break_points_scored1 += stat.get('breakPointsScored', 0)
+                total_break_points_total1 += stat.get('breakPointsTotal', 0)
+
+            # Calcul des statistiques globales pour le joueur 2
+            total_first_serve_points_scored2 = 0
+            total_first_serve_points_total2 = 0
+            total_second_serve_points_scored2 = 0
+            total_second_serve_points_total2 = 0
+            total_break_points_scored2 = 0
+            total_break_points_total2 = 0
+
+            # Parcourir toutes les surfaces pour le joueur 2
+            print(f"Structure des données pour {playerName2}: {list(d2.keys())}")
+            print(f"Nombre de statistiques pour {playerName2}: {len(d2.get('statistics', []))}")
+            for i, stat in enumerate(d2.get('statistics', [])):
+                print(f"Surface {i + 1} pour {playerName2}: {stat.get('surfaceType', 'Inconnue')}")
+                total_first_serve_points_scored2 += stat.get('firstServePointsScored', 0)
+                total_first_serve_points_total2 += stat.get('firstServePointsTotal', 0)
+                total_second_serve_points_scored2 += stat.get('secondServePointsScored', 0)
+                total_second_serve_points_total2 += stat.get('secondServePointsTotal', 0)
+                total_break_points_scored2 += stat.get('breakPointsScored', 0)
+                total_break_points_total2 += stat.get('breakPointsTotal', 0)
+
+            print(f"\nTotaux pour {playerName1}:")
+            print(f"Points gagnés sur 1ère balle: {total_first_serve_points_scored1}/{total_first_serve_points_total1}")
+            print(
+                f"Points gagnés sur 2ème balle: {total_second_serve_points_scored1}/{total_second_serve_points_total1}")
+            print(f"Balles de break converties: {total_break_points_scored1}/{total_break_points_total1}")
+
+            print(f"\nTotaux pour {playerName2}:")
+            print(f"Points gagnés sur 1ère balle: {total_first_serve_points_scored2}/{total_first_serve_points_total2}")
+            print(
+                f"Points gagnés sur 2ème balle: {total_second_serve_points_scored2}/{total_second_serve_points_total2}")
+            print(f"Balles de break converties: {total_break_points_scored2}/{total_break_points_total2}")
+
+            # Calcul des pourcentages de service et retour
+            svc1 = float(total_first_serve_points_scored1) / float(
+                total_first_serve_points_total1) if total_first_serve_points_total1 > 0 else 0.0
+            ret1 = float(total_break_points_scored1) / float(
+                total_break_points_total1) if total_break_points_total1 > 0 else 0.0
+            svc2 = float(total_first_serve_points_scored2) / float(
+                total_first_serve_points_total2) if total_first_serve_points_total2 > 0 else 0.0
+            ret2 = float(total_break_points_scored2) / float(
+                total_break_points_total2) if total_break_points_total2 > 0 else 0.0
+
+            print(f"\nPourcentages pour {playerName1}:")
+            print(f"Service: {svc1:.4f} ({total_first_serve_points_scored1}/{total_first_serve_points_total1})")
+            print(f"Retour: {ret1:.4f} ({total_break_points_scored1}/{total_break_points_total1})")
+
+            print(f"\nPourcentages pour {playerName2}:")
+            print(f"Service: {svc2:.4f} ({total_first_serve_points_scored2}/{total_first_serve_points_total2})")
+            print(f"Retour: {ret2:.4f} ({total_break_points_scored2}/{total_break_points_total2})")
+
+            # Calcul des probabilités
+            prob1 = float(svc1) * float(ret1)
+            prob2 = float(svc2) * float(ret2)
+
+            print(f"\nProbabilités calculées:")
+            print(f"{playerName1}: {prob1:.4f} (svc {svc1:.4f} * ret {ret1:.4f})")
+            print(f"{playerName2}: {prob2:.4f} (svc {svc2:.4f} * ret {ret2:.4f})")
+
+            # Mise en cache des résultats
+            cache[f"player_{playerName1.lower()}_40-40"] = prob1
+            cache[f"player_{playerName2.lower()}_40-40"] = prob2
+            save_cache(cache)
+
+            result = float(prob1) + float(prob2)
+            print(f"Résultat final: {result:.4f}")
+            print("===== FIN FONCTION get_wta_proba_40A_sofascore =====\n")
+            return result
+        except Exception as e:
+            print(f"Erreur lors du calcul des statistiques: {e}")
+            print("Traceback:")
+            import traceback
+            traceback.print_exc()
+            print("===== FIN FONCTION get_wta_proba_40A_sofascore (avec erreur) =====\n")
+            return 0.0
+
+
 # Probabilité 40-40 via scraping head-to-head UltimateStatistics
 
 def get_proba_40A_other(playerName1, playerName2, driver1, link=False):
@@ -185,7 +381,7 @@ def get_proba_40A_other(playerName1, playerName2, driver1, link=False):
     print(p2_key)
     if p1_key in cache and p2_key in cache:
         print('proba found in cache')
-        return cache[p1_key] + cache[p2_key]
+        # return cache[p1_key] + cache[p2_key]
     prob_service_joueur1 = 0.0
     prob_service_joueur2 = 0.0
     prob_retour_joueur1 = 0.0
@@ -605,6 +801,12 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver1, link=False):
                     if re.search(playerName.lower(), player_name.lower()):
                         print('find')
                         player.click()
+                        drawer_links = driver.find_elements(By.CLASS_NAME, 'player-row-drawer__link')
+                        for link in drawer_links:
+                            if link.is_displayed():
+                                print("Lien visible trouvé, on clique.")
+                                link.click()
+
                     else:
                         print('not found')
                     try:
@@ -702,8 +904,16 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver1, link=False):
                             i = i + 1
 
             # Calculate probabilities for each player
-            prob_40_40_joueur1 = prob_service_joueur1 * prob_retour_joueur1
-            prob_40_40_joueur2 = prob_service_joueur2 * prob_retour_joueur2
+            # Conversion explicite en float pour éviter les erreurs de type
+            prob_service_joueur1 = float(prob_service_joueur1) if isinstance(prob_service_joueur1,
+                                                                             (int, float)) else 0.0
+            prob_retour_joueur1 = float(prob_retour_joueur1) if isinstance(prob_retour_joueur1, (int, float)) else 0.0
+            prob_service_joueur2 = float(prob_service_joueur2) if isinstance(prob_service_joueur2,
+                                                                             (int, float)) else 0.0
+            prob_retour_joueur2 = float(prob_retour_joueur2) if isinstance(prob_retour_joueur2, (int, float)) else 0.0
+
+            prob_40_40_joueur1 = float(prob_service_joueur1) * float(prob_retour_joueur1)
+            prob_40_40_joueur2 = float(prob_service_joueur2) * float(prob_retour_joueur2)
             print('Proba j1 40 A = ' + str(prob_40_40_joueur1))
             print('Proba j2 40 A = ' + str(prob_40_40_joueur2))
 
@@ -713,11 +923,14 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver1, link=False):
             save_cache(cache)
 
             # Calcul de la probabilité totale
-            prob_40_40_totale = prob_40_40_joueur1 + prob_40_40_joueur2
-            prob = prob_40_40_totale
+            prob_40_40_totale = float(prob_40_40_joueur1) + float(prob_40_40_joueur2)
+            prob = float(prob_40_40_totale)
             print('Proba 40 A = ' + str(prob))
             return prob
         except Exception as e:
+            # Initialisation des variables en cas d'erreur
+            prob_40_40_joueur1 = 0.0
+            prob_40_40_joueur2 = 0.0
             # Save individual probabilities to cache
             cache[f"player_{playerName1.lower()}_40-40"] = prob_40_40_joueur1
             cache[f"player_{playerName2.lower()}_40-40"] = prob_40_40_joueur2
@@ -726,12 +939,34 @@ def get_wta_proba_40A_other(playerName1, playerName2, driver1, link=False):
             print(e)
             tentative = tentative + 1
             continue
-    if link:
-        driver.switch_to.window(driver.window_handles[0])
+    # Initialisation de la variable prob si elle n'est pas définie
+    if 'prob' not in locals():
+        prob = 0.0
+    # Initialisation de driver s'il n'est pas défini
+    if 'driver' not in locals() or driver is None:
+        # Importer driver uniquement si nécessaire
         try:
-            driver.get(link)
-        except:
-            print('te')
+            from ChromeDriver.SetDriver import driver as chrome_driver
+            driver = chrome_driver
+        except Exception as e:
+            print(f"Erreur lors de l'initialisation du driver: {e}")
+            driver = None
+
+    # Initialisation de link s'il n'est pas défini
+    if 'link' not in locals():
+        link = None
+
+    # Vérification que driver et link sont définis avant utilisation
+    if link is not None and driver is not None:
+        try:
+            # Vérifier que driver a les méthodes nécessaires avant de les utiliser
+            if hasattr(driver, 'switch_to') and hasattr(driver, 'window_handles') and hasattr(driver, 'get'):
+                driver.switch_to.window(driver.window_handles[0])
+                driver.get(str(link))
+            else:
+                print('Driver non initialisé correctement, impossible de naviguer')
+        except Exception as e:
+            print('Erreur lors de la navigation:', e)
     return prob
 
 

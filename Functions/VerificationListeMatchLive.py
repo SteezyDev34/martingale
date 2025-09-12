@@ -10,7 +10,7 @@ def VerificationListeMatchLive(driver):
     try:
         config.log('         Recherche tableau des scores', 'info', False)
         config.log('         CLASS="betting-content__main"', 'info', False)
-        driver.find_element(By.CLASS_NAME, 'betting-content__main')
+        driver.find_element(By.CLASS_NAME, config.classes['live_content'][config.site_type])
     except Exception as e:
         config.log_clear_line(2)
         config.log('        Liste match live non visible!', 'warning', False)

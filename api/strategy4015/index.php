@@ -1,16 +1,9 @@
 <?php
-// Configurer les paramètres de la base de données
-$servername = "pcomstd757.mysql.db";
-$username = "pcomstd757";
-$password = "RgzQzGkXvsMK";
-$database = "pcomstd757";
-// Créer une connexion à la base de données
-$conn = new mysqli($servername, $username, $password, $database);
+// Inclure le fichier de configuration
+require_once __DIR__ . '/../config.php';
 
-// Vérifier la connexion
-if ($conn->connect_error) {
-    die("Échec de la connexion : " . $conn->connect_error);
-}
+// Obtenir la connexion à la base de données
+$conn = getDbConnection();
 
 // Exécuter une requête SQL
 $sql = "SELECT * FROM 0_Strategy4015";

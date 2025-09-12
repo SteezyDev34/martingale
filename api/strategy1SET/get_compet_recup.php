@@ -1,22 +1,10 @@
 <?php
 
-// Configurer les paramètres de la base de données
-$servername = "pcomstd757.mysql.db";
-$username = "pcomstd757";
-$password = "RgzQzGkXvsMK";
-$database = "pcomstd757";
+// Inclure le fichier de configuration
+require_once __DIR__ . '/../config.php';
 
-// Créer une connexion à la base de données
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Vérifier la connexion
-if ($conn->connect_error) {
-    die("Échec de la connexion : " . $conn->connect_error);
-}
-if (!$conn->set_charset("utf8")) {
-    printf("Erreur lors du chargement du jeu de caractères utf8 : %s\n", $conn->error);
-    exit();
-}
+// Obtenir la connexion à la base de données
+$conn = getDbConnection();
 // Préparer la requête SQL
 $sql = "SELECT compet_recup_ok, compet_recup_not_ok FROM 0_compet_recup1SET";
 

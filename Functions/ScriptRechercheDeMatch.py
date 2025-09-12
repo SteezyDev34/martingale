@@ -62,6 +62,63 @@ def charger_matchlist_depuis_json():
         return None
 
 
+def traiter_matchlist(matchlist):
+    goodmatch = []
+    for matchItem in matchlist:
+        players_name = matchItem[0]
+        ligue_name = matchItem[1]
+        print('matchitem', matchItem)
+        # Vérifier si c'est un match WTA
+        if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
+            print('wta get proba')
+            config.proba40A = Functions_stats.get_wta_proba_40A(players_name[0], players_name[1])
+            print('tentative proba 1 : ', config.proba40A)
+            time.sleep(1)
+            if config.proba40A == 0:
+                config.proba40A = Functions_stats.get_wta_proba_40A_sofascore(players_name[0], players_name[1])
+                print('tentative proba 2 : ', config.proba40A)
+        else:
+            config.proba40A = Functions_stats.get_proba_40A(players_name[0], players_name[1])
+            time.sleep(1)
+            if config.proba40A == 0:
+                config.proba40A = Functions_stats.get_wta_proba_40A_sofascore(players_name[0], players_name[1])
+        print('proba ' + str(config.proba40A))
+        if float(config.proba40A) >= float(config.probamini):
+            matchItem.append(config.proba40A)
+            print(matchItem)
+            goodmatch.append(matchItem)
+    return goodmatch
+
+
+def sauvegarder_matchlist_json(matchlist):
+    try:
+        # Créer un nom de fichier avec timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        json_filename = f"matchlist_{timestamp}.json"
+        json_filepath = os.path.join(config.projectPath, "DataFiles", json_filename)
+
+        # Créer le dossier DataFiles s'il n'existe pas
+        os.makedirs(os.path.dirname(json_filepath), exist_ok=True)
+
+        # Préparer les données à enregistrer
+        data_to_save = {
+            "timestamp": datetime.now().isoformat(),
+            "total_matches": len(matchlist),
+            "matches": matchlist
+        }
+
+        # Enregistrer dans le fichier JSON
+        with open(json_filepath, 'w', encoding='utf-8') as json_file:
+            json.dump(data_to_save, json_file, ensure_ascii=False, indent=2)
+
+        config.log(f"Matchlist enregistrée dans: {json_filepath}", 'info', True)
+        print(f"Matchlist enregistrée dans: {json_filepath}")
+
+    except Exception as e:
+        config.log(f"Erreur lors de l'enregistrement de matchlist: {str(e)}", 'error', True)
+        print(f"Erreur lors de l'enregistrement de matchlist: {str(e)}")
+
+
 def rechercheDeMatch(driver):
     config.error = False
     config.log(' RECHERCHE DE MATCH', 'title', False)
@@ -69,7 +126,8 @@ def rechercheDeMatch(driver):
     while not config.match_found and not config.error:
         # config.init_variable()
         config.match_found = GetIfMatchPage(driver)
-        config.newsite = True
+        # Définir newsite comme variable locale au lieu d'attribut de config
+        newsite = True
         if not config.match_found and float(config.perte) > 0:
             if config.scriptType == '1SET':
                 set1DispatchPerte()
@@ -198,7 +256,8 @@ def rechercheDeMatch(driver):
         else:
 
             config.log('MATCH TROUVE!', 'success', False, 2)
-            config.match_end = False
+            # Définir match_end comme variable locale au lieu d'attribut de config
+            match_end = False
             time.sleep(3)
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE
     # END SCRIPT RECHERCHE DE MATCH
@@ -379,9 +438,12 @@ def rechercheDeMatchNBA(driver):
         # VERIFICATION SI PAGE DE LIST LIVE"""
         if not VerificationListeMatchLive(driver):
             current_frame = inspect.currentframe()
-            config.log(
-                f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
-                'error', True)
+            if current_frame:
+                config.log(
+                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    'error', True)
+            else:
+                config.log('Error in VerificationListeMatchLive', 'error', True)
             print("PAGE VIDE")
             driver.get('https://1xbet.com/fr/live/basketball/')
             return False
@@ -419,7 +481,7 @@ def rechercheDeMatchNBA(driver):
                                                                    'c-events-scoreboard__lines_tennis')
                         except:
                             txtlog = "Impossible de récupérer le score"
-                            config.log(txtlog, 0, config.newmatch)
+                            config.log(txtlog, 'warning', True)
                             print(txtlog)
                             continue
                         else:
@@ -453,7 +515,7 @@ def rechercheDeMatchNBA(driver):
                 break
 
         if not config.match_found:
-            config.log('PAS DE MATCH TROUVE', 1)
+            config.log('PAS DE MATCH TROUVE', 'info', True)
             driver.get('https://1xbet.com/fr/live/basketball/')
 
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE
@@ -462,126 +524,136 @@ def rechercheDeMatchNBA(driver):
 
 
 def classementeDeMatch(driver):
-    driver.get(config.site_url)
+    driver.get(config.site_line_url)
     config.error = False
     print('RECHERCHE DE MATCH')
     config.match_found = False
     while not config.match_found and not config.error:
         config.init_variable()
-        """On vérifie si c'est la page d'un match """
-        config.match_found = GetIfMatchPage(driver)
-        # SCRIPT RECHERCHE DE MATCH
-        # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-        GetIfScriptsRunning()
-        # VERIFICATION SI PAGE DE LIST LIVE"""
-        if not VerificationListeMatchLive(driver):
-            config.error = True
-            print("PAGE VIDE")
-            driver.get(config.site_url)
-            return False
-        # RECUPERATION DES LIGUES EN COURS
-        bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                              'dashboard__champ')
-        matchlist = []
-        liguelist = []
-        print(str(len(bet_list_ligue)))
-        for bet_ligue in bet_list_ligue:
-            # ON RÉCUPÈRE LE NOM DE LA LIGUE
-            config.ligue_name = GetLigueName.main(bet_ligue)
-            # EN CAS D'ERREUR
-            if not config.ligue_name:
-                config.error = False
-                break
-            liguelist.append([bet_ligue.find_elements(By.CLASS_NAME,
-                                                      'dashboard-champ-name__label')[
-                0].get_attribute(
-                "href"), config.ligue_name])
 
-        for link in liguelist:
-            driver.get(link[0])
-            config.ligue_name = link[1]
-            bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                                  'dashboard-champ-body__games')
-            # POUR CHAQUE LIGUE RÉCUPÉRÉE
+        matchlist_from_json = charger_matchlist_depuis_json()
+
+        if matchlist_from_json is not None:
+            # Utiliser la matchlist du fichier JSON
+            matchlist = matchlist_from_json
+            print(f"Utilisation de la matchlist depuis le fichier JSON - {len(matchlist)} matchs")
+            config.log(f"Matchlist chargée depuis JSON - {len(matchlist)} matchs", 'info', True)
+        else:
+            """On vérifie si c'est la page d'un match """
+            config.match_found = GetIfMatchPage(driver)
+            # SCRIPT RECHERCHE DE MATCH
+            # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
+            # GetIfScriptsRunning()
+            # VERIFICATION SI PAGE DE LIST LIVE"""
+            if not VerificationListeMatchLive(driver):
+                config.error = True
+                print("PAGE VIDE")
+                driver.get(config.site_line_url)
+                return False
+            # RECUPERATION DES LIGUES EN COURS
+            bet_list_ligue = driver.find_elements(By.CLASS_NAME, config.classes['dashboard_champ'][config.site_type])
+            matchlist = []
+            liguelist = []
+            print(str(len(bet_list_ligue)))
             for bet_ligue in bet_list_ligue:
+                # ON RÉCUPÈRE LE NOM DE LA LIGUE
+                config.ligue_name = GetLigueName.main(bet_ligue)
+                # EN CAS D'ERREUR
+                if not config.ligue_name:
+                    config.error = False
+                    break
+                liguelist.append([bet_ligue.find_elements(By.CLASS_NAME,
+                                                          config.classes['dashboard_champ_name'][config.site_type])[
+                    0].get_attribute(
+                    "href"), config.ligue_name])
 
-                # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-                if getCompet():
-                    print(config.ligue_name)
-                    print('get comp')
-                    # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
-                    try:
-                        bet_items = driver.find_elements(By.CLASS_NAME,
-                                                         'dashboard-game-block__row')
-                    except:
-                        print(' c-events-scoreboard__item')
-                        # s'il y une erreur on passe au suivant
-                        continue
-                    else:
-                        if len(bet_items) <= 0:
-                            continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
-                        i = 0
-                        for bet_item in bet_items:
-                            try:
-                                teams_name = bet_item.find_element(By.CLASS_NAME,
-                                                                   'dashboard-game-block__teams')
-                                players = teams_name.find_elements(By.CLASS_NAME, 'dashboard-game-team-info')
-                                players_name = []
-                                match = []
-                                if len(players) <= 1:
+            for link in liguelist:
+                driver.get(link[0])
+                config.ligue_name = link[1]
+                bet_list_ligue = driver.find_elements(By.CLASS_NAME,
+                                                      config.classes['dashboard_champ_body_games'][config.site_type])
+                # POUR CHAQUE LIGUE RÉCUPÉRÉE
+                for bet_ligue in bet_list_ligue:
+
+                    # ON VÉRIFIE QUE LA COMPET EST JOUABLE
+                    if getCompet():
+                        print(config.ligue_name)
+                        # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
+                        try:
+                            bet_items = driver.find_elements(By.CLASS_NAME,
+                                                             config.classes['dashboard_game_block_row'][
+                                                                 config.site_type])
+                        except:
+                            print(' c-events-scoreboard__item')
+                            # s'il y une erreur on passe au suivant
+                            continue
+                        else:
+                            if len(bet_items) <= 0:
+                                continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
+                            i = 0
+                            for bet_item in bet_items:
+                                try:
+                                    start_time_text = bet_item.find_element(By.CLASS_NAME, 'c-events__time').text
+                                except:
+                                    print('heure de debut non trouvé')
+                                else:
+                                    try:
+                                        day_month = start_time_text.split()[0]  # '09/09'
+
+                                        # Ajouter l'année actuelle
+                                        current_year = datetime.now().year
+                                        match_date = datetime.strptime(f"{day_month}/{current_year}", "%d/%m/%Y").date()
+
+                                        # Date actuelle sans l'heure
+                                        today = datetime.now().date()
+
+                                        if match_date > today:
+                                            continue
+                                    except ValueError as e:
+                                        print(f"Erreur de parsing de la date : {e}")
+
+                                try:
+                                    teams_name = bet_item.find_element(By.CLASS_NAME,
+                                                                       config.classes['team_wrap'][config.site_type])
+                                    players = teams_name.find_elements(By.CLASS_NAME,
+                                                                       config.classes['team_name'][config.site_type])
+                                    players_name = []
+                                    match = []
+                                    if len(players) <= 1:
+                                        print('pas de player')
+                                        continue
+                                    for player in players:
+                                        player = player.text.split('(')[0]
+                                        player = player.strip()
+                                        config.log(player, config.newmatch)
+                                        players_name.append(player)
+                                    match.append(players_name)
+                                    match.append(config.ligue_name)
+                                    newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
+                                                                         config.classes['match_link'][
+                                                                             config.site_type])[
+                                        0].get_attribute(
+                                        "href")
+                                    newmatch = newmatchtxt.split(
+                                        '-')
+                                    config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
+                                    match.append(config.newmatch)
+                                    matchlist.append(match)
+
+                                except Exception as e:
                                     continue
-                                for player in players:
-                                    player = player.text.split('(')[0]
-                                    player = player.strip()
-                                    config.log(player, config.newmatch)
-                                    players_name.append(player)
-                                match.append(players_name)
-                                match.append(config.ligue_name)
-                                newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
-                                                                     'dashboard-game-block__link')[
-                                    0].get_attribute(
-                                    "href")
-                                newmatch = newmatchtxt.split(
-                                    '-')
-                                config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
-                                match.append(config.newmatch)
-                                matchlist.append(match)
-
-                            except Exception as e:
-                                print(e)
-                                txtlog = "Impossible de récupérer le score"
-                                config.log(txtlog, 0, config.newmatch)
-                                print(txtlog)
-                                continue
-                            else:
-                                print('ok')
-                else:
-                    print('not comp')
+                                else:
+                                    print('ok')
+                    else:
+                        print('not comp')
 
         print(len(matchlist))
-        goodmatch = []
-        for matchItem in matchlist:
-            players_name = matchItem[0]
-            ligue_name = matchItem[1]
-            print(matchItem)
-            # goodmatch.append(matchItem)#ajout dasn tou sles cas pour faire tous ls match
-            if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
-                config.proba40A = Functions_stats.get_wta_proba_40A(players_name[0], players_name[1])
-                # config.proba40A = 0.5
-                time.sleep(1)
-                if config.proba40A == 0:
-                    config.proba40A = Functions_stats.get_wta_proba_40A_other(players_name[0], players_name[1], driver)
-            else:
-                config.proba40A = Functions_stats.get_proba_40A(players_name[0], players_name[1])
-                # config.proba40A = 0.5
-                time.sleep(1)
-                if config.proba40A == 0:
-                    config.proba40A = Functions_stats.get_proba_40A_other(players_name[0], players_name[1], driver)
-            print('proba ' + str(config.proba40A))
-            if float(config.proba40A) >= float(config.probamini):
-                matchItem.append(config.proba40A)
-                print(matchItem)
-                goodmatch.append(matchItem)
+
+        # Sauvegarder la matchlist dans un fichier JSON avant traitement
+        sauvegarder_matchlist_json(matchlist)
+
+        # Traiter les matchs pour obtenir les probabilités
+        goodmatch = traiter_matchlist(matchlist)
 
         # Tri en fonction de la dernière valeur (indice -1) en ordre décroissant
         tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
@@ -848,4 +920,4 @@ if __name__ == "__main__":
     # ajouter un autre niveau parent si nécessaire
     project_directory = os.path.dirname(parent_directory)
     sys.path.append(project_directory)
-    rechercheDeMatch(driver)
+    classementeDeMatch(driver)

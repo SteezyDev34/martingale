@@ -1,5 +1,7 @@
 <?php
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 // Inclure le fichier de configuration
 require_once __DIR__ . '/../config.php';
 
@@ -7,17 +9,14 @@ require_once __DIR__ . '/../config.php';
 $conn = getDbConnection();
 
 
-// Vérifier si le paramètre "ligue" est fourni
-if (!isset($_GET['ligue']) || empty($_GET['ligue'])) {
-    echo json_encode(null);
-    exit;
-}
-
-$ligue = $conn->real_escape_string($_GET['ligue']);
-$ligue = urldecode($ligue);
-// Requête SQL : sélectionner la dernière perte pour la ligue donnée
 // On suppose qu'il y a un champ "id" ou un champ "date" pour trier par ordre décroissant
-$sql = "SELECT * FROM 0_perte1SET WHERE ligue = '$ligue' ORDER BY id DESC LIMIT 1";
+/* $sql = "SELECT * FROM 0_perte1SET 
+        WHERE created_at < NOW() - INTERVAL 1 DAY 
+        ORDER BY id DESC 
+        LIMIT 1"; */
+$sql = "SELECT * FROM 0_perte1SET 
+ORDER BY id DESC 
+LIMIT 1";
 $result = $conn->query($sql);
 
 $data = array();

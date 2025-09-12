@@ -14,7 +14,7 @@ from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetJeuActuel import GetJeuActuel
-from Functions.GetJsonData import DispatchPerte, getGlobalPerte
+from Functions.GetJsonData import DispatchPerte, getGlobalPerte, get1setGlobalPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
@@ -60,6 +60,8 @@ def all_script(driver):
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
         if config.perte == 0:
             getGlobalPerte()
+        if config.perte == 0:
+            get1setGlobalPerte()
         # END RECHERCHE INFOS DE MISE
     GetScoreActuel(driver)
     if not config.set_actuel:
@@ -288,6 +290,8 @@ def all_script(driver):
                     passageset = True
                     config.newset = int(config.set_actuel) + 1
                     config.log(txtlog, config.newmatch)
+                    config.perte -= float(config.validated_bet.get('montant'))
+                    print('Revert perte : ', config.perte)
                     DeleteBet(driver)
                     txtlog = 'Wait 30 sec'
                     config.log(txtlog, config.newmatch)
