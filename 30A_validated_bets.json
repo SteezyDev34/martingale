@@ -1483,5 +1483,41 @@
         "winscore": "30:30",
         "timestamp": "2025-09-12 17:58:22",
         "url": "https://1xbet.com/fr/live/tennis/2901152-wta-san-sebastian/652983289-tamara-korpatsch-oksana-selekhmeteva"
+    },
+    {
+        "montant": 0.24,
+        "cote": "2.65",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-09-12 19:20:50",
+        "url": "https://1xbet.com/fr/live/tennis/113301-challenger-rennes/652993924-michael-geerts-stanislas-wawrinka"
+    },
+    {
+        "montant": 0.38,
+        "cote": "3.2",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-09-12 19:25:02",
+        "url": "https://1xbet.com/fr/live/tennis/113301-challenger-rennes/652993886-michael-geerts-stanislas-wawrinka"
+    },
+    {
+        "montant": 0.28,
+        "cote": "2.45",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-09-12 19:54:11",
+        "url": "https://1xbet.com/fr/live/tennis/2299089-itf-le-neubourg-women/653021401-yuriko-miyazaki-astrid-lew-yan-foon"
+    },
+    {
+        "montant": 0.63,
+        "cote": "2.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-09-12 20:00:19",
+        "url": "https://1xbet.com/fr/live/tennis/2299089-itf-le-neubourg-women/653021389-yuriko-miyazaki-astrid-lew-yan-foon"
     }
 ]
