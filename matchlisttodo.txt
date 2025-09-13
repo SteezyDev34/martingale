@@ -1,56 +1,10 @@
 
-['Maria Sakkari', 'Elsa Jacquemot']|wta guadalajara|sakkari-elsa-jacquemot|0.485387
-['Emiliana Arango', 'Magda Linette']|wta guadalajara|arango-magda-linette|0.4676429999999999
-['Berfu Cengiz', 'Renata Zarazua']|wta sao paulo|cengiz-renata-zarazua|0.44902400000000003
-['Mayar Sherif', 'Tamara Korpatsch']|wta saint-sébastien|sherif-tamara-korpatsch|0.4436
-['Victoria Jimenez Kasintseva', 'Veronika Kudermetova']|wta guadalajara|kasintseva-veronika-kudermetova|0.429251
-['Julia Grabher', 'Carson Branstine']|wta saint-sébastien|grabher-carson-branstine|0.4118139999999999
-['Kyoka Okamura', 'Sijia Wei']|wta huzhou|okamura-sijia-wei|0.398759
-['Francesca Jones', 'Whitney Osuigwe']|wta sao paulo|jones-whitney-osuigwe|0.388778
-['Leyre Romero Gormaz', 'Charo Esquiva Banuls']|wta saint-sébastien|charo-esquiva-banuls|0.273689
-['Storm Hunter', 'Katerina Siniakova']|wta guadalajara|hunter-katerina-siniakova|0.23630400000000004
-['Nauhany Vitoria Leme Da Silva', 'Solana Sierra']|wta sao paulo|silva-solana-sierra|0.23435999999999996
-['Martina Trevisan', 'Rebecca Marino']|wta guadalajara|trevisan-rebecca-marino|0.230691
-['Maria Camila Osorio Serrano', 'Kamilla Rakhimova']|wta guadalajara|serrano-kamilla-rakhimova|0.23037300000000002
-['Beatriz Haddad Maia', 'Miriana Tona']|wta sao paulo|maia-miriana-tona|0.22942499999999996
-['Anastasia Gasanova', 'Lanlana Tararudee']|wta huzhou|gasanova-lanlana-tararudee|0.22869
-['Sloane Stephens', 'Lucrezia Stefanini']|wta guadalajara|stephens-lucrezia-stefanini|0.221792
-['Janice Tjen', 'Martina Okalova']|wta sao paulo|tjen-martina-okalova|0.213
-['Maria Timofeeva', 'Anna-Lena Friedsam']|wta huzhou|anna-lena-friedsam|0.210358
-['Mai Hontama', 'Xinxin Yao']|wta huzhou|hontama-xinxin-yao|0.20542200000000002
-['Angela Fita Boluda', 'Carlota Martinez Cirez']|wta saint-sébastien|carlota-martinez-cirez|0.20372800000000002
-['Dominika Salkova', 'Renata Jamrichova']|wta ljubljana|salkova-renata-jamrichova|0.20039600000000005
-['Oksana Selekhmeteva', 'Ane Mintegi Del Olmo']|wta saint-sébastien|mintegi-del-olmo|0.19747
-['Anouk Koevermans', 'Sara Bejlek']|wta saint-sébastien|koevermans-sara-bejlek|0.18353400000000003
-['Victoria Rodriguez', 'Tiantsoa Sarah Rakotomanga Rajaonah']|wta sao paulo|sarah-rakotomanga-rajaonah|0.1365
-['Irene Burillo Escorihuela', 'Darja Semenistaja']|wta saint-sébastien|escorihuela-darja-semenistaja|0.132545
-['Rafael Jodar', 'Lucas Poullain']|challenger hersonissos 4 dur|jodar-lucas-poullain|0.5681816141949738
-['Nikolas Sanchez Izquierdo', 'Diego Dedura-Palomero']|challenger augsburg terre battue|diego-dedura-palomero|0.5174991019715062
-['Zdenek Kolar', 'Hynek Barton']|challenger augsburg terre battue|kolar-hynek-barton|0.5062731449670156
-['Mats Rosenkranz', 'Christian Langmo']|challenger hersonissos 4 dur|rosenkranz-christian-langmo|0.40960361803153833
-['Vit Kopriva', 'Diego Dedura-Palomero']|challenger szczecin|diego-dedura-palomero|0.4950863829764699
-['Darja Vidmanova', 'Nikola Bartunkova']|wta guadalajara|vidmanova-nikola-bartunkova|0.6877551341878827
-['Julia Riera', 'Alexandra Eala']|wta sao paulo|riera-alexandra-eala|0.6341127306221483
-['Oksana Selekhmeteva', 'Ane Mintegi Del Olmo']|wta saint-sébastien|mintegi-del-olmo|0.614223750225459
-['Anouk Koevermans', 'Sara Bejlek']|wta saint-sébastien|koevermans-sara-bejlek|0.5899357538286922
-['Sloane Stephens', 'Lucrezia Stefanini']|wta guadalajara|stephens-lucrezia-stefanini|0.5729740928908587
-['Francesca Jones', 'Whitney Osuigwe']|wta sao paulo|jones-whitney-osuigwe|0.5667236246355305
-['Eliakim Coulibaly', 'Sascha Gueymard Wayenburg']|challenger rennes|sascha-gueymard-wayenburg|0.5587275540715134
-['Mayar Sherif', 'Tamara Korpatsch']|wta saint-sébastien|sherif-tamara-korpatsch|0.5367459859428981
-['Hugo Gaston', 'eliakim coulibaly']|challenger rennes|gaston-eliakim-coulibaly|0.5313443332573903
-['Julia Grabher', 'Carson Branstine']|wta saint-sébastien|grabher-carson-branstine|0.5268304627066982
-['Dominika Salkova', 'Renata Jamrichova']|wta ljubljana|salkova-renata-jamrichova|0.5187113638158414
-['Dimitar Kuzmanov', 'Pablo Llamas Ruiz']|challenger szczecin|pablo-llamas-ruiz|0.5090135999318419
-['Facundo Diaz Acosta', 'Hynek Barton']|challenger szczecin|acosta-hynek-barton|0.4814191072734004
-['Francesco Passaro', 'Henri Squire']|challenger szczecin|passaro-henri-squire|0.44485535973054846
-['Harold Mayot', 'Robin Bertrand']|challenger rennes|mayot-robin-bertrand|0.44452116578456435
-['Clement Chidekh', 'Maxime Janvier']|challenger rennes|chidekh-maxime-janvier|0.43457932523165127
-['Kilian Feldbausch', 'Marco Cecchinato']|challenger biella|feldbausch-marco-cecchinato|0.37844057274297593
-['Mae Malige', 'Dan Added']|challenger rennes|malige-dan-added|0.37460759204635663
-['Janice Tjen', 'Martina Okalova']|wta sao paulo|tjen-martina-okalova|0.3744047619047619
-['Nauhany Vitoria Leme Da Silva', 'Solana Sierra']|wta sao paulo|silva-solana-sierra|0.3171290286689167
-['Piet Luis Pinter', 'Ognjen Milic']|itf kursumlijska banja|pinter-ognjen-milic|0.2146118721461187
-['Yuliana Lizarazo', 'Noemi Maines']|itf viserba femmes|lizarazo-noemi-maines|0.19375
-['Vit Kopriva', 'Diego Dedura-Palomero']|challenger szczecin|diego-dedura-palomero|0.48804506027776495
-https://1xbet.com/fr/live/tennis/2901152-wta-san-sebastian/652983289-tamara-korpatsch-oksana-selekhmeteva
-https://1xbet.com/fr/live/tennis/113301-challenger-rennes/652993886-michael-geerts-stanislas-wawrinka
+['Janice Tjen', 'Francesca Jones']|wta sao paulo|tjen-francesca-jones|0.6903295387699828
+['Elsa Jacquemot', 'Emiliana Arango']|wta guadalajara|jacquemot-emiliana-arango|0.6097667863116638
+['Astrid Lew Yan Foon', 'Petra Marcinko']|itf le nebourg femmes|foon-petra-marcinko|0.5888510682865521
+['Marin Cilic', 'Corentin Moutet']|coupe davis qualification|cilic-corentin-moutet|0.5335876392126109
+['Frances Tiafoe', 'Jakub Mensik']|coupe davis qualification|tiafoe-jakub-mensik|0.5265313218744639
+['Harry Wendelken', 'Mats Rosenkranz']|itf plaisir|wendelken-mats-rosenkranz|0.48685617193079883
+['Olaf Pieczkowski', 'Cameron Norrie']|coupe davis|pieczkowski-cameron-norrie|0.45338359648896187
+['Hugo Gaston', 'Clement Chidekh']|challenger rennes|gaston-clement-chidekh|0.45336610048566567
+['Simon Reveniau', 'Hamish Stewart']|itf plaisir|reveniau-hamish-stewart|0.28715322236449

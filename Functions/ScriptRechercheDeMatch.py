@@ -1,5 +1,6 @@
 import inspect
 import json
+import os
 import time
 from datetime import datetime
 
@@ -19,8 +20,6 @@ from config import site_url
 
 
 def charger_matchlist_depuis_json():
-    import os
-
     """
     Fonction pour charger la liste des matchs depuis le fichier JSON le plus récent
     
@@ -670,7 +669,6 @@ def classementeDeMatch(driver):
 
 
 def newclassementeDeMatch(driver):
-    import os
     driver.get(site_url)
     config.error = False
     print('RECHERCHE DE MATCH')
@@ -909,7 +907,6 @@ def newclassementeDeMatch(driver):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
     import sys
-    import os
 
     GetIfNewSite(driver)
     # Récupérer le chemin absolu du fichier actuel
