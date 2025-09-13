@@ -198,7 +198,7 @@ classes = {
     'search_input':
         {
             'old_site': 'scoreboard-nav-items-search__input',
-            'nex_site': 'ui-search__input'
+            'new_site': 'ui-search__input'
         },
     'bet_list_container':
         {

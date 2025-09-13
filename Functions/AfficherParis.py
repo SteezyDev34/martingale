@@ -115,23 +115,27 @@ def AfficherParis(driver):
                                                     'ui_search_to_click'][
                                                     config.site_type])[0]
                                                 searchbutton.click()
+                                                print('click')
                                                 toolbar.find_elements(By.CLASS_NAME,
                                                                       config.classes[
                                                                           'search_input'][
                                                                           config.site_type])[
                                                     0].clear()
+                                                print('clear')
+
                                                 toolbar.find_elements(By.CLASS_NAME,
                                                                       config.classes[
                                                                           'search_input'][
                                                                           config.site_type])[
                                                     0].send_keys(
                                                     key)
+                                                print(f'send {key}')
                                                 l = toolbar.find_elements(By.CLASS_NAME,
                                                                           config.classes[
                                                                               'search_input'][
                                                                               config.site_type])[
                                                     0].get_attribute("value")
-
+                                                print(f'l : {l}')
                                                 if l == key:
                                                     try:
                                                         print('wait for market grid container')
@@ -158,8 +162,10 @@ def AfficherParis(driver):
 
 
                                             except Exception as e:
-                                                config.log(f'        #ERROR16 : impossible ecrire {key}', 'warning',
-                                                           False)
+                                                config.log(
+                                                    f'        #ERROR16 : impossible ecrire {key}, {e}',
+                                                    'warning',
+                                                    False)
                                                 config.log_clear_line()
                                                 if GetIfMatchPage(driver) != True:
                                                     config.error = True
