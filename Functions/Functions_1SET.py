@@ -1,5 +1,6 @@
 import json
 import time
+from datetime import datetime, timedelta
 from time import sleep
 
 from selenium.webdriver.common.by import By
@@ -10,16 +11,16 @@ from Functions import Functions_1XBET, UpdateMatchDone
 from Functions import GetLigueName, AddRunning
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
-from Functions.GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import remove_match_from_json_file
 from Functions.GetJsonData import getPerte, set1DispatchPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
+from Functions.GetSetActuel import GetSetActuel
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch1set
 from Functions.VerificationMatchTrouve import newmatchFromUrl
-from datetime import datetime, timedelta
+
 
 def all_script(driver):
     # driver.switch_to.window(driver.window_handles[0])
@@ -122,15 +123,15 @@ def all_script(driver):
                                 if 'timestamp' in match:
                                     match_time = datetime.strptime(match['timestamp'], "%Y-%m-%d %H:%M:%S")
                                     if match_time < datetime.now() - timedelta(days=2):
-                                            config.perte = float(config.validated_bet['montant']) * float(
-                                                config.validated_bet['cote'])
-                                            set1DispatchPerte()
-                                            remove_match_from_json_file('1SET_validated_bets.json', config.newmatch)
+                                        config.perte = float(match['montant']) * float(
+                                            match['cote'])
+                                        set1DispatchPerte()
+                                        remove_match_from_json_file('1SET_validated_bets.json', match['url'])
 
-                                            config.error = 'LOSE'
-                                            Functions_1XBET.update_match_done("del", config.newmatch,
-                                                                            config.matchlist_file_name)
-                                            continue
+                                        config.error = 'LOSE'
+                                        Functions_1XBET.update_match_done("del", config.newmatch,
+                                                                          config.matchlist_file_name)
+                                        continue
                                 if 'url' in match and config.newmatch in match['url']:
                                     div_bet_score = bet_item.find_elements(By.CLASS_NAME,
                                                                            'ui-game-scores')

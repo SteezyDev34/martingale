@@ -26,6 +26,7 @@ scriptTypeList4 = ['400', '4015', '4030', 'BREAK']
 script_num = 0  # Numéro du Script
 win = 0  # Nombre de victoire
 cote = 3
+tipster = '1xbet'
 scriptType = "40A"
 localhost = ''
 wich_site = input("1XBET CA? (Y/N): ")
@@ -355,6 +356,16 @@ classes = {
         },
 
 }
+# Importation des types de paris 1xBet depuis le fichier JSON
+xbet_types_file = os.path.join(projectPath, 'xbet_types.json')
+with open(xbet_types_file, 'r', encoding='utf-8') as f:
+    xbet_types_data = json.load(f)
+
+# Conversion des listes en ensembles pour maintenir la compatibilité avec le code existant
+xbet_type_list = {}
+for period, bet_types in xbet_types_data.items():
+    # Utilisation d'une compréhension d'ensemble au lieu de la fonction set()
+    xbet_type_list[period] = {bet_type for bet_type in bet_types}
 # Initialize dictionaries to track wins per script type
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}

@@ -1,5 +1,5 @@
 # GetMise
-
+import requests
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -34,7 +34,13 @@ def GetMise(driver):
             config.log_clear_line()
             if config.cote == '' or str(config.cote) == '0' or str(config.cote) == '1' or config.cote == 0:
                 config.cote = config.cotebase
-    config.mise = (float(config.wantwin) + float(config.perte)) / (float(config.cote) - 1)
+    if config.scriptType == 'LIVE':
+        api_url = f'https://bettracker.sc2vagr6376.universe.wf/backend/api.php?action=recommended_stake&tipster={config.tipster}&odds={config.cote}&target_percentage=1&recover_losses=1'
+        req = requests.get(api_url, verify=False)
+        config.mise = round(float(req.json()['recommended_stake']), 2)
+        return True
+    else:
+        config.mise = (float(config.wantwin) + float(config.perte)) / (float(config.cote) - 1)
     config.mise = round(config.mise, 2)
     if config.mise < 0.2:
         config.mise = 0.2

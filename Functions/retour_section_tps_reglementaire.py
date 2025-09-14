@@ -9,7 +9,7 @@ import config
 from Functions.GetIfNewSite import GetIfNewSite
 
 
-def RetourTpsReg(driver):
+def RetourTpsReg(driver, theset="Temps réglementaire"):
     config.log('recherche du champ déroulant...', config.newmatch)
     # driver.switch_to.window(driver.window_handles[0])
     selection = False
@@ -68,7 +68,7 @@ def RetourTpsReg(driver):
                                 tentative = tentative + 1
                                 config.log(str(tentative))
                             else:
-                                theset = "Temps réglementaire"
+
                                 if select_option_text.strip().lower() == str(theset).lower():
                                     # config.log('Lien ' + select_option_text.lower() + ' = ' + str(theset).lower(),config.newmatch)
                                     try:

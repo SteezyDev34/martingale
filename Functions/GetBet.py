@@ -13,14 +13,14 @@ from Functions.GetJeuActuel import GetJeuActuel
 from Functions.GetScoreActuel import GetScoreActuel
 
 
-def GetBet(driver, nextBet=False):
+def GetBet(driver, nextBet=False, selection=''):
     if config.site_type == 'old_site':
-        return GetBetOld(driver, nextBet)
+        return GetBetOld(driver, nextBet, selection)
     else:
-        return GetBetNew(driver, nextBet)
+        return GetBetNew(driver, nextBet, selection)
 
 
-def GetBetNew(driver, nextBet=False):
+def GetBetNew(driver, nextBet=False, selection=''):
     config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', True, 2)
     if_get_jeu = False
     clic = False

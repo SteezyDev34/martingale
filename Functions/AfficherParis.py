@@ -12,10 +12,11 @@ from Functions.GetSetActuel import GetSetActuel
 from Functions.ModalHandler import ModalHandler
 
 
-def AfficherParis(driver):
+def AfficherParis(driver, categorie='', type_de_pari='', ):
     config.log('recherche du champ déroulant...', '', True, 2)
-    GetSetActuel(driver)
-    GetScoreActuel(driver)
+    if config.scriptType != 'LIVE':
+        GetSetActuel(driver)
+        GetScoreActuel(driver)
     selection = False
     tentative = 1
     clic = False
@@ -37,6 +38,10 @@ def AfficherParis(driver):
         key = '1X2'
     elif config.scriptType == 'BREAK':
         key = 'Gagne dans le jeu'
+    elif config.scriptType == 'LIVE':
+        theset = ''
+        args = categorie
+        key = type_de_pari
     else:
         if config.site_type == 'old_site':
             key = 'Score de la partie. ' + theset + args
@@ -182,7 +187,7 @@ def AfficherParis(driver):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    config.scriptType = '40A'
+    config.scriptType = 'LIVE'
     GetIfNewSite(driver)
     print(config.site_type)
-    AfficherParis(driver)
+    AfficherParis(driver, 'Corners')
