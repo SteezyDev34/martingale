@@ -65,21 +65,21 @@ def all_script(driver):
 
     try:
         # RECUPERATION DES LIGUES EN COURS
-        config.log(' Récupération des ligues', 'info', True, 1)
+        # config.log(' Récupération des ligues', 'info', True, 1)
         bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                               'dashboard-champ')
     except:
         config.log('ligues introuvables!', 'warning', True, 2)
         return False
     else:
-        config.log('ligues trouvées!', 'success', True, 2)
+        # config.log('ligues trouvées!', 'success', True, 2)
         # POUR CHAQUE LIGUE RÉCUPÉRÉE
         for bet_ligue in bet_list_ligue:
             # ON RÉCUPÈRE LE NOM DE LA LIGUE
             config.ligue_name = GetLigueName.main(bet_ligue)
             # EN CAS D'ERREUR
             if not config.ligue_name:
-                config.log('nom ligues introuvalbe!', 'warning', False, 2)
+                # config.log('nom ligues introuvalbe!', 'warning', False, 2)
                 config.log_clear_line()
                 config.error = False
                 continue
@@ -87,17 +87,17 @@ def all_script(driver):
             config.log(' ' + config.ligue_name, 'info', False, 2)
             # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
             try:
-                config.log('Récupération des matchs', 'info', False, 3)
+                # config.log('Récupération des matchs', 'info', False, 3)
                 config.log_clear_line()
                 bet_items = bet_ligue.find_elements(By.CLASS_NAME,
                                                     'dashboard-champ__game')
             except:
-                config.log('Listes des matchs introuvables!', 'warning', False, 3)
+                # config.log('Listes des matchs introuvables!', 'warning', False, 3)
                 # s'il y une erreur on passe au suivant
                 continue
             else:
                 if len(bet_items) <= 0:
-                    config.log('Listes des matchs introuvables!', 'warning', False, 3)
+                    # config.log('Listes des matchs introuvables!', 'warning', False, 3)
                     # s'il y une erreur on passe au suivant
                     config.log_clear_line(2)
                     continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
@@ -111,8 +111,7 @@ def all_script(driver):
                     newmatch = newmatchtxt.split(
                         '-')
                     config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
-                    config.log(config.newmatch, 'info', False, 4)
-                    print('config new match ', config.newmatch)
+                    # config.log(config.newmatch, 'info', False, 4)
                     # Check if newmatch exists in JSON file
                     try:
                         with open('1SET_validated_bets.json', 'r') as f:
@@ -139,10 +138,10 @@ def all_script(driver):
                                         '\n', '')
                                     print(text)
                                     if '6' not in text and '7' not in text:
-                                        print('MATCH NON TERMINÉ SELON SCORE')
+                                        # print('MATCH NON TERMINÉ SELON SCORE')
                                         continue
                                     elif '0066' in text or '0065' in text or '0056' in text:
-                                        print('TIE BREAK MATCH NON TERMINÉ SELON SCORE')
+                                        # print('TIE BREAK MATCH NON TERMINÉ SELON SCORE')
                                         continue
                                     else:
                                         print('MATCH TROUVÉ')
