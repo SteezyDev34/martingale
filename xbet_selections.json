@@ -1,0 +1,82 @@
+{
+    "Temps réglementaire": {
+        "Total. Corners": [
+            "Total Plus de 9",
+            "Total Moins de 9",
+            "Total Plus de 9.5",
+            "Total Moins de 9.5",
+            "Total Plus de 10",
+            "Total Moins de 10",
+            "Total Plus de 10.5",
+            "Total Moins de 10.5",
+            "Total Plus de 11",
+            "Total Moins de 11"
+        ]
+    },
+    "1 Set": {
+        "Total. Corners": [
+            "Total Plus de 9",
+            "Total Moins de 9",
+            "Total Plus de 9.5",
+            "Total Moins de 9.5",
+            "Total Plus de 10",
+            "Total Moins de 10",
+            "Total Plus de 10.5",
+            "Total Moins de 10.5",
+            "Total Plus de 11",
+            "Total Moins de 11"
+        ]
+    },
+    "Corners:Total. Corners": [
+        "Total Plus de 8.5",
+        "Total Moins de 8.5",
+        "Total Plus de 9",
+        "Total Moins de 9",
+        "Total Plus de 9.5",
+        "Total Moins de 9.5",
+        "Total Plus de 10",
+        "Total Moins de 10",
+        "Total Plus de 10.5",
+        "Total Moins de 10.5"
+    ],
+    "Corners:3 Issues Total. Corners": [
+        "Total Plus de 9 (3 Issues)",
+        "Total égal à 9 (3 Issues)",
+        "Total Moins de 9 (3 Issues)",
+        "Total Plus de 10 (3 Issues)",
+        "Total égal à 10 (3 Issues)",
+        "Total Moins de 10 (3 Issues)",
+        "Total Plus de 11 (3 Issues)",
+        "Total égal à 11 (3 Issues)",
+        "Total Moins de 11 (3 Issues)",
+        "Total Plus de 12 (3 Issues)"
+    ],
+    "Corners:Prochain Corner (2 Issues). Corners": [
+        "Prochain Corner 8 - Equipe 1 (2 Issues)",
+        "Prochain Corner 8 - Equipe 2 (2 Issues)"
+    ],
+    "Corners:Premier à avoir. Corners": [
+        "Equipe 1 première à obtenir 7 Corners",
+        "Equipe 2 première à obtenir 7 Corners",
+        "Aucune Equipe n'obtient 7 Corners",
+        "Equipe 1 première à obtenir 9 Corners",
+        "Equipe 2 première à obtenir 9 Corners",
+        "Aucune Equipe n'obtient 9 Corners"
+    ],
+    "Corners:Prochain Corner. Corners": [
+        "Dernier corner Equipe 1",
+        "Dernier corner Equipe 2"
+    ],
+    "Corners:Nombre Exact. Corners": [
+        "Total 8 ou moins - Oui",
+        "Total 8 ou moins - Non",
+        "Total 9 - Oui",
+        "Total 9 - Non",
+        "Total 10 - Oui",
+        "Total 10 - Non",
+        "Total 11 - Oui",
+        "Total 11 - Non",
+        "Total 12 - Oui",
+        "Total 12 - Non"
+    ]
+}

@@ -1,0 +1,72 @@
+{
+    "Temps réglementaire": [
+        "1x2",
+        "Double chance",
+        "Les deux équipes vont marquer",
+        "1X2 + Chaque équipe va marquer",
+        "Total",
+        "Total Asiatique",
+        "Handicap",
+        "Handicap asiatique",
+        "Total 1",
+        "Total asiatique d'équipe 1",
+        "Total 2",
+        "Total asiatique d'équipe 2",
+        "Prochain But",
+        "Total. Corners"
+    ],
+    "1 Set": [
+        "1x2",
+        "Double chance",
+        "Les deux équipes vont marquer",
+        "1X2 + Chaque équipe va marquer",
+        "Total",
+        "Total Asiatique",
+        "Handicap",
+        "Handicap asiatique",
+        "Total 1",
+        "Total asiatique d'équipe 1",
+        "Total 2",
+        "Total asiatique d'équipe 2",
+        "Prochain But",
+        "Total. Corners"
+    ],
+    "1ère mi-temps": [
+        "1x2",
+        "Double chance",
+        "Les deux équipes vont marquer",
+        "1X2 + Chaque équipe va marquer",
+        "Total",
+        "Total Asiatique",
+        "Handicap",
+        "Handicap asiatique",
+        "Total 1",
+        "Total asiatique d'équipe 1",
+        "Total 2",
+        "Total asiatique d'équipe 2",
+        "Prochain But"
+    ],
+    "2ème mi-temps": [
+        "1x2",
+        "Double chance",
+        "Les deux équipes vont marquer",
+        "1X2 + Chaque équipe va marquer",
+        "Total",
+        "Total Asiatique",
+        "Handicap",
+        "Handicap asiatique",
+        "Total 1",
+        "Total asiatique d'équipe 1",
+        "Total 2",
+        "Total asiatique d'équipe 2",
+        "Prochain But"
+    ],
+    "Corners": [
+        "Total. Corners",
+        "3 Issues Total. Corners",
+        "Prochain Corner (2 Issues). Corners",
+        "Premier à avoir. Corners",
+        "Prochain Corner. Corners",
+        "Nombre Exact. Corners"
+    ]
+}
