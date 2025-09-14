@@ -8,3 +8,4 @@ DataFiles/*
 .idea/prettier.xml
 .idea/php.xml
 .DS_Store
+session_data.json
