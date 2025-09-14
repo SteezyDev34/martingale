@@ -9,7 +9,6 @@ def main(bet_ligue):
     try:
         div_ligue_name = bet_ligue.find_element(By.TAG_NAME, 'div')
     except Exception as e:
-        config.log('Lecture nom ligue impossible!', 'warning', False, 2)
         config.ligue_name = False
         config.log_clear_line()
     else:

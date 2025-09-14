@@ -253,8 +253,6 @@ def get_ligue_name(bet_ligue):
     try:
         div_ligue_name = bet_ligue.find_element(By.TAG_NAME, 'div')
     except Exception as e:
-        print(f"#E0004\nUne erreur est survenue : {e}")
-        print('Lecture nom ligue impossible!')
         ligue_name = False
     else:
         try:
@@ -263,7 +261,6 @@ def get_ligue_name(bet_ligue):
             ligue_name = ligue_name.text.lower()
             ligue_name = ligue_name.replace('.', '')
         except Exception as e:
-            print(f"#E0005\nUne erreur est survenue : {e}")
             ligue_name = False
         # else:
         # print('a Nom de la ligue :'+ligue_name)
