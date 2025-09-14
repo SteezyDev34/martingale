@@ -6,7 +6,6 @@ import time
 # Ajouter le chemin du projet au PYTHONPATH pour permettre l'importation de config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import openai
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
@@ -19,10 +18,9 @@ def cleanJson(raw_response):
 
 
 # Initialisation du client OpenAI avec la clé API
-from openai import OpenAI
+
 
 # Initialiser le client OpenAI
-client = OpenAI(api_key='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')
 
 
 # 🖼️ Charger l'image et la convertir en base64
@@ -101,7 +99,7 @@ if __name__ == "__main__":
     # Utiliser un chemin absolu pour l'image
     project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     image_path = os.path.join(project_path, "media_20250413_204440.jpg")
-    
+
     if os.path.exists(image_path):
         result = extraire_pari_depuis_image(image_path)
         # Initialize your webdriver here
