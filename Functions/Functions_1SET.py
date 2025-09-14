@@ -120,10 +120,10 @@ def all_script(driver):
                             # Vérifie si config.newmatch est présent dans l'URL du fichier JSON
                             original_tab = driver.current_window_handle  # Mémorise l'onglet actuel
                             for match in match_data:
-                                print('get match')
                                 if 'timestamp' in match:
                                     match_time = datetime.strptime(match['timestamp'], "%Y-%m-%d %H:%M:%S")
                                     if match_time < datetime.now() - timedelta(days=2):
+                                        print('match abandonné')
                                         config.perte = float(match['montant']) * float(match['cote'])
                                         set1DispatchPerte()
                                         remove_match_from_json_file('1SET_validated_bets.json', match['url'])
@@ -169,17 +169,20 @@ def all_script(driver):
                                     config.log(txtlog, config.newmatch)
                                     config.result = GetResult(driver)
                                     if config.result == 'LOSE':
-                                        config.perte = float(config.validated_bet['montant']) * float(config.validated_bet['cote'])
+                                        config.perte = float(config.validated_bet['montant']) * float(
+                                            config.validated_bet['cote'])
                                         set1DispatchPerte()
                                         remove_match_from_json_file('1SET_validated_bets.json', config.newmatch)
                                         config.error = 'LOSE'
-                                        Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
+                                        Functions_1XBET.update_match_done("del", config.newmatch,
+                                                                          config.matchlist_file_name)
                                     elif config.result == 'WIN':
                                         # Load and process validated bets from JSON file
                                         remove_match_from_json_file('1SET_validated_bets.json', config.newmatch)
                                         config.perte = 0
                                         config.error = 'WIN'
-                                        Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
+                                        Functions_1XBET.update_match_done("del", config.newmatch,
+                                                                          config.matchlist_file_name)
                                     return
 
 
