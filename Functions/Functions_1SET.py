@@ -84,7 +84,7 @@ def all_script(driver):
                 config.error = False
                 continue
             # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-            config.log(' ' + config.ligue_name, 'info', False, 2)
+            # config.log(' ' + config.ligue_name, 'info', False, 2)
             # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
             try:
                 # config.log('Récupération des matchs', 'info', False, 3)
@@ -136,7 +136,6 @@ def all_script(driver):
                                     text = div_bet_score[0].text
                                     text = text.replace(
                                         '\n', '')
-                                    print(text)
                                     if '6' not in text and '7' not in text:
                                         # print('MATCH NON TERMINÉ SELON SCORE')
                                         continue

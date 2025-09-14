@@ -28,7 +28,6 @@ def main(bet_ligue):
 # GetLigueNameFromUrl
 def fromUrl(driver):
     get_url = driver.current_url
-    print(" url = " + get_url)
     get_url = get_url.split('tennis/')
     get_url = get_url[1].split('/')
     get_url = get_url[0]
