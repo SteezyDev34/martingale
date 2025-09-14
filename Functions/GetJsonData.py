@@ -262,9 +262,9 @@ def getCompetRecup():
 
 
 def getCompet():
-    config.log('Recherche compet', 'info', False, 3)
+    # config.log('Recherche compet', 'info', False, 3)
     scriptType = '40A'
-    config.log_clear_line()
+    # config.log_clear_line()
     url = f"{config.api_url}/strategy" + scriptType + "/get_compet.php"
     # URL du lien JSON de la strategy
     try:

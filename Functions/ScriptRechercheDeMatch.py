@@ -263,7 +263,7 @@ def rechercheDeMatch(driver):
 
 def rechercheDeMatch1set(driver):
     config.error = False
-    config.log(' RECHERCHE DE MATCH', 'title', False)
+    # config.log(' RECHERCHE DE MATCH', 'title', False)
     config.match_found = False
     # config.init_variable()
     config.match_found = GetIfMatchPage(driver)
@@ -283,77 +283,77 @@ def rechercheDeMatch1set(driver):
         return False"""
     try:
         # RECUPERATION DES LIGUES EN COURS
-        config.log(' Récupération des ligues', 'info', True, 1)
+        # config.log(' Récupération des ligues', 'info', True, 1)
         bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                               'dashboard-champ')
     except:
-        config.log('ligues introuvables!', 'warning', True, 2)
+        # config.log('ligues introuvables!', 'warning', True, 2)
         return False
     else:
-        config.log('ligues trouvées!', 'success', True, 2)
+        # config.log('ligues trouvées!', 'success', True, 2)
         # POUR CHAQUE LIGUE RÉCUPÉRÉE
         for bet_ligue in bet_list_ligue:
             # ON RÉCUPÈRE LE NOM DE LA LIGUE
             config.ligue_name = GetLigueName.main(bet_ligue)
             # EN CAS D'ERREUR
             if not config.ligue_name:
-                config.log('nom ligues introuvalbe!', 'warning', False, 2)
-                config.log_clear_line()
+                # config.log('nom ligues introuvalbe!', 'warning', False, 2)
+                # config.log_clear_line()
                 config.error = False
                 continue
             # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-            config.log(' ' + config.ligue_name, 'info', False, 2)
+            # config.log(' ' + config.ligue_name, 'info', False, 2)
             # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
             if getCompet():
                 try:
-                    config.log('Récupération des matchs', 'info', False, 3)
-                    config.log_clear_line()
+                    # config.log('Récupération des matchs', 'info', False, 3)
+                    # config.log_clear_line()
                     bet_items = bet_ligue.find_elements(By.CLASS_NAME,
                                                         'dashboard-champ__game')
                 except:
-                    config.log('Listes des matchs introuvables!', 'warning', False, 3)
+                    # config.log('Listes des matchs introuvables!', 'warning', False, 3)
                     # s'il y une erreur on passe au suivant
                     continue
                 else:
                     if len(bet_items) <= 0:
-                        config.log('Listes des matchs introuvables!', 'warning', False, 3)
+                        # config.log('Listes des matchs introuvables!', 'warning', False, 3)
                         # s'il y une erreur on passe au suivant
-                        config.log_clear_line(2)
+                        # config.log_clear_line(2)
                         continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
                     for bet_item in bet_items:
                         try:
-                            config.log('On récupère le nom des joueurs', 'info', False, 3)
-                            config.log_clear_line()
+                            # config.log('On récupère le nom des joueurs', 'info', False, 3)
+                            # config.log_clear_line()
                             div_bet_player = bet_item.find_element(By.CLASS_NAME, 'ui-team-scores__teams')
                         except:
-                            config.log('Impossible de récpérer les joueurs!', 'warning', False, 3)
-                            config.log_clear_line()
+                            # config.log('Impossible de récpérer les joueurs!', 'warning', False, 3)
+                            # config.log_clear_line()
                             continue
                         else:
                             if div_bet_player:
                                 div_bet_player = div_bet_player.text.split('\n')
-                                config.log(str(div_bet_player), 'info', False, 3)
-                                config.log_clear_line()
+                                # config.log(str(div_bet_player), 'info', False, 3)
+                                # config.log_clear_line()
                             try:
                                 # on récupère le score
                                 div_bet_score = bet_item.find_elements(By.CLASS_NAME,
                                                                        'ui-game-scores')
                             except:
 
-                                config.log('Impossible de récupérer le score!', 'warning', False, 4)
+                                # config.log('Impossible de récupérer le score!', 'warning', False, 4)
                                 time.sleep(2)
-                                config.log_clear_line()
+                                # config.log_clear_line()
                                 continue
                             else:
                                 # si le score est récupéré
                                 if len(div_bet_score) <= 0:
-                                    config.log('Pas de score!', 'warning', False, 4)
+                                    # config.log('Pas de score!', 'warning', False, 4)
                                     time.sleep(2)
-                                    config.log_clear_line()
+                                    # config.log_clear_line()
                                     continue
                                 # on le vérifie
-                                config.log('Vérification du score!', 'info', False, 4)
-                                config.log_clear_line()
+                                # config.log('Vérification du score!', 'info', False, 4)
+                                # config.log_clear_line()
                                 bet_score = GetMatchScore.set1main(div_bet_score[0],
                                                                    config.score_to_start)
 
@@ -362,9 +362,9 @@ def rechercheDeMatch1set(driver):
                                                                          'dashboard-markets__group')
                                     btn_cote = div_bet_cote.find_elements(By.CLASS_NAME, 'dashboard-markets__market')
                                     cotev1 = float(btn_cote[0].text)
-                                    print('cote v1', cotev1)
+                                    # print('cote v1', cotev1)
                                     cotev2 = float(btn_cote[2].text)
-                                    print('cote v2', cotev2)
+                                    # print('cote v2', cotev2)
                                 except Exception as e:
                                     print(f'erreur de cote {e}')
                                     continue
@@ -373,18 +373,18 @@ def rechercheDeMatch1set(driver):
                                         config.win_type = 'V1'
                                         if 'wta' in config.ligue_name or 'women' in config.ligue_name or 'femmes' in config.ligue_name:
                                             config.win_type = 'V2'
-                                        print('1SET')
+                                        # print('1SET')
                                     elif cotev2 > 1.2 and cotev2 < 1.9:
                                         config.win_type = 'V2'
                                         if 'wta' in config.ligue_name or 'women' in config.ligue_name or 'femmes' in config.ligue_name:
                                             config.win_type = 'V1'
-                                        print('1SETV2')
+                                        # print('1SETV2')
                                     else:
                                         continue
                                 if bet_score:  # SI LE MATCH EST PRET
 
-                                    config.log('Score ok', 'info', False, 4)
-                                    config.log_clear_line()
+                                    # config.log('Score ok', 'info', False, 4)
+                                    # config.log_clear_line()
                                     # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
                                     config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
                                                                                    config.matchlist_file_name)
@@ -394,13 +394,13 @@ def rechercheDeMatch1set(driver):
                                                                    config.running_file_name,
                                                                    config.matchlist_file_name):
                                             config.newmatch = config.newmatch[1]
-                                            config.log(config.newmatch, 'info', False, 4)
+                                            # config.log(config.newmatch, 'info', False, 4)
                                             config.match_found = True
                                             break
                                         else:
                                             continue
                                 else:
-                                    config.log('Score NOT ok', 'warning', False, 4)
+                                    # config.log('Score NOT ok', 'warning', False, 4)
                                     config.log_clear_line()
             config.log_clear_line()
             if config.match_found:
@@ -408,8 +408,8 @@ def rechercheDeMatch1set(driver):
                 break
 
     if not config.match_found:
-        config.log('PAS DE MATCH TROUVE!', 'warning', True, 2)
-        config.log_clear_line(3)
+        # config.log('PAS DE MATCH TROUVE!', 'warning', True, 2)
+        # config.log_clear_line(3)
         driver.get(config.site_url)
         time.sleep(5)
     else:
