@@ -10,7 +10,7 @@ from Functions.GetJsonData import getIfGlobalPerte, getIf1setGlobalPerte
 
 def main(driver, bet_item, matchlist_file_name):
     try:
-        config.log('Vérification si match déjà parié', 'info', True, 4)
+        # config.log('Vérification si match déjà parié', 'info', True, 4)
         newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
                                              config.classes['match_link'][config.site_type])[
             0].get_attribute(
@@ -25,9 +25,6 @@ def main(driver, bet_item, matchlist_file_name):
     else:
         match_list = GetMatchDone.main(config.matchlisttodo_file_name)
         match_done = GetMatchDone.main(config.matchlist_file_name)
-        print('matchlisfole', config.matchlisttodo_file_name)
-        print('in stat', config.in_stat)
-        print(match_list)
         if config.in_stat and any(config.newmatch in x for x in match_list) and not any(
                 config.newmatch in x for x in match_done):
             config.log('Le match autorisé!', 'success', False, 4)
@@ -41,14 +38,14 @@ def main(driver, bet_item, matchlist_file_name):
             if not p or p == 0:
                 p = getIf1setGlobalPerte()
             if not p or p == 0:
-                config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
+                # config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
                 return [False, config.newmatch]
             else:
                 config.log('Le match  non autorisé mais perte en cours', 'sucess', True, 4)
                 driver.get(newmatchtxt)
                 return [True, config.newmatch]
         else:
-            config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
+            # config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
             return [False, config.newmatch]
 
 
