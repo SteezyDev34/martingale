@@ -369,16 +369,24 @@ def rechercheDeMatch1set(driver):
                                     print(f'erreur de cote {e}')
                                     continue
                                 else:
-                                    if cotev1 > 1.2 and cotev1 < 1.9:
+                                    if cotev1 > 1.1 and cotev1 < 1.4:
                                         config.win_type = 'V1'
-                                        if 'wta' in config.ligue_name or 'women' in config.ligue_name or 'femmes' in config.ligue_name:
-                                            config.win_type = 'V2'
-                                        # print('1SET')
-                                    elif cotev2 > 1.2 and cotev2 < 1.9:
+                                        config.ligue_name = config.ligue_name + ' 1.3'
+                                    elif cotev1 > 1.4 and cotev1 < 1.7:
+                                        config.win_type = 'V1'
+                                        config.ligue_name = config.ligue_name + ' 1.5'
+                                    elif cotev1 > 1.7 and cotev1 < 1.9:
+                                        config.win_type = 'V1'
+                                        config.ligue_name = config.ligue_name + ' 1.8'
+                                    elif cotev2 > 1.1 and cotev2 < 1.4:
+                                        config.ligue_name = config.ligue_name + ' 1.3'
                                         config.win_type = 'V2'
-                                        if 'wta' in config.ligue_name or 'women' in config.ligue_name or 'femmes' in config.ligue_name:
-                                            config.win_type = 'V1'
-                                        # print('1SETV2')
+                                    elif cotev2 > 1.4 and cotev2 < 1.7:
+                                        config.ligue_name = config.ligue_name + ' 1.5'
+                                        config.win_type = 'V2'
+                                    elif cotev2 > 1.7 and cotev2 < 1.9:
+                                        config.ligue_name = config.ligue_name + ' 1.8'
+                                        config.win_type = 'V2'
                                     else:
                                         continue
                                 if bet_score:  # SI LE MATCH EST PRET
