@@ -11,8 +11,6 @@ def GetIfScriptsRunning():
     go = False
     txtlog = ""
     dot_count = 0
-    if not config.print_running_text:
-        config.log('Est ce que le script peut y aller?', 'info', False)
 
     while not go:
         if not config.print_running_text:
