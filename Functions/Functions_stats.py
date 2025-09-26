@@ -37,6 +37,7 @@ def log_player_not_found(player_name, function_name=""):
     # Écrire dans le fichier de log
     try:
         with open(PLAYERS_NOT_FOUND_LOG, "a", encoding="utf-8") as f:
+            print(f"{log_message}")
             f.write(log_message)
     except Exception as e:
         print(f"Erreur lors de l'écriture du log: {e}")
