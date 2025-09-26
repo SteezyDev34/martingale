@@ -195,8 +195,8 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
         # return result
 
     print("Recherche des IDs des joueurs via API...")
-    url1 = f"https://api.auxotracker.lan/api/sports/2/teams/search?search={playerName1.replace(' ', '+')}"
-    url2 = f"https://api.auxotracker.lan/api/sports/2/teams/search?search={playerName2.replace(' ', '+')}"
+    url1 = f"http://datas.sc2vagr6376.universe.wf/api/sports/2/teams/search?search={playerName1.replace(' ', '+')}"
+    url2 = f"http://datas.sc2vagr6376.universe.wf/api/sports/2/teams/search?search={playerName2.replace(' ', '+')}"
     try:
         print(f"Requête API pour {playerName1}: {url1}")
         # Désactiver la vérification SSL pour les certificats auto-signés
@@ -230,24 +230,28 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
         for player in d1['data']:
             # Éviter les équipes de double (contiennent souvent '/')
             if '/' not in player.get('name', ''):
-                pid1 = player.get('sofascore_id')
+                # pid1 = player.get('sofascore_id')
+                pid1 = player.get('id')
                 print(f"Sélectionné pour {playerName1}: {player.get('name')} (ID: {pid1})")
                 break
 
         pid2 = None
         for player in d2['data']:
             if '/' not in player.get('name', ''):
-                pid2 = player.get('sofascore_id')
+                # pid2 = player.get('sofascore_id')
+                pid2 = player.get('id')
                 print(f"Sélectionné pour {playerName2}: {player.get('name')} (ID: {pid2})")
                 break
 
         # Si aucun joueur individuel n'a été trouvé, utiliser le premier résultat
         if pid1 is None and d1['data']:
-            pid1 = d1['data'][0]['sofascore_id']
+            # pid1 = d1['data'][0]['sofascore_id']
+            pid1 = d1['data'][0]['id']
             print(f"Aucun joueur individuel trouvé pour {playerName1}, utilisation du premier résultat (ID: {pid1})")
 
         if pid2 is None and d2['data']:
-            pid2 = d2['data'][0]['sofascore_id']
+            # pid2 = d2['data'][0]['sofascore_id']
+            pid2 = d2['data'][0]['id']
             print(f"Aucun joueur individuel trouvé pour {playerName2}, utilisation du premier résultat (ID: {pid2})")
 
         if not pid1 or not pid2:
@@ -261,15 +265,19 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
         print("Note: Si l'erreur persiste, vérifiez la configuration SSL ou le certificat du serveur.")
         return 0.0
     else:
-        url1 = f"https://www.sofascore.com/api/v1/team/{pid1}/year-statistics/2025"
-        url2 = f"https://www.sofascore.com/api/v1/team/{pid2}/year-statistics/2025"
+        # url1 = f"https://www.sofascore.com/api/v1/team/{pid1}/year-statistics/2025"
+        # url2 = f"https://www.sofascore.com/api/v1/team/{pid2}/year-statistics/2025"
+        url1 = f"http://datas.sc2vagr6376.universe.wf/api/stats/tennis/player/{pid1}"
+        url2 = f"http://datas.sc2vagr6376.universe.wf/api/stats/tennis/player/{pid2}"
         print(f"URLs des statistiques: \n{url1}\n{url2}")
         try:
             print(f"Récupération des statistiques pour {playerName1}...")
-            d1 = requests.get(url1, headers=headers, verify=False).json()
+            json_data = requests.get(url1, headers=headers, verify=False).json()['data']
+            d1 = json_data.get('data', [])  # ou {} ou [] selon ce que tu attends
             time.sleep(1)
             print(f"Récupération des statistiques pour {playerName2}...")
-            d2 = requests.get(url2, headers=headers, verify=False).json()
+            json_data = requests.get(url2, headers=headers, verify=False).json()['data']
+            d2 = json_data.get('data', [])  # ou {} ou [] selon ce que tu attends
             time.sleep(1)
             print("Statistiques récupérées avec succès")
 
@@ -285,7 +293,7 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
             print(f"Structure des données pour {playerName1}: {list(d1.keys())}")
             print(f"Nombre de statistiques pour {playerName1}: {len(d1.get('statistics', []))}")
             for i, stat in enumerate(d1.get('statistics', [])):
-                print(f"Surface {i + 1} pour {playerName1}: {stat.get('surfaceType', 'Inconnue')}")
+                print(f"Surface {i + 1} pour {playerName1}: {stat.get('groundType', 'Inconnue')}")
                 total_first_serve_points_scored1 += stat.get('firstServePointsScored', 0)
                 total_first_serve_points_total1 += stat.get('firstServePointsTotal', 0)
                 total_second_serve_points_scored1 += stat.get('secondServePointsScored', 0)
@@ -305,7 +313,7 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
             print(f"Structure des données pour {playerName2}: {list(d2.keys())}")
             print(f"Nombre de statistiques pour {playerName2}: {len(d2.get('statistics', []))}")
             for i, stat in enumerate(d2.get('statistics', [])):
-                print(f"Surface {i + 1} pour {playerName2}: {stat.get('surfaceType', 'Inconnue')}")
+                print(f"Surface {i + 1} pour {playerName2}: {stat.get('groundType', 'Inconnue')}")
                 total_first_serve_points_scored2 += stat.get('firstServePointsScored', 0)
                 total_first_serve_points_total2 += stat.get('firstServePointsTotal', 0)
                 total_second_serve_points_scored2 += stat.get('secondServePointsScored', 0)

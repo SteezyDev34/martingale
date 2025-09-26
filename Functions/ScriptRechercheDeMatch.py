@@ -573,6 +573,7 @@ def classementeDeMatch(driver):
                     "href"), config.ligue_name])
 
             for link in liguelist:
+                print(link[0])
                 driver.get(link[0])
                 config.ligue_name = link[1]
                 bet_list_ligue = driver.find_elements(By.CLASS_NAME,
@@ -664,7 +665,7 @@ def classementeDeMatch(driver):
         tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
 
         # Retenir les 10 premières lignes
-        top_10 = tableau_trie[:50]
+        top_10 = tableau_trie[:30]
         for m in top_10:
             # Join array elements with pipe separator before adding to todo
             try:

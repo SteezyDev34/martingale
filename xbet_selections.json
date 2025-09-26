@@ -1,82 +1,1567 @@
 {
     "Temps réglementaire": {
-        "Total. Corners": [
-            "Total Plus de 9",
-            "Total Moins de 9",
-            "Total Plus de 9.5",
-            "Total Moins de 9.5",
-            "Total Plus de 10",
-            "Total Moins de 10",
-            "Total Plus de 10.5",
-            "Total Moins de 10.5",
-            "Total Plus de 11",
-            "Total Moins de 11"
+        "1x2": [
+            "Nul",
+            "V1",
+            "V2",
+            "X"
+        ],
+        "Total": [
+            "Moins de 2.5",
+            "Plus de 2.5",
+            "Plus de 3.5",
+            "Total Moins de 0.5",
+            "Total Moins de 1",
+            "Total Moins de 1.5",
+            "Total Moins de 2",
+            "Total Moins de 2.5",
+            "Total Moins de 22.5",
+            "Total Moins de 23.5",
+            "Total Moins de 24.5",
+            "Total Plus de 0.5",
+            "Total Plus de 1",
+            "Total Plus de 1.5",
+            "Total Plus de 2",
+            "Total Plus de 2.5",
+            "Total Plus de 22.5",
+            "Total Plus de 23.5",
+            "Total Plus de 24.5"
+        ],
+        "Handicap": [
+            "Handicap 1 (+1)",
+            "Handicap 1 (+1.5)",
+            "Handicap 1 (-1)",
+            "Handicap 1 (-1.5)",
+            "Handicap 1 (-2.5)",
+            "Handicap 1 (-3.5)",
+            "Handicap 1 (0)",
+            "Handicap 2 (+1)",
+            "Handiсap 2 (+1)",
+            "Handiсap 2 (+1.5)",
+            "Handiсap 2 (+2.5)",
+            "Handiсap 2 (+3.5)",
+            "Handiсap 2 (-1)",
+            "Handiсap 2 (-1.5)",
+            "Handiсap 2 (0)"
+        ],
+        "Les deux équipes vont marquer": [
+            "Les deux équipes vont marquer - Non",
+            "Les deux équipes vont marquer - Oui"
+        ],
+        "Total 1": [
+            "Total Individuel 1 Moins de 0.5",
+            "Total Individuel 1 Moins de 1",
+            "Total Individuel 1 Moins de 1.5",
+            "Total Individuel 1 Moins de 2.5",
+            "Total Individuel 1 Plus de 0.5",
+            "Total Individuel 1 Plus de 1",
+            "Total Individuel 1 Plus de 1.5",
+            "Total Individuel 1 Plus de 2.5"
+        ],
+        "Total 2": [
+            "Total Individuel 2 Moins de 0.5",
+            "Total Individuel 2 Moins de 1",
+            "Total Individuel 2 Moins de 1.5",
+            "Total Individuel 2 Moins de 11.5",
+            "Total Individuel 2 Moins de 12.5",
+            "Total Individuel 2 Plus de 0.5",
+            "Total Individuel 2 Plus de 1",
+            "Total Individuel 2 Plus de 1.5",
+            "Total Individuel 2 Plus de 11.5",
+            "Total Individuel 2 Plus de 12.5"
+        ],
+        "Prochain But": [
+            "Aucune Equipe ne va marquer le prochain But 1",
+            "Aucune Equipe ne va marquer le prochain But 2",
+            "Aucune Equipe ne va marquer le prochain But 3",
+            "Equipe 1 va marquer le prochain But 1",
+            "Equipe 1 va marquer le prochain But 2",
+            "Equipe 1 va marquer le prochain But 3",
+            "Equipe 2 va marquer le prochain But 1",
+            "Equipe 2 va marquer le prochain But 2",
+            "Equipe 2 va marquer le prochain But 3"
+        ],
+        "Prochain but, double chance": [
+            "Equipe 1 ou Equipe 2 va marquer le prochain but 1",
+            "Equipe 1 ou Equipe 2 va marquer le prochain but 2",
+            "Equipe 1 va marquer ou aucune équipe ne va marquer le prochain but 1",
+            "Equipe 1 va marquer ou aucune équipe ne va marquer le prochain but 2",
+            "Equipe 2 va marquer ou aucune équipe ne va marquer le prochain but 1",
+            "Equipe 2 va marquer ou aucune équipe ne va marquer le prochain but 2"
+        ],
+        "Pair/Impair": [
+            "Total Pair - Non",
+            "Total Pair - Oui"
+        ],
+        "Nul": [
+            "Match Nul 0-0 - Non",
+            "Match Nul 0-0 - Oui"
+        ],
+        "Equipe 1 va gagner au moins une Mi-Temps": [
+            "Equipe 1 va gagner au moins une Mi-Temps - Non",
+            "Equipe 1 va gagner au moins une Mi-Temps - Oui"
+        ],
+        "3 Issues Total": [
+            "Total Moins de 1 (3 Issues)",
+            "Total Moins de 2 (3 Issues)",
+            "Total Moins de 3 (3 Issues)",
+            "Total Plus de 1 (3 Issues)",
+            "Total Plus de 2 (3 Issues)",
+            "Total Plus de 3 (3 Issues)",
+            "Total égal à 1 (3 Issues)",
+            "Total égal à 2 (3 Issues)",
+            "Total égal à 3 (3 Issues)"
+        ],
+        "Total Individuel 2 de 3 Issues": [
+            "Total Equipe 2 (3 Issues) Moins de 1",
+            "Total Equipe 2 (3 Issues) Plus de 1",
+            "Total Equipe 2 (3 Issues) égal à 1"
+        ],
+        "Total Individuel 2 Pair/Impair": [
+            "Total Equipe 2 Impair",
+            "Total Equipe 2 Pair"
+        ],
+        "Une Des Equipes Va Gagner Par": [
+            "Une équipe va gagner avec une différence de 1 but(s) - Non",
+            "Une équipe va gagner avec une différence de 1 but(s) - Oui",
+            "Une équipe va gagner avec une différence de 2 but(s) - Non",
+            "Une équipe va gagner avec une différence de 2 but(s) - Oui"
+        ],
+        "Victoire sans prendre de Buts": [
+            "Une équipe va gagner sans prendre de Buts - Non",
+            "Une équipe va gagner sans prendre de Buts - Oui"
+        ],
+        "Gagner Par": [
+            "Equipe 1 va gagner par 1 buts d'écart - Non",
+            "Equipe 1 va gagner par 1 buts d'écart - Oui",
+            "Equipe 1 va gagner par 2 buts d'écart - Non",
+            "Equipe 1 va gagner par 2 buts d'écart - Oui",
+            "Equipe 2 va gagner par 1 buts d'écart - Non",
+            "Equipe 2 va gagner par 1 buts d'écart - Oui"
+        ],
+        "Equipe 1 va gagner sans prendre de buts": [
+            "Equipe 1 va gagner sans prendre de Buts - Non",
+            "Equipe 1 va gagner sans prendre de Buts - Oui"
+        ],
+        "Equipe 1 va marquer buts d'affilée": [
+            "Equipe 1 va marquer 2 buts d'affilée ou plus - Non",
+            "Equipe 1 va marquer 2 buts d'affilée ou plus - Oui"
+        ],
+        "V1 + Total 1": [
+            "V1 et Total 1 Moins de 1.5 - Non",
+            "V1 et Total 1 Moins de 1.5 - Oui",
+            "V1 et Total 1 Moins de 2.5 - Non",
+            "V1 et Total 1 Moins de 2.5 - Oui",
+            "V1 et Total 1 Plus de 0.5 - Non",
+            "V1 et Total 1 Plus de 0.5 - Oui",
+            "V1 et Total 1 Plus de 1.5 - Non",
+            "V1 et Total 1 Plus de 1.5 - Oui"
+        ],
+        "Total individuel 1 Nombre exact de buts": [
+            "Total individuel 1 0",
+            "Total individuel 1 1",
+            "Total individuel 1 1 ou moins",
+            "Total individuel 1 2",
+            "Total Équipe 1 - 2 Buts ou plus",
+            "Total Équipe 1 - 3 Buts ou plus"
+        ],
+        "Buts d'affilée par une seule équipe": [
+            "2 buts d'affilée ou plus marqués par une équipe - Non",
+            "2 buts d'affilée ou plus marqués par une équipe - Oui"
+        ],
+        "Va marquer le premier but et faire match nul": [
+            "Equipe 1 va marquer le Premier But et faire Match Nul - Non",
+            "Equipe 1 va marquer le Premier But et faire Match Nul - Oui",
+            "Equipe 2 va marquer le Premier But et faire Match Nul - Non",
+            "Equipe 2 va marquer le Premier But et faire Match Nul - Oui"
+        ],
+        "Equipe 1, Multi But": [
+            "Equipe 1, Multi But 0-1"
+        ],
+        "Double chance": [
+            "12",
+            "1X",
+            "2X"
+        ],
+        "1X2 + Chaque équipe va marquer": [
+            "V1 Et chaque Equipe va marquer – Oui",
+            "X Et Les Deux Equipes vont marquer – Non",
+            "X Et Les Deux Equipes vont marquer – Oui"
+        ],
+        "Total Asiatique": [
+            "Total Moins de 0.75",
+            "Total Moins de 1.25",
+            "Total Moins de 1.75",
+            "Total Moins de 2.25",
+            "Total Plus de 0.75",
+            "Total Plus de 1.25",
+            "Total Plus de 1.75",
+            "Total Plus de 2.25"
+        ],
+        "Handicap asiatique": [
+            "Handicap 1 (+0.25)",
+            "Handicap 1 (+0.75)",
+            "Handicap 1 (-0.25)",
+            "Handicap 1 (-0.75)",
+            "Handicap 1 (-2.75)",
+            "Handiсap 2 (+0.25)",
+            "Handiсap 2 (+0.75)",
+            "Handiсap 2 (+2.75)",
+            "Handiсap 2 (-0.25)",
+            "Handiсap 2 (-0.75)"
+        ],
+        "Total asiatique d'équipe 1": [
+            "Total Equipe 1 Moins de 0.75",
+            "Total Equipe 1 Moins de 1.25",
+            "Total Equipe 1 Plus de 0.75",
+            "Total Equipe 1 Plus de 1.25"
+        ],
+        "Total asiatique d'équipe 2": [
+            "Equipe 2 Total Moins de 0.75",
+            "Equipe 2 Total Moins de 1.25",
+            "Equipe 2 Total Plus de 0.75",
+            "Equipe 2 Total Plus de 1.25"
+        ],
+        "Prochain but, handicap": [
+            "Prochain but 1, Handicap 1 0",
+            "Prochain but 1, Handicap 2 0",
+            "Prochain but 2, Handicap 1 0",
+            "Prochain but 2, Handicap 2 0"
+        ],
+        "But jusqu'à la minute": [
+            "But 1 sera marqué jusqu'à la 59 Minute - Non",
+            "But 1 sera marqué jusqu'à la 59 Minute - Oui",
+            "But 1 sera marqué jusqu'à la 60 Minute - Non",
+            "But 1 sera marqué jusqu'à la 60 Minute - Oui",
+            "But 1 sera marqué jusqu'à la 61 Minute - Non",
+            "But 1 sera marqué jusqu'à la 61 Minute - Oui",
+            "But 1 sera marqué jusqu'à la 62 Minute - Non",
+            "But 1 sera marqué jusqu'à la 62 Minute - Oui",
+            "But 1 sera marqué jusqu'à la 63 Minute - Non",
+            "But 1 sera marqué jusqu'à la 63 Minute - Oui"
+        ],
+        "Handicap Européen": [
+            "Handicap Européen 0:1 V1",
+            "Handicap Européen 0:1 V2",
+            "Handicap Européen 0:1 X",
+            "Handicap Européen 0:2 V1",
+            "Handicap Européen 0:2 V2",
+            "Handicap Européen 0:2 X",
+            "Handicap Européen 0:3 V1",
+            "Handicap Européen 0:3 V2",
+            "Handicap Européen 0:3 X",
+            "Handicap Européen 1:0 V1",
+            "Handicap Européen 1:0 V2",
+            "Handicap Européen 1:0 X",
+            "Handicap Européen 2:0 V1"
+        ],
+        "Equipe 2 va gagner au moins une Mi-Temps": [
+            "Equipe 2 va gagner au moins une Mi-Temps - Non",
+            "Equipe 2 va gagner au moins une Mi-Temps - Oui"
+        ],
+        "Total Individuel 1 de 3 Issues": [
+            "Total Equipe 1 (3 Issues) Moins de 1",
+            "Total Equipe 1 (3 Issues) Moins de 2",
+            "Total Equipe 1 (3 Issues) Plus de 1",
+            "Total Equipe 1 (3 Issues) Plus de 2",
+            "Total Equipe 1 (3 Issues) égal à 1",
+            "Total Equipe 1 (3 Issues) égal à 2"
+        ],
+        "Total Individuel 1 Pair/Impair": [
+            "Total Equipe 1 Impair",
+            "Total Equipe 1 Pair"
+        ],
+        "Dernier But": [
+            "Aucune Equipe va marquer le dernier But",
+            "Equipe 1 va marquer le dernier But",
+            "Equipe 2 va marquer le dernier But"
+        ],
+        "Total à telle Minute": [
+            "Total Moins de 0.5 à la 85 Minute",
+            "Total Moins de 1.5 à la 85 Minute",
+            "Total Plus de 0.5 à la 85 Minute",
+            "Total Plus de 1.5 à la 85 Minute"
+        ],
+        "Chaque Equipe va marquer + Total": [
+            "Chaque Equipe va marquer + Total Moins de 2.5 - Non",
+            "Chaque Equipe va marquer + Total Moins de 2.5 - Oui",
+            "Chaque Equipe va marquer + Total Moins de 3.5 - Non",
+            "Chaque Equipe va marquer + Total Moins de 3.5 - Oui",
+            "Chaque Equipe va marquer + Total Moins de 4.5 - Non",
+            "Chaque Equipe va marquer + Total Moins de 4.5 - Oui",
+            "Chaque Equipe va marquer + Total Plus de 1.5 - Non",
+            "Chaque Equipe va marquer + Total Plus de 1.5 - Oui",
+            "Chaque Equipe va marquer + Total Plus de 2.5 - Non",
+            "Chaque Equipe va marquer + Total Plus de 2.5 - Oui"
+        ],
+        "Total et les deux Equipes marquent": [
+            "Les deux équipes vont marquer + Total Moins de 2.5 - Non",
+            "Les deux équipes vont marquer + Total Moins de 2.5 - Oui",
+            "Les deux équipes vont marquer + Total Moins de 3.5 - Non",
+            "Les deux équipes vont marquer + Total Moins de 3.5 - Oui",
+            "Les deux équipes vont marquer + Total Plus de 2.5 - Non",
+            "Les deux équipes vont marquer + Total Plus de 2.5 - Oui"
+        ],
+        "Equipe 2 va gagner sans prendre de buts": [
+            "Equipe 2 va gagner sans prendre de Buts - Non",
+            "Equipe 2 va gagner sans prendre de Buts - Oui"
+        ],
+        "Equipe 2 va marquer buts d'affilée": [
+            "Equipe 2 va marquer 2 buts d'affilée ou plus - Non",
+            "Equipe 2 va marquer 2 buts d'affilée ou plus - Oui"
+        ],
+        "V2 + Total 2": [
+            "V2 et Total 2 Moins de 1.5 - Non",
+            "V2 et Total 2 Moins de 1.5 - Oui",
+            "V2 et Total 2 Moins de 2.5 - Non",
+            "V2 et Total 2 Moins de 2.5 - Oui",
+            "V2 et Total 2 Plus de 0.5 - Non",
+            "V2 et Total 2 Plus de 0.5 - Oui",
+            "V2 et Total 2 Plus de 1.5 - Non",
+            "V2 et Total 2 Plus de 1.5 - Oui"
+        ],
+        "Total individuel 2 Nombre exact de buts": [
+            "Total individuel 2 0",
+            "Total individuel 2 1",
+            "Total individuel 2 2",
+            "Total Équipe 2 - 2 Buts ou plus",
+            "Total Équipe 2 - 3 Buts ou plus"
+        ],
+        "Va marquer le premier but et gagner": [
+            "Equipe 1 va marquer le Premier But et gagner - Non",
+            "Equipe 1 va marquer le Premier But et gagner - Oui",
+            "Equipe 2 va marquer le Premier But et gagner - Non",
+            "Equipe 2 va marquer le Premier But et gagner - Oui"
+        ],
+        "Multi But": [
+            "Multi But 0-1",
+            "Multi But 0-2",
+            "Multi But 1-2"
+        ],
+        "Double Chance + Total de L'Equipe 2": [
+            "12 Et Total Equipe 2 Plus de 0.5 - Non",
+            "12 Et Total Equipe 2 Plus de 0.5 - Oui",
+            "1X Et Total Equipe 2 Plus de 0.5 - Non",
+            "1X Et Total Equipe 2 Plus de 0.5 - Oui",
+            "2X Et Total Equipe 2 Moins de 1.5 - Non",
+            "2X Et Total Equipe 2 Moins de 1.5 - Oui",
+            "2X Et Total Equipe 2 Plus de 0.5 - Non",
+            "2X Et Total Equipe 2 Plus de 0.5 - Oui",
+            "2X Et Total Equipe 2 Plus de 1.5 - Non",
+            "2X Et Total Equipe 2 Plus de 1.5 - Oui"
+        ],
+        "Au Moins une Equipe va marquer": [
+            "Au Moins une Equipe va marquer Plus de 0.5 - Non",
+            "Au Moins une Equipe va marquer Plus de 0.5 - Oui"
+        ],
+        "2, Résultat + Total": [
+            "Equipe 2 va gagner et Total < 23.5 - Non",
+            "Equipe 2 va gagner et Total < 23.5 - Oui",
+            "Equipe 2 va gagner et Total < 27.5 - Oui",
+            "Equipe 2 va gagner et Total > 23.5 - Non",
+            "Equipe 2 va gagner et Total > 23.5 - Oui",
+            "Equipe 2 va gagner et Total > 27.5 - Oui"
+        ],
+        "Total exact des sets": [
+            "Total de Sets 2",
+            "Total de Sets 3"
+        ],
+        "Victoire en Sets": [
+            "Joueur 1 va gagner au moins 1 set(s) - Non",
+            "Joueur 1 va gagner au moins 1 set(s) - Oui",
+            "Joueur 2 va gagner au moins 1 set(s) - Non",
+            "Joueur 2 va gagner au moins 1 set(s) - Oui"
+        ],
+        "Un joueur va gagner tous les sets": [
+            "Joueur Va Gagner Tous Les Sets - Non",
+            "Joueur Va Gagner Tous Les Sets - Oui"
+        ],
+        "Set / match": [
+            "Set / Match V1V1",
+            "Set / Match V1V2",
+            "Set / Match V2V1",
+            "Set / Match V2V2"
         ]
     },
-    "1 Set": {
+    "Corners": {
+        "Corners": [
+            "1x2 corners",
+            "Total corners"
+        ],
+        "1x2. Corners": [
+            "V1",
+            "V2",
+            "X"
+        ],
+        "Total Asiatique. Corners": [
+            "Total Moins de 3.75",
+            "Total Moins de 4.25",
+            "Total Moins de 4.75",
+            "Total Moins de 5.25",
+            "Total Moins de 5.75",
+            "Total Plus de 3.75",
+            "Total Plus de 4.25",
+            "Total Plus de 4.75",
+            "Total Plus de 5.25",
+            "Total Plus de 5.75"
+        ],
+        "Handicap asiatique. Corners": [
+            "Handicap 1 (-1.75)",
+            "Handicap 1 (-2.25)",
+            "Handicap 1 (-2.75)",
+            "Handicap 1 (-3.25)",
+            "Handicap 1 (-3.75)",
+            "Handiсap 2 (+1.75)",
+            "Handiсap 2 (+2.25)",
+            "Handiсap 2 (+2.75)",
+            "Handiсap 2 (+3.25)",
+            "Handiсap 2 (+3.75)"
+        ],
+        "Total asiatique d'équipe 1. Corners": [
+            "Total Equipe 1 Moins de 2.75",
+            "Total Equipe 1 Moins de 3.25",
+            "Total Equipe 1 Moins de 3.75",
+            "Total Equipe 1 Moins de 4.25",
+            "Total Equipe 1 Moins de 4.75",
+            "Total Equipe 1 Plus de 2.75",
+            "Total Equipe 1 Plus de 3.25",
+            "Total Equipe 1 Plus de 3.75",
+            "Total Equipe 1 Plus de 4.25",
+            "Total Equipe 1 Plus de 4.75"
+        ],
+        "Total asiatique d'équipe 2. Corners": [
+            "Equipe 2 Total Moins de 0.75",
+            "Equipe 2 Total Moins de 1.25",
+            "Equipe 2 Total Moins de 1.75",
+            "Equipe 2 Total Moins de 2.25",
+            "Equipe 2 Total Moins de 2.75",
+            "Equipe 2 Total Plus de 0.75",
+            "Equipe 2 Total Plus de 1.25",
+            "Equipe 2 Total Plus de 1.75",
+            "Equipe 2 Total Plus de 2.25",
+            "Equipe 2 Total Plus de 2.75"
+        ],
+        "Pair/Impair. Corners": [
+            "Total Pair - Non",
+            "Total Pair - Oui"
+        ],
+        "Premier à avoir. Corners": [
+            "Aucune Equipe n'obtient 5 Corners",
+            "Aucune Equipe n'obtient 7 Corners",
+            "Aucune Equipe n'obtient 9 Corners",
+            "Equipe 1 première à obtenir 5 Corners",
+            "Equipe 1 première à obtenir 7 Corners",
+            "Equipe 1 première à obtenir 9 Corners",
+            "Equipe 2 première à obtenir 5 Corners",
+            "Equipe 2 première à obtenir 7 Corners",
+            "Equipe 2 première à obtenir 9 Corners"
+        ],
+        "Total Individuel 1 de 3 Issues. Corners": [
+            "Total Equipe 1 (3 Issues) Moins de 3",
+            "Total Equipe 1 (3 Issues) Moins de 4",
+            "Total Equipe 1 (3 Issues) Moins de 5",
+            "Total Equipe 1 (3 Issues) Plus de 3",
+            "Total Equipe 1 (3 Issues) Plus de 4",
+            "Total Equipe 1 (3 Issues) Plus de 5",
+            "Total Equipe 1 (3 Issues) égal à 3",
+            "Total Equipe 1 (3 Issues) égal à 4",
+            "Total Equipe 1 (3 Issues) égal à 5"
+        ],
+        "Total Individuel 1 Pair/Impair. Corners": [
+            "Total Equipe 1 Impair",
+            "Total Equipe 1 Pair"
+        ],
+        "Prochain Corner. Corners": [
+            "Dernier corner Equipe 1",
+            "Dernier corner Equipe 2"
+        ],
+        "Handicap 2 + Total. Corners": [
+            "Handicap 2 2.5 + TM 5.5",
+            "Handicap 2 2.5 + TP 5.5"
+        ],
+        "Nombre Exact. Corners": [
+            "Total 3 ou moins - Non",
+            "Total 3 ou moins - Oui",
+            "Total 4 - Non",
+            "Total 4 - Oui",
+            "Total 5 - Non",
+            "Total 5 - Oui",
+            "Total 6 - Non",
+            "Total 6 - Oui",
+            "Total 7 - Non",
+            "Total 7 - Oui"
+        ],
+        "Individual Interval Total 2. Corners": [
+            "Individual Interval Total 2 0 - 1",
+            "Individual Interval Total 2 0 - 2",
+            "Individual Interval Total 2 1 - 2"
+        ],
         "Total. Corners": [
-            "Total Plus de 9",
-            "Total Moins de 9",
-            "Total Plus de 9.5",
-            "Total Moins de 9.5",
-            "Total Plus de 10",
-            "Total Moins de 10",
-            "Total Plus de 10.5",
-            "Total Moins de 10.5",
-            "Total Plus de 11",
-            "Total Moins de 11"
+            "Total Moins de 3.5",
+            "Total Moins de 4",
+            "Total Moins de 4.5",
+            "Total Moins de 5",
+            "Total Moins de 5.5",
+            "Total Plus de 3.5",
+            "Total Plus de 4",
+            "Total Plus de 4.5",
+            "Total Plus de 5",
+            "Total Plus de 5.5"
+        ],
+        "Handicap. Corners": [
+            "Handicap 1 (-1.5)",
+            "Handicap 1 (-2)",
+            "Handicap 1 (-2.5)",
+            "Handicap 1 (-3)",
+            "Handicap 1 (-3.5)",
+            "Handiсap 2 (+1.5)",
+            "Handiсap 2 (+2)",
+            "Handiсap 2 (+2.5)",
+            "Handiсap 2 (+3)",
+            "Handiсap 2 (+3.5)"
+        ],
+        "Total 1. Corners": [
+            "Total Individuel 1 Moins de 2.5",
+            "Total Individuel 1 Moins de 3",
+            "Total Individuel 1 Moins de 3.5",
+            "Total Individuel 1 Moins de 4",
+            "Total Individuel 1 Moins de 4.5",
+            "Total Individuel 1 Plus de 2.5",
+            "Total Individuel 1 Plus de 3",
+            "Total Individuel 1 Plus de 3.5",
+            "Total Individuel 1 Plus de 4",
+            "Total Individuel 1 Plus de 4.5"
+        ],
+        "Total 2. Corners": [
+            "Total Individuel 2 Moins de 0.5",
+            "Total Individuel 2 Moins de 1",
+            "Total Individuel 2 Moins de 1.5",
+            "Total Individuel 2 Moins de 2",
+            "Total Individuel 2 Moins de 2.5",
+            "Total Individuel 2 Plus de 0.5",
+            "Total Individuel 2 Plus de 1",
+            "Total Individuel 2 Plus de 1.5",
+            "Total Individuel 2 Plus de 2",
+            "Total Individuel 2 Plus de 2.5"
+        ],
+        "1, Résultat + Total. Corners": [
+            "Equipe 1 ne va pas perdre et Total < 5.5 - Oui",
+            "Equipe 1 ne va pas perdre et Total < 6.5 - Oui",
+            "Equipe 1 ne va pas perdre et Total > 5.5 - Oui",
+            "Equipe 1 ne va pas perdre et Total > 6.5 - Oui",
+            "Equipe 1 va gagner et Total < 5.5 - Non",
+            "Equipe 1 va gagner et Total < 5.5 - Oui",
+            "Equipe 1 va gagner et Total < 6.5 - Oui",
+            "Equipe 1 va gagner et Total > 5.5 - Non",
+            "Equipe 1 va gagner et Total > 5.5 - Oui",
+            "Equipe 1 va gagner et Total > 6.5 - Oui"
+        ],
+        "Handicap Européen. Corners": [
+            "Handicap Européen 0:2 V1",
+            "Handicap Européen 0:2 V2",
+            "Handicap Européen 0:2 X"
+        ],
+        "3 Issues Total. Corners": [
+            "Total Moins de 4 (3 Issues)",
+            "Total Moins de 5 (3 Issues)",
+            "Total Moins de 6 (3 Issues)",
+            "Total Plus de 4 (3 Issues)",
+            "Total Plus de 5 (3 Issues)",
+            "Total Plus de 6 (3 Issues)",
+            "Total Plus de 7 (3 Issues)",
+            "Total égal à 4 (3 Issues)",
+            "Total égal à 5 (3 Issues)",
+            "Total égal à 6 (3 Issues)"
+        ],
+        "Total Individuel 2 de 3 Issues. Corners": [
+            "Total Equipe 2 (3 Issues) Moins de 1",
+            "Total Equipe 2 (3 Issues) Moins de 2",
+            "Total Equipe 2 (3 Issues) Plus de 1",
+            "Total Equipe 2 (3 Issues) Plus de 2",
+            "Total Equipe 2 (3 Issues) égal à 1",
+            "Total Equipe 2 (3 Issues) égal à 2"
+        ],
+        "Total Individuel 2 Pair/Impair. Corners": [
+            "Total Equipe 2 Impair",
+            "Total Equipe 2 Pair"
+        ],
+        "Handicap 1 + Total. Corners": [
+            "Handicap 1 -2.5 + TM 5.5",
+            "Handicap 1 -2.5 + TP 5.5"
+        ],
+        "Prochain Corner (2 Issues). Corners": [
+            "Prochain Corner 4 - Equipe 1 (2 Issues)",
+            "Prochain Corner 4 - Equipe 2 (2 Issues)"
+        ],
+        "Individual Interval Total 1. Corners": [
+            "Individual Interval Total 1 2 - 3",
+            "Individual Interval Total 1 2 - 4",
+            "Individual Interval Total 1 2 - 5",
+            "Individual Interval Total 1 3 - 4",
+            "Individual Interval Total 1 3 - 5",
+            "Individual Interval Total 1 4 - 5"
         ]
     },
-    "Corners:Total. Corners": [
-        "Total Plus de 8.5",
-        "Total Moins de 8.5",
-        "Total Plus de 9",
-        "Total Moins de 9",
-        "Total Plus de 9.5",
-        "Total Moins de 9.5",
-        "Total Plus de 10",
-        "Total Moins de 10",
-        "Total Plus de 10.5",
-        "Total Moins de 10.5"
-    ],
-    "Corners:3 Issues Total. Corners": [
-        "Total Plus de 9 (3 Issues)",
-        "Total égal à 9 (3 Issues)",
-        "Total Moins de 9 (3 Issues)",
-        "Total Plus de 10 (3 Issues)",
-        "Total égal à 10 (3 Issues)",
-        "Total Moins de 10 (3 Issues)",
-        "Total Plus de 11 (3 Issues)",
-        "Total égal à 11 (3 Issues)",
-        "Total Moins de 11 (3 Issues)",
-        "Total Plus de 12 (3 Issues)"
-    ],
-    "Corners:Prochain Corner (2 Issues). Corners": [
-        "Prochain Corner 8 - Equipe 1 (2 Issues)",
-        "Prochain Corner 8 - Equipe 2 (2 Issues)"
-    ],
-    "Corners:Premier à avoir. Corners": [
-        "Equipe 1 première à obtenir 7 Corners",
-        "Equipe 2 première à obtenir 7 Corners",
-        "Aucune Equipe n'obtient 7 Corners",
-        "Equipe 1 première à obtenir 9 Corners",
-        "Equipe 2 première à obtenir 9 Corners",
-        "Aucune Equipe n'obtient 9 Corners"
-    ],
-    "Corners:Prochain Corner. Corners": [
-        "Dernier corner Equipe 1",
-        "Dernier corner Equipe 2"
-    ],
-    "Corners:Nombre Exact. Corners": [
-        "Total 8 ou moins - Oui",
-        "Total 8 ou moins - Non",
-        "Total 9 - Oui",
-        "Total 9 - Non",
-        "Total 10 - Oui",
-        "Total 10 - Non",
-        "Total 11 - Oui",
-        "Total 11 - Non",
-        "Total 12 - Oui",
-        "Total 12 - Non"
-    ]
+    "test": {
+        "1x2": [
+            "V1",
+            "V2",
+            "X"
+        ],
+        "Les deux équipes vont marquer": [
+            "Les deux équipes vont marquer - Non",
+            "Les deux équipes vont marquer - Oui"
+        ],
+        "Total": [
+            "Total Moins de 0.5",
+            "Total Moins de 1",
+            "Total Moins de 1.5",
+            "Total Moins de 2",
+            "Total Moins de 2.5",
+            "Total Plus de 0.5",
+            "Total Plus de 1",
+            "Total Plus de 1.5",
+            "Total Plus de 2",
+            "Total Plus de 2.5"
+        ],
+        "Handicap": [
+            "Handicap 1 (+1)",
+            "Handicap 1 (+1.5)",
+            "Handicap 1 (-1)",
+            "Handicap 1 (0)",
+            "Handiсap 2 (+1)",
+            "Handiсap 2 (-1)",
+            "Handiсap 2 (-1.5)",
+            "Handiсap 2 (0)"
+        ],
+        "Total 1": [
+            "Total Individuel 1 Moins de 0.5",
+            "Total Individuel 1 Moins de 1",
+            "Total Individuel 1 Moins de 1.5",
+            "Total Individuel 1 Moins de 2.5",
+            "Total Individuel 1 Plus de 0.5",
+            "Total Individuel 1 Plus de 1",
+            "Total Individuel 1 Plus de 1.5",
+            "Total Individuel 1 Plus de 2.5"
+        ],
+        "Total 2": [
+            "Total Individuel 2 Moins de 0.5",
+            "Total Individuel 2 Moins de 1",
+            "Total Individuel 2 Moins de 1.5",
+            "Total Individuel 2 Moins de 2.5",
+            "Total Individuel 2 Plus de 0.5",
+            "Total Individuel 2 Plus de 1",
+            "Total Individuel 2 Plus de 1.5",
+            "Total Individuel 2 Plus de 2.5"
+        ],
+        "Prochain But": [
+            "Aucune Equipe ne va marquer le prochain But 1",
+            "Aucune Equipe ne va marquer le prochain But 2",
+            "Aucune Equipe ne va marquer le prochain But 3",
+            "Equipe 1 va marquer le prochain But 1",
+            "Equipe 1 va marquer le prochain But 2",
+            "Equipe 1 va marquer le prochain But 3",
+            "Equipe 2 va marquer le prochain But 1",
+            "Equipe 2 va marquer le prochain But 2",
+            "Equipe 2 va marquer le prochain But 3"
+        ],
+        "Prochain but, double chance": [
+            "Equipe 1 ou Equipe 2 va marquer le prochain but 1",
+            "Equipe 1 ou Equipe 2 va marquer le prochain but 2",
+            "Equipe 1 va marquer ou aucune équipe ne va marquer le prochain but 1",
+            "Equipe 1 va marquer ou aucune équipe ne va marquer le prochain but 2",
+            "Equipe 2 va marquer ou aucune équipe ne va marquer le prochain but 1",
+            "Equipe 2 va marquer ou aucune équipe ne va marquer le prochain but 2"
+        ],
+        "Pair/Impair": [
+            "Total Pair - Non",
+            "Total Pair - Oui"
+        ],
+        "Nul": [
+            "Match Nul 0-0 - Non",
+            "Match Nul 0-0 - Oui"
+        ],
+        "Equipe 1 va gagner au moins une Mi-Temps": [
+            "Equipe 1 va gagner au moins une Mi-Temps - Non",
+            "Equipe 1 va gagner au moins une Mi-Temps - Oui"
+        ],
+        "Premier à avoir": [
+            "Qui marquera 2 Buts en premier - Aucune Equipe",
+            "Qui marquera 2 Buts en premier - Equipe 1",
+            "Qui marquera 2 Buts en premier - Equipe 2"
+        ],
+        "Total Individuel 1 de 3 Issues": [
+            "Total Equipe 1 (3 Issues) Moins de 1",
+            "Total Equipe 1 (3 Issues) Moins de 2",
+            "Total Equipe 1 (3 Issues) Plus de 1",
+            "Total Equipe 1 (3 Issues) Plus de 2",
+            "Total Equipe 1 (3 Issues) égal à 1",
+            "Total Equipe 1 (3 Issues) égal à 2"
+        ],
+        "Total Individuel 1 Pair/Impair": [
+            "Total Equipe 1 Impair",
+            "Total Equipe 1 Pair"
+        ],
+        "Dernier But": [
+            "Aucune Equipe va marquer le dernier But",
+            "Equipe 1 va marquer le dernier But",
+            "Equipe 2 va marquer le dernier But"
+        ],
+        "Total à telle Minute": [
+            "Total Moins de 0.5 à la 75 Minute",
+            "Total Moins de 0.5 à la 85 Minute",
+            "Total Moins de 1.5 à la 75 Minute",
+            "Total Moins de 1.5 à la 85 Minute",
+            "Total Plus de 0.5 à la 75 Minute",
+            "Total Plus de 0.5 à la 85 Minute",
+            "Total Plus de 1.5 à la 75 Minute",
+            "Total Plus de 1.5 à la 85 Minute"
+        ],
+        "Chaque Equipe va marquer + Total": [
+            "Chaque Equipe va marquer + Total Moins de 2.5 - Non",
+            "Chaque Equipe va marquer + Total Moins de 2.5 - Oui",
+            "Chaque Equipe va marquer + Total Moins de 3.5 - Non",
+            "Chaque Equipe va marquer + Total Moins de 3.5 - Oui",
+            "Chaque Equipe va marquer + Total Moins de 4.5 - Non",
+            "Chaque Equipe va marquer + Total Moins de 4.5 - Oui",
+            "Chaque Equipe va marquer + Total Plus de 1.5 - Non",
+            "Chaque Equipe va marquer + Total Plus de 1.5 - Oui",
+            "Chaque Equipe va marquer + Total Plus de 2.5 - Non",
+            "Chaque Equipe va marquer + Total Plus de 2.5 - Oui"
+        ],
+        "Total et les deux Equipes marquent": [
+            "Les deux équipes vont marquer + Total Moins de 2.5 - Non",
+            "Les deux équipes vont marquer + Total Moins de 2.5 - Oui",
+            "Les deux équipes vont marquer + Total Moins de 3.5 - Non",
+            "Les deux équipes vont marquer + Total Moins de 3.5 - Oui",
+            "Les deux équipes vont marquer + Total Plus de 2.5 - Non",
+            "Les deux équipes vont marquer + Total Plus de 2.5 - Oui",
+            "Les deux équipes vont marquer + Total Plus de 3.5 - Non",
+            "Les deux équipes vont marquer + Total Plus de 3.5 - Oui"
+        ],
+        "Equipe 2 va gagner sans prendre de buts": [
+            "Equipe 2 va gagner sans prendre de Buts - Non",
+            "Equipe 2 va gagner sans prendre de Buts - Oui"
+        ],
+        "Equipe 2 va marquer buts d'affilée": [
+            "Equipe 2 va marquer 2 buts d'affilée ou plus - Non",
+            "Equipe 2 va marquer 2 buts d'affilée ou plus - Oui"
+        ],
+        "V2 + Total 2": [
+            "V2 et Total 2 Moins de 1.5 - Non",
+            "V2 et Total 2 Moins de 1.5 - Oui",
+            "V2 et Total 2 Moins de 2.5 - Non",
+            "V2 et Total 2 Moins de 2.5 - Oui",
+            "V2 et Total 2 Plus de 0.5 - Non",
+            "V2 et Total 2 Plus de 0.5 - Oui",
+            "V2 et Total 2 Plus de 1.5 - Non",
+            "V2 et Total 2 Plus de 1.5 - Oui"
+        ],
+        "Double chance": [
+            "12",
+            "1X",
+            "2X"
+        ],
+        "1X2 + Chaque équipe va marquer": [
+            "V1 Et chaque Equipe va marquer – Oui",
+            "V2 Et chaque Equipe va marquer – Oui",
+            "X Et Les Deux Equipes vont marquer – Non",
+            "X Et Les Deux Equipes vont marquer – Oui"
+        ],
+        "Total Asiatique": [
+            "Total Moins de 0.75",
+            "Total Moins de 1.25",
+            "Total Moins de 1.75",
+            "Total Plus de 0.75",
+            "Total Plus de 1.25",
+            "Total Plus de 1.75"
+        ],
+        "Handicap asiatique": [
+            "Handicap 1 (+0.25)",
+            "Handicap 1 (+0.75)",
+            "Handicap 1 (-0.25)",
+            "Handicap 1 (-0.75)",
+            "Handicap 1 (-1.25)",
+            "Handiсap 2 (+0.25)",
+            "Handiсap 2 (+0.75)",
+            "Handiсap 2 (+1.25)",
+            "Handiсap 2 (-0.25)",
+            "Handiсap 2 (-0.75)"
+        ],
+        "Total asiatique d'équipe 1": [
+            "Total Equipe 1 Moins de 0.75",
+            "Total Equipe 1 Moins de 1.25",
+            "Total Equipe 1 Plus de 0.75",
+            "Total Equipe 1 Plus de 1.25"
+        ],
+        "Total asiatique d'équipe 2": [
+            "Equipe 2 Total Moins de 0.75",
+            "Equipe 2 Total Moins de 1.25",
+            "Equipe 2 Total Plus de 0.75",
+            "Equipe 2 Total Plus de 1.25"
+        ],
+        "Prochain but, handicap": [
+            "Prochain but 1, Handicap 1 0",
+            "Prochain but 1, Handicap 2 0",
+            "Prochain but 2, Handicap 1 0",
+            "Prochain but 2, Handicap 2 0"
+        ],
+        "But jusqu'à la minute": [
+            "But 1 sera marqué jusqu'à la 55 Minute - Non",
+            "But 1 sera marqué jusqu'à la 55 Minute - Oui",
+            "But 1 sera marqué jusqu'à la 56 Minute - Non",
+            "But 1 sera marqué jusqu'à la 56 Minute - Oui",
+            "But 1 sera marqué jusqu'à la 57 Minute - Non",
+            "But 1 sera marqué jusqu'à la 57 Minute - Oui",
+            "But 1 sera marqué jusqu'à la 58 Minute - Non",
+            "But 1 sera marqué jusqu'à la 58 Minute - Oui",
+            "But 1 sera marqué jusqu'à la 59 Minute - Non",
+            "But 1 sera marqué jusqu'à la 59 Minute - Oui"
+        ],
+        "Handicap Européen": [
+            "Handicap Européen 0:1 V1",
+            "Handicap Européen 0:1 V2",
+            "Handicap Européen 0:1 X",
+            "Handicap Européen 0:2 V1",
+            "Handicap Européen 0:2 V2",
+            "Handicap Européen 0:2 X",
+            "Handicap Européen 0:3 V1",
+            "Handicap Européen 0:3 V2",
+            "Handicap Européen 0:3 X",
+            "Handicap Européen 1:0 V1"
+        ],
+        "Equipe 2 va gagner au moins une Mi-Temps": [
+            "Equipe 2 va gagner au moins une Mi-Temps - Non",
+            "Equipe 2 va gagner au moins une Mi-Temps - Oui"
+        ],
+        "3 Issues Total": [
+            "Total Moins de 1 (3 Issues)",
+            "Total Moins de 2 (3 Issues)",
+            "Total Moins de 3 (3 Issues)",
+            "Total Plus de 1 (3 Issues)",
+            "Total Plus de 2 (3 Issues)",
+            "Total Plus de 3 (3 Issues)",
+            "Total égal à 1 (3 Issues)",
+            "Total égal à 2 (3 Issues)",
+            "Total égal à 3 (3 Issues)"
+        ],
+        "Total Individuel 2 de 3 Issues": [
+            "Total Equipe 2 (3 Issues) Moins de 1",
+            "Total Equipe 2 (3 Issues) Moins de 2",
+            "Total Equipe 2 (3 Issues) Plus de 1",
+            "Total Equipe 2 (3 Issues) Plus de 2",
+            "Total Equipe 2 (3 Issues) égal à 1",
+            "Total Equipe 2 (3 Issues) égal à 2"
+        ],
+        "Total Individuel 2 Pair/Impair": [
+            "Total Equipe 2 Impair",
+            "Total Equipe 2 Pair"
+        ],
+        "Une Des Equipes Va Gagner Par": [
+            "Une équipe va gagner avec une différence de 1 but(s) - Non",
+            "Une équipe va gagner avec une différence de 1 but(s) - Oui",
+            "Une équipe va gagner avec une différence de 2 but(s) - Non",
+            "Une équipe va gagner avec une différence de 2 but(s) - Oui"
+        ],
+        "Victoire sans prendre de Buts": [
+            "Une équipe va gagner sans prendre de Buts - Non",
+            "Une équipe va gagner sans prendre de Buts - Oui"
+        ],
+        "Gagner Par": [
+            "Equipe 1 va gagner par 1 buts d'écart - Non",
+            "Equipe 1 va gagner par 1 buts d'écart - Oui",
+            "Equipe 1 va gagner par 2 buts d'écart - Non",
+            "Equipe 1 va gagner par 2 buts d'écart - Oui",
+            "Equipe 2 va gagner par 1 buts d'écart - Non",
+            "Equipe 2 va gagner par 1 buts d'écart - Oui",
+            "Equipe 2 va gagner par 2 buts d'écart - Non",
+            "Equipe 2 va gagner par 2 buts d'écart - Oui"
+        ],
+        "Equipe 1 va gagner sans prendre de buts": [
+            "Equipe 1 va gagner sans prendre de Buts - Non",
+            "Equipe 1 va gagner sans prendre de Buts - Oui"
+        ],
+        "Equipe 1 va marquer buts d'affilée": [
+            "Equipe 1 va marquer 2 buts d'affilée ou plus - Non",
+            "Equipe 1 va marquer 2 buts d'affilée ou plus - Oui"
+        ],
+        "V1 + Total 1": [
+            "V1 et Total 1 Moins de 1.5 - Non",
+            "V1 et Total 1 Moins de 1.5 - Oui",
+            "V1 et Total 1 Moins de 2.5 - Non",
+            "V1 et Total 1 Moins de 2.5 - Oui",
+            "V1 et Total 1 Plus de 0.5 - Non",
+            "V1 et Total 1 Plus de 0.5 - Oui",
+            "V1 et Total 1 Plus de 1.5 - Non",
+            "V1 et Total 1 Plus de 1.5 - Oui",
+            "V1 et Total 1 Plus de 2.5 - Non",
+            "V1 et Total 1 Plus de 2.5 - Oui"
+        ],
+        "Total individuel 1 Nombre exact de buts": [
+            "Total individuel 1 0",
+            "Total individuel 1 1",
+            "Total individuel 1 1 ou moins",
+            "Total individuel 1 2",
+            "Total Équipe 1 - 2 Buts ou plus",
+            "Total Équipe 1 - 3 Buts ou plus"
+        ]
+    },
+    "2ème mi-temps": {
+        "1x2. 2ème mi-temps": [
+            "V1",
+            "V2",
+            "X"
+        ],
+        "Les deux équipes vont marquer. 2ème mi-temps": [
+            "Les deux équipes vont marquer - Non",
+            "Les deux équipes vont marquer - Oui"
+        ],
+        "Total. 2ème mi-temps": [
+            "Total Moins de 0.5",
+            "Total Moins de 1",
+            "Total Moins de 1.5",
+            "Total Moins de 2.5",
+            "Total Plus de 0.5",
+            "Total Plus de 1",
+            "Total Plus de 1.5",
+            "Total Plus de 2.5"
+        ],
+        "Total 1. 2ème mi-temps": [
+            "Total Individuel 1 Moins de 0.5",
+            "Total Individuel 1 Moins de 1",
+            "Total Individuel 1 Moins de 1.5",
+            "Total Individuel 1 Plus de 0.5",
+            "Total Individuel 1 Plus de 1",
+            "Total Individuel 1 Plus de 1.5"
+        ],
+        "Total 2. 2ème mi-temps": [
+            "Total Individuel 2 Moins de 0.5",
+            "Total Individuel 2 Moins de 1",
+            "Total Individuel 2 Moins de 1.5",
+            "Total Individuel 2 Plus de 0.5",
+            "Total Individuel 2 Plus de 1",
+            "Total Individuel 2 Plus de 1.5"
+        ],
+        "Prochain But. 2ème mi-temps": [
+            "Aucune Equipe ne va marquer le prochain But 1",
+            "Equipe 1 va marquer le prochain But 1",
+            "Equipe 2 va marquer le prochain But 1"
+        ],
+        "Prochain but, double chance. 2ème mi-temps": [
+            "Equipe 1 ou Equipe 2 va marquer le prochain but 1",
+            "Equipe 1 va marquer ou aucune équipe ne va marquer le prochain but 1",
+            "Equipe 2 va marquer ou aucune équipe ne va marquer le prochain but 1"
+        ],
+        "1, Résultat + Total. 2ème mi-temps": [
+            "Equipe 1 ne va pas perdre et Total < 1.5 - Non",
+            "Equipe 1 ne va pas perdre et Total < 1.5 - Oui",
+            "Equipe 1 ne va pas perdre et Total > 1.5 - Non",
+            "Equipe 1 ne va pas perdre et Total > 1.5 - Oui",
+            "Equipe 1 va gagner et Total < 1.5 - Non",
+            "Equipe 1 va gagner et Total < 1.5 - Oui",
+            "Equipe 1 va gagner et Total < 2.5 - Non",
+            "Equipe 1 va gagner et Total < 2.5 - Oui",
+            "Equipe 1 va gagner et Total > 1.5 - Non",
+            "Equipe 1 va gagner et Total > 1.5 - Oui"
+        ],
+        "Pair/Impair. 2ème mi-temps": [
+            "Total Pair - Non",
+            "Total Pair - Oui"
+        ],
+        "3 Issues Total. 2ème mi-temps": [
+            "Total Moins de 1 (3 Issues)",
+            "Total Moins de 2 (3 Issues)",
+            "Total Plus de 1 (3 Issues)",
+            "Total Plus de 2 (3 Issues)",
+            "Total égal à 1 (3 Issues)",
+            "Total égal à 2 (3 Issues)"
+        ],
+        "Total Individuel 2 de 3 Issues. 2ème mi-temps": [
+            "Total Equipe 2 (3 Issues) Moins de 1",
+            "Total Equipe 2 (3 Issues) Plus de 1",
+            "Total Equipe 2 (3 Issues) égal à 1"
+        ],
+        "Nul + total. 2ème mi-temps": [
+            "Match Nul et Total < 1.5 - Non",
+            "Match Nul et Total < 1.5 - Oui",
+            "Match Nul et Total < 2.5 - Non",
+            "Match Nul et Total < 2.5 - Oui",
+            "Match Nul et Total < 3.5 - Non",
+            "Match Nul et Total < 3.5 - Oui",
+            "Match Nul et Total > 1.5 - Non",
+            "Match Nul et Total > 1.5 - Oui"
+        ],
+        "Multi But. 2ème mi-temps": [
+            "Multi But 0-1"
+        ],
+        "Résultat du Match ou Total. 2ème mi-temps": [
+            "V1 Ou Total Moins de 0.5",
+            "V1 Ou Total Moins de 1.5",
+            "V1 Ou Total Plus de 0.5",
+            "V1 Ou Total Plus de 1.5",
+            "V2 Ou Total Moins de 0.5",
+            "V2 Ou Total Moins de 1.5",
+            "V2 Ou Total Plus de 0.5",
+            "V2 Ou Total Plus de 1.5",
+            "X Ou Total Moins de 1.5",
+            "X Ou Total Plus de 1.5"
+        ],
+        "Nombre Exact. 2ème mi-temps": [
+            "Total 1 ou moins - Non",
+            "Total 1 ou moins - Oui",
+            "Total de 2 ou plus - Non",
+            "Total de 2 ou plus - Oui"
+        ],
+        "Double chance. 2ème mi-temps": [
+            "12",
+            "1X",
+            "2X"
+        ],
+        "Résultat Et Les Deux Equipes Vont Marquer. 2ème mi-temps": [
+            "12 Et chaque Equipe va marquer – Non",
+            "12 Et chaque Equipe va marquer – Oui",
+            "1X Et chaque Equipe va marquer – Non",
+            "1X Et chaque Equipe va marquer – Oui",
+            "2X Et chaque Equipe va marquer – Non",
+            "2X Et chaque Equipe va marquer – Oui",
+            "X Et Les Deux Equipes vont marquer – Non",
+            "X Et Les Deux Equipes vont marquer – Oui"
+        ],
+        "Total Asiatique. 2ème mi-temps": [
+            "Total Moins de 0.75",
+            "Total Moins de 1.25",
+            "Total Moins de 1.75",
+            "Total Plus de 0.75",
+            "Total Plus de 1.25",
+            "Total Plus de 1.75"
+        ],
+        "Total asiatique d'équipe 1. 2ème mi-temps": [
+            "Total Equipe 1 Moins de 0.75",
+            "Total Equipe 1 Moins de 1.25",
+            "Total Equipe 1 Plus de 0.75",
+            "Total Equipe 1 Plus de 1.25"
+        ],
+        "Total asiatique d'équipe 2. 2ème mi-temps": [
+            "Equipe 2 Total Moins de 0.75",
+            "Equipe 2 Total Moins de 1.25",
+            "Equipe 2 Total Plus de 0.75",
+            "Equipe 2 Total Plus de 1.25"
+        ],
+        "Prochain but, handicap. 2ème mi-temps": [
+            "Prochain but 1, Handicap 1 0",
+            "Prochain but 1, Handicap 2 0"
+        ],
+        "2, Résultat + Total. 2ème mi-temps": [
+            "Equipe 2 ne va pas perdre et Total < 1.5 - Non",
+            "Equipe 2 ne va pas perdre et Total < 1.5 - Oui",
+            "Equipe 2 ne va pas perdre et Total > 1.5 - Non",
+            "Equipe 2 ne va pas perdre et Total > 1.5 - Oui",
+            "Equipe 2 va gagner et Total < 1.5 - Non",
+            "Equipe 2 va gagner et Total < 1.5 - Oui",
+            "Equipe 2 va gagner et Total < 2.5 - Non",
+            "Equipe 2 va gagner et Total < 2.5 - Oui",
+            "Equipe 2 va gagner et Total > 1.5 - Non",
+            "Equipe 2 va gagner et Total > 1.5 - Oui"
+        ],
+        "Handicap Européen. 2ème mi-temps": [
+            "Handicap Européen 0:1 V1",
+            "Handicap Européen 0:1 V2",
+            "Handicap Européen 0:1 X",
+            "Handicap Européen 1:0 V1",
+            "Handicap Européen 1:0 V2",
+            "Handicap Européen 1:0 X"
+        ],
+        "Total Individuel 1 de 3 Issues. 2ème mi-temps": [
+            "Total Equipe 1 (3 Issues) Moins de 1",
+            "Total Equipe 1 (3 Issues) Plus de 1",
+            "Total Equipe 1 (3 Issues) égal à 1"
+        ],
+        "Dernier But. 2ème mi-temps": [
+            "Aucune Equipe va marquer le dernier But",
+            "Equipe 1 va marquer le dernier But",
+            "Equipe 2 va marquer le dernier But"
+        ],
+        "Total individuel 1 Nombre exact de buts. 2ème mi-temps": [
+            "Total individuel 1 1 ou moins",
+            "Total Équipe 1 - 2 Buts ou plus"
+        ],
+        "Equipe 1, Multi But. 2ème mi-temps": [
+            "Equipe 1, Multi But 0-1"
+        ],
+        "Les Deux Equipes vont marquer ou Total. 2ème mi-temps": [
+            "Les Deux vont marquer ou Total Moins de 0.5",
+            "Les Deux vont marquer ou Total Moins de 1.5",
+            "Les Deux vont marquer ou Total Plus de 0.5",
+            "Les Deux vont marquer ou Total Plus de 1.5"
+        ]
+    },
+    "Résultat + Total": {
+        "1, Résultat + Total. Résultat + Total": [
+            "Equipe 1 ne va pas perdre et Total < 1.5 - Non",
+            "Equipe 1 ne va pas perdre et Total < 1.5 - Oui",
+            "Equipe 1 ne va pas perdre et Total > 1.5 - Non",
+            "Equipe 1 ne va pas perdre et Total > 1.5 - Oui",
+            "Equipe 1 va gagner et Total < 1.5 - Non",
+            "Equipe 1 va gagner et Total < 1.5 - Oui",
+            "Equipe 1 va gagner et Total < 2.5 - Non",
+            "Equipe 1 va gagner et Total < 2.5 - Oui",
+            "Equipe 1 va gagner et Total > 1.5 - Non",
+            "Equipe 1 va gagner et Total > 1.5 - Oui"
+        ],
+        "Au moins une équipe ne marque pas + Total. Résultat + Total": [
+            "Au moins une équipe ne marquera pas + Total Moins de 0.5 - Non",
+            "Au moins une équipe ne marquera pas + Total Moins de 0.5 - Oui",
+            "Au moins une équipe ne marquera pas + Total Moins de 1.5 - Non",
+            "Au moins une équipe ne marquera pas + Total Moins de 1.5 - Oui",
+            "Au moins une équipe ne marquera pas + Total Moins de 2.5 - Non",
+            "Au moins une équipe ne marquera pas + Total Moins de 2.5 - Oui",
+            "Au moins une équipe ne marquera pas + Total Plus de 0.5 - Non",
+            "Au moins une équipe ne marquera pas + Total Plus de 0.5 - Oui",
+            "Au moins une équipe ne marquera pas + Total Plus de 1.5 - Non",
+            "Au moins une équipe ne marquera pas + Total Plus de 1.5 - Oui"
+        ],
+        "2, Résultat + Total. Résultat + Total": [
+            "Equipe 2 ne va pas perdre et Total < 1.5 - Non",
+            "Equipe 2 ne va pas perdre et Total < 1.5 - Oui",
+            "Equipe 2 ne va pas perdre et Total > 1.5 - Non",
+            "Equipe 2 ne va pas perdre et Total > 1.5 - Oui",
+            "Equipe 2 va gagner et Total < 1.5 - Non",
+            "Equipe 2 va gagner et Total < 1.5 - Oui",
+            "Equipe 2 va gagner et Total < 2.5 - Non",
+            "Equipe 2 va gagner et Total < 2.5 - Oui",
+            "Equipe 2 va gagner et Total > 1.5 - Non",
+            "Equipe 2 va gagner et Total > 1.5 - Oui"
+        ]
+    },
+    "Résultats du Combiné": {
+        "Buts et Corners. Résultats du Combiné": [
+            "Moins De 1.5 Buts Et Moins De 9.5 Corners",
+            "Moins De 1.5 Buts Et Plus De 9.5 Corners",
+            "Plus De 1.5 Buts Et Moins De 6.5 Corners",
+            "Plus De 1.5 Buts Et Plus De 6.5 Corners"
+        ],
+        "Les Deux Equipes Vont Marquer + Total de Corners. Résultats du Combiné": [
+            "Les Deux Equipes Vont Marquer + TM 6.5 Corners",
+            "Les Deux Equipes Vont Marquer + TM 7.5 Corners",
+            "Les Deux Equipes Vont Marquer + TM 8.5 Corners",
+            "Les Deux Equipes Vont Marquer + TM 9.5 Corners",
+            "Les Deux Equipes Vont Marquer + TP 6.5 Corners",
+            "Les Deux Equipes Vont Marquer + TP 7.5 Corners",
+            "Les Deux Equipes Vont Marquer + TP 8.5 Corners",
+            "Les Deux Equipes Vont Marquer + TP 9.5 Corners"
+        ],
+        "Handicap Match + Total de Corners. Résultats du Combiné": [
+            "Equipe 1 Handicap -0.5 Dans Le Match + TM 8.5 Corners",
+            "Equipe 1 Handicap -0.5 Dans Le Match + TM 9.5 Corners",
+            "Equipe 1 Handicap -0.5 Dans Le Match + TP 7.5 Corners",
+            "Equipe 1 Handicap -0.5 Dans Le Match + TP 8.5 Corners",
+            "Equipe 1 Handicap -0.5 Dans Le Match + TP 9.5 Corners",
+            "Equipe 2 Handicap -0.5 Dans Le Match + TM 8.5 Corners",
+            "Equipe 2 Handicap -0.5 Dans Le Match + TM 9.5 Corners",
+            "Equipe 2 Handicap -0.5 Dans Le Match + TP 7.5 Corners",
+            "Equipe 2 Handicap -0.5 Dans Le Match + TP 8.5 Corners",
+            "Equipe 2 Handicap -0.5 Dans Le Match + TP 9.5 Corners"
+        ],
+        "Equipe 1, Total Dans Le Match + Equipe 2, Total de Corners. Résultats du Combiné": [
+            "Equipe 1, TM 0.5 Dans Le Match + Equipe 2, TM 0.5 Corners",
+            "Equipe 1, TM 0.5 Dans Le Match + Equipe 2, TM 1.5 Corners",
+            "Equipe 1, TM 0.5 Dans Le Match + Equipe 2, TP 0.5 Corners",
+            "Equipe 1, TM 0.5 Dans Le Match + Equipe 2, TP 1.5 Corners",
+            "Equipe 1, TM 0.5 Dans Le Match + Equipe 2, TP 2.5 Corners",
+            "Equipe 1, TP 0.5 Dans Le Match + Equipe 2, TM 0.5 Corners",
+            "Equipe 1, TP 0.5 Dans Le Match + Equipe 2, TM 1.5 Corners",
+            "Equipe 1, TP 0.5 Dans Le Match + Equipe 2, TP 0.5 Corners",
+            "Equipe 1, TP 0.5 Dans Le Match + Equipe 2, TP 1.5 Corners",
+            "Equipe 1, TP 0.5 Dans Le Match + Equipe 2, TP 2.5 Corners"
+        ],
+        "Equipe 2, Total Dans Le Match + Equipe 2, Total de Corners. Résultats du Combiné": [
+            "Equipe 2, TM 0.5 Dans Le Match + Equipe 2, TM 0.5 Corners",
+            "Equipe 2, TM 0.5 Dans Le Match + Equipe 2, TM 1.5 Corners",
+            "Equipe 2, TM 0.5 Dans Le Match + Equipe 2, TP 0.5 Corners",
+            "Equipe 2, TM 0.5 Dans Le Match + Equipe 2, TP 1.5 Corners",
+            "Equipe 2, TM 0.5 Dans Le Match + Equipe 2, TP 2.5 Corners",
+            "Equipe 2, TP 0.5 Dans Le Match + Equipe 2, TM 0.5 Corners",
+            "Equipe 2, TP 0.5 Dans Le Match + Equipe 2, TM 1.5 Corners",
+            "Equipe 2, TP 0.5 Dans Le Match + Equipe 2, TP 0.5 Corners",
+            "Equipe 2, TP 0.5 Dans Le Match + Equipe 2, TP 1.5 Corners",
+            "Equipe 2, TP 0.5 Dans Le Match + Equipe 2, TP 2.5 Corners"
+        ],
+        "Total de L'Equipe 2 + Total de Corners Dans Le Match. Résultats du Combiné": [
+            "Total Equipe 2 Moins de 0.5 + TM 6.5 Corners Dans Le Match",
+            "Total Equipe 2 Moins de 0.5 + TM 7.5 Corners Dans Le Match",
+            "Total Equipe 2 Moins de 0.5 + TP 6.5 Corners Dans Le Match",
+            "Total Equipe 2 Moins de 0.5 + TP 7.5 Corners Dans Le Match",
+            "Total Equipe 2 Moins de 0.5 + TP 8.5 Corners Dans Le Match",
+            "Total Equipe 2 Plus de 0.5 + TM 6.5 Corners Dans Le Match",
+            "Total Equipe 2 Plus de 0.5 + TM 7.5 Corners Dans Le Match",
+            "Total Equipe 2 Plus de 0.5 + TP 6.5 Corners Dans Le Match",
+            "Total Equipe 2 Plus de 0.5 + TP 7.5 Corners Dans Le Match",
+            "Total Equipe 2 Plus de 0.5 + TP 8.5 Corners Dans Le Match"
+        ],
+        "Vainqueur Du Match + Total de Corners. Résultats du Combiné": [
+            "V1 Dans Le Match + TM 6.5 Corners",
+            "V1 Dans Le Match + TM 7.5 Corners",
+            "V1 Dans Le Match + TP 6.5 Corners",
+            "V1 Dans Le Match + TP 7.5 Corners",
+            "V2 Dans Le Match + TM 6.5 Corners",
+            "V2 Dans Le Match + TP 6.5 Corners",
+            "V2 Dans Le Match + TP 7.5 Corners",
+            "X Dans Le Match + TM 6.5 Corners",
+            "X Dans Le Match + TP 6.5 Corners",
+            "X Dans Le Match + TP 7.5 Corners"
+        ],
+        "Handicap Match + Handicap Aux Corners. Résultats du Combiné": [
+            "Equipe 1 Handicap -0.5 Dans Le Match + Equipe 1 Handicap -2.5 Sur Les Corners",
+            "Equipe 1 Handicap -0.5 Dans Le Match + Equipe 1 Handicap -3.5 Sur Les Corners",
+            "Equipe 1 Handicap -0.5 Dans Le Match + Equipe 1 Handicap -4.5 Sur Les Corners",
+            "Equipe 1 Handicap -0.5 Dans Le Match + Equipe 1 Handicap -5.5 Sur Les Corners",
+            "Equipe 1 Handicap -0.5 Dans Le Match + Equipe 1 Handicap -6.5 Sur Les Corners",
+            "Equipe 2 Handicap -0.5 Dans Le Match + Equipe 1 Handicap -2.5 Sur Les Corners",
+            "Equipe 2 Handicap -0.5 Dans Le Match + Equipe 1 Handicap -3.5 Sur Les Corners",
+            "Equipe 2 Handicap -0.5 Dans Le Match + Equipe 1 Handicap -4.5 Sur Les Corners",
+            "Equipe 2 Handicap -0.5 Dans Le Match + Equipe 1 Handicap -5.5 Sur Les Corners",
+            "Equipe 2 Handicap -0.5 Dans Le Match + Equipe 1 Handicap -6.5 Sur Les Corners"
+        ],
+        "Equipe 1, Total Dans Le Match + Equipe 1, Total de Corners. Résultats du Combiné": [
+            "Equipe 1, TM 0.5 Dans Le Match + Equipe 1, TM 5.5 Corners",
+            "Equipe 1, TM 0.5 Dans Le Match + Equipe 1, TM 6.5 Corners",
+            "Equipe 1, TM 0.5 Dans Le Match + Equipe 1, TP 5.5 Corners",
+            "Equipe 1, TM 0.5 Dans Le Match + Equipe 1, TP 6.5 Corners",
+            "Equipe 1, TM 1.5 Dans Le Match + Equipe 1, TP 5.5 Corners",
+            "Equipe 1, TP 0.5 Dans Le Match + Equipe 1, TM 5.5 Corners",
+            "Equipe 1, TP 0.5 Dans Le Match + Equipe 1, TM 6.5 Corners",
+            "Equipe 1, TP 0.5 Dans Le Match + Equipe 1, TP 5.5 Corners",
+            "Equipe 1, TP 0.5 Dans Le Match + Equipe 1, TP 6.5 Corners",
+            "Equipe 1, TP 1.5 Dans Le Match + Equipe 1, TP 5.5 Corners"
+        ],
+        "Equipe 2, Total Dans Le Match + Equipe 1, Total de Corners. Résultats du Combiné": [
+            "Equipe 2, TM 0.5 Dans Le Match + Equipe 1, TM 5.5 Corners",
+            "Equipe 2, TM 0.5 Dans Le Match + Equipe 1, TM 6.5 Corners",
+            "Equipe 2, TM 0.5 Dans Le Match + Equipe 1, TP 5.5 Corners",
+            "Equipe 2, TM 0.5 Dans Le Match + Equipe 1, TP 6.5 Corners",
+            "Equipe 2, TP 0.5 Dans Le Match + Equipe 1, TM 5.5 Corners",
+            "Equipe 2, TP 0.5 Dans Le Match + Equipe 1, TM 6.5 Corners",
+            "Equipe 2, TP 0.5 Dans Le Match + Equipe 1, TP 5.5 Corners",
+            "Equipe 2, TP 0.5 Dans Le Match + Equipe 1, TP 6.5 Corners"
+        ],
+        "Total de L'Equipe 1 + Total de Corners Dans Le Match. Résultats du Combiné": [
+            "Total Equipe 1 Moins de 0.5 + TM 6.5 Corners Dans Le Match",
+            "Total Equipe 1 Moins de 0.5 + TM 7.5 Corners Dans Le Match",
+            "Total Equipe 1 Moins de 0.5 + TP 6.5 Corners Dans Le Match",
+            "Total Equipe 1 Moins de 0.5 + TP 7.5 Corners Dans Le Match",
+            "Total Equipe 1 Moins de 0.5 + TP 8.5 Corners Dans Le Match",
+            "Total Equipe 1 Plus de 0.5 + TM 6.5 Corners Dans Le Match",
+            "Total Equipe 1 Plus de 0.5 + TM 7.5 Corners Dans Le Match",
+            "Total Equipe 1 Plus de 0.5 + TP 6.5 Corners Dans Le Match",
+            "Total Equipe 1 Plus de 0.5 + TP 7.5 Corners Dans Le Match",
+            "Total Equipe 1 Plus de 0.5 + TP 8.5 Corners Dans Le Match"
+        ]
+    },
+    "Statistiques des joueurs": {
+        "Quel joueur va marquer le but. Statistiques des joueurs": [
+            "Andrei Girotto va marquer un but à tout moment - Oui",
+            "Angelo Fulgini va marquer un but à tout moment - Oui",
+            "Aschraf El Mahdioui va marquer un but à tout moment - Oui",
+            "Bart Schenkeveld va marquer un but à tout moment - Oui",
+            "Dimitrios Kourbelis va marquer un but à tout moment - Oui",
+            "Joshua King va marquer un but à tout moment - Oui",
+            "Konstantinos Fortounis va marquer un but à tout moment - Oui",
+            "Paolo Fernandes va marquer un but à tout moment - Oui",
+            "Pedro Rebocho va marquer un but à tout moment - Oui",
+            "Roger Martínez va marquer un but à tout moment - Oui"
+        ],
+        "Buts par joueur. Statistiques des joueurs": [
+            "Angelo Fulgini Va marquer le but numéro (1)",
+            "Aschraf El Mahdioui Va marquer le but numéro (1)",
+            "Dimitrios Kourbelis Va marquer le but numéro (1)",
+            "Georgios Masouras Va marquer le but numéro (1)",
+            "Joshua King Va marquer le but numéro (1)",
+            "Konstantinos Fortounis Va marquer le but numéro (1)",
+            "Musa Barrow Va marquer le but numéro (1)",
+            "Paolo Fernandes Va marquer le but numéro (1)",
+            "Roger Martínez Va marquer le but numéro (1)",
+            "Sultan Mandash Va marquer le but numéro (1)"
+        ],
+        "Qui va marquer et Total Match. Statistiques des joueurs": [
+            "Georgios Masouras va marquer et TM (1.5)",
+            "Georgios Masouras va marquer et TP (1.5)",
+            "Joshua King va marquer et TM (1.5)",
+            "Joshua King va marquer et TP (1.5)",
+            "Konstantinos Fortounis va marquer et TM (1.5)",
+            "Konstantinos Fortounis va marquer et TP (1.5)",
+            "Musa Barrow va marquer et TM (1.5)",
+            "Musa Barrow va marquer et TP (1.5)",
+            "Roger Martínez va marquer et TM (1.5)",
+            "Roger Martínez va marquer et TP (1.5)"
+        ],
+        "Total de buts marqués par un joueur. Statistiques des joueurs": [
+            "Angelo Fulgini Va marquer Plus de (1.5)",
+            "Aschraf El Mahdioui Va marquer Plus de (1.5)",
+            "Dimitrios Kourbelis Va marquer Plus de (1.5)",
+            "Flavio Medeiros da Silva Va marquer Plus de (1.5)",
+            "Georgios Masouras Va marquer Plus de (1.5)",
+            "Joshua King Va marquer Plus de (1.5)",
+            "Konstantinos Fortounis Va marquer Plus de (1.5)",
+            "Musa Barrow Va marquer Plus de (1.5)",
+            "Paolo Fernandes Va marquer Plus de (1.5)",
+            "Roger Martínez Va marquer Plus de (1.5)"
+        ],
+        "Fera une passe décisive. Statistiques des joueurs": [
+            "Angelo Fulgini fait une passe décisive - Oui",
+            "Aschraf El Mahdioui fait une passe décisive - Oui",
+            "Dimitrios Kourbelis fait une passe décisive - Oui",
+            "Georgios Masouras fait une passe décisive - Oui",
+            "Joshua King fait une passe décisive - Oui",
+            "Konstantinos Fortounis fait une passe décisive - Oui",
+            "Musa Barrow fait une passe décisive - Oui",
+            "Paolo Fernandes fait une passe décisive - Oui",
+            "Pedro Rebocho fait une passe décisive - Oui",
+            "Sultan Mandash fait une passe décisive - Oui"
+        ],
+        "Joueur va marquer ou faire une Passe décisive. Statistiques des joueurs": [
+            "Angelo Fulgini va marquer ou faire une Passe décisive - Oui",
+            "Dimitrios Kourbelis va marquer ou faire une Passe décisive - Oui",
+            "Georgios Masouras va marquer ou faire une Passe décisive - Oui",
+            "Joshua King va marquer ou faire une Passe décisive - Oui",
+            "Konstantinos Fortounis va marquer ou faire une Passe décisive - Oui",
+            "Musa Barrow va marquer ou faire une Passe décisive - Oui",
+            "Paolo Fernandes va marquer ou faire une Passe décisive - Oui",
+            "Pedro Rebocho va marquer ou faire une Passe décisive - Oui",
+            "Roger Martínez va marquer ou faire une Passe décisive - Oui",
+            "Sultan Mandash va marquer ou faire une Passe décisive - Oui"
+        ]
+    },
+    "1er set": {
+        "1x2. 1er set": [
+            "V1",
+            "V2"
+        ],
+        "Total. 1er set": [
+            "Total Moins de 10.5",
+            "Total Moins de 12.5",
+            "Total Moins de 7.5",
+            "Total Moins de 8.5",
+            "Total Moins de 9.5",
+            "Total Plus de 10.5",
+            "Total Plus de 12.5",
+            "Total Plus de 7.5",
+            "Total Plus de 8.5",
+            "Total Plus de 9.5"
+        ],
+        "Handicap. 1er set": [
+            "Handicap 1 (-1.5)",
+            "Handicap 1 (-2.5)",
+            "Handiсap 2 (+1.5)",
+            "Handiсap 2 (+2.5)"
+        ],
+        "Total 1. 1er set": [
+            "Total Individuel 1 Moins de 6.5",
+            "Total Individuel 1 Plus de 6.5"
+        ],
+        "2, Résultat + Total. 1er set": [
+            "Equipe 2 va gagner et Total < 9.5 - Oui",
+            "Equipe 2 va gagner et Total > 9.5 - Non",
+            "Equipe 2 va gagner et Total > 9.5 - Oui"
+        ],
+        "Premier à avoir N Jeux. 1er set": [
+            "Joueur 1 sera le premier à gagner 4 jeux - Oui",
+            "Joueur 1 sera le premier à gagner 5 jeux - Oui",
+            "Joueur 2 sera le premier à gagner 4 jeux - Oui",
+            "Joueur 2 sera le premier à gagner 5 jeux - Oui"
+        ],
+        "Score après 6 jeux. 1er set": [
+            "Score 3-3 après 6 Jeux",
+            "Score 4-2 après 6 Jeux",
+            "Score 5-1 après 6 Jeux"
+        ],
+        "Break dans le Set. 1er set": [
+            "Joueur 2 Va Breaker Le Service - Non",
+            "Joueur 2 Va Breaker Le Service - Oui"
+        ],
+        "Gagne dans le Jeu. 1er set": [
+            "Joueur 1 va gagner le Jeu 5\n         Live",
+            "Joueur 1 va gagner le Jeu 6\n          Next",
+            "Joueur 2 va gagner le Jeu 5\n         Live",
+            "Joueur 2 va gagner le Jeu 6\n          Next"
+        ],
+        "Total Asiatique. 1er set": [
+            "Total Moins de 9.75",
+            "Total Plus de 9.75"
+        ],
+        "Handicap asiatique. 1er set": [
+            "Handicap 1 (-2.25)",
+            "Handiсap 2 (+2.25)"
+        ],
+        "Total 2. 1er set": [
+            "Total Individuel 2 Moins de 3.5",
+            "Total Individuel 2 Plus de 3.5"
+        ],
+        "1, Résultat + Total. 1er set": [
+            "Equipe 1 va gagner et Total < 9.5 - Non",
+            "Equipe 1 va gagner et Total < 9.5 - Oui",
+            "Equipe 1 va gagner et Total > 9.5 - Non",
+            "Equipe 1 va gagner et Total > 9.5 - Oui"
+        ],
+        "Total exact. 1er set": [
+            "Total entre 6 et 7 - Oui",
+            "Total entre 7 et 8 - Oui",
+            "Total entre 7 et 9 - Oui",
+            "Total entre 8 et 9 - Oui"
+        ],
+        "Résultat après les jeux. 1er set": [
+            "Résultat 6 premiers jeux - 1",
+            "Résultat 6 premiers jeux - X"
+        ],
+        "Résultat des jeux. 1er set": [
+            "Deux jeux 6 et 7 - V1",
+            "Deux jeux 6 et 7 - V2",
+            "Jeux 6 et 7 - Égalité"
+        ],
+        "Score exact. Groupes. 1er set": [
+            "Score Exact Dans Le Set - 3-6, 4-6",
+            "Score Exact Dans Le Set - 5-7, 6-7",
+            "Score Exact Dans Le Set - 6-0, 6-1, 6-2",
+            "Score Exact Dans Le Set - 6-1, 1-6",
+            "Score Exact Dans Le Set - 6-2, 2-6",
+            "Score Exact Dans Le Set - 6-3, 3-6",
+            "Score Exact Dans Le Set - 6-3, 6-4",
+            "Score Exact Dans Le Set - 6-4, 4-6",
+            "Score Exact Dans Le Set - 7-5, 5-7",
+            "Score Exact Dans Le Set - 7-5, 7-6"
+        ]
+    },
+    "1er set Evénements rapides": {
+        "Point. 1er set Evénements rapides": [
+            "Joueur 1 va gagner le point 1 dans le jeu 6",
+            "Joueur 1 va gagner le point 1 dans le jeu 7",
+            "Joueur 1 va gagner le point 2 dans le jeu 6",
+            "Joueur 1 va gagner le point 2 dans le jeu 7",
+            "Joueur 1 va gagner le point 3 dans le jeu 6",
+            "Joueur 2 va gagner le point 1 dans le jeu 6",
+            "Joueur 2 va gagner le point 1 dans le jeu 7",
+            "Joueur 2 va gagner le point 2 dans le jeu 6",
+            "Joueur 2 va gagner le point 2 dans le jeu 7",
+            "Joueur 2 va gagner le point 3 dans le jeu 6"
+        ],
+        "Points d'affilée. 1er set Evénements rapides": [
+            "Jeu 6 - Points 1-2 - Nul",
+            "Jeu 6 - Points 1-2 - V1",
+            "Jeu 6 - Points 1-2 - V2",
+            "Jeu 6 - Points 2-3 - Nul",
+            "Jeu 6 - Points 2-3 - V1",
+            "Jeu 6 - Points 2-3 - V2",
+            "Jeu 7 - Points 1-2 - Nul",
+            "Jeu 7 - Points 1-2 - V1",
+            "Jeu 7 - Points 1-2 - V2",
+            "Jeu 7 - Points 2-3 - V1"
+        ],
+        "Score du jeu. Après 3 points. 1er set Evénements rapides": [
+            "Jeu 6, Score 0-40 après 3 points",
+            "Jeu 6, Score 15-30 après 3 points",
+            "Jeu 6, Score 30-15 après 3 points",
+            "Jeu 6, Score 40-0 après 3 points"
+        ],
+        "Serveur va gagner 40+ à 0 ou 40+ à 15. 1er set Evénements rapides": [
+            "Serveur va gagner le jeu 6 40+ à 0 ou 40+ à 15 - Non",
+            "Serveur va gagner le jeu 6 40+ à 0 ou 40+ à 15 - Oui"
+        ],
+        "Gagne le jeu avec le score. 1er set Evénements rapides": [
+            "Joueur 1 va gagner le Jeu 6 40-0",
+            "Joueur 1 va gagner le Jeu 6 40-15",
+            "Joueur 1 va gagner le Jeu 6 40-30",
+            "Joueur 1 va gagner le Jeu 6 après 40-40",
+            "Joueur 2 va gagner le Jeu 6 40-0",
+            "Joueur 2 va gagner le Jeu 6 40-15",
+            "Joueur 2 va gagner le Jeu 6 40-30",
+            "Joueur 2 va gagner le Jeu 6 après 40-40"
+        ],
+        "Points de Handicap dans le Jeu. 1er set Evénements rapides": [
+            "Points de Handicap 1 -2.5 dans le Jeu 6",
+            "Points de Handicap 1 -2.5 dans le Jeu 7",
+            "Points de Handicap 1 2.5 dans le Jeu 6",
+            "Points de Handicap 1 2.5 dans le Jeu 7",
+            "Points de Handicap 2 -2.5 dans le Jeu 6",
+            "Points de Handicap 2 -2.5 dans le Jeu 7",
+            "Points de Handicap 2 2.5 dans le Jeu 6",
+            "Points de Handicap 2 2.5 dans le Jeu 7"
+        ],
+        "Serveur va gagner le jeu après une balle de break. 1er set Evénements rapides": [
+            "Jeu 6 - Serveur va sauver une balle de break et gagner le jeu - Non",
+            "Jeu 6 - Serveur va sauver une balle de break et gagner le jeu - Oui",
+            "Jeu 7 - Serveur va sauver une balle de break et gagner le jeu - Non",
+            "Jeu 7 - Serveur va sauver une balle de break et gagner le jeu - Oui"
+        ],
+        "Nombre exact de points dans un jeu. 1er set Evénements rapides": [
+            "Jeu 6, Nombre de Points 4",
+            "Jeu 6, Nombre de Points 5",
+            "Jeu 6, Nombre de Points 6",
+            "Jeu 6, Nombre de Points 7 ou plus",
+            "Jeu 6, Nombre de Points 8 ou plus",
+            "Jeu 7, Nombre de Points 4",
+            "Jeu 7, Nombre de Points 5",
+            "Jeu 7, Nombre de Points 6",
+            "Jeu 7, Nombre de Points 8 ou plus"
+        ],
+        "Point au service. 1er set Evénements rapides": [
+            "Serveur va gagner le Point 1 dans le Jeu 6 sur le 1er Service",
+            "Serveur va gagner le Point 1 dans le Jeu 6 sur le 2ème Service",
+            "Serveur va gagner le Point 2 dans le Jeu 6 sur le 1er Service",
+            "Serveur va gagner le Point 2 dans le Jeu 6 sur le 2ème Service",
+            "Serveur va gagner le Point 3 dans le Jeu 6 sur le 1er Service",
+            "Serveur va perdre le Point 1 dans le Jeu 6 sur le 1er Service",
+            "Serveur va perdre le Point 1 dans le Jeu 6 sur le 2ème Service",
+            "Serveur va perdre le Point 2 dans le Jeu 6 sur le 1er Service",
+            "Serveur va perdre le Point 2 dans le Jeu 6 sur le 2ème Service",
+            "Serveur va perdre le Point 3 dans le Jeu 6 sur le 1er Service"
+        ],
+        "Score de la partie. 1er set Evénements rapides": [
+            "Jeu 6 15-15 - Non",
+            "Jeu 6 15-15 - Oui",
+            "Jeu 6 30-30 - Non",
+            "Jeu 6 30-30 - Oui",
+            "Jeu 6 : 40-40 - Non",
+            "Jeu 6 : 40-40 - Oui",
+            "Jeu 6, Receveur va mener 30-0 - Non",
+            "Jeu 6, Receveur va mener 30-0 - Oui",
+            "Jeu 6, Serveur va mener 30-0 - Non",
+            "Jeu 6, Serveur va mener 30-0 - Oui"
+        ],
+        "Score du Jeu. Après 4 points. 1er set Evénements rapides": [
+            "Jeu 6, Joueur 1 va gagner 40+ à 0 après 4 points",
+            "Jeu 6, Joueur 2 va gagner 40+ à 0 après 4 points",
+            "Jeu 6, Score 15-40 après 4 points",
+            "Jeu 6, Score 30-30 après 4 points",
+            "Jeu 6, Score 40-15 après 4 points"
+        ],
+        "Serveur va gagner 40+ à 0, 40+ à 15 ou 40+ à 30. 1er set Evénements rapides": [
+            "Serveur va gagner le jeu 6 40+ à 0, 40+ à 15 ou 40+ à 30 - Non",
+            "Serveur va gagner le jeu 6 40+ à 0, 40+ à 15 ou 40+ à 30 - Oui"
+        ],
+        "40-40 dans un Jeu. 1er set Evénements rapides": [
+            "Jeu 6 ou 7 : 40-40 - Non",
+            "Jeu 6 ou 7 : 40-40 - Oui"
+        ],
+        "Balle de break dans un jeu. 1er set Evénements rapides": [
+            "Balle de Break dans le Jeu 6 - Non",
+            "Balle de Break dans le Jeu 6 - Oui"
+        ],
+        "Total de points dans un Jeu. 1er set Evénements rapides": [
+            "Jeu 6, Total de Points Moins de 4.5",
+            "Jeu 6, Total de Points Moins de 5.5",
+            "Jeu 6, Total de Points Moins de 6.5",
+            "Jeu 6, Total de Points Moins de 8.5",
+            "Jeu 6, Total de Points Plus de 4.5",
+            "Jeu 6, Total de Points Plus de 5.5",
+            "Jeu 6, Total de Points Plus de 6.5",
+            "Jeu 6, Total de Points Plus de 8.5",
+            "Jeu 7, Total de Points Moins de 4.5",
+            "Jeu 7, Total de Points Plus de 4.5"
+        ],
+        "Total de points dans un Jeu. Pair/Impair. 1er set Evénements rapides": [
+            "Jeu 6, Total de Points impair",
+            "Jeu 6, Total de Points pair",
+            "Jeu 7, Total de Points impair",
+            "Jeu 7, Total de Points pair"
+        ]
+    }
 }

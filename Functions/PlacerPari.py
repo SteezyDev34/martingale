@@ -1,70 +1,13 @@
 import json
-import os
-import sys
 import time
 
-from Functions.AfficherParis import AfficherParis
-from Functions.GetBet import GetBet
-from Functions.PlacerMise import PlacerMise
-from Functions.ValidationDuParis import ValidationDuParis
-
-# Récupérer le chemin absolu du fichier actuel
-current_file_path = os.path.abspath(__file__)
-
-# Récupérer le dossier parent du fichier actuel
-parent_directory = os.path.dirname(current_file_path)
-# ajouter un autre niveau parent si nécessaire
-project_directory = os.path.dirname(parent_directory)
-sys.path.append(project_directory)
-# Vérification de l'environnement
-if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
-    import VenvDependencyManager
-
-    VenvDependencyManager.main()
-
-from art import *
-
-# Chargement des variables globales
-import config
-
-# Récupérer le nom du script
-# Nom du fichier
-file_name = os.path.basename(__file__)  # ou directement '40-1.py' pour l'exemple
-# Séparer le nom du fichier et l'extension
-name_part = os.path.splitext(file_name)[0]
-# Séparer les parties du nom
-parts = name_part.split('-')
-if len(parts) > 1:
-    config.scriptType = parts[0]  # Suppose que le type est avant le tiret
-    config.script_num = int(parts[1])  # Suppose que le numéro est avant le tiret
-    localhost = str(config.scriptType) + str(config.script_num)
-    config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
-    if int(config.localhost) < 1024:
-        config.localhost = 1024 + int(config.localhost)
-    print(config.localhost)
-    # Demander confirmation à l'utilisateur
-    if config.systeme == 'Windows':
-        command = f'start chrome --remote-debugging-port={config.localhost} --user-data-dir="{project_directory}\\ChromeDebugProfile{config.localhost}"'
-    else:
-        command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
-
-    confirmation = input(f"Avez-vous exécuté la commande \n{command}\n? (Y/N): ")
-
-    if confirmation.upper() != 'Y' and confirmation.upper() != 'y' and confirmation.upper() != 'O' and confirmation.upper() != 'o':
-        print("Programme arrêté par l'utilisateur.")
-        sys.exit(0)  # Arrêter le programme
-
-
-else:
-    print("Le format du nom du fichier est incorrect.")
-    exit()
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 
-def placer_pari(driver, equipe1, equipe2, categorie, type_de_pari, selection, mise, cote_min=None):
+def placer_pari(driver, codeList):
     """
     Fonction pour placer un pari sur 1xBet
     
@@ -78,73 +21,107 @@ def placer_pari(driver, equipe1, equipe2, categorie, type_de_pari, selection, mi
     :param cote_min: Cote minimum acceptée (optionnel)
     :return: Dictionnaire avec le résultat de l'opération
     """
-    driver.get('https://1xbet.com/fr')
-    # BOUTON DE RECHERCHE
-    try:
-        WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.ID, 'b-searchBut-live')))
-    except Exception as e:
-        print(f'Erreur lors de la recherche du bouton de recherche: {str(e)}')
-        exit()
-    else:
-        search_button = driver.find_element(By.ID, 'b-searchBut-live')
-        search_button.click()
-    # POPUP DE RECHERCHE
-    try:
-        WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.ID, 'search-in-popup')))
-    except Exception as e:
-        print(f'Erreur lors de la recherche du champ de recherche: {str(e)}')
-    else:
-        search_input = driver.find_element(By.ID, 'search-in-popup')
-        search_input.send_keys(f"{equipe1} - {equipe2}")
-        search_popup_button = driver.find_element(By.CLASS_NAME, 'search-popup__button')
-        search_popup_button.click()
-    # RECHERCHE DU MATCH DANS LA LIST ET OUVERTURE DU MATCH
-    try:
-        WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'search-popup-events__item')))
-    except Exception as e:
-        print(f'Erreur lors de la recherche du match: {equipe1} vs {equipe2} : {str(e)}')
-    else:
-        try:
-            matches = driver.find_elements(By.CLASS_NAME, 'search-popup-events__item')
-            team1 = ''
-            team2 = ''
-            for match in matches:
-                teams = match.find_element(By.CLASS_NAME, 'search-popup-event__teams').text
-                if ' - ' in teams:
-                    team1, team2 = teams.split(' - ')
-                if (equipe1 in team1 or team1 in equipe1) and (equipe2 in team2 or team2 in equipe2):
-                    print('Match found')
-                    link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
-                    driver.get(link)
-                    break
-        except Exception as e:
-            print(f'Erreur lors de la selection du match: {equipe1} vs {equipe2} : {str(e)}')
-            exit()
-    try:
-        AfficherParis(driver, categorie, type_de_pari)
-    except Exception as e:
-        print(f'Erreur lors de l\'affichage du type de pari : {e}')
-        exit()
-    try:
-        GetBet(driver, selection=selection)
-    except Exception as e:
-        print(f'Erreur lors de la recherche de la selection : {e}')
-        exit()
-    try:
-        config.wantwin = 1.5
-        PlacerMise(driver)
-    except Exception as e:
-        print(f'Erreur lors de la validation du pari : {e}')
-        exit()
-    try:
-        ValidationDuParis(driver)
+    while codeList != []:
+        donnees_test = codeList[0]
+        del codeList[0]
+        print("=== DONNÉES ===")
+        print(f"Match: {donnees_test['equipe_1']} vs {donnees_test['equipe_2']}")
+        print(f"Date: {donnees_test['date']}")
+        print(f"Catégorie de pari: {donnees_test['categorie']}")
+        print(f"Type de pari: {donnees_test['type_de_pari']}")
+        print(f"Sélection: {donnees_test['selection']}")
+        print(f"Cote: {donnees_test['odds']}")
+        print("=" * 50)
 
-    except Exception as e:
-        print(f'Erreur lors de la validation du pari : {e}')
-        exit()
+        equipe1 = donnees_test['equipe_1'],
+        equipe2 = donnees_test['equipe_2'],
+        categorie = donnees_test['categorie'],
+        type_de_pari = donnees_test['type_de_pari'],
+        selection = donnees_test['selection'],  # "Plus De 20.5"
+        mise = 10,  # Mise de test
+        cote_min = float(donnees_test['odds'])  # Cote minimum basée sur l'exemple
+
+        driver.get('https://1xbet.com/fr')
+        # BOUTON DE RECHERCHE
+        try:
+            WebDriverWait(driver, 20).until(
+                EC.presence_of_element_located((By.ID, 'b-searchBut-live')))
+        except Exception as e:
+            print(f'Erreur lors de la recherche du bouton de recherche: {str(e)}')
+            exit()
+        else:
+            search_button = driver.find_element(By.ID, 'b-searchBut-live')
+            search_button.click()
+        # POPUP DE RECHERCHE
+        try:
+            WebDriverWait(driver, 20).until(
+                EC.presence_of_element_located((By.ID, 'search-in-popup')))
+        except Exception as e:
+            print(f'Erreur lors de la recherche du champ de recherche: {str(e)}')
+        else:
+            search_input = driver.find_element(By.ID, 'search-in-popup')
+            search_input.send_keys(f"{equipe1} - {equipe2}")
+            search_popup_button = driver.find_element(By.CLASS_NAME, 'search-popup__button')
+            search_popup_button.click()
+        # RECHERCHE DU MATCH DANS LA LIST ET OUVERTURE DU MATCH
+        try:
+            WebDriverWait(driver, 20).until(
+                EC.presence_of_element_located((By.CLASS_NAME, 'search-popup-events__item')))
+        except Exception as e:
+            print(f'Erreur lors de la recherche du match: {equipe1} vs {equipe2} : {str(e)}')
+        else:
+            try:
+                matches = driver.find_elements(By.CLASS_NAME, 'search-popup-events__item')
+                team1 = ''
+                team2 = ''
+                for match in matches:
+                    teams = match.find_element(By.CLASS_NAME, 'search-popup-event__teams').text
+                    if ' - ' in teams:
+                        team1, team2 = teams.split(' - ')
+                    if (equipe1 in team1 or team1 in equipe1) and (equipe2 in team2 or team2 in equipe2):
+                        print('Match found')
+                        link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
+                        driver.get(link)
+            except Exception as e:
+                print(f'Erreur lors de la selection du match: {equipe1} vs {equipe2} : {str(e)}')
+                exit()
+        try:
+            # Rechercher le match
+            resultat_recherche = rechercher_match(driver, equipe1, equipe2)
+            if not resultat_recherche['success']:
+                return resultat_recherche
+
+            # Sélectionner le pari
+            resultat_selection = selectionner_pari(driver, type_de_pari, cote_min)
+            if not resultat_selection['success']:
+                return resultat_selection
+
+            # Placer la mise
+            resultat_mise = placer_mise(driver, mise)
+            if not resultat_mise['success']:
+                return resultat_mise
+
+            # Valider le pari
+            resultat_validation = valider_pari(driver)
+
+            return {
+                'success': True,
+                'message': 'Pari placé avec succès',
+                'details': {
+                    'equipes': f"{equipe1} vs {equipe2}",
+                    'type_de_pari': type_de_pari,
+                    'mise': mise,
+                    'cote': resultat_selection.get('cote'),
+                    'coupon': resultat_validation.get('coupon_number')
+                }
+            }
+
+        except Exception as e:
+            return {
+                'success': False,
+                'message': f'Erreur lors du placement du pari: {str(e)}',
+                'error': str(e)
+            }
 
 
 def rechercher_match(driver, equipe1, equipe2):
@@ -454,36 +431,20 @@ def tester_avec_donnees_exemple():
     # Données d'exemple pour les tests
     donnees_test = {
         "date": "05/09/2025",
-        "equipe_1": "Atlanta United",
-        "equipe_2": "Crew de Columbus",
+        "equipe_1": "Crystal Palace",
+        "equipe_2": "Sunderland",
         "categorie": "Corners",
         "type_de_pari": "Total. Corners",
-        "selection": "Total Plus de 6.5",
+        "selection": "Total (9.5) Plus de",
         "odds": "1.1"
     }
-
-    print("=== TEST AVEC DONNÉES D'EXEMPLE ===")
-    print(f"Match: {donnees_test['equipe_1']} vs {donnees_test['equipe_2']}")
-    print(f"Date: {donnees_test['date']}")
-    print(f"Catégorie de pari: {donnees_test['categorie']}")
-    print(f"Type de pari: {donnees_test['type_de_pari']}")
-    print(f"Sélection: {donnees_test['selection']}")
-    print(f"Cote: {donnees_test['odds']}")
-    print("=" * 50)
 
     try:
         from ChromeDriver.SetDriver1 import driver
 
         # Test avec les données d'exemple
         resultat = placer_pari(
-            driver=driver,
-            equipe1=donnees_test['equipe_1'],
-            equipe2=donnees_test['equipe_2'],
-            categorie=donnees_test['categorie'],
-            type_de_pari=donnees_test['type_de_pari'],
-            selection=donnees_test['selection'],  # "Plus De 20.5"
-            mise=10,  # Mise de test
-            cote_min=float(donnees_test['odds'])  # Cote minimum basée sur l'exemple
+            driver=driver, donnees_test=donnees_test
         )
 
         print("RÉSULTAT DU TEST:")
@@ -532,4 +493,7 @@ def tester_pari_tennis_simple(driver, equipe1, equipe2, selection, mise=10):
         return False
 
 
-tester_avec_donnees_exemple()
+if __name__ == "__main__":
+    # Test avec les données d'exemple
+    print("Lancement du test avec les données d'exemple...")
+    tester_avec_donnees_exemple()

@@ -29,15 +29,38 @@ cote = 3
 tipster = '1xbet'
 scriptType = "40A"
 localhost = ''
-wich_site = input("1XBET CA? (Y/N): ")
 api_url = "http://auxobetbot.sc2vagr6376.universe.wf"
 site_url = 'https://1xbet.com/fr/live/tennis'
 site_line_url = 'https://1xbet.com/fr/line/tennis'
 site_type = 'old_site'
-if wich_site.upper() == 'Y' or wich_site.upper() == 'y' or wich_site.upper() == 'O' or wich_site.upper() == 'o':
-    site_url = "https://ca.1xbet.com/fr/live/tennis"
-    site_line_url = "https://ca.1xbet.com/fr/line/tennis"
-    site_type = 'new_site'
+def configure_site_type(use_ca_site=None):
+    """
+    Configure le type de site et les URLs en fonction du choix utilisateur.
+    
+    Args:
+        use_ca_site (bool, optional): Si True, utilise le site CA. Si False, utilise le site standard.
+                                     Si None, demande à l'utilisateur.
+    
+    Returns:
+        str: Le type de site configuré ('new_site' ou 'old_site')
+    """
+    global site_url, site_line_url, site_type
+    
+    if use_ca_site is None:
+        wich_site = input("1XBET CA? (Y/N): ")
+        use_ca_site = wich_site.upper() in ['Y', 'O']
+    
+    if use_ca_site:
+        site_url = "https://ca.1xbet.com/fr/live/tennis"
+        site_line_url = "https://ca.1xbet.com/fr/line/tennis"
+        site_type = 'new_site'
+    else:
+        site_url = 'https://1xbet.com/fr/live/tennis'
+        site_line_url = 'https://1xbet.com/fr/line/tennis'
+        site_type = 'old_site'
+    
+    return site_type
+
 # Score configurations
 score_to_start = [
     "01(0)00(0)",
@@ -90,7 +113,6 @@ placed_game = False
 saved_score = False
 
 numset = ""
-set = ""
 game_end = False
 game_start = False
 gain = 0
@@ -361,11 +383,16 @@ xbet_types_file = os.path.join(projectPath, 'xbet_types.json')
 with open(xbet_types_file, 'r', encoding='utf-8') as f:
     xbet_types_data = json.load(f)
 
-# Conversion des listes en ensembles pour maintenir la compatibilité avec le code existant
-xbet_type_list = {}
-for period, bet_types in xbet_types_data.items():
-    # Utilisation d'une compréhension d'ensemble au lieu de la fonction set()
-    xbet_type_list[period] = {bet_type for bet_type in bet_types}
+# Préserver la structure originale des données JSON pour une meilleure utilisation
+xbet_type_list = xbet_types_data
+
+# Créer également une version avec des sets pour la compatibilité avec l'ancien code si nécessaire
+xbet_type_list_sets = {}
+for period, bet_types_list in xbet_types_data.items():
+    # Créer un ensemble de toutes les sélections pour cette période
+    # bet_types_list est une liste de types de paris, pas un dictionnaire
+    all_selections = set(bet_types_list)
+    xbet_type_list_sets[period] = all_selections
 # Initialize dictionaries to track wins per script type
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}

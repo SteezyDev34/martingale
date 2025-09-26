@@ -23,3 +23,5 @@ colorama==0.4.6
 colorlog
 logging
 pyautogui
+telethon
+telepot
