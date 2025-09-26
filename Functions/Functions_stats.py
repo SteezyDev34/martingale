@@ -2,7 +2,7 @@ import json
 import os
 import re
 import time
-from datetime import date
+from datetime import date, datetime
 
 import requests
 from selenium.webdriver.common.by import By
@@ -12,6 +12,34 @@ from unidecode import unidecode
 
 # Fichier de cache partagé pour toutes les stats tennis
 CACHE_FILE = "tennis_stats_cache.json"
+# Fichier de log pour les joueurs non trouvés
+PLAYERS_NOT_FOUND_LOG = "Logs/players_not_found.log"
+
+
+def log_player_not_found(player_name, function_name=""):
+    """
+    Enregistre dans un fichier de log les joueurs qui ne sont pas trouvés.
+    
+    Args:
+        player_name (str): Nom du joueur non trouvé
+        function_name (str): Nom de la fonction qui a appelé le log (optionnel)
+    """
+    # Créer le répertoire Logs s'il n'existe pas
+    os.makedirs("Logs", exist_ok=True)
+    
+    # Préparer le message de log avec timestamp
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    log_message = f"[{timestamp}] Joueur non trouvé: {player_name}"
+    if function_name:
+        log_message += f" (fonction: {function_name})"
+    log_message += "\n"
+    
+    # Écrire dans le fichier de log
+    try:
+        with open(PLAYERS_NOT_FOUND_LOG, "a", encoding="utf-8") as f:
+            f.write(log_message)
+    except Exception as e:
+        print(f"Erreur lors de l'écriture du log: {e}")
 
 
 def load_cache():
@@ -211,8 +239,10 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
         # Vérifier si des résultats ont été trouvés
         if not d1.get('data') or len(d1['data']) == 0:
             print(f"Aucun résultat trouvé pour {playerName1}")
+            log_player_not_found(playerName1, "get_wta_proba_40A_sofascore")
         if not d2.get('data') or len(d2['data']) == 0:
             print(f"Aucun résultat trouvé pour {playerName2}")
+            log_player_not_found(playerName2, "get_wta_proba_40A_sofascore")
 
         # Afficher les résultats trouvés pour aider au débogage
         print(f"Résultats pour {playerName1}:")
@@ -254,7 +284,7 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
             pid2 = d2['data'][0]['id']
             print(f"Aucun joueur individuel trouvé pour {playerName2}, utilisation du premier résultat (ID: {pid2})")
 
-        if not pid1 or not pid2:
+        if not pid1 and not pid2:
             print("Impossible de récupérer les IDs des joueurs")
             return 0.0
 
