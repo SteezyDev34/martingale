@@ -84,7 +84,7 @@ def GetBetOld(driver, nextBet=False, selection=''):
                         config.win_type = '0:40'  # inversé
                         sType = "Game " + str(config.looking_game) + " 0:40+, Player " + str(first_player)
             if config.scriptType == '030':
-                sType = "Receveur Va Mener 30-0"
+                sType = "Receveur va mener 30-0"
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
                         len(first_player) > 0 and int(config.jeu_actuel) == int(config.looking_game)):
                     first_player = 1
