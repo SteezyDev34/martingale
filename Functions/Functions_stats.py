@@ -272,12 +272,12 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
         print(f"URLs des statistiques: \n{url1}\n{url2}")
         try:
             print(f"Récupération des statistiques pour {playerName1}...")
-            json_data = requests.get(url1, headers=headers, verify=False).json()['data']
-            d1 = json_data.get('data', [])  # ou {} ou [] selon ce que tu attends
+            json_data = requests.get(url1, headers=headers, verify=False).json()
+            d1 = json_data.get('data', {})  # ou {} ou [] selon ce que tu attends
             time.sleep(1)
             print(f"Récupération des statistiques pour {playerName2}...")
-            json_data = requests.get(url2, headers=headers, verify=False).json()['data']
-            d2 = json_data.get('data', [])  # ou {} ou [] selon ce que tu attends
+            json_data = requests.get(url2, headers=headers, verify=False).json()
+            d2 = json_data.get('data', {})  # ou {} ou [] selon ce que tu attends
             time.sleep(1)
             print("Statistiques récupérées avec succès")
 
