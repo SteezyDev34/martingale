@@ -12,7 +12,7 @@ from Functions.GetScoreActuel import GetScoreActuel
 
 def GetBetOld(driver, nextBet=False, selection=''):
     config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', True, 2)
-    if config.scriptType != 'LIVE':
+    if config.scriptType in config.allScriptType:
         GetScoreActuel(driver)
     DeleteBet(driver)
     if nextBet:
@@ -46,7 +46,7 @@ def GetBetOld(driver, nextBet=False, selection=''):
 
     # print('i '+str(i))
     while not clic and tentative_clic < 5:
-        if config.scriptType != 'LIVE':
+        if config.scriptType in config.allScriptType:
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__row')[0]
             first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__ball')
@@ -123,6 +123,14 @@ def GetBetOld(driver, nextBet=False, selection=''):
                         '//span[contains(text(), "Jeu ' + str(jeu) + '") '
                                                                      'and contains(text(),"' + sType + ' - Oui")]'
                 )
+            else:
+                x_path = (
+                        '//div[contains(@class, "bet_group_col")]'
+                        '//div[not(contains(@style, "display: none;"))]'
+                        '//div[contains(@class, "bet-inner") and not(contains(@class, "blockSob"))]'
+                        '//span[contains(text(), "' + str(sType) + '")]'
+                )
+            print(x_path)
         else:
             x_path = (
                     '//div[contains(@class, "bet_group_col")]'
