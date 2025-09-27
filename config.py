@@ -17,22 +17,24 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 projectPath = os.path.dirname(os.path.abspath(__file__))
 scriptTypeList = ['300', '15A', '30A']
 scriptTypeList1 = ['30A']
-scriptTypeList2 = ['BREAK', '6P']
+scriptTypeList2 = ['6P']
 # scriptTypeList2 = ['4P', '5P', '6P', '40A']
-scriptTypeList3 = ['5P', '40A']
+scriptTypeList3 = ['5P', '40A', 'BREAK']
 scriptTypeList4 = ['400', '4015', '4030', 'BREAK']
-
+allScriptType = ['030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK']
 # Script configuration
 script_num = 0  # Numéro du Script
 win = 0  # Nombre de victoire
 cote = 3
 tipster = '1xbet'
-scriptType = "40A"
+scriptType = ""
 localhost = ''
 api_url = "http://auxobetbot.sc2vagr6376.universe.wf"
 site_url = 'https://1xbet.com/fr/live/tennis'
 site_line_url = 'https://1xbet.com/fr/line/tennis'
 site_type = 'old_site'
+
+
 def configure_site_type(use_ca_site=None):
     """
     Configure le type de site et les URLs en fonction du choix utilisateur.
@@ -45,11 +47,11 @@ def configure_site_type(use_ca_site=None):
         str: Le type de site configuré ('new_site' ou 'old_site')
     """
     global site_url, site_line_url, site_type
-    
+
     if use_ca_site is None:
         wich_site = input("1XBET CA? (Y/N): ")
         use_ca_site = wich_site.upper() in ['Y', 'O']
-    
+
     if use_ca_site:
         site_url = "https://ca.1xbet.com/fr/live/tennis"
         site_line_url = "https://ca.1xbet.com/fr/line/tennis"
@@ -58,8 +60,9 @@ def configure_site_type(use_ca_site=None):
         site_url = 'https://1xbet.com/fr/live/tennis'
         site_line_url = 'https://1xbet.com/fr/line/tennis'
         site_type = 'old_site'
-    
+
     return site_type
+
 
 # Score configurations
 score_to_start = [
