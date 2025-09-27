@@ -35,13 +35,13 @@ def GetBetOld(driver, nextBet=False, selection=''):
         config.win_type = '15:15'
 
     if config.scriptType == '6P':
-        sType = ", 6"
+        sType = ", Nombre de Points 6"
         config.win_type = ['40:30', '30:40']  # inversé
     if config.scriptType == '5P':
-        sType = ", 5"
+        sType = ", Nombre de Points 5"
         config.win_type = ['40:15', '15:40']  # inversé
     if config.scriptType == '4P':
-        sType = ", 4"
+        sType = ", Nombre de Points 4"
         config.win_type = ['40:0', '0:40']  # inversé
 
     # print('i '+str(i))
