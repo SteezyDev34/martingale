@@ -7,16 +7,16 @@ from Functions import GetLigueName, AddRunning
 from Functions.Authenticator import loginProcess, is_logged_in
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
-from Functions.GetJeuActuel import GetJeuActuel
-from Functions.GetSetActuel import GetSetActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import update_match_done
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetIfMatchPage import GetIfMatchPage
-from Functions.GetJsonData import DispatchPerte, getGlobalPerte
+from Functions.GetJeuActuel import GetJeuActuel
+from Functions.GetJsonData import DispatchPerte, getGlobalPerte, get1setGlobalPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
+from Functions.GetSetActuel import GetSetActuel
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.VerificationMatchTrouve import newmatchFromUrl
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
@@ -51,6 +51,8 @@ def all_script(driver):
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
         if config.perte == 0:
             getGlobalPerte()
+        if config.perte == 0:
+            get1setGlobalPerte()
         # END RECHERCHE INFOS DE MISE
     GetScoreActuel(driver)
     if not config.set_actuel:

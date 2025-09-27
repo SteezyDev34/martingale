@@ -153,6 +153,7 @@ def all_script(driver):
                             config.log(f"FIN {config.scriptType}", 'success', False)
                             continue
                     else:
+                        config.perte -= float(config.validated_bet.get('montant'))
                         firstjeu = True
                         FirstGameBet(driver)
             elif config.perte > 0:
@@ -290,7 +291,6 @@ def all_script(driver):
                     passageset = True
                     config.newset = int(config.set_actuel) + 1
                     config.log(txtlog, config.newmatch)
-                    config.perte -= float(config.validated_bet.get('montant'))
                     print('Revert perte : ', config.perte)
                     DeleteBet(driver)
                     txtlog = 'Wait 30 sec'
