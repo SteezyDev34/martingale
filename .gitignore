@@ -9,3 +9,8 @@ DataFiles/*
 .idea/php.xml
 .DS_Store
 session_data.json
+
+# Variables d'environnement sensibles
+.env
+.env.local
+.env.*.local
