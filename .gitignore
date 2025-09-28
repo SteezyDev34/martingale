@@ -9,3 +9,4 @@ DataFiles/*
 .idea/php.xml
 .DS_Store
 session_data.json
+/.env
