@@ -6,8 +6,8 @@ from typing import Dict, Any, Optional
 
 import requests
 
-# Import du dictionnaire classes depuis le module config
-from config import classes
+# Import des configurations depuis le module config
+from config import classes, score_to_start, total_want_win, total_want_winset1
 
 # System detection
 systeme = platform.system()
@@ -67,37 +67,7 @@ def configure_site_type(use_ca_site=None):
     return site_type
 configure_site_type()
 
-# Score configurations
-score_to_start = [
-    "00(0)00(0)",
-    "00(15)00(0)",
-    "00(0)00(15)",
-    "00(15)00(15)",
-    "00(30)00(15)",
-    "00(15)00(30)",
-    "00(30)00(0)",
-    "00(0)00(30)",
-    "00(40)00(40)",
-    "00(A)00(40)",
-    "00(40)00(A)",
-    "0000(0)(0)",
-    "00(0)(0)",
-    "0000(15)(0)",
-    "0000(30)(0)",
-    "0000(40)(0)",
-    "0000(0)(15)",
-    "0000(0)(30)",
-    "0000(0)(40)",
-    "0000(15)(15)",
-    "0000(30)(30)",
-    "0000(40)(40)",
-    "0000(30)(15)",
-    "0000(15)(30)",
-    "0000(40)(15)",
-    "0000(15)(40)",
-    "0000(40)(30)",
-    "0000(30)(40)"
-]
+# La configuration des scores est maintenant importée depuis le module config
 passed_score = []
 # Game state variables
 validated_bet = {}  # Dictionnaire pour stocker les paris validés
@@ -173,21 +143,7 @@ for period, bet_types_list in xbet_types_data.items():
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
-total_want_win = {
-    '030': 0.1,
-    '300': 0.1,
-    '15A': 0.1,
-    '30A': 0.1,
-    '40A': 0.1,
-    '4P': 0.1,
-    '5P': 0.1,
-    '6P': 0.1,
-    'BREAK': 0.1,
-    '400': 0.1,
-    '4015': 0.1,
-    '4030': 0.1,
-}
-total_want_winset1 = {'1SET': 0.2}
+# Configurations de paris importées depuis config.betting_config
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:
