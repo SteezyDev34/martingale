@@ -17,10 +17,10 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 projectPath = os.path.dirname(os.path.abspath(__file__))
 scriptTypeList = ['300', '15A', '30A']
 scriptTypeList1 = ['30A']
-scriptTypeList2 = ['6P']
+scriptTypeList2 = ['6P','4015', '4030']
 # scriptTypeList2 = ['4P', '5P', '6P', '40A']
-scriptTypeList3 = ['5P', '40A', 'BREAK']
-scriptTypeList4 = ['400', '4015', '4030', 'BREAK']
+scriptTypeList3 = ['5P','6P', '40A', 'BREAK']
+scriptTypeList4 = ['4015', '4030']
 allScriptType = ['030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK']
 # Script configuration
 script_num = 0  # Numéro du Script
@@ -32,7 +32,7 @@ localhost = ''
 api_url = "http://auxobetbot.sc2vagr6376.universe.wf"
 site_url = 'https://1xbet.com/fr/live/tennis'
 site_line_url = 'https://1xbet.com/fr/line/tennis'
-site_type = 'old_site'
+site_type = 'new_site'
 
 
 def configure_site_type(use_ca_site=None):
@@ -62,15 +62,10 @@ def configure_site_type(use_ca_site=None):
         site_type = 'old_site'
 
     return site_type
-
+configure_site_type()
 
 # Score configurations
 score_to_start = [
-    "01(0)00(0)",
-    "00(0)01(0)",
-    "01(0)01(0)",
-    "02(0)00(0)",
-    "00(0)02(0)",
     "00(0)00(0)",
     "00(15)00(0)",
     "00(0)00(15)",
@@ -401,18 +396,18 @@ winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
 
 total_want_win = {
-    '030': 0.2,
-    '300': 0.2,
-    '15A': 0.2,
-    '30A': 0.2,
-    '40A': 0.2,
-    '4P': 0.2,
-    '5P': 0.2,
-    '6P': 0.2,
-    'BREAK': 0.2,
-    '400': 0.2,
-    '4015': 0.2,
-    '4030': 0.2,
+    '030': 0.1,
+    '300': 0.1,
+    '15A': 0.1,
+    '30A': 0.1,
+    '40A': 0.1,
+    '4P': 0.1,
+    '5P': 0.1,
+    '6P': 0.1,
+    'BREAK': 0.1,
+    '400': 0.1,
+    '4015': 0.1,
+    '4030': 0.1,
 }
 total_want_winset1 = {'1SET': 0.2}
 

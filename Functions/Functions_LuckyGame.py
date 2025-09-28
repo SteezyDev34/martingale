@@ -184,17 +184,7 @@ def all_script(driver):
                 else:
                     win = win + 1
                 print('WIN SESSION')
-            save_session_data({
-                'WIN': True,
-                'unit': f"{unit:.8f}",
-                'perte': f"{perte:.8f}",
-                'side': old_side,
-                # 'solde': solde,
-                'result': result,
-                'gain': f"{gain:.8f}",
-                'win_session': win_session,
-                'time': datetime.datetime.now().strftime("%H:%M:%S")
-            })
+
         else:
             print(f'{config.RED}LOSE')
             print('side :', side)
@@ -210,13 +200,4 @@ def all_script(driver):
             unit = unit - min_unit
             if unit < min_unit:
                 unit = min_unit
-            save_session_data({
-                'LOSE': True,
-                'unit': f"{unit:.8f}",
-                'perte': f"{perte:.8f}",
-                'gain': f"{gain:.8f}",
-                'side': old_side,
-                # 'solde': solde,
-                'result': result,
-                'time': datetime.datetime.now().strftime("%H:%M:%S")
-            })
+

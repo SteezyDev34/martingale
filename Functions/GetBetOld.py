@@ -44,6 +44,7 @@ def GetBetOld(driver, nextBet=False, selection=''):
         sType = ", Nombre de Points 4"
         config.win_type = ['40:0', '0:40']  # inversé
 
+
     # print('i '+str(i))
     while not clic and tentative_clic < 5:
         if config.scriptType in config.allScriptType:
@@ -59,30 +60,26 @@ def GetBetOld(driver, nextBet=False, selection=''):
                     first_player = 1
                     if config.scriptType == '4030':
                         config.win_type = '40:30'
-                        win_texte = '40+:30'
-                        sType = "Game " + str(config.looking_game) + " 40+:30, Player " + str(first_player)
                     elif config.scriptType == '4015':
                         config.win_type = '40:15'  # inversé
-                        win_texte = '40+:15'
-                        sType = "Game " + str(config.looking_game) + " 40+:15, Player " + str(first_player)
                     elif config.scriptType == '400':
                         config.win_type = '40:0'  # inversé
-                        win_texte = '40+:0'
-                        sType = "Game " + str(config.looking_game) + " 40+:0, Player " + str(first_player)
+
                 else:
                     first_player = 2
                     if config.scriptType == '4030':
                         config.win_type = '30:40'  # inversé
-                        win_texte = '30:40+'
-                        sType = "Game " + str(config.looking_game) + " 30:40+, Player " + str(first_player)
                     elif config.scriptType == '4015':
                         config.win_type = '15:40'  # inversé
-                        win_texte = '15:40+'
-                        sType = "Game " + str(config.looking_game) + " 15:40+, Player " + str(first_player)
                     elif config.scriptType == '400':
-                        win_texte = '0:40+'
                         config.win_type = '0:40'  # inversé
-                        sType = "Game " + str(config.looking_game) + " 0:40+, Player " + str(first_player)
+                if config.scriptType == '4030':
+                    sType = 'Joueur ' + str(first_player) + ' va gagner le Jeu ' + str(config.looking_game) + ' 40-30'
+                elif config.scriptType == '4015':
+                    sType = 'Joueur ' + str(first_player) + ' va gagner le Jeu ' + str(config.looking_game) + ' 40-15'
+                elif config.scriptType == '400':
+                    sType = 'Joueur ' + str(first_player) + ' va gagner le Jeu ' + str(
+                        config.looking_game) + ' 40-0'
             if config.scriptType == '030':
                 sType = "Receveur va mener 30-0"
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
@@ -106,13 +103,14 @@ def GetBetOld(driver, nextBet=False, selection=''):
                     config.win_type = '0:30'  # inversé
                 print('first_player :', first_player)
             if config.scriptType == 'BREAK':
-                sType = "gne dans le jeu"
+
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
-                    first_player = 1
+                    first_player = 2
                     config.win_type = ['0:40', '15:40', '30:40', '40:A']
                 else:
-                    first_player = 2
+                    first_player = 1
                     config.win_type = ['40:0', '40:15', '40:30', 'A:40']
+                sType = "Joueur "+str(first_player)+" va gagner le"
                 print('first_player :', first_player)
             print('config.win_type', config.win_type)
             if config.scriptType == '15A' or config.scriptType == '30A' or config.scriptType == '40A' or config.scriptType == '030' or config.scriptType == '300':
@@ -170,9 +168,19 @@ def GetBetOld(driver, nextBet=False, selection=''):
                         else:
                             time.sleep(1)
                             cpn_bet_market_label = driver.find_element(By.CLASS_NAME, 'cpn-bet-market__label').text
-                            if config.scriptType == '15A' or config.scriptType == '30A' or config.scriptType == '40A' or config.scriptType == '030' or config.scriptType == '300':
+                            if config.scriptType in ['15A', '30A', '40A', '030', '300']:
                                 if 'Jeu ' + str(
                                         jeu) in cpn_bet_market_label and sType + ' - Oui' in cpn_bet_market_label:
+                                    clic = True
+                                    return clic
+                                else:
+                                    tentative += 1
+                                    DeleteBet(driver)
+                            elif config.scriptType in ['4P', '5P', '6P', '4030', '4015', '400', 'BREAK']:
+                                print(sType)
+                                print(cpn_bet_market_label)
+                                if 'Jeu ' + str(
+                                        jeu) in cpn_bet_market_label and sType in cpn_bet_market_label:
                                     clic = True
                                     return clic
                                 else:

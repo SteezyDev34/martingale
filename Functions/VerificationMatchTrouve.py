@@ -25,7 +25,11 @@ def main(driver, bet_item, matchlist_file_name):
     else:
         match_list = GetMatchDone.main(config.matchlisttodo_file_name)
         match_done = GetMatchDone.main(config.matchlist_file_name)
-        if config.in_stat and any(config.newmatch in x for x in match_list) and not any(
+        if config.scriptType == '1SET' and not any(config.newmatch in x for x in match_done):
+            config.log('Le match autorisé!', 'success', False, 4)
+            driver.get(newmatchtxt)
+            return [True, config.newmatch]
+        elif config.in_stat and any(config.newmatch in x for x in match_list) and not any(
                 config.newmatch in x for x in match_done):
             config.log('Le match autorisé!', 'success', False, 4)
             driver.get(newmatchtxt)

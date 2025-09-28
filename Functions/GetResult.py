@@ -91,38 +91,7 @@ def GetResult(driver):
                 config.validated_bet['result'] = result
                 return result
 
-        elif config.scriptType == '400' or config.scriptType == '4030' or config.scriptType == '4015':
-
-            if config.score_actuel in passed_score or config.set_actuel != int(
-                    config.validated_bet.get('set')) + 1 or config.jeu_actuel != int(
-                config.validated_bet.get('jeu')) + 1:
-                # Check the last element in all_scores
-                # Filter scores for matching set and jeu, excluding 0:0 scores
-                matching_set_jeu_scores = {k: v for k, v in config.all_scores.items()
-                                           if v.get('set') is not None
-                                           and v.get('jeu') is not None
-                                           and config.validated_bet.get('set') is not None
-                                           and config.validated_bet.get('jeu') is not None
-                                           and int(v.get('set')) == int(config.validated_bet.get('set'))
-                                           and int(v.get('jeu')) == int(config.validated_bet.get('jeu'))
-                                           and v.get('score') != '0:0'}
-
-                if matching_set_jeu_scores:
-                    last_score_key = max(matching_set_jeu_scores.keys())
-                    last_score = matching_set_jeu_scores[last_score_key]
-
-                    if last_score.get('score') == config.validated_bet.get('winscore'):
-                        print("Matching score found:", last_score)
-                        result = 'WIN'
-                        config.log(f"Result: {result}", 'success', False, 2)
-                    else:
-                        result = 'LOSE'
-                        config.log(result, 'error', False, 2)
-                else:
-                    result = 'LOSE'
-                    config.log(result, 'error', False, 2)
-                return result
-        elif config.scriptType == '4P' or config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == 'BREAK':
+        elif config.scriptType in ['4P', '6P', '5P','BREAK', '400', '4030', '4015']:
             if int(config.set_actuel) != int(config.validated_bet.get('set')):
                 print('set actuel différent', config.validated_bet.get('set'))
                 getresult = True

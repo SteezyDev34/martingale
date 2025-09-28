@@ -1168,5 +1168,887 @@
         "winscore": "15:15",
         "timestamp": "2025-09-12 19:24:34",
         "url": "https://1xbet.com/fr/live/tennis/113301-challenger-rennes/652993886-michael-geerts-stanislas-wawrinka"
+    },
+    {
+        "montant": 0.71,
+        "cote": "1.95",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 04:32:37",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/656976740-jenson-brooksby-luciano-darderi"
+    },
+    {
+        "montant": 1.47,
+        "cote": "1.94",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 04:36:08",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/656976726-jenson-brooksby-luciano-darderi"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 04:40:13",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/656976740-jenson-brooksby-luciano-darderi"
+    },
+    {
+        "montant": 0.23,
+        "cote": "1.87",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 05:05:14",
+        "url": "https://1xbet.com/fr/live/tennis/5063-wta-beijing/656985850-anastasia-potapova-victoria-mboko"
+    },
+    {
+        "montant": 0.48,
+        "cote": "1.9",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 05:09:56",
+        "url": "https://1xbet.com/fr/live/tennis/5063-wta-beijing/656985807-anastasia-potapova-victoria-mboko"
+    },
+    {
+        "montant": 0.68,
+        "cote": "2.03",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 05:16:31",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/656985856-fabian-marozsan-alexandre-muller"
+    },
+    {
+        "montant": 0.8,
+        "cote": "1.87",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 05:46:29",
+        "url": "https://1xbet.com/fr/live/tennis/234943-wta-suzhou/656993877-tatiana-prozorova-varvara-lepchenko"
+    },
+    {
+        "montant": 1.72,
+        "cote": "1.87",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 05:48:37",
+        "url": "https://1xbet.com/fr/live/tennis/234153-wta-suzhou-qualification/656993837-tatiana-prozorova-varvara-lepchenko"
+    },
+    {
+        "montant": 3.46,
+        "cote": "1.93",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 05:52:26",
+        "url": "https://1xbet.com/fr/live/tennis/234153-wta-suzhou-qualification/656993837-tatiana-prozorova-varvara-lepchenko"
+    },
+    {
+        "montant": 0.61,
+        "cote": "2.15",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 06:49:41",
+        "url": "https://1xbet.com/fr/live/tennis/5063-wta-beijing/657001879-iga-swiatek-yue-yuan"
+    },
+    {
+        "montant": 1.54,
+        "cote": "1.85",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 06:51:14",
+        "url": "https://1xbet.com/fr/live/tennis/5063-wta-beijing/657001830-iga-swiatek-yue-yuan"
+    },
+    {
+        "montant": 10.97,
+        "cote": "1.93",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 07:17:15",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657005777-alex-de-minaur-arthur-rinderknech"
+    },
+    {
+        "montant": 15.68,
+        "cote": "2.35",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 07:21:33",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657005751-alex-de-minaur-arthur-rinderknech"
+    },
+    {
+        "montant": 40.94,
+        "cote": "1.9",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 07:25:19",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657005751-alex-de-minaur-arthur-rinderknech"
+    },
+    {
+        "montant": 5.2,
+        "cote": "2",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 08:58:34",
+        "url": "https://1xbet.com/fr/live/tennis/234153-wta-suzhou-qualification/657028192-janice-tjen-yihan-qu"
+    },
+    {
+        "montant": 11.95,
+        "cote": "1.87",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 09:00:33",
+        "url": "https://1xbet.com/fr/live/tennis/234153-wta-suzhou-qualification/657028140-janice-tjen-yihan-qu"
+    },
+    {
+        "montant": 21.7,
+        "cote": "2.03",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 09:03:28",
+        "url": "https://1xbet.com/fr/live/tennis/234153-wta-suzhou-qualification/657028140-janice-tjen-yihan-qu"
+    },
+    {
+        "montant": 5.2,
+        "cote": "2",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 09:05:45",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657030745-ethan-quinn-holger-vitus-nodskov-rune"
+    },
+    {
+        "montant": 50.63,
+        "cote": "1.87",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 09:07:34",
+        "url": "https://1xbet.com/fr/live/tennis/234153-wta-suzhou-qualification/657028140-janice-tjen-yihan-qu"
+    },
+    {
+        "montant": 4.6,
+        "cote": "2.13",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 09:09:30",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657030745-ethan-quinn-holger-vitus-nodskov-rune"
+    },
+    {
+        "montant": 5.47,
+        "cote": "1.95",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 09:13:37",
+        "url": "https://1xbet.com/fr/live/tennis/2907681-challenger-jingshan/657031742-alex-bolt-mackenzie-mcdonald"
+    },
+    {
+        "montant": 5.47,
+        "cote": "1.95",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 09:14:31",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657030745-ethan-quinn-holger-vitus-nodskov-rune"
+    },
+    {
+        "montant": 4.0,
+        "cote": "2.3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 09:38:09",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657027554-jannik-sinner-terence-atmane"
+    },
+    {
+        "montant": 7.08,
+        "cote": "2.3",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 09:42:17",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657027554-jannik-sinner-terence-atmane"
+    },
+    {
+        "montant": 0.22,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 10:03:29",
+        "url": "https://1xbet.com/fr/live/tennis/2906879-wta-jingshan/657041498-alexandra-eala-lulu-sun"
+    },
+    {
+        "montant": 0.23,
+        "cote": "1.87",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 10:06:24",
+        "url": "https://1xbet.com/fr/live/tennis/2906879-wta-jingshan/657041498-alexandra-eala-lulu-sun"
+    },
+    {
+        "montant": 1.33,
+        "cote": "1.9",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 10:13:02",
+        "url": "https://1xbet.com/fr/live/tennis/2906879-wta-jingshan/657041498-alexandra-eala-lulu-sun"
+    },
+    {
+        "montant": 1.38,
+        "cote": "1.87",
+        "jeu": 7,
+        "set": "2",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 10:29:04",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657047307-jannik-sinner-terence-atmane"
+    },
+    {
+        "montant": 2.24,
+        "cote": "2.15",
+        "jeu": 8,
+        "set": "2",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 10:31:47",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657027499-jannik-sinner-terence-atmane"
+    },
+    {
+        "montant": 1.38,
+        "cote": "1.87",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 10:57:53",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657054571-carlos-alcaraz-garfia-zizou-bergs"
+    },
+    {
+        "montant": 2.15,
+        "cote": "2.2",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 11:02:58",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657054571-carlos-alcaraz-garfia-zizou-bergs"
+    },
+    {
+        "montant": 5.44,
+        "cote": "1.87",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 11:05:27",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657054483-carlos-alcaraz-garfia-zizou-bergs"
+    },
+    {
+        "montant": 1.41,
+        "cote": "1.85",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 11:20:14",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657066022-carlos-alcaraz-garfia-zizou-bergs"
+    },
+    {
+        "montant": 0.98,
+        "cote": "2.23",
+        "jeu": 3,
+        "set": "2",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 11:24:20",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657066022-carlos-alcaraz-garfia-zizou-bergs"
+    },
+    {
+        "montant": 1.38,
+        "cote": "1.87",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 11:29:37",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657066022-carlos-alcaraz-garfia-zizou-bergs"
+    },
+    {
+        "montant": 2.1,
+        "cote": "2.23",
+        "jeu": 5,
+        "set": "2",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 11:34:22",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657054483-carlos-alcaraz-garfia-zizou-bergs"
+    },
+    {
+        "montant": 1.33,
+        "cote": "1.9",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 12:04:58",
+        "url": "https://1xbet.com/fr/live/tennis/111793-itf-sabadell/657066810-nick-hardt-ivan-gakhov"
+    },
+    {
+        "montant": 2.81,
+        "cote": "1.9",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 12:10:23",
+        "url": "https://1xbet.com/fr/live/tennis/111793-itf-sabadell/657066765-nick-hardt-ivan-gakhov"
+    },
+    {
+        "montant": 1.33,
+        "cote": "1.9",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 12:13:46",
+        "url": "https://1xbet.com/fr/live/tennis/111793-itf-sabadell/657066810-nick-hardt-ivan-gakhov"
+    },
+    {
+        "montant": 2.91,
+        "cote": "1.87",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 12:21:46",
+        "url": "https://1xbet.com/fr/live/tennis/111793-itf-sabadell/657066765-nick-hardt-ivan-gakhov"
+    },
+    {
+        "montant": 1.33,
+        "cote": "1.9",
+        "jeu": 10,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 12:25:40",
+        "url": "https://1xbet.com/fr/live/tennis/111793-itf-sabadell/657066810-nick-hardt-ivan-gakhov"
+    },
+    {
+        "montant": 2.81,
+        "cote": "1.9",
+        "jeu": 11,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 12:29:08",
+        "url": "https://1xbet.com/fr/live/tennis/111793-itf-sabadell/657066765-nick-hardt-ivan-gakhov"
+    },
+    {
+        "montant": 1.38,
+        "cote": "1.87",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 14:34:09",
+        "url": "https://1xbet.com/fr/live/tennis/2749696-itf-slovenj-gradec/657113723-martin-van-der-meerschen-piet-luis-pinter"
+    },
+    {
+        "montant": 2.77,
+        "cote": "1.93",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 14:35:50",
+        "url": "https://1xbet.com/fr/live/tennis/2749696-itf-slovenj-gradec/657113703-martin-van-der-meerschen-piet-luis-pinter"
+    },
+    {
+        "montant": 1.38,
+        "cote": "1.87",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 14:41:01",
+        "url": "https://1xbet.com/fr/live/tennis/2749696-itf-slovenj-gradec/657113723-martin-van-der-meerschen-piet-luis-pinter"
+    },
+    {
+        "montant": 3.37,
+        "cote": "1.95",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 14:44:32",
+        "url": "https://1xbet.com/fr/live/tennis/2749696-itf-slovenj-gradec/657113723-martin-van-der-meerschen-piet-luis-pinter"
+    },
+    {
+        "montant": 7.55,
+        "cote": "1.87",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 14:52:24",
+        "url": "https://1xbet.com/fr/live/tennis/2749696-itf-slovenj-gradec/657113703-martin-van-der-meerschen-piet-luis-pinter"
+    },
+    {
+        "montant": 2.91,
+        "cote": "2.1",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 14:58:22",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657118415-arthur-cazaux-jakub-mensik"
+    },
+    {
+        "montant": 2.83,
+        "cote": "2.13",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:01:49",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657118415-arthur-cazaux-jakub-mensik"
+    },
+    {
+        "montant": 6.35,
+        "cote": "1.95",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:03:45",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657118352-arthur-cazaux-jakub-mensik"
+    },
+    {
+        "montant": 10.96,
+        "cote": "2.13",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:07:21",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657118352-arthur-cazaux-jakub-mensik"
+    },
+    {
+        "montant": 3.37,
+        "cote": "1.95",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:11:46",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657118415-arthur-cazaux-jakub-mensik"
+    },
+    {
+        "montant": 5.81,
+        "cote": "2.13",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:16:31",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657118415-arthur-cazaux-jakub-mensik"
+    },
+    {
+        "montant": 3.56,
+        "cote": "1.9",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:36:24",
+        "url": "https://1xbet.com/fr/live/tennis/255093-itf-forbach/657132716-andrea-guerrieri-tom-zeuch"
+    },
+    {
+        "montant": 6.32,
+        "cote": "2.07",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:40:42",
+        "url": "https://1xbet.com/fr/live/tennis/255093-itf-forbach/657132679-andrea-guerrieri-tom-zeuch"
+    },
+    {
+        "montant": 3.37,
+        "cote": "1.95",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:45:09",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657132393-raphael-collignon-justin-engel"
+    },
+    {
+        "montant": 3.56,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:46:35",
+        "url": "https://1xbet.com/fr/live/tennis/255093-itf-forbach/657132716-andrea-guerrieri-tom-zeuch"
+    },
+    {
+        "montant": 3.11,
+        "cote": "2.03",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:47:11",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657132393-raphael-collignon-justin-engel"
+    },
+    {
+        "montant": 6.78,
+        "cote": "1.93",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:49:49",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657132366-raphael-collignon-justin-engel"
+    },
+    {
+        "montant": 2.99,
+        "cote": "2.07",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:49:49",
+        "url": "https://1xbet.com/fr/live/tennis/255093-itf-forbach/657132716-andrea-guerrieri-tom-zeuch"
+    },
+    {
+        "montant": 12.71,
+        "cote": "2.03",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:54:33",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657132366-raphael-collignon-justin-engel"
+    },
+    {
+        "montant": 6.88,
+        "cote": "1.9",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:55:00",
+        "url": "https://1xbet.com/fr/live/tennis/255093-itf-forbach/657132679-andrea-guerrieri-tom-zeuch"
+    },
+    {
+        "montant": 25.8,
+        "cote": "2",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:57:38",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657132366-raphael-collignon-justin-engel"
+    },
+    {
+        "montant": 12.69,
+        "cote": "2.03",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 15:59:05",
+        "url": "https://1xbet.com/fr/live/tennis/255093-itf-forbach/657132679-andrea-guerrieri-tom-zeuch"
+    },
+    {
+        "montant": 3.05,
+        "cote": "2.05",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 16:01:44",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657132393-raphael-collignon-justin-engel"
+    },
+    {
+        "montant": 28.62,
+        "cote": "1.9",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 16:03:14",
+        "url": "https://1xbet.com/fr/live/tennis/255093-itf-forbach/657132679-andrea-guerrieri-tom-zeuch"
+    },
+    {
+        "montant": 6.58,
+        "cote": "1.95",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 16:05:06",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657132366-raphael-collignon-justin-engel"
+    },
+    {
+        "montant": 54.38,
+        "cote": "2",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 16:06:57",
+        "url": "https://1xbet.com/fr/live/tennis/255093-itf-forbach/657132679-andrea-guerrieri-tom-zeuch"
+    },
+    {
+        "montant": 13.51,
+        "cote": "1.95",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 16:09:00",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657132366-raphael-collignon-justin-engel"
+    },
+    {
+        "montant": 27.73,
+        "cote": "1.95",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 16:10:28",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657132366-raphael-collignon-justin-engel"
+    },
+    {
+        "montant": 2.6,
+        "cote": "2.23",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 16:15:27",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657139963-gustavo-heide-joao-eduardo-schiessl"
+    },
+    {
+        "montant": 3.56,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 16:20:48",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657139963-gustavo-heide-joao-eduardo-schiessl"
+    },
+    {
+        "montant": 2.67,
+        "cote": "2.2",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 16:26:36",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657139963-gustavo-heide-joao-eduardo-schiessl"
+    },
+    {
+        "montant": 3.4,
+        "cote": "1.94",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 17:57:57",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657177904-facundo-mena-andres-andrade"
+    },
+    {
+        "montant": 7.33,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:00:31",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657177813-facundo-mena-andres-andrade"
+    },
+    {
+        "montant": 3.2,
+        "cote": "2",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:05:21",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657172177-mark-lajal-martin-landaluce"
+    },
+    {
+        "montant": 15.48,
+        "cote": "1.9",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:07:36",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657177813-facundo-mena-andres-andrade"
+    },
+    {
+        "montant": 6.21,
+        "cote": "2.03",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:09:58",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657172177-mark-lajal-martin-landaluce"
+    },
+    {
+        "montant": 32.68,
+        "cote": "1.9",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:13:24",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657177813-facundo-mena-andres-andrade"
+    },
+    {
+        "montant": 13.41,
+        "cote": "1.94",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:13:49",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657172076-mark-lajal-martin-landaluce"
+    },
+    {
+        "montant": 65.36,
+        "cote": "1.95",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:16:00",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657177813-facundo-mena-andres-andrade"
+    },
+    {
+        "montant": 27.39,
+        "cote": "1.95",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:16:04",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657172076-mark-lajal-martin-landaluce"
+    },
+    {
+        "montant": 56.22,
+        "cote": "1.95",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:20:47",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657172076-mark-lajal-martin-landaluce"
+    },
+    {
+        "montant": 3.56,
+        "cote": "1.9",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:24:25",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657177904-facundo-mena-andres-andrade"
+    },
+    {
+        "montant": 115.4,
+        "cote": "1.95",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:26:40",
+        "url": "https://1xbet.com/fr/live/tennis/107955-challenger-orleans/657172076-mark-lajal-martin-landaluce"
+    },
+    {
+        "montant": 7.19,
+        "cote": "1.94",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:33:15",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657177813-facundo-mena-andres-andrade"
+    },
+    {
+        "montant": 15.5,
+        "cote": "1.9",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:38:06",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657177813-facundo-mena-andres-andrade"
+    },
+    {
+        "montant": 0.21,
+        "cote": "1.95",
+        "jeu": 10,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:42:11",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657177904-facundo-mena-andres-andrade"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2",
+        "jeu": 1,
+        "set": "2",
+        "winscore": "15:15",
+        "timestamp": "2025-09-27 18:43:55",
+        "url": "https://1xbet.com/fr/live/tennis/2908281-itf-barueri/657194025-facundo-mena-andres-andrade"
+    },
+    {
+        "montant": 0.23,
+        "cote": "1.87",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-28 12:16:01",
+        "url": "https://1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/657383226-jacopo-berrettini-daniel-michalski"
+    },
+    {
+        "montant": 0.49,
+        "cote": "1.87",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-28 12:20:03",
+        "url": "https://1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/657383192-jacopo-berrettini-daniel-michalski"
+    },
+    {
+        "montant": 0.56,
+        "cote": "1.9",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-28 13:00:01",
+        "url": "https://1xbet.com/fr/live/tennis/2763513-challenger-villena-qualification/657407669-mario-gonzalez-fernandez-eric-vanshelboim"
+    },
+    {
+        "montant": 0.49,
+        "cote": "2.03",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-28 13:04:43",
+        "url": "https://1xbet.com/fr/live/tennis/261631-challenger-mouilleron-le-captif-qualification/657408770-robert-strombachs-maxence-beauge"
+    },
+    {
+        "montant": 0.49,
+        "cote": "2.03",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-28 13:13:20",
+        "url": "https://1xbet.com/fr/live/tennis/2909861-wta-samsun-qualification/657412279-carol-youngsuh-lee-emily-webley-smith"
+    },
+    {
+        "montant": 0.22,
+        "cote": "1.93",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-28 13:19:35",
+        "url": "https://1xbet.com/fr/live/tennis/2909861-wta-samsun-qualification/657404783-weronika-falkowska-nika-radisic"
+    },
+    {
+        "montant": 0.49,
+        "cote": "1.85",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-28 13:22:43",
+        "url": "https://1xbet.com/fr/live/tennis/2909861-wta-samsun-qualification/657404738-weronika-falkowska-nika-radisic"
+    },
+    {
+        "montant": 0.98,
+        "cote": "1.93",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-28 13:26:36",
+        "url": "https://1xbet.com/fr/live/tennis/2909861-wta-samsun-qualification/657404738-weronika-falkowska-nika-radisic"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.07",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-09-28 13:45:33",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657408015-corentin-moutet-alexander-zverev"
     }
 ]
