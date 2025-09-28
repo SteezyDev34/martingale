@@ -14,3 +14,10 @@ session_data.json
 .env
 .env.local
 .env.*.local
+
+# Fichiers de cache Python
+*__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
+2.session
