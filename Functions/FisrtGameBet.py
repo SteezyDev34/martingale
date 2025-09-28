@@ -23,7 +23,7 @@ def FirstGameBet(driver):
         GetScoreActuel(driver)
         config.looking_game = int(config.jeu_actuel)
 
-        if config.scriptType == '30A':
+        if config.scriptType == '30A' or config.scriptType == '4030' or config.scriptType == '4015':
             if config.score_actuel != "0:0" and config.score_actuel != "0:15" and config.score_actuel != "15:0" and config.score_actuel != "15:15":
                 config.log(f'       score : {config.score_actuel} ...1er jeu passé !', 'warning', True)
                 nextBet = True

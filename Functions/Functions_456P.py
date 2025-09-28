@@ -50,9 +50,9 @@ def all_script(driver):
         config.switchScript(scriptType)
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
         if config.perte == 0:
-            getGlobalPerte()
-        if config.perte == 0:
             get1setGlobalPerte()
+        if config.perte == 0:
+            getGlobalPerte()
         # END RECHERCHE INFOS DE MISE
     GetScoreActuel(driver)
     if not config.set_actuel:

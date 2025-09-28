@@ -665,7 +665,7 @@ def classementeDeMatch(driver):
         tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
 
         # Retenir les 10 premières lignes
-        top_10 = tableau_trie[:30]
+        top_10 = tableau_trie[:10]
         for m in top_10:
             # Join array elements with pipe separator before adding to todo
             try:
@@ -901,7 +901,7 @@ def newclassementeDeMatch(driver):
         tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
 
         # Retenir les 10 premières lignes
-        top_10 = tableau_trie[:100]
+        top_10 = tableau_trie[:10]
         for m in top_10:
             # Join array elements with pipe separator before adding to todo
             try:

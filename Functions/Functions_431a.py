@@ -59,9 +59,10 @@ def all_script(driver):
         config.switchScript(scriptType)
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
         if config.perte == 0:
-            getGlobalPerte()
-        if config.perte == 0:
             get1setGlobalPerte()
+        if config.perte == 0:
+            getGlobalPerte()
+
         # END RECHERCHE INFOS DE MISE
     GetScoreActuel(driver)
     if not config.set_actuel:
@@ -153,7 +154,6 @@ def all_script(driver):
                             config.log(f"FIN {config.scriptType}", 'success', False)
                             continue
                     else:
-                        config.perte -= float(config.validated_bet.get('montant'))
                         firstjeu = True
                         FirstGameBet(driver)
             elif config.perte > 0:
@@ -290,6 +290,10 @@ def all_script(driver):
                     txtlog = " ON EST SUR LE PROCHAIN SET"
                     passageset = True
                     config.newset = int(config.set_actuel) + 1
+                    for scriptType in config.scriptTypeList:
+                        config.switchScript(scriptType)
+                        if config.validated_bet.get('montant'):
+                            config.perte -= float(config.validated_bet.get('montant'))
                     config.log(txtlog, config.newmatch)
                     print('Revert perte : ', config.perte)
                     DeleteBet(driver)

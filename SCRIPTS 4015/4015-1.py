@@ -10,9 +10,11 @@ parent_directory = os.path.dirname(current_file_path)
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
 # Vérification de l'environnement
-import VenvDependencyManager
+if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
+    import VenvDependencyManager
 
-VenvDependencyManager.main()
+    VenvDependencyManager.main()
+
 from art import *
 
 # Chargement des variables globales
@@ -31,7 +33,6 @@ if len(parts) > 1:
     localhost = str(config.scriptType) + str(config.script_num)
     config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
     print(config.localhost)
-
     # Demander confirmation à l'utilisateur
     if config.systeme == 'Windows':
         command = f'start chrome --remote-debugging-port={config.localhost} --user-data-dir="{project_directory}\\ChromeDebugProfile{config.localhost}"'
@@ -56,23 +57,57 @@ else:
 # Chargement de Chrome driver
 from ChromeDriver.SetDriver import driver
 
-from Functions import Functions_4015
+from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
+from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
+from Functions.Authenticator import is_logged_in, loginProcess
 
-config.init_variable()
+confirmation = input(f"Classement ? (Y/N): ")
+
+if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
+    confirmation = input(f"type de Classement ? (1/2): ")
+    if confirmation == '1':
+        classementeDeMatch(driver)
+    else:
+        print('new class')
+        newclassementeDeMatch(driver)
+        print('new class')
+        classementeDeMatch(driver)
+
+# Call the function to get the code
+if not is_logged_in(driver):
+    loginProcess(driver)
+else:
+    print("You are already logged in.")
+
 is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
 if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
     config.in_stat = True
+config.scriptTypeList = config.scriptTypeList4
+for i in config.scriptTypeList:
+    config.ScriptConfig(i)
+config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
+config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
+config.running_file_name = f"{config.projectPath}/SCRIPTS 4015/running"
+config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 4015/matchlist"
+config.total_want_win = config.total_want_win
 while (config.win < 100):
     try:
-        Functions_4015.all_script(driver)
+        Functions_456P.all_script(driver)
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
         if config.perte > 0:
             DispatchPerte()
-        config.init_variable()
-        sucess = False
+        for i in config.scriptTypeList:
+            config.switchScript('456P')
+            config.ScriptConfig(i).reset()
+            config.init_variable()
+            config.switchScript(i)
+            DispatchPerte()
+            config.global_match_win[i] = 0  # Initialize win counter for script type
+            config.winmatch[i] = 0  # Initialize match counter for script type
+            sucess = False
         while not sucess:
             try:
                 driver.get(config.site_url)
@@ -80,4 +115,5 @@ while (config.win < 100):
                 continue
             else:
                 sucess = True
+
 print('TOTAL WIN : ' + str(config.win))
