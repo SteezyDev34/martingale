@@ -6,6 +6,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from Functions.AfficherParis import AfficherParis
+from Functions.GetBetOld import GetBetOld
+
 
 def placer_pari(driver, codeList):
     """
@@ -21,9 +24,11 @@ def placer_pari(driver, codeList):
     :param cote_min: Cote minimum acceptée (optionnel)
     :return: Dictionnaire avec le résultat de l'opération
     """
+    donnees_test = []
     while codeList != []:
-        donnees_test = codeList[0]
-        del codeList[0]
+        print('ok')
+        donnees_test = codeList
+        print(codeList)
         print("=== DONNÉES ===")
         print(f"Match: {donnees_test['equipe_1']} vs {donnees_test['equipe_2']}")
         print(f"Date: {donnees_test['date']}")
@@ -33,12 +38,12 @@ def placer_pari(driver, codeList):
         print(f"Cote: {donnees_test['odds']}")
         print("=" * 50)
 
-        equipe1 = donnees_test['equipe_1'],
-        equipe2 = donnees_test['equipe_2'],
-        categorie = donnees_test['categorie'],
-        type_de_pari = donnees_test['type_de_pari'],
-        selection = donnees_test['selection'],  # "Plus De 20.5"
-        mise = 10,  # Mise de test
+        equipe1 = donnees_test['equipe_1']
+        equipe2 = donnees_test['equipe_2']
+        categorie = donnees_test['categorie']
+        type_de_pari = donnees_test['type_de_pari']
+        selection = donnees_test['selection']  # "Plus De 20.5"
+        mise = 0.2,  # Mise de test
         cote_min = float(donnees_test['odds'])  # Cote minimum basée sur l'exemple
 
         driver.get('https://1xbet.com/fr')
@@ -55,7 +60,7 @@ def placer_pari(driver, codeList):
         # POPUP DE RECHERCHE
         try:
             WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.ID, 'search-in-popup')))
+                EC.element_to_be_clickable((By.ID, 'search-in-popup')))
         except Exception as e:
             print(f'Erreur lors de la recherche du champ de recherche: {str(e)}')
         else:
@@ -82,9 +87,14 @@ def placer_pari(driver, codeList):
                         print('Match found')
                         link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
                         driver.get(link)
+                        break
             except Exception as e:
                 print(f'Erreur lors de la selection du match: {equipe1} vs {equipe2} : {str(e)}')
                 exit()
+        # Afficher la categorie de paris
+        AfficherParis(driver, categorie, type_de_pari)
+        GetBetOld(driver, selection=selection)
+
         try:
             # Rechercher le match
             resultat_recherche = rechercher_match(driver, equipe1, equipe2)
@@ -431,11 +441,11 @@ def tester_avec_donnees_exemple():
     # Données d'exemple pour les tests
     donnees_test = {
         "date": "05/09/2025",
-        "equipe_1": "Crystal Palace",
-        "equipe_2": "Sunderland",
-        "categorie": "Corners",
-        "type_de_pari": "Total. Corners",
-        "selection": "Total (9.5) Plus de",
+        "equipe_1": "Club Canoneros Marina",
+        "equipe_2": "Jaguares de Chiapas",
+        "categorie": "Temps réglementaire",
+        "type_de_pari": "Handicap asiatique",
+        "selection": "Handiсap 2 (+0.75)",
         "odds": "1.1"
     }
 
@@ -444,7 +454,7 @@ def tester_avec_donnees_exemple():
 
         # Test avec les données d'exemple
         resultat = placer_pari(
-            driver=driver, donnees_test=donnees_test
+            driver, donnees_test
         )
 
         print("RÉSULTAT DU TEST:")
@@ -458,39 +468,6 @@ def tester_avec_donnees_exemple():
     except Exception as e:
         print(f"Erreur lors du test: {str(e)}")
         return None
-
-
-def tester_pari_tennis_simple(driver, equipe1, equipe2, selection, mise=10):
-    """
-    Fonction simplifiée pour tester un pari de tennis
-    
-    :param driver: Instance du driver Selenium
-    :param equipe1: Nom du premier joueur
-    :param equipe2: Nom du deuxième joueur
-    :param selection: Type de pari (ex: "Plus De 20.5", "Moins De 20.5")
-    :param mise: Montant de la mise (défaut: 10)
-    :return: Résultat du pari
-    """
-
-    print(f"Test pari tennis: {equipe1} vs {equipe2}")
-    print(f"Sélection: {selection}")
-    print(f"Mise: {mise}€")
-
-    # Utiliser la fonction placer_pari_simple pour les tests
-    try:
-        recherche_match = f"{equipe1} - {equipe2}"
-        resultat = placer_pari_simple(driver, recherche_match, selection, mise)
-
-        if resultat:
-            print("✅ Pari placé avec succès !")
-        else:
-            print("❌ Échec du placement du pari")
-
-        return resultat
-
-    except Exception as e:
-        print(f"❌ Erreur: {str(e)}")
-        return False
 
 
 if __name__ == "__main__":

@@ -9,4 +9,15 @@ DataFiles/*
 .idea/php.xml
 .DS_Store
 session_data.json
-/.env
+
+# Variables d'environnement sensibles
+.env
+.env.local
+.env.*.local
+
+# Fichiers de cache Python
+*__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
+2.session

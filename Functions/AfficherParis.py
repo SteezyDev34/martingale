@@ -14,39 +14,40 @@ from Functions.ModalHandler import ModalHandler
 
 def AfficherParis(driver, categorie='', type_de_pari='', ):
     config.log('recherche du champ déroulant...', '', True, 2)
-    if config.scriptType != 'LIVE':
+    if config.scriptType in config.allScriptType:
+        print(config.scriptType)
         GetSetActuel(driver)
         GetScoreActuel(driver)
-    selection = False
-    tentative = 1
-    clic = False
 
-    if str(config.set_actuel) == "1":
-        theset = "1er"
-    else:
-        theset = str(config.set_actuel) + "ème"
-    if config.scriptType == '1SET' or config.scriptType == 'BREAK':
-        args = ' set'
-    else:
-        args = ' set Evénements rapides'
+        if str(config.set_actuel) == "1":
+            theset = "1er"
+        else:
+            theset = str(config.set_actuel) + "ème"
+        if config.scriptType == '1SET' or config.scriptType == 'BREAK':
+            args = ' set'
+        else:
+            args = ' set Evénements rapides'
 
-    if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
-        key = 'Gagne le jeu avec le score.'
-    elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
-        key = 'Nombre exact de points dans un jeu'
-    elif config.scriptType == '1SET':
-        key = '1X2'
-    elif config.scriptType == 'BREAK':
-        key = 'Gagne dans le jeu'
-    elif config.scriptType == 'LIVE':
+        if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
+            key = 'Gagne le jeu avec le score.'
+        elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
+            key = 'Nombre exact de points dans un jeu'
+        elif config.scriptType == '1SET':
+            key = '1X2'
+        elif config.scriptType == 'BREAK':
+            key = 'Gagne dans le jeu'
+        else:
+            if config.site_type == 'old_site':
+                key = 'Score de la partie. ' + theset + args
+            else:
+                key = 'Score du jeu. ' + theset + args
+    else:
         theset = ''
         args = categorie
         key = type_de_pari
-    else:
-        if config.site_type == 'old_site':
-            key = 'Score de la partie. ' + theset + args
-        else:
-            key = 'Score du jeu. ' + theset + args
+    selection = False
+    tentative = 1
+    clic = False
 
     while not selection and tentative < 6:
         try:
@@ -72,6 +73,7 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                 config.log('ouverture du champ déroulant...', 'info', True, 2)
                 time.sleep(1)
                 try:
+                    print('decttion')
                     element = WebDriverWait(driver, 5).until(
                         EC.visibility_of_element_located(
                             (By.CLASS_NAME, config.classes['multiselect_container_wrapper'][config.site_type]))
@@ -81,8 +83,10 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                     tentative = tentative + 1
                     config.log(f'tentative {tentative}', 'warning', False, 2)
                 else:
+
                     select_form_set_1 = driver.find_elements(By.CLASS_NAME,
                                                              config.classes['multiselect_element'][config.site_type])
+                    print('detect multiselect_element', len(select_form_set_1))
                     if len(select_form_set_1) > 0:
                         for select_option in select_form_set_1:
                             if selection == True:
@@ -98,7 +102,8 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
 
                                 if select_option_text.strip().lower() == str(
                                         theset).lower() + f'{args}'.lower():
-                                    # config.log('            Lien ' + select_option_text.lower() + ' = ' + str(theset).lower() + ' set Evénements rapides'.lower(), 'warning', True, 2)
+                                    config.log('            Lien ' + select_option_text.lower() + ' = ' + str(
+                                        theset).lower() + ' set Evénements rapides'.lower(), 'warning', True, 2)
                                     try:
                                         select_option.click()
                                     except Exception as e:
@@ -178,7 +183,8 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                                             else:
                                                 selection = True
                                 else:
-                                    # config.log('Lien ' + select_option_text.lower() + ' > ' + str(theset).lower() + f'{args}'.lower(), 'warning', True, 2)
+                                    config.log('Lien ' + select_option_text.lower() + ' > ' + str(
+                                        theset).lower() + f'{args}'.lower(), 'warning', True, 2)
                                     continue
                         return selection
     return selection
