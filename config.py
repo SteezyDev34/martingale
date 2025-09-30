@@ -7,8 +7,9 @@ from typing import Dict, Any, Optional
 import requests
 
 # Import des configurations depuis le module config
-from config import classes, score_to_start, total_want_win, total_want_winset1
+from conf import classes, score_to_start, total_want_win, total_want_winset1
 
+__all__ = ['classes', 'score_to_start', 'total_want_win', 'total_want_winset1']
 # System detection
 systeme = platform.system()
 
@@ -20,9 +21,9 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 projectPath = os.path.dirname(os.path.abspath(__file__))
 scriptTypeList = ['300', '15A', '30A']
 scriptTypeList1 = ['30A']
-scriptTypeList2 = ['6P','4015', '4030']
+scriptTypeList2 = ['6P', '4015', '4030']
 # scriptTypeList2 = ['4P', '5P', '6P', '40A']
-scriptTypeList3 = ['5P','6P', '40A', 'BREAK']
+scriptTypeList3 = ['5P', '6P', '40A', 'BREAK']
 scriptTypeList4 = ['4015', '4030']
 allScriptType = ['030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK']
 # Script configuration
@@ -36,6 +37,7 @@ api_url = "http://auxobetbot.sc2vagr6376.universe.wf"
 site_url = 'https://1xbet.com/fr/live/tennis'
 site_line_url = 'https://1xbet.com/fr/line/tennis'
 site_type = 'new_site'
+match_name = ''
 
 
 def configure_site_type(use_ca_site=None):
@@ -65,6 +67,8 @@ def configure_site_type(use_ca_site=None):
         site_type = 'old_site'
 
     return site_type
+
+
 configure_site_type()
 
 # La configuration des scores est maintenant importée depuis le module config
@@ -142,6 +146,7 @@ for period, bet_types_list in xbet_types_data.items():
 # Initialize dictionaries to track wins per script type
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 global_match_win = {script_type: 0 for script_type in scriptTypeList}
+
 
 # Configurations de paris importées depuis config.betting_config
 

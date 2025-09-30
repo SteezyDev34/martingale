@@ -11,12 +11,12 @@ from Functions.GetIfNewSite import GetIfNewSite
 def GetMise(driver):
     if config.rattrape_perte == 3:
         txtlog = 'Bonne proba, cote : 3'
-        config.log(txtlog, 'info', '', 3)
+        config.log(txtlog, 'info')
         config.log_clear_line()
         config.cote = config.cotebase
     else:
         txtlog = "Rattrapage, recuperation de la cote"
-        config.log(txtlog, 'info', '', 3)
+        config.log(txtlog, 'info')
         config.log_clear_line()
         try:
             config.cote = driver.find_elements(By.CLASS_NAME,
@@ -24,13 +24,13 @@ def GetMise(driver):
                 0].text
         except:
             txtlog = 'erreur recup cote : 3'
-            config.log(txtlog, 'info', '', 3)
+            config.log(txtlog, 'info')
             config.log_clear_line()
             config.cote = config.cotebase
         else:
 
             txtlog = 'cote recupéré ' + str(config.cote)
-            config.log(txtlog, 'info', '', 3)
+            config.log(txtlog, 'info')
             config.log_clear_line()
             if config.cote == '' or str(config.cote) == '0' or str(config.cote) == '1' or config.cote == 0:
                 config.cote = config.cotebase
@@ -47,7 +47,7 @@ def GetMise(driver):
     txtlog = "cote : " + str(config.cote) + " | perte : " + str(
         config.perte) + " | wantwin : " + str(
         config.wantwin) + " | mise : " + str(config.mise)
-    config.log(txtlog, 'info', '', 3)
+    config.log(txtlog, 'info')
     getmisemax = True
     tentative = 0
     while not getmisemax:

@@ -230,5 +230,20 @@ classes = {
             'old_site': 'c-events__team',
             'new_site': 'dashboard-game-team-info'
         },
+    'cpn_events_trigger':
+        {
+            'old_site': 'cpn-events__trigger',
+            'new_site': 'cpn-events__trigger'
+        },
+    'cpn_events_input':
+        {
+            'old_site': 'cpn-events__input',
+            'new_site': 'cpn-events__input'
+        },
+    'cpn_btn_theme_brand':
+        {
+            'old_site': 'cpn-btn--theme-brand',
+            'new_site': 'cpn-btn--theme-brand'
+        }
 
 }
