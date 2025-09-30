@@ -8,6 +8,7 @@ import config
 from Functions.DeleteBet import DeleteBet
 from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetScoreActuel import GetScoreActuel
+from Functions.getTextFromImageGPT import compare_selection
 
 
 def GetBetOld(driver, nextBet=False, selection=''):
@@ -43,7 +44,6 @@ def GetBetOld(driver, nextBet=False, selection=''):
     if config.scriptType == '4P':
         sType = f"Jeu {jeu}, Nombre de Points 4"
         config.win_type = ['40:0', '0:40']  # inversé
-
 
     # print('i '+str(i))
     while not clic and tentative_clic < 5:
@@ -110,7 +110,7 @@ def GetBetOld(driver, nextBet=False, selection=''):
                 else:
                     first_player = 1
                     config.win_type = ['40:0', '40:15', '40:30', 'A:40']
-                sType = "Joueur "+str(first_player)+" va gagner le"
+                sType = "Joueur " + str(first_player) + " va gagner le"
                 print('first_player :', first_player)
             if config.scriptType == '15A' or config.scriptType == '30A' or config.scriptType == '40A' or config.scriptType == '030' or config.scriptType == '300':
                 x_path = (
@@ -137,9 +137,34 @@ def GetBetOld(driver, nextBet=False, selection=''):
             )
             print(x_path)
         try:
-            element = WebDriverWait(driver, 5).until(
-                EC.presence_of_element_located((By.XPATH, x_path))
-            )
+            if tentative_clic < 2:
+                element = WebDriverWait(driver, 5).until(
+                    EC.presence_of_element_located((By.XPATH, x_path))
+                )
+            else:
+                x_path = (
+                    '//div[contains(@class, "bet_group_col")]'
+                    '//div[not(contains(@style, "display: none;"))]'
+                    '//div[contains(@class, "bet-inner")]'
+                )
+                list_of_bet_type = driver.find_elements(By.XPATH, x_path)
+                bet_list = []
+                for bet in list_of_bet_type:
+                    bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
+                    if bet_text.strip():  # Only append if bet_text is not empty
+                        bet_list.append(bet_text)
+                bet_list = '\n'.join(bet_list)
+                print(bet_list)
+                sType = compare_selection(config.match_name, sType, bet_list)
+                if sType:
+                    x_path = (
+                            '//div[contains(@class, "bet_group_col")]'
+                            '//div[not(contains(@style, "display: none;"))]'
+                            '//div[contains(@class, "bet-inner") and not(contains(@class, "blockSob"))]'
+                            '//span[contains(text(), "' + str(sType) + '")]'
+                    )
+                else:
+                    return False
         except Exception as e:
             tentative_clic += 1
             config.log(f'error recup lin #ERR345 jeu : {jeu}, stype : {sType} e : {e}', 'error', True, 2)
@@ -159,7 +184,7 @@ def GetBetOld(driver, nextBet=False, selection=''):
                         try:
                             list_of_bet_type[0].click()
                             element = WebDriverWait(driver, 10).until(
-                                EC.presence_of_element_located((By.CLASS_NAME, 'cpn-bet-market__label'))
+                                EC.element_to_be_clickable((By.CLASS_NAME, 'cpn-bet-market__label'))
                             )
                             time.sleep(1)
                             cpn_bet_market_label = driver.find_element(By.CLASS_NAME, 'cpn-bet-market__label').text
@@ -187,7 +212,7 @@ def GetBetOld(driver, nextBet=False, selection=''):
                                 else:
                                     tentative += 1
                                     DeleteBet(driver)
-                            elif config.scriptType == 'LIVE':
+                            else:
                                 if sType in cpn_bet_market_label:
                                     clic = True
                                     return clic

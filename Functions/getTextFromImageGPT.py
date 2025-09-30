@@ -20,10 +20,38 @@ def cleanJson(raw_response):
 # Initialisation du client OpenAI avec la clé API
 from openai import OpenAI
 
+
+# Fonction pour charger les variables d'environnement depuis un fichier .env
+def load_env_file():
+    """Charge les variables d'environnement depuis un fichier .env s'il existe."""
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    env_file = os.path.join(project_root, '.env')
+
+    if os.path.exists(env_file):
+        with open(env_file, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    # Supprimer les guillemets si présents
+                    value = value.strip().strip('"').strip("'")
+                    os.environ[key.strip()] = value
+
+
+# Charger le fichier .env s'il existe
+load_env_file()
+
 # Charger la clé API depuis les variables d'environnement
 api_key = os.getenv('OPENAI_API_KEY')
 if not api_key:
-    raise ValueError("La clé API OpenAI n'est pas définie. Veuillez définir la variable d'environnement OPENAI_API_KEY.")
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    raise ValueError(
+        f"La clé API OpenAI n'est pas définie.\n"
+        f"Solutions possibles :\n"
+        f"1. Définir la variable d'environnement : export OPENAI_API_KEY='votre_clé'\n"
+        f"2. Créer un fichier .env dans {project_root} avec : OPENAI_API_KEY=votre_clé\n"
+        f"3. Voir le fichier .env.example pour un modèle"
+    )
 
 # Initialiser le client OpenAI
 client = OpenAI(api_key=api_key)
@@ -33,6 +61,7 @@ client = OpenAI(api_key=api_key)
 def image_to_base64(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
+
 
 def stringify_xbet_type_list(xbet_type_list):
     """
@@ -54,102 +83,61 @@ def stringify_xbet_type_list(xbet_type_list):
             )
     return "\n".join(lines)
 
+
 # 🧾 Envoyer l'image à ChatGPT avec des instructions spécifiques
 def extraire_pari_depuis_image(image_path, msg):
-    print("Tu es un agent OCR intelligent. Ton rôle est de lire des captures d'écran de tickets de paris sportifs"
-                                "et d'en extraire les données principales sous forme de JSON structuré."
-                                "Les données à extraire sont les suivantes :\n"
-                                "- equipe_1 : première équipe (ou joueur)\n"
-                                "- equipe_2 : deuxième équipe (ou joueur)\n"
-                                "- categorie : catégorie du pari\n"
-                                "- type_de_pari : type de pari (doit être EXACTEMENT présent dans la liste ci-dessous)\n"
-                                "- selection : la sélection faite (peut être générée dynamiquement si elle suit un format connu)\n"
-                                "- odds : la cote du pari (nombre flottant)\n"
-                                "- date : date du pari (extrait du nom de l'image, ou sinon date du jour)\n"
-                                "- tipster : toujours \"marco\"\n\n"
-
-                                "⚠️ Règles strictes à suivre :\n"
-                                "1. Tu dois OBLIGATOIREMENT choisir la catégorie et le type de pari parmi ceux du dictionnaire ci-dessous.\n"
-                                "2. Tu peux générer dynamiquement la sélection si elle respecte le même format qu'une sélection d'exemple.\n"
-                                "3. Tu ne dois jamais inventer un type de pari ou une catégorie.\n"
-                                "4. Si le texte 'générateur de paris' apparaît dans l’image, retourne une erreur avec le texte brut de l’image.\n"
-                                "5. Tu dois ignorer les textes superflus et te concentrer uniquement sur les données mentionnées ci-dessus.\n\n"
-
-                                "🧠 Exemples de correspondance dynamique :\n"
-                                "- Texte image : 'Total 1: (0.5) Plus de' → type_de_pari : 'Total 1', selection : 'Total Individuel 1 Plus de 0.5'\n"
-                                "- Texte image : 'Total 2: (1.5) Moins de' → type_de_pari : 'Total 2', selection : 'Total Individuel 2 Moins de 1.5'\n"
-                                "- Texte image : 'Handicap 1 (-2)' → type_de_pari : 'Handicap', selection : 'Handicap 1 (-2)'\n\n"
-
-                                "📆 Gestion de la date :\n"
-                                "- Si le nom du fichier contient une date comme 'media_20250413_204440.jpg', la date du pari est 13/04/2025.\n"
-                                "- Si le nom du fichier est 'Capture-decran_1-4-2025_205148.jpeg', la date est 01/04/2025.\n"
-                                "- Si aucun format de date n'est détecté dans le nom de fichier, utilise la date du jour.\n\n"
-
-                                "📖 Voici la liste de référence des catégories, types et formats de sélections :\n"
-                                f"{stringify_xbet_type_list(config.xbet_type_list)}\n\n"
-
-                                "🧾 Format de réponse attendu (aucune explication, juste le JSON brut) :\n"
-                                "{\n"
-                                "  \"date\": \"25/09/2025\",\n"
-                                "  \"equipe_1\": \"Al Shabab Riyadh\",\n"
-                                "  \"equipe_2\": \"Al Kholood\",\n"
-                                "  \"categorie\": \"Temps réglementaire\",\n"
-                                "  \"type_de_pari\": \"Total 1\",\n"
-                                "  \"selection\": \"Total Individuel 1 Plus de 0.5\",\n"
-                                "  \"odds\": \"1.432\",\n"
-                                "  \"tipster\": \"marco\"\n"
-                                "}")
     image_b64 = image_to_base64(image_path)
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[
             {
                 "role": "system",
-                "content": 
-                                "Tu es un agent OCR intelligent. Ton rôle est de lire des captures d'écran de tickets de paris sportifs"
-                                "et d'en extraire les données principales sous forme de JSON structuré."
-                                "Les données à extraire sont les suivantes :\n"
-                                "- equipe_1 : première équipe (ou joueur)\n"
-                                "- equipe_2 : deuxième équipe (ou joueur)\n"
-                                "- categorie : catégorie du pari\n"
-                                "- type_de_pari : type de pari (doit être EXACTEMENT présent dans la liste ci-dessous)\n"
-                                "- selection : la sélection faite (peut être générée dynamiquement si elle suit un format connu)\n"
-                                "- odds : la cote du pari (nombre flottant)\n"
-                                "- date : date du pari (extrait du nom de l'image, ou sinon date du jour)\n"
-                                "- tipster : toujours \"marco\"\n\n"
+                "content":
+                    "Tu es un agent OCR intelligent. Ton rôle est de lire des captures d'écran de tickets de paris sportifs"
+                    "et d'en extraire les données principales sous forme de JSON structuré."
+                    "Les données à extraire sont les suivantes :\n"
+                    "- equipe_1 : première équipe (ou joueur)\n"
+                    "- equipe_2 : deuxième équipe (ou joueur)\n"
+                    "- categorie : catégorie du pari\n"
+                    "- type_de_pari : type de pari (doit être EXACTEMENT présent dans la liste ci-dessous)\n"
+                    "- selection : la sélection faite (peut être générée dynamiquement si elle suit un format connu)\n"
+                    "- odds : la cote du pari (nombre flottant)\n"
+                    "- date : date du pari (extrait du nom de l'image, ou sinon date du jour)\n"
+                    "- tipster : toujours \"marco\"\n\n"
 
-                                "⚠️ Règles strictes à suivre :\n"
-                                "1. Tu dois OBLIGATOIREMENT choisir la catégorie et le type de pari parmi ceux du dictionnaire ci-dessous.\n"
-                                "2. Tu peux générer dynamiquement la sélection si elle respecte le même format qu'une sélection d'exemple.\n"
-                                "3. Tu ne dois jamais inventer un type de pari ou une catégorie.\n"
-                                "4. Si le texte 'générateur de paris' apparaît dans l’image, retourne une erreur avec le texte brut de l’image.\n"
-                                "5. Tu dois ignorer les textes superflus et te concentrer uniquement sur les données mentionnées ci-dessus.\n\n"
+                    "⚠️ Règles strictes à suivre :\n"
+                    "1. Tu dois OBLIGATOIREMENT choisir la catégorie et le type de pari parmi ceux du dictionnaire ci-dessous.\n"
+                    "2. Tu peux générer dynamiquement la sélection si elle respecte le même format qu'une sélection d'exemple.\n"
+                    "3. Tu ne dois jamais inventer un type de pari ou une catégorie.\n"
+                    "4. Si le texte 'générateur de paris' apparaît dans l’image, retourne une erreur avec le texte brut de l’image.\n"
+                    "5. Tu dois ignorer les textes superflus et te concentrer uniquement sur les données mentionnées ci-dessus.\n\n"
 
-                                "🧠 Exemples de correspondance dynamique :\n"
-                                "- Texte image : 'Total 1: (0.5) Plus de' → type_de_pari : 'Total 1', selection : 'Total Individuel 1 Plus de 0.5'\n"
-                                "- Texte image : 'Total 2: (1.5) Moins de' → type_de_pari : 'Total 2', selection : 'Total Individuel 2 Moins de 1.5'\n"
-                                "- Texte image : 'Handicap 1 (-2)' → type_de_pari : 'Handicap', selection : 'Handicap 1 (-2)'\n\n"
+                    "🧠 Exemples de correspondance dynamique :\n"
+                    "- Texte image : 'Total 1: (0.5) Plus de' → type_de_pari : 'Total 1', selection : 'Total Individuel 1 Plus de 0.5'\n"
+                    "- Texte image : 'Total 2: (1.5) Moins de' → type_de_pari : 'Total 2', selection : 'Total Individuel 2 Moins de 1.5'\n"
+                    "- Texte image : 'Handicap 1 (-2)' → type_de_pari : 'Handicap', selection : 'Handicap 1 (-2)'\n\n"
 
-                                "📆 Gestion de la date :\n"
-                                "- Si le nom du fichier contient une date comme 'media_20250413_204440.jpg', la date du pari est 13/04/2025.\n"
-                                "- Si le nom du fichier est 'Capture-decran_1-4-2025_205148.jpeg', la date est 01/04/2025.\n"
-                                "- Si aucun format de date n'est détecté dans le nom de fichier, utilise la date du jour.\n\n"
+                    "📆 Gestion de la date :\n"
+                    "- Si le nom du fichier contient une date comme 'media_20250413_204440.jpg', la date du pari est 13/04/2025.\n"
+                    "- Si le nom du fichier est 'Capture-decran_1-4-2025_205148.jpeg', la date est 01/04/2025.\n"
+                    "- Si aucun format de date n'est détecté dans le nom de fichier, utilise la date du jour.\n\n"
 
-                                "📖 Voici la liste de référence des catégories, types et formats de sélections :\n"
-                                f"{stringify_xbet_type_list(config.xbet_type_list)}\n\n"
-
-                                "🧾 Format de réponse attendu (aucune explication, juste le JSON brut) :\n"
-                                "{\n"
-                                "  \"date\": \"25/09/2025\",\n"
-                                "  \"equipe_1\": \"Al Shabab Riyadh\",\n"
-                                "  \"equipe_2\": \"Al Kholood\",\n"
-                                "  \"categorie\": \"Temps réglementaire\",\n"
-                                "  \"type_de_pari\": \"Total 1\",\n"
-                                "  \"selection\": \"Total Individuel 1 Plus de 0.5\",\n"
-                                "  \"odds\": \"1.432\",\n"
-                                "  \"tipster\": \"marco\"\n"
-                                "}"
-
+                    "📖 Voici la liste de référence des catégories, types et formats de sélections :\n"
+                    f"{stringify_xbet_type_list(config.xbet_type_list)}\n\n"
+                    "Si tu ne vois aucune information sur la catégories utilise Temps réglementaire."
+                    "Si c'est un pari remboursé si nul, ça correspond au type Handicap, et à la selection Handicap 1 (0) ou Handicap 2 (0), en fonction de si c'est équipe 1 ou équipe 2 si nul."
+                    "Si c'est le vainqueur du match la selection est V1 ou V2 en fonction de l'équipe 1 ou 2 vainqueur"
+                    "🧾 Format de réponse attendu (aucune explication, juste le JSON brut) :\n"
+                    "{\n"
+                    "  \"date\": \"25/09/2025\",\n"
+                    "  \"equipe_1\": \"Al Shabab Riyadh\",\n"
+                    "  \"equipe_2\": \"Al Kholood\",\n"
+                    "  \"categorie\": \"Temps réglementaire\",\n"
+                    "  \"type_de_pari\": \"Total 1\",\n"
+                    "  \"selection\": \"Total Individuel 1 Plus de 0.5\",\n"
+                    "  \"odds\": \"1.432\",\n"
+                    "  \"tipster\": \"marco\"\n"
+                    "}"
 
             },
             {
@@ -164,6 +152,88 @@ def extraire_pari_depuis_image(image_path, msg):
         max_tokens=500
     )
     return cleanJson(response.choices[0].message.content)
+
+
+def compare_match_name(match_name1, match_name2):
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {
+                "role": "system",
+                "content": "Tu es un agent qui compare deux noms de matchs sportifs. Réponds uniquement par true ou false en suivant ces règles : ignorer les accents, la casse, les séparateurs et certains mots comme FC, Real, etc."
+
+            },
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text",
+                     "text": f"Campare ces deux match :  {match_name1} et {match_name2}"
+                     },
+                ]
+            }
+        ],
+        max_tokens=500
+    )
+    # Convertir la réponse string "true"/"false" en booléen correspondant
+    response_content = response.choices[0].message.content
+    if response_content is None:
+        return False
+    response_text = response_content.strip().lower()
+    return response_text == "true"
+
+
+def compare_selection(match, selection, selection_list):
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {
+                "role": "system",
+                "content": """
+                        Tu es un agent spécialisé dans la comparaison de sélections de paris sportifs.
+                        Ton objectif est de déterminer si une sélection donnée correspond exactement à une liste de sélections possibles.
+                        
+                        Instructions :
+                        1. Compare la sélection demandée avec les options fournies.
+                        2. Ignore :
+                           - La casse (majuscule/minuscule)
+                           - Les accents (ex. Gérone = Girona)
+                           - Les espaces supplémentaires
+                        3. Répond strictement par :
+                           - Le texte exact de la sélection correspondante dans la liste si elle existe
+                           - "false" si aucune sélection ne correspond
+                        4. Ne rajoute aucun autre texte ni explication.
+                        
+                        Exemples :
+                        - Sélection recherchée : "Total jeux Moins de 21.5"
+                          Liste : ["Total Moins de 21", "Total Moins de 21.5", "Total Plus de 21.5"]
+                          Réponse : "Total Moins de 21.5"
+                        
+                        - Sélection recherchée : "Equipe 1 gagne et Total > 19.5"
+                          Liste : ["Equipe 1 va gagner et Total > 19.5 - Oui", "Equipe 1 va gagner et Total < 19.5 - Oui"]
+                          Réponse : "Equipe 1 va gagner et Total > 19.5 - Oui"
+                        
+                        - Sélection recherchée : "Total jeux Moins de 25"
+                          Liste : ["Total Moins de 21", "Total Moins de 21.5", "Total Plus de 21.5"]
+                          Réponse : "false"
+                        """
+            },
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text",
+                     "text": f"pour le match {match} Campare ces deux selections :  {selection} et {selection_list}"
+                     },
+                ]
+            }
+        ],
+        max_tokens=500
+    )
+    # Convertir la réponse string "true"/"false" en booléen correspondant
+    response_content = response.choices[0].message.content
+    if response_content is None:
+        return False
+    response_text = response_content.strip().lower()
+    return response_text == "true"
 
 
 def fordate(date_str):

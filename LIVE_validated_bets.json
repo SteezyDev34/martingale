@@ -25,5 +25,32 @@
         "winscore": "",
         "timestamp": "2025-09-14 01:31:42",
         "url": "https://1xbet.com/fr/live/football/828065-usa-mls/653401606-atlanta-united-columbus-crew"
+    },
+    {
+        "montant": 1.54,
+        "cote": "1.69",
+        "jeu": false,
+        "set": "",
+        "winscore": "",
+        "timestamp": "2025-09-29 00:25:47",
+        "url": "https://1xbet.com/fr/line/tennis/5188-atp-tokyo/280856629-carlos-alcaraz-garfia-casper-ruud"
+    },
+    {
+        "montant": 1.73,
+        "cote": "1.6",
+        "jeu": false,
+        "set": "",
+        "winscore": "",
+        "timestamp": "2025-09-29 00:26:54",
+        "url": "https://1xbet.com/fr/line/tennis/5191-atp-beijing/280837842-learner-tien-lorenzo-musetti"
+    },
+    {
+        "montant": 1.43,
+        "cote": "1.72",
+        "jeu": false,
+        "set": "",
+        "winscore": "",
+        "timestamp": "2025-09-29 00:38:31",
+        "url": "https://1xbet.com/fr/line/tennis/5191-atp-beijing/280884863-daniil-medvedev-alexander-zverev"
     }
 ]

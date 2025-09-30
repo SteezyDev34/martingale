@@ -1,6 +1,7 @@
 import json
-import ssl
 import os
+import ssl
+
 import urllib3
 
 # Configuration SSL pour éviter les erreurs de certificat
@@ -18,13 +19,10 @@ try:
 except:
     pass
 
-import requests
 import telepot
 
 # Configuration SSL pour requests
 import requests.adapters
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
 
 # Configuration de session avec SSL désactivé
 session = requests.Session()
@@ -121,57 +119,3 @@ def send_telegram_group(groupid, message, code):
             print(f"Erreur HTTP {response.status_code}: {response.text}")
     except Exception as e:
         print(f"Une erreur est survenue : {e}")
-
-
-# WORD TO AVOID ON MESSAGE RECEIVE
-def filter_txt(txt):
-    try:
-        fichier = open("words.txt", "r")
-        words = fichier.read()
-        fichier.close()
-        words = words.split('\n')
-        for word in words:
-            txt = txt.replace(word.strip().upper(), "")
-        return txt
-    except Exception as e:
-        send_telegram(alertGroup, f"#E0007\nUne erreur est survenue : {e}")
-        print(f"#E0007\nUne erreur est survenue : {e}")
-        return txt
-
-
-def add_word_to_replace(word):
-    try:
-        words = word.split('\n')
-        for word in words:
-            word = word.strip().upper()
-            codes = open("words.txt", "a")
-            codes.write('\n' + word)
-            codes.close()
-            print("word ADDED  : " + word)
-        return True
-    except Exception as e:
-        send_telegram(alertGroup, f"#E00017\nUne erreur est survenue : {e}")
-        print(f"#E00017\nUne erreur est survenue : {e}")
-        return False
-
-
-def delete_word_to_replace(word):
-    try:
-        words = word.split('\n')
-        used_codes = ""
-        codes = open("words.txt", "r")
-        used_codes = codes.read()
-        codes.close()
-        updates_used_codes = used_codes  # Initialiser la variable
-        for word in words:
-            word = word.strip().upper()
-            updates_used_codes = updates_used_codes.replace('\n' + word, '')
-        codes = open("words.txt", "w")
-        codes.write(updates_used_codes)
-        codes.close()
-        # print("CODES UPDATED : "+updates_used_codes)
-        return True
-    except Exception as e:
-        send_telegram(alertGroup, f"#E00018\nUne erreur est survenue : {e}")
-        print(f"#E00018\nUne erreur est survenue : {e}")
-        return False

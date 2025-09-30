@@ -45,7 +45,7 @@ def getPerte():
 
 
 def get1setGlobalPerte():
-    url = f"{config.api_url}/strategy1SET/get_last_perte.php"
+    url = f"{config.api_url}/strategy1SET/get_last_perte.php?mtt_recup={config.mtt_recup}"
     try:
         # Envoyer une requête GET à l'URL
         response = requests.get(url)
@@ -68,20 +68,7 @@ def get1setGlobalPerte():
     else:
         if float(pertes["perte"]) > 0:
             config.rattrape_perte = 1
-        config.log(f'Perte global : {str(pertes["perte"])}', 'info', False, 1)
-        print('config.mtt_recup', config.mtt_recup)
-        if float(pertes['perte']) > float(config.mtt_recup):
-            SendGlobalPerte(config.scriptType, float(pertes['perte']) - float(config.mtt_recup))
-            print('pertes[id]', pertes['id'])
-            del1setPerte(pertes['id'])
-            config.perte = config.mtt_recup
-            config.log(f'Perte : {str(config.perte)}', 'info', False, 1)
-        elif float(pertes['perte']) <= float(config.mtt_recup):
-            print('config.mtt_recup', config.mtt_recup)
             config.perte = float(pertes['perte'])
-            m = config.perte
-            print('pertes[id]', pertes['id'])
-            del1setPerte(pertes['id'])
             config.log(f'Perte : {str(config.perte)}', 'info', False, 1)
         config.rattrape_perte = 1
         return pertes

@@ -91,6 +91,7 @@ def ValidationDuParis(driver, nexbet=False):
                         'url') == driver.current_url):
                 config.log(f"Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.")
                 validation = True
+                already = True
                 break  # Sortir de la boucle si le jeu et le set ont déjà été pariés
         config.log('boucle validation paris')
         config.log_clear_line()
@@ -167,7 +168,7 @@ def ValidationDuParis(driver, nexbet=False):
     if validation:
         # Store bet information in validated_bet variable
         from datetime import datetime
-        #SendBetData()
+        # SendBetData()
         current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         # Create validated bet data
         config.validated_bet = {
