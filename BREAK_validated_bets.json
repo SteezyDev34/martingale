@@ -1384,5 +1384,943 @@
         ],
         "timestamp": "2025-09-28 13:30:48",
         "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657408013-corentin-moutet-alexander-zverev"
+    },
+    {
+        "montant": 0.2,
+        "cote": "4.38",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-28 16:09:50",
+        "url": "https://1xbet.com/fr/live/tennis/5063-wta-beijing/657459316-shuai-zhang-amanda-anisimova"
+    },
+    {
+        "montant": 0.4,
+        "cote": "2.77",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-28 20:06:12",
+        "url": "https://1xbet.com/fr/live/tennis/1635085-itf-templeton-women/657527976-kayla-cross-kayla-day"
+    },
+    {
+        "montant": 0.4,
+        "cote": "3.74",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 20:14:18",
+        "url": "https://1xbet.com/fr/live/tennis/1635085-itf-templeton-women/657527976-kayla-cross-kayla-day"
+    },
+    {
+        "montant": 0.26,
+        "cote": "3.74",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 20:51:04",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657538487-nicholas-godsick-tristan-mccormick"
+    },
+    {
+        "montant": 0.23,
+        "cote": "4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 21:06:46",
+        "url": "https://1xbet.com/fr/live/tennis/2603161-challenger-antofagasta-qualification/657536794-guido-ivan-justo-carlos-maria-zarate"
+    },
+    {
+        "montant": 0.26,
+        "cote": "3.74",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-28 21:39:07",
+        "url": "https://1xbet.com/fr/live/tennis/2603161-challenger-antofagasta-qualification/657544465-ignacio-antonio-becerra-otarola-ignacio-monzon"
+    },
+    {
+        "montant": 0.69,
+        "cote": "2.384",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 21:51:14",
+        "url": "https://1xbet.com/fr/live/tennis/2603161-challenger-antofagasta-qualification/657544465-ignacio-antonio-becerra-otarola-ignacio-monzon"
+    },
+    {
+        "montant": 0.67,
+        "cote": "3.48",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-28 21:56:49",
+        "url": "https://1xbet.com/fr/live/tennis/2603161-challenger-antofagasta-qualification/657544465-ignacio-antonio-becerra-otarola-ignacio-monzon"
+    },
+    {
+        "montant": 1.55,
+        "cote": "2.495",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 22:05:06",
+        "url": "https://1xbet.com/fr/live/tennis/2603161-challenger-antofagasta-qualification/657544465-ignacio-antonio-becerra-otarola-ignacio-monzon"
+    },
+    {
+        "montant": 1.56,
+        "cote": "3.48",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-28 22:10:12",
+        "url": "https://1xbet.com/fr/live/tennis/2603161-challenger-antofagasta-qualification/657544465-ignacio-antonio-becerra-otarola-ignacio-monzon"
+    },
+    {
+        "montant": 3.32,
+        "cote": "2.635",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 22:14:54",
+        "url": "https://1xbet.com/fr/live/tennis/2603161-challenger-antofagasta-qualification/657544465-ignacio-antonio-becerra-otarola-ignacio-monzon"
+    },
+    {
+        "montant": 0.35,
+        "cote": "2.99",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 22:39:31",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657556472-luca-castagnola-pietro-orlando-fellin"
+    },
+    {
+        "montant": 0.23,
+        "cote": "5.51",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-28 22:42:45",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657556472-luca-castagnola-pietro-orlando-fellin"
+    },
+    {
+        "montant": 0.58,
+        "cote": "3.216",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 22:49:19",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657556472-luca-castagnola-pietro-orlando-fellin"
+    },
+    {
+        "montant": 0.41,
+        "cote": "5.51",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-28 22:53:26",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657556472-luca-castagnola-pietro-orlando-fellin"
+    },
+    {
+        "montant": 0.92,
+        "cote": "3.48",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 22:55:51",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657556472-luca-castagnola-pietro-orlando-fellin"
+    },
+    {
+        "montant": 1.16,
+        "cote": "3.74",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-28 23:00:13",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657556472-luca-castagnola-pietro-orlando-fellin"
+    },
+    {
+        "montant": 1.59,
+        "cote": "3.74",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 23:05:19",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657556472-luca-castagnola-pietro-orlando-fellin"
+    },
+    {
+        "montant": 0.43,
+        "cote": "2.635",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-28 23:15:09",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657563407-daniel-masur-ozan-baris"
+    },
+    {
+        "montant": 0.29,
+        "cote": "4.94",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 23:17:01",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657563407-daniel-masur-ozan-baris"
+    },
+    {
+        "montant": 0.71,
+        "cote": "2.99",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-28 23:23:18",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657563407-daniel-masur-ozan-baris"
+    },
+    {
+        "montant": 0.54,
+        "cote": "4.94",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 23:26:01",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657563407-daniel-masur-ozan-baris"
+    },
+    {
+        "montant": 2.62,
+        "cote": "2.02",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-28 23:29:41",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657563407-daniel-masur-ozan-baris"
+    },
+    {
+        "montant": 1.34,
+        "cote": "4.94",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-28 23:32:23",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657563407-daniel-masur-ozan-baris"
+    },
+    {
+        "montant": 5.96,
+        "cote": "2.112",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-28 23:36:59",
+        "url": "https://1xbet.com/fr/live/tennis/113431-challenger-tiburon-qualification/657563407-daniel-masur-ozan-baris"
+    },
+    {
+        "montant": 1.04,
+        "cote": "1.675",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-29 10:21:03",
+        "url": "https://1xbet.com/fr/live/tennis/2909857-wta-rende-qualification/657656976-teodora-kostovic-federica-urgesi"
+    },
+    {
+        "montant": 0.55,
+        "cote": "2.275",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-29 10:47:34",
+        "url": "https://1xbet.com/fr/live/tennis/179831-itf-sharm-el-sheikh-qualification/657665978-bogdan-seleznev-farzan-amiri"
+    },
+    {
+        "montant": 0.76,
+        "cote": "1.925",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-29 11:23:07",
+        "url": "https://1xbet.com/fr/live/tennis/829649-itf-bucharest-women-qualification/657672689-arina-gabriela-vasilescu-sara-victoria-balan"
+    },
+    {
+        "montant": 0.2,
+        "cote": "8.56",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-29 11:45:54",
+        "url": "https://1xbet.com/fr/live/tennis/94415-atp-shanghai-qualification/657676404-jason-kubler-chak-lam-coleman-wong"
+    },
+    {
+        "montant": 0.33,
+        "cote": "3.74",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-29 11:49:57",
+        "url": "https://1xbet.com/fr/live/tennis/94415-atp-shanghai-qualification/657676404-jason-kubler-chak-lam-coleman-wong"
+    },
+    {
+        "montant": 0.37,
+        "cote": "4.31",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-29 11:53:09",
+        "url": "https://1xbet.com/fr/live/tennis/94415-atp-shanghai-qualification/657676404-jason-kubler-chak-lam-coleman-wong"
+    },
+    {
+        "montant": 0.23,
+        "cote": "4.06",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-29 12:05:23",
+        "url": "https://1xbet.com/fr/live/tennis/5596-atp-shanghai/657661402-nishesh-basavareddy-valentin-vacherot"
+    },
+    {
+        "montant": 0.2,
+        "cote": "6.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-29 12:09:08",
+        "url": "https://1xbet.com/fr/live/tennis/94415-atp-shanghai-qualification/657661402-nishesh-basavareddy-valentin-vacherot"
+    },
+    {
+        "montant": 0.26,
+        "cote": "3.74",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-29 12:40:09",
+        "url": "https://1xbet.com/fr/live/tennis/1749031-challenger-braga/657689687-sumit-nagal-enrico-dalla-valle"
+    },
+    {
+        "montant": 0.59,
+        "cote": "2.635",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-29 12:44:50",
+        "url": "https://1xbet.com/fr/live/tennis/1748175-challenger-braga-qualification/657689687-sumit-nagal-enrico-dalla-valle"
+    },
+    {
+        "montant": 0.52,
+        "cote": "4",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-29 12:49:29",
+        "url": "https://1xbet.com/fr/live/tennis/1748175-challenger-braga-qualification/657689687-sumit-nagal-enrico-dalla-valle"
+    },
+    {
+        "montant": 1.17,
+        "cote": "2.77",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-29 12:52:06",
+        "url": "https://1xbet.com/fr/live/tennis/1748175-challenger-braga-qualification/657689687-sumit-nagal-enrico-dalla-valle"
+    },
+    {
+        "montant": 0.2,
+        "cote": "7.84",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-29 14:11:40",
+        "url": "https://1xbet.com/fr/live/tennis/94415-atp-shanghai-qualification/657704104-rei-sakamoto-brandon-holt"
+    },
+    {
+        "montant": 0.27,
+        "cote": "4.31",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-29 14:13:21",
+        "url": "https://1xbet.com/fr/live/tennis/94415-atp-shanghai-qualification/657704104-rei-sakamoto-brandon-holt"
+    },
+    {
+        "montant": 0.63,
+        "cote": "2.112",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-29 15:06:03",
+        "url": "https://1xbet.com/fr/live/tennis/1103277-itf-bratislava-women-qualification/657717837-ivana-sebestova-mia-chudejova"
+    },
+    {
+        "montant": 0.2,
+        "cote": "5.02",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-29 15:28:56",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657718012-daniil-medvedev-alexander-zverev"
+    },
+    {
+        "montant": 0.25,
+        "cote": "4.57",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-29 15:32:39",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657718012-daniil-medvedev-alexander-zverev"
+    },
+    {
+        "montant": 0.51,
+        "cote": "3.264",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-29 15:37:50",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657718012-daniil-medvedev-alexander-zverev"
+    },
+    {
+        "montant": 0.46,
+        "cote": "4.57",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-29 15:41:43",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657718012-daniil-medvedev-alexander-zverev"
+    },
+    {
+        "montant": 0.21,
+        "cote": "4.31",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-30 08:48:31",
+        "url": "https://1xbet.com/fr/live/tennis/823681-itf-bucharest-women/657893842-alevtina-ibragimova-diana-ioana-simionescu"
+    },
+    {
+        "montant": 0.61,
+        "cote": "2.495",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-30 08:51:37",
+        "url": "https://1xbet.com/fr/live/tennis/823681-itf-bucharest-women/657893842-alevtina-ibragimova-diana-ioana-simionescu"
+    },
+    {
+        "montant": 0.2,
+        "cote": "6.51",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-30 11:19:19",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657920176-carlos-alcaraz-garfia-taylor-harry-fritz"
+    },
+    {
+        "montant": 0.31,
+        "cote": "3.87",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-30 11:23:33",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657920176-carlos-alcaraz-garfia-taylor-harry-fritz"
+    },
+    {
+        "montant": 0.2,
+        "cote": "7.97",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-30 11:26:57",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657920176-carlos-alcaraz-garfia-taylor-harry-fritz"
+    },
+    {
+        "montant": 1.84,
+        "cote": "1.38",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-30 11:27:12",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657922164-learner-tien-daniil-medvedev"
+    },
+    {
+        "montant": 0.2,
+        "cote": "34",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-30 11:31:23",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657922164-learner-tien-daniil-medvedev"
+    },
+    {
+        "montant": 0.49,
+        "cote": "3.87",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-30 11:33:00",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657920176-carlos-alcaraz-garfia-taylor-harry-fritz"
+    },
+    {
+        "montant": 1.64,
+        "cote": "2.675",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-30 11:33:35",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657922164-learner-tien-daniil-medvedev"
+    },
+    {
+        "montant": 0.27,
+        "cote": "7.97",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-30 11:37:51",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657920176-carlos-alcaraz-garfia-taylor-harry-fritz"
+    },
+    {
+        "montant": 1.43,
+        "cote": "4.06",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-30 11:40:41",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657922164-learner-tien-daniil-medvedev"
+    },
+    {
+        "montant": 0.76,
+        "cote": "3.87",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-30 11:42:11",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657920176-carlos-alcaraz-garfia-taylor-harry-fritz"
+    },
+    {
+        "montant": 3.47,
+        "cote": "2.675",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-30 11:43:59",
+        "url": "https://1xbet.com/fr/live/tennis/5191-atp-beijing/657922164-learner-tien-daniil-medvedev"
+    },
+    {
+        "montant": 0.42,
+        "cote": "7.97",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-30 11:48:30",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657920176-carlos-alcaraz-garfia-taylor-harry-fritz"
+    },
+    {
+        "montant": 1.09,
+        "cote": "4.06",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-30 11:53:48",
+        "url": "https://1xbet.com/fr/live/tennis/5188-atp-tokyo/657920176-carlos-alcaraz-garfia-taylor-harry-fritz"
+    },
+    {
+        "montant": 0.95,
+        "cote": "1.74",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-30 13:39:58",
+        "url": "https://1xbet.com/fr/live/tennis/2909885-wta-rende/657955871-guiomar-maristany-zuleta-de-reales-darja-semenistaja"
+    },
+    {
+        "montant": 1.1,
+        "cote": "2.495",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-30 13:45:00",
+        "url": "https://1xbet.com/fr/live/tennis/2909885-wta-rende/657955871-guiomar-maristany-zuleta-de-reales-darja-semenistaja"
+    },
+    {
+        "montant": 3.72,
+        "cote": "1.74",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-30 13:50:58",
+        "url": "https://1xbet.com/fr/live/tennis/2909885-wta-rende/657955871-guiomar-maristany-zuleta-de-reales-darja-semenistaja"
+    },
+    {
+        "montant": 0.29,
+        "cote": "3.435",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-30 14:13:53",
+        "url": "https://1xbet.com/fr/live/tennis/5063-wta-beijing/657960305-karolina-muchova-amanda-anisimova"
+    },
+    {
+        "montant": 0.63,
+        "cote": "2.112",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-30 14:46:34",
+        "url": "https://1xbet.com/fr/live/tennis/2909886-wta-samsun/657959571-vitalia-diatchenko-amandine-hesse"
+    },
+    {
+        "montant": 0.26,
+        "cote": "3.74",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-30 15:53:37",
+        "url": "https://1xbet.com/fr/live/tennis/2763553-challenger-villena/657981035-christoph-negritu-eliakim-coulibaly"
+    },
+    {
+        "montant": 0.2,
+        "cote": "6.98",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-09-30 15:56:39",
+        "url": "https://1xbet.com/fr/live/tennis/2763553-challenger-villena/657981035-christoph-negritu-eliakim-coulibaly"
+    },
+    {
+        "montant": 0.23,
+        "cote": "4",
+        "jeu": 6,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-09-30 16:10:50",
+        "url": "https://1xbet.com/fr/live/tennis/2763553-challenger-villena/657976952-moez-echargui-raul-brancaccio"
     }
 ]

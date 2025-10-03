@@ -36,13 +36,13 @@ def GetBetOld(driver, nextBet=False, selection=''):
         config.win_type = '15:15'
 
     if config.scriptType == '6P':
-        sType = ", Nombre de Points 6"
+        sType = f"Jeu {jeu}, Nombre de Points 6"
         config.win_type = ['40:30', '30:40']  # inversé
     if config.scriptType == '5P':
-        sType = ", Nombre de Points 5"
+        sType = f"Jeu {jeu}, Nombre de Points 5"
         config.win_type = ['40:15', '15:40']  # inversé
     if config.scriptType == '4P':
-        sType = ", Nombre de Points 4"
+        sType = f"Jeu {jeu}, Nombre de Points 4"
         config.win_type = ['40:0', '0:40']  # inversé
 
     # print('i '+str(i))
@@ -112,7 +112,6 @@ def GetBetOld(driver, nextBet=False, selection=''):
                     config.win_type = ['40:0', '40:15', '40:30', 'A:40']
                 sType = "Joueur " + str(first_player) + " va gagner le"
                 print('first_player :', first_player)
-            print('config.win_type', config.win_type)
             if config.scriptType == '15A' or config.scriptType == '30A' or config.scriptType == '40A' or config.scriptType == '030' or config.scriptType == '300':
                 x_path = (
                         '//div[contains(@class, "bet_group_col")]'
@@ -187,12 +186,12 @@ def GetBetOld(driver, nextBet=False, selection=''):
                             element = WebDriverWait(driver, 10).until(
                                 EC.element_to_be_clickable((By.CLASS_NAME, 'cpn-bet-market__label'))
                             )
+                            time.sleep(1)
+                            cpn_bet_market_label = driver.find_element(By.CLASS_NAME, 'cpn-bet-market__label').text
                         except Exception as e:
                             config.log('Pas de paris affiché!', 'error', True, 2)
                             tentative += 1
                         else:
-                            time.sleep(1)
-                            cpn_bet_market_label = driver.find_element(By.CLASS_NAME, 'cpn-bet-market__label').text
                             if config.scriptType in ['15A', '30A', '40A', '030', '300']:
                                 if 'Jeu ' + str(
                                         jeu) in cpn_bet_market_label and sType + ' - Oui' in cpn_bet_market_label:
@@ -202,6 +201,8 @@ def GetBetOld(driver, nextBet=False, selection=''):
                                     tentative += 1
                                     DeleteBet(driver)
                             elif config.scriptType in ['4P', '5P', '6P', '4030', '4015', '400', 'BREAK']:
+                                print('jeu ',str(
+                                        jeu))
                                 print(sType)
                                 print(cpn_bet_market_label)
                                 if 'Jeu ' + str(

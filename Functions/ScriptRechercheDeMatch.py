@@ -160,11 +160,11 @@ def rechercheDeMatch(driver):
                     config.error = False
                     continue
                 # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-                # config.log(' ' + config.ligue_name, 'info', False, 2)
+                config.log(' ' + config.ligue_name, 'info', False, 2)
                 if getCompet():
                     # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
                     try:
-                        # config.log('Récupération des matchs', 'info', False, 3)
+                        config.log('Récupération des matchs', 'info', False, 3)
                         # config.log_clear_line()
                         bet_items = bet_ligue.find_elements(By.CLASS_NAME,
                                                             config.classes['dashboard_champ_matchlist'][
@@ -181,7 +181,7 @@ def rechercheDeMatch(driver):
                             continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
                         for bet_item in bet_items:
                             try:
-                                # config.log('On récupère le nom des joueurs', 'info', False, 3)
+                                config.log('On récupère le nom des joueurs', 'info', False, 3)
                                 # config.log_clear_line()
                                 div_bet_player = bet_item.find_element(By.CLASS_NAME, config.classes[
                                     'dashboard_champ_match_teams_name'][
@@ -193,7 +193,7 @@ def rechercheDeMatch(driver):
                             else:
                                 if div_bet_player:
                                     div_bet_player = div_bet_player.text.split('\n')
-                                    # config.log(str(div_bet_player), 'info', False, 3)
+                                    config.log(str(div_bet_player), 'info', False, 3)
                                     # config.log_clear_line()
                                 try:
                                     # on récupère le score
@@ -202,25 +202,25 @@ def rechercheDeMatch(driver):
                                         config.site_type])
                                 except:
 
-                                    # config.log('Impossible de récupérer le score!', 'warning', False, 4)
+                                    config.log('Impossible de récupérer le score!', 'warning', False, 4)
                                     time.sleep(2)
                                     # config.log_clear_line()
                                     continue
                                 else:
                                     # si le score est récupéré
                                     if len(div_bet_score) <= 0:
-                                        # config.log('Pas de score!', 'warning', False, 4)
+                                        config.log('Pas de score!', 'warning', False, 4)
                                         time.sleep(2)
                                         # config.log_clear_line()
                                         continue
                                     # on le vérifie
-                                    # config.log('Vérification du score!', 'info', False, 4)
+                                    config.log('Vérification du score!', 'info', False, 4)
                                     # config.log_clear_line()
                                     bet_score = GetMatchScore.main(div_bet_score[0],
                                                                    config.score_to_start)
-                                    if bet_score:  # SI LE MATCH EST PRET
-                                        # config.log('Score ok', 'info', False, 4)
-                                        # config.log_clear_line()
+                                    if not bet_score:  # SI LE MATCH EST PRET
+                                        config.log('Score ok', 'info', False, 4)
+                                        config.log_clear_line()
                                         # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
                                         config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
                                                                                        config.matchlist_file_name)
@@ -231,14 +231,14 @@ def rechercheDeMatch(driver):
                                                                        config.running_file_name,
                                                                        config.matchlist_file_name):
                                                 config.newmatch = config.newmatch[1]
-                                                # config.log(config.newmatch, 'info', False, 4)
+                                                config.log(config.newmatch, 'info', False, 4)
                                                 print('MATCH OK')
                                                 config.match_found = True
                                                 break
                                             else:
                                                 continue
                                     else:
-                                        # config.log('Score NOT ok', 'warning', False, 4)
+                                        config.log('Score NOT ok', 'warning', False, 4)
                                         config.log_clear_line()
                 config.log_clear_line()
                 if config.match_found:
@@ -246,7 +246,7 @@ def rechercheDeMatch(driver):
                     break
 
         if not config.match_found:
-            # config.log('PAS DE MATCH TROUVE!', 'warning', True, 2)
+            config.log('PAS DE MATCH TROUVE!', 'warning', True, 2)
             # config.log_clear_line(3)
             driver.get(config.site_url)
             time.sleep(5)

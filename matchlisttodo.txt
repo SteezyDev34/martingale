@@ -1,18 +1,10 @@
-https://1xbet.com/fr/live/tennis/2909861-wta-samsun-qualification/657404425-carol-youngsuh-lee-emily-webley-smith
-https://1xbet.com/fr/live/tennis/2909861-wta-samsun-qualification/657404738-weronika-falkowska-nika-radisic
-['Shuai Zhang', 'Amanda Anisimova']|wta p�kin|zhang-amanda-anisimova|0.6265249129977486
-['Belinda Bencic', 'Priscilla Hon']|wta p�kin|bencic-priscilla-hon|0.6153004163902167
-['Jasmine Paolini', 'Sofia Kenin']|wta p�kin|paolini-sofia-kenin|0.5907207887382431
-['Maxim Mrva', 'Martin Krumich']|itf pardubice|mrva-martin-krumich|0.5881242648121403
-['Corentin Moutet', 'Alexander Zverev']|atp p�kin|moutet-alexander-zverev|0.5242858090668832
-['Jacopo Berrettini', 'Daniel Michalski']|itf santa margherita di pula|berrettini-daniel-michalski|0.48326359832635984
-['Lorenzo Giustino', 'Nick Hardt']|itf sabadell|giustino-nick-hardt|0.4542496765165876
-['Mario Gonzalez Fernandez', 'Eric Vanshelboim']|challenger villena qualification|fernandez-eric-vanshelboim|0.407199144433187
-['Ioannis Xilas', 'Nino Ehrenschneider']|itf h�raklion|xilas-nino-ehrenschneider|0.3681159420289855
-['Remy Bertola', 'Guillaume Dalmasso']|challenger mouilleron-le-captif qualification|bertola-guillaume-dalmasso|0.32253230942123995
-['Deborah Chiesa', 'Ekaterina Kazionova']|wta rende qualification|chiesa-ekaterina-kazionova|0.3071838165020707
-['Fiona Ganz', 'Yelyzaveta Kotliar']|itf cap d'agde femmes|ganz-yelyzaveta-kotliar|0.3035714285714286
-['Robert Strombachs', 'Maxence Beauge']|challenger mouilleron-le-captif qualification|strombachs-maxence-beauge|0.23684210526315788
-['Alexis Gautier', 'Harry Wendelken']|challenger mouilleron-le-captif qualification|gautier-harry-wendelken|0.23199999999999998
-['Liam Broady', 'Matyas Fuele']|itf budapest|broady-matyas-fuele|0.2009132420091324
-['Martina Colmegna', 'Federica Urgesi']|wta rende qualification|colmegna-federica-urgesi|0.1680327868852459
+
+['Jasmine Paolini', 'Marie Bouzkova']|wta pekin|paolini-marie-bouzkova|0.6535713071847749
+['Pablo Carreno Busta', 'Dali Blanch']|challenger villena|busta-dali-blanch|0.6197926180408291
+['Moez Echargui', 'Raul Brancaccio']|challenger villena|echargui-raul-brancaccio|0.6023718734133534
+['Guiomar Maristany Zuleta De Reales', 'Darja Semenistaja']|wta rende|reales-darja-semenistaja|0.5983273363735413
+['Nikola Bartunkova', 'Ipek Oz']|wta samsun|bartunkova-ipek-oz|0.5949852990484339
+['Simona Waltert', 'Sinja Kraus']|wta rende|waltert-sinja-kraus|0.5613105141002137
+['Karolina Muchova', 'Amanda Anisimova']|wta pekin|muchova-amanda-anisimova|0.5423721977994718
+['Christoph Negritu', 'Eliakim Coulibaly']|challenger villena|negritu-eliakim-coulibaly|0.5367019736360433
+['Vitalia Diatchenko', 'Amandine Hesse']|wta samsun|diatchenko-amandine-hesse|0.5268005691838923
