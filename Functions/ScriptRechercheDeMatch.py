@@ -362,9 +362,9 @@ def rechercheDeMatch1set(driver):
                                                                          'dashboard-markets__group')
                                     btn_cote = div_bet_cote.find_elements(By.CLASS_NAME, 'dashboard-markets__market')
                                     cotev1 = float(btn_cote[0].text)
-                                    # print('cote v1', cotev1)
+                                    print('cote v1', cotev1)
                                     cotev2 = float(btn_cote[2].text)
-                                    # print('cote v2', cotev2)
+                                    print('cote v2', cotev2)
                                 except Exception as e:
                                     print(f'erreur de cote {e}')
                                     continue
@@ -665,7 +665,7 @@ def classementeDeMatch(driver):
         tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
 
         # Retenir les 10 premières lignes
-        top_10 = tableau_trie[:10]
+        top_10 = tableau_trie[:30]
         for m in top_10:
             # Join array elements with pipe separator before adding to todo
             try:
