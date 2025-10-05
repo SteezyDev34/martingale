@@ -61,6 +61,7 @@ def GetResult(driver):
             passed_score = [
                 '0:0'
             ]
+
         if config.scriptType == "40A" or config.scriptType == "30A" or config.scriptType == "15A" or config.scriptType == '030' or config.scriptType == '300':
             if int(config.set_actuel) != int(config.validated_bet.get('set')):
                 print('set actuel différent', config.validated_bet.get('set'))
