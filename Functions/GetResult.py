@@ -23,6 +23,7 @@ def GetResult(driver):
             result = 'LOSE'
             print('NO VALIDATED BET')
             config.log(result, 'error', False, 2)
+            config.validated_bet['result'] = result
             return result
 
         if config.scriptType == "40A" or config.scriptType == '40:30' or config.scriptType == '6P':

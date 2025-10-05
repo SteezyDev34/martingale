@@ -106,5 +106,14 @@
         "winscore": "V2",
         "timestamp": "2025-10-05 12:35:54",
         "url": "https://ca.1xbet.com/fr/live/tennis/2596336-itf-kigali-qualification/659430516-patrick-jozwicki-christopher-bulus"
+    },
+    {
+        "montant": 0.44,
+        "cote": "1.45",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2025-10-05 18:16:08",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2480702-challenger-valencia-qualification/659530798-sumit-nagal-andres-santamarta-roig"
     }
 ]

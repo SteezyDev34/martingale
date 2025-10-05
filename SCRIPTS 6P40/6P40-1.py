@@ -9,13 +9,12 @@ parent_directory = os.path.dirname(current_file_path)
 # ajouter un autre niveau parent si nécessaire
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
+# Vérification de l'environnement
 if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
-    # Simple écriture de lignes vides pour PyCharm
-
-    # Vérification de l'environnement
     import VenvDependencyManager
 
     VenvDependencyManager.main()
+
 from art import *
 
 # Chargement des variables globales
@@ -58,7 +57,7 @@ else:
 # Chargement de Chrome driver
 from ChromeDriver.SetDriver import driver
 
-from Functions import Functions_431a
+from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
 from Functions.Authenticator import is_logged_in, loginProcess
@@ -72,8 +71,8 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
     else:
         print('new class')
         newclassementeDeMatch(driver)
-        # print('new class')
-        # classementeDeMatch(driver)
+        print('new class')
+        classementeDeMatch(driver)
 
 # Call the function to get the code
 if not is_logged_in(driver):
@@ -84,20 +83,24 @@ else:
 is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
 if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
     config.in_stat = True
+config.scriptTypeList = config.scriptTypeList4
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
-config.running_file_name = f"{config.projectPath}/SCRIPTS 4315A/running"
-config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 4315A/matchlist"
+config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
+config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
+config.running_file_name = f"{config.projectPath}/SCRIPTS 6P40/running"
+config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 6P40/matchlist"
 while (config.win < 100):
+    Functions_456P.all_script(driver)
     try:
-        Functions_431a.all_script(driver)
+        pass
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
         if config.perte > 0:
             DispatchPerte()
         for i in config.scriptTypeList:
-            config.switchScript('4315A')
+            config.switchScript('6P40')
             config.ScriptConfig(i).reset()
             config.init_variable()
             config.switchScript(i)

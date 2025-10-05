@@ -88,8 +88,8 @@ for i in config.scriptTypeList:
     config.ScriptConfig(i)
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
 config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
-config.running_file_name = f"{config.projectPath}/SCRIPTS 403015/running"
-config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 403015/matchlist"
+config.running_file_name = f"{config.projectPath}/SCRIPTS 40A5PBREAK/running"
+config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 40A5PBREAK/matchlist"
 while (config.win < 100):
     Functions_456P.all_script(driver)
     try:

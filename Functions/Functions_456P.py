@@ -262,9 +262,10 @@ def all_script(driver):
                         config.validated_bet.get('set')):
                     print('already bet')
                     continue
-            print('get result')
-            config.result = GetResult(driver)
-            if config.result == 'LOSE':
+            if config.validated_bet.get('result') is None:
+                print('result', config.validated_bet.get('result'))
+                GetResult(driver)
+            if config.validated_bet.get('result') == 'LOSE':
                 # VÉRIFCATION DU SET ACTUEL
                 GetScoreActuel(driver)
                 if not config.set_actuel:
@@ -292,8 +293,7 @@ def all_script(driver):
                 else:
                     print("ERROR : ecup set " + str(config.set_actuel))
                     config.error = True
-
-            elif config.result == 'WIN':
+            elif config.validated_bet.get('result') == 'WIN':
                 config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
                     config.netprofit)
                 config.winmatch[scriptType] = config.winmatch[scriptType] + 1
@@ -337,6 +337,8 @@ def all_script(driver):
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
+            else:
+                config.log(f"PAS DE RESULT", 'success', False)
         actual_scryptType = config.scriptType
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
