@@ -25,7 +25,7 @@ scriptTypeList2 = ['6P', '4015', '4030']
 # scriptTypeList2 = ['4P', '5P', '6P', '40A']
 scriptTypeList3 = ['5P', '6P', '40A', 'BREAK']
 scriptTypeList4 = ['4015', '4030']
-allScriptType = ['030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK']
+allScriptType = ['030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK', '1SET']
 # Script configuration
 script_num = 0  # Numéro du Script
 win = 0  # Nombre de victoire

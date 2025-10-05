@@ -183,6 +183,7 @@ def compare_match_name(match_name1, match_name2):
 
 
 def compare_selection(match, selection, selection_list):
+    print(f"pour le match {match} Compare ces deux selections :  {selection} et {selection_list}")
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[
@@ -215,13 +216,15 @@ def compare_selection(match, selection, selection_list):
                         - Sélection recherchée : "Total jeux Moins de 25"
                           Liste : ["Total Moins de 21", "Total Moins de 21.5", "Total Plus de 21.5"]
                           Réponse : "false"
+                          
+                          Retourne le texte exacte dans la liste donnée.
                         """
             },
             {
                 "role": "user",
                 "content": [
                     {"type": "text",
-                     "text": f"pour le match {match} Campare ces deux selections :  {selection} et {selection_list}"
+                     "text": f"Pour le match {match} compare {selection}  avec les selections suivantes: {selection_list} et retourne la selction de cette liste qui correspond sans texte superflu juste le texte de la liste qui correspond a la selectione envoyée."
                      },
                 ]
             }
@@ -230,10 +233,10 @@ def compare_selection(match, selection, selection_list):
     )
     # Convertir la réponse string "true"/"false" en booléen correspondant
     response_content = response.choices[0].message.content
-    if response_content is None:
-        return False
-    response_text = response_content.strip().lower()
-    return response_text == "true"
+    print(response_content)
+    if response_content is None or response_content == 'false':
+        return 'false'
+    return response_content
 
 
 def fordate(date_str):

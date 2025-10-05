@@ -22,5 +22,20 @@ total_want_win = {
     '4030': 0.1,
 }
 
+total_want_win_if_lost = {
+    '030': 0.1,
+    '300': 0.3,
+    '15A': 0.3,
+    '30A': 0.5,
+    '40A': 0.3,
+    '4P': 0.1,
+    '5P': 0.1,
+    '6P': 0.1,
+    'BREAK': 0.1,
+    '400': 0.1,
+    '4015': 0.1,
+    '4030': 0.1,
+}
+
 # Configuration spécifique pour les paris 1SET
 total_want_winset1 = {'1SET': 0.2}

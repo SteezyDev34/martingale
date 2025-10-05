@@ -75,7 +75,7 @@ def get1setGlobalPerte():
 
 
 def getIf1setGlobalPerte():
-    url = f"{config.api_url}/strategy1SET/get_last_perte.php"
+    url = f"{config.api_url}/strategy1SET/get_last_perte.php?infos"
     try:
         # Envoyer une requête GET à l'URL
         response = requests.get(url)

@@ -4,6 +4,7 @@ import os
 import time
 from datetime import datetime
 
+import requests
 from selenium.webdriver.common.by import By
 
 import config
@@ -218,7 +219,7 @@ def rechercheDeMatch(driver):
                                     # config.log_clear_line()
                                     bet_score = GetMatchScore.main(div_bet_score[0],
                                                                    config.score_to_start)
-                                    if not bet_score:  # SI LE MATCH EST PRET
+                                    if bet_score:  # SI LE MATCH EST PRET
                                         config.log('Score ok', 'info', False, 4)
                                         config.log_clear_line()
                                         # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
@@ -595,6 +596,7 @@ def classementeDeMatch(driver):
                             continue
                         else:
                             if len(bet_items) <= 0:
+                                print('AUCUN MATCHS RÉCUPÉ')
                                 continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
                             i = 0
                             for bet_item in bet_items:
@@ -605,7 +607,7 @@ def classementeDeMatch(driver):
                                 else:
                                     try:
                                         day_month = start_time_text.split()[0]  # '09/09'
-
+                                        hour = start_time_text.split()[1]
                                         # Ajouter l'année actuelle
                                         current_year = datetime.now().year
                                         match_date = datetime.strptime(f"{day_month}/{current_year}", "%d/%m/%Y").date()
@@ -644,9 +646,14 @@ def classementeDeMatch(driver):
                                         '-')
                                     config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
                                     match.append(config.newmatch)
+                                    match_date = datetime.strptime(f"{day_month}/{current_year} {hour}:00",
+                                                                   "%d/%m/%Y %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
+                                    print('match_date', match_date)
+                                    match.append(match_date)
                                     matchlist.append(match)
 
                                 except Exception as e:
+                                    print(e)
                                     continue
                                 else:
                                     print('ok')
@@ -667,12 +674,48 @@ def classementeDeMatch(driver):
         # Retenir les 10 premières lignes
         top_10 = tableau_trie[:30]
         for m in top_10:
+
+            send_matchlist_to_remote(m)
             # Join array elements with pipe separator before adding to todo
             try:
                 todo("add", "|".join(str(x) for x in m), config.matchlisttodo_file_name)
             except:
                 pass
         break
+
+
+def send_matchlist_to_remote(match):
+    """
+    Envoie la liste des matchs à l'URL distante via une requête POST.
+    
+    Args:
+        matchlist (list): Liste des matchs à envoyer.
+    """
+    print('match', match)
+    url = f"{config.api_url}/matchlist/insert.php"
+    headers = {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                      "AppleWebKit/537.36 (KHTML, like Gecko) "
+                      "Chrome/122.0.0.0 Safari/537.36"
+    }
+    params = {"matches": json.dumps(match)}
+
+    try:
+        # Envoyer les données en POST
+        response = requests.get(url, params=params, headers=headers, timeout=10)
+        if response.status_code == 200:
+            try:
+                json_resp = response.json()
+                print(json_resp)
+            except ValueError:
+                config.log("Réponse 200 reçue mais le corps n'est pas du JSON valide", 'warning', True)
+                print(response.text)
+        else:
+            config.log(f"Erreur lors de l'envoi de la matchlist : {response.status_code} - {response.text}", 'error',
+                       True)
+    except Exception as e:
+        config.log(f"Exception lors de l'envoi de la matchlist : {str(e)}", 'error', True)
 
 
 def newclassementeDeMatch(driver):

@@ -13,7 +13,7 @@ from unidecode import unidecode
 # Fichier de cache partagé pour toutes les stats tennis
 CACHE_FILE = "tennis_stats_cache.json"
 # Fichier de log pour les joueurs non trouvés
-PLAYERS_NOT_FOUND_LOG = "Logs/players_not_found.log"
+PLAYERS_NOT_FOUND_LOG = "players_not_found.log"
 
 
 def log_player_not_found(player_name, function_name=""):
@@ -26,14 +26,14 @@ def log_player_not_found(player_name, function_name=""):
     """
     # Créer le répertoire Logs s'il n'existe pas
     os.makedirs("Logs", exist_ok=True)
-    
+
     # Préparer le message de log avec timestamp
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     log_message = f"[{timestamp}] Joueur non trouvé: {player_name}"
     if function_name:
         log_message += f" (fonction: {function_name})"
     log_message += "\n"
-    
+
     # Écrire dans le fichier de log
     try:
         with open(PLAYERS_NOT_FOUND_LOG, "a", encoding="utf-8") as f:
