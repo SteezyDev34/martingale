@@ -43,6 +43,7 @@ def all_script(driver):
     # loginProcess(driver)
     # --------
     config.match_found = True
+
     if config.match_found and not config.error:
         print('config.script_num', config.script_num)
         print('config.running_file_name', config.running_file_name)
@@ -264,7 +265,6 @@ def all_script(driver):
             if config.validated_bet.get('result') is None:
                 print('result', config.validated_bet.get('result'))
                 GetResult(driver)
-
 
             if config.validated_bet.get('result') == 'WIN':
                 config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
