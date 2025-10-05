@@ -3904,5 +3904,32 @@
         "winscore": "30:0",
         "timestamp": "2025-10-05 12:33:39",
         "url": "https://1xbet.com/fr/live/tennis/2317578-challenger-roanne-qualification/659426577-maxence-beauge-milos-karol"
+    },
+    {
+        "montant": 0.47,
+        "cote": "2",
+        "jeu": 1,
+        "set": "2",
+        "winscore": "30:0",
+        "timestamp": "2025-10-05 14:00:22",
+        "url": "https://1xbet.com/fr/live/tennis/5596-atp-shanghai/659452599-valentin-vacherot-tomas-machac"
+    },
+    {
+        "montant": 0.72,
+        "cote": "2.3",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "0:30",
+        "timestamp": "2025-10-05 14:02:24",
+        "url": "https://1xbet.com/fr/live/tennis/5596-atp-shanghai/659443478-valentin-vacherot-tomas-machac"
+    },
+    {
+        "montant": 1.75,
+        "cote": "1.95",
+        "jeu": 3,
+        "set": "2",
+        "winscore": "30:0",
+        "timestamp": "2025-10-05 14:04:34",
+        "url": "https://1xbet.com/fr/live/tennis/5596-atp-shanghai/659443478-valentin-vacherot-tomas-machac"
     }
 ]
