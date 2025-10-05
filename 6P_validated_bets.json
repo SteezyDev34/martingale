@@ -1642,5 +1642,77 @@
         ],
         "timestamp": "2025-09-30 16:09:54",
         "url": "https://1xbet.com/fr/live/tennis/2763553-challenger-villena/657986836-moez-echargui-raul-brancaccio"
+    },
+    {
+        "montant": 0.25,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-04 22:34:25",
+        "url": "https://1xbet.com/fr/live/tennis/114079-challenger-tiburon/659276697-abedallah-shelbayh-tyler-zink"
+    },
+    {
+        "montant": 0.98,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-04 22:41:30",
+        "url": "https://1xbet.com/fr/live/tennis/114079-challenger-tiburon/659276697-abedallah-shelbayh-tyler-zink"
+    },
+    {
+        "montant": 1.51,
+        "cote": "3.1",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-04 22:44:57",
+        "url": "https://1xbet.com/fr/live/tennis/114079-challenger-tiburon/659276697-abedallah-shelbayh-tyler-zink"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-05 12:25:13",
+        "url": "https://1xbet.com/fr/live/tennis/2317578-challenger-roanne-qualification/659426599-maxence-beauge-milos-karol"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-05 12:32:42",
+        "url": "https://1xbet.com/fr/live/tennis/2317578-challenger-roanne-qualification/659426599-maxence-beauge-milos-karol"
+    },
+    {
+        "montant": 0.27,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-05 12:36:39",
+        "url": "https://1xbet.com/fr/live/tennis/2317578-challenger-roanne-qualification/659426599-maxence-beauge-milos-karol"
     }
 ]

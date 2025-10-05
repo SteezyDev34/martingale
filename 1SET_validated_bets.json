@@ -1,210 +1,93 @@
 [
     {
-        "montant": 1.11,
-        "cote": "1.18",
+        "montant": 0.3,
+        "cote": "1.675",
         "jeu": 1,
         "set": "1",
         "winscore": "V2",
-        "timestamp": "2025-09-29 03:51:15",
-        "url": "https://ca.1xbet.com/fr/live/tennis/2910287-itf-perth-qualification/657605970-laurence-teunissen-alexander-zgirovsky"
+        "timestamp": "2025-10-05 11:40:35",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2461062-itf-baza-women/659413214-eva-guerrero-alvarez-marina-bassols-ribera"
+    },
+    {
+        "montant": 0.25,
+        "cote": "1.816",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2025-10-05 11:43:09",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2460767-itf-zaragoza/659413206-lorenzo-giustino-pedro-vives-marcos"
+    },
+    {
+        "montant": 0.28,
+        "cote": "1.704",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2025-10-05 11:52:22",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1749031-challenger-braga/659416473-vilius-gaubas-luka-mikrut"
+    },
+    {
+        "montant": 0.27,
+        "cote": "1.752",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2025-10-05 11:56:33",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2480702-challenger-valencia-qualification/659417394-marco-cecchinato-jonas-forejtek"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.112",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "v1",
+        "timestamp": "2025-10-05 12:20:55",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2317773-challenger-roanne/659422413-kenny-de-schepper-lucas-poullain"
+    },
+    {
+        "montant": 0.44,
+        "cote": "1.456",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2025-10-05 12:21:54",
+        "url": "https://ca.1xbet.com/fr/live/tennis/5063-wta-beijing/659427331-linda-noskova-amanda-anisimova"
     },
     {
         "montant": 0.37,
         "cote": "1.54",
         "jeu": 1,
         "set": "1",
-        "winscore": "V1",
-        "timestamp": "2025-09-29 06:47:14",
-        "url": "https://ca.1xbet.com/fr/live/tennis/5191-atp-beijing/657627190-alex-de-minaur-jakub-mensik"
-    },
-    {
-        "montant": 0.46,
-        "cote": "1.432",
-        "jeu": 1,
-        "set": "1",
         "winscore": "V2",
-        "timestamp": "2025-09-29 10:07:15",
-        "url": "https://ca.1xbet.com/fr/live/tennis/94415-atp-shanghai-qualification/657656691-linang-xiao-eliot-spizzirri"
-    },
-    {
-        "montant": 0.24,
-        "cote": "1.825",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V1",
-        "timestamp": "2025-09-29 10:33:01",
-        "url": "https://ca.1xbet.com/fr/live/tennis/261901-challenger-mouilleron-le-captif/657664222-lucas-poullain-maxime-janvier"
-    },
-    {
-        "montant": 0.33,
-        "cote": "1.615",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V1",
-        "timestamp": "2025-09-29 10:53:04",
-        "url": "https://ca.1xbet.com/fr/live/tennis/2763553-challenger-villena/657667862-raul-brancaccio-mario-gonzalez-fernandez"
-    },
-    {
-        "montant": 0.83,
-        "cote": "1.24",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V1",
-        "timestamp": "2025-09-29 10:56:12",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1749031-challenger-braga/657668630-javier-barranco-cosano-david-pichler"
-    },
-    {
-        "montant": 0.86,
-        "cote": "1.232",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V2",
-        "timestamp": "2025-09-29 10:57:07",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1749031-challenger-braga/657668655-stefan-latinovic-buvaysar-gadamauri"
-    },
-    {
-        "montant": 0.56,
-        "cote": "1.36",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V1",
-        "timestamp": "2025-09-29 10:58:06",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1104483-itf-bratislava-women/657669347-mayuka-aikawa-barbora-michalkova"
-    },
-    {
-        "montant": 0.62,
-        "cote": "1.32",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V2",
-        "timestamp": "2025-09-29 11:11:44",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1103277-itf-bratislava-women-qualification/657671495-kiara-nina-kucikova-lucie-petruzelova"
-    },
-    {
-        "montant": 0.62,
-        "cote": "1.32",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V1",
-        "timestamp": "2025-09-29 12:58:30",
-        "url": "https://ca.1xbet.com/fr/live/tennis/2460581-itf-zaragoza-qualification/657692243-oscar-jose-gutierrez-toprak-avcibasi"
-    },
-    {
-        "montant": 0.91,
-        "cote": "1.22",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V1",
-        "timestamp": "2025-09-29 13:10:33",
-        "url": "https://ca.1xbet.com/fr/live/tennis/309785-itf-santa-margherita-di-pula-qualification/657696101-fausto-tabacco-gian-gruenig"
-    },
-    {
-        "montant": 0.53,
-        "cote": "1.38",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V2",
-        "timestamp": "2025-09-29 18:11:30",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1749031-challenger-braga/657759302-elias-ymer-elmer-moeller"
-    },
-    {
-        "montant": 0.4,
-        "cote": "1.496",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V2",
-        "timestamp": "2025-09-29 18:45:12",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1789600-itf-santa-tecla-women/657766511-britney-brace-june-bjork"
-    },
-    {
-        "montant": 0.51,
-        "cote": "1.39",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V2",
-        "timestamp": "2025-09-30 03:49:24",
-        "url": "https://ca.1xbet.com/fr/live/tennis/234943-wta-suzhou/657855611-kyoka-okamura-kimberly-birrell"
+        "timestamp": "2025-10-05 12:23:00",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2317578-challenger-roanne-qualification/659426597-maxence-beauge-milos-karol"
     },
     {
         "montant": 0.32,
         "cote": "1.62",
         "jeu": 1,
         "set": "1",
-        "winscore": "V2",
-        "timestamp": "2025-09-30 03:50:06",
-        "url": "https://ca.1xbet.com/fr/live/tennis/234943-wta-suzhou/657855633-yulia-starodubtsewa-dalma-galfi"
+        "winscore": "V1",
+        "timestamp": "2025-10-05 12:25:06",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1167607-itf-heraklion-women-qualification/659426056-anna-lena-ebster-beatris-spasova"
     },
     {
-        "montant": 0.27,
-        "cote": "1.745",
+        "montant": 0.75,
+        "cote": "1.265",
         "jeu": 1,
         "set": "1",
         "winscore": "V1",
-        "timestamp": "2025-09-30 07:48:47",
-        "url": "https://ca.1xbet.com/fr/live/tennis/5596-atp-shanghai/657887050-gauthier-onclin-august-holmgren"
+        "timestamp": "2025-10-05 12:30:38",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1235565-wta-mallorca-qualification/659429162-teodora-kostovic-ekaterina-kazionova"
     },
     {
-        "montant": 0.95,
-        "cote": "1.21",
+        "montant": 0.32,
+        "cote": "1.62",
         "jeu": 1,
         "set": "1",
         "winscore": "V1",
-        "timestamp": "2025-09-30 07:55:06",
-        "url": "https://ca.1xbet.com/fr/live/tennis/5191-atp-beijing/657888031-jannik-sinner-alex-de-minaur"
-    },
-    {
-        "montant": 1.0,
-        "cote": "1.2",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V1",
-        "timestamp": "2025-09-30 08:14:34",
-        "url": "https://ca.1xbet.com/fr/live/tennis/5191-atp-beijing/657888031-jannik-sinner-alex-de-minaur"
-    },
-    {
-        "montant": 0.91,
-        "cote": "1.22",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V1",
-        "timestamp": "2025-09-30 08:28:50",
-        "url": "https://ca.1xbet.com/fr/live/tennis/823681-itf-bucharest-women/657893909-lia-karatancheva-sara-victoria-balan"
-    },
-    {
-        "montant": 1.14,
-        "cote": "1.175",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V2",
-        "timestamp": "2025-09-30 08:31:15",
-        "url": "https://ca.1xbet.com/fr/live/tennis/109327-itf-varna-women/657893920-krystyna-pochtovyk-giulia-safina-popa"
-    },
-    {
-        "montant": 0.3,
-        "cote": "1.675",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V1",
-        "timestamp": "2025-09-30 08:32:09",
-        "url": "https://ca.1xbet.com/fr/live/tennis/109327-itf-varna-women/657893839-viktoria-veleva-ginevra-parentini-vallega-montebruno"
-    },
-    {
-        "montant": 0.38,
-        "cote": "1.52",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V2",
-        "timestamp": "2025-09-30 10:59:17",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1749031-challenger-braga/657922369-max-houkes-zdenek-kolar"
-    },
-    {
-        "montant": 1.0,
-        "cote": "1.2",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V2",
-        "timestamp": "2025-09-30 15:40:35",
-        "url": "https://ca.1xbet.com/fr/live/tennis/2909885-wta-rende/657985115-deborah-chiesa-julia-grabher"
+        "timestamp": "2025-10-05 12:31:30",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2480702-challenger-valencia-qualification/659429121-christoph-negritu-ryan-nijboer"
     },
     {
         "montant": 0.34,
@@ -212,25 +95,16 @@
         "jeu": 1,
         "set": "1",
         "winscore": "V1",
-        "timestamp": "2025-09-30 15:41:53",
-        "url": "https://ca.1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/657985082-oleksii-krutykh-giovanni-oradini"
+        "timestamp": "2025-10-05 12:32:28",
+        "url": "https://ca.1xbet.com/fr/live/tennis/109327-itf-varna-women/659428926-eva-bennemann-anastasija-cvetkovic"
     },
     {
-        "montant": 0.46,
-        "cote": "1.432",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V1",
-        "timestamp": "2025-09-30 15:54:54",
-        "url": "https://ca.1xbet.com/fr/live/tennis/261901-challenger-mouilleron-le-captif/657988231-alexander-blockx-arthur-bouquier"
-    },
-    {
-        "montant": 0.27,
-        "cote": "1.74",
+        "montant": 1.33,
+        "cote": "1.15",
         "jeu": 1,
         "set": "1",
         "winscore": "V2",
-        "timestamp": "2025-09-30 15:59:57",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1749031-challenger-braga/657989676-stefano-travaglia-jaime-faria"
+        "timestamp": "2025-10-05 12:35:54",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2596336-itf-kigali-qualification/659430516-patrick-jozwicki-christopher-bulus"
     }
 ]

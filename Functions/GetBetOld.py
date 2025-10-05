@@ -149,32 +149,65 @@ def GetBetOld(driver, nextBet=False, selection=''):
                 )
                 list_of_bet_type = driver.find_elements(By.XPATH, x_path)
                 bet_list = []
+                betclic = False
                 for bet in list_of_bet_type:
                     bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
-                    if bet_text.strip():  # Only append if bet_text is not empty
-                        bet_list.append(bet_text)
-                bet_list = '\n'.join(bet_list)
-                print(bet_list)
-                sType = compare_selection(config.match_name, sType, bet_list)
-                if sType:
-                    x_path = (
-                            '//div[contains(@class, "bet_group_col")]'
-                            '//div[not(contains(@style, "display: none;"))]'
-                            '//div[contains(@class, "bet-inner") and not(contains(@class, "blockSob"))]'
-                            '//span[contains(text(), "' + str(sType) + '")]'
-                    )
+                    if bet_text.strip() and sType in bet_text.strip():  # Only append if bet_text is not empty
+                        bet.click()
+                        betclic = True
+                        break
+                if not betclic:
+                    for bet in list_of_bet_type:
+                        bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
+                        if bet_text.strip():  # Only append if bet_text is not empty
+                            bet_list.append(bet_text)
+                    bet_list = '[' + ','.join(bet_list) + ']'
+                    print(bet_list)
+                    sType = compare_selection(config.match_name, sType, bet_list)
+                    print(sType)
+                    if sType:
+                        for bet in list_of_bet_type:
+                            bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
+                            if bet_text.strip() and sType in bet_text.strip():  # Only append if bet_text is not empty
+                                bet.click()
+                                betclic = True
+                                break
+
+                    else:
+                        return False
+                if betclic:
+                    try:
+                        element = WebDriverWait(driver, 10).until(
+                            EC.element_to_be_clickable((By.CLASS_NAME, 'cpn-bet-market__label'))
+                        )
+                    except Exception as e:
+                        config.log('Pas de paris affiché!', 'error', True, 2)
+                        tentative_clic += 1
+                    else:
+                        time.sleep(1)
+                        cpn_bet_market_label = driver.find_element(By.CLASS_NAME, 'cpn-bet-market__label').text
+                        print('cpn_bet_market_label', cpn_bet_market_label)
+                        if sType in cpn_bet_market_label:
+                            clic = True
+                            return clic
+                        else:
+                            tentative_clic += 1
+                            DeleteBet(driver)
                 else:
                     return False
+
         except Exception as e:
             tentative_clic += 1
             config.log(f'error recup lin #ERR345 jeu : {jeu}, stype : {sType} e : {e}', 'error', True, 2)
         else:
             try:
+                print(x_path)
                 element = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.XPATH,
                                                 x_path)))
                 list_of_bet_type = driver.find_elements(By.XPATH, x_path)
             except Exception as e:
+                tentative_clic += 1
                 config.log(f"#E0015\ btn 40A not reachable : {e}", 'error', True, 2)
             else:
                 if len(list_of_bet_type) > 0:

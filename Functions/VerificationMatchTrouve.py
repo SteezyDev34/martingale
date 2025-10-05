@@ -49,7 +49,7 @@ def main(driver, bet_item, matchlist_file_name):
                 driver.get(newmatchtxt)
                 return [True, config.newmatch]
         else:
-            # config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
+            config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
             return [False, config.newmatch]
 
 

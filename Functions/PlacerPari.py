@@ -82,21 +82,22 @@ def placer_pari(driver, codeList):
         except Exception as e:
             print(f'Erreur lors de la recherche du match: {equipe1} vs {equipe2} : {str(e)}')
         else:
-            try:
-                matches = driver.find_elements(By.CLASS_NAME, 'search-popup-events__item')
-                team1 = ''
-                team2 = ''
+            # try:
+            matches = driver.find_elements(By.CLASS_NAME, 'search-popup-events__item')
+            team1 = ''
+            team2 = ''
 
-                for match in matches:
-                    teams = match.find_element(By.CLASS_NAME, 'search-popup-event__teams').text
-                    if ' - ' in teams:
-                        team1, team2 = teams.split(' - ')
-                    if (equipe1 in team1 or team1 in equipe1) and (equipe2 in team2 or team2 in equipe2):
-                        print('Match found')
-                        link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
-                        driver.get(link)
-                        find_match = True
-                        break
+            for match in matches:
+                teams = match.find_element(By.CLASS_NAME, 'search-popup-event__teams').text
+                if ' - ' in teams:
+                    team1, team2 = teams.split(' - ')
+                if (equipe1 in team1 or team1 in equipe1) and (equipe2 in team2 or team2 in equipe2):
+                    print('Match found')
+                    link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
+                    driver.get(link)
+                    find_match = True
+                    break
+            if not find_match:
                 for match in matches:
                     teams = match.find_element(By.CLASS_NAME, 'search-popup-event__teams').text
                     if compare_match_name(teams, f'{equipe1} vs {equipe2}'):
@@ -106,9 +107,9 @@ def placer_pari(driver, codeList):
                         find_match = True
                         break
 
-            except Exception as e:
-                print(f'Erreur lors de la selection du match: {equipe1} vs {equipe2} : {str(e)}')
-                exit()
+            # except Exception as e:
+            # print(f'Erreur lors de la selection du match: {equipe1} vs {equipe2} : {str(e)}')
+            # exit()
         if not find_match:
             send_telegram(Functions.Functions_telegram.alertGroup, f"Une erreur est survenue : {codeList}")
             # Retirer l'élément de la liste avant de retourner
