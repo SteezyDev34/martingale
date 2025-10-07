@@ -84,33 +84,9 @@ else:
 is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
 if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
     config.in_stat = True
-for i in config.scriptTypeList:
-    config.ScriptConfig(i)
-config.running_file_name = f"{config.projectPath}/SCRIPTS 4315A/running"
-config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 4315A/matchlist"
-while (config.win < 100):
-    try:
-        Functions_431a.all_script(driver)
-    except Exception as e:
-        config.log(f"ERROR SCRIPT : {e}", 'error', False)
-    else:
-        if config.perte > 0:
-            DispatchPerte()
-        for i in config.scriptTypeList:
-            config.switchScript('4315A')
-            config.ScriptConfig(i).reset()
-            config.init_variable()
-            config.switchScript(i)
-            DispatchPerte()
-            config.global_match_win[i] = 0  # Initialize win counter for script type
-            config.winmatch[i] = 0  # Initialize match counter for script type
-            sucess = False
-        while not sucess:
-            try:
-                driver.get(config.site_url)
-            except:
-                continue
-            else:
-                sucess = True
+from core.engine import MartingaleEngine
 
-print('TOTAL WIN : ' + str(config.win))
+# Préparation et exécution via la classe d'orchestration
+engine = MartingaleEngine(driver)
+engine.prepare()
+engine.run(max_total_wins=100)

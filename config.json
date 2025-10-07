@@ -1,0 +1,21 @@
+{
+    "site_type": "1xbet",
+    "urls": {
+        "1xbet": {
+            "base": "https://1xbet.com",
+            "login": "https://1xbet.com/login",
+            "tennis": "https://1xbet.com/live/tennis"
+        }
+    },
+    "strategies": {},
+    "display": {
+        "show_browser": true,
+        "debug_mode": false
+    },
+    "logging": {
+        "level": "INFO",
+        "file_rotation": true,
+        "max_file_size": 10485760,
+        "backup_count": 5
+    }
+}
