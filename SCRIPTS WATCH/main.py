@@ -353,11 +353,22 @@ def check():
     while True:
         if codeList != []:
             driver.get(config.site_line_url)
-            PlacerCode(driver, codeList[0])
-            del codeList[0]
+            try:
+                PlacerCode(driver, codeList[0])
+            except Exception as e:
+                print(f"Erreur lors du placement du code: {e}")
+            else:
+                print(f"Code placé avec succès: {codeList[0]}")
+                del codeList[0]
         if betList != []:
-            print('gestion du pari')
-            placer_pari(driver, betList)
+            try:
+                print('gestion du pari')
+                placer_pari(driver, betList)
+            except Exception as e:
+                print(f"Erreur lors du placement du pari: {e}")
+            else:
+                print(f"Pari placé avec succès: {betList[0]}")
+                del betList[0]
 
 
 # Lancement d'un thread pour vérifier les messages en continu
