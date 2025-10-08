@@ -59,20 +59,20 @@ def GetBetOld(driver, nextBet=False, selection=''):
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                     first_player = 1
                     if config.scriptType == '4030':
-                        config.win_type = '40:30'
+                        config.win_type = ['40:30']
                     elif config.scriptType == '4015':
-                        config.win_type = '40:15'  # inversé
+                        config.win_type = ['40:15']  # inversé
                     elif config.scriptType == '400':
-                        config.win_type = '40:0'  # inversé
+                        config.win_type = ['40:0']  # inversé
 
                 else:
                     first_player = 2
                     if config.scriptType == '4030':
-                        config.win_type = '30:40'  # inversé
+                        config.win_type = ['30:40']  # inversé
                     elif config.scriptType == '4015':
-                        config.win_type = '15:40'  # inversé
+                        config.win_type = ['15:40']  # inversé
                     elif config.scriptType == '400':
-                        config.win_type = '0:40'  # inversé
+                        config.win_type = ['0:40']  # inversé
                 if config.scriptType == '4030':
                     sType = 'Joueur ' + str(first_player) + ' va gagner le Jeu ' + str(config.looking_game) + ' 40-30'
                 elif config.scriptType == '4015':
@@ -208,7 +208,7 @@ def GetBetOld(driver, nextBet=False, selection=''):
                 list_of_bet_type = driver.find_elements(By.XPATH, x_path)
             except Exception as e:
                 tentative_clic += 1
-                config.log(f"#E0015\ btn 40A not reachable : {e}", 'error', True, 2)
+                config.log(f"#E0015 btn 40A not reachable : {e}", 'error', True, 2)
             else:
                 if len(list_of_bet_type) > 0:
                     config.log('JEU TROUVÉ! : ' + list_of_bet_type[0].text, 'success', True, 2)
@@ -234,8 +234,8 @@ def GetBetOld(driver, nextBet=False, selection=''):
                                     tentative += 1
                                     DeleteBet(driver)
                             elif config.scriptType in ['4P', '5P', '6P', '4030', '4015', '400', 'BREAK']:
-                                print('jeu ',str(
-                                        jeu))
+                                print('jeu ', str(
+                                    jeu))
                                 print(sType)
                                 print(cpn_bet_market_label)
                                 if 'Jeu ' + str(

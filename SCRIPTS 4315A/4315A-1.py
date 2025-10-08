@@ -72,8 +72,8 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
     else:
         print('new class')
         newclassementeDeMatch(driver)
-        # print('new class')
-        # classementeDeMatch(driver)
+        print('new class')
+        classementeDeMatch(driver)
 
 # Call the function to get the code
 if not is_logged_in(driver):
@@ -84,6 +84,7 @@ else:
 is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
 if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
     config.in_stat = True
+config.scriptTypeList = config.scriptTypeList
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
 config.running_file_name = f"{config.projectPath}/SCRIPTS 4315A/running"
