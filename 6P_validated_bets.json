@@ -1954,5 +1954,581 @@
         ],
         "timestamp": "2025-10-05 18:00:19",
         "url": "https://1xbet.com/fr/live/tennis/2480702-challenger-valencia-qualification/659521900-ivan-gakhov-rudolf-molleker"
+    },
+    {
+        "montant": 2.48,
+        "cote": "3.1",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 05:11:07",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660137783-ekaterina-alexandrova-ann-li"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 06:40:05",
+        "url": "https://1xbet.com/fr/live/tennis/5596-atp-shanghai/660149329-arthur-rinderknech-jiri-lehecka"
+    },
+    {
+        "montant": 2.73,
+        "cote": "3.75",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 06:46:44",
+        "url": "https://1xbet.com/fr/live/tennis/5596-atp-shanghai/660149329-arthur-rinderknech-jiri-lehecka"
+    },
+    {
+        "montant": 4.55,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 06:49:53",
+        "url": "https://1xbet.com/fr/live/tennis/5596-atp-shanghai/660149329-arthur-rinderknech-jiri-lehecka"
+    },
+    {
+        "montant": 5.38,
+        "cote": "3.75",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 06:52:17",
+        "url": "https://1xbet.com/fr/live/tennis/5596-atp-shanghai/660149329-arthur-rinderknech-jiri-lehecka"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 07:23:51",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660154948-arthur-cazaux-ugo-blanchet"
+    },
+    {
+        "montant": 3.76,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 07:30:18",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660154948-arthur-cazaux-ugo-blanchet"
+    },
+    {
+        "montant": 5.01,
+        "cote": "3.25",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 07:36:25",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660154948-arthur-cazaux-ugo-blanchet"
+    },
+    {
+        "montant": 2.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 07:57:50",
+        "url": "https://1xbet.com/fr/live/tennis/2745898-itf-kunshan-women/660161967-hina-inoue-aliona-falei"
+    },
+    {
+        "montant": 4.53,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:22:22",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660166389-moyuka-uchijima-cori-gauff"
+    },
+    {
+        "montant": 5.1,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:24:42",
+        "url": "https://1xbet.com/fr/live/tennis/2745898-itf-kunshan-women/660166803-zongyu-li-xiaodi-you"
+    },
+    {
+        "montant": 7.22,
+        "cote": "3.04",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:27:00",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660166389-moyuka-uchijima-cori-gauff"
+    },
+    {
+        "montant": 9.76,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:29:48",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660166389-moyuka-uchijima-cori-gauff"
+    },
+    {
+        "montant": 7.65,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:30:53",
+        "url": "https://1xbet.com/fr/live/tennis/2745898-itf-kunshan-women/660166803-zongyu-li-xiaodi-you"
+    },
+    {
+        "montant": 15.85,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:32:19",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660166389-moyuka-uchijima-cori-gauff"
+    },
+    {
+        "montant": 5.1,
+        "cote": "3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:38:13",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660166389-moyuka-uchijima-cori-gauff"
+    },
+    {
+        "montant": 6.8,
+        "cote": "3.25",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:44:05",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660166389-moyuka-uchijima-cori-gauff"
+    },
+    {
+        "montant": 11.05,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:47:21",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660173247-moyuka-uchijima-cori-gauff"
+    },
+    {
+        "montant": 16.58,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:48:13",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660173247-moyuka-uchijima-cori-gauff"
+    },
+    {
+        "montant": 5.1,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:49:04",
+        "url": "https://1xbet.com/fr/live/tennis/1425704-itf-perth/660172804-dane-sweeny-jake-dembo"
+    },
+    {
+        "montant": 22.1,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:51:11",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660173247-moyuka-uchijima-cori-gauff"
+    },
+    {
+        "montant": 6.8,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:53:24",
+        "url": "https://1xbet.com/fr/live/tennis/1425704-itf-perth/660172804-dane-sweeny-jake-dembo"
+    },
+    {
+        "montant": 35.91,
+        "cote": "3",
+        "jeu": 3,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 08:58:55",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660173247-moyuka-uchijima-cori-gauff"
+    },
+    {
+        "montant": 5.1,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:02:13",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660171134-antonia-ruzic-clara-tauson"
+    },
+    {
+        "montant": 5.1,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:05:36",
+        "url": "https://1xbet.com/fr/live/tennis/149549-itf-sharm-el-sheikh/660173944-yassin-ahmed-wageh-tudor-batin"
+    },
+    {
+        "montant": 7.65,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:08:41",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660171134-antonia-ruzic-clara-tauson"
+    },
+    {
+        "montant": 11.47,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:11:34",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660171134-antonia-ruzic-clara-tauson"
+    },
+    {
+        "montant": 6.8,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:13:03",
+        "url": "https://1xbet.com/fr/live/tennis/149549-itf-sharm-el-sheikh/660173944-yassin-ahmed-wageh-tudor-batin"
+    },
+    {
+        "montant": 17.21,
+        "cote": "3",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:16:11",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660171134-antonia-ruzic-clara-tauson"
+    },
+    {
+        "montant": 11.05,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:19:13",
+        "url": "https://1xbet.com/fr/live/tennis/149549-itf-sharm-el-sheikh/660173944-yassin-ahmed-wageh-tudor-batin"
+    },
+    {
+        "montant": 4.53,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:21:20",
+        "url": "https://1xbet.com/fr/live/tennis/1425704-itf-perth/660177380-anthony-susanto-naoki-tajima"
+    },
+    {
+        "montant": 7.37,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:32:31",
+        "url": "https://1xbet.com/fr/live/tennis/1425704-itf-perth/660177380-anthony-susanto-naoki-tajima"
+    },
+    {
+        "montant": 9.82,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:38:16",
+        "url": "https://1xbet.com/fr/live/tennis/1425704-itf-perth/660177380-anthony-susanto-naoki-tajima"
+    },
+    {
+        "montant": 1.9,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:44:13",
+        "url": "https://1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/660180178-felix-gill-federico-iannaccone"
+    },
+    {
+        "montant": 15.96,
+        "cote": "3",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:46:28",
+        "url": "https://1xbet.com/fr/live/tennis/1425704-itf-perth/660177380-anthony-susanto-naoki-tajima"
+    },
+    {
+        "montant": 2.85,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 09:58:11",
+        "url": "https://1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/660180178-felix-gill-federico-iannaccone"
+    },
+    {
+        "montant": 5.1,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 10:03:16",
+        "url": "https://1xbet.com/fr/live/tennis/1237133-wta-mallorca/660185165-darja-semenistaja-andrea-lazaro-garcia"
+    },
+    {
+        "montant": 4.27,
+        "cote": "3",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 10:08:30",
+        "url": "https://1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/660180178-felix-gill-federico-iannaccone"
+    },
+    {
+        "montant": 7.65,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 10:09:50",
+        "url": "https://1xbet.com/fr/live/tennis/1237133-wta-mallorca/660185165-darja-semenistaja-andrea-lazaro-garcia"
+    },
+    {
+        "montant": 6.41,
+        "cote": "3",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 10:16:18",
+        "url": "https://1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/660180178-felix-gill-federico-iannaccone"
+    },
+    {
+        "montant": 11.47,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 10:19:10",
+        "url": "https://1xbet.com/fr/live/tennis/1237133-wta-mallorca/660185165-darja-semenistaja-andrea-lazaro-garcia"
+    },
+    {
+        "montant": 9.62,
+        "cote": "3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 10:21:08",
+        "url": "https://1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/660180178-felix-gill-federico-iannaccone"
+    },
+    {
+        "montant": 17.21,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 10:26:31",
+        "url": "https://1xbet.com/fr/live/tennis/1237133-wta-mallorca/660185165-darja-semenistaja-andrea-lazaro-garcia"
+    },
+    {
+        "montant": 14.42,
+        "cote": "3",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 10:29:40",
+        "url": "https://1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/660180178-felix-gill-federico-iannaccone"
+    },
+    {
+        "montant": 21.64,
+        "cote": "3",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 10:31:26",
+        "url": "https://1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/660180178-felix-gill-federico-iannaccone"
+    },
+    {
+        "montant": 32.46,
+        "cote": "3",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 10:38:02",
+        "url": "https://1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/660180178-felix-gill-federico-iannaccone"
+    },
+    {
+        "montant": 48.69,
+        "cote": "3",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 10:45:32",
+        "url": "https://1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/660180178-felix-gill-federico-iannaccone"
+    },
+    {
+        "montant": 73.03,
+        "cote": "3",
+        "jeu": 11,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-08 10:53:43",
+        "url": "https://1xbet.com/fr/live/tennis/192201-itf-santa-margherita-di-pula/660180178-felix-gill-federico-iannaccone"
     }
 ]

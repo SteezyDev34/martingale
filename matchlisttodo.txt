@@ -1,111 +1,29 @@
 
-['Jasmine Paolini', 'Marie Bouzkova']|wta pekin|paolini-marie-bouzkova|0.6535713071847749
-['Pablo Carreno Busta', 'Dali Blanch']|challenger villena|busta-dali-blanch|0.6197926180408291
-['Moez Echargui', 'Raul Brancaccio']|challenger villena|echargui-raul-brancaccio|0.6023718734133534
-['Guiomar Maristany Zuleta De Reales', 'Darja Semenistaja']|wta rende|reales-darja-semenistaja|0.5983273363735413
-['Nikola Bartunkova', 'Ipek Oz']|wta samsun|bartunkova-ipek-oz|0.5949852990484339
-['Simona Waltert', 'Sinja Kraus']|wta rende|waltert-sinja-kraus|0.5613105141002137
-['Karolina Muchova', 'Amanda Anisimova']|wta pekin|muchova-amanda-anisimova|0.5423721977994718
-['Christoph Negritu', 'Eliakim Coulibaly']|challenger villena|negritu-eliakim-coulibaly|0.5367019736360433
-['Vitalia Diatchenko', 'Amandine Hesse']|wta samsun|diatchenko-amandine-hesse|0.5268005691838923
-['Rafael Jodar', 'Michael Zheng']|challenger tiburon|jodar-michael-zheng|0.693358922516375
-['Nikola Bartunkova', 'Kaja Juvan']|wta samsun|bartunkova-kaja-juvan|0.6358576687403761
-['Emiliana Arango', 'Antonia Ruzic']|wta wuhan qualification|arango-antonia-ruzic|0.5849773603706572
-['Lola Radivojevic', 'Sara Bejlek']|wta rende|radivojevic-sara-bejlek|0.5796307449783195
-['Tallon Griekspoor', 'Jannik Sinner']|atp shanghai|griekspoor-jannik-sinner|0.579029036392082
-['Katie Volynets', 'Viktorija Golubic']|wta suzhou|volynets-viktorija-golubic|0.5772084506424797
-['Moyuka Uchijima', 'Xiyu Wang']|wta wuhan qualification|uchijima-xiyu-wang|0.558785784000541
-['Kimberly Birrell', 'Lucia Bronzetti']|wta wuhan qualification|birrell-lucia-bronzetti|0.5546565837307127
-['Francisco Cerundolo', 'Zizou Bergs']|atp shanghai|cerundolo-zizou-bergs|0.5335006842467407
-['Omar Jasika', 'Linang Xiao']|challenger jinan qualification|jasika-linang-xiao|0.37842113027219715
-['Timofey Skatov', 'Akira Santillan']|challenger jinan qualification|skatov-akira-santillan|0.37142857142857144
-['Nino Ehrenschneider', 'Ioannis Xilas']|itf héraklion|ehrenschneider-ioannis-xilas|0.3681159420289855
-['Giulia Safina Popa', 'Eva Bennemann']|itf varna femmes|popa-eva-bennemann|0.3538777606574217
-['Jason Kubler', 'Kasidit Samrej']|challenger jinan qualification|kubler-kasidit-samrej|0.31166576234400434
-['Pavel Kotov', 'Sanhui Shin']|challenger jinan qualification|kotov-sanhui-shin|0.3100558659217877
-['Taylah Preston', 'Shiho Akita']|itf darwin femmes|preston-shiho-akita|0.2924407555365939
-['Amr Elsayed', 'Fabrizio Andaloro']|itf charm el-cheikh|elsayed-fabrizio-andaloro|0.2261904761904762
-['Evan Zhu', 'Petr Bar Biryukov']|challenger jinan qualification|petr-bar-biryukov|0.2036559036607014
-['Yannick Hanfmann', 'Novak Djokovic']|atp shanghai|hanfmann-novak-djokovic|0.5935740451674836
-['Valentin Vacherot', 'Tomas Machac']|atp shanghai|vacherot-tomas-machac|0.577347734776017
-['Yulia Putintseva', 'Anna Blinkova']|wta wuhan qualification|putintseva-anna-blinkova|0.5723578003760864
-['Ugo Humbert', 'Holger Vitus Nodskov Rune']|atp shanghai|vitus-nodskov-rune|0.5587476965091767
-['Viktoriya Tomova', 'Polina Kudermetova']|wta wuhan qualification|tomova-polina-kudermetova|0.5518800276678899
-['Tsung-Hao Huang', 'Yasutaka Uchiyama']|challenger jinan qualification|huang-yasutaka-uchiyama|0.5499281177883709
-['Katerina Siniakova', 'Yafan Wang']|wta wuhan qualification|siniakova-yafan-wang|0.5372698587675367
-['Alex Bolt', 'Maxim Zhukov']|challenger jinan qualification|bolt-maxim-zhukov|0.5098069124680532
-['David Goffin', 'Gabriel Diallo']|atp shanghai|goffin-gabriel-diallo|0.4825254365450562
-['Rio Noguchi', 'Sergey Fomin']|challenger jinan qualification|noguchi-sergey-fomin|0.4430866412170881
-['Aoran Wang', 'Denis Yevseyev']|challenger jinan qualification|wang-denis-yevseyev|0.37125147993137897
-['Tianhui Zhang', 'Adria Soriano Barrera']|challenger jinan qualification|adria-soriano-barrera|0.27993306804280266
-['Xiaofei Wang', 'Hyeon Chung']|challenger jinan qualification|wang-hyeon-chung|0.22880653318409816
-['Teodora Kostovic', 'Ekaterina Kazionova']|wta majorque qualification|kostovic-ekaterina-kazionova|2025-10-05|0.6166535134717677
-['Patrick Kypson', 'Nicolai Budkov Kjaer']|challenger mouilleron-le-captif|nicolai-budkov-kjaer|2025-10-05|0.6130996998458267
-['Linda Noskova', 'Amanda Anisimova']|wta pékin|noskova-amanda-anisimova|2025-10-05|0.5971318679491663
-['Yannick Hanfmann', 'Novak Djokovic']|atp shanghai|hanfmann-novak-djokovic|2025-10-05|0.5935740451674836
-['Tallon Griekspoor', 'Jannik Sinner']|atp shanghai|griekspoor-jannik-sinner|2025-10-05|0.579029036392082
-['Valentin Vacherot', 'Tomas Machac']|atp shanghai|vacherot-tomas-machac|2025-10-05|0.577347734776017
-['Martin Krumich', 'Raul Brancaccio']|challenger valence qualification|krumich-raul-brancaccio|2025-10-05|0.572946085889474
-['Arthur Bouquier', 'Loann Massard']|challenger roanne qualification|bouquier-loann-massard|2025-10-05|0.5716856174476445
-['Marco Cecchinato', 'Jonas Forejtek']|challenger valence qualification|cecchinato-jonas-forejtek|2025-10-05|0.570359962883809
-['Alberto Barroso Campos', 'Peter Fajta']|challenger hersonissos 5 qualification|campos-peter-fajta|2025-10-05|0.553259163710631
-['Vilius Gaubas', 'Luka Mikrut']|challenger braga|gaubas-luka-mikrut|2025-10-05|0.5436098513907658
-['Mae Malige', 'Mika Brunold']|challenger roanne qualification|malige-mika-brunold|2025-10-05|0.5087093863724578
-['Maxence Beauge', 'Milos Karol']|challenger roanne qualification|beauge-milos-karol|2025-10-05|0.5071752646715189
-['Lorenzo Giustino', 'Pedro Vives Marcos']|itf saragosee|pedro-vives-marcos|2025-10-05|0.496614226406849
-['Nuria Brancaccio', 'Carson Branstine']|wta majorque|brancaccio-carson-branstine|2025-10-05|0.49119466900072384
-['Matteo Martineau', 'Etienne Donnet']|challenger roanne qualification|martineau-etienne-donnet|2025-10-05|0.4854027773627637
-['Nino Ehrenschneider', 'Toby Samuel']|challenger hersonissos 5 qualification|ehrenschneider-toby-samuel|2025-10-05|0.48144927536231885
-['Hamish Stewart', 'Niels Visker']|challenger hersonissos 5 qualification|stewart-niels-visker|2025-10-05|0.47644937176644486
-['Lucie Havlickova', 'Alina Korneeva']|itf bratislava femmes|havlickova-alina-korneeva|2025-10-05|0.47456073338426275
-['Dali Blanch', 'Adrian Oetzbach']|challenger hersonissos 5 qualification|blanch-adrian-oetzbach|2025-10-05|0.45817634703239196
-['Rio Noguchi', 'Sergey Fomin']|challenger jinan qualification|noguchi-sergey-fomin|2025-10-05|0.4430866412170881
-['Christoph Negritu', 'Ryan Nijboer']|challenger valence qualification|negritu-ryan-nijboer|2025-10-05|0.43956657928138987
-['Sumit Nagal', 'Andres Santamarta Roig']|challenger valence qualification|andres-santamarta-roig|2025-10-05|0.42489004781743156
-['Adrien Gobat', 'David Jorda Sanchis']|challenger roanne qualification|david-jorda-sanchis|2025-10-05|0.42333281876122253
-['Oleksii Krutykh', 'Andrej Martin']|challenger valence qualification|krutykh-andrej-martin|2025-10-05|0.40005310881189193
-['Daniil Glinka', 'Neil Oberleitner']|challenger roanne qualification|glinka-neil-oberleitner|2025-10-05|0.39413991247819413
-['Omar Jasika', 'Linang Xiao']|challenger jinan qualification|jasika-linang-xiao|2025-10-05|0.37842113027219715
-['Aoran Wang', 'Denis Yevseyev']|challenger jinan qualification|wang-denis-yevseyev|2025-10-05|0.37125147993137897
-['Nikolay Vylegzhanin', 'Alexey Vatutin']|challenger roanne qualification|vylegzhanin-alexey-vatutin|2025-10-05|0.34421641791044777
-['Ignacio Parisca Romera', 'Miguel Damas']|challenger valence qualification|romera-miguel-damas|2025-10-05|0.28861597708167
-['Teodora Kostovic', 'Ekaterina Kazionova']|wta majorque qualification|kostovic-ekaterina-kazionova|2025-10-05 12:00:00|0.6166535134717677
-['Patrick Kypson', 'Nicolai Budkov Kjaer']|challenger mouilleron-le-captif|nicolai-budkov-kjaer|2025-10-05 14:00:00|0.6130996998458267
-['Linda Noskova', 'Amanda Anisimova']|wta pékin|noskova-amanda-anisimova|2025-10-05 13:00:00|0.5971318679491663
-['Yannick Hanfmann', 'Novak Djokovic']|atp shanghai|hanfmann-novak-djokovic|2025-10-05 12:30:00|0.5935740451674836
-['Tallon Griekspoor', 'Jannik Sinner']|atp shanghai|griekspoor-jannik-sinner|2025-10-05 14:00:00|0.579029036392082
-['Valentin Vacherot', 'Tomas Machac']|atp shanghai|vacherot-tomas-machac|2025-10-05 12:00:00|0.577347734776017
-['Martin Krumich', 'Raul Brancaccio']|challenger valence qualification|krumich-raul-brancaccio|2025-10-05 15:00:00|0.572946085889474
-['Arthur Bouquier', 'Loann Massard']|challenger roanne qualification|bouquier-loann-massard|2025-10-05 14:40:00|0.5716856174476445
-['Marco Cecchinato', 'Jonas Forejtek']|challenger valence qualification|cecchinato-jonas-forejtek|2025-10-05 12:00:00|0.570359962883809
-['Alberto Barroso Campos', 'Peter Fajta']|challenger hersonissos 5 qualification|campos-peter-fajta|2025-10-05 12:35:00|0.553259163710631
-['Vilius Gaubas', 'Luka Mikrut']|challenger braga|gaubas-luka-mikrut|2025-10-05 12:00:00|0.5436098513907658
-['Mae Malige', 'Mika Brunold']|challenger roanne qualification|malige-mika-brunold|2025-10-05 13:00:00|0.5087093863724578
-['Nuria Brancaccio', 'Carson Branstine']|wta majorque|brancaccio-carson-branstine|2025-10-05 15:30:00|0.49119466900072384
-['Matteo Martineau', 'Etienne Donnet']|challenger roanne qualification|martineau-etienne-donnet|2025-10-05 16:00:00|0.4854027773627637
-['Nino Ehrenschneider', 'Toby Samuel']|challenger hersonissos 5 qualification|ehrenschneider-toby-samuel|2025-10-05 13:30:00|0.48144927536231885
-['Hamish Stewart', 'Niels Visker']|challenger hersonissos 5 qualification|stewart-niels-visker|2025-10-05 13:30:00|0.47644937176644486
-['Lucie Havlickova', 'Alina Korneeva']|itf bratislava femmes|havlickova-alina-korneeva|2025-10-05 13:00:00|0.47456073338426275
-['Dali Blanch', 'Adrian Oetzbach']|challenger hersonissos 5 qualification|blanch-adrian-oetzbach|2025-10-05 12:00:00|0.45817634703239196
-['Christoph Negritu', 'Ryan Nijboer']|challenger valence qualification|negritu-ryan-nijboer|2025-10-05 12:30:00|0.43956657928138987
-['Sumit Nagal', 'Andres Santamarta Roig']|challenger valence qualification|andres-santamarta-roig|2025-10-05 16:30:00|0.42489004781743156
-['Adrien Gobat', 'David Jorda Sanchis']|challenger roanne qualification|david-jorda-sanchis|2025-10-05 13:10:00|0.42333281876122253
-['Oleksii Krutykh', 'Andrej Martin']|challenger valence qualification|krutykh-andrej-martin|2025-10-05 14:00:00|0.40005310881189193
-['Daniil Glinka', 'Neil Oberleitner']|challenger roanne qualification|glinka-neil-oberleitner|2025-10-05 14:40:00|0.39413991247819413
-['Nikolay Vylegzhanin', 'Alexey Vatutin']|challenger roanne qualification|vylegzhanin-alexey-vatutin|2025-10-05 17:30:00|0.34421641791044777
-['Ignacio Parisca Romera', 'Miguel Damas']|challenger valence qualification|romera-miguel-damas|2025-10-05 12:10:00|0.28861597708167
-['Ivan Gakhov', 'Rudolf Molleker']|challenger valence qualification|gakhov-rudolf-molleker|2025-10-05 15:30:00|0.25201654840871796
-['Harry Wendelken', 'Henri Haupt']|challenger hersonissos 5 qualification|wendelken-henri-haupt|2025-10-05 13:30:00|0.2453330664130924
-['Andres Andrade', 'Taha Baadi']|itf salvador|andrade-taha-baadi|2025-10-05 15:00:00|0.23556619162087913
-['Fanny Norin', 'Dalila Spiteri']|wta majorque qualification|norin-dalila-spiteri|2025-10-05 12:00:00|0.23464603844350676
-['Carlos Sanchez Jover', 'Sergio Planella Hernandez']|challenger valence qualification|sergio-planella-hernandez|2025-10-05 14:00:00|0.21441795690996968
-['Teodora Kostovic', 'Ekaterina Kazionova']|wta majorque qualification|kostovic-ekaterina-kazionova|2025-10-05 12:30:00|0.6166535134717677
-['Arthur Bouquier', 'Loann Massard']|challenger roanne qualification|bouquier-loann-massard|2025-10-05 14:30:00|0.5716856174476445
-['Salvador Price', 'Mateus Alves']|challenger cali qualification|price-mateus-alves|2025-10-05 21:30:00|0.5284431347938002
-['Benjamin Torrealba', 'Thomas Faurel']|challenger cali qualification|torrealba-thomas-faurel|2025-10-05 18:30:00|0.514962185201549
-['Mae Malige', 'Mika Brunold']|challenger roanne qualification|malige-mika-brunold|2025-10-05 12:20:00|0.5087093863724578
-['Matteo Martineau', 'Etienne Donnet']|challenger roanne qualification|martineau-etienne-donnet|2025-10-05 16:40:00|0.4854027773627637
-['Adrien Gobat', 'David Jorda Sanchis']|challenger roanne qualification|david-jorda-sanchis|2025-10-05 13:30:00|0.42333281876122253
-['Nikolay Vylegzhanin', 'Alexey Vatutin']|challenger roanne qualification|vylegzhanin-alexey-vatutin|2025-10-05 15:50:00|0.34421641791044777
-['Luciano Emanuel Ambrogi', 'Brandon Perez']|challenger cali qualification|ambrogi-brandon-perez|2025-10-05 17:00:00|0.28358269637339406
-['Juan Bautista Torres', 'Mateo Castaneda']|challenger cali qualification|torres-mateo-castaneda|2025-10-05 18:30:00|0.24586684276314238
+['Naomi Osaka', 'Linda Noskova']|wta wuhan|osaka-linda-noskova|2025-10-08 09:00:00|0.6671919630417175
+['Shuai Zhang', 'Sorana Cîrstea']|wta wuhan|zhang-sorana-cirstea|2025-10-08 07:30:00|0.6577616754439832
+['Belinda Bencic', 'Elise Mertens']|wta wuhan|bencic-elise-mertens|2025-10-08 06:00:00|0.6164604909032909
+['Antonia Ruzic', 'Clara Tauson']|wta wuhan|ruzic-clara-tauson|2025-10-08 07:00:00|0.6159372335857639
+['Arthur Rinderknech', 'Jiri Lehecka']|atp shanghai|rinderknech-jiri-lehecka|2025-10-08 05:30:00|0.5990998416105355
+['Sofia Kenin', 'Liudmila Samsonova']|wta wuhan|kenin-liudmila-samsonova|2025-10-08 05:30:00|0.597882557696721
+['Darja Semenistaja', 'Andrea Lazaro Garcia']|wta majorque|andrea-lazaro-garcia|2025-10-08 09:00:00|0.5863948897584648
+['Hina Inoue', 'Aliona Falei']|itf kunshan femmes|inoue-aliona-falei|2025-10-08 06:00:00|0.5802613510946844
+['Ekaterine Gorgodze', 'Oksana Selekhmeteva']|wta majorque|gorgodze-oksana-selekhmeteva|2025-10-08 10:30:00|0.5670813533452027
+['Jasmine Paolini', 'Yue Yuan']|wta wuhan|paolini-yue-yuan|2025-10-08 12:00:00|0.5590032529465365
+['Teodora Kostovic', 'Mayar Sherif']|wta majorque|kostovic-mayar-sherif|2025-10-08 12:00:00|0.5489833608844216
+['Arthur Cazaux', 'Ugo Blanchet']|challenger jinan|cazaux-ugo-blanchet|2025-10-08 05:30:00|0.5481552177742923
+["Christopher O'Connell", 'Liam Draxl']|challenger jinan|oconnell-liam-draxl|2025-10-08 05:30:00|0.5470189447116691
+['Nuno Borges', 'Alex De Minaur']|atp shanghai|alex-de-minaur|2025-10-08 07:00:00|0.5465583399525281
+['Félix Auger-Aliassime', 'Lorenzo Musetti']|atp shanghai|aliassime-lorenzo-musetti|2025-10-08 11:30:00|0.5249535862099173
+['Learner Tien', 'Daniil Medvedev']|atp shanghai|tien-daniil-medvedev|2025-10-08 13:00:00|0.519917877926125
+['Denis Yevseyev', 'Rinky Hijikata']|challenger jinan|yevseyev-rinky-hijikata|2025-10-08 05:30:00|0.4753378072512282
+['Han Shi', 'Katarina Zavatska']|itf kunshan femmes|shi-katarina-zavatska|2025-10-08 06:00:00|0.4391340875182873
+['Filip Peliwo', 'Shinji Hazawa']|itf perth|peliwo-shinji-hazawa|2025-10-08 05:30:00|0.4288834146572552
+['Pavel Kotov', 'August Holmgren']|challenger jinan|kotov-august-holmgren|2025-10-08 07:00:00|0.4003804730587629
+['Anthony Susanto', 'Naoki Tajima']|itf perth|susanto-naoki-tajima|2025-10-08 06:30:00|0.358695652173913
+['Emile Hudd', 'Pavle Marinkov']|itf perth|hudd-pavle-marinkov|2025-10-08 05:30:00|0.3586206896551724
+['Solana Sierra', 'Guiomar Maristany Zuleta De Reales']|wta majorque|zuleta-de-reales|2025-10-08 13:30:00|0.29724770642201837
+['Yuhan Liu', 'Taylah Preston']|itf darwin femmes|liu-taylah-preston|2025-10-08 06:30:00|0.2924407555365939
+['Zongyu Li', 'Xiaodi You']|itf kunshan femmes|li-xiaodi-you|2025-10-08 06:00:00|0.2845159330272752
+['Magdalena Frech', 'Karolina Muchova']|wta wuhan|frech-karolina-muchova|2025-10-08 05:30:00|0.2562835295545576
+['Matthew Dellavedova', "Benjamin O'Connell"]|itf perth|dellavedova-benjamin-oconnell|2025-10-08 06:30:00|0.2290762628563209
+['Dane Sweeny', 'Jake Dembo']|itf perth|sweeny-jake-dembo|2025-10-08 05:30:00|0.20244431302976543

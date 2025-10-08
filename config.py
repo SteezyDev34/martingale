@@ -2,7 +2,6 @@ import datetime
 import json
 import os
 import platform
-import sys
 from typing import Dict, Any, Optional
 
 import requests
@@ -24,8 +23,8 @@ scriptTypeList = ['300', '15A', '30A']
 scriptTypeList1 = ['30A']
 scriptTypeList2 = ['6P', '4015', '4030']
 # scriptTypeList2 = ['4P', '5P', '6P', '40A']
-scriptTypeList3 = ['5P', '6P', '40A', 'BREAK']
-scriptTypeList4 = ['4015', '4030']
+scriptTypeList3 = ['5P', '6P', '40A']
+scriptTypeList4 = ['BREAK', '4015', '4030']
 allScriptType = ['030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK', '1SET']
 # Script configuration
 script_num = 0  # Numéro du Script
@@ -54,18 +53,9 @@ def configure_site_type(use_ca_site=None):
     """
     global site_url, site_line_url, site_type
 
-    # Permettre une configuration non interactive (tests CI, pytest, etc.)
-    env_val = os.environ.get("MARTINGALE_USE_CA_SITE")
-    if env_val is not None:
-        use_ca_site = str(env_val).strip().lower() in ("1", "true", "y", "o", "yes")
-
     if use_ca_site is None:
-        # Si l'entrée standard n'est pas un TTY ou si pytest est détecté, éviter la saisie utilisateur
-        if not sys.stdin.isatty() or os.environ.get("PYTEST_CURRENT_TEST"):
-            use_ca_site = False
-        else:
-            wich_site = input("1XBET CA? (Y/N): ")
-            use_ca_site = wich_site.upper() in ['Y', 'O']
+        wich_site = input("1XBET CA? (Y/N): ")
+        use_ca_site = wich_site.upper() in ['Y', 'O']
 
     if use_ca_site:
         site_url = "https://ca.1xbet.com/fr/live/tennis"
@@ -191,6 +181,204 @@ def getJsonData(url: str) -> Optional[Dict[str, Any]]:
             time.sleep(1 * (attempt + 1))
 
     return None
+
+
+def init_variable():
+    """Initialize global variables from strategy data"""
+    global mise, perte, wantwin, increment, probamini
+    global running_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
+    global print_match_live_text, devMode, gain, netprofit, perte, placed_game, looking_game, saved_score
+    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, matchlist1set_name
+    config_global = ScriptConfig(scriptType)
+
+    # Initialize variables from config
+    # devMode = config_global.get("devmode")
+    error = config_global.get("error")
+    validated_bet = config_global.get("validated_bet")
+
+    # On suppose que chacune de ces variables a déjà une valeur par défaut
+    # définie avant ce bloc. On ne modifie la variable que si la clé existe
+    # dans config_global et que sa valeur n’est pas None.
+
+    # Game settings
+    val = config_global.get("cote_base")
+    if val is not None:
+        cotebase = float(val)
+    val = config_global.get("mise")
+    if val is not None:
+        mise = float(val)
+
+    val = config_global.get("nb_tour")
+    if val is not None:
+        nb_tour = int(val)
+
+    val = config_global.get("proba_mini")
+    if val is not None:
+        probamini = float(val)
+
+    # Game state
+    val = config_global.get("gain")
+    if val is not None:
+        gain = float(val)
+
+    val = config_global.get("increment")
+    if val is not None:
+        increment = float(val)
+
+    val = config_global.get("looking_game")
+    if val is not None:
+        looking_game = int(val)
+
+    val = config_global.get("netprofit")
+    if val is not None:
+        netprofit = float(val)
+
+    val = config_global.get("perte")
+    if val is not None:
+        perte = float(val)
+
+    val = config_global.get("placed_game")
+    if val is not None:
+        placed_game = int(val)
+
+    val = config_global.get("rattrape_perte")
+    if val is not None:
+        rattrape_perte = int(val)
+
+    val = config_global.get("restart_set2")
+    if val is not None:
+        restart_set2 = int(val)
+
+    val = config_global.get("saved_score")
+    if val is not None:
+        saved_score = val
+
+    val = config_global.get("validated_bet")
+    if val is not None:
+        validated_bet = val
+
+    val = config_global.get("wantwin")
+    if val is not None:
+        wantwin = float(val)
+
+    val = config_global.get("win_type")
+    if val is not None:
+        win_type = val
+
+    val = config_global.get("mtt_recup")
+    if val is not None:
+        mtt_recup = float(val)
+
+    val = config_global.get("result")
+    if val is not None:
+        result = val
+
+    # Display settings
+    print_match_live_text = config_global.get("print_match_live_text")
+    print_running_text = config_global.get("print_running_text")
+
+    # File paths configuration
+    matchlisttodo_file_name = f"{projectPath}/matchlisttodo"
+
+
+def save_variables():
+    """Initialize global variables from strategy data"""
+    global mise, perte, wantwin, increment, probamini
+    global running_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
+    global print_match_live_text, devMode, gain, netprofit, perte, placed_game, looking_game, saved_score
+    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, matchlist1set_name
+
+    """Save current variables state back to config"""
+    config_global = ScriptConfig(scriptType)
+
+    # Save game settings
+    config_global.set("cote_base", cotebase)
+    config_global.set("mise", mise)
+    config_global.set("nb_tour", nb_tour)
+    config_global.set("proba_mini", probamini)
+
+    # Save game state
+    config_global.set("gain", gain)
+    config_global.set("increment", increment)
+    config_global.set("looking_game", looking_game)
+    config_global.set("netprofit", netprofit)
+    config_global.set("perte", perte)
+    config_global.set("placed_game", placed_game)
+    config_global.set("rattrape_perte", rattrape_perte)
+    config_global.set("restart_set2", restart_set2)
+    config_global.set("saved_score", saved_score)
+    config_global.set("validated_bet", validated_bet)
+    config_global.set("wantwin", wantwin)
+    config_global.set("win_type", win_type)
+    config_global.set("mtt_recup", mtt_recup)
+    config_global.set("result", result)
+
+    # Save display settings
+    config_global.set("print_match_live_text", print_match_live_text)
+    config_global.set("print_running_text", print_running_text)
+    matchlisttodo_file_name = f"{projectPath}/matchlisttodo"
+
+
+def switchScript(newScriptType):
+    global scriptType
+    save_variables()
+    scriptType = newScriptType
+    init_variable()
+
+
+class ScriptConfig:
+    _instances = {}  # Dictionnaire pour stocker les instances par type de script
+
+    def __init__(self, script_type):
+        self.script_type = script_type
+        # Récupérer l'instance existante si elle existe, sinon en créer une nouvelle
+        if script_type in ScriptConfig._instances:
+            self.variables = ScriptConfig._instances[script_type].variables
+        else:
+            self.variables = self._init_variables()
+            ScriptConfig._instances[script_type] = self
+
+    def _init_variables(self):
+
+        url = f"{api_url}/strategy{self.script_type}/"
+        strategy = getJsonData(url)
+        print('init scriptconfig')
+        # Configuration par défaut selon le type de script
+        default_configs = {
+        }
+        config = default_configs.get(self.script_type, {})
+        if strategy:
+            for key, strat in strategy.items():
+                config[key] = strat
+            config['error'] = False
+            config['validated_bet'] = {}
+
+            config['print_running_text'] = False
+            config['print_match_live_text'] = False
+            config['win_type'] = ''
+            config['netprofit'] = 0
+            config['gain'] = 0
+            config['looking_game'] = False
+            config['placed_game'] = False
+            config['saved_score'] = False
+            config['rattrape_perte'] = False
+            config['result'] = False
+
+        return config
+
+    def get(self, var_name):
+        """Récupère une variable par son nom"""
+        return self.variables.get(var_name)
+
+    def set(self, var_name, value):
+        """Définit une variable"""
+        self.variables[var_name] = value
+
+    def reset(self):
+        """Force la réinitialisation de la configuration"""
+        self.variables = self._init_variables()
+        ScriptConfig._instances[self.script_type] = self
+        return self
 
 
 def saveLog(txt):
