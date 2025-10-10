@@ -12,3 +12,4 @@ SetDriver*
 .idea/php.xml
 .DS_Store
 .DS_Store
+/.env
