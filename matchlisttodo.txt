@@ -29,3 +29,4 @@
 ['Colton Smith', 'Petr Bar Biryukov']|challenger jinan|petr-bar-biryukov|2025-10-10 07:30:00|0.43875231920375657
 ['Denislava Glushkova', 'Raluca Georgiana Serban']|itf héraklion femmes|raluca-georgiana-serban|2025-10-10 08:00:00|0.2626471729848622
 ['Johan Nikles', 'Fons Van Sambeek']|itf héraklion|fons-van-sambeek|2025-10-10 09:30:00|0.24793388429752064
+['Colin Sinclair', 'Mark Polmans']|itf perth|sinclair-marc-polmans|2025-10-10 05:00:00|0.2746061013557356

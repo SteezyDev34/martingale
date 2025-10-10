@@ -4687,5 +4687,68 @@
         "winscore": "30:0",
         "timestamp": "2025-10-10 05:19:34",
         "url": "https://1xbet.com/fr/live/tennis/2745898-itf-kunshan-women/660677272-haruka-kaji-carol-young-suh-lee"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.55",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "0:30",
+        "timestamp": "2025-10-10 05:50:50",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660690263-katerina-siniakova-jessica-pegula"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.8",
+        "jeu": 7,
+        "set": "2",
+        "winscore": "30:0",
+        "timestamp": "2025-10-10 06:35:37",
+        "url": "https://1xbet.com/fr/live/tennis/1425704-itf-perth/660692850-emile-hudd-kaichi-uchida"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-10 07:10:02",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660698692-aryna-sabalenka-elena-rybakina"
+    },
+    {
+        "montant": 0.32,
+        "cote": "2.25",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-10 07:14:09",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660698651-aryna-sabalenka-elena-rybakina"
+    },
+    {
+        "montant": 0.55,
+        "cote": "2.3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-10 07:19:40",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660698651-aryna-sabalenka-elena-rybakina"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-10 07:31:15",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660698297-arthur-cazaux-yi-zhou"
+    },
+    {
+        "montant": 1.91,
+        "cote": "2.15",
+        "jeu": 8,
+        "set": "2",
+        "winscore": "0:30",
+        "timestamp": "2025-10-10 07:57:06",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660704737-bernard-tomic-shintaro-mochizuki"
     }
 ]
