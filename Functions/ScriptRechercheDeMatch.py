@@ -120,7 +120,7 @@ def rechercheDeMatch(driver):
         if config.in_stat and (
                 not config.last_classement or config.last_classement != datetime.now().strftime("%Y-%m-%d")):
             config.log("Classement différent du dernier run, recherche de nouveaux matchs", 'info', True)
-            classementeDeMatch(driver)
+            classementeDeMatch(driver, False)
 
         logline = 0
         config.match_found = GetIfMatchPage(driver)
@@ -532,15 +532,16 @@ def rechercheDeMatchNBA(driver):
     return config.match_found
 
 
-def classementeDeMatch(driver):
+def classementeDeMatch(driver, use_json_cache=True):
     driver.get(config.site_line_url)
     config.error = False
     config.match_found = False
     while not config.match_found and not config.error:
         line = 0
         config.init_variable()
-
-        matchlist_from_json = charger_matchlist_depuis_json()
+        matchlist_from_json = None
+        if use_json_cache:
+            matchlist_from_json = charger_matchlist_depuis_json()
 
         if matchlist_from_json is not None:
             # Utiliser la matchlist du fichier JSON
