@@ -4,7 +4,6 @@ import time
 import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName, AddRunning
-from Functions.Authenticator import is_logged_in, loginProcess
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Function_scriptDelRunning import scriptDelRunning
@@ -33,26 +32,21 @@ def all_script(driver):
     config.all_scores = {}
     # --------
     # SCRIPT RECHERCHE DE MATCH
-    print('test')
     while not rechercheDeMatch(driver) and not config.error:
         config.log('Erreur lors de la recherche de match!', 'error', False, 2)
-    print('test2')
-    print('error', config.error)
-    # if not is_logged_in(driver):
-    # print('not logged in ')
-    # loginProcess(driver)
     # --------
     config.match_found = True
     if config.match_found and not config.error:
-        print('config.script_num', config.script_num)
-        print('config.running_file_name', config.running_file_name)
         AddRunning.main(config.script_num, config.running_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.teams = GetPlayersName(driver)
         newmatchFromUrl(driver)
         update_match_done("add", config.newmatch, config.matchlist_file_name)
-    print('error', config.error)
+        config.log("-" * 60, "success", False, False, False)
+        config.log(f'MATCH OK : {str(config.teams)} | {config.ligue_name}', 'success', False, 0, False)
+        config.log("-" * 60, "success", False, False, False)
+
     if config.error:
         return False
     for scriptType in config.scriptTypeList:
@@ -62,6 +56,7 @@ def all_script(driver):
             get1setGlobalPerte()
         if config.perte == 0:
             getGlobalPerte()
+        config.log_clear_line()
 
         # END RECHERCHE INFOS DE MISE
     GetScoreActuel(driver)
@@ -75,7 +70,9 @@ def all_script(driver):
         FirstGameBet(driver)
 
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
-    print('FIRST GAME DONE')
+    print(f'{config.PURPLE}-' * 30)
+    print(f'{config.PURPLE}FIRST GAME DONE')
+    print(f'{config.PURPLE}-' * 30)
     waitendgame = True
     firstjeu = True
     for scriptType in config.scriptTypeList:
@@ -94,9 +91,6 @@ def all_script(driver):
         GetJeuActuel(driver)
         # WAIT FOR GAME START
         if passageset:
-            if not is_logged_in(driver):
-                print('not logged in ')
-                loginProcess(driver)
             GetSetActuel(driver)
             config.game_start = True
             if config.rattrape_perte == 1:
@@ -109,9 +103,6 @@ def all_script(driver):
                 print(txtlog)
                 config.log(txtlog, config.newmatch)
                 for scriptType in config.scriptTypeList:
-                    if not is_logged_in(driver):
-                        print('not logged in ')
-                        loginProcess(driver)
                     config.switchScript(scriptType)
                     # Check if all script types have global_match_win > 1
                     all_below_one = all(
@@ -184,7 +175,6 @@ def all_script(driver):
                 DeleteBet(driver)
                 continue
             if firstjeu or int(current_game) != int(config.jeu_actuel):
-                print('firstgame')
                 time.sleep(2)
                 firstjeu = False
                 current_game = config.jeu_actuel
@@ -196,11 +186,7 @@ def all_script(driver):
         passageset = False
         current_game = int(config.jeu_actuel)
         for scriptType in config.scriptTypeList:
-            if not is_logged_in(driver):
-                print('not logged in ')
-                loginProcess(driver)
             config.switchScript(scriptType)
-            print('passage prochain script ', scriptType)
             # Check if all script types have global_match_win > 1
             all_below_one = all(
                 float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in

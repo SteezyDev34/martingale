@@ -64,12 +64,12 @@ def get1setGlobalPerte():
         print(f"Erreur lors du parsing du JSON : {e}")
         return
     except Exception as e:
-        print(f"pas de perte {e}")
+        config.log(f'Pas de Perte : {e}', 'warning', False, 1)
     else:
         if float(pertes["perte"]) > 0:
             config.rattrape_perte = 1
             config.perte = float(pertes['perte'])
-            config.log(f'Perte : {str(config.perte)}', 'info', False, 1)
+            config.log(f'Perte : {str(config.perte)}', 'info', True, 1)
         config.rattrape_perte = 1
         return pertes
 
@@ -124,7 +124,7 @@ def getGlobalPerte():
     else:
         if float(pertes["perte"]) > 0:
             config.rattrape_perte = 1
-        config.log(f'Perte global : {str(pertes["perte"])}', 'info', False, 1)
+        config.log(f'Perte global : {str(pertes["perte"])}', 'info', True, 1)
         if float(pertes['perte']) > float(config.mtt_recup):
             SendGlobalPerte(config.scriptType, float(0 - config.mtt_recup))
             config.perte = config.mtt_recup
@@ -373,21 +373,20 @@ def SendGlobalPerte(scriptType, mise):
         result = response.json()
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
-        print(f"Erreur lors de la récupération des données : {e}")
+        config.log(f"Erreur lors de la récupération des données : {e}", 'warning', True)
         return
     except json.JSONDecodeError as e:
-        print(f"Erreur lors du parsing du JSON : {e}")
+        config.log(f"Erreur lors du parsing du JSON : {e}", 'warning', True)
         return
     except Exception as e:
-        print(f"Pas d'envoi de perte {e}")
+        config.log(f"Pas d'envoi de perte {e}", 'warning', True)
+
     else:
         if result['status'] == "success":
-            config.log(f"{str(mise)} insert in strategy" + str(scriptType), 'info', False, 2)
-            config.log_clear_line()
+            config.log(f"{str(mise)} insert in strategy" + str(scriptType), 'info', True, 2)
             return True
         else:
-            config.log(f"        {result}", 'info', False)
-            config.log_clear_line()
+            config.log(f"        {result}", 'info', True)
             return False
 
 

@@ -26,13 +26,15 @@ def main(driver, bet_item, matchlist_file_name):
         match_list = GetMatchDone.main(config.matchlisttodo_file_name)
         match_done = GetMatchDone.main(config.matchlist_file_name)
         if config.scriptType == '1SET' and not any(config.newmatch in x for x in match_done):
-            config.log('Le match autorisé!', 'success', False, 4)
+            config.log('Le match autorisé!', 'success', False, 4, False)
             driver.get(newmatchtxt)
+            config.log_clear_line()
             return [True, config.newmatch]
         elif config.in_stat and any(config.newmatch in x for x in match_list) and not any(
                 config.newmatch in x for x in match_done):
-            config.log('Le match autorisé!', 'success', False, 4)
+            config.log('Le match autorisé!', 'success', False, 4, False)
             driver.get(newmatchtxt)
+            config.log_clear_line()
             return [True, config.newmatch]
         elif not config.in_stat and not any(config.newmatch in x for x in match_list) and not any(
                 config.newmatch in x for x in match_done):
@@ -42,14 +44,15 @@ def main(driver, bet_item, matchlist_file_name):
             if not p or p == 0:
                 p = getIf1setGlobalPerte()
             if not p or p == 0:
-                config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
+                config.log('Le match  n\'est pas autorisé!', 'warning', True, 4, False)
                 return [False, config.newmatch]
             else:
-                config.log('Le match  non autorisé mais perte en cours', 'sucess', True, 4)
+                config.log('Le match  non autorisé mais perte en cours', 'sucess', False, 4, False)
                 driver.get(newmatchtxt)
+                config.log_clear_line()
                 return [True, config.newmatch]
         else:
-            config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
+            config.log('Le match  n\'est pas autorisé!', 'warning', True, 4, False)
             return [False, config.newmatch]
 
 

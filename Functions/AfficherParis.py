@@ -13,12 +13,11 @@ from Functions.ModalHandler import ModalHandler
 
 
 def AfficherParis(driver, categorie='', type_de_pari='', ):
-    config.log('recherche du champ déroulant...', '', True, 2)
+    config.log('recherche du champ déroulant...', '', indent=2)
+    logline = 1
     if config.scriptType in config.allScriptType:
-        print(config.scriptType)
         GetSetActuel(driver)
         GetScoreActuel(driver)
-
         if str(config.set_actuel) == "1":
             theset = "1er"
         else:
@@ -47,7 +46,6 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
         key = type_de_pari
     selection = False
     tentative = 1
-    clic = False
 
     while not selection and tentative < 6:
         try:
@@ -57,23 +55,22 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
             )
         except Exception as e:
             config.log(f"Champ déroulant {config.classes['period_select'][config.site_type]} introuvable !", "warning",
-                       False, 2)
+                       True, 2)
             config.log(f'tentative {tentative}', 'warning', True, 2)
             tentative = tentative + 1
         else:
             select_form = driver.find_elements(By.CLASS_NAME, config.classes['period_select'][config.site_type])
-            # config.log('Champ déroulant trouvé !', 'success', True, 2)
+            config.log('Champ déroulant trouvé !', 'success', True, 2)
             try:
                 select_form[0].click()
             except Exception as e:
-                config.log("#E0013 Erreur lors du clic sur le champ deroulant", 'warning', False, 2)
+                config.log("#E0013 Erreur lors du clic sur le champ deroulant", 'warning', True, 2)
                 ModalHandler(driver)
                 tentative = tentative + 1
             else:
                 config.log('ouverture du champ déroulant...', 'info', True, 2)
                 time.sleep(1)
                 try:
-                    print('decttion')
                     element = WebDriverWait(driver, 5).until(
                         EC.visibility_of_element_located(
                             (By.CLASS_NAME, config.classes['multiselect_container_wrapper'][config.site_type]))
@@ -81,12 +78,11 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                 except Exception as e:
                     config.log('#E0014 aucun element dans le champ déroulant', 'error', False, 2)
                     tentative = tentative + 1
-                    config.log(f'tentative {tentative}', 'warning', False, 2)
+                    config.log(f'tentative {tentative}', 'warning', True, 2)
                 else:
 
                     select_form_set_1 = driver.find_elements(By.CLASS_NAME,
                                                              config.classes['multiselect_element'][config.site_type])
-                    print('detect multiselect_element', len(select_form_set_1))
                     if len(select_form_set_1) > 0:
                         for select_option in select_form_set_1:
                             if selection == True:
@@ -94,22 +90,21 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                             try:
                                 select_option_text = select_option.text
                             except Exception as e:
-                                config.log('#E0015 ucun élements multiselect__option', 'error', False, 2)
+                                config.log('#E0015 Aucun élements multiselect__option', 'error', False, 3)
                                 tentative = tentative + 1
-                                config.log(f'tentative {tentative}', 'warning', False, 2)
+                                config.log(f'tentative {tentative}', 'warning', True, 3)
 
                             else:
-
                                 if select_option_text.strip().lower() == str(
                                         theset).lower() + f'{args}'.lower():
-                                    config.log('            Lien ' + select_option_text.lower() + ' = ' + str(
-                                        theset).lower() + ' set Evénements rapides'.lower(), 'warning', True, 2)
+                                    config.log('Lien ' + select_option_text.lower() + ' = ' + str(
+                                        theset).lower() + 'set Evénements rapides'.lower(), 'warning', True, 3)
                                     try:
                                         select_option.click()
                                     except Exception as e:
-                                        config.log(f'        #E0016 clic impossible menu 1set', 'warning', False, 2)
+                                        config.log(f'#E0016 clic impossible menu 1set', 'warning', False, 3)
                                         tentative = tentative + 1
-                                        config.log(f'        tentative {tentative}', 'warning', False, 2)
+                                        config.log(f'tentative {tentative}', 'warning', True, 3)
                                         ModalHandler(driver)
                                     else:
                                         paris = 0
@@ -125,30 +120,24 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                                                     'ui_search_to_click'][
                                                     config.site_type])[0]
                                                 searchbutton.click()
-                                                print('click')
                                                 toolbar.find_elements(By.CLASS_NAME,
                                                                       config.classes[
                                                                           'search_input'][
                                                                           config.site_type])[
                                                     0].clear()
-                                                print('clear')
-
                                                 toolbar.find_elements(By.CLASS_NAME,
                                                                       config.classes[
                                                                           'search_input'][
                                                                           config.site_type])[
                                                     0].send_keys(
                                                     key)
-                                                print(f'send {key}')
                                                 l = toolbar.find_elements(By.CLASS_NAME,
                                                                           config.classes[
                                                                               'search_input'][
                                                                               config.site_type])[
                                                     0].get_attribute("value")
-                                                print(f'l : {l}')
                                                 if l == key:
                                                     try:
-                                                        print('wait for market grid container')
                                                         element = WebDriverWait(driver, 2).until(
                                                             EC.presence_of_element_located(
                                                                 (By.CLASS_NAME, config.classes[
@@ -156,8 +145,6 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                                                                     config.site_type]))
                                                         )
                                                     except:
-                                                        print(
-                                                            f"no market grid {config.classes['bet_list_container'][config.site_type]}")
                                                         if key == 'Paris':
                                                             key = 'Game Score. ' + theset + args
                                                         elif key == 'Game Score. ' + theset + args:
@@ -165,7 +152,6 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                                                         else:
                                                             key = 'Paris'
                                                     else:
-                                                        print('find market grid')
                                                         paris = 1
                                                 else:
                                                     tentative = tentative + 1
@@ -173,10 +159,9 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
 
                                             except Exception as e:
                                                 config.log(
-                                                    f'        #ERROR16 : impossible ecrire {key}, {e}',
+                                                    f'#ERROR16 : impossible ecrire {key}, {e}',
                                                     'warning',
                                                     False)
-                                                config.log_clear_line()
                                                 if GetIfMatchPage(driver) != True:
                                                     config.error = True
                                                     break
@@ -184,7 +169,7 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                                                 selection = True
                                 else:
                                     config.log('Lien ' + select_option_text.lower() + ' > ' + str(
-                                        theset).lower() + f'{args}'.lower(), 'warning', True, 2)
+                                        theset).lower() + f'{args}'.lower(), 'warning', True, 3)
                                     continue
                         return selection
     return selection

@@ -2,7 +2,6 @@ import config
 from Functions.AfficherParis import AfficherParis
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.GetBet import GetBet
-from Functions.GetMise import GetMise
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.PlacerMise import PlacerMise
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
@@ -11,7 +10,6 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 def GetAndPlaceBet(driver):
     bet_40a = False
     tentative = 0
-    print('GetAndPlaceBet error', config.error)
     config.game_start = False
     actual_scryptType = config.scriptType
     while not bet_40a and not config.error:
@@ -86,7 +84,6 @@ def GetAndPlaceBet(driver):
     config.log(txtlog, config.newmatch)
     send_mise = False
     # ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
-    GetMise(driver)
     while not send_mise and not config.error:
         if PlacerMise(driver):
             send_mise = True

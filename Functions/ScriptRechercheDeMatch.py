@@ -39,6 +39,12 @@ def charger_matchlist_depuis_json():
             config.log("Aucun fichier JSON de matchlist trouvé", 'info', True)
             return None
 
+        use = input('Voulez vous utiliser le json récupéré? (Y/N): ')
+        config.log_clear_line()
+        if use.upper() not in ['Y', 'y', 'O', 'o']:
+            config.log("Utilisation de la matchlist récupérée", 'info', True)
+            return None
+
         # Trier par date de modification (le plus récent en premier)
         json_files.sort(key=lambda x: os.path.getmtime(os.path.join(datafiles_path, x)), reverse=True)
         latest_file = os.path.join(datafiles_path, json_files[0])
@@ -51,7 +57,6 @@ def charger_matchlist_depuis_json():
 
         if matchlist and len(matchlist) > 0:
             config.log(f"Matchlist chargée depuis {latest_file} - {len(matchlist)} matchs trouvés", 'info', True)
-            print(f"Matchlist chargée depuis {latest_file} - {len(matchlist)} matchs trouvés")
             return matchlist
         else:
             config.log(f"Fichier JSON {latest_file} existe mais est vide", 'info', True)
@@ -69,21 +74,11 @@ def traiter_matchlist(matchlist):
         ligue_name = matchItem[1]
         # Vérifier si c'est un match WTA
         if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
-            config.proba40A = Functions_stats.get_wta_proba_40A(players_name[0], players_name[1])
-            print('tentative proba 1 : ', config.proba40A)
-            time.sleep(1)
-            if config.proba40A == 0:
-                config.proba40A = Functions_stats.get_wta_proba_40A_sofascore(players_name[0], players_name[1])
-                print('tentative proba 2 : ', config.proba40A)
+            config.proba40A = Functions_stats.get_wta_proba_40A_sofascore(players_name[0], players_name[1])
         else:
-            config.proba40A = Functions_stats.get_proba_40A(players_name[0], players_name[1])
-            time.sleep(1)
-            if config.proba40A == 0:
-                config.proba40A = Functions_stats.get_wta_proba_40A_sofascore(players_name[0], players_name[1])
-        print('proba ' + str(config.proba40A))
+            config.proba40A = Functions_stats.get_wta_proba_40A_sofascore(players_name[0], players_name[1])
         if float(config.proba40A) >= float(config.probamini):
             matchItem.append(config.proba40A)
-            print(matchItem)
             goodmatch.append(matchItem)
     return goodmatch
 
@@ -110,28 +105,31 @@ def sauvegarder_matchlist_json(matchlist):
             json.dump(data_to_save, json_file, ensure_ascii=False, indent=2)
 
         config.log(f"Matchlist enregistrée dans: {json_filepath}", 'info', True)
-        print(f"Matchlist enregistrée dans: {json_filepath}")
 
     except Exception as e:
         config.log(f"Erreur lors de l'enregistrement de matchlist: {str(e)}", 'error', True)
-        print(f"Erreur lors de l'enregistrement de matchlist: {str(e)}")
 
 
 def rechercheDeMatch(driver):
     config.error = False
-    config.log(' RECHERCHE DE MATCH', 'title', False)
+    config.log("-" * 60, "title", False, False, False)
+    config.log(' RECHERCHE DE MATCH', 'title', False, False, False)
+    config.log("-" * 60, "title", False, False, False)
     config.match_found = False
     while not config.match_found and not config.error:
-        # config.init_variable()
+        if config.in_stat and (
+                not config.last_classement or config.last_classement != datetime.now().strftime("%Y-%m-%d")):
+            config.log("Classement différent du dernier run, recherche de nouveaux matchs", 'info', True)
+            classementeDeMatch(driver)
+
+        logline = 0
         config.match_found = GetIfMatchPage(driver)
-        # Définir newsite comme variable locale au lieu d'attribut de config
-        newsite = True
+        page_de_match = config.match_found
         if not config.match_found and float(config.perte) > 0:
             if config.scriptType == '1SET':
                 set1DispatchPerte()
             else:
                 DispatchPerte()
-        # config.match_found = False
         # SCRIPT RECHERCHE DE MATCH
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
         GetIfScriptsRunning()
@@ -142,60 +140,69 @@ def rechercheDeMatch(driver):
             return False"""
         try:
             # RECUPERATION DES LIGUES EN COURS
-            # config.log(' Récupération des ligues', 'info', True, 1)
+            config.log('Récupération des ligues', 'info', False, 1, show_script_type=False)
+            logline += 1
             bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                                   config.classes['dashboard_champ'][config.site_type])
+
         except:
-            # config.log('ligues introuvables!', 'warning', True, 2)
+            config.log('ligues introuvables!', 'warning', True, 2, False)
+            logline += 3
+            config.log_clear_line(logline)
             return False
         else:
-            # config.log('ligues trouvées!', 'success', True, 2)
+            config.log('ligues trouvées!', 'success', True, 2, False)
             # POUR CHAQUE LIGUE RÉCUPÉRÉE
             for bet_ligue in bet_list_ligue:
+                logligueline = 0
                 # ON RÉCUPÈRE LE NOM DE LA LIGUE
                 config.ligue_name = GetLigueName.main(bet_ligue)
                 # EN CAS D'ERREUR
                 if not config.ligue_name:
-                    # config.log('nom ligues introuvalbe!', 'warning', False, 2)
-                    # config.log_clear_line()
+                    config.log('nom ligues introuvalbe!', 'warning', True, 2, False)
                     config.error = False
+                    config.log_clear_line(logligueline)
                     continue
                 # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-                config.log(' ' + config.ligue_name, 'info', False, 2)
+                config.log(config.ligue_name, 'info', False, 2, False)
+                logligueline += 1
+
                 if getCompet():
                     # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
                     try:
-                        config.log('Récupération des matchs', 'info', False, 3)
-                        # config.log_clear_line()
+                        config.log('Récupération des matchs', 'info', False, 3, False)
+                        logligueline += 1
+
                         bet_items = bet_ligue.find_elements(By.CLASS_NAME,
                                                             config.classes['dashboard_champ_matchlist'][
                                                                 config.site_type])
                     except:
-                        config.log('Listes des matchs introuvables!', 'warning', False, 3)
+                        config.log('Listes des matchs introuvables!', 'warning', True, 3, False)
+                        config.log_clear_line(logligueline)
                         # s'il y une erreur on passe au suivant
                         continue
                     else:
                         if len(bet_items) <= 0:
-                            config.log('Listes des matchs introuvables!', 'warning', False, 3)
-                            # s'il y une erreur on passe au suivant
-                            config.log_clear_line(2)
+                            config.log('Listes des matchs introuvables!', 'warning', True, 3, False)
+                            config.log_clear_line(logligueline)
                             continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
                         for bet_item in bet_items:
                             try:
-                                config.log('On récupère le nom des joueurs', 'info', False, 3)
-                                # config.log_clear_line()
+                                config.log('On récupère le nom des joueurs', 'info', False, 3, False)
+                                logligueline += 1
+
                                 div_bet_player = bet_item.find_element(By.CLASS_NAME, config.classes[
                                     'dashboard_champ_match_teams_name'][
                                     config.site_type])
                             except:
-                                # config.log('Impossible de récpérer les joueurs!', 'warning', False, 3)
-                                # config.log_clear_line()
+                                config.log('Impossible de récpérer les joueurs!', 'warning', True, 3, False)
                                 continue
                             else:
                                 if div_bet_player:
                                     div_bet_player = div_bet_player.text.split('\n')
-                                    config.log(str(div_bet_player), 'info', False, 3)
-                                    # config.log_clear_line()
+                                    config.log(str(div_bet_player), 'info', False, 3, False)
+                                    logligueline += 1
+
                                 try:
                                     # on récupère le score
                                     div_bet_score = bet_item.find_elements(By.CLASS_NAME, config.classes[
@@ -203,62 +210,58 @@ def rechercheDeMatch(driver):
                                         config.site_type])
                                 except:
 
-                                    config.log('Impossible de récupérer le score!', 'warning', False, 4)
-                                    time.sleep(2)
-                                    # config.log_clear_line()
+                                    config.log('Impossible de récupérer le score!', 'warning', True, 4)
                                     continue
                                 else:
                                     # si le score est récupéré
                                     if len(div_bet_score) <= 0:
-                                        config.log('Pas de score!', 'warning', False, 4)
-                                        time.sleep(2)
-                                        # config.log_clear_line()
+                                        config.log('Pas de score!', 'warning', True, 4, False)
                                         continue
                                     # on le vérifie
-                                    config.log('Vérification du score!', 'info', False, 4)
-                                    # config.log_clear_line()
+                                    config.log('Vérification du score!', 'info', False, 4, False)
+                                    logligueline += 1
+
                                     bet_score = GetMatchScore.main(div_bet_score[0],
                                                                    config.score_to_start)
-                                    if bet_score:  # SI LE MATCH EST PRET
-                                        config.log('Score ok', 'info', False, 4)
-                                        config.log_clear_line()
+                                    if not bet_score:  # SI LE MATCH EST PRET
+                                        config.log('Score OK', 'info', False, 4, False)
+                                        logligueline += 1
+
                                         # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
                                         config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
                                                                                        config.matchlist_file_name)
-                                        print(config.newmatch[0])
                                         if config.newmatch[0]:
                                             if OuverturePageMatch.main(bet_item, config.script_num,
                                                                        config.newmatch[1],
                                                                        config.running_file_name,
                                                                        config.matchlist_file_name):
                                                 config.newmatch = config.newmatch[1]
-                                                config.log(config.newmatch, 'info', False, 4)
-                                                print('MATCH OK')
                                                 config.match_found = True
+                                                config.log_clear_line(logligueline)
                                                 break
                                             else:
                                                 continue
                                     else:
-                                        config.log('Score NOT ok', 'warning', False, 4)
-                                        config.log_clear_line()
-                config.log_clear_line()
+                                        config.log('Score NOT OK', 'warning', False, 4, False)
+                                        logligueline += 1
+
                 if config.match_found:
                     AddRunning.main(config.script_num, config.running_file_name)
                     break
+                config.log_clear_line(logligueline)
 
         if not config.match_found:
-            config.log('PAS DE MATCH TROUVE!', 'warning', True, 2)
-            # config.log_clear_line(3)
+            config.log_clear_line(logline)
+            config.log('PAS DE MATCH TROUVE!', 'warning', False, 2, False)
             driver.get(config.site_url)
             time.sleep(5)
+            config.log_clear_line()
         else:
-
-            config.log('MATCH TROUVE!', 'success', False, 2)
-            # Définir match_end comme variable locale au lieu d'attribut de config
-            match_end = False
+            logline += 3
+            config.log_clear_line(logline)
             time.sleep(3)
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE
-    # END SCRIPT RECHERCHE DE MATCH
+
     return config.match_found
 
 
@@ -532,9 +535,9 @@ def rechercheDeMatchNBA(driver):
 def classementeDeMatch(driver):
     driver.get(config.site_line_url)
     config.error = False
-    print('RECHERCHE DE MATCH')
     config.match_found = False
     while not config.match_found and not config.error:
+        line = 0
         config.init_variable()
 
         matchlist_from_json = charger_matchlist_depuis_json()
@@ -542,7 +545,6 @@ def classementeDeMatch(driver):
         if matchlist_from_json is not None:
             # Utiliser la matchlist du fichier JSON
             matchlist = matchlist_from_json
-            print(f"Utilisation de la matchlist depuis le fichier JSON - {len(matchlist)} matchs")
             config.log(f"Matchlist chargée depuis JSON - {len(matchlist)} matchs", 'info', True)
         else:
             """On vérifie si c'est la page d'un match """
@@ -553,14 +555,12 @@ def classementeDeMatch(driver):
             # VERIFICATION SI PAGE DE LIST LIVE"""
             if not VerificationListeMatchLive(driver):
                 config.error = True
-                print("PAGE VIDE")
                 driver.get(config.site_line_url)
                 return False
             # RECUPERATION DES LIGUES EN COURS
             bet_list_ligue = driver.find_elements(By.CLASS_NAME, config.classes['dashboard_champ'][config.site_type])
             matchlist = []
             liguelist = []
-            print(str(len(bet_list_ligue)))
             for bet_ligue in bet_list_ligue:
                 # ON RÉCUPÈRE LE NOM DE LA LIGUE
                 config.ligue_name = GetLigueName.main(bet_ligue)
@@ -576,6 +576,7 @@ def classementeDeMatch(driver):
             for link in liguelist:
                 print(link[0])
                 driver.get(link[0])
+                config.log_clear_line()
                 config.ligue_name = link[1]
                 bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                                       config.classes['dashboard_champ_body_games'][config.site_type])
@@ -585,25 +586,25 @@ def classementeDeMatch(driver):
                     # ON VÉRIFIE QUE LA COMPET EST JOUABLE
                     if getCompet():
                         print(config.ligue_name)
+                        line += 1
                         # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
                         try:
                             bet_items = driver.find_elements(By.CLASS_NAME,
                                                              config.classes['dashboard_game_block_row'][
                                                                  config.site_type])
                         except:
-                            print(' c-events-scoreboard__item')
                             # s'il y une erreur on passe au suivant
                             continue
                         else:
                             if len(bet_items) <= 0:
-                                print('AUCUN MATCHS RÉCUPÉ')
+                                config.log('AUCUN MATCHS RÉCUPÉ', 'warning', True)
                                 continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
                             i = 0
                             for bet_item in bet_items:
                                 try:
                                     start_time_text = bet_item.find_element(By.CLASS_NAME, 'c-events__time').text
                                 except:
-                                    print('heure de debut non trouvé')
+                                    config.log('heure de debut non trouvé', 'warning', True)
                                 else:
                                     try:
                                         day_month = start_time_text.split()[0]  # '09/09'
@@ -618,7 +619,7 @@ def classementeDeMatch(driver):
                                         if match_date > today:
                                             continue
                                     except ValueError as e:
-                                        print(f"Erreur de parsing de la date : {e}")
+                                        config.log(f"Erreur de parsing de la date", 'warning', True)
 
                                 try:
                                     teams_name = bet_item.find_element(By.CLASS_NAME,
@@ -628,7 +629,6 @@ def classementeDeMatch(driver):
                                     players_name = []
                                     match = []
                                     if len(players) <= 1:
-                                        print('pas de player')
                                         continue
                                     for player in players:
                                         player = player.text.split('(')[0]
@@ -648,19 +648,15 @@ def classementeDeMatch(driver):
                                     match.append(config.newmatch)
                                     match_date = datetime.strptime(f"{day_month}/{current_year} {hour}:00",
                                                                    "%d/%m/%Y %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
-                                    print('match_date', match_date)
                                     match.append(match_date)
                                     matchlist.append(match)
 
                                 except Exception as e:
-                                    print(e)
                                     continue
-                                else:
-                                    print('ok')
+                        config.log_clear_line(line)
+                        line = 0
                     else:
-                        print('not comp')
-
-        print(len(matchlist))
+                        config.log('Compétition non autorisé', 'warning', True)
 
         # Sauvegarder la matchlist dans un fichier JSON avant traitement
         sauvegarder_matchlist_json(matchlist)
@@ -681,6 +677,22 @@ def classementeDeMatch(driver):
                 todo("add", "|".join(str(x) for x in m), config.matchlisttodo_file_name)
             except:
                 pass
+        config.last_classement = datetime.now().strftime("%Y-%m-%d")
+        # Créer le dossier DataFiles/done s'il n'existe pas
+        done_dir = os.path.join(config.projectPath, "DataFiles", "done")
+        os.makedirs(done_dir, exist_ok=True)
+
+        # Déplacer les anciens fichiers matchlist_*.json dans le dossier done
+        datafiles_path = os.path.join(config.projectPath, "DataFiles")
+        for filename in os.listdir(datafiles_path):
+            if filename.startswith('matchlist_') and filename.endswith('.json'):
+                src_path = os.path.join(datafiles_path, filename)
+                dst_path = os.path.join(done_dir, filename)
+                try:
+                    os.rename(src_path, dst_path)
+                except Exception as e:
+                    config.log(f"Erreur lors du déplacement de {filename} vers done: {str(e)}", 'warning', True)
+        config.log_clear_line(line)
         break
 
 
@@ -691,7 +703,6 @@ def send_matchlist_to_remote(match):
     Args:
         matchlist (list): Liste des matchs à envoyer.
     """
-    print('match', match)
     url = f"{config.api_url}/matchlist/insert.php"
     headers = {
         "Content-Type": "application/json",
@@ -707,10 +718,10 @@ def send_matchlist_to_remote(match):
         if response.status_code == 200:
             try:
                 json_resp = response.json()
-                print(json_resp)
+                config.log(json_resp)
             except ValueError:
                 config.log("Réponse 200 reçue mais le corps n'est pas du JSON valide", 'warning', True)
-                print(response.text)
+                config.log(response.text, 'warning', False)
         else:
             config.log(f"Erreur lors de l'envoi de la matchlist : {response.status_code} - {response.text}", 'error',
                        True)
@@ -742,11 +753,9 @@ def newclassementeDeMatch(driver):
         if matchlist_from_json is not None:
             # Utiliser la matchlist du fichier JSON
             matchlist = matchlist_from_json
-            print(f"Utilisation de la matchlist depuis le fichier JSON - {len(matchlist)} matchs")
             config.log(f"Matchlist chargée depuis JSON - {len(matchlist)} matchs", 'info', True)
         else:
             # Procéder au scraping normal
-            print("Aucun fichier JSON valide trouvé, procédure de scraping normale")
             config.log("Aucun fichier JSON valide trouvé, procédure de scraping normale", 'info', True)
 
             # RECUPERATION DES LIGUES EN COURS

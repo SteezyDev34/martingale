@@ -18,8 +18,8 @@ def GetIfMatchPage(driver):
                 (By.CLASS_NAME, config.classes['scoreboard'][config.site_type]))
         )
     except:
-        # config.log('        Tableau des scores introuvable!', 'warning', False)
-        # config.log_clear_line()
+        config.log('Tableau des scores introuvable!', 'warning', False, show_script_type=False)
+        config.log_clear_line()
         return False
     else:
         try:
@@ -28,9 +28,9 @@ def GetIfMatchPage(driver):
                     (By.CLASS_NAME, config.classes['end_match_stats'][config.site_type]))
             )
         except:
-            # config.log('        Tableau des stats introuvable!', 'warning', False)
-            # config.log_clear_line()
-            # config.log('PAGE DE MATCH!', 'info', False)
+            config.log('Tableau des stats introuvable!', 'info', False, show_script_type=False)
+            config.log_clear_line()
+            config.log('PAGE DE MATCH!', 'info', show_script_type=False)
             return True
         else:
             try:
@@ -39,20 +39,18 @@ def GetIfMatchPage(driver):
                         (By.CLASS_NAME, config.classes['resume_text_content'][config.site_type]))
                 )
             except Exception as e:
-                config.log('MATCH TERMINÉ!', 'info', False)
-                config.log_clear_line()
+                config.log('MATCH TERMINÉ!', 'info', show_script_type=False)
                 driver.get(config.site_url)
                 return False
             else:
                 ul_text = ul_element.text
-                # print(ul_text)
                 # Vérifier si le texte contient le mot "résume", indépendamment de la casse
                 if 'résume' in ul_text.lower() or 'terminé' in ul_text.lower():
-                    config.log('     MATCH TERMINÉ!', 'info', False)
+                    config.log('MATCH TERMINÉ!', 'info', show_script_type=False)
                     driver.get(config.site_url)
                     return False
                 else:
-                    config.log('     Ce n\'est pas une page de résumé', 'info', False)
+                    config.log("Ce n'est pas une page de résumé", 'info', False, show_script_type=False)
                     config.log_clear_line()
                     driver.get(config.site_url)
                     return False

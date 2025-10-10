@@ -10,6 +10,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from unidecode import unidecode
 
+import config
+
 # Fichier de cache partagé pour toutes les stats tennis
 CACHE_FILE = "tennis_stats_cache.json"
 # Fichier de log pour les joueurs non trouvés
@@ -37,10 +39,9 @@ def log_player_not_found(player_name, function_name=""):
     # Écrire dans le fichier de log
     try:
         with open(PLAYERS_NOT_FOUND_LOG, "a", encoding="utf-8") as f:
-            print(f"{log_message}")
             f.write(log_message)
     except Exception as e:
-        print(f"Erreur lors de l'écriture du log: {e}")
+        config.log(f"Erreur lors de l'écriture du log")
 
 
 def load_cache():
@@ -211,50 +212,39 @@ warnings.simplefilter('ignore', InsecureRequestWarning)
 
 def get_wta_proba_40A_sofascore(playerName1, playerName2):
     # Initialise cache en mémoire
-    print("\n===== DÉBUT FONCTION get_wta_proba_40A_sofascore =====")
+    print("===== DÉBUT FONCTION get_wta_proba_40A_sofascore =====")
+    line = 1
     print(f"Joueurs: {playerName1} vs {playerName2}")
+    line += 1
     cache = load_cache()
     p1_key = f"player_{unidecode(playerName1).strip().lower().replace('-', ' ')}_40-40"
     p2_key = f"player_{unidecode(playerName2).strip().lower().replace('-', ' ')}_40-40"
-    print(f"Clés de cache: {p1_key}, {p2_key}")
     if p1_key in cache and p2_key in cache:
-        print('Probabilités trouvées dans le cache')
         result = cache[p1_key] + cache[p2_key]
-        print(f"Résultat depuis cache: {result}")
         # return result
 
     print("Recherche des IDs des joueurs via API...")
+    line += 1
     url1 = f"http://datas.sc2vagr6376.universe.wf/api/sports/2/teams/search?search={playerName1.replace(' ', '+')}"
     url2 = f"http://datas.sc2vagr6376.universe.wf/api/sports/2/teams/search?search={playerName2.replace(' ', '+')}"
     try:
         print(f"Requête API pour {playerName1}: {url1}")
+        line += 1
+        print(f"Requête API pour {playerName2}: {url1}")
+        line += 1
         # Désactiver la vérification SSL pour les certificats auto-signés
         d1 = requests.get(url1, headers=headers, verify=False).json()
-        print(f"Réponse API pour {playerName1}: {d1}")
-        time.sleep(1)
-        print(f"Requête API pour {playerName2}: {url2}")
         d2 = requests.get(url2, headers=headers, verify=False).json()
-        print(f"Réponse API pour {playerName2}: {d2}")
-        time.sleep(1)
 
         # Vérifier si des résultats ont été trouvés
         if not d1.get('data') or len(d1['data']) == 0:
             print(f"Aucun résultat trouvé pour {playerName1}")
+            line += 1
             log_player_not_found(playerName1, "get_wta_proba_40A_sofascore")
         if not d2.get('data') or len(d2['data']) == 0:
             print(f"Aucun résultat trouvé pour {playerName2}")
+            line += 1
             log_player_not_found(playerName2, "get_wta_proba_40A_sofascore")
-
-        # Afficher les résultats trouvés pour aider au débogage
-        print(f"Résultats pour {playerName1}:")
-        for i, player in enumerate(d1['data']):
-            print(
-                f"  {i + 1}. {player.get('name')} (ID: {player.get('sofascore_id')}, Ligue: {player.get('league', {}).get('name', 'Inconnue')})")
-
-        print(f"Résultats pour {playerName2}:")
-        for i, player in enumerate(d2['data']):
-            print(
-                f"  {i + 1}. {player.get('name')} (ID: {player.get('sofascore_id')}, Ligue: {player.get('league', {}).get('name', 'Inconnue')})")
 
         # Sélectionner le joueur individuel (non double) si possible
         pid1 = None
@@ -263,7 +253,6 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
             if '/' not in player.get('name', ''):
                 # pid1 = player.get('sofascore_id')
                 pid1 = player.get('id')
-                print(f"Sélectionné pour {playerName1}: {player.get('name')} (ID: {pid1})")
                 break
 
         pid2 = None
@@ -271,7 +260,6 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
             if '/' not in player.get('name', ''):
                 # pid2 = player.get('sofascore_id')
                 pid2 = player.get('id')
-                print(f"Sélectionné pour {playerName2}: {player.get('name')} (ID: {pid2})")
                 break
 
         # Si aucun joueur individuel n'a été trouvé, utiliser le premier résultat
@@ -279,39 +267,34 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
             # pid1 = d1['data'][0]['sofascore_id']
             pid1 = d1['data'][0]['id']
             print(f"Aucun joueur individuel trouvé pour {playerName1}, utilisation du premier résultat (ID: {pid1})")
+            line += 1
 
         if pid2 is None and d2['data']:
             # pid2 = d2['data'][0]['sofascore_id']
             pid2 = d2['data'][0]['id']
             print(f"Aucun joueur individuel trouvé pour {playerName2}, utilisation du premier résultat (ID: {pid2})")
+            line += 1
 
         if not pid1 and not pid2:
             print("Impossible de récupérer les IDs des joueurs")
+            line += 1
+            config.log_clear_line(line)
             return 0.0
-
-        print(f"IDs récupérés: {pid1} pour {playerName1}, {pid2} pour {playerName2}")
     except Exception as e:
-        print(f"Erreur lors de la récupération des IDs: {e}")
+        config.log(f"Erreur lors de la récupération des IDs", 'warning')
+        config.log_clear_line(line)
         # Ajouter un avertissement sur la désactivation de la vérification SSL
-        print("Note: Si l'erreur persiste, vérifiez la configuration SSL ou le certificat du serveur.")
         return 0.0
     else:
         # url1 = f"https://www.sofascore.com/api/v1/team/{pid1}/year-statistics/2025"
         # url2 = f"https://www.sofascore.com/api/v1/team/{pid2}/year-statistics/2025"
         url1 = f"http://datas.sc2vagr6376.universe.wf/api/stats/tennis/player/{pid1}"
         url2 = f"http://datas.sc2vagr6376.universe.wf/api/stats/tennis/player/{pid2}"
-        print(f"URLs des statistiques: \n{url1}\n{url2}")
         try:
-            print(f"Récupération des statistiques pour {playerName1}...")
             json_data = requests.get(url1, headers=headers, verify=False).json()
             d1 = json_data.get('data', {})  # ou {} ou [] selon ce que tu attends
-            time.sleep(1)
-            print(f"Récupération des statistiques pour {playerName2}...")
             json_data = requests.get(url2, headers=headers, verify=False).json()
             d2 = json_data.get('data', {})  # ou {} ou [] selon ce que tu attends
-            time.sleep(1)
-            print("Statistiques récupérées avec succès")
-
             # Calcul des statistiques globales pour le joueur 1
             total_first_serve_points_scored1 = 0
             total_first_serve_points_total1 = 0
@@ -321,10 +304,7 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
             total_break_points_total1 = 0
 
             # Parcourir toutes les surfaces pour le joueur 1
-            print(f"Structure des données pour {playerName1}: {list(d1.keys())}")
-            print(f"Nombre de statistiques pour {playerName1}: {len(d1.get('statistics', []))}")
             for i, stat in enumerate(d1.get('statistics', [])):
-                print(f"Surface {i + 1} pour {playerName1}: {stat.get('groundType', 'Inconnue')}")
                 total_first_serve_points_scored1 += stat.get('firstServePointsScored', 0)
                 total_first_serve_points_total1 += stat.get('firstServePointsTotal', 0)
                 total_second_serve_points_scored1 += stat.get('secondServePointsScored', 0)
@@ -341,28 +321,13 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
             total_break_points_total2 = 0
 
             # Parcourir toutes les surfaces pour le joueur 2
-            print(f"Structure des données pour {playerName2}: {list(d2.keys())}")
-            print(f"Nombre de statistiques pour {playerName2}: {len(d2.get('statistics', []))}")
             for i, stat in enumerate(d2.get('statistics', [])):
-                print(f"Surface {i + 1} pour {playerName2}: {stat.get('groundType', 'Inconnue')}")
                 total_first_serve_points_scored2 += stat.get('firstServePointsScored', 0)
                 total_first_serve_points_total2 += stat.get('firstServePointsTotal', 0)
                 total_second_serve_points_scored2 += stat.get('secondServePointsScored', 0)
                 total_second_serve_points_total2 += stat.get('secondServePointsTotal', 0)
                 total_break_points_scored2 += stat.get('breakPointsScored', 0)
                 total_break_points_total2 += stat.get('breakPointsTotal', 0)
-
-            print(f"\nTotaux pour {playerName1}:")
-            print(f"Points gagnés sur 1ère balle: {total_first_serve_points_scored1}/{total_first_serve_points_total1}")
-            print(
-                f"Points gagnés sur 2ème balle: {total_second_serve_points_scored1}/{total_second_serve_points_total1}")
-            print(f"Balles de break converties: {total_break_points_scored1}/{total_break_points_total1}")
-
-            print(f"\nTotaux pour {playerName2}:")
-            print(f"Points gagnés sur 1ère balle: {total_first_serve_points_scored2}/{total_first_serve_points_total2}")
-            print(
-                f"Points gagnés sur 2ème balle: {total_second_serve_points_scored2}/{total_second_serve_points_total2}")
-            print(f"Balles de break converties: {total_break_points_scored2}/{total_break_points_total2}")
 
             # Calcul des pourcentages de service et retour
             svc1 = float(total_first_serve_points_scored1) / float(
@@ -374,21 +339,9 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
             ret2 = float(total_break_points_scored2) / float(
                 total_break_points_total2) if total_break_points_total2 > 0 else 0.0
 
-            print(f"\nPourcentages pour {playerName1}:")
-            print(f"Service: {svc1:.4f} ({total_first_serve_points_scored1}/{total_first_serve_points_total1})")
-            print(f"Retour: {ret1:.4f} ({total_break_points_scored1}/{total_break_points_total1})")
-
-            print(f"\nPourcentages pour {playerName2}:")
-            print(f"Service: {svc2:.4f} ({total_first_serve_points_scored2}/{total_first_serve_points_total2})")
-            print(f"Retour: {ret2:.4f} ({total_break_points_scored2}/{total_break_points_total2})")
-
             # Calcul des probabilités
             prob1 = float(svc1) * float(ret1)
             prob2 = float(svc2) * float(ret2)
-
-            print(f"\nProbabilités calculées:")
-            print(f"{playerName1}: {prob1:.4f} (svc {svc1:.4f} * ret {ret1:.4f})")
-            print(f"{playerName2}: {prob2:.4f} (svc {svc2:.4f} * ret {ret2:.4f})")
 
             # Mise en cache des résultats
             cache[f"player_{playerName1.lower()}_40-40"] = prob1
@@ -396,15 +349,14 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
             save_cache(cache)
 
             result = float(prob1) + float(prob2)
-            print(f"Résultat final: {result:.4f}")
-            print("===== FIN FONCTION get_wta_proba_40A_sofascore =====\n")
+            config.log(f"Résultat final: {result:.4f}")
+            print("===== FIN FONCTION get_wta_proba_40A_sofascore =====")
+            line += 1
+            config.log_clear_line(line)
             return result
         except Exception as e:
-            print(f"Erreur lors du calcul des statistiques: {e}")
-            print("Traceback:")
-            import traceback
-            traceback.print_exc()
-            print("===== FIN FONCTION get_wta_proba_40A_sofascore (avec erreur) =====\n")
+            config.log(f"Erreur lors du calcul des statistiques")
+            config.log_clear_line(line)
             return 0.0
 
 

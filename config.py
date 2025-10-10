@@ -2,9 +2,11 @@ import datetime
 import json
 import os
 import platform
+import time
 from typing import Dict, Any, Optional
 
 import requests
+from pygments.styles.rainbow_dash import WHITE
 
 # Import des configurations depuis le module config
 from conf import classes, score_to_start, total_want_win, total_want_winset1
@@ -38,39 +40,7 @@ site_url = 'https://1xbet.com/fr/live/tennis'
 site_line_url = 'https://1xbet.com/fr/line/tennis'
 site_type = 'new_site'
 match_name = ''
-
-
-def configure_site_type(use_ca_site=None):
-    """
-    Configure le type de site et les URLs en fonction du choix utilisateur.
-    
-    Args:
-        use_ca_site (bool, optional): Si True, utilise le site CA. Si False, utilise le site standard.
-                                     Si None, demande à l'utilisateur.
-    
-    Returns:
-        str: Le type de site configuré ('new_site' ou 'old_site')
-    """
-    global site_url, site_line_url, site_type
-
-    if use_ca_site is None:
-        wich_site = input("1XBET CA? (Y/N): ")
-        use_ca_site = wich_site.upper() in ['Y', 'O']
-
-    if use_ca_site:
-        site_url = "https://ca.1xbet.com/fr/live/tennis"
-        site_line_url = "https://ca.1xbet.com/fr/line/tennis"
-        site_type = 'new_site'
-    else:
-        site_url = 'https://1xbet.com/fr/live/tennis'
-        site_line_url = 'https://1xbet.com/fr/line/tennis'
-        site_type = 'old_site'
-
-    return site_type
-
-
-configure_site_type()
-
+nb_log_lines = 0
 # La configuration des scores est maintenant importée depuis le module config
 passed_score = []
 # Game state variables
@@ -126,7 +96,7 @@ log_message = ''
 newset = 2
 teams = False
 all_scores = {}
-
+last_classement = 'test'
 # Le dictionnaire classes est maintenant importé depuis le module config
 # Importation des types de paris 1xBet depuis le fichier JSON
 xbet_types_file = os.path.join(projectPath, 'xbet_types.json')
@@ -161,7 +131,7 @@ def getJsonData(url: str) -> Optional[Dict[str, Any]]:
     Returns:
         Un dictionnaire contenant les données JSON ou None en cas d'erreur
     """
-    max_attempts = 5
+    max_attempts = 1
     for attempt in range(max_attempts):
         try:
             response = requests.get(url, timeout=10)
@@ -171,10 +141,9 @@ def getJsonData(url: str) -> Optional[Dict[str, Any]]:
                 return data[0]
             return None
         except requests.exceptions.RequestException as e:
-            print(f"Tentative {attempt + 1}/{max_attempts} - Erreur lors de la récupération des données : {e}")
-        except json.JSONDecodeError as e:
-            print(f"Tentative {attempt + 1}/{max_attempts} - Erreur lors du parsing du JSON : {e}")
-
+            log(f"Tentative {attempt + 1}/{max_attempts} - Erreur lors de la récupération des données", 'warning')
+        except json.JSONDecodeError:
+            log(f"Tentative {attempt + 1}/{max_attempts} - Erreur lors du parsing du JSON", 'warning')
         # Attendre un peu plus longtemps entre chaque tentative
         if attempt < max_attempts - 1:
             import time
@@ -342,7 +311,6 @@ class ScriptConfig:
 
         url = f"{api_url}/strategy{self.script_type}/"
         strategy = getJsonData(url)
-        print('init scriptconfig')
         # Configuration par défaut selon le type de script
         default_configs = {
         }
@@ -426,7 +394,6 @@ import sys
 import os
 
 # Forcer l'encodage en UTF-8 pour stdout
-print(sys.platform)
 if sys.platform == "win32":
     sys.stdout = codecs.getwriter("utf-8")(sys.stdout.buffer, errors="backslashreplace")
     sys.stderr = codecs.getwriter("utf-8")(sys.stderr.buffer, errors="backslashreplace")
@@ -438,6 +405,7 @@ colorama.init()
 
 # Définition des couleurs ANSI avec colorama pour la compatibilité Windows
 RESET = colorama.Style.RESET_ALL  # Réinitialisation des styles
+WHITE = colorama.Fore.WHITE
 BOLD = colorama.Style.BRIGHT  # Texte en gras
 YELLOW = colorama.Fore.YELLOW  # Texte jaune
 GREEN = colorama.Fore.GREEN  # Texte vert
@@ -451,7 +419,7 @@ BGBLUE = colorama.Back.BLUE  # Fond bleu
 BGRESET = colorama.Back.BLACK  # Fond noir (réinitialisation)
 
 
-def log(message, type="", clear=True, indent=0):
+def log(message, type="", clear=True, indent=0, show_script_type=True):
     """
     Affiche un message dans le terminal tout en effaçant dynamiquement la ligne précédente si demandé.
 
@@ -462,7 +430,7 @@ def log(message, type="", clear=True, indent=0):
     global log_message
     # Détermination de la couleur en fonction du type de message
     if type == "info":
-        color = BOLD
+        color = WHITE
     elif type == "title":
         color = CYAN
     elif type == "success":
@@ -471,16 +439,30 @@ def log(message, type="", clear=True, indent=0):
         color = YELLOW
     elif type == "error":
         color = RED
+    elif type == "purple":
+        color = PURPLE
+    elif type == "bgpurple":
+        color = BGPURPLE
+    elif type == "bgcyan":
+        color = BGCYAN
+    elif type == "bgblue":
+        color = BGBLUE
+    elif type == "bgreset":
+        color = BGRESET
     else:
         color = RESET  # Pas de couleur par défaut
 
     # Gestion de l'indentation
     indent = "    " * indent if indent > 0 else ""
-    sys.stdout.write(f"{color}{scriptType}__{indent}{message}{RESET}\n")
+    s = ''
+    if show_script_type:
+        s = scriptType
+    sys.stdout.write(f"{color}{s} {indent}{message}{RESET}\n")
 
     if clear:
         # Effacement de la ligne précédente
         # Affichage du nouveau message sur la même ligne
+        time.sleep(0.3)
         log_clear_line()
 
     # Force l'écriture du buffer
@@ -499,16 +481,15 @@ def log_clear_line(line_number=1):
     if os.getenv('PYCHARM_HOSTED') == '1':  # Si exécuté dans PyCharm
         # Simple écriture de lignes vides pour PyCharm
         for _ in range(line_number):
-            # sys.stdout.write("clear\n")
+            sys.stdout.write("clear\n")
             continue
     else:
         # Délai pour éviter les problèmes d'affichage
         for _ in range(line_number):
-            # Remonte d'une ligne et l'efface
             # sys.stdout.write("clear\n")
-            pass
-            # sys.stdout.write("\033[F\033[K\r")
-            # sys.stdout.flush()
+            # Monte d’une ligne et efface-la entièrement
+            sys.stdout.write("\x1b[1A\x1b[2K\r")
+        sys.stdout.flush()
 
 
 win_session = False
@@ -522,3 +503,39 @@ old_side = 'under'
 old_result = False
 xpath_over = '//*[@id="root"]/div[1]/div[2]/div[1]/div/section/div/div[4]/div[2]/button'
 xpath_under = '//*[@id="root"]/div[1]/div[2]/div[1]/div/section/div/div[4]/div[1]/button'
+
+
+def configure_site_type(use_ca_site=None):
+    """
+    Configure le type de site et les URLs en fonction du choix utilisateur.
+
+    Args:
+        use_ca_site (bool, optional): Si True, utilise le site CA. Si False, utilise le site standard.
+                                     Si None, demande à l'utilisateur.
+
+    Returns:
+        str: Le type de site configuré ('new_site' ou 'old_site')
+    """
+    global site_url, site_line_url, site_type
+
+    if use_ca_site is None:
+        wich_site = input("1XBET CA? (Y/N): ")
+        use_ca_site = wich_site.upper() in ['Y', 'O']
+        log_clear_line(1)
+
+    if use_ca_site:
+        site_url = "https://ca.1xbet.com/fr/live/tennis"
+        site_line_url = "https://ca.1xbet.com/fr/line/tennis"
+        site_type = 'new_site'
+    else:
+        site_url = 'https://1xbet.com/fr/live/tennis'
+        site_line_url = 'https://1xbet.com/fr/line/tennis'
+        site_type = 'old_site'
+
+    log("-" * 60, "info", False)
+    log(f"SITE CONFIGURÉ: {site_type.upper()} - {site_url}", "info", False)
+    log("-" * 60, "info", False)
+    return site_type
+
+
+configure_site_type()

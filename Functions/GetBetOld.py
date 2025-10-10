@@ -12,7 +12,7 @@ from Functions.getTextFromImageGPT import compare_selection
 
 
 def GetBetOld(driver, nextBet=False, selection=''):
-    config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', True, 2)
+    config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', False, 2)
     if config.scriptType in config.allScriptType:
         GetScoreActuel(driver)
     DeleteBet(driver)
@@ -51,10 +51,6 @@ def GetBetOld(driver, nextBet=False, selection=''):
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__row')[0]
             first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'c-scoreboard-player-score__ball')
-            if first_player:
-                print('PLAYER 1')
-            else:
-                print('PLAYER 2')
             if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                     first_player = 1
@@ -92,7 +88,6 @@ def GetBetOld(driver, nextBet=False, selection=''):
                     first_player = 2
                     if config.scriptType == '030':
                         config.win_type = '30:0'  # inversé
-                print('first_player :', first_player)
             if config.scriptType == '300':
                 sType = "Serveur va mener 30-0"
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
@@ -101,7 +96,6 @@ def GetBetOld(driver, nextBet=False, selection=''):
                 else:
                     first_player = 2
                     config.win_type = '0:30'  # inversé
-                print('first_player :', first_player)
             if config.scriptType == 'BREAK':
 
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
@@ -111,7 +105,6 @@ def GetBetOld(driver, nextBet=False, selection=''):
                     first_player = 1
                     config.win_type = ['40:0', '40:15', '40:30', 'A:40']
                 sType = "Joueur " + str(first_player) + " va gagner le"
-                print('first_player :', first_player)
             if config.scriptType == '15A' or config.scriptType == '30A' or config.scriptType == '40A' or config.scriptType == '030' or config.scriptType == '300':
                 x_path = (
                         '//div[contains(@class, "bet_group_col")]'
@@ -127,7 +120,7 @@ def GetBetOld(driver, nextBet=False, selection=''):
                         '//div[contains(@class, "bet-inner") and not(contains(@class, "blockSob"))]'
                         '//span[contains(text(), "' + str(sType) + '")]'
                 )
-            print(x_path)
+            # TODO le xpath direct sur le mtodu bouton ne ofnctionne plus
         else:
             x_path = (
                     '//div[contains(@class, "bet_group_col")]'
@@ -135,7 +128,7 @@ def GetBetOld(driver, nextBet=False, selection=''):
                     '//div[contains(@class, "bet-inner") and not(contains(@class, "blockSob"))]'
                     '//span[contains(text(), "' + str(sType) + '")]'
             )
-            print(x_path)
+            # print(x_path)
         try:
             if tentative_clic < 2:
                 element = WebDriverWait(driver, 5).until(
@@ -162,9 +155,7 @@ def GetBetOld(driver, nextBet=False, selection=''):
                         if bet_text.strip():  # Only append if bet_text is not empty
                             bet_list.append(bet_text)
                     bet_list = '[' + ','.join(bet_list) + ']'
-                    print(bet_list)
                     sType = compare_selection(config.match_name, sType, bet_list)
-                    print(sType)
                     if sType:
                         for bet in list_of_bet_type:
                             bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
@@ -186,7 +177,6 @@ def GetBetOld(driver, nextBet=False, selection=''):
                     else:
                         time.sleep(1)
                         cpn_bet_market_label = driver.find_element(By.CLASS_NAME, 'cpn-bet-market__label').text
-                        print('cpn_bet_market_label', cpn_bet_market_label)
                         if sType in cpn_bet_market_label:
                             clic = True
                             return clic
@@ -198,20 +188,19 @@ def GetBetOld(driver, nextBet=False, selection=''):
 
         except Exception as e:
             tentative_clic += 1
-            config.log(f'error recup lin #ERR345 jeu : {jeu}, stype : {sType} e : {e}', 'error', True, 2)
+            config.log(f'error recup lin #ERR345 jeu : {jeu}, stype : {sType}', 'error', False)
         else:
             try:
-                print(x_path)
                 element = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.XPATH,
                                                 x_path)))
                 list_of_bet_type = driver.find_elements(By.XPATH, x_path)
             except Exception as e:
                 tentative_clic += 1
-                config.log(f"#E0015 btn 40A not reachable : {e}", 'error', True, 2)
+                config.log(f"#E0015 btn 40A not reachable", 'error', False, 2)
             else:
                 if len(list_of_bet_type) > 0:
-                    config.log('JEU TROUVÉ! : ' + list_of_bet_type[0].text, 'success', True, 2)
+                    config.log('JEU TROUVÉ! : ' + list_of_bet_type[0].text, 'success', False, 2)
                     tentative = 0
                     while not clic and tentative < 5:
                         try:
@@ -222,7 +211,7 @@ def GetBetOld(driver, nextBet=False, selection=''):
                             time.sleep(1)
                             cpn_bet_market_label = driver.find_element(By.CLASS_NAME, 'cpn-bet-market__label').text
                         except Exception as e:
-                            config.log('Pas de paris affiché!', 'error', True, 2)
+                            config.log('Pas de paris affiché!', 'error', False, 2)
                             tentative += 1
                         else:
                             if config.scriptType in ['15A', '30A', '40A', '030', '300']:
@@ -234,10 +223,6 @@ def GetBetOld(driver, nextBet=False, selection=''):
                                     tentative += 1
                                     DeleteBet(driver)
                             elif config.scriptType in ['4P', '5P', '6P', '4030', '4015', '400', 'BREAK']:
-                                print('jeu ', str(
-                                    jeu))
-                                print(sType)
-                                print(cpn_bet_market_label)
                                 if 'Jeu ' + str(
                                         jeu) in cpn_bet_market_label and sType in cpn_bet_market_label:
                                     clic = True
@@ -254,7 +239,7 @@ def GetBetOld(driver, nextBet=False, selection=''):
                                     DeleteBet(driver)
 
                 else:
-                    config.log("pas de btn 40 recuperé")
+                    config.log("pas de btn 40 recuperé", 'error', False)
                     return clic
     return False
 

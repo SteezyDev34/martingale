@@ -4624,5 +4624,68 @@
         "winscore": "0:30",
         "timestamp": "2025-10-08 11:42:40",
         "url": "https://1xbet.com/fr/live/tennis/2912719-challenger-hersonissos-5/660201285-antoine-escoffier-petros-tsitsipas"
+    },
+    {
+        "montant": 1.33,
+        "cote": "2.65",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-10 01:10:26",
+        "url": "https://1xbet.com/fr/live/tennis/2767329-itf-edmond-women/660650411-renata-zarazua-kayla-day"
+    },
+    {
+        "montant": 1.33,
+        "cote": "2.65",
+        "jeu": 5,
+        "set": "2",
+        "winscore": "0:30",
+        "timestamp": "2025-10-10 02:35:20",
+        "url": "https://1xbet.com/fr/live/tennis/2014133-itf-rio-de-janeiro/660662550-eduardo-ribeiro-pedro-boscardin-dias"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.8",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "30:0",
+        "timestamp": "2025-10-10 02:59:17",
+        "url": "https://1xbet.com/fr/live/tennis/104395-itf-redding-women/660667526-jaeda-daniel-victoria-hu"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": "0:30",
+        "timestamp": "2025-10-10 05:05:47",
+        "url": "https://1xbet.com/fr/live/tennis/2745898-itf-kunshan-women/660685626-haruka-kaji-carol-young-suh-lee"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.2",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "30:0",
+        "timestamp": "2025-10-10 05:08:10",
+        "url": "https://1xbet.com/fr/live/tennis/2745898-itf-kunshan-women/660677272-haruka-kaji-carol-young-suh-lee"
+    },
+    {
+        "montant": 0.43,
+        "cote": "2.4",
+        "jeu": 3,
+        "set": "2",
+        "winscore": "0:30",
+        "timestamp": "2025-10-10 05:15:33",
+        "url": "https://1xbet.com/fr/live/tennis/2745898-itf-kunshan-women/660677272-haruka-kaji-carol-young-suh-lee"
+    },
+    {
+        "montant": 0.47,
+        "cote": "3.2",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "30:0",
+        "timestamp": "2025-10-10 05:19:34",
+        "url": "https://1xbet.com/fr/live/tennis/2745898-itf-kunshan-women/660677272-haruka-kaji-carol-young-suh-lee"
     }
 ]

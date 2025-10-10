@@ -89,7 +89,6 @@ def verification_match_trouve_url(driver, matchlist_file_name):
             # print('Le match n\'a pas encore été parié!')
             return [True, newmatch]
         else:
-            print('Le match a déjà été parié!')
             return [False, newmatch]
 
 
@@ -101,7 +100,6 @@ def update_match_done(action, values, matchlist_file_name):
         get_matchlist_file.write(
             "\n" + str(newmatch))
         get_matchlist_file.close()
-        print('add matchlist ', values, matchlist_file_name)
     elif action == "del":
         get_matchlist_file = open(matchlist_file_name + ".txt", "r")
         get_matchlist = get_matchlist_file.read()

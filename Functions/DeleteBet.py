@@ -25,10 +25,8 @@ def DeleteBet(driver):
             element = driver.find_element(By.CLASS_NAME, config.classes['coupon_bet_remove_lock'][config.site_type])
             element.click()
         except:
-            print("cross no found")
             return False
         else:
-            print("coupon supprimé")
             return True
     else:
         # print("coupon supprimé")

@@ -20,7 +20,7 @@ def PlacerMise(driver):
             EC.presence_of_element_located((By.CLASS_NAME, config.classes['cpn_amount'][config.site_type])))
     except Exception as e:
 
-        config.log("        CHAMP DE MISE NON TROUVÉ")
+        config.log("CHAMP DE MISE NON TROUVÉ", 'error', False)
         return False
     else:
         cpn_setting = driver.find_element(By.CLASS_NAME, config.classes['cpn_amount'][config.site_type])
@@ -37,7 +37,7 @@ def PlacerMise(driver):
 
             else:
                 tentative = tentative + 1
-                config.log('mauvaise mise insérée!', 'warning')
+                config.log('mauvaise mise insérée!', 'warning', False)
                 time.sleep(1)
     return sending_mise
 

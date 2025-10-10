@@ -1,29 +1,31 @@
 
-['Naomi Osaka', 'Linda Noskova']|wta wuhan|osaka-linda-noskova|2025-10-08 09:00:00|0.6671919630417175
-['Shuai Zhang', 'Sorana Cîrstea']|wta wuhan|zhang-sorana-cirstea|2025-10-08 07:30:00|0.6577616754439832
-['Belinda Bencic', 'Elise Mertens']|wta wuhan|bencic-elise-mertens|2025-10-08 06:00:00|0.6164604909032909
-['Antonia Ruzic', 'Clara Tauson']|wta wuhan|ruzic-clara-tauson|2025-10-08 07:00:00|0.6159372335857639
-['Arthur Rinderknech', 'Jiri Lehecka']|atp shanghai|rinderknech-jiri-lehecka|2025-10-08 05:30:00|0.5990998416105355
-['Sofia Kenin', 'Liudmila Samsonova']|wta wuhan|kenin-liudmila-samsonova|2025-10-08 05:30:00|0.597882557696721
-['Darja Semenistaja', 'Andrea Lazaro Garcia']|wta majorque|andrea-lazaro-garcia|2025-10-08 09:00:00|0.5863948897584648
-['Hina Inoue', 'Aliona Falei']|itf kunshan femmes|inoue-aliona-falei|2025-10-08 06:00:00|0.5802613510946844
-['Ekaterine Gorgodze', 'Oksana Selekhmeteva']|wta majorque|gorgodze-oksana-selekhmeteva|2025-10-08 10:30:00|0.5670813533452027
-['Jasmine Paolini', 'Yue Yuan']|wta wuhan|paolini-yue-yuan|2025-10-08 12:00:00|0.5590032529465365
-['Teodora Kostovic', 'Mayar Sherif']|wta majorque|kostovic-mayar-sherif|2025-10-08 12:00:00|0.5489833608844216
-['Arthur Cazaux', 'Ugo Blanchet']|challenger jinan|cazaux-ugo-blanchet|2025-10-08 05:30:00|0.5481552177742923
-["Christopher O'Connell", 'Liam Draxl']|challenger jinan|oconnell-liam-draxl|2025-10-08 05:30:00|0.5470189447116691
-['Nuno Borges', 'Alex De Minaur']|atp shanghai|alex-de-minaur|2025-10-08 07:00:00|0.5465583399525281
-['Félix Auger-Aliassime', 'Lorenzo Musetti']|atp shanghai|aliassime-lorenzo-musetti|2025-10-08 11:30:00|0.5249535862099173
-['Learner Tien', 'Daniil Medvedev']|atp shanghai|tien-daniil-medvedev|2025-10-08 13:00:00|0.519917877926125
-['Denis Yevseyev', 'Rinky Hijikata']|challenger jinan|yevseyev-rinky-hijikata|2025-10-08 05:30:00|0.4753378072512282
-['Han Shi', 'Katarina Zavatska']|itf kunshan femmes|shi-katarina-zavatska|2025-10-08 06:00:00|0.4391340875182873
-['Filip Peliwo', 'Shinji Hazawa']|itf perth|peliwo-shinji-hazawa|2025-10-08 05:30:00|0.4288834146572552
-['Pavel Kotov', 'August Holmgren']|challenger jinan|kotov-august-holmgren|2025-10-08 07:00:00|0.4003804730587629
-['Anthony Susanto', 'Naoki Tajima']|itf perth|susanto-naoki-tajima|2025-10-08 06:30:00|0.358695652173913
-['Emile Hudd', 'Pavle Marinkov']|itf perth|hudd-pavle-marinkov|2025-10-08 05:30:00|0.3586206896551724
-['Solana Sierra', 'Guiomar Maristany Zuleta De Reales']|wta majorque|zuleta-de-reales|2025-10-08 13:30:00|0.29724770642201837
-['Yuhan Liu', 'Taylah Preston']|itf darwin femmes|liu-taylah-preston|2025-10-08 06:30:00|0.2924407555365939
-['Zongyu Li', 'Xiaodi You']|itf kunshan femmes|li-xiaodi-you|2025-10-08 06:00:00|0.2845159330272752
-['Magdalena Frech', 'Karolina Muchova']|wta wuhan|frech-karolina-muchova|2025-10-08 05:30:00|0.2562835295545576
-['Matthew Dellavedova', "Benjamin O'Connell"]|itf perth|dellavedova-benjamin-oconnell|2025-10-08 06:30:00|0.2290762628563209
-['Dane Sweeny', 'Jake Dembo']|itf perth|sweeny-jake-dembo|2025-10-08 05:30:00|0.20244431302976543
+['Jasmine Paolini', 'Iga Swiatek']|wta wuhan|paolini-iga-swiatek|2025-10-10 12:00:00|0.6468057701168413
+['Aryna Sabalenka', 'Elena Rybakina']|wta wuhan|sabalenka-elena-rybakina|2025-10-10 06:00:00|0.6451924613470206
+['Maria Lourdes Carle', 'Teodora Kostovic']|wta majorque|carle-teodora-kostovic|2025-10-10 09:00:00|0.6060244749240864
+['Georgii Kravchenko', 'Mario Gonzalez Fernandez']|itf héraklion|mario-gonzalez-fernandez|2025-10-10 09:30:00|0.6009640798994758
+['Andrea Lazaro Garcia', 'Sara Bejlek']|wta majorque|garcia-sara-bejlek|2025-10-10 14:30:00|0.5991173269454102
+['Solana Sierra', 'Ekaterine Gorgodze']|wta majorque|sierra-ekaterine-gorgodze|2025-10-10 13:00:00|0.5897540736491255
+['Katerina Siniakova', 'Jessica Pegula']|wta wuhan|siniakova-jessica-pegula|2025-10-10 04:00:00|0.5828113593625699
+['Daniil Medvedev', 'Alex De Minaur']|atp shanghai|alex-de-minaur|2025-10-10 11:30:00|0.552077004904481
+['Mackenzie Mcdonald', 'Brandon Holt']|challenger jinan|mcdonald-brandon-holt|2025-10-10 07:30:00|0.5467501488523516
+['Lola Radivojevic', 'Noma Noha Akugue']|wta majorque|noma-noha-akugue|2025-10-10 10:30:00|0.5437480585629701
+['Arthur Rinderknech', 'Félix Auger-Aliassime']|atp shanghai|felix-auger-aliassime|2025-10-10 08:00:00|0.5419034300643513
+['Vadym Ursu', 'Michal Krajci']|itf charm el-cheikh|ursu-michal-krajci|2025-10-10 08:00:00|0.46728579125796077
+['Matthew Dellavedova', 'Jake Delaney']|itf perth|dellavedova-jake-delaney|2025-10-10 04:00:00|0.4508216133570362
+['Max Houkes', 'Maik Steiner']|itf kigali|houkes-maik-steiner|2025-10-10 08:00:00|0.44106423463827804
+['Masamichi Imamura', 'Christian Langmo']|itf perth|imamura-christian-langmo|2025-10-10 05:00:00|0.42718494125749223
+['Laura Samson', 'Laura Mair']|itf héraklion femmes|samson-laura-mair|2025-10-10 08:00:00|0.3799019607843137
+['Shiho Akita', 'Taylah Preston']|itf darwin femmes|akita-taylah-preston|2025-10-10 07:30:00|0.2924407555365939
+['Martin Van Der Meerschen', 'Rodrigo Alujas']|itf kigali|meerschen-rodrigo-alujas|2025-10-10 08:00:00|0.27050820328131253
+['Selena Janicijevic', 'Eva Marie Voracek']|itf héraklion femmes|eva-marie-voracek|2025-10-10 09:30:00|0.2578899335696246
+['BoYoung Jeong', 'Jizelle Sibai']|itf darwin femmes|jeong-jizelle-sibai|2025-10-10 06:30:00|0.2361111111111111
+['Emile Hudd', 'Kaichi Uchida']|itf perth|hudd-kaichi-uchida|2025-10-10 04:00:00|0.22153621779290228
+['Konstantin Zhzhenov', 'Aleksandre Bakshi']|itf charm el-cheikh|zhzhenov-aleksandre-bakshi|2025-10-10 08:00:00|0.2027189812424712
+['Maximilian Homberg', 'Corentin Denolly']|itf kigali|homberg-corentin-denolly|2025-10-10 08:00:00|0.1818487696552343
+['Jana Kovackova', 'Anna Snigireva']|itf charm el-cheikh femmes|kovackova-anna-snigireva|2025-10-10 08:00:00|0.1570415400202634
+['Laura Siegemund', 'Cori Gauff']|wta wuhan|siegemund-cori-gauff|2025-10-10 08:00:00|0.6242542071786215
+['Arthur Cazaux', 'Yi Zhou']|challenger jinan|cazaux-yi-zhou|2025-10-10 06:00:00|0.5549819651431458
+['Bernard Tomic', 'Shintaro Mochizuki']|challenger jinan|tomic-shintaro-mochizuki|2025-10-10 06:00:00|0.5457178456644458
+['Colton Smith', 'Petr Bar Biryukov']|challenger jinan|petr-bar-biryukov|2025-10-10 07:30:00|0.43875231920375657
+['Denislava Glushkova', 'Raluca Georgiana Serban']|itf héraklion femmes|raluca-georgiana-serban|2025-10-10 08:00:00|0.2626471729848622
+['Johan Nikles', 'Fons Van Sambeek']|itf héraklion|fons-van-sambeek|2025-10-10 09:30:00|0.24793388429752064

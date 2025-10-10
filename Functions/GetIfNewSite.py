@@ -16,12 +16,10 @@ def GetIfNewSite(driver):
                 (By.CLASS_NAME, config.classes['go_to_new_platform_link']['old_site']))
         )
     except:
-        config.log('NEW SITE', 'warning', False)
-        config.log_clear_line()
+        config.log('NEW SITE', 'warning', True, show_script_type=False)
         config.site_type = 'new_site'
     else:
-        config.log('OLD SITE', 'warning', False)
-        config.log_clear_line()
+        config.log('OLD SITE', 'warning', True, show_script_type=False)
         config.site_type = 'old_site'
 
 

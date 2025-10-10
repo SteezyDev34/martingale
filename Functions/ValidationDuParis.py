@@ -75,11 +75,9 @@ def SendBetData():
 def ValidationDuParis(driver, nexbet=False):
     validation = False
     tentative = 0
-    while not validation and tentative < 2:
+    while not validation and tentative < 3:
         config.log('Vérification des paris validés')
-        config.log_clear_line()
-        config.log('        tentative', str(tentative))
-        config.log_clear_line()
+        config.log('Tentative', str(tentative))
 
         # Vérification que le jeu actuel et le set actuel n'ont pas déjà été pariés
         if hasattr(config, 'validated_bet') and config.validated_bet is not None:
@@ -89,21 +87,20 @@ def ValidationDuParis(driver, nexbet=False):
                     config.validated_bet.get('jeu') == config.looking_game and
                     config.validated_bet.get('set') == current_set and config.validated_bet.get(
                         'url') == driver.current_url):
-                config.log(f"Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.")
+                config.log(f"Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.",
+                           'warning', False)
                 validation = True
                 already = True
                 break  # Sortir de la boucle si le jeu et le set ont déjà été pariés
-        config.log('boucle validation paris')
-        config.log_clear_line()
         try:
             cpn_setting = driver.find_elements(By.CLASS_NAME, config.classes['cpn_amount_input'][config.site_type])[0]
             l = cpn_setting.get_attribute("value")
-            config.log("mise insérée : " + str(l), 'info', False, 2)
+            config.log("mise insérée : " + str(l), 'info', indent=2)
         except Exception as e:
-            config.log(e)
             tentative += 1
             config.log('erreur verification mise')
-            break
+            if tentative > 2:
+                break
         else:
             if str(l) == str(config.mise):
                 sending_mise = 1
@@ -114,8 +111,7 @@ def ValidationDuParis(driver, nexbet=False):
                                                         config.classes['coupon_buttons'][config.site_type]))
                     )
                 except Exception as e:
-                    config.log(f"#E0021\nUne erreur est survenue : {e}")
-                    config.log('zone de bouton non trouvé!')
+                    config.log('zone de bouton non trouvé!', 'error', False)
                     tentative = tentative + 1
                     validation = ModalHandler(driver)
                 else:
@@ -145,18 +141,22 @@ def ValidationDuParis(driver, nexbet=False):
                                 tentative = tentative + 1
                                 preloader = 1
                                 printtext = 0
+                                line = 0
                                 while preloader == 1:
+
                                     try:
                                         WebDriverWait(driver, 3).until(EC.visibility_of_element_located(
                                             (By.CLASS_NAME, config.classes['preloader'][config.site_type])))
                                     except:
-                                        config.log('        pas de loader')
+                                        config.log('pas de loader', 'infos', False, indent=3)
+                                        line += 1
                                         preloader = 0
                                     else:
                                         if printtext == 0:
-                                            config.log('        loading...')
+                                            config.log('loading...', 'infos', False, indent=3)
+                                            line += 1
                                             printtext = 1
-
+                                config.log_clear_line(line)
                                 if ModalHandler(driver):
                                     validation = True
                         else:
@@ -198,16 +198,16 @@ def ValidationDuParis(driver, nexbet=False):
             with open(json_filename, 'w') as f:
                 json.dump(existing_bets, f, indent=4)
         except Exception as e:
-            print(f"Error saving validated bet to JSON: {e}")
+            config.log(f"Error saving validated bet to JSON: {e}", 'error', False)
         config.placed_game = config.looking_game
-        config.log(f'           {config.validated_bet}', 'info', True)
+        config.log(f'{config.validated_bet}', 'info', False, indent=3)
         config.perte = float(config.perte) + float(config.mise)
         config.wantwin = float(config.wantwin) + float(config.increment)
         # Calculate net profit based on stake, odds and losses
-        print('mise ' + str(config.mise), 'cote ' + str(config.cote), 'perte ' + str(config.perte))
+        config.log('Perte ' + str(config.perte))
         config.netprofit = round(
             (float(config.mise) * float(config.cote)) - float(config.perte), 2)
-        config.log(f'Potential Net profit: {config.netprofit}')
+        config.log(f'Potential Net profit: {config.netprofit}', 'title', clear=False, indent=3)
     return validation
 
 

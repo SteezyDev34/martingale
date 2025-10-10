@@ -8,21 +8,16 @@ import config
 
 def VerificationListeMatchLive(driver):
     try:
-        config.log('         Recherche tableau des scores', 'info', False)
-        config.log('         CLASS="betting-content__main"', 'info', False)
+        config.log('         Recherche tableau des scores', 'info')
         driver.find_element(By.CLASS_NAME, config.classes['live_content'][config.site_type])
     except Exception as e:
-        config.log_clear_line(2)
-        config.log('        Liste match live non visible!', 'warning', False)
+        config.log('        Liste match live non visible!', 'warning')
         time.sleep(2)
-        config.log_clear_line()
         return False
     else:
-        config.log_clear_line(2)
         if not config.print_match_live_text:
-            config.log('    Liste match live OK!', 'success', False)
+            config.log('    Liste match live OK!', 'success')
             time.sleep(0.5)
-            config.log_clear_line()
             config.print_match_live_text = True
         return True
 

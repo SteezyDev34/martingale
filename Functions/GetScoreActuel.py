@@ -26,7 +26,6 @@ def GetScoreActuel(driver):
             )
             score_teams = driver.find_elements(By.CLASS_NAME, config.classes['score_container'][config.site_type])
         except Exception as e:
-            print('test')
             print(f"#E0020\nUne erreur est survenue : {config.classes['score_container'][config.site_type]}")
             if not GetIfMatchPage(driver):
                 config.error = True
@@ -40,16 +39,13 @@ def GetScoreActuel(driver):
             try:
                 config.score_actuel = score_teams[0].text + ':' + score_teams[1].text
             except Exception as e:
-                print('no score')
                 continue
             else:
                 if config.saved_score != config.score_actuel:
                     if not first:
                         first = False
                         record_scores(driver)
-                        # print('score change')
                     else:
-                        # print('first time score change')
                         first = False
                         time.sleep(2)
                         continue
@@ -63,7 +59,7 @@ def record_scores(driver):
     GetSetActuel(driver)
     GetJeuActuel(driver)
     nouveau_score = {'set': config.set_actuel, 'jeu': config.jeu_actuel, 'score': config.score_actuel}
-    config.log(nouveau_score, '', False, 2)
+    config.log(nouveau_score, indent=2)
     # Si le dictionnaire n'existe pas encore, l'ajouter
     config.all_scores.update({len(config.all_scores): nouveau_score})
 

@@ -3373,5 +3373,32 @@
         "winscore": "15:15",
         "timestamp": "2025-10-08 11:25:39",
         "url": "https://1xbet.com/fr/live/tennis/2912719-challenger-hersonissos-5/660201362-antoine-escoffier-petros-tsitsipas"
+    },
+    {
+        "montant": 0.56,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-10 01:11:28",
+        "url": "https://1xbet.com/fr/live/tennis/2767329-itf-edmond-women/660650411-renata-zarazua-kayla-day"
+    },
+    {
+        "montant": 0.23,
+        "cote": "1.87",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "15:15",
+        "timestamp": "2025-10-10 03:00:41",
+        "url": "https://1xbet.com/fr/live/tennis/104395-itf-redding-women/660667526-jaeda-daniel-victoria-hu"
+    },
+    {
+        "montant": 0.24,
+        "cote": "1.85",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "15:15",
+        "timestamp": "2025-10-10 05:07:07",
+        "url": "https://1xbet.com/fr/live/tennis/2745898-itf-kunshan-women/660685626-haruka-kaji-carol-young-suh-lee"
     }
 ]
