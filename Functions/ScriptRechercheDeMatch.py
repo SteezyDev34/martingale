@@ -223,7 +223,7 @@ def rechercheDeMatch(driver):
 
                                     bet_score = GetMatchScore.main(div_bet_score[0],
                                                                    config.score_to_start)
-                                    if not bet_score:  # SI LE MATCH EST PRET
+                                    if bet_score:  # SI LE MATCH EST PRET
                                         config.log('Score OK', 'info', False, 4, False)
                                         logligueline += 1
 
