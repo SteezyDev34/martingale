@@ -20,11 +20,10 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['300', '15A', '30A']
-scriptTypeList1 = ['30A']
-scriptTypeList2 = ['6P', '4015', '4030']
-# scriptTypeList2 = ['4P', '5P', '6P', '40A']
-scriptTypeList3 = ['5P', '6P', '40A']
+scriptTypeList = ['030','300', '15A', '30A']
+scriptTypeList1 = ['4P,'400','40A']
+scriptTypeList2 = ['5P', '4015', 'BREAK']
+scriptTypeList3 = ['6P', '4030']
 scriptTypeList4 = ['BREAK', '4015', '4030']
 allScriptType = ['030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK', '1SET']
 # Script configuration
