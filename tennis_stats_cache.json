@@ -26,7 +26,7 @@
   "player_keegan smith_40-40": 0.16304347826086957,
   "player_oliver okonkwo_40-40": 0,
   "player_jack satterfield_40-40": 0.0,
-  "player_raphael perot_40-40": 0,
+  "player_raphael perot_40-40": 0.0,
   "player_pedro sakamoto_40-40": 0.19878139008573792,
   "player_joao eduardo schiessl_40-40": 0.186456400742115,
   "player_natan rodrigues_40-40": 0.0,
@@ -167,7 +167,7 @@
   "player_yelyzaveta kotliar_40-40": 0.3035714285714286,
   "player_weronika falkowska_40-40": 0.0,
   "player_nika radisic_40-40": 0.0,
-  "player_henri squire_40-40": 0.0,
+  "player_henri squire_40-40": 0.2669615117511605,
   "player_john sperle_40-40": 0.0,
   "player_tiago cacao_40-40": 0.0,
   "player_filippo romano_40-40": 0.0,
@@ -271,7 +271,7 @@
   "player_fanny norin_40-40": 0.0,
   "player_dalila spiteri_40-40": 0.23464603844350676,
   "player_teodora kostovic_40-40": 0.30946969696969695,
-  "player_luka mikrut_40-40": 0.26679542893932073,
+  "player_luka mikrut_40-40": 0.26890605151034813,
   "player_marco cecchinato_40-40": 0.20994653767820773,
   "player_jonas forejtek_40-40": 0.3604134252056012,
   "player_christoph negritu_40-40": 0.2127342811447439,
@@ -426,5 +426,8 @@
   "player_jay clarke_40-40": 0.28181428090969185,
   "player_otto virtanen_40-40": 0.2337534586998165,
   "player_matej dodig_40-40": 0.26398017999797757,
-  "player_hugo gaston_40-40": 0.25972912899336953
+  "player_hugo gaston_40-40": 0.25972912899336953,
+  "player_jan choinski_40-40": 0.29854660050328075,
+  "player_carlos taberner_40-40": 0.2834475988895535,
+  "player_jack kennedy_40-40": 0.13221288515406163
 }

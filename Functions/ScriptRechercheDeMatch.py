@@ -689,8 +689,6 @@ def classementeDeMatch(driver, use_json_cache=True):
         
         
         for match in top_matches:
-            # Envoi du match au serveur distant et ajout à la base de données
-            if match_manager.send_matchlist_to_remote(match):
                 try:
                     match_info = "|".join(str(x) for x in match)
                     success = match_manager.add_match_todo(match_info)
@@ -700,13 +698,14 @@ def classementeDeMatch(driver, use_json_cache=True):
                         config.log(f"Match déjà dans la liste: {match[0]} vs {match[1]}", 'warning', True)
                 except Exception as e:
                     config.log(f"Erreur lors de l'ajout du match: {str(e)}", 'error', True)
-                
+            
         # Sauvegarde de la date dans un fichier
         last_classement_file = os.path.join(config.projectPath, "DataFiles", "last_classement.txt")
         try:
             with open(last_classement_file, 'w') as f:
-                f.write(config.last_classement)
-                config.log(f"Date du dernier classement sauvegardée: {config.last_classement}", 'info', True)
+                f.write(datetime.now().strftime("%Y-%m-%d"))
+                config.last_classement = datetime.now().strftime("%Y-%m-%d")
+                config.log(f"Date du dernier classement sauvegardée: {datetime.now().strftime('%Y-%m-%d')}", 'info', True)
         except Exception as e:
             config.log(f"Erreur lors de la sauvegarde de la date: {str(e)}", 'error', True)
         # Créer le dossier DataFiles/done s'il n'existe pas

@@ -79,8 +79,9 @@ class MatchManager:
         Envoie la liste des matchs à l'URL distante via une requête GET.
         
         Args:
-            match: Liste des informations du match à envoyer au format:
-                  [players_list, league, match_id, date, probability]
+            match: Informations du match à envoyer. Accepte:
+                  - une liste au format [players_list, league, match_id, date, probability]
+                  - ou un dict avec les clés {players, league, match_id, match_date, probability}
             
         Returns:
             bool: True si l'envoi est réussi, False sinon.
@@ -95,6 +96,19 @@ class MatchManager:
                         "AppleWebKit/537.36 (KHTML, like Gecko) "
                         "Chrome/122.0.0.0 Safari/537.36"
         }
+        # Normaliser le format si 'match' est un dict
+        if isinstance(match, dict):
+            try:
+                match = [
+                    match.get("players", []),
+                    match.get("league", ""),
+                    match.get("match_id", ""),
+                    match.get("match_date", ""),
+                    float(match.get("probability", 0))
+                ]
+            except Exception as e:
+                config.log(f"Erreur de normalisation des données de match: {str(e)}", 'error', True)
+                return False
         # Format attendu par l'API : [players_list, league, match_id, date, probability]
         params = {"matches": json.dumps(match)}
 
@@ -104,15 +118,19 @@ class MatchManager:
             if response.status_code == 200:
                 try:
                     json_resp = response.json()
-                    config.log(json_resp)
-                    return True
+                    status_val = str(json_resp.get("status", "")).lower()
+                    # Considérer les doublons comme succès côté client
+                    return status_val in ("success", "exists", "duplicate")
                 except ValueError:
                     config.log("Réponse 200 reçue mais le corps n'est pas du JSON valide", 'warning', True)
-                    config.log(response.text, 'warning', False)
                     return False
             else:
-                config.log(f"Erreur lors de l'envoi de la matchlist : {response.status_code} - {response.text}", 'error',
-                        True)
+                config.log(
+                    f"Échec de l'envoi de la matchlist – code HTTP {response.status_code} | "
+                    f"URL : {response.url} | ",
+                    'error',
+                    True
+                )
                 return False
         except Exception as e:
             config.log(f"Exception lors de l'envoi de la matchlist : {str(e)}", 'error', True)
@@ -308,17 +326,50 @@ class MatchManager:
                     pass
 
             # Création du dictionnaire pour l'envoi distant
-            match_data = {
-                "match_id": match_id,
-                "players": players,
-                "league": league,
-                "match_date": date_str,
-                "probability": float(prob),
-                "strategy": self.strategy_name
-            }
+            # Construire la payload au format attendu par l'API PHP
+            # Normalisation robuste des joueurs pour garantir un tableau
+            try:
+                import json
+                if isinstance(players, list):
+                    players_list = players
+                elif isinstance(players, str):
+                    ps = players.strip()
+                    # Si la chaîne ressemble à un tableau JSON, tenter de la parser
+                    if ps.startswith('[') and ps.endswith(']'):
+                        try:
+                            parsed = json.loads(ps)
+                            players_list = parsed if isinstance(parsed, list) else [str(parsed)]
+                        except Exception:
+                            # Repli sur un découpage simple
+                            if ' - ' in players:
+                                players_list = [p.strip() for p in players.split(' - ') if p.strip()]
+                            elif ',' in players:
+                                players_list = [p.strip() for p in players.split(',') if p.strip()]
+                            else:
+                                players_list = [players.strip()] if players.strip() else []
+                    else:
+                        # Découpage par séparateur connu ou fallback
+                        if ' - ' in players:
+                            players_list = [p.strip() for p in players.split(' - ') if p.strip()]
+                        elif ',' in players:
+                            players_list = [p.strip() for p in players.split(',') if p.strip()]
+                        else:
+                            players_list = [players.strip()] if players.strip() else []
+                else:
+                    players_list = [str(players)]
+            except Exception:
+                players_list = players if isinstance(players, list) else [str(players)]
+            match_payload = [
+                players_list,
+                league,
+                match_id,
+                date_str,
+                float(prob)
+            ]
 
             # Envoi au serveur distant
-            added_remotely = self.send_matchlist_to_remote(match_data)
+            print('Envoi au serveur distant')
+            added_remotely = self.send_matchlist_to_remote(match_payload)
             
             # Si l'ajout a réussi soit localement soit à distance, on considère que c'est un succès
             return added_locally or added_remotely
