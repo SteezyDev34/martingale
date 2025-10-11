@@ -1,7 +1,7 @@
 <?php
 
 // Inclure le fichier de configuration
-require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../../config.php';
 
 // Obtenir la connexion à la base de données
 $conn = getDbConnection();

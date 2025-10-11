@@ -7,16 +7,18 @@ from datetime import datetime
 import requests
 from selenium.webdriver.common.by import By
 
+from Functions._to_remove import AddRunning
 import config
-from Functions import GetMatchScore, GetLigueName, AddRunning, Functions_stats
+from Functions import GetMatchScore, GetLigueName, Functions_stats
 from Functions import OuverturePageMatch
 from Functions import VerificationMatchTrouve
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetIfNewSite import GetIfNewSite
-from Functions.GetIfScriptsRunning import GetIfScriptsRunning
 from Functions.GetJsonData import getCompet, DispatchPerte, set1DispatchPerte
-from Functions.UpdateMatchDone import todo
 from Functions.VerificationListeMatchLive import VerificationListeMatchLive
+from Functions.Managers.ScriptManager import script_manager
+from Functions.Managers.MatchManager import match_manager, get_match_manager
+from Functions.UpdateMatchDone import todo
 from config import site_url
 
 
@@ -132,7 +134,7 @@ def rechercheDeMatch(driver):
                 DispatchPerte()
         # SCRIPT RECHERCHE DE MATCH
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-        GetIfScriptsRunning()
+        script_manager.check_previous_scripts(config.script_num)
         # VERIFICATION SI PAGE DE LIST LIVE"""
         """if not VerificationListeMatchLive(driver):
             config.log("PAGE VIDE", 'error', True)
@@ -279,7 +281,7 @@ def rechercheDeMatch1set(driver):
     # config.match_found = False
     # SCRIPT RECHERCHE DE MATCH
     # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-    GetIfScriptsRunning()
+    script_manager.check_previous_scripts(config.script_num)
     # VERIFICATION SI PAGE DE LIST LIVE"""
     """if not VerificationListeMatchLive(driver):
         config.log("PAGE VIDE", 'error', True)
@@ -443,7 +445,7 @@ def rechercheDeMatchNBA(driver):
         config.match_found = GetIfMatchPage(driver)
         # SCRIPT RECHERCHE DE MATCH
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-        GetIfScriptsRunning()
+        script_manager.check_previous_scripts(config.script_num)
         # VERIFICATION SI PAGE DE LIST LIVE"""
         if not VerificationListeMatchLive(driver):
             current_frame = inspect.currentframe()
@@ -552,7 +554,7 @@ def classementeDeMatch(driver, use_json_cache=True):
             config.match_found = GetIfMatchPage(driver)
             # SCRIPT RECHERCHE DE MATCH
             # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-            # GetIfScriptsRunning()
+            # script_manager.check_previous_scripts(config.script_num)
             # VERIFICATION SI PAGE DE LIST LIVE"""
             if not VerificationListeMatchLive(driver):
                 config.error = True
@@ -602,25 +604,32 @@ def classementeDeMatch(driver, use_json_cache=True):
                                 continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
                             i = 0
                             for bet_item in bet_items:
+                                # Initialiser les variables de date pour éviter des références non définies
+                                day_month = None
+                                hour = None
+                                current_year = None
                                 try:
                                     start_time_text = bet_item.find_element(By.CLASS_NAME, 'c-events__time').text
-                                except:
+                                except Exception:
                                     config.log('heure de debut non trouvé', 'warning', True)
                                 else:
                                     try:
-                                        day_month = start_time_text.split()[0]  # '09/09'
-                                        hour = start_time_text.split()[1]
-                                        # Ajouter l'année actuelle
-                                        current_year = datetime.now().year
-                                        match_date = datetime.strptime(f"{day_month}/{current_year}", "%d/%m/%Y").date()
+                                        parts = start_time_text.split()
+                                        if len(parts) >= 2:
+                                            day_month = parts[0]  # '09/09'
+                                            hour = parts[1]
+                                            # Ajouter l'année actuelle
+                                            current_year = datetime.now().year
+                                            match_date_only = datetime.strptime(f"{day_month}/{current_year}", "%d/%m/%Y").date()
 
-                                        # Date actuelle sans l'heure
-                                        today = datetime.now().date()
+                                            # Date actuelle sans l'heure
+                                            today = datetime.now().date()
 
-                                        if match_date > today:
-                                            continue
-                                    except ValueError as e:
-                                        config.log(f"Erreur de parsing de la date", 'warning', True)
+                                            if match_date_only > today:
+                                                # Match prévu dans le futur, on passe
+                                                continue
+                                    except ValueError:
+                                        config.log("Erreur de parsing de la date", 'warning', True)
 
                                 try:
                                     teams_name = bet_item.find_element(By.CLASS_NAME,
@@ -647,9 +656,16 @@ def classementeDeMatch(driver, use_json_cache=True):
                                         '-')
                                     config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
                                     match.append(config.newmatch)
-                                    match_date = datetime.strptime(f"{day_month}/{current_year} {hour}:00",
-                                                                   "%d/%m/%Y %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
-                                    match.append(match_date)
+                                    # N'ajouter la date que si toutes les composantes sont définies
+                                    if day_month and current_year and hour:
+                                        match_date = datetime.strptime(
+                                            f"{day_month}/{current_year} {hour}:00",
+                                            "%d/%m/%Y %H:%M:%S"
+                                        ).strftime("%Y-%m-%d %H:%M:%S")
+                                        match.append(match_date)
+                                    else:
+                                        # Si l'heure ou la date n'est pas disponible, ignorer ce match
+                                        continue
                                     matchlist.append(match)
 
                                 except Exception as e:
@@ -668,17 +684,31 @@ def classementeDeMatch(driver, use_json_cache=True):
         # Tri en fonction de la dernière valeur (indice -1) en ordre décroissant
         tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
 
-        # Retenir les 10 premières lignes
-        top_10 = tableau_trie[:30]
-        for m in top_10:
-
-            send_matchlist_to_remote(m)
-            # Join array elements with pipe separator before adding to todo
-            try:
-                todo("add", "|".join(str(x) for x in m), config.matchlisttodo_file_name)
-            except:
-                pass
-        config.last_classement = datetime.now().strftime("%Y-%m-%d")
+        # Retenir les 30 premiers matchs
+        top_matches = tableau_trie[:30]
+        
+        
+        for match in top_matches:
+            # Envoi du match au serveur distant et ajout à la base de données
+            if match_manager.send_matchlist_to_remote(match):
+                try:
+                    match_info = "|".join(str(x) for x in match)
+                    success = match_manager.add_match_todo(match_info)
+                    if success:
+                        config.log(f"Match ajouté à la liste: {match[0]} vs {match[1]}", 'success', True)
+                    else:
+                        config.log(f"Match déjà dans la liste: {match[0]} vs {match[1]}", 'warning', True)
+                except Exception as e:
+                    config.log(f"Erreur lors de l'ajout du match: {str(e)}", 'error', True)
+                
+        # Sauvegarde de la date dans un fichier
+        last_classement_file = os.path.join(config.projectPath, "DataFiles", "last_classement.txt")
+        try:
+            with open(last_classement_file, 'w') as f:
+                f.write(config.last_classement)
+                config.log(f"Date du dernier classement sauvegardée: {config.last_classement}", 'info', True)
+        except Exception as e:
+            config.log(f"Erreur lors de la sauvegarde de la date: {str(e)}", 'error', True)
         # Créer le dossier DataFiles/done s'il n'existe pas
         done_dir = os.path.join(config.projectPath, "DataFiles", "done")
         os.makedirs(done_dir, exist_ok=True)
@@ -697,37 +727,7 @@ def classementeDeMatch(driver, use_json_cache=True):
         break
 
 
-def send_matchlist_to_remote(match):
-    """
-    Envoie la liste des matchs à l'URL distante via une requête POST.
-    
-    Args:
-        matchlist (list): Liste des matchs à envoyer.
-    """
-    url = f"{config.api_url}/matchlist/insert.php"
-    headers = {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                      "AppleWebKit/537.36 (KHTML, like Gecko) "
-                      "Chrome/122.0.0.0 Safari/537.36"
-    }
-    params = {"matches": json.dumps(match)}
-
-    try:
-        # Envoyer les données en POST
-        response = requests.get(url, params=params, headers=headers, timeout=10)
-        if response.status_code == 200:
-            try:
-                json_resp = response.json()
-                config.log(json_resp)
-            except ValueError:
-                config.log("Réponse 200 reçue mais le corps n'est pas du JSON valide", 'warning', True)
-                config.log(response.text, 'warning', False)
-        else:
-            config.log(f"Erreur lors de l'envoi de la matchlist : {response.status_code} - {response.text}", 'error',
-                       True)
-    except Exception as e:
-        config.log(f"Exception lors de l'envoi de la matchlist : {str(e)}", 'error', True)
+# Fonction déplacée dans MatchManager
 
 
 def newclassementeDeMatch(driver):
@@ -741,7 +741,7 @@ def newclassementeDeMatch(driver):
         config.match_found = GetIfMatchPage(driver)
         # SCRIPT RECHERCHE DE MATCH
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-        GetIfScriptsRunning()
+        script_manager.check_previous_scripts(config.script_num)
         # VERIFICATION SI PAGE DE LIST LIVE"""
         if not VerificationListeMatchLive(driver):
             config.error = True

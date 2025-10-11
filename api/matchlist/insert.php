@@ -17,13 +17,15 @@ if (isset($_GET['matches'])) {
     // Si c'est un JSON encodé (par ex. depuis urlencode côté client)
     $matches = json_decode($matches, true);
 
-    // Vérifier que les champs requis sont présents dans 'matches'
+    // Extraire les données du tableau matches
+    // Le format reste le même que l'ancien code : [joueurs, ligue, slug, date, proba]
     $players = implode(' - ', $matches[0]);
     $ligue   = $matches[1];
     $slug    = $matches[2];
-    $time    = $matches[3]; // au format 'Y-m-d H:i:s'
+    $time    = $matches[3];
     $proba   = (float) $matches[4];
-    // Préparer la requête SQL
+
+    // Préparer la requête SQL avec les champs requis
     $stmt = $conn->prepare("INSERT INTO matchlisttodo (players, ligue, slug, proba, time) VALUES (?, ?, ?, ?, ?)");
     if ($stmt) {
         $stmt->bind_param("sssds", $players, $ligue, $slug, $proba, $time);

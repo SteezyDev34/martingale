@@ -2,9 +2,8 @@
 # VERRIFICATION DU MATCH TROUVÉ
 
 from selenium.webdriver.common.by import By
-
 import config
-from Functions import GetMatchDone
+from Functions.Managers.MatchManager import match_manager
 from Functions.GetJsonData import getIfGlobalPerte, getIf1setGlobalPerte
 
 
@@ -23,21 +22,21 @@ def main(driver, bet_item, matchlist_file_name):
         config.log_clear_line()
         return [False, config.newmatch]
     else:
-        match_list = GetMatchDone.main(config.matchlisttodo_file_name)
-        match_done = GetMatchDone.main(config.matchlist_file_name)
-        if config.scriptType == '1SET' and not any(config.newmatch in x for x in match_done):
+        # Vérification si le match est déjà traité ou en attente
+        match_is_done = match_manager.match_exists(config.newmatch)
+        match_is_todo = match_manager.is_match_todo(config.newmatch)
+        
+        if config.scriptType == '1SET' and not match_is_done:
             config.log('Le match autorisé!', 'success', False, 4, False)
             driver.get(newmatchtxt)
             config.log_clear_line()
             return [True, config.newmatch]
-        elif config.in_stat and any(config.newmatch in x for x in match_list) and not any(
-                config.newmatch in x for x in match_done):
+        elif config.in_stat and match_is_todo and not match_is_done:
             config.log('Le match autorisé!', 'success', False, 4, False)
             driver.get(newmatchtxt)
             config.log_clear_line()
             return [True, config.newmatch]
-        elif not config.in_stat and not any(config.newmatch in x for x in match_list) and not any(
-                config.newmatch in x for x in match_done):
+        elif not config.in_stat and not match_is_todo and not match_is_done:
             p = config.perte
             if not p or p == 0:
                 p = getIfGlobalPerte()
@@ -47,7 +46,7 @@ def main(driver, bet_item, matchlist_file_name):
                 config.log('Le match  n\'est pas autorisé!', 'warning', True, 4, False)
                 return [False, config.newmatch]
             else:
-                config.log('Le match  non autorisé mais perte en cours', 'sucess', False, 4, False)
+                config.log('Le match  non autorisé mais perte en cours', 'success', False, 4, False)
                 driver.get(newmatchtxt)
                 config.log_clear_line()
                 return [True, config.newmatch]
@@ -71,15 +70,16 @@ def getstats(driver, bet_item, matchlist_file_name):
         return [False, config.newmatch]
     else:
         print('newmatch : ' + config.newmatch)
-        match_list = GetMatchDone.main(config.matchlisttodo_file_name)
-        config.log(match_list, 'info', False, 4)
-        if any(config.newmatch in x for x in match_list):
-            txtlog = "          Le match n\'a pas encore été parié! 111"
+        match_manager = get_match_manager(config.scriptType)
+        match_is_todo = match_manager.is_match_todo(config.newmatch)
+        
+        if match_is_todo:
+            txtlog = "          Le match n'a pas encore été parié!"
             config.log(txtlog, config.newmatch)
             driver.get(newmatchtxt)
             return [True, config.newmatch]
         else:
-            txtlog = '          Le match a déjà été parié! 111'
+            txtlog = '          Le match a déjà été parié!'
             config.log(txtlog, config.newmatch)
             return [False, config.newmatch]
 
@@ -96,12 +96,14 @@ def fromUrl(driver, matchlist_file_name):
         config.log('            Impossible de lire le lien du match!', 'warning', False)
         return [False, config.newmatch]
     else:
-        match_list = GetMatchDone.main(config.matchlisttodo_file_name)
-        if any(config.newmatch in x for x in match_list):
+        match_manager = MatchManager.get_instance(config.scriptType)
+        match_is_todo = match_manager.is_match_todo(config.newmatch)
+        
+        if match_is_todo:
             config.log('        Le match autorisé!', 'warning', True)
             return [True, config.newmatch]
         else:
-            config.log('            Le match  n\'est pas autorisé!', 'warning', True)
+            config.log('            Le match n\'est pas autorisé!', 'warning', True)
             return [False, config.newmatch]
 
 

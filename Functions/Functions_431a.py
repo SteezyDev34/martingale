@@ -1,12 +1,13 @@
 import inspect
 import time
 
+from Functions._to_remove import AddRunning
 import config
 from Functions import Functions_1XBET
-from Functions import GetLigueName, AddRunning
+from Functions import GetLigueName
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
-from Functions.Function_scriptDelRunning import scriptDelRunning
+from Functions._to_remove.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import update_match_done
 from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
@@ -22,33 +23,53 @@ from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.ValidationDuParis import ValidationDuParis
 from Functions.VerificationMatchTrouve import newmatchFromUrl
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
+from Functions.Managers.ScriptManager import script_manager
+from Functions.Managers.MatchManager import match_manager
 
 
 def all_script(driver):
     GetIfNewSite(driver)
-    # driver.switch_to.window(driver.window_handles[0])
-    # Mise à jour du fichier txt des script en cours
-    scriptDelRunning()
+    # Nettoyer le script inactif
+    script_manager.stop_script(config.scriptType, config.script_num)
+
+    # Initialize dictionary to store all scores
     config.all_scores = {}
+
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver) and not config.error:
         config.log('Erreur lors de la recherche de match!', 'error', False, 2)
     # --------
+
+    # Indique qu'un match a été trouvé
     config.match_found = True
+    
+    # Si un match est trouvé et qu'il n'y a pas d'erreur
     if config.match_found and not config.error:
-        AddRunning.main(config.script_num, config.running_file_name)
-        config.ligue_name = GetLigueName.fromUrl(driver)[0]
-        config.match_Url = GetLigueName.fromUrl(driver)[1]
+        # Démarre le script avec le type et numéro spécifiés
+        script_manager.start_script(config.scriptType, config.script_num)
+        
+        # Get league name and match URL
+        ligue_info = GetLigueName.fromUrl(driver)
+        config.ligue_name = ligue_info[0]
+        config.match_Url = ligue_info[1]
+        
+        # Récupère les noms des joueurs/équipes
         config.teams = GetPlayersName(driver)
+        
+        # Vérifie si c'est un nouveau match depuis l'URL
         newmatchFromUrl(driver)
-        update_match_done("add", config.newmatch, config.matchlist_file_name)
+        
+        # Met à jour le statut du match dans le gestionnaire de matchs
+        match_manager.add_match(config.newmatch, config.scriptType)
+        
         config.log("-" * 60, "success", False, False, False)
         config.log(f'MATCH OK : {str(config.teams)} | {config.ligue_name}', 'success', False, 0, False)
         config.log("-" * 60, "success", False, False, False)
 
     if config.error:
         return False
+    
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
@@ -341,7 +362,11 @@ def all_script(driver):
         config.global_match_win[i] = 0  # Initialize win counter for script type
         config.winmatch[i] = 0  # Initialize match counter for script type
     config.all_scores = {}
-    Functions_1XBET.update_match_done("del", config.newmatch, config.matchlist_file_name)
-    Functions_1XBET.del_running(config.script_num, config.running_file_name)
+    # Supprimer le match de la base de données
+    match_manager.remove_match(config.newmatch, config.scriptType)
+    
+    # Nettoyer le script en cours
+    script_manager.stop_script(config.scriptType, config.script_num)
+    
     DeleteBet(driver)
     return True

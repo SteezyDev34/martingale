@@ -6,7 +6,6 @@ import time
 from typing import Dict, Any, Optional
 
 import requests
-from pygments.styles.rainbow_dash import WHITE
 
 # Import des configurations depuis le module config
 from conf import classes, score_to_start, total_want_win, total_want_winset1
@@ -96,7 +95,12 @@ log_message = ''
 newset = 2
 teams = False
 all_scores = {}
-last_classement = 'test'
+# Récupération du dernier classement depuis le fichier
+try:
+    with open(os.path.join(projectPath, 'DataFiles', 'last_classement.txt'), 'r') as f:
+        last_classement = f.read().strip()
+except FileNotFoundError:
+    last_classement = 'test'  # Valeur par défaut si le fichier n'existe pas
 # Le dictionnaire classes est maintenant importé depuis le module config
 # Importation des types de paris 1xBet depuis le fichier JSON
 xbet_types_file = os.path.join(projectPath, 'xbet_types.json')
@@ -156,12 +160,11 @@ def init_variable():
     """Initialize global variables from strategy data"""
     global mise, perte, wantwin, increment, probamini
     global running_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
-    global print_match_live_text, devMode, gain, netprofit, perte, placed_game, looking_game, saved_score
+    global print_match_live_text, gain, netprofit, perte, placed_game, looking_game, saved_score
     global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, matchlist1set_name
     config_global = ScriptConfig(scriptType)
 
     # Initialize variables from config
-    # devMode = config_global.get("devmode")
     error = config_global.get("error")
     validated_bet = config_global.get("validated_bet")
 
@@ -254,7 +257,7 @@ def save_variables():
     """Initialize global variables from strategy data"""
     global mise, perte, wantwin, increment, probamini
     global running_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
-    global print_match_live_text, devMode, gain, netprofit, perte, placed_game, looking_game, saved_score
+    global print_match_live_text, gain, netprofit, perte, placed_game, looking_game, saved_score
     global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, matchlist1set_name
 
     """Save current variables state back to config"""
@@ -486,9 +489,10 @@ def log_clear_line(line_number=1):
     else:
         # Délai pour éviter les problèmes d'affichage
         for _ in range(line_number):
-            # sys.stdout.write("clear\n")
+            if not devMode:
+                sys.stdout.write("\x1b[1A\x1b[2K\r")
             # Monte d’une ligne et efface-la entièrement
-            sys.stdout.write("\x1b[1A\x1b[2K\r")
+            
         sys.stdout.flush()
 
 

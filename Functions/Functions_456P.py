@@ -1,13 +1,14 @@
 import inspect
 import time
 
+from Functions._to_remove import AddRunning
 import config
 from Functions import Functions_1XBET
-from Functions import GetLigueName, AddRunning
+from Functions import GetLigueName
 from Functions.Authenticator import loginProcess, is_logged_in
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
-from Functions.Function_scriptDelRunning import scriptDelRunning
+from Functions._to_remove.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import update_match_done
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetIfMatchPage import GetIfMatchPage

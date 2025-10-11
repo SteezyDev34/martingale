@@ -230,7 +230,7 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
     try:
         print(f"Requête API pour {playerName1}: {url1}")
         line += 1
-        print(f"Requête API pour {playerName2}: {url1}")
+        print(f"Requête API pour {playerName2}: {url2}")
         line += 1
         # Désactiver la vérification SSL pour les certificats auto-signés
         d1 = requests.get(url1, headers=headers, verify=False).json()

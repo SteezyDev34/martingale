@@ -6,12 +6,13 @@ from time import sleep
 from selenium.webdriver.common.by import By
 
 import Functions.GetJsonData
+from Functions._to_remove import AddRunning
 import config
 from Functions import Functions_1XBET, UpdateMatchDone
-from Functions import GetLigueName, AddRunning
+from Functions import GetLigueName
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
-from Functions.Function_scriptDelRunning import scriptDelRunning
+from Functions._to_remove.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import remove_match_from_json_file
 from Functions.GetJsonData import getPerte, set1DispatchPerte
 from Functions.GetPlayersName import GetPlayersName

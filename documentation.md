@@ -77,10 +77,10 @@ class ScriptConfig:
 def configure_site_type(use_ca_site=None):
     """
     Configure le type de site et les URLs en fonction du choix utilisateur.
-    
+
     Args:
         use_ca_site (bool, optional): Si True, utilise le site CA. Si False, utilise le site standard.
-    
+
     Returns:
         str: Le type de site configuré ('new_site' ou 'old_site')
     """
@@ -108,7 +108,7 @@ def switchScript(newScriptType):
 def saveLog(txt):
     """
     Enregistre un message dans un fichier de log.
-    
+
     Args:
         txt: Le texte à enregistrer
     """
@@ -117,7 +117,7 @@ def saveLog(txt):
 def log(message, type="", clear=True, indent=0):
     """
     Affiche un message dans le terminal avec formatage couleur.
-    
+
     Args:
         message: Le texte du message
         type: Type de message (info, title, success, warning, error)
@@ -150,6 +150,7 @@ Cette section explique en détail comment la martingale est implémentée dans c
 La martingale vise à récupérer les pertes cumulées et à garantir un gain net cible (wantwin) lorsqu’un pari gagne, en augmentant la mise après une perte.
 
 Terminologie utilisée dans le code (voir `config.py` et `Functions/GetMise.py`) :
+
 - `wantwin` : gain net souhaité par victoire.
 - `perte` : pertes cumulées à rattraper au prochain pari.
 - `cote` : cote du pari en cours (récupérée depuis la page, sinon `cotebase`).
@@ -165,6 +166,7 @@ mise = (wantwin + perte) / (cote - 1)
 - Si la cote ne peut pas être lue, le système retombe sur `config.cotebase`.
 
 Après un pari:
+
 - Si le pari est perdu (LOSE), on met à jour `perte` en y ajoutant la mise perdue (éventuellement multipliée par la cote si l’on suit un suivi externe). Dans ce projet, les flux d’actualisation se font via les résultats retournés par `Functions/GetResult.py` et la gestion des pertes via `Functions/GetJsonData.py` (Dispatch/SendPerte, etc.).
 - Si le pari est gagné (WIN), `perte` est remise à zéro et la boucle repart avec `wantwin` uniquement.
 
@@ -179,6 +181,7 @@ Après un pari:
 ### 3) Exemple chiffré
 
 Supposons:
+
 - wantwin = 0.20 EUR
 - perte = 0 EUR au départ
 - cote = 2.40
@@ -195,6 +198,7 @@ Mise1 = (0.20 + 0.00) / (2.40 - 1) = 0.20 / 1.40 ≈ 0.14 → minimum 0.20 EUR
 Au premier WIN, le gain brut ≈ Mise × (cote - 1) rembourse `perte` et laisse ~`wantwin` en net. Ensuite `perte` est remise à 0.
 
 Remarques:
+
 - Les arrondis à 2 décimales peuvent légèrement dévier du théorique.
 - Si `cote` varie entre le calcul et l’envoi, la modale peut proposer d’accepter un changement de cote; la logique de modale est gérée dans `Functions/ModalHandler.py` et `ValidationDuParis`.
 
@@ -212,6 +216,7 @@ def max_gain_pour_16_tours(solde_initial, cote=2.4, tours_max=16):
 Idée: pour un capital donné et un nombre de tours maximum, on cherche le `wantwin` maximal tel que la somme des mises successives reste ≤ capital. Cela permet d’ajuster `wantwin` de façon réaliste.
 
 Recommandations:
+
 - Fixer un nombre de tours max (nb_tour) raisonnable par stratégie.
 - Calculer un `wantwin` compatible avec le capital et la cote moyenne attendue.
 - Mettre en place un stop-loss global si `nb_tour` est atteint ou si la mise à venir dépasse une limite (misemax si disponible sur le site).
@@ -219,6 +224,7 @@ Recommandations:
 ### 5) Spécificités par stratégie (quand parier)
 
 La martingale (calcul de mise) est commune, mais chaque stratégie définit quand déclencher le pari en fonction du score en direct:
+
 - 40A: on cible des moments proches de 40-40/avantage (voir `FirstGameBet`/`GetAndPlaceBet`).
 - 30A: déclenche lorsque le score atteint des états comme 0:0, 15:15, etc. (voir `FirstGameBet` et `GetResult`).
 - 15A, 030/300: déclenche à 0:0 ou autres états précisés dans le code.
@@ -277,13 +283,14 @@ En résumé, la martingale ici est une martingale « classique » à cible fixe 
 - Cas particulier LIVE:
   - Si `config.scriptType == 'LIVE'`, `GetMise` n’utilise pas la formule de martingale locale: la mise recommandée est obtenue via l’API `recommended_stake` avec `recover_losses=1`.
 - Croissance des mises (intuition):
-  - À cote constante C, après k pertes, la somme des mises ≈ Σ_{i=0..k} (wantwin + Σ mises précédentes)/(C−1). Cette croissance peut devenir très rapide lorsque C se rapproche de 1.5–2.0; d’où l’importance de dimensionner `wantwin` et `tours_max` via `GetGainFromCapital.py`.
+  - À cote constante C, après k pertes, la somme des mises ≈ Σ\_{i=0..k} (wantwin + Σ mises précédentes)/(C−1). Cette croissance peut devenir très rapide lorsque C se rapproche de 1.5–2.0; d’où l’importance de dimensionner `wantwin` et `tours_max` via `GetGainFromCapital.py`.
 
 ## Paramétrage du Programme
 
 ### Configuration de Base
 
 1. Éditer le fichier `config.py` pour ajuster les paramètres globaux :
+
    - `mise` : Montant de base pour les paris
    - `wantwin` : Gain souhaité
    - `probamini` : Probabilité minimale pour placer un pari
@@ -299,6 +306,7 @@ En résumé, la martingale ici est une martingale « classique » à cible fixe 
 Chaque stratégie peut être configurée individuellement via l'API ou en modifiant les fichiers de configuration spécifiques dans le dossier `conf/`.
 
 Exemple pour la stratégie 40A :
+
 ```python
 config_40A = ScriptConfig('40A')
 config_40A.set("mise", 0.5)  # Augmente la mise de base pour cette stratégie
@@ -316,6 +324,7 @@ Pour exécuter le programme avec une stratégie spécifique :
    ```
 
 Le programme va alors :
+
 1. Initialiser la configuration
 2. Rechercher des matchs de tennis en direct
 3. Analyser les matchs selon les critères de la stratégie
@@ -325,6 +334,7 @@ Le programme va alors :
 ## Journalisation et Suivi
 
 Tous les paris et résultats sont enregistrés dans :
+
 - Des fichiers de log dans le dossier `Logs/`
 - Des fichiers JSON pour les paris validés
 - Potentiellement dans une base de données via l'API
@@ -332,6 +342,7 @@ Tous les paris et résultats sont enregistrés dans :
 ## Maintenance et Dépannage
 
 En cas de problème :
+
 1. Vérifier les fichiers de log pour identifier l'erreur
 2. S'assurer que les URLs du site 1xBet sont à jour
 3. Vérifier la connexion à l'API
@@ -344,15 +355,17 @@ Ce programme offre un système complet pour automatiser les paris sportifs sur l
 ## Description détaillée des fonctions principales
 
 ### Functions/GetMise.py
+
 Cette fonction calcule la mise selon la stratégie martingale :
+
 ```python
 def getMise(driver):
     """
     Calcule la mise selon la stratégie martingale.
-    
+
     Args:
         driver: Instance du navigateur Selenium
-        
+
     Returns:
         float: Montant de la mise calculée
     """
@@ -361,12 +374,14 @@ def getMise(driver):
 ```
 
 ### Functions/FirstGameBet.py
+
 Gère le premier pari d'une série :
+
 ```python
 def firstGameBet(driver):
     """
     Vérifie les conditions initiales et place le premier pari.
-    
+
     - Vérifie le score actuel
     - Valide les conditions de la stratégie
     - Place le pari si toutes les conditions sont remplies
@@ -374,19 +389,23 @@ def firstGameBet(driver):
 ```
 
 ### Functions/GetResult.py
+
 Détermine le résultat du pari :
+
 ```python
 def getResult(driver):
     """
     Analyse le score final pour déterminer si le pari est gagné/perdu.
-    
+
     Returns:
         str: 'WIN' ou 'LOSE'
     """
 ```
 
 ### Functions/ModalHandler.py
+
 Gère les popups de changement de cote :
+
 ```python
 def handleModal(driver):
     """
@@ -397,7 +416,9 @@ def handleModal(driver):
 ```
 
 ### Functions/ValidationDuParis.py
+
 Valide que le pari a bien été placé :
+
 ```python
 def validateBet(driver):
     """
@@ -410,25 +431,30 @@ def validateBet(driver):
 ## Cycle complet d'un pari
 
 1. Initialisation
+
 - ScriptConfig charge les paramètres de la stratégie
 - Connexion au site via ChromeDriver
 
 2. Recherche de match
+
 - ScriptRechercheDeMatch.py analyse les matchs en direct
 - Filtre selon les critères de la stratégie
 
 3. Placement du pari
+
 - FirstGameBet vérifie les conditions initiales
 - GetMise calcule le montant à parier
 - PlacerMise place physiquement le pari
 - ValidationDuParis confirme l'enregistrement
 
 4. Suivi et résultat
+
 - GetResult surveille le score
 - Met à jour config.perte selon le résultat
 - Prépare la mise suivante si nécessaire
 
 5. Gestion des erreurs
+
 - ModalHandler gère les changements de cote
 - Retry mécanisme en cas d'erreur technique
 - Logging des événements
@@ -436,16 +462,19 @@ def validateBet(driver):
 ## Sécurités et limites
 
 1. Limites financières
+
 - Mise minimum : 0.2€
 - Capital maximum par stratégie
 - Stop-loss après X pertes consécutives
 
 2. Contrôles de cohérence
+
 - Validation des cotes avant pari
 - Vérification des tickets de paris
 - Double contrôle des résultats
 
 3. Gestion des erreurs
+
 - Retry sur les opérations critiques
 - Rollback en cas d'erreur
 - Logging détaillé

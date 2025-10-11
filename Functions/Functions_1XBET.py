@@ -93,21 +93,10 @@ def verification_match_trouve_url(driver, matchlist_file_name):
 
 
 # MISE A JOUR DES MATCHS EFFECTUÉS
-def update_match_done(action, values, matchlist_file_name):
-    if action == "add":
-        newmatch = values
-        get_matchlist_file = open(matchlist_file_name + ".txt", "a")
-        get_matchlist_file.write(
-            "\n" + str(newmatch))
-        get_matchlist_file.close()
-    elif action == "del":
-        get_matchlist_file = open(matchlist_file_name + ".txt", "r")
-        get_matchlist = get_matchlist_file.read()
-        get_matchlist_file.close()
-        match_list = get_matchlist.replace("\n" + str(values), "")
-        get_matchlist_file = open(matchlist_file_name + ".txt", "w")
-        get_matchlist_file.write(match_list)
-        get_matchlist_file.close()
+def update_match_done(action, values, strategy_name):
+    from Functions.Managers.MatchManager import match_manager
+    
+    match_manager.update_match(action, str(values), strategy_name)
 
 
 # MISE A JOUR DES MATCHS EFFECTUÉS

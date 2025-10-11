@@ -1,6 +1,6 @@
 # OuverturePageMatch
 
-from Functions import AddRunning
+from Functions._to_remove import AddRunning
 
 
 def main(bet_item, script_num, newmatch, running_file_name, matchlist_file_name):

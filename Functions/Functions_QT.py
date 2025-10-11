@@ -1,11 +1,12 @@
 from Functions.FisrtQTBet import FirstQTBet
 
+from Functions._to_remove import AddRunning
 import config
 from Functions import Functions_1XBET
-from Functions import GetLigueName, AddRunning
+from Functions import GetLigueName
 from Functions.DeleteBet import DeleteBet
 from Functions.GetSetActuel import GetQTActuel
-from Functions.Function_scriptDelRunning import scriptDelRunning
+from Functions._to_remove.Function_scriptDelRunning import scriptDelRunning
 from Functions.GetIfGameStart import GetIfQTEnd, GetIfQTStart
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
 from Functions.GetPlayersName import GetPlayersName
