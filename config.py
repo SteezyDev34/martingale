@@ -85,7 +85,7 @@ increment = 0
 mtt_recup = 0
 
 recup30 = 0
-rattrape_perte = 0
+rattrape_perte = 1  # ne pas changer
 print_running_text = False
 print_match_live_text = False
 error = False
@@ -332,7 +332,7 @@ class ScriptConfig:
             config['looking_game'] = False
             config['placed_game'] = False
             config['saved_score'] = False
-            config['rattrape_perte'] = False
+            config['rattrape_perte'] = 1
             config['result'] = False
 
         return config
@@ -492,7 +492,7 @@ def log_clear_line(line_number=1):
             if not devMode:
                 sys.stdout.write("\x1b[1A\x1b[2K\r")
             # Monte d’une ligne et efface-la entièrement
-            
+
         sys.stdout.flush()
 
 

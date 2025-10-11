@@ -28,8 +28,10 @@ def max_gain_pour_16_tours(solde_initial, cote=2.4, tours_max=16):
     gain_max = round(bas, 2)
     print(f"➡️ tu peux viser au maximum {gain_max}€ net par victoire en martingale sur {tours_max} tours.")
     return gain_max
+
+
 if __name__ == '__main__':
-    capital = 11000
-    cote = 2.4
-    
-    gain_max = max_gain_pour_16_tours(capital, cote, 15)
+    capital = 450
+    cote = 4
+
+    gain_max = max_gain_pour_16_tours(capital, cote, 10)
