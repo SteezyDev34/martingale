@@ -9,12 +9,192 @@
         "url": "https://1xbet.com/fr/live/tennis/2745898-itf-kunshan-women/660677272-haruka-kaji-carol-young-suh-lee"
     },
     {
-        "montant": 1.26,
-        "cote": "2.5",
+        "montant": 0.2,
+        "cote": "2.45",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 05:51:44",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660690263-katerina-siniakova-jessica-pegula"
+    },
+    {
+        "montant": 0.28,
+        "cote": "2.45",
+        "jeu": 5,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 05:55:37",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660683684-katerina-siniakova-jessica-pegula"
+    },
+    {
+        "montant": 0.41,
+        "cote": "2.65",
+        "jeu": 6,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 05:58:09",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660683684-katerina-siniakova-jessica-pegula"
+    },
+    {
+        "montant": 0.78,
+        "cote": "2.4",
         "jeu": 7,
         "set": "2",
         "winscore": "30:30",
-        "timestamp": "2025-10-10 05:45:37",
-        "url": "https://1xbet.com/fr/live/tennis/2745898-itf-kunshan-women/660677272-haruka-kaji-carol-young-suh-lee"
+        "timestamp": "2025-10-10 06:02:43",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660683684-katerina-siniakova-jessica-pegula"
+    },
+    {
+        "montant": 0.78,
+        "cote": "2.4",
+        "jeu": 1,
+        "set": "3",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 06:04:11",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660692885-katerina-siniakova-jessica-pegula"
+    },
+    {
+        "montant": 1.13,
+        "cote": "2.65",
+        "jeu": 2,
+        "set": "3",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 06:08:39",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660683684-katerina-siniakova-jessica-pegula"
+    },
+    {
+        "montant": 2.07,
+        "cote": "2.45",
+        "jeu": 3,
+        "set": "3",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 06:11:43",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660683684-katerina-siniakova-jessica-pegula"
+    },
+    {
+        "montant": 3.27,
+        "cote": "2.55",
+        "jeu": 4,
+        "set": "3",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 06:16:55",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660683684-katerina-siniakova-jessica-pegula"
+    },
+    {
+        "montant": 5.75,
+        "cote": "2.45",
+        "jeu": 5,
+        "set": "3",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 06:21:00",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660683684-katerina-siniakova-jessica-pegula"
+    },
+    {
+        "montant": 8.54,
+        "cote": "2.65",
+        "jeu": 6,
+        "set": "3",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 06:24:10",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660683684-katerina-siniakova-jessica-pegula"
+    },
+    {
+        "montant": 16.16,
+        "cote": "2.4",
+        "jeu": 7,
+        "set": "3",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 06:27:41",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660683684-katerina-siniakova-jessica-pegula"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.45",
+        "jeu": 7,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 06:37:15",
+        "url": "https://1xbet.com/fr/live/tennis/1425704-itf-perth/660692850-emile-hudd-kaichi-uchida"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.65",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 07:10:52",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660698651-aryna-sabalenka-elena-rybakina"
+    },
+    {
+        "montant": 0.21,
+        "cote": "1.95",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 07:32:14",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660698297-arthur-cazaux-yi-zhou"
+    },
+    {
+        "montant": 0.22,
+        "cote": "2.9",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 07:33:21",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660698275-arthur-cazaux-yi-zhou"
+    },
+    {
+        "montant": 0.37,
+        "cote": "2.7",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 07:37:07",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660698275-arthur-cazaux-yi-zhou"
+    },
+    {
+        "montant": 0.5,
+        "cote": "3",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 07:38:58",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660698275-arthur-cazaux-yi-zhou"
+    },
+    {
+        "montant": 0.88,
+        "cote": "2.7",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 07:45:39",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660698275-arthur-cazaux-yi-zhou"
+    },
+    {
+        "montant": 1.19,
+        "cote": "3",
+        "jeu": 10,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 07:47:53",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660698275-arthur-cazaux-yi-zhou"
+    },
+    {
+        "montant": 0.47,
+        "cote": "2.8",
+        "jeu": 8,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 07:58:11",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660704737-bernard-tomic-shintaro-mochizuki"
+    },
+    {
+        "montant": 0.88,
+        "cote": "2.5",
+        "jeu": 9,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-10 08:01:03",
+        "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660698266-bernard-tomic-shintaro-mochizuki"
     }
 ]
