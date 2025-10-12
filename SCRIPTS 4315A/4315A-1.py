@@ -33,6 +33,8 @@ if len(parts) > 1:
     config.script_num = int(parts[1])  # Suppose que le numéro est avant le tiret
     localhost = str(config.scriptType) + str(config.script_num)
     config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
+    if int(config.localhost) < 1024:
+        config.localhost = 1024 + int(config.localhost)
     # Demander confirmation à l'utilisateur
     if config.systeme == 'Windows':
         command = f'start chrome --remote-debugging-port={config.localhost} --user-data-dir="{project_directory}\\ChromeDebugProfile{config.localhost}"'
@@ -47,7 +49,7 @@ if len(parts) > 1:
     else:
         config.log_clear_line(3)
 
-    print(f"{config.PURPLE}{text2art(f"Start martingal {config.scriptType} {config.script_num}")}")
+    print(f"{config.PURPLE}{text2art(f'Start martingal {config.scriptType} {config.script_num}')}")
 else:
     print("Le format du nom du fichier est incorrect.")
     exit()
@@ -88,11 +90,12 @@ if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in
 config.scriptTypeList = config.scriptTypeList
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
-config.running_file_name = f"{config.projectPath}/SCRIPTS 4315A/running"
-config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 4315A/matchlist"
+config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
+config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
 while (config.win < 100):
+    Functions_431a.all_script(driver)
     try:
-        Functions_431a.all_script(driver)
+        pass
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:

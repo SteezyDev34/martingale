@@ -9,12 +9,13 @@ parent_directory = os.path.dirname(current_file_path)
 # ajouter un autre niveau parent si nécessaire
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
-# Vérification de l'environnement
 if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
+    # Simple écriture de lignes vides pour PyCharm
+
+    # Vérification de l'environnement
     import VenvDependencyManager
 
     VenvDependencyManager.main()
-
 from art import *
 
 # Chargement des variables globales
@@ -32,7 +33,6 @@ if len(parts) > 1:
     config.script_num = int(parts[1])  # Suppose que le numéro est avant le tiret
     localhost = str(config.scriptType) + str(config.script_num)
     config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
-    print(config.localhost)
     # Demander confirmation à l'utilisateur
     if config.systeme == 'Windows':
         command = f'start chrome --remote-debugging-port={config.localhost} --user-data-dir="{project_directory}\\ChromeDebugProfile{config.localhost}"'
@@ -44,11 +44,10 @@ if len(parts) > 1:
     if confirmation.upper() != 'Y' and confirmation.upper() != 'y' and confirmation.upper() != 'O' and confirmation.upper() != 'o':
         print("Programme arrêté par l'utilisateur.")
         sys.exit(0)  # Arrêter le programme
+    else:
+        config.log_clear_line(3)
 
-    print(f'{config.PURPLE}' + text2art(
-        f"Start martingal {config.scriptType} {config.script_num}"))  # Crée un texte en art ASCII
-    # sys.stdout.write(f"\rSCRIPT TYPE : {config.scriptType}")
-    # sys.stdout.write(f"\rSCRIPT NUM : {config.script_num}")
+    print(f"{config.PURPLE}{text2art(f'Start martingal {config.scriptType} {config.script_num}')}")
 else:
     print("Le format du nom du fichier est incorrect.")
     exit()
@@ -60,30 +59,33 @@ from ChromeDriver.SetDriver import driver
 from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
-from Functions.Authenticator import is_logged_in, loginProcess
 
 confirmation = input(f"Classement ? (Y/N): ")
+config.log_clear_line()
 
 if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
-    confirmation = input(f"type de Classement ? (1/2): ")
+    confirmation = input(f"Type de Classement ? (1/2): ")
+    config.log_clear_line()
     if confirmation == '1':
+        config.log("-" * 60, "info", False, False, False)
+        print("Classement simple en cours")
+        config.log("-" * 60, "info", False, False, False)
         classementeDeMatch(driver)
     else:
-        print('new class')
+        config.log("-" * 60, "info", False, False, False)
+        print("Classement complet en cours")
+        config.log("-" * 60, "info", False, False, False)
         newclassementeDeMatch(driver)
-        print('new class')
         classementeDeMatch(driver)
 
-# Call the function to get the code
-if not is_logged_in(driver):
-    loginProcess(driver)
-else:
-    print("You are already logged in.")
-
 is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
+config.log_clear_line()
 if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
     config.in_stat = True
-config.scriptTypeList = config.scriptTypeList3
+    config.log("-" * 60, "purple", False, False, False)
+    print(f"{config.PURPLE}CLASSEMENT : OUI")
+    config.log("-" * 60, "purple", False, False, False)
+config.scriptTypeList = config.scriptTypeList
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}

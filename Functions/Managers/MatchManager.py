@@ -262,7 +262,9 @@ class MatchManager:
             response = requests.get(url, headers=headers, timeout=10)
             if response.status_code == 200:
                 try:
-                    return response.json()
+
+                    data = response.json()
+                    return data.get('data', [])
                 except ValueError:
                     config.log("Réponse 200 reçue mais le corps n'est pas du JSON valide", 'warning', True)
                     return []
@@ -368,7 +370,6 @@ class MatchManager:
             ]
 
             # Envoi au serveur distant
-            print('Envoi au serveur distant')
             added_remotely = self.send_matchlist_to_remote(match_payload)
             
             # Si l'ajout a réussi soit localement soit à distance, on considère que c'est un succès

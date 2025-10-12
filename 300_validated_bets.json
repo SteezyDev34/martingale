@@ -4750,5 +4750,77 @@
         "winscore": "0:30",
         "timestamp": "2025-10-10 07:57:06",
         "url": "https://1xbet.com/fr/live/tennis/1554609-challenger-jinan/660704737-bernard-tomic-shintaro-mochizuki"
+    },
+    {
+        "montant": 0.45,
+        "cote": "2.1",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-12 09:55:22",
+        "url": "https://1xbet.com/fr/live/tennis/2769427-atp-almaty-qualification/661337181-marko-topo-titouan-droguet"
+    },
+    {
+        "montant": 8.87,
+        "cote": "2.15",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "30:0",
+        "timestamp": "2025-10-12 10:25:30",
+        "url": "https://1xbet.com/fr/live/tennis/2769427-atp-almaty-qualification/661350324-marko-topo-titouan-droguet"
+    },
+    {
+        "montant": 10.85,
+        "cote": "1.94",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-12 10:41:18",
+        "url": "https://1xbet.com/fr/live/tennis/5596-atp-shanghai/661349842-arthur-rinderknech-valentin-vacherot"
+    },
+    {
+        "montant": 2.11,
+        "cote": "2.52",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-12 12:53:44",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/661387248-jessica-pegula-cori-gauff"
+    },
+    {
+        "montant": 2.91,
+        "cote": "2.1",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-12 13:11:57",
+        "url": "https://1xbet.com/fr/live/tennis/2769427-atp-almaty-qualification/661391069-james-duckworth-mikhail-kukushkin"
+    },
+    {
+        "montant": 4.16,
+        "cote": "1.77",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-12 15:48:42",
+        "url": "https://1xbet.com/fr/live/tennis/2915542-atp-brussels-qualification/661435420-jaime-faria-tibo-colson"
+    },
+    {
+        "montant": 5.66,
+        "cote": "2.3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-12 15:54:36",
+        "url": "https://1xbet.com/fr/live/tennis/2915542-atp-brussels-qualification/661435334-jaime-faria-tibo-colson"
+    },
+    {
+        "montant": 15.69,
+        "cote": "1.83",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-12 16:00:18",
+        "url": "https://1xbet.com/fr/live/tennis/2915542-atp-brussels-qualification/661435334-jaime-faria-tibo-colson"
     }
 ]

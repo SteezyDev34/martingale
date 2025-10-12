@@ -57,7 +57,7 @@ def all_script(driver):
         newmatchFromUrl(driver)
 
         # Met à jour le statut du match dans le gestionnaire de matchs
-        match_manager.add_match(config.newmatch, config.scriptType)
+        match_manager.add_match(config.newmatch)
 
         config.log("-" * 60, "success", False, False, False)
         config.log(f'MATCH OK : {str(config.teams)} | {config.ligue_name}', 'success', False, 0, False)
@@ -83,6 +83,23 @@ def all_script(driver):
     current_game = int(config.jeu_actuel)
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
+        # Check if all script types have global_match_win > 1
+        all_below_one = all(
+            float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
+            config.scriptTypeList)
+        if all_below_one:
+            for st in config.scriptTypeList:
+                config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
+                           'success', False)
+            return True
+        if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
+            config.log(
+                f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
+        else:
+            config.log(
+                f' {scriptType} Net profit: {config.global_match_win[scriptType]} /{config.total_want_win[scriptType]}')
+            config.log(f" {scriptType} FIN {config.scriptType}", 'success', False)
+            continue
         ##PREPARATTION PREMIER PARIS
         FirstGameBet(driver)
 
@@ -360,7 +377,7 @@ def all_script(driver):
         config.winmatch[i] = 0  # Initialize match counter for script type
     config.all_scores = {}
     # Supprimer le match de la base de données
-    match_manager.remove_match(config.newmatch, config.scriptType)
+    match_manager.remove_match(config.newmatch)
 
     # Nettoyer le script en cours
     script_manager.stop_script(config.scriptType, config.script_num)

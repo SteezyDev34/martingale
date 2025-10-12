@@ -191,5 +191,148 @@
         ],
         "timestamp": "2025-10-08 11:08:45",
         "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/660200157-aryna-sabalenka-rebecca-sramkova"
+    },
+    {
+        "montant": 1.07,
+        "cote": "4",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "30:40"
+        ],
+        "timestamp": "2025-10-12 11:03:41",
+        "url": "https://1xbet.com/fr/live/tennis/5596-atp-shanghai/661349842-arthur-rinderknech-valentin-vacherot"
+    },
+    {
+        "montant": 1.42,
+        "cote": "4",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:30"
+        ],
+        "timestamp": "2025-10-12 11:11:10",
+        "url": "https://1xbet.com/fr/live/tennis/5596-atp-shanghai/661349842-arthur-rinderknech-valentin-vacherot"
+    },
+    {
+        "montant": 1.07,
+        "cote": "4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "30:40"
+        ],
+        "timestamp": "2025-10-12 12:05:20",
+        "url": "https://1xbet.com/fr/live/tennis/2769427-atp-almaty-qualification/661373706-marc-andrea-huesler-bernard-tomic"
+    },
+    {
+        "montant": 1.42,
+        "cote": "4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30"
+        ],
+        "timestamp": "2025-10-12 12:09:41",
+        "url": "https://1xbet.com/fr/live/tennis/2769427-atp-almaty-qualification/661373635-marc-andrea-huesler-bernard-tomic"
+    },
+    {
+        "montant": 1.9,
+        "cote": "4",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30"
+        ],
+        "timestamp": "2025-10-12 12:14:04",
+        "url": "https://1xbet.com/fr/live/tennis/2769427-atp-almaty-qualification/661373635-marc-andrea-huesler-bernard-tomic"
+    },
+    {
+        "montant": 1.07,
+        "cote": "4",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "30:40"
+        ],
+        "timestamp": "2025-10-12 12:18:53",
+        "url": "https://1xbet.com/fr/live/tennis/2769427-atp-almaty-qualification/661373706-marc-andrea-huesler-bernard-tomic"
+    },
+    {
+        "montant": 1.42,
+        "cote": "4",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "30:40"
+        ],
+        "timestamp": "2025-10-12 12:22:48",
+        "url": "https://1xbet.com/fr/live/tennis/2769427-atp-almaty-qualification/661373635-marc-andrea-huesler-bernard-tomic"
+    },
+    {
+        "montant": 1.9,
+        "cote": "4",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:30"
+        ],
+        "timestamp": "2025-10-12 12:27:35",
+        "url": "https://1xbet.com/fr/live/tennis/2769427-atp-almaty-qualification/661373635-marc-andrea-huesler-bernard-tomic"
+    },
+    {
+        "montant": 2.53,
+        "cote": "4",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "40:30"
+        ],
+        "timestamp": "2025-10-12 12:32:16",
+        "url": "https://1xbet.com/fr/live/tennis/2769427-atp-almaty-qualification/661373635-marc-andrea-huesler-bernard-tomic"
+    },
+    {
+        "montant": 0.96,
+        "cote": "4.33",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "30:40"
+        ],
+        "timestamp": "2025-10-12 12:35:46",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/661387248-jessica-pegula-cori-gauff"
+    },
+    {
+        "montant": 1.19,
+        "cote": "4.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30"
+        ],
+        "timestamp": "2025-10-12 12:41:22",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/661387248-jessica-pegula-cori-gauff"
+    },
+    {
+        "montant": 1.61,
+        "cote": "4.33",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "30:40"
+        ],
+        "timestamp": "2025-10-12 12:45:29",
+        "url": "https://1xbet.com/fr/live/tennis/887517-wta-wuhan/661387248-jessica-pegula-cori-gauff"
+    },
+    {
+        "montant": 1.07,
+        "cote": "4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30"
+        ],
+        "timestamp": "2025-10-12 15:49:12",
+        "url": "https://1xbet.com/fr/live/tennis/115611-atp-stockholm-qualification/661439310-arthur-fery-jay-clarke"
     }
 ]
