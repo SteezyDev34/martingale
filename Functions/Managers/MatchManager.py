@@ -99,8 +99,36 @@ class MatchManager:
         # Normaliser le format si 'match' est un dict
         if isinstance(match, dict):
             try:
+                raw_players = match.get("players", [])
+                if isinstance(raw_players, str):
+                    ps = raw_players.strip()
+                    if ps.startswith('[') and ps.endswith(']'):
+                        try:
+                            parsed = json.loads(ps)
+                            players_list = parsed if isinstance(parsed, list) else [str(parsed)]
+                        except Exception:
+                            if ' - ' in raw_players:
+                                players_list = [p.strip().strip("[]'\"") for p in raw_players.split(' - ') if p.strip()]
+                            elif ',' in raw_players:
+                                players_list = [p.strip().strip("[]'\"") for p in raw_players.split(',') if p.strip()]
+                            else:
+                                cleaned = raw_players.strip().strip("[]'\"")
+                                players_list = [cleaned] if cleaned else []
+                    else:
+                        if ' - ' in raw_players:
+                            players_list = [p.strip().strip("[]'\"") for p in raw_players.split(' - ') if p.strip()]
+                        elif ',' in raw_players:
+                            players_list = [p.strip().strip("[]'\"") for p in raw_players.split(',') if p.strip()]
+                        else:
+                            cleaned = raw_players.strip().strip("[]'\"")
+                            players_list = [cleaned] if cleaned else []
+                elif isinstance(raw_players, list):
+                    players_list = [str(p).strip().strip("[]'\"") for p in raw_players]
+                else:
+                    players_list = [str(raw_players).strip().strip("[]'\"")]
+
                 match = [
-                    match.get("players", []),
+                    players_list,
                     match.get("league", ""),
                     match.get("match_id", ""),
                     match.get("match_date", ""),
@@ -344,23 +372,25 @@ class MatchManager:
                         except Exception:
                             # Repli sur un découpage simple
                             if ' - ' in players:
-                                players_list = [p.strip() for p in players.split(' - ') if p.strip()]
+                                players_list = [p.strip().strip("[]'\"") for p in players.split(' - ') if p.strip()]
                             elif ',' in players:
-                                players_list = [p.strip() for p in players.split(',') if p.strip()]
+                                players_list = [p.strip().strip("[]'\"") for p in players.split(',') if p.strip()]
                             else:
-                                players_list = [players.strip()] if players.strip() else []
+                                cleaned = players.strip().strip("[]'\"")
+                                players_list = [cleaned] if cleaned else []
                     else:
                         # Découpage par séparateur connu ou fallback
                         if ' - ' in players:
-                            players_list = [p.strip() for p in players.split(' - ') if p.strip()]
+                            players_list = [p.strip().strip("[]'\"") for p in players.split(' - ') if p.strip()]
                         elif ',' in players:
-                            players_list = [p.strip() for p in players.split(',') if p.strip()]
+                            players_list = [p.strip().strip("[]'\"") for p in players.split(',') if p.strip()]
                         else:
-                            players_list = [players.strip()] if players.strip() else []
+                            cleaned = players.strip().strip("[]'\"")
+                            players_list = [cleaned] if cleaned else []
                 else:
-                    players_list = [str(players)]
+                    players_list = [str(players).strip().strip("[]'\"")]
             except Exception:
-                players_list = players if isinstance(players, list) else [str(players)]
+                players_list = players if isinstance(players, list) else [str(players).strip().strip("[]'\"")]
             match_payload = [
                 players_list,
                 league,

@@ -690,7 +690,27 @@ def classementeDeMatch(driver, use_json_cache=True):
         
         for match in top_matches:
                 try:
-                    match_info = "|".join(str(x) for x in match)
+                    # Assurer un format propre pour les joueurs: "Joueur A - Joueur B"
+                    players = match[0]
+                    if isinstance(players, (list, tuple)):
+                        players_str = " - ".join(str(p).strip().strip("[]'\"") for p in players)
+                    else:
+                        # Nettoyer les éventuels crochets/quotes provenant d'une conversion liste->str
+                        players_str = str(players).strip().strip("[]'\"")
+
+                    # Recomposer la ligne au format attendu
+                    league = match[1]
+                    match_id = match[2]
+                    date_str = match[3]
+                    prob = match[4]
+                    match_info = "|".join([
+                        players_str,
+                        str(league),
+                        str(match_id),
+                        str(date_str),
+                        str(prob)
+                    ])
+
                     success = match_manager.add_match_todo(match_info)
                     if success:
                         config.log(f"Match ajouté à la liste: {match[0]} vs {match[1]}", 'success', True)
