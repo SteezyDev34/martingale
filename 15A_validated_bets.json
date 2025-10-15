@@ -3625,5 +3625,842 @@
         "winscore": "15:15",
         "timestamp": "2025-10-12 15:49:09",
         "url": "https://1xbet.com/fr/live/tennis/2915542-atp-brussels-qualification/661435420-jaime-faria-tibo-colson"
+    },
+    {
+        "montant": 3.2,
+        "cote": "2",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 17:25:06",
+        "url": "https://1xbet.com/fr/live/tennis/1310707-challenger-curitiba-qualification/661422395-wilson-leite-bruno-kuzuhara"
+    },
+    {
+        "montant": 3.2,
+        "cote": "2",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 18:10:03",
+        "url": "https://1xbet.com/fr/live/tennis/2480894-challenger-valencia/661478919-jan-choinski-luka-mikrut"
+    },
+    {
+        "montant": 6.81,
+        "cote": "1.94",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 18:20:31",
+        "url": "https://1xbet.com/fr/live/tennis/2480894-challenger-valencia/661478882-jan-choinski-luka-mikrut"
+    },
+    {
+        "montant": 12.83,
+        "cote": "2.03",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 18:22:20",
+        "url": "https://1xbet.com/fr/live/tennis/2480894-challenger-valencia/661478882-jan-choinski-luka-mikrut"
+    },
+    {
+        "montant": 27.41,
+        "cote": "1.95",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 18:26:44",
+        "url": "https://1xbet.com/fr/live/tennis/2480894-challenger-valencia/661478882-jan-choinski-luka-mikrut"
+    },
+    {
+        "montant": 0.57,
+        "cote": "1.87",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 19:03:45",
+        "url": "https://1xbet.com/fr/live/tennis/2469021-wta-tampico/661495201-ekaterina-kazionova-dasha-plekhanova"
+    },
+    {
+        "montant": 1.26,
+        "cote": "1.85",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 19:07:42",
+        "url": "https://1xbet.com/fr/live/tennis/2469021-wta-tampico/661495178-ekaterina-kazionova-dasha-plekhanova"
+    },
+    {
+        "montant": 2.59,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 19:10:54",
+        "url": "https://1xbet.com/fr/live/tennis/2469021-wta-tampico/661495178-ekaterina-kazionova-dasha-plekhanova"
+    },
+    {
+        "montant": 0.57,
+        "cote": "1.87",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 19:55:21",
+        "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/661509686-dan-martin-nikolay-sysoev"
+    },
+    {
+        "montant": 1.04,
+        "cote": "2.03",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 19:58:10",
+        "url": "https://1xbet.com/fr/live/tennis/2738042-challenger-lincoln-qualification/661509642-dan-martin-nikolay-sysoev"
+    },
+    {
+        "montant": 2.34,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 20:00:14",
+        "url": "https://1xbet.com/fr/live/tennis/2738042-challenger-lincoln-qualification/661509642-dan-martin-nikolay-sysoev"
+    },
+    {
+        "montant": 4.24,
+        "cote": "2.05",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 20:01:26",
+        "url": "https://1xbet.com/fr/live/tennis/2738042-challenger-lincoln-qualification/661509642-dan-martin-nikolay-sysoev"
+    },
+    {
+        "montant": 9.34,
+        "cote": "1.93",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 20:04:27",
+        "url": "https://1xbet.com/fr/live/tennis/2738042-challenger-lincoln-qualification/661509642-dan-martin-nikolay-sysoev"
+    },
+    {
+        "montant": 17.17,
+        "cote": "2.05",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 20:06:51",
+        "url": "https://1xbet.com/fr/live/tennis/2738042-challenger-lincoln-qualification/661509642-dan-martin-nikolay-sysoev"
+    },
+    {
+        "montant": 0.54,
+        "cote": "1.93",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 21:03:28",
+        "url": "https://1xbet.com/fr/live/tennis/104395-itf-redding-women/661522834-lea-ma-francesca-pace"
+    },
+    {
+        "montant": 1.09,
+        "cote": "1.95",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 21:05:35",
+        "url": "https://1xbet.com/fr/live/tennis/104395-itf-redding-women/661522796-lea-ma-francesca-pace"
+    },
+    {
+        "montant": 0.56,
+        "cote": "1.9",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 21:24:32",
+        "url": "https://1xbet.com/fr/live/tennis/2468823-wta-tampico-qualification/661526882-kristina-novak-sachia-vickery"
+    },
+    {
+        "montant": 1.25,
+        "cote": "1.85",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 21:26:51",
+        "url": "https://1xbet.com/fr/live/tennis/2468823-wta-tampico-qualification/661526858-kristina-novak-sachia-vickery"
+    },
+    {
+        "montant": 2.57,
+        "cote": "1.9",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 21:29:31",
+        "url": "https://1xbet.com/fr/live/tennis/2468823-wta-tampico-qualification/661526858-kristina-novak-sachia-vickery"
+    },
+    {
+        "montant": 5.61,
+        "cote": "1.87",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 21:33:46",
+        "url": "https://1xbet.com/fr/live/tennis/2468823-wta-tampico-qualification/661526858-kristina-novak-sachia-vickery"
+    },
+    {
+        "montant": 11.66,
+        "cote": "1.9",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 21:38:13",
+        "url": "https://1xbet.com/fr/live/tennis/2468823-wta-tampico-qualification/661526858-kristina-novak-sachia-vickery"
+    },
+    {
+        "montant": 0.5,
+        "cote": "2",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 21:43:27",
+        "url": "https://1xbet.com/fr/live/tennis/1310707-challenger-curitiba-qualification/661530378-enzo-camargo-lima-mateus-alves"
+    },
+    {
+        "montant": 0.54,
+        "cote": "1.93",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 22:00:45",
+        "url": "https://1xbet.com/fr/live/tennis/1310707-challenger-curitiba-qualification/661534163-sebastian-gima-aristotelis-thanos"
+    },
+    {
+        "montant": 1.16,
+        "cote": "1.9",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-12 22:04:32",
+        "url": "https://1xbet.com/fr/live/tennis/1310707-challenger-curitiba-qualification/661534139-sebastian-gima-aristotelis-thanos"
+    },
+    {
+        "montant": 0.24,
+        "cote": "1.85",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 06:52:45",
+        "url": "https://1xbet.com/fr/live/tennis/5657-wta-osaka/661605456-naomi-osaka-wakana-sonobe"
+    },
+    {
+        "montant": 0.4,
+        "cote": "2.1",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 06:56:30",
+        "url": "https://1xbet.com/fr/live/tennis/5657-wta-osaka/661605442-naomi-osaka-wakana-sonobe"
+    },
+    {
+        "montant": 0.21,
+        "cote": "1.95",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 07:14:45",
+        "url": "https://1xbet.com/fr/live/tennis/317589-challenger-shenzhen-qualification/661609302-tsung-hao-huang-xiaofei-wang"
+    },
+    {
+        "montant": 0.43,
+        "cote": "1.95",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 07:19:23",
+        "url": "https://1xbet.com/fr/live/tennis/317589-challenger-shenzhen-qualification/661609250-tsung-hao-huang-xiaofei-wang"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.03",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 08:07:45",
+        "url": "https://1xbet.com/fr/live/tennis/2769557-atp-almaty/661615427-fabian-marozsan-luca-nardi"
+    },
+    {
+        "montant": 0.43,
+        "cote": "1.93",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 08:11:17",
+        "url": "https://1xbet.com/fr/live/tennis/2769557-atp-almaty/661615398-fabian-marozsan-luca-nardi"
+    },
+    {
+        "montant": 0.81,
+        "cote": "2.03",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 08:13:34",
+        "url": "https://1xbet.com/fr/live/tennis/2769557-atp-almaty/661615398-fabian-marozsan-luca-nardi"
+    },
+    {
+        "montant": 1.73,
+        "cote": "1.95",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 08:15:51",
+        "url": "https://1xbet.com/fr/live/tennis/2769557-atp-almaty/661615398-fabian-marozsan-luca-nardi"
+    },
+    {
+        "montant": 0.59,
+        "cote": "1.85",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 09:51:23",
+        "url": "https://1xbet.com/fr/live/tennis/2769557-atp-almaty/661634804-gabriel-diallo-amir-omarkhanov"
+    },
+    {
+        "montant": 0.23,
+        "cote": "1.87",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 10:27:48",
+        "url": "https://1xbet.com/fr/live/tennis/5657-wta-osaka/661640875-maria-sakkari-ashlyn-krueger"
+    },
+    {
+        "montant": 0.49,
+        "cote": "2.03",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 13:10:49",
+        "url": "https://1xbet.com/fr/live/tennis/6038-atp-stockholm/661673973-miomir-kecmanovic-alexandre-muller"
+    },
+    {
+        "montant": 0.57,
+        "cote": "1.87",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 13:43:18",
+        "url": "https://1xbet.com/fr/live/tennis/254401-wta-ningbo/661682391-xiyu-wang-diana-shnaider"
+    },
+    {
+        "montant": 1.23,
+        "cote": "1.87",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 13:46:58",
+        "url": "https://1xbet.com/fr/live/tennis/254401-wta-ningbo/661682311-xiyu-wang-diana-shnaider"
+    },
+    {
+        "montant": 2.64,
+        "cote": "1.87",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 13:50:08",
+        "url": "https://1xbet.com/fr/live/tennis/254401-wta-ningbo/661682311-xiyu-wang-diana-shnaider"
+    },
+    {
+        "montant": 5.68,
+        "cote": "1.87",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 13:52:34",
+        "url": "https://1xbet.com/fr/live/tennis/254401-wta-ningbo/661682311-xiyu-wang-diana-shnaider"
+    },
+    {
+        "montant": 12.21,
+        "cote": "1.87",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 13:57:06",
+        "url": "https://1xbet.com/fr/live/tennis/254401-wta-ningbo/661682311-xiyu-wang-diana-shnaider"
+    },
+    {
+        "montant": 0.49,
+        "cote": "2.03",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 14:12:03",
+        "url": "https://1xbet.com/fr/live/tennis/2615953-challenger-olbia/661683680-hugo-grenier-nishesh-basavareddy"
+    },
+    {
+        "montant": 1.04,
+        "cote": "1.95",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 14:15:54",
+        "url": "https://1xbet.com/fr/live/tennis/2615953-challenger-olbia/661683650-hugo-grenier-nishesh-basavareddy"
+    },
+    {
+        "montant": 0.5,
+        "cote": "2",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 14:57:20",
+        "url": "https://1xbet.com/fr/live/tennis/6038-atp-stockholm/661695330-tallon-griekspoor-jacob-fearnley"
+    },
+    {
+        "montant": 0.49,
+        "cote": "2.03",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 15:39:36",
+        "url": "https://1xbet.com/fr/live/tennis/2915556-atp-brussels/661704729-marcos-giron-mattia-bellucci"
+    },
+    {
+        "montant": 0.96,
+        "cote": "2.03",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 15:43:02",
+        "url": "https://1xbet.com/fr/live/tennis/2915556-atp-brussels/661704623-marcos-giron-mattia-bellucci"
+    },
+    {
+        "montant": 2.05,
+        "cote": "1.95",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 15:48:33",
+        "url": "https://1xbet.com/fr/live/tennis/2915556-atp-brussels/661704623-marcos-giron-mattia-bellucci"
+    },
+    {
+        "montant": 0.5,
+        "cote": "2",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 15:56:11",
+        "url": "https://1xbet.com/fr/live/tennis/1310707-challenger-curitiba-qualification/661708648-gustavo-heide-pedro-sakamoto"
+    },
+    {
+        "montant": 1.15,
+        "cote": "1.87",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 15:59:31",
+        "url": "https://1xbet.com/fr/live/tennis/1310707-challenger-curitiba-qualification/661708609-gustavo-heide-pedro-sakamoto"
+    },
+    {
+        "montant": 0.56,
+        "cote": "1.9",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 17:06:17",
+        "url": "https://1xbet.com/fr/live/tennis/1310707-challenger-curitiba-qualification/661723032-pedro-boscardin-dias-paulo-andre-saraiva-dos-santos"
+    },
+    {
+        "montant": 1.18,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 17:12:56",
+        "url": "https://1xbet.com/fr/live/tennis/1310707-challenger-curitiba-qualification/661723032-pedro-boscardin-dias-paulo-andre-saraiva-dos-santos"
+    },
+    {
+        "montant": 0.41,
+        "cote": "2.23",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 17:17:16",
+        "url": "https://1xbet.com/fr/live/tennis/2915556-atp-brussels/661724646-reilly-opelka-benjamin-bonzi"
+    },
+    {
+        "montant": 0.37,
+        "cote": "2.35",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 17:38:30",
+        "url": "https://1xbet.com/fr/live/tennis/2915556-atp-brussels/661724646-reilly-opelka-benjamin-bonzi"
+    },
+    {
+        "montant": 0.72,
+        "cote": "2.2",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 17:42:38",
+        "url": "https://1xbet.com/fr/live/tennis/2915556-atp-brussels/661724616-reilly-opelka-benjamin-bonzi"
+    },
+    {
+        "montant": 0.49,
+        "cote": "2.03",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 18:29:43",
+        "url": "https://1xbet.com/fr/live/tennis/2738042-challenger-lincoln-qualification/661741151-andrew-fenty-karl-poling"
+    },
+    {
+        "montant": 1.1,
+        "cote": "1.9",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 18:32:40",
+        "url": "https://1xbet.com/fr/live/tennis/2738042-challenger-lincoln-qualification/661741063-andrew-fenty-karl-poling"
+    },
+    {
+        "montant": 0.45,
+        "cote": "2.1",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 19:01:13",
+        "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/661747801-aidan-mchugh-keegan-smith"
+    },
+    {
+        "montant": 1.0,
+        "cote": "1.95",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 19:03:34",
+        "url": "https://1xbet.com/fr/live/tennis/2738042-challenger-lincoln-qualification/661747769-aidan-mchugh-keegan-smith"
+    },
+    {
+        "montant": 2.07,
+        "cote": "1.94",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 19:09:29",
+        "url": "https://1xbet.com/fr/live/tennis/2738042-challenger-lincoln-qualification/661747769-aidan-mchugh-keegan-smith"
+    },
+    {
+        "montant": 4.02,
+        "cote": "2",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 19:14:52",
+        "url": "https://1xbet.com/fr/live/tennis/2738042-challenger-lincoln-qualification/661747769-aidan-mchugh-keegan-smith"
+    },
+    {
+        "montant": 0.54,
+        "cote": "1.93",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 19:33:41",
+        "url": "https://1xbet.com/fr/live/tennis/1311161-challenger-curitiba/661752448-daniel-dutra-da-silva-aristotelis-thanos"
+    },
+    {
+        "montant": 0.54,
+        "cote": "1.93",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 20:42:17",
+        "url": "https://1xbet.com/fr/live/tennis/6038-atp-stockholm/661765569-leo-borg-sebastian-ofner"
+    },
+    {
+        "montant": 0.92,
+        "cote": "2.13",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 20:45:29",
+        "url": "https://1xbet.com/fr/live/tennis/6038-atp-stockholm/661765555-leo-borg-sebastian-ofner"
+    },
+    {
+        "montant": 2.18,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 20:50:01",
+        "url": "https://1xbet.com/fr/live/tennis/6038-atp-stockholm/661765555-leo-borg-sebastian-ofner"
+    },
+    {
+        "montant": 3.45,
+        "cote": "2.2",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-13 20:52:26",
+        "url": "https://1xbet.com/fr/live/tennis/6038-atp-stockholm/661765555-leo-borg-sebastian-ofner"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.03",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 08:11:28",
+        "url": "https://1xbet.com/fr/live/tennis/2769557-atp-almaty/661864960-aleksandar-vukic-marko-topo"
+    },
+    {
+        "montant": 0.35,
+        "cote": "2.15",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 08:14:50",
+        "url": "https://1xbet.com/fr/live/tennis/2769557-atp-almaty/661864916-aleksandar-vukic-marko-topo"
+    },
+    {
+        "montant": 0.62,
+        "cote": "2.2",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 08:21:41",
+        "url": "https://1xbet.com/fr/live/tennis/2769557-atp-almaty/661864916-aleksandar-vukic-marko-topo"
+    },
+    {
+        "montant": 0.49,
+        "cote": "2.03",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 15:27:51",
+        "url": "https://1xbet.com/fr/live/tennis/2770239-itf-offenbach/661962080-lucas-gerch-alec-deckers"
+    },
+    {
+        "montant": 0.47,
+        "cote": "2.07",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 16:05:51",
+        "url": "https://1xbet.com/fr/live/tennis/127245-itf-kigali/661971453-claude-ishimwe-dillon-beckles"
+    },
+    {
+        "montant": 0.53,
+        "cote": "1.95",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 16:07:05",
+        "url": "https://1xbet.com/fr/live/tennis/2915556-atp-brussels/661973074-francisco-comesana-david-goffin"
+    },
+    {
+        "montant": 1.29,
+        "cote": "1.95",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 16:10:47",
+        "url": "https://1xbet.com/fr/live/tennis/2915556-atp-brussels/661970312-francisco-comesana-david-goffin"
+    },
+    {
+        "montant": 2.86,
+        "cote": "1.95",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 16:13:37",
+        "url": "https://1xbet.com/fr/live/tennis/2915556-atp-brussels/661970312-francisco-comesana-david-goffin"
+    },
+    {
+        "montant": 6.08,
+        "cote": "1.95",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 16:16:46",
+        "url": "https://1xbet.com/fr/live/tennis/2915556-atp-brussels/661970312-francisco-comesana-david-goffin"
+    },
+    {
+        "montant": 12.69,
+        "cote": "1.95",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 16:21:07",
+        "url": "https://1xbet.com/fr/live/tennis/2915556-atp-brussels/661970312-francisco-comesana-david-goffin"
+    },
+    {
+        "montant": 26.83,
+        "cote": "1.93",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 16:23:12",
+        "url": "https://1xbet.com/fr/live/tennis/2915556-atp-brussels/661970312-francisco-comesana-david-goffin"
+    },
+    {
+        "montant": 0.49,
+        "cote": "2.03",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 16:29:42",
+        "url": "https://1xbet.com/fr/live/tennis/6038-atp-stockholm/661974097-nicolai-budkov-kjaer-marin-cilic"
+    },
+    {
+        "montant": 0.59,
+        "cote": "1.85",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 18:02:17",
+        "url": "https://1xbet.com/fr/live/tennis/298177-wta-rio-de-janeiro/661999304-martina-colmegna-maria-lourdes-carle"
+    },
+    {
+        "montant": 1.39,
+        "cote": "1.93",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 18:06:24",
+        "url": "https://1xbet.com/fr/live/tennis/298177-wta-rio-de-janeiro/661999218-martina-colmegna-maria-lourdes-carle"
+    },
+    {
+        "montant": 0.57,
+        "cote": "1.87",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 18:09:15",
+        "url": "https://1xbet.com/fr/live/tennis/2915713-challenger-hersonissos-6/662001366-javier-barranco-cosano-charles-broom"
+    },
+    {
+        "montant": 0.53,
+        "cote": "1.95",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 18:34:25",
+        "url": "https://1xbet.com/fr/live/tennis/1311161-challenger-curitiba/662009155-joao-lucas-reis-da-silva-marcelo-tomas-barrios-vera"
+    },
+    {
+        "montant": 0.54,
+        "cote": "1.93",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 18:45:42",
+        "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/662011422-andre-ilagan-murphy-cassone"
+    },
+    {
+        "montant": 1.16,
+        "cote": "2.07",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 18:48:47",
+        "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/662011348-andre-ilagan-murphy-cassone"
+    },
+    {
+        "montant": 2.8,
+        "cote": "1.93",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 18:54:58",
+        "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/662011348-andre-ilagan-murphy-cassone"
+    },
+    {
+        "montant": 0.49,
+        "cote": "2.03",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 18:58:14",
+        "url": "https://1xbet.com/fr/live/tennis/134397-itf-santiago/662015446-carlos-maria-zarate-jorge-abde-celis"
+    },
+    {
+        "montant": 0.56,
+        "cote": "1.9",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 19:44:03",
+        "url": "https://1xbet.com/fr/live/tennis/2309646-itf-macon-women/662025380-dj-bennett-madison-brengle"
+    },
+    {
+        "montant": 0.56,
+        "cote": "1.9",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 20:22:44",
+        "url": "https://1xbet.com/fr/live/tennis/134397-itf-santiago/662029971-maximo-zeitune-ryan-dickerson"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.07",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 20:27:09",
+        "url": "https://1xbet.com/fr/live/tennis/6038-atp-stockholm/662029308-matteo-berrettini-giulio-zeppieri"
+    },
+    {
+        "montant": 0.22,
+        "cote": "1.93",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 22:44:31",
+        "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/662065552-andrew-fenty-andres-martin"
+    },
+    {
+        "montant": 0.69,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 22:47:39",
+        "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/662065494-andrew-fenty-andres-martin"
+    },
+    {
+        "montant": 1.59,
+        "cote": "1.95",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-14 22:53:11",
+        "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/662065494-andrew-fenty-andres-martin"
+    },
+    {
+        "montant": 0.22,
+        "cote": "1.9",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-15 01:50:09",
+        "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/662091753-jay-dylan-hara-friend-oliver-tarvet"
+    },
+    {
+        "montant": 0.69,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-15 01:55:46",
+        "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/662091730-jay-dylan-hara-friend-oliver-tarvet"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.07",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-15 02:50:33",
+        "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/662101009-brandon-holt-aryan-shah"
     }
 ]

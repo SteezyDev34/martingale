@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+import Functions.retour_section_tps_reglementaire
 import config
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetIfNewSite import GetIfNewSite
@@ -158,6 +159,7 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
 
 
                                             except Exception as e:
+                                                tentative = tentative + 1
                                                 config.log(
                                                     f'#ERROR16 : impossible ecrire {key}, {e}',
                                                     'warning',
@@ -165,6 +167,7 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                                                 if GetIfMatchPage(driver) != True:
                                                     config.error = True
                                                     break
+                                                Functions.retour_section_tps_reglementaire.RetourTpsReg(driver)
                                             else:
                                                 selection = True
                                 else:

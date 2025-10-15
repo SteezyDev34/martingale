@@ -397,7 +397,7 @@ def all_script(driver):
         config.winmatch[i] = 0  # Initialize match counter for script type
     config.all_scores = {}
     # Supprimer le match de la base de données
-    match_manager.remove_match(config.newmatch, config.scriptType)
+    match_manager.remove_match(config.newmatch)
     # Nettoyer le script en cours
     script_manager.stop_script(config.scriptType, config.script_num)
 

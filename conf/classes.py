@@ -70,12 +70,12 @@ classes = {
     'ui_search_to_click':
         {
             'old_site': 'scoreboard-nav-items-search__input',
-            'new_site': 'ui-search'
+            'new_site': 'ui-search-default__button'
         },
     'search_input':
         {
             'old_site': 'scoreboard-nav-items-search__input',
-            'new_site': 'ui-search__input'
+            'new_site': 'ui-search-default__input'
         },
     'bet_list_container':
         {

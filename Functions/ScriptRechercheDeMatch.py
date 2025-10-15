@@ -677,6 +677,8 @@ def classementeDeMatch(driver, use_json_cache=True):
 
         # Sauvegarder la matchlist dans un fichier JSON avant traitement
         sauvegarder_matchlist_json(matchlist)
+        match_manager.clear_all_matches(False)
+
 
         # Traiter les matchs pour obtenir les probabilités
         goodmatch = traiter_matchlist(matchlist)
@@ -686,7 +688,8 @@ def classementeDeMatch(driver, use_json_cache=True):
 
         # Retenir les 30 premiers matchs
         top_matches = tableau_trie[:30]
-        
+
+
         
         for match in top_matches:
                 try:

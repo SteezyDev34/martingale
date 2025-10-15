@@ -94,9 +94,8 @@ for i in config.scriptTypeList:
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
 config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
 while (config.win < 100):
-    Functions_456P.all_script(driver)
     try:
-        pass
+        Functions_456P.all_script(driver)
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
