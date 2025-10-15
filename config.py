@@ -118,7 +118,8 @@ for period, bet_types_list in xbet_types_data.items():
     xbet_type_list_sets[period] = all_selections
 # Initialize dictionaries to track wins per script type
 winmatch = {script_type: 0 for script_type in scriptTypeList}
-global_match_win = {script_type: 0 for script_type in scriptTypeList}
+# Net profit per script type is tracked as float values
+global_match_win: Dict[str, float] = {script_type: 0.0 for script_type in scriptTypeList}
 
 
 # Configurations de paris importées depuis config.betting_config

@@ -5,6 +5,8 @@ from time import sleep
 
 from selenium.webdriver.common.by import By
 
+from Functions.Managers.MatchManager import match_manager
+from Functions.Managers.ScriptManager import script_manager
 import Functions.GetJsonData
 from Functions._to_remove import AddRunning
 import config
@@ -33,14 +35,28 @@ def all_script(driver):
     # SCRIPT RECHERCHE DE MATCH
     config.match_found = rechercheDeMatch1set(driver)
     # --------
-    print('match found ', config.match_found)
+    # Si un match est trouvé et qu'il n'y a pas d'erreur
     if config.match_found and not config.error:
-        sleep(1)
-        AddRunning.main(config.script_num, config.running_file_name)
-        config.ligue_name = GetLigueName.fromUrl(driver)[0]
-        config.match_Url = GetLigueName.fromUrl(driver)[1]
+        # Démarre le script avec le type et numéro spécifiés
+        script_manager.start_script(config.scriptType, config.script_num)
+
+        # Get league name and match URL
+        ligue_info = GetLigueName.fromUrl(driver)
+        config.ligue_name = ligue_info[0]
+        config.match_Url = ligue_info[1]
+
+        # Récupère les noms des joueurs/équipes
         config.teams = GetPlayersName(driver)
+
+        # Vérifie si c'est un nouveau match depuis l'URL
         newmatchFromUrl(driver)
+
+
+
+        config.log("-" * 60, "success", False, False, False)
+        config.log(f'MATCH OK : {str(config.teams)} | {config.ligue_name}', 'success', False, 0, False)
+        config.log("-" * 60, "success", False, False, False)
+
         if not config.win_type:
             config.win_type = input("Quel est le win type V1/V2")
 
@@ -58,9 +74,8 @@ def all_script(driver):
             ##PREPARATTION PREMIER PARIS
             FirstGameBet(driver)
             config.perte = 0
-            UpdateMatchDone.main("add", config.newmatch, config.matchlist_file_name)
-
-    config.lose = False
+            # Met à jour le statut du match dans le gestionnaire de matchs
+            match_manager.add_match(config.newmatch)
     print('START CHEKING LIST')
     time.sleep(5)
 
@@ -128,8 +143,7 @@ def all_script(driver):
                                         set1DispatchPerte()
                                         remove_match_from_json_file('1SET_validated_bets.json', match['url'])
                                         config.error = 'LOSE'
-                                        Functions_1XBET.update_match_done("del", config.newmatch,
-                                                                          config.matchlist_file_name)
+                                        match_manager.remove_match(config.newmatch)
                                         continue
                                 if 'url' in match and config.newmatch in match['url']:
                                     div_bet_score = bet_item.find_elements(By.CLASS_NAME,
@@ -173,15 +187,13 @@ def all_script(driver):
                                         set1DispatchPerte()
                                         remove_match_from_json_file('1SET_validated_bets.json', config.newmatch)
                                         config.error = 'LOSE'
-                                        Functions_1XBET.update_match_done("del", config.newmatch,
-                                                                          config.matchlist_file_name)
+                                        match_manager.remove_match(config.newmatch)
                                     elif config.result == 'WIN':
                                         # Load and process validated bets from JSON file
                                         remove_match_from_json_file('1SET_validated_bets.json', config.newmatch)
                                         config.perte = 0
                                         config.error = 'WIN'
-                                        Functions_1XBET.update_match_done("del", config.newmatch,
-                                                                          config.matchlist_file_name)
+                                        match_manager.remove_match(config.newmatch)
                                     return
 
 

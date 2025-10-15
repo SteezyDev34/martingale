@@ -195,9 +195,18 @@ def all_script(driver):
                 FirstGameBet(driver)
                 firstjeu = True
             else:
-                current_frame = inspect.currentframe()
+                frame = inspect.currentframe()
+                if frame is not None:
+                    info = inspect.getframeinfo(frame)
+                    filename = info.filename
+                    lineno = info.lineno
+                    funcname = info.function
+                else:
+                    filename = __file__
+                    lineno = -1
+                    funcname = 'unknown'
                 config.log(
-                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    f'Error in file {filename} at line {lineno} in function {funcname}',
                     'error', True)
                 print("erreur perte en 1 set")
                 DispatchPerte()
@@ -369,18 +378,18 @@ def all_script(driver):
 
             if config.scriptType == '15A' or config.scriptType == '300' or config.scriptType == '030':
                 if config.score_actuel == '0:0':
-                    if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu', -1)):
+                    if not config.validated_bet or int(config.jeu_actuel) > int(config.validated_bet.get('jeu', -1)):
                         FirstGameBet(driver)
             if config.scriptType == '30A':
                 if config.score_actuel == '0:0' or config.score_actuel == '15:15' or config.score_actuel == '15:0' or config.score_actuel == '0:15':
-                    if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu')):
+                    if not config.validated_bet or int(config.jeu_actuel) > int(config.validated_bet.get('jeu', -1)):
                         FirstGameBet(driver)
             if config.scriptType == '40A':
                 if config.score_actuel != "40:40" and config.score_actuel != "A:40" and config.score_actuel != "40:A":
-                    if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu')):
+                    if not config.validated_bet or int(config.jeu_actuel) > int(config.validated_bet.get('jeu', -1)):
                         FirstGameBet(driver)
             if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400' or config.scriptType == '4P' or config.scriptType == '5P' or config.scriptType == '6P':
-                if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu')):
+                if not config.validated_bet or int(config.jeu_actuel) > int(config.validated_bet.get('jeu', -1)):
                     FirstGameBet(driver)
             if scriptType == actual_scryptType:
                 break
@@ -393,7 +402,7 @@ def all_script(driver):
         DispatchPerte()
         config.ScriptConfig(i).reset()
         config.init_variable()
-        config.global_match_win[i] = 0  # Initialize win counter for script type
+        config.global_match_win[i] = 0.0  # Initialize win counter for script type (float)
         config.winmatch[i] = 0  # Initialize match counter for script type
     config.all_scores = {}
     # Supprimer le match de la base de données

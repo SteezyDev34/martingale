@@ -43,7 +43,7 @@ class MartingaleEngine:
             config.switchScript(st)
             DispatchPerte()
             # Reset counters for the next loop
-            config.global_match_win[st] = 0
+            config.global_match_win[st] = 0.0
             config.winmatch[st] = 0
 
         # Ensure the browser is back to the site url for the next iteration

@@ -70,7 +70,6 @@ def getstats(driver, bet_item, matchlist_file_name):
         return [False, config.newmatch]
     else:
         print('newmatch : ' + config.newmatch)
-        match_manager = get_match_manager(config.scriptType)
         match_is_todo = match_manager.is_match_todo(config.newmatch)
         
         if match_is_todo:
@@ -96,7 +95,6 @@ def fromUrl(driver, matchlist_file_name):
         config.log('            Impossible de lire le lien du match!', 'warning', False)
         return [False, config.newmatch]
     else:
-        match_manager = MatchManager.get_instance(config.scriptType)
         match_is_todo = match_manager.is_match_todo(config.newmatch)
         
         if match_is_todo:
