@@ -195,9 +195,18 @@ def all_script(driver):
                 FirstGameBet(driver)
                 firstjeu = True
             else:
-                current_frame = inspect.currentframe()
+                frame = inspect.currentframe()
+                if frame is not None:
+                    info = inspect.getframeinfo(frame)
+                    filename = info.filename
+                    lineno = info.lineno
+                    funcname = info.function
+                else:
+                    filename = __file__
+                    lineno = -1
+                    funcname = 'unknown'
                 config.log(
-                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                    f'Error in file {filename} at line {lineno} in function {funcname}',
                     'error', True)
                 print("erreur perte en 1 set")
                 DispatchPerte()
@@ -277,8 +286,9 @@ def all_script(driver):
                 continue
             GetScoreActuel(driver)
             if config.validated_bet:
-                if int(config.jeu_actuel) == int(config.validated_bet.get('jeu')) - 1 and int(config.set_actuel) == int(
-                        config.validated_bet.get('set')):
+                vb_jeu = int(config.validated_bet.get('jeu', -1))
+                vb_set = int(config.validated_bet.get('set', -1))
+                if int(config.jeu_actuel) == vb_jeu - 1 and int(config.set_actuel) == vb_set:
                     print('set du paris supérieur!')
                     continue
             if config.validated_bet.get('result') is None:
@@ -373,7 +383,7 @@ def all_script(driver):
         DispatchPerte()
         config.ScriptConfig(i).reset()
         config.init_variable()
-        config.global_match_win[i] = 0  # Initialize win counter for script type
+        config.global_match_win[i] = 0.0  # Initialize win counter for script type (float)
         config.winmatch[i] = 0  # Initialize match counter for script type
     config.all_scores = {}
     # Supprimer le match de la base de données
