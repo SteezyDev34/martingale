@@ -16,7 +16,6 @@ if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
 
     VenvDependencyManager.main()
 
-from art import *
 from Functions import Functions_LuckyGame
 
 # Chargement des variables globales
@@ -66,16 +65,13 @@ if len(parts) > 1:
     else:
         command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
 
-    confirmation = input(f"Avez-vous exécuté la commande \n{command}\n? (Y/N): ")
+        confirmation = input(f"Avez-vous exécuté la commande \n{command}\n? (Y/N): ")
 
-    if confirmation.upper() != 'Y' and confirmation.upper() != 'y' and confirmation.upper() != 'O' and confirmation.upper() != 'o':
-        print("Programme arrêté par l'utilisateur.")
-        sys.exit(0)  # Arrêter le programme
+        if confirmation.upper() != 'Y' and confirmation.upper() != 'y' and confirmation.upper() != 'O' and confirmation.upper() != 'o':
+            print("Programme arrêté par l'utilisateur.")
+            sys.exit(0)  # Arrêter le programme
 
-    print(f'cd ../' + text2art(
-        f"Start luckygame {config.scriptType} {config.script_num}"))  # Crée un texte en art ASCII
-    # sys.stdout.write(f"\rSCRIPT TYPE : {config.scriptType}")
-    # sys.stdout.write(f"\rSCRIPT NUM : {config.script_num}")
+
 else:
     print("Le format du nom du fichier est incorrect.")
     exit()
