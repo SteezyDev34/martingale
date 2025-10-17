@@ -58,6 +58,7 @@ if len(parts) > 1:
             # User-Agent fourni (Mac)
             mac_ua = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36")
+            print(mac_ua)
             args = [
                 f"--remote-debugging-port={config.localhost}",
                 f"--user-data-dir={project_directory}\\ChromeDebugProfile{config.localhost}",
