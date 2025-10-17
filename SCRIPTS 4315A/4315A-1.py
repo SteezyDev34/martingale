@@ -62,20 +62,16 @@ if len(parts) > 1:
             ]
 
             subprocess.Popen([chrome_path] + args)
-    print('test')
-    if config.systeme == 'Windows':
-        command = f'Start-Process $chromePath -ArgumentList "--remote-debugging-port={config.localhost}", "--user-data-dir={project_directory}\\ChromeDebugProfile{config.localhost}"'
-        # command = f'start chrome --remote-debugging-port={config.localhost} --user-data-dir="{project_directory}\\ChromeDebugProfile{config.localhost}"'
     else:
         command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
 
-    confirmation = input(f"Avez-vous exécuté la commande \n{command}\n? (Y/N): ")
+        confirmation = input(f"Avez-vous exécuté la commande \n{command}\n? (Y/N): ")
 
-    if confirmation.upper() != 'Y' and confirmation.upper() != 'y' and confirmation.upper() != 'O' and confirmation.upper() != 'o':
-        print("Programme arrêté par l'utilisateur.")
-        sys.exit(0)  # Arrêter le programme
-    else:
-        config.log_clear_line(3)
+        if confirmation.upper() != 'Y' and confirmation.upper() != 'y' and confirmation.upper() != 'O' and confirmation.upper() != 'o':
+            print("Programme arrêté par l'utilisateur.")
+            sys.exit(0)  # Arrêter le programme
+        else:
+            config.log_clear_line(3)
 
     print(f"{config.PURPLE}{text2art(f'Start martingal {config.scriptType} {config.script_num}')}")
 else:
