@@ -25,6 +25,7 @@ logging
 pyautogui
 telethon
 telepot
+psutil
 # Dépendances pour l'automatisation visuelle avec OCR
 pytesseract==0.3.10
 Pillow==10.4.0

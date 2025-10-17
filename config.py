@@ -540,3 +540,18 @@ def configure_site_type(use_ca_site=None):
     log(f"SITE CONFIGURÉ: {site_type.upper()} - {site_url}", "info", False)
     log("-" * 60, "info", False)
     return site_type
+
+
+import psutil
+
+
+def is_chrome_running_with_port(port):
+    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+        try:
+            if proc.info['name'] and 'chrome.exe' in proc.info['name'].lower():
+                cmdline = proc.info['cmdline']
+                if cmdline and any(f'--remote-debugging-port={port}' in arg for arg in cmdline):
+                    return True
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            continue
+    return False
