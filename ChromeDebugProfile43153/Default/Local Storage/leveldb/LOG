@@ -1,0 +1,5 @@
+2025/10/08-08:38:10.207 bd32d5 Creating DB /Users/steeven/ChromeDebugProfile43153/Default/Local Storage/leveldb since it was missing.
+2025/10/08-08:38:10.222 bd32d5 Reusing MANIFEST /Users/steeven/ChromeDebugProfile43153/Default/Local Storage/leveldb/MANIFEST-000001
+2025/10/08-08:39:38.737 bd32d8 Level-0 table #5: started
+2025/10/08-08:39:38.751 bd32d8 Level-0 table #5: 337832 bytes OK
+2025/10/08-08:39:38.755 bd32d8 Delete type=0 #3
