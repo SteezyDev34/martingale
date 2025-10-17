@@ -62,6 +62,7 @@ if len(parts) > 1:
             ]
 
             subprocess.run([chrome_path] + args)
+    print('test')
     if config.systeme == 'Windows':
         command = f'Start-Process $chromePath -ArgumentList "--remote-debugging-port={config.localhost}", "--user-data-dir={project_directory}\\ChromeDebugProfile{config.localhost}"'
         # command = f'start chrome --remote-debugging-port={config.localhost} --user-data-dir="{project_directory}\\ChromeDebugProfile{config.localhost}"'
