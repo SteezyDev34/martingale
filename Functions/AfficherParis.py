@@ -10,7 +10,6 @@ from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.GetSetActuel import GetSetActuel
 from Functions.ModalHandler import ModalHandler
-from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def AfficherParis(driver, categorie='', type_de_pari='', ):
@@ -115,11 +114,9 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                                                                                    config.site_type]
                                                                                )[
                                                     0]
-                                                print('find toolbar')
                                                 searchbutton = toolbar.find_elements(By.CLASS_NAME, config.classes[
                                                     'ui_search_to_click'][
                                                     config.site_type])[0]
-                                                print('find searchbutton')
                                                 searchbutton.click()
                                                 toolbar.find_elements(By.CLASS_NAME,
                                                                       config.classes[
@@ -137,7 +134,6 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                                                                               'search_input'][
                                                                               config.site_type])[
                                                     0].get_attribute("value")
-                                                print('test')
                                                 if l == key:
                                                     try:
                                                         element = WebDriverWait(driver, 2).until(
@@ -169,7 +165,6 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                                                     config.error = True
                                                     break
                                             else:
-                                                config.log('Liste de paris affiché')
                                                 selection = True
                                 else:
                                     config.log('Lien ' + select_option_text.lower() + ' > ' + str(
@@ -181,7 +176,7 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    config.scriptType = '30A'
+    config.scriptType = 'LIVE'
     GetIfNewSite(driver)
     print(config.site_type)
-    AfficherParis(driver)
+    AfficherParis(driver, 'Corners')

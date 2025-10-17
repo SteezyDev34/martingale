@@ -86,8 +86,10 @@ for i in config.scriptTypeList:
     config.ScriptConfig(i)
 
 while (config.win < 100):
+    Functions_1SET.all_script(driver)
+
     try:
-        Functions_1SET.all_script(driver)
+        pass
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
