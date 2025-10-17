@@ -20,9 +20,9 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = [ '300', '15A', '30A']
+scriptTypeList = ['300', '15A', '30A']
 scriptTypeList1 = ['5P', '40A']
-scriptTypeList2 = [ '6P', 'BREAK']
+scriptTypeList2 = ['6P', 'BREAK']
 scriptTypeList3 = ['6P', '4030']
 scriptTypeList4 = ['BREAK', '4015', '4030']
 allScriptType = ['030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK', '1SET']
@@ -34,8 +34,8 @@ tipster = '1xbet'
 scriptType = ""
 localhost = ''
 api_url = "http://auxobetbot.sc2vagr6376.universe.wf"
-site_url = 'https://1xbet.com/fr/live/tennis'
-site_line_url = 'https://1xbet.com/fr/line/tennis'
+site_url = "https://ca.1xbet.com/fr/live/tennis"
+site_line_url = "https://ca.1xbet.com/fr/line/tennis"
 site_type = 'new_site'
 match_name = ''
 nb_log_lines = 0
@@ -540,6 +540,3 @@ def configure_site_type(use_ca_site=None):
     log(f"SITE CONFIGURÉ: {site_type.upper()} - {site_url}", "info", False)
     log("-" * 60, "info", False)
     return site_type
-
-
-configure_site_type()

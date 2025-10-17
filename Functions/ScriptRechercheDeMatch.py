@@ -4,10 +4,10 @@ import os
 import time
 from datetime import datetime
 
-import requests
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
-from Functions._to_remove import AddRunning
 import config
 from Functions import GetMatchScore, GetLigueName, Functions_stats
 from Functions import OuverturePageMatch
@@ -15,10 +15,12 @@ from Functions import VerificationMatchTrouve
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetJsonData import getCompet, DispatchPerte, set1DispatchPerte
-from Functions.VerificationListeMatchLive import VerificationListeMatchLive
+from Functions.Managers.MatchManager import match_manager
 from Functions.Managers.ScriptManager import script_manager
-from Functions.Managers.MatchManager import match_manager, get_match_manager
 from Functions.UpdateMatchDone import todo
+from Functions.VerificationListeMatchLive import VerificationListeMatchLive
+from Functions.WaitWhileTimeAppear import WaitWhileTimeAppear
+from Functions._to_remove import AddRunning
 from config import site_url
 
 
@@ -577,103 +579,128 @@ def classementeDeMatch(driver, use_json_cache=True):
                     "href"), config.ligue_name])
 
             for link in liguelist:
-                print(link[0])
-                driver.get(link[0])
-                config.log_clear_line()
-                config.ligue_name = link[1]
+                if link[0]:
+                    config.ligue_name = link[1]
+                    if not getCompet():
+                        config.log('Compétition non autorisé', 'warning', True)
+                        continue
+                    config.log(f'Accès à : {link[0]}', 'info', True)
+                    driver.get(link[0])
+                else:
+                    continue
+
+                if not WaitWhileTimeAppear():
+                    config.log('Wait time appear', 'warning', True)
+                    continue
+
                 bet_list_ligue = driver.find_elements(By.CLASS_NAME,
                                                       config.classes['dashboard_champ_body_games'][config.site_type])
                 # POUR CHAQUE LIGUE RÉCUPÉRÉE
                 for bet_ligue in bet_list_ligue:
 
                     # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-                    if getCompet():
-                        print(config.ligue_name)
-                        line += 1
-                        # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
-                        try:
-                            bet_items = driver.find_elements(By.CLASS_NAME,
-                                                             config.classes['dashboard_game_block_row'][
-                                                                 config.site_type])
-                        except:
-                            # s'il y une erreur on passe au suivant
-                            continue
-                        else:
-                            if len(bet_items) <= 0:
-                                config.log('AUCUN MATCHS RÉCUPÉ', 'warning', True)
-                                continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
-                            i = 0
-                            for bet_item in bet_items:
-                                # Initialiser les variables de date pour éviter des références non définies
-                                day_month = None
-                                hour = None
-                                current_year = None
-                                try:
-                                    start_time_text = bet_item.find_element(By.CLASS_NAME, 'c-events__time').text
-                                except Exception:
-                                    config.log('heure de debut non trouvé', 'warning', True)
-                                else:
-                                    try:
-                                        parts = start_time_text.split()
-                                        if len(parts) >= 2:
-                                            day_month = parts[0]  # '09/09'
-                                            hour = parts[1]
-                                            # Ajouter l'année actuelle
-                                            current_year = datetime.now().year
-                                            match_date_only = datetime.strptime(f"{day_month}/{current_year}", "%d/%m/%Y").date()
-
-                                            # Date actuelle sans l'heure
-                                            today = datetime.now().date()
-
-                                            if match_date_only > today:
-                                                # Match prévu dans le futur, on passe
-                                                continue
-                                    except ValueError:
-                                        config.log("Erreur de parsing de la date", 'warning', True)
-
-                                try:
-                                    teams_name = bet_item.find_element(By.CLASS_NAME,
-                                                                       config.classes['team_wrap'][config.site_type])
-                                    players = teams_name.find_elements(By.CLASS_NAME,
-                                                                       config.classes['team_name'][config.site_type])
-                                    players_name = []
-                                    match = []
-                                    if len(players) <= 1:
-                                        continue
-                                    for player in players:
-                                        player = player.text.split('(')[0]
-                                        player = player.strip()
-                                        config.log(player, config.newmatch)
-                                        players_name.append(player)
-                                    match.append(players_name)
-                                    match.append(config.ligue_name)
-                                    newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
-                                                                         config.classes['match_link'][
-                                                                             config.site_type])[
-                                        0].get_attribute(
-                                        "href")
-                                    newmatch = newmatchtxt.split(
-                                        '-')
-                                    config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
-                                    match.append(config.newmatch)
-                                    # N'ajouter la date que si toutes les composantes sont définies
-                                    if day_month and current_year and hour:
-                                        match_date = datetime.strptime(
-                                            f"{day_month}/{current_year} {hour}:00",
-                                            "%d/%m/%Y %H:%M:%S"
-                                        ).strftime("%Y-%m-%d %H:%M:%S")
-                                        match.append(match_date)
-                                    else:
-                                        # Si l'heure ou la date n'est pas disponible, ignorer ce match
-                                        continue
-                                    matchlist.append(match)
-
-                                except Exception as e:
-                                    continue
-                        config.log_clear_line(line)
-                        line = 0
+                    line += 1
+                    # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
+                    try:
+                        bet_items = driver.find_elements(By.CLASS_NAME,
+                                                         config.classes['dashboard_game_block_row'][
+                                                             config.site_type])
+                    except:
+                        # s'il y une erreur on passe au suivant
+                        continue
                     else:
-                        config.log('Compétition non autorisé', 'warning', True)
+                        if len(bet_items) <= 0:
+                            config.log('AUCUN MATCHS RÉCUPÉ', 'warning', True)
+                            continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
+                        i = 0
+                        for bet_item in bet_items:
+                            # Initialiser les variables de date pour éviter des références non définies
+                            day_month = None
+                            hour = None
+                            current_year = None
+                            try:
+                                # Attendre jusqu'à 10 secondes que l'élément s'affiche dans bet_item
+                                time_element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
+                                    (By.CLASS_NAME, config.classes['events_time'][config.site_type])))
+
+                                if config.site_type == 'old_site':
+                                    start_time_text = bet_item.find_element(By.CLASS_NAME,
+                                                                            config.classes['events_time'][
+                                                                                config.site_type]).text
+                                elif config.site_type == 'new_site':
+                                    start_date_text = time_element.find_element(By.CLASS_NAME,
+                                                                                'dashboard-game-info__date').text
+                                    start_time_text = time_element.find_element(By.CLASS_NAME,
+                                                                                'dashboard-game-info__time').text
+                                    start_time_text = start_date_text + ' ' + start_time_text
+                            except Exception as e:
+                                config.log(
+                                    f'heure de debut non trouvé {config.classes['events_time'][config.site_type]} {e} ',
+                                    'warning', True)
+                            else:
+                                try:
+                                    parts = start_time_text.split()
+                                    if len(parts) >= 2:
+                                        day_month = parts[0]  # '09/09'
+                                        hour = parts[1].split()[0]
+                                        # Ajouter l'année actuelle
+                                        current_year = datetime.now().year
+                                        match_date_only = datetime.strptime(f"{day_month}/{current_year}",
+                                                                            "%d/%m/%Y").date()
+
+                                        # Date actuelle sans l'heure
+                                        today = datetime.now().date()
+
+                                        if match_date_only > today:
+                                            config.log('Match date later', 'warning', True)
+                                            # Match prévu dans le futur, on passe
+                                            continue
+                                        else:
+                                            config.log(match_date_only, 'info', True)
+                                except ValueError:
+                                    config.log("Erreur de parsing de la date", 'warning', True)
+
+                            try:
+                                teams_name = bet_item.find_element(By.CLASS_NAME,
+                                                                   config.classes['team_wrap'][config.site_type])
+                                players = teams_name.find_elements(By.CLASS_NAME,
+                                                                   config.classes['team_name'][config.site_type])
+                                players_name = []
+                                match = []
+                                if len(players) <= 1:
+                                    continue
+                                for player in players:
+                                    player = player.text.split('(')[0]
+                                    player = player.strip()
+                                    config.log(player, config.newmatch)
+                                    players_name.append(player)
+                                match.append(players_name)
+                                match.append(config.ligue_name)
+                                newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
+                                                                     config.classes['match_link'][
+                                                                         config.site_type])[
+                                    0].get_attribute(
+                                    "href")
+                                newmatch = newmatchtxt.split(
+                                    '-')
+                                config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
+                                match.append(config.newmatch)
+                                # N'ajouter la date que si toutes les composantes sont définies
+                                if day_month and current_year and hour:
+                                    match_date = datetime.strptime(
+                                        f"{day_month}/{current_year} {hour}:00",
+                                        "%d/%m/%Y %H:%M:%S"
+                                    ).strftime("%Y-%m-%d %H:%M:%S")
+                                    match.append(match_date)
+                                else:
+                                    # Si l'heure ou la date n'est pas disponible, ignorer ce match
+                                    continue
+                                matchlist.append(match)
+
+                            except Exception as e:
+                                continue
+                    config.log_clear_line(line)
+                    line = 0
 
         # Sauvegarder la matchlist dans un fichier JSON avant traitement
         sauvegarder_matchlist_json(matchlist)
@@ -686,46 +713,46 @@ def classementeDeMatch(driver, use_json_cache=True):
 
         # Retenir les 30 premiers matchs
         top_matches = tableau_trie[:30]
-        
-        
+
         for match in top_matches:
-                try:
-                    # Assurer un format propre pour les joueurs: "Joueur A - Joueur B"
-                    players = match[0]
-                    if isinstance(players, (list, tuple)):
-                        players_str = " - ".join(str(p).strip().strip("[]'\"") for p in players)
-                    else:
-                        # Nettoyer les éventuels crochets/quotes provenant d'une conversion liste->str
-                        players_str = str(players).strip().strip("[]'\"")
+            try:
+                # Assurer un format propre pour les joueurs: "Joueur A - Joueur B"
+                players = match[0]
+                if isinstance(players, (list, tuple)):
+                    players_str = " - ".join(str(p).strip().strip("[]'\"") for p in players)
+                else:
+                    # Nettoyer les éventuels crochets/quotes provenant d'une conversion liste->str
+                    players_str = str(players).strip().strip("[]'\"")
 
-                    # Recomposer la ligne au format attendu
-                    league = match[1]
-                    match_id = match[2]
-                    date_str = match[3]
-                    prob = match[4]
-                    match_info = "|".join([
-                        players_str,
-                        str(league),
-                        str(match_id),
-                        str(date_str),
-                        str(prob)
-                    ])
+                # Recomposer la ligne au format attendu
+                league = match[1]
+                match_id = match[2]
+                date_str = match[3]
+                prob = match[4]
+                match_info = "|".join([
+                    players_str,
+                    str(league),
+                    str(match_id),
+                    str(date_str),
+                    str(prob)
+                ])
 
-                    success = match_manager.add_match_todo(match_info)
-                    if success:
-                        config.log(f"Match ajouté à la liste: {match[0]} vs {match[1]}", 'success', True)
-                    else:
-                        config.log(f"Match déjà dans la liste: {match[0]} vs {match[1]}", 'warning', True)
-                except Exception as e:
-                    config.log(f"Erreur lors de l'ajout du match: {str(e)}", 'error', True)
-            
+                success = match_manager.add_match_todo(match_info)
+                if success:
+                    config.log(f"Match ajouté à la liste: {match[0]} vs {match[1]}", 'success', True)
+                else:
+                    config.log(f"Match déjà dans la liste: {match[0]} vs {match[1]}", 'warning', True)
+            except Exception as e:
+                config.log(f"Erreur lors de l'ajout du match: {str(e)}", 'error', True)
+
         # Sauvegarde de la date dans un fichier
         last_classement_file = os.path.join(config.projectPath, "DataFiles", "last_classement.txt")
         try:
             with open(last_classement_file, 'w') as f:
                 f.write(datetime.now().strftime("%Y-%m-%d"))
                 config.last_classement = datetime.now().strftime("%Y-%m-%d")
-                config.log(f"Date du dernier classement sauvegardée: {datetime.now().strftime('%Y-%m-%d')}", 'info', True)
+                config.log(f"Date du dernier classement sauvegardée: {datetime.now().strftime('%Y-%m-%d')}", 'info',
+                           True)
         except Exception as e:
             config.log(f"Erreur lors de la sauvegarde de la date: {str(e)}", 'error', True)
         # Créer le dossier DataFiles/done s'il n'existe pas

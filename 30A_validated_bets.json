@@ -331,5 +331,95 @@
         "winscore": "30:30",
         "timestamp": "2025-10-12 15:49:36",
         "url": "https://1xbet.com/fr/live/tennis/2915542-atp-brussels-qualification/661435420-jaime-faria-tibo-colson"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.52",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-16 22:59:26",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2469021-wta-tampico/662618020-harriet-dart-petra-marcinko"
+    },
+    {
+        "montant": 0.36,
+        "cote": "2.65",
+        "jeu": 6,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-16 23:03:25",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2469021-wta-tampico/662594410-harriet-dart-petra-marcinko"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.7",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-16 23:43:46",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2767462-itf-bakersfield-women/662622887-christina-lyutova-solymar-colling"
+    },
+    {
+        "montant": 0.43,
+        "cote": "2.4",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-17 00:02:30",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2767462-itf-bakersfield-women/662622852-christina-lyutova-solymar-colling"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.7",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-17 05:36:37",
+        "url": "https://ca.1xbet.com/fr/live/tennis/5657-wta-osaka/662676151-rebecca-sramkova-leylah-annie-fernandez"
+    },
+    {
+        "montant": 0.39,
+        "cote": "2.52",
+        "jeu": 3,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-17 05:41:53",
+        "url": "https://ca.1xbet.com/fr/live/tennis/5657-wta-osaka/662666792-rebecca-sramkova-leylah-annie-fernandez"
+    },
+    {
+        "montant": 0.72,
+        "cote": "2.65",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-17 05:45:37",
+        "url": "https://ca.1xbet.com/fr/live/tennis/5657-wta-osaka/662666792-rebecca-sramkova-leylah-annie-fernandez"
+    },
+    {
+        "montant": 1.41,
+        "cote": "2.5",
+        "jeu": 5,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-17 05:49:52",
+        "url": "https://ca.1xbet.com/fr/live/tennis/5657-wta-osaka/662666792-rebecca-sramkova-leylah-annie-fernandez"
+    },
+    {
+        "montant": 2.25,
+        "cote": "2.65",
+        "jeu": 6,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-17 05:52:32",
+        "url": "https://ca.1xbet.com/fr/live/tennis/5657-wta-osaka/662666792-rebecca-sramkova-leylah-annie-fernandez"
+    },
+    {
+        "montant": 4.26,
+        "cote": "2.45",
+        "jeu": 7,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-17 05:57:45",
+        "url": "https://ca.1xbet.com/fr/live/tennis/5657-wta-osaka/662666792-rebecca-sramkova-leylah-annie-fernandez"
     }
 ]

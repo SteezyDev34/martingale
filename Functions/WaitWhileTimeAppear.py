@@ -1,0 +1,42 @@
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+import config
+from ChromeDriver.SetDriver1 import driver
+
+
+def WaitWhileTimeAppear():
+    tentative = 0
+    time_show = False
+
+    while not time_show and tentative < 10:
+        try:
+            bet_items = driver.find_elements(By.CLASS_NAME,
+                                             config.classes['dashboard_game_block_row'][
+                                                 config.site_type])
+        except:
+            # s'il y une erreur on passe au suivant
+            return False
+        else:
+            if len(bet_items) <= 0:
+                config.log('AUCUN MATCHS RÉCUPÉ', 'warning', True)
+                return False  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
+            i = 0
+            for bet_item in bet_items:
+                try:
+                    # Attendre jusqu'à 10 secondes que l'élément s'affiche dans bet_item
+                    wait = WebDriverWait(bet_item, 1)
+                    time_element = wait.until(EC.presence_of_element_located(
+                        (By.CLASS_NAME, config.classes['events_time'][config.site_type])))
+                except Exception as e:
+                    tentative += 1
+                    config.log(
+                        f'heure de debut non trouvé {config.classes['events_time'][config.site_type]} ',
+                        'warning', True)
+                else:
+                    return True
+
+
+if '__main__' == __name__:
+    print(WaitWhileTimeAppear())

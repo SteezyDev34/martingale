@@ -70,12 +70,12 @@ classes = {
     'ui_search_to_click':
         {
             'old_site': 'scoreboard-nav-items-search__input',
-            'new_site': 'ui-search'
+            'new_site': 'ui-search-default__button'
         },
     'search_input':
         {
             'old_site': 'scoreboard-nav-items-search__input',
-            'new_site': 'ui-search__input'
+            'new_site': 'ui-search-default__input'
         },
     'bet_list_container':
         {
@@ -157,7 +157,7 @@ classes = {
     'team_name_container':
         {
             'old_site': 'c-tablo__team',
-            'news_site': 'scoreboard-intro__team'
+            'new_site': 'scoreboard-intro__team'
         },
     'team_name_text':
         {
@@ -172,7 +172,7 @@ classes = {
     'dashboard_champ_name':
         {
             'old_site': 'c-events__liga',
-            'new_site': 'dashboard-champ-name__caption'
+            'new_site': 'dashboard-champ-name__label--is-link'
         },
     'dashboard_champ_matchlist':
         {
@@ -218,7 +218,7 @@ classes = {
     'dashboard_game_block_row':
         {
             'old_site': 'c-events__item_game',
-            'new_site': 'dashboard-game-block__row'
+            'new_site': 'dashboard-game-block'
         },
     'team_wrap':
         {
@@ -244,6 +244,11 @@ classes = {
         {
             'old_site': 'cpn-btn--theme-brand',
             'new_site': 'cpn-btn--theme-brand'
+        },
+    'events_time':
+        {
+            'old_site': 'c-events__time',
+            'new_site': 'dashboard-game-block__info'
         }
 
 }
