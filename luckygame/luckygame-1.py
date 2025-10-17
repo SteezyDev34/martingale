@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 
 # Récupérer le chemin absolu du fichier actuel
@@ -38,7 +39,30 @@ if len(parts) > 1:
     print(config.localhost)
     # Demander confirmation à l'utilisateur
     if config.systeme == 'Windows':
-        command = f'start chrome --remote-debugging-port={config.localhost} --user-data-dir="{project_directory}\\ChromeDebugProfile{config.localhost}"'
+        if config.is_chrome_running_with_port(config.localhost):
+            print(f"Chrome est déjà lancé avec le port de débogage {config.localhost}, pas de relancement.")
+        else:
+            # Trouver chrome_path comme avant
+            possible_paths = [
+                r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+            ]
+
+            chrome_path = None
+            for path in possible_paths:
+                if os.path.exists(path):
+                    chrome_path = path
+                    break
+
+            if chrome_path is None:
+                raise FileNotFoundError("Chrome executable not found.")
+            # User-Agent fourni (Mac)
+            args = [
+                f"--remote-debugging-port={config.localhost}",
+                f"--user-data-dir={project_directory}\\ChromeDebugProfile{config.localhost}",
+            ]
+
+            subprocess.Popen([chrome_path] + args)
     else:
         command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
 
