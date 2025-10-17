@@ -31,8 +31,9 @@ def WaitWhileTimeAppear():
                         (By.CLASS_NAME, config.classes['events_time'][config.site_type])))
                 except Exception as e:
                     tentative += 1
+                    events_time_selector = config.classes['events_time'][config.site_type]
                     config.log(
-                        f'heure de debut non trouvé {config.classes['events_time'][config.site_type]} ',
+                        f'heure de debut non trouvé {events_time_selector} ',
                         'warning', True)
                 else:
                     return True

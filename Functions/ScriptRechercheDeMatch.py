@@ -635,8 +635,9 @@ def classementeDeMatch(driver, use_json_cache=True):
                                                                                 'dashboard-game-info__time').text
                                     start_time_text = start_date_text + ' ' + start_time_text
                             except Exception as e:
+                                events_time_selector = config.classes['events_time'][config.site_type]
                                 config.log(
-                                    f'heure de debut non trouvé {config.classes['events_time'][config.site_type]} {e} ',
+                                    f'heure de debut non trouvé {events_time_selector} {e} ',
                                     'warning', True)
                             else:
                                 try:

@@ -26,7 +26,8 @@ def GetScoreActuel(driver):
             )
             score_teams = driver.find_elements(By.CLASS_NAME, config.classes['score_container'][config.site_type])
         except Exception as e:
-            print(f"#E0020\nUne erreur est survenue : {config.classes['score_container'][config.site_type]}")
+            score_container_selector = config.classes['score_container'][config.site_type]
+            print(f"#E0020\nUne erreur est survenue : {score_container_selector}")
             if not GetIfMatchPage(driver):
                 config.error = True
                 return False

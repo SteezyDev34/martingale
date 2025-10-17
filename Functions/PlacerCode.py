@@ -40,7 +40,8 @@ def PlacerCode(driver, code):
                     EC.element_to_be_clickable(
                         (By.CLASS_NAME, config.classes['cpn_events_input'][config.site_type])))
             except Exception as e:
-                config.log(f"Erreur de recherche {config.classes['cpn_events_input'][config.site_type]} ")
+                cpn_events_input_selector = config.classes['cpn_events_input'][config.site_type]
+                config.log(f"Erreur de recherche {cpn_events_input_selector} ")
                 if tentative > 10:
                     return False
                 if tentative > 2:
@@ -57,7 +58,8 @@ def PlacerCode(driver, code):
                             EC.element_to_be_clickable(
                                 (By.CLASS_NAME, config.classes['cpn_btn_theme_brand'][config.site_type])))
                     except Exception as e:
-                        config.log(f"Erreur de recherche {config.classes['cpn_btn_theme_brand'][config.site_type]} ")
+                        cpn_btn_theme_brand_selector = config.classes['cpn_btn_theme_brand'][config.site_type]
+                        config.log(f"Erreur de recherche {cpn_btn_theme_brand_selector} ")
                         if tentative > 10:
                             return False
                     else:
@@ -65,8 +67,9 @@ def PlacerCode(driver, code):
                         # XPath : recherche un bouton avec la classe cpn-btn--theme-brand qui contient un span avec le texte 'charger'
                         # La fonction translate() convertit le texte en minuscules pour ignorer la casse
                         # Le '..' à la fin remonte au bouton parent depuis le span trouvé
+                        cpn_btn_theme_brand_class = config.classes['cpn_btn_theme_brand'][config.site_type]
                         cpn_setting = driver.find_element(By.XPATH,
-                                                          f"//button[contains(@class, '{config.classes['cpn_btn_theme_brand'][config.site_type]}')]//span[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'charger')]/..")
+                                                          f"//button[contains(@class, '{cpn_btn_theme_brand_class}')]//span[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'charger')]/..")
                         try:
                             cpn_setting.click()
                             validate_bet = False

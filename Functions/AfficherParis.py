@@ -10,6 +10,7 @@ from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.GetSetActuel import GetSetActuel
 from Functions.ModalHandler import ModalHandler
+from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def AfficherParis(driver, categorie='', type_de_pari='', ):
@@ -52,7 +53,8 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                     (By.CLASS_NAME, config.classes['period_select'][config.site_type]))
             )
         except Exception as e:
-            config.log(f"Champ déroulant {config.classes['period_select'][config.site_type]} introuvable !", "warning",
+            period_select_selector = config.classes['period_select'][config.site_type]
+            config.log(f"Champ déroulant {period_select_selector} introuvable !", "warning",
                        True, 2)
             config.log(f'tentative {tentative}', 'warning', True, 2)
             tentative = tentative + 1
