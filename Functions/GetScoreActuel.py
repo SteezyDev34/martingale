@@ -28,6 +28,7 @@ def GetScoreActuel(driver):
         except Exception as e:
             score_container_selector = config.classes['score_container'][config.site_type]
             print(f"#E0020\nUne erreur est survenue : {score_container_selector}")
+            config.log_clear_line()
             if not GetIfMatchPage(driver):
                 config.error = True
                 return False
@@ -60,7 +61,8 @@ def record_scores(driver):
     GetSetActuel(driver)
     GetJeuActuel(driver)
     nouveau_score = {'set': config.set_actuel, 'jeu': config.jeu_actuel, 'score': config.score_actuel}
-    config.log(nouveau_score, indent=2)
+    config.log(nouveau_score,clear=False, indent=2)
+    config.log_clear_line()
     # Si le dictionnaire n'existe pas encore, l'ajouter
     config.all_scores.update({len(config.all_scores): nouveau_score})
 

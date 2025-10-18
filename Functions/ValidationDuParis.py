@@ -86,7 +86,7 @@ def ValidationDuParis(driver, nexbet=False):
             if (config.looking_game is not None and current_set is not None and
                     config.validated_bet.get('jeu') == config.looking_game and
                     config.validated_bet.get('set') == current_set and config.validated_bet.get(
-                        'url') == driver.current_url):
+                        'url') == config.ligue_name):
                 config.log(f"Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.",
                            'warning', False)
                 validation = True
@@ -178,7 +178,7 @@ def ValidationDuParis(driver, nexbet=False):
             'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
             'winscore': config.win_type,
             'timestamp': current_timestamp,
-            'url': driver.current_url
+            'url': config.ligue_name
         }
 
         # Save validated bet to JSON file named after script type

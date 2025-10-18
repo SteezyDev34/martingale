@@ -51,8 +51,7 @@ def RetourTpsReg(driver, theset="Temps réglementaire"):
                             (By.CLASS_NAME, config.classes['multiselect_container_wrapper'][config.site_type]))
                     )
                 except Exception as e:
-                    config.log(f"#E0014\nUne erreur est survenue : {e}")
-                    config.log("ERROR : aucun element dans le champ déroulant ")
+                    config.log("#E0014 : aucun element dans le champ déroulant ")
                 else:
                     select_form_set_1 = driver.find_elements(By.CLASS_NAME,
                                                              config.classes['multiselect_element'][config.site_type])

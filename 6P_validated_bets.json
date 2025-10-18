@@ -2170,5 +2170,89 @@
         ],
         "timestamp": "2025-10-15 03:05:20",
         "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/662101009-brandon-holt-aryan-shah"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-18 01:06:30",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2469021-wta-tampico/662938469-hanne-vandewinkel-harriet-dart"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-18 01:15:04",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2469021-wta-tampico/662938469-hanne-vandewinkel-harriet-dart"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-18 03:08:11",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2469021-wta-tampico/662960207-jessica-pieri-cadence-brace"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-18 03:13:25",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2469021-wta-tampico/662960207-jessica-pieri-cadence-brace"
+    },
+    {
+        "montant": 0.53,
+        "cote": "3.08",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-18 03:20:28",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2469021-wta-tampico/662960207-jessica-pieri-cadence-brace"
+    },
+    {
+        "montant": 0.92,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-18 03:24:37",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2469021-wta-tampico/662960207-jessica-pieri-cadence-brace"
+    },
+    {
+        "montant": 1.29,
+        "cote": "3.28",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-10-18 03:31:10",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2469021-wta-tampico/662960207-jessica-pieri-cadence-brace"
     }
 ]

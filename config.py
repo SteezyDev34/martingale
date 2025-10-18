@@ -145,9 +145,9 @@ def getJsonData(url: str) -> Optional[Dict[str, Any]]:
                 return data[0]
             return None
         except requests.exceptions.RequestException as e:
-            log(f"Tentative {attempt + 1}/{max_attempts} - Erreur lors de la récupération des données", 'warning')
+            log(f" Erreur lors de la récupération des données", 'warning')
         except json.JSONDecodeError:
-            log(f"Tentative {attempt + 1}/{max_attempts} - Erreur lors du parsing du JSON", 'warning')
+            log(f" Erreur lors du parsing du JSON", 'warning')
         # Attendre un peu plus longtemps entre chaque tentative
         if attempt < max_attempts - 1:
             import time
@@ -542,16 +542,16 @@ def configure_site_type(use_ca_site=None):
     return site_type
 
 
-import psutil
+if systeme == 'Windows':
+    import psutil
 
-
-def is_chrome_running_with_port(port):
-    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        try:
-            if proc.info['name'] and 'chrome.exe' in proc.info['name'].lower():
-                cmdline = proc.info['cmdline']
-                if cmdline and any(f'--remote-debugging-port={port}' in arg for arg in cmdline):
-                    return True
-        except (psutil.NoSuchProcess, psutil.AccessDenied):
-            continue
-    return False
+    def is_chrome_running_with_port(port):
+        for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+            try:
+                if proc.info['name'] and 'chrome.exe' in proc.info['name'].lower():
+                    cmdline = proc.info['cmdline']
+                    if cmdline and any(f'--remote-debugging-port={port}' in arg for arg in cmdline):
+                        return True
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                continue
+        return False

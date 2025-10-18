@@ -9,31 +9,32 @@ from Functions.GetIfNewSite import GetIfNewSite
 
 
 def GetMise(driver):
+    logline = 0
     if config.rattrape_perte == 3:
-        txtlog = 'Bonne proba, cote : 3'
-        config.log(txtlog, 'info')
+        config.log('Bonne proba, cote : 3', 'info', False)
+        logline +=1
         config.cote = config.cotebase
     else:
-        txtlog = "Rattrapage, recuperation de la cote"
-        config.log(txtlog, 'info')
+        config.log("Rattrapage, recuperation de la cote", 'info', False)
+        logline+=1
         try:
             config.cote = driver.find_elements(By.CLASS_NAME,
                                                config.classes['coef_value'][config.site_type])[
                 0].text
         except:
-            txtlog = 'erreur recup cote : 3'
-            config.log(txtlog, 'info')
+            config.log('erreur recup cote', 'info',False)
+            logline+=1
             config.cote = config.cotebase
         else:
-
-            txtlog = 'cote recupéré ' + str(config.cote)
-            config.log(txtlog, 'info')
+            config.log(f'cote recupéré {str(config.cote)}', 'info', False)
+            logline+=1
             if config.cote == '' or str(config.cote) == '0' or str(config.cote) == '1' or config.cote == 0:
                 config.cote = config.cotebase
     if config.scriptType == 'LIVE':
         api_url = f'https://bettracker.sc2vagr6376.universe.wf/backend/api.php?action=recommended_stake&tipster={config.tipster}&odds={config.cote}&target_percentage=1&recover_losses=1'
         req = requests.get(api_url, verify=False)
         config.mise = round(float(req.json()['recommended_stake']), 2)
+        config.log_clear_line(logline)
         return True
     else:
         config.mise = (float(config.wantwin) + float(config.perte)) / (float(config.cote) - 1)
@@ -44,6 +45,7 @@ def GetMise(driver):
         config.perte) + " | wantwin : " + str(
         config.wantwin) + " | mise : " + str(config.mise)
     config.log(txtlog, 'info', False, indent=3)
+    logline+=1
     getmisemax = True
     tentative = 0
     while not getmisemax:
@@ -88,6 +90,7 @@ def GetMise(driver):
                     config.misemax = 0
                 else:
                     getmisemax = True
+    config.log_clear_line(logline)
     return True
 
 

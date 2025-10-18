@@ -32,9 +32,11 @@ def getPerte():
             # Afficher les données pour vérification
         except requests.exceptions.RequestException as e:
             print(f"Erreur lors de la récupération des données : {e}")
+            config.log_clear_line()
             return
         except json.JSONDecodeError as e:
             print(f"Erreur lors du parsing du JSON : {e}")
+            config.log_clear_line()
             return
         except Exception as e:
             print(f"pas de perte {e}")
@@ -59,9 +61,11 @@ def get1setGlobalPerte():
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
         print(f"Erreur lors de la récupération des données : {e}")
+        config.log_clear_line()
         return
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
+        config.log_clear_line()
         return
     except Exception as e:
         config.log(f'Pas de Perte : {e}', 'warning', False, 1)
@@ -89,6 +93,7 @@ def getIf1setGlobalPerte():
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
         print(f"Erreur lors de la récupération des données : {e}")
+        config.log_clear_line()
         return
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
@@ -115,6 +120,7 @@ def getGlobalPerte():
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
         print(f"Erreur lors de la récupération des données : {e}")
+        config.log_clear_line()
         return
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
@@ -151,9 +157,11 @@ def getIfGlobalPerte():
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
         print(f"Erreur lors de la récupération des données : {e}")
+        config.log_clear_line()
         return
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
+        config.log_clear_line()
         return
     except Exception as e:
         print(f"pas de perte {e}")
@@ -174,12 +182,15 @@ def delPerte(id):
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
         print(f"Erreur lors de la récupération des données : {e}")
+        config.log_clear_line()
         return
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
+        config.log_clear_line()
         return
     except Exception as e:
         print(f"Pas de suppression de perte {e}")
+        config.log_clear_line()
     else:
         print(result)
         return True
@@ -198,12 +209,15 @@ def del1setPerte(id):
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
         print(f"Erreur lors de la récupération des données : {e}")
+        config.log_clear_line()
         return
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
+        config.log_clear_line()
         return
     except Exception as e:
         print(f"Pas de suppression de perte {e}")
+        config.log_clear_line()
     else:
         print(result)
         return True
@@ -222,12 +236,15 @@ def getCompetRecup():
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
         print(f"Erreur lors de la récupération des données : {e}")
+        config.log_clear_line()
         return
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
+        config.log_clear_line()
         return
     except Exception as e:
         print(f"Pas de compet {e}")
+        config.log_clear_line()
     else:
         compet_ok_list = compets["compet_recup_ok"]
         config.log(compet_ok_list, 1)
@@ -263,13 +280,13 @@ def getCompet():
         compets = response.json()
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
-        config.log(f'Erreur lors de la récupération des données : {e}', 'warning', False, 3)
+        config.log(f'Erreur lors de la récupération des données : {e}', 'warning', True, 3)
         return
     except json.JSONDecodeError as e:
-        config.log(f'Erreur lors du parsing du JSON : {e}', 'warning', False, 3)
+        config.log(f'Erreur lors du parsing du JSON : {e}', 'warning', True, 3)
         return
     except Exception as e:
-        config.log(f'Pas de données de compet : {e}', 'warning', False, 3)
+        config.log(f'Pas de données de compet : {e}', 'warning', True, 3)
     else:
         compet_ok_list = compets["compet_ok"]
         # config.log(compet_ok_list,0)
@@ -313,12 +330,15 @@ def SendPerte(scriptType, perte):
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
         print(f"Erreur lors de la récupération des données : {e}")
+        config.log_clear_line()
         return
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
+        config.log_clear_line()
         return
     except Exception as e:
         print(f"Pas d'envoi de perte {e}")
+        config.log_clear_line()
     else:
         if result['status'] == "success":
             config.log(str(perte) + "> Perte insert in strategy" + str(scriptType))
@@ -417,12 +437,15 @@ def SendBetPlaced(scriptType, mise):
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
         print(f"Erreur lors de la récupération des données : {e}")
+        config.log_clear_line()
         return
     except json.JSONDecodeError as e:
         print(f"Erreur lors du parsing du JSON : {e}")
+        config.log_clear_line()
         return
     except Exception as e:
         print(f"Pas d'envoi de perte {e}")
+        config.log_clear_line()
     else:
         if result['status'] == "success":
             config.log(f"{str(mise)} insert in strategy" + str(scriptType), 'info', False, 2)

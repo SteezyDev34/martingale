@@ -421,5 +421,149 @@
         "winscore": "30:30",
         "timestamp": "2025-10-17 05:57:45",
         "url": "https://ca.1xbet.com/fr/live/tennis/5657-wta-osaka/662666792-rebecca-sramkova-leylah-annie-fernandez"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.52",
+        "jeu": 5,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 10:17:44",
+        "url": "https://ca.1xbet.com/fr/live/tennis/254401-wta-ningbo/663036989-elena-rybakina-jasmine-paolini"
+    },
+    {
+        "montant": 0.35,
+        "cote": "2.7",
+        "jeu": 6,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 10:20:50",
+        "url": "https://ca.1xbet.com/fr/live/tennis/254401-wta-ningbo/663019990-elena-rybakina-jasmine-paolini"
+    },
+    {
+        "montant": 0.77,
+        "cote": "2.5",
+        "jeu": 7,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 10:26:46",
+        "url": "https://ca.1xbet.com/fr/live/tennis/254401-wta-ningbo/663019990-elena-rybakina-jasmine-paolini"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.45",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 11:00:54",
+        "url": "https://ca.1xbet.com/fr/live/tennis/107745-wta-tokyo-qualification/663043786-alina-charaeva-himeno-sakatsume"
+    },
+    {
+        "montant": 0.41,
+        "cote": "2.45",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 11:04:22",
+        "url": "https://ca.1xbet.com/fr/live/tennis/107745-wta-tokyo-qualification/663043756-alina-charaeva-himeno-sakatsume"
+    },
+    {
+        "montant": 0.81,
+        "cote": "2.5",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 11:08:33",
+        "url": "https://ca.1xbet.com/fr/live/tennis/107745-wta-tokyo-qualification/663043756-alina-charaeva-himeno-sakatsume"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.2",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 11:42:39",
+        "url": "https://ca.1xbet.com/fr/live/tennis/118243-atp-basel-qualification/663049870-valentin-royer-marc-andrea-huesler"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.85",
+        "jeu": 10,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 11:47:02",
+        "url": "https://ca.1xbet.com/fr/live/tennis/118243-atp-basel-qualification/663049870-valentin-royer-marc-andrea-huesler"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 12:15:53",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.55",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 13:20:19",
+        "url": "atp basel qualification"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.2",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 13:55:55",
+        "url": "atp basel qualification"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.3",
+        "jeu": 6,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 14:02:02",
+        "url": "atp basel qualification"
+    },
+    {
+        "montant": 0.33,
+        "cote": "2.8",
+        "jeu": 7,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 14:06:09",
+        "url": "atp basel qualification"
+    },
+    {
+        "montant": 0.57,
+        "cote": "3",
+        "jeu": 8,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 14:08:47",
+        "url": "atp basel qualification"
+    },
+    {
+        "montant": 1.06,
+        "cote": "2.8",
+        "jeu": 9,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 14:15:11",
+        "url": "atp basel qualification"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.9",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-18 14:30:48",
+        "url": "atp basel qualification"
     }
 ]

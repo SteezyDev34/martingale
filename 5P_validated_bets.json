@@ -3166,5 +3166,41 @@
         ],
         "timestamp": "2025-10-15 02:53:28",
         "url": "https://1xbet.com/fr/live/tennis/2738113-challenger-lincoln/662101009-brandon-holt-aryan-shah"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2025-10-18 01:05:56",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2469021-wta-tampico/662938469-hanne-vandewinkel-harriet-dart"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2025-10-18 03:07:52",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2469021-wta-tampico/662960207-jessica-pieri-cadence-brace"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2025-10-18 09:08:42",
+        "url": "https://ca.1xbet.com/fr/live/tennis/254401-wta-ningbo/663020074-elena-rybakina-jasmine-paolini"
     }
 ]

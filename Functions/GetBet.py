@@ -21,7 +21,8 @@ def GetBet(driver, nextBet=False, selection=''):
 
 
 def GetBetNew(driver, nextBet=False, selection=''):
-    config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', True, 2)
+    config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', False, 2)
+    logline = 1
     if_get_jeu = False
     clic = False
     if config.scriptType == "40A":
@@ -44,7 +45,9 @@ def GetBetNew(driver, nextBet=False, selection=''):
                                               'market-grid-canvas__container'))
         )
     except:
-        config.log('erreur recup market-grid-canvas__container', 'error', True, 2)
+        config.log('erreur recup market-grid-canvas__container', 'error', False, 2)
+        logline+=1
+        config.log_clear_line(logline)
         return False
     # Récupérer les coordonnées du div
     location = canvas.location
@@ -93,7 +96,8 @@ def GetBetNew(driver, nextBet=False, selection=''):
         GetJeuActuel(driver)
         GetScoreActuel(driver)
         DeleteBet(driver)
-        config.log(f'jeu recherhcé : {config.looking_game}', 'info', True)
+        config.log(f'jeu recherhcé : {config.looking_game}', 'info', False)
+        logline +=1
         if_get_jeu = False
 
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
@@ -130,7 +134,6 @@ def GetBetNew(driver, nextBet=False, selection=''):
                     config.win_type = '0:40'  # inversé
                     sType = "Game " + str(config.looking_game) + " 0:40+, Player " + str(first_player)
         if config.scriptType == '030':
-
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
             first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
@@ -147,7 +150,6 @@ def GetBetNew(driver, nextBet=False, selection=''):
                 if config.scriptType == '030':
                     config.win_type = '30:0'  # inversé
                     win_texte = '30-0'
-            print('first_player :', first_player)
         if config.scriptType == '300':
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
@@ -161,7 +163,6 @@ def GetBetNew(driver, nextBet=False, selection=''):
                 first_player = 2
                 config.win_type = '0:30'  # inversé
                 win_texte = '30-0'
-            print('first_player :', first_player)
         if config.scriptType == 'BREAK':
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
@@ -175,7 +176,6 @@ def GetBetNew(driver, nextBet=False, selection=''):
                 first_player = 2
                 config.win_type = ['40:0', '40:15', '40:30', 'A:40']
                 win_texte = 'W1'
-            print('first_player :', first_player)
         if config.scriptType == '6P':
             sType = ", 6"
             config.win_type = ['40:30', '30:40']  # inversé
@@ -188,10 +188,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
             sType = ", 4"
             config.win_type = ['40:0', '0:40']  # inversé
             win_texte = ', 4'
-        # print('i '+str(i))
         GetJeuActuel(driver)
-        print('win_type', config.win_type)
-        # print('Ligne suivante')
         canvas = driver.find_element(By.CLASS_NAME, 'market-grid-canvas__container')
         # Récupérer les coordonnées du div
         location = canvas.location
@@ -207,10 +204,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
                 i = -1
                 y = 0
         x = decalageX
-        # Calculer les coordonnées pour cliquer au centre du div
-        # print('Y offset : ' + str(y))
-        # print('X offset : ' + str(x))
-        # Créer une instance ActionChains
+
         actions = ActionChains(driver)
         # Cliquer aux coordonnées calculées
         try:
@@ -219,17 +213,16 @@ def GetBetNew(driver, nextBet=False, selection=''):
                 i = 1
                 continue
         except:
+            config.log_clear_line(logline)
             return False
-        # print('Click sur la ligne')
         try:
             element = WebDriverWait(driver, 2).until(
                 EC.visibility_of_element_located((By.CLASS_NAME,
                                                   'ui-coupon-bet-market__name'))
             )
         except Exception as e:
-            config.log('tentative_clic : ' + str(tentative_clic))
-
-            config.log('Pas d\'infos, suivant...')
+            config.log('tentative_clic : ' + str(tentative_clic), clear=False)
+            logline+=1
             tentative_clic = tentative_clic + 1
             if tentative_clic < 4:
                 if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
@@ -242,11 +235,9 @@ def GetBetNew(driver, nextBet=False, selection=''):
                             decalageX = size['width'] / -2 + 50
                     else:
                         if i % 2 != 0:
-                            # print('gauche')
                             sautDeLigne = sautDeLigne
                             decalageX = 50
                         else:
-                            # print('droite')
                             sautDeLigne = sautDeLigne + 30
                             decalageX = size['width'] / -2 + 50
                     if config.systeme == 'Darwin':
@@ -258,10 +249,8 @@ def GetBetNew(driver, nextBet=False, selection=''):
                             decalageX = size['width'] / -2 + 50
                     else:
                         if i % 2 != 0:
-                            # print('gauche')
                             decalageX = 50
                         else:
-                            # print('droite')
                             sautDeLigne = sautDeLigne + 30
                             decalageX = -50
                 else:
@@ -269,9 +258,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
                 ligne = ligne + 1
             tentative_clic = tentative_clic + 1
         else:
-            # print('Infos de paris affiché')
             try:
-                # print('Lecture des infos')
                 time.sleep(1)
                 list_of_bet_type = WebDriverWait(driver, 1).until(
                     EC.visibility_of_element_located((By.CLASS_NAME,
@@ -289,34 +276,27 @@ def GetBetNew(driver, nextBet=False, selection=''):
                             decalageX = size['width'] / -2 + 50
                     else:
                         if i % 2 != 0:
-                            # print('gauche')
                             decalageX = 50
                         else:
-                            # print('droite')
                             sautDeLigne = sautDeLigne + 30
                             decalageX = -50
                 else:
                     sautDeLigne = sautDeLigne + 30
-                config.log(f"#E0015 Infos de paris non lisible")
+                config.log(f"#E0015 Infos de paris non lisible", clear=False)
+                logline +=1
             else:
                 list_of_newbet_type = list_of_bet_type.text
-                print(list_of_newbet_type)
                 if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
-                    # print(sType)
                     list_of_newbet_type_text = list_of_newbet_type
-                    # print(list_of_newbet_type_text)
                     list_of_newbet_type = list_of_newbet_type_text.split(sType)
-                    # print(len(list_of_newbet_type))
-                    # print(list_of_newbet_type)
                     if len(list_of_newbet_type) > 1:
                         list_of_newbet_type_text = list_of_newbet_type_text.split(" " + win_texte)[0]
                         getjeu_actuel = int(list_of_newbet_type_text.split("Game ")[1])
                         if str(config.looking_game) == str(getjeu_actuel):
-                            # print('paris trouvé')
                             clic = True
+                            config.log_clear_line(logline)
                             return clic
                         else:
-                            # print('mauvais jeu')
                             if config.systeme == 'Darwin':
                                 if i % 2 != 0:
                                     sautDeLigne = sautDeLigne
@@ -325,16 +305,12 @@ def GetBetNew(driver, nextBet=False, selection=''):
                                     sautDeLigne = sautDeLigne + 30
                                     decalageX = size['width'] / -2 + 50
                             else:
-                                # print('win')
                                 if i % 2 != 0:
-                                    print('gauche')
                                     decalageX = 50
                                 else:
-                                    print('droite')
                                     sautDeLigne = sautDeLigne + 30
                                     decalageX = -50
                     else:
-                        # print('Mauvais paris')
                         if config.systeme == 'Darwin':
                             if i % 2 != 0:
                                 sautDeLigne = sautDeLigne
@@ -343,33 +319,23 @@ def GetBetNew(driver, nextBet=False, selection=''):
                                 sautDeLigne = sautDeLigne + 30
                                 decalageX = size['width'] / -2 + 50
                         else:
-                            # print('win')
                             if i % 2 != 0:
-                                print('gauche')
                                 decalageX = 50
                             else:
-                                # print('droite')
                                 sautDeLigne = sautDeLigne + 30
                                 decalageX = -50
                         ligne = ligne + 1
                 elif config.scriptType == 'BREAK':
-                    # print(sType)
                     list_of_newbet_type_text = list_of_newbet_type
-                    # print(list_of_newbet_type_text)
                     list_of_newbet_type = list_of_newbet_type_text.split(' - ' + win_texte)
-                    print(len(list_of_newbet_type))
-                    print(list_of_newbet_type)
                     if len(list_of_newbet_type) > 1:
                         list_of_newbet_type_text = list_of_newbet_type[0]
-                        print(win_texte)
-                        print(list_of_newbet_type_text)
                         getjeu_actuel = int(list_of_newbet_type_text.split("Game ")[1])
                         if str(config.looking_game) == str(getjeu_actuel):
-                            # print('paris trouvé')
                             clic = True
+                            config.log_clear_line(logline)
                             return clic
                         else:
-                            # print('mauvais jeu')
                             if config.systeme == 'Darwin':
                                 if i % 2 != 0:
                                     sautDeLigne = sautDeLigne
@@ -378,16 +344,12 @@ def GetBetNew(driver, nextBet=False, selection=''):
                                     sautDeLigne = sautDeLigne + 30
                                     decalageX = size['width'] / -2 + 50
                             else:
-                                # print('win')
                                 if i % 2 != 0:
-                                    print('gauche')
                                     decalageX = 50
                                 else:
-                                    print('droite')
                                     sautDeLigne = sautDeLigne + 30
                                     decalageX = -50
                     else:
-                        # print('Mauvais paris')
                         if config.systeme == 'Darwin':
                             if i % 2 != 0:
                                 sautDeLigne = sautDeLigne
@@ -396,68 +358,52 @@ def GetBetNew(driver, nextBet=False, selection=''):
                                 sautDeLigne = sautDeLigne + 30
                                 decalageX = size['width'] / -2 + 50
                         else:
-                            # print('win')
                             if i % 2 != 0:
-                                print('gauche')
                                 decalageX = 50
                             else:
-                                # print('droite')
                                 sautDeLigne = sautDeLigne + 30
                                 decalageX = -50
                         ligne = ligne + 1
                 elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
-                    print('sType', sType)
                     list_of_newbet_type = list_of_newbet_type.split(sType)
                     if len(list_of_newbet_type) > 1:
                         getjeu_actuel = list_of_newbet_type[0].split("Jeu ")[1]
                         getjeu_actuel = ''.join(caractere for caractere in getjeu_actuel if caractere.isdigit())
                         if str(config.looking_game) == str(getjeu_actuel):
-                            print('paris trouvé')
                             clic = True
                             return clic
                         else:
-                            print('mauvais jeu')
                             sautDeLigne = sautDeLigne + 30
                     else:
-                        print('Mauvais paris')
                         sautDeLigne = sautDeLigne + 30
                         ligne = ligne + 1
-                        # print('ligne ' + str(ligne))
                 elif config.scriptType == '1SET':
                     list_of_newbet_type = list_of_bet_type.text
-                    print(list_of_newbet_type)
-
-                    # print('stype', sType)
                     list_of_newbet_type = list_of_newbet_type.lower().split(sType.lower())
                     if len(list_of_newbet_type) > 1:
                         clic = True
+                        config.log_clear_line(logline)
                         return clic
                 else:
-                    # print('stype', sType)
                     list_of_newbet_type = list_of_newbet_type.lower().split(sType.lower() + " - Oui".lower())
                     if len(list_of_newbet_type) > 1:
                         getjeu_actuel = list_of_newbet_type[0].split("jeu ")[1]
                         getjeu_actuel = ''.join(caractere for caractere in getjeu_actuel if caractere.isdigit())
                         if str(config.looking_game) == str(getjeu_actuel):
-                            # print('paris trouvé')
                             clic = True
+                            config.log_clear_line(logline)
                             return clic
                         else:
-                            # print('mauvais jeu')
                             sautDeLigne = sautDeLigne + 30
                     else:
-                        # print('Mauvais paris')
                         sautDeLigne = sautDeLigne + 30
                         ligne = ligne + 1
-                        # print('ligne ' + str(ligne))
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
             max_line = 16
         else:
             max_line = 10
         if config.systeme == 'Darwin':
             if y > size['height'] / 2 or ligne > max_line:
-                # print('size height :'+str(size['height'] ))
-                # print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
                 if config.scriptType == '300' or config.scriptType == '030':
                     sautDeLigne = 50 * 3
                 else:
@@ -468,8 +414,6 @@ def GetBetNew(driver, nextBet=False, selection=''):
                 i = 0
         elif config.systeme == 'Windows':
             if y > size['height'] or ligne > max_line:
-                # print('size height :' + str(size['height']))
-                # print('Aucun paris trouvé, nouvelle tentative : ' + str(tentative))
                 if config.scriptType == '300' or config.scriptType == '030':
                     sautDeLigne = 50 * 3
                 else:
@@ -481,6 +425,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
                 tentative = tentative + 1
                 i = 0
         i = i + 1
+    config.log_clear_line(logline)
 
 
 if __name__ == "__main__":

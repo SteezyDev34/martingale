@@ -142,7 +142,7 @@ classes = {
     'popup_submit':
         {
             'old_site': 'swal2-confirm',
-            'new_site': 'popup__submit'
+            'new_site': 'ui-popup__submit'
         },
     'popup_cancel':
         {
