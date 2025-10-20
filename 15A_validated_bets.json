@@ -4327,5 +4327,41 @@
         "winscore": "15:15",
         "timestamp": "2025-10-20 11:53:35",
         "url": "wta guangzhou"
+    },
+    {
+        "montant": 0.56,
+        "cote": "1.9",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-20 18:55:03",
+        "url": "challenger hamburg"
+    },
+    {
+        "montant": 1.26,
+        "cote": "2",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-20 18:57:30",
+        "url": "challenger hamburg"
+    },
+    {
+        "montant": 2.92,
+        "cote": "1.93",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-20 19:00:09",
+        "url": "challenger hamburg"
+    },
+    {
+        "montant": 6.21,
+        "cote": "1.94",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-20 19:10:00",
+        "url": "challenger hamburg"
     }
 ]

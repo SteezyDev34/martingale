@@ -3112,5 +3112,41 @@
         "winscore": "40:40",
         "timestamp": "2025-10-19 19:23:59",
         "url": "wta rio de janeiro"
+    },
+    {
+        "montant": 1.16,
+        "cote": "3.75",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2025-10-20 18:53:19",
+        "url": "challenger hamburg"
+    },
+    {
+        "montant": 1.9,
+        "cote": "3.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2025-10-20 18:56:22",
+        "url": "challenger hamburg"
+    },
+    {
+        "montant": 2.22,
+        "cote": "4",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2025-10-20 18:59:25",
+        "url": "challenger hamburg"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2025-10-20 19:04:41",
+        "url": "itf saguenay women qualification"
     }
 ]

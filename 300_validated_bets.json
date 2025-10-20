@@ -5587,5 +5587,14 @@
         "winscore": "30:0",
         "timestamp": "2025-10-20 11:45:09",
         "url": "wta guangzhou"
+    },
+    {
+        "montant": 2.06,
+        "cote": "2.55",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-20 18:54:34",
+        "url": "challenger hamburg"
     }
 ]
