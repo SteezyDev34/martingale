@@ -48,6 +48,7 @@ else:
 
 # Chargement des functions
 # Chargement de Chrome driver
+config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
 num_fenetre = 1
 driver = get_script_driver(num_fenetre)
