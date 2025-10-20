@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+import time
 
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
@@ -37,41 +38,8 @@ if len(parts) > 1:
     if int(config.localhost) < 1024:
         config.localhost = 1024 + int(config.localhost)
     # Demander confirmation à l'utilisateur
-    if config.systeme == 'Windows':
-        if config.is_chrome_running_with_port(config.localhost):
-            print(f"Chrome est déjà lancé avec le port de débogage {config.localhost}, pas de relancement.")
-        else:
-            # Trouver chrome_path comme avant
-            possible_paths = [
-                r"C:\Program Files\Google\Chrome\Application\chrome.exe",
-                r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
-            ]
-
-            chrome_path = None
-            for path in possible_paths:
-                if os.path.exists(path):
-                    chrome_path = path
-                    break
-
-            if chrome_path is None:
-                raise FileNotFoundError("Chrome executable not found.")
-            # User-Agent fourni (Mac)
-            args = [
-                f"--remote-debugging-port={config.localhost}",
-                f"--user-data-dir={project_directory}\\ChromeDebugProfile{config.localhost}",
-            ]
-
-            subprocess.Popen([chrome_path] + args)
-    else:
-        command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
-
-        confirmation = input(f"Avez-vous exécuté la commande \n{command}\n? (Y/N): ")
-
-        if confirmation.upper() != 'Y' and confirmation.upper() != 'y' and confirmation.upper() != 'O' and confirmation.upper() != 'o':
-            print("Programme arrêté par l'utilisateur.")
-            sys.exit(0)  # Arrêter le programme
-        else:
-            config.log_clear_line(3)
+    # Le lancement de Chrome est maintenant géré dans SetDriver.py
+    config.log_clear_line(3)
 
     print(f"{config.PURPLE}{text2art(f'Start martingal {config.scriptType} {config.script_num}')}")
 else:
@@ -80,8 +48,9 @@ else:
 
 # Chargement des functions
 # Chargement de Chrome driver
-from ChromeDriver.SetDriver import driver
-
+from ChromeDriver.SetDriver import get_script_driver
+num_fenetre = 1
+driver = get_script_driver(num_fenetre)
 from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
