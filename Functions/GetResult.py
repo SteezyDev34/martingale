@@ -70,6 +70,7 @@ def GetResult(driver):
                 getresult = True
             elif config.score_actuel in passed_score:
                 getresult = True
+            
             if getresult:
                 matching_scores = [score for score in config.all_scores.values()
                                    if score.get('set') is not None
