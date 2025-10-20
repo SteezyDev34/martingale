@@ -30,7 +30,8 @@ def GetIfMatchPage(driver):
         except:
             config.log('Tableau des stats introuvable!', 'info', False, show_script_type=False)
             config.log_clear_line()
-            config.log('PAGE DE MATCH!', 'info', show_script_type=False)
+            config.log('PAGE DE MATCH!', 'info', False, show_script_type=False)
+            config.log_clear_line()
             return True
         else:
             try:

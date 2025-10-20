@@ -28,7 +28,8 @@ def main(driver, bet_item, matchlist_file_name):
         # Vérification si le match est déjà traité ou en attente
         match_is_done = match_manager.match_exists(config.newmatch)
         match_is_todo = match_manager.is_match_todo(config.newmatch)
-        
+        print('match_is_done', match_is_done)
+        print('match_is_todo', match_is_todo)
         if config.scriptType == '1SET' and not match_is_done:
             config.log('Le match autorisé!', 'success', False, 4, False)
             driver.get(newmatchtxt)
