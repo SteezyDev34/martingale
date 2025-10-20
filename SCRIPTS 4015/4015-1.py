@@ -35,17 +35,7 @@ if len(parts) > 1:
     config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
     if int(config.localhost) < 1024:
         config.localhost = 1024 + int(config.localhost)
-    # Demander confirmation à l'utilisateur
-    if config.systeme == 'Windows':
-        command = f'start chrome --remote-debugging-port={config.localhost} --user-data-dir="{project_directory}\\ChromeDebugProfile{config.localhost}"'
-    else:
-        command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
-
-    confirmation = input(f"Avez-vous exécuté la commande \n{command}\n? (Y/N): ")
-
-    if confirmation.upper() != 'Y' and confirmation.upper() != 'y' and confirmation.upper() != 'O' and confirmation.upper() != 'o':
-        print("Programme arrêté par l'utilisateur.")
-        sys.exit(0)  # Arrêter le programme
+   
 
     print(f'{config.PURPLE}' + text2art(
         f"Start martingal {config.scriptType} {config.script_num}"))  # Crée un texte en art ASCII
@@ -57,7 +47,11 @@ else:
 
 # Chargement des functions
 # Chargement de Chrome driver
-from ChromeDriver.SetDriver import driver
+# Chargement des functions
+config.localhost = 43151
+from ChromeDriver.SetDriver import get_script_driver
+num_fenetre = 2
+driver = get_script_driver(num_fenetre)
 
 from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
