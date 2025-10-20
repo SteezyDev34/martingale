@@ -2,6 +2,7 @@
 import os
 import sys
 import time
+import json
 import socket
 import subprocess
 
@@ -136,8 +137,14 @@ def init_driver(port, window_handle=None):
             print("❌ Impossible de switcher sur la fenêtre spécifiée")
     return driver
 
-def create_new_window(port):
-    """Crée une nouvelle fenêtre Chrome et retourne son handle"""
+def create_new_window(port, num_fenetre, url=config.site_url):
+    """
+    Crée une nouvelle fenêtre Chrome et retourne son handle
+    Args:
+        port (int): Port de débogage Chrome
+        url (str): URL à ouvrir dans la nouvelle fenêtre (par défaut: about:blank)
+    """
+    print(url)
     try:
         temp_driver = init_driver(port)
         if not temp_driver:
@@ -147,8 +154,8 @@ def create_new_window(port):
         initial_handles = temp_driver.window_handles
         initial_handle = temp_driver.current_window_handle
         
-        # Ouvre une nouvelle fenêtre vide avec une taille spécifique
-        temp_driver.execute_script("window.open('about:blank', '_blank', 'width=500,height=375')")
+        # Ouvre une nouvelle fenêtre avec l'URL spécifiée
+        temp_driver.execute_script(f"window.open('{url}', '_blank', 'width=500,height=375')")
         time.sleep(1)
         
         # Récupère les nouveaux handles et trouve le nouveau
@@ -161,14 +168,10 @@ def create_new_window(port):
         temp_driver.switch_to.window(new_handle)
         
         # Configure la position de la fenêtre en cascade
-        window_count = len(temp_driver.window_handles)
-        x_pos = (window_count - 1) * 500
+        x_pos = (num_fenetre - 1) * 500
         y_pos = 0
         temp_driver.set_window_position(x_pos, y_pos)
         temp_driver.set_window_size(500, 375)
-
-        # Charge une page vide pour initialiser la fenêtre
-        temp_driver.get("about:blank")
         
         print(f"✅ Nouvelle fenêtre créée et configurée (handle: {new_handle[:8]}...)")
         return new_handle
@@ -196,8 +199,6 @@ def create_new_window(port):
         temp_driver.set_window_position(200, 200)
         temp_driver.set_window_size(1000, 800)
         
-        # Charge une page vide pour initialiser la fenêtre
-        temp_driver.get("about:blank")
         
         print(f"✅ Nouvelle fenêtre créée et configurée (handle: {new_handle[:8]}...)")
         return new_handle
@@ -215,6 +216,46 @@ def create_new_window(port):
 # Variable pour stocker les handles des fenêtres
 window_handles = {}
 
+def save_window_handles():
+    """Sauvegarde les handles des fenêtres dans un fichier JSON"""
+    save_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'window_handles.json')
+    try:
+        with open(save_path, 'w') as f:
+            json.dump(window_handles, f, indent=4)
+        print("💾 Handles des fenêtres sauvegardés")
+    except Exception as e:
+        print(f"❌ Erreur lors de la sauvegarde des handles : {e}")
+
+def load_window_handles():
+    """Charge les handles des fenêtres depuis le fichier JSON"""
+    save_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'window_handles.json')
+    try:
+        if os.path.exists(save_path):
+            with open(save_path, 'r') as f:
+                loaded_handles = json.load(f)
+            print("📂 Handles des fenêtres chargés")
+            return loaded_handles
+        return {}
+    except Exception as e:
+        print(f"❌ Erreur lors du chargement des handles : {e}")
+        return {}
+
+def verify_handles(driver, handles):
+    """Vérifie si les handles sont toujours valides"""
+    valid_handles = {}
+    try:
+        current_handles = set(driver.window_handles)
+        for num, handle in handles.items():
+            if handle in current_handles:
+                valid_handles[num] = handle
+                print(f"✅ Fenêtre {num} existante validée")
+            else:
+                print(f"❌ Fenêtre {num} invalide (handle expiré)")
+        return valid_handles
+    except Exception as e:
+        print(f"❌ Erreur lors de la vérification des handles : {e}")
+        return {}
+
 def get_script_driver(num_fenetre):
     """
     Retourne un driver configuré pour la fenêtre spécifiée
@@ -223,6 +264,8 @@ def get_script_driver(num_fenetre):
     """
     num_str = str(num_fenetre)
 
+    global window_handles
+    
     # Première initialisation
     if not window_handles:
         if not ensure_chrome_running(config.localhost, os.path.dirname(os.path.dirname(__file__))):
@@ -233,23 +276,45 @@ def get_script_driver(num_fenetre):
         if not driver:
             return None
             
-        window_handles['1'] = driver.current_window_handle
-        x_pos = 0
-        y_pos = 0
-        driver.set_window_position(x_pos, y_pos)
-        driver.set_window_size(500, 375)
-        print("✅ Fenêtre 1 (principale) initialisée")
-        # Affiche la taille de la fenêtre principale
-        size = driver.get_window_size()
-        print(f"📐 Taille de la fenêtre 1: {size['width']}x{size['height']}")
+        # Essaie de charger les handles sauvegardés
+        saved_handles = load_window_handles()
+        if saved_handles:
+            print("🔄 Vérification des fenêtres sauvegardées...")
+            window_handles = verify_handles(driver, saved_handles)
+        
+        # Si aucun handle valide n'a été chargé
+        if not window_handles:
+            print("🆕 Initialisation d'une nouvelle session...")
+            window_handles['1'] = driver.current_window_handle
+            driver.set_window_position(0, 0)
+            driver.set_window_size(500, 375)
+            print("✅ Fenêtre 1 (principale) initialisée")
+            save_window_handles()  # Sauvegarde la configuration initiale
+            
+        # Configure les fenêtres existantes
+        for num, handle in window_handles.items():
+            try:
+                driver.switch_to.window(handle)
+                x_pos = (int(num) - 1) * 500
+                y_pos = 0
+                driver.set_window_position(x_pos, y_pos)
+                driver.set_window_size(500, 375)
+                print(f"✅ Fenêtre {num} configurée")
+            except Exception as e:
+                print(f"❌ Erreur lors de la configuration de la fenêtre {num}: {e}")
+                
+        # Revient à la première fenêtre si elle existe
+        if '1' in window_handles:
+            driver.switch_to.window(window_handles['1'])
 
     # Si la fenêtre demandée n'existe pas encore, la créer
     if num_str not in window_handles:
         print(f"🔄 Création de la fenêtre {num_fenetre}...")
-        new_handle = create_new_window(config.localhost)
+        new_handle = create_new_window(config.localhost,num_fenetre)
         if new_handle:
             window_handles[num_str] = new_handle
-            print(f"✅ Fenêtre {num_fenetre} créée avec succès")
+            save_window_handles()  # Sauvegarde la nouvelle configuration
+            print(f"✅ Fenêtre {num_fenetre} créée et sauvegardée avec succès")
         else:
             print(f"❌ Échec de la création de la fenêtre {num_fenetre}")
             return None

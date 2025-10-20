@@ -74,11 +74,6 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
         print('new class')
         classementeDeMatch(driver)
 
-# Call the function to get the code
-if not is_logged_in(driver):
-    loginProcess(driver)
-else:
-    print("You are already logged in.")
 
 is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
 if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
