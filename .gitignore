@@ -21,3 +21,6 @@ session_data.json
 *$py.class
 .DS_Store
 2.session
+
+# Fichiers de gestion des fenêtres Chrome
+ChromeDriver/window_handles.json
