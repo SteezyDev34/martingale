@@ -3,8 +3,11 @@
 
 from selenium.webdriver.common.by import By
 import config
-from Functions.Managers.MatchManager import match_manager
+from Functions.Managers.MatchManager import MatchManager
 from Functions.GetJsonData import getIfGlobalPerte, getIf1setGlobalPerte
+
+# Initialiser l'instance du gestionnaire de matchs
+match_manager = MatchManager.get_instance()
 
 
 def main(driver, bet_item, matchlist_file_name):

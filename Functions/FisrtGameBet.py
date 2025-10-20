@@ -1,4 +1,5 @@
 import inspect
+import time
 
 import config
 from Functions.AfficherParis import AfficherParis
@@ -50,6 +51,7 @@ def FirstGameBet(driver):
 
         if not GetBet(driver, nextBet):
             tentative = tentative + 1
+            time.sleep(5)
             if tentative > 5:
                 config.error = True
                 config.log('error recup jeu #ERR345', 'error', False, 2)
@@ -81,6 +83,7 @@ def FirstGameBet(driver):
                 bet_40a = True
             else:
                 break
+    return bet_40a
 
 
 if __name__ == "__main__":

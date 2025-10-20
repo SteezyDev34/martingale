@@ -84,6 +84,7 @@ requests.adapters.DEFAULT_RETRIES = 3
 
 from Functions import Functions_telegram
 from Functions.getTextFromImageGPT import extraire_pari_depuis_image
+from Functions.TelegramBetsAPI import send_bet_data_to_api, telegram_bets_api
 
 # Déclaration d'une variable globale qui va stocker les codes de paris
 global codeList, betList
@@ -331,7 +332,23 @@ async def my_event_handler(event):
                             try:
                                 pari_dict = json.loads(result)
                                 betList.append(pari_dict)
-                                print(f"Pari ajouté à codeList: {pari_dict}")
+                                print(f"Pari ajouté à betList: {pari_dict}")
+                                
+                                # Envoyer le pari à l'API
+                                try:
+                                    sender_username = sender.username if sender and sender.username else None
+                                    api_success = send_bet_data_to_api(
+                                        pari_dict, 
+                                        message_original=event.raw_text,
+                                        sender_username=sender_username
+                                    )
+                                    if api_success:
+                                        print(f"Pari envoyé avec succès à l'API")
+                                    else:
+                                        print(f"Échec de l'envoi du pari à l'API")
+                                except Exception as api_error:
+                                    print(f"Erreur lors de l'envoi à l'API: {api_error}")
+                                    
                             except json.JSONDecodeError as e:
                                 print(f"Erreur lors de la conversion JSON: {e}")
                                 print(f"Résultat brut: {result}")
@@ -350,7 +367,14 @@ config.scriptType = 'LIVE'
 
 # Fonction de vérification des nouveaux codes et envoi
 def check():
+    from Functions.ProcessTelegramBets import process_api_bets
+    import time
+    
+    last_api_check = 0
+    api_check_interval = 300  # Vérifier l'API toutes les 5 minutes
+    
     while True:
+        # Traitement des codes directs
         if codeList != []:
             driver.get(config.site_line_url)
             try:
@@ -360,15 +384,32 @@ def check():
             else:
                 print(f"Code placé avec succès: {codeList[0]}")
                 del codeList[0]
+        
+        # Traitement des paris en temps réel
         if betList != []:
             try:
-                print('gestion du pari')
+                print('Gestion du pari en temps réel')
                 placer_pari(driver, betList)
             except Exception as e:
                 print(f"Erreur lors du placement du pari: {e}")
             else:
                 print(f"Pari placé avec succès: {betList[0]}")
                 del betList[0]
+        
+        # Vérification périodique de l'API pour les paris non traités
+        current_time = time.time()
+        if current_time - last_api_check > api_check_interval:
+            try:
+                print("Vérification des paris non traités dans l'API...")
+                processed_count = process_api_bets(driver, limit=5)
+                if processed_count > 0:
+                    print(f"Traité {processed_count} paris depuis l'API")
+                last_api_check = current_time
+            except Exception as e:
+                print(f"Erreur lors du traitement des paris API: {e}")
+        
+        # Petite pause pour éviter une boucle trop intensive
+        time.sleep(1)
 
 
 # Lancement d'un thread pour vérifier les messages en continu

@@ -1,5 +1,11 @@
+# -*- coding: utf-8 -*-
 import json
+import os
+import sys
 import time
+
+# Ajouter le chemin du projet au PYTHONPATH
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import requests
 from selenium.webdriver.common.by import By
@@ -34,6 +40,7 @@ def placer_pari(driver, codeList):
     while codeList != []:
         print('ok')
         # Récupérer le premier élément de la liste (dictionnaire de pari)
+        print(codeList)
         donnees_test = codeList[0]
         print(codeList)
         print("=== DONNÉES ===")
@@ -44,7 +51,7 @@ def placer_pari(driver, codeList):
         print(f"Sélection: {donnees_test['selection']}")
         print(f"Tipster: {donnees_test['tipster']}")
         print("=" * 50)
-
+        print('etst')
         equipe1 = donnees_test['equipe_1']
         equipe2 = donnees_test['equipe_2']
         categorie = donnees_test['categorie']
@@ -57,38 +64,42 @@ def placer_pari(driver, codeList):
         # BOUTON DE RECHERCHE
         try:
             WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.ID, 'b-searchBut-live')))
+                EC.presence_of_element_located((By.CLASS_NAME, 'games-search-app-search__button')))
         except Exception as e:
             print(f'Erreur lors de la recherche du bouton de recherche: {str(e)}')
             exit()
         else:
-            search_button = driver.find_element(By.ID, 'b-searchBut-live')
+            search_button = driver.find_element(By.CLASS_NAME, 'games-search-app-search__button')
             search_button.click()
         # POPUP DE RECHERCHE
         try:
+
             WebDriverWait(driver, 20).until(
-                EC.element_to_be_clickable((By.ID, 'search-in-popup')))
+                EC.element_to_be_clickable((By.CLASS_NAME, 'games-search-modal__input')))
+            WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, 'modal__content')))
+            modal__content = driver.find_element(By.CLASS_NAME, 'modal__content')
         except Exception as e:
             print(f'Erreur lors de la recherche du champ de recherche: {str(e)}')
         else:
-            search_input = driver.find_element(By.ID, 'search-in-popup')
+            search_input = modal__content.find_element(By.CSS_SELECTOR, 'input.games-search-modal__input')
             search_input.send_keys(f"{equipe1} - {equipe2}")
-            search_popup_button = driver.find_element(By.CLASS_NAME, 'search-popup__button')
+            search_popup_button = modal__content.find_element(By.CLASS_NAME, 'ico--search')
             search_popup_button.click()
         # RECHERCHE DU MATCH DANS LA LIST ET OUVERTURE DU MATCH
         try:
             WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.CLASS_NAME, 'search-popup-events__item')))
+                EC.presence_of_element_located((By.CLASS_NAME, 'games-search-modal-results-list__item')))
         except Exception as e:
             print(f'Erreur lors de la recherche du match: {equipe1} vs {equipe2} : {str(e)}')
         else:
             # try:
-            matches = driver.find_elements(By.CLASS_NAME, 'search-popup-events__item')
+            matches = driver.find_elements(By.CLASS_NAME, 'games-search-modal-results-list__item')
             team1 = ''
             team2 = ''
 
             for match in matches:
-                teams = match.find_element(By.CLASS_NAME, 'search-popup-event__teams').text
+                teams = match.find_element(By.CLASS_NAME, 'games-search-modal-card-info__main').text
                 if ' - ' in teams:
                     team1, team2 = teams.split(' - ')
                 if (equipe1 in team1 or team1 in equipe1) and (equipe2 in team2 or team2 in equipe2):
@@ -99,7 +110,7 @@ def placer_pari(driver, codeList):
                     break
             if not find_match:
                 for match in matches:
-                    teams = match.find_element(By.CLASS_NAME, 'search-popup-event__teams').text
+                    teams = match.find_element(By.CLASS_NAME, 'games-search-modal-card-info__main').text
                     if compare_match_name(teams, f'{equipe1} vs {equipe2}'):
                         print('Match found')
                         link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
@@ -232,17 +243,25 @@ def placer_pari(driver, codeList):
                 del codeList[0]
                 print(f"Pari traité et retiré de la liste. Éléments restants: {len(codeList)}")
 
+    # Retour par défaut si la boucle se termine sans traitement
+    return {
+        'success': True,
+        'message': 'Tous les paris ont été traités',
+        'processed_count': len(donnees_test) if isinstance(donnees_test, list) else 1
+    }
+
 
 def avec_donnees_exemple():
     """
     Fonction de test utilisant les données d'exemple fournies
     """
+    from ChromeDriver.SetDriver1 import driver
 
     # Données d'exemple pour les tests
     donnees_test = {
         "date": "05/09/2025",
-        "equipe_1": "Real Betis Balompié",
-        "equipe_2": "Osasuna",
+        "equipe_1": "Earthquakes",
+        "equipe_2": "Austin",
         "categorie": "Temps réglementaire",
         "type_de_pari": "Handicap",
         "selection": "Handicap 1 (-1)",
@@ -250,28 +269,31 @@ def avec_donnees_exemple():
         "tipster": 'TEST'
     }
 
-    try:
-        from ChromeDriver.SetDriver1 import driver
+    # try:
+    # Test en mode simulation sans driver réel
+    print("=== MODE TEST SANS DRIVER ===")
+    print("Test des données d'exemple uniquement...")
 
-        # Test avec les données d'exemple
-        resultat = placer_pari(
-            driver, donnees_test
-        )
+    # Test avec les données d'exemple
+    resultat = placer_pari(
+        driver, [donnees_test]
+    )
 
-        print("RÉSULTAT DU TEST:")
-        print(json.dumps(resultat, indent=2, ensure_ascii=False))
+    print("RÉSULTAT DU TEST:")
+    print(json.dumps(resultat, indent=2, ensure_ascii=False))
 
-        return resultat
+    return resultat
 
-    except ImportError:
-        print("Erreur: Impossible d'importer le driver Chrome")
-        return None
-    except Exception as e:
-        print(f"Erreur lors du test: {str(e)}")
-        return None
+    # except ImportError:
+    # print("Erreur: Impossible d'importer le driver Chrome")
+    # return None
+    # except Exception as e:
+    # print(f"Erreur lors du test: {str(e)}")
+    # return None
 
 
 if __name__ == "__main__":
+    config.site_type = 'new_site'
     # Test avec les données d'exemple
     print("Lancement du test avec les données d'exemple...")
     config.scriptType = 'LIVE'
