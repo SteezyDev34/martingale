@@ -182,6 +182,7 @@ def all_script(driver):
                     else:
                         firstjeu = True
                         FirstGameBet(driver)
+                GetIfGameStart(driver)
             elif config.perte > 0:
                 DispatchPerte()
                 config.init_variable()
@@ -227,6 +228,7 @@ def all_script(driver):
         current_game = int(config.jeu_actuel)
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
+            if
             # Check if all script types have global_match_win > 1
             all_below_one = all(
                 float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in

@@ -144,7 +144,6 @@ def create_new_window(port, num_fenetre, url=config.site_url):
         port (int): Port de débogage Chrome
         url (str): URL à ouvrir dans la nouvelle fenêtre (par défaut: about:blank)
     """
-    print(url)
     try:
         temp_driver = init_driver(port)
         if not temp_driver:
@@ -169,7 +168,10 @@ def create_new_window(port, num_fenetre, url=config.site_url):
         
         # Configure la position de la fenêtre en cascade
         x_pos = (num_fenetre - 1) * 500
-        y_pos = 0
+        if num_fenetre > 3:
+            y_pos = 375
+        else:
+            y_pos = 0
         temp_driver.set_window_position(x_pos, y_pos)
         temp_driver.set_window_size(500, 375)
         
@@ -286,7 +288,10 @@ def get_script_driver(num_fenetre):
         if not window_handles:
             print("🆕 Initialisation d'une nouvelle session...")
             window_handles['1'] = driver.current_window_handle
-            driver.set_window_position(0, 0)
+            if num_fenetre > 3:
+                driver.set_window_position(0, 375)
+            else:
+                driver.set_window_position(0, 0)
             driver.set_window_size(500, 375)
             print("✅ Fenêtre 1 (principale) initialisée")
             save_window_handles()  # Sauvegarde la configuration initiale
@@ -321,11 +326,9 @@ def get_script_driver(num_fenetre):
 
     # Vérifie si le handle est toujours valide
     try:
-        print('driver init  ')
         driver = init_driver(config.localhost)
         if not driver:
             return None
-        print('check handle')
         # Vérifie si le handle existe encore dans la liste des fenêtres
         if window_handles[num_str] not in driver.window_handles:
             print(f"🔄 Le handle de la fenêtre {num_fenetre} n'est plus valide, création d'une nouvelle fenêtre...")
@@ -336,7 +339,6 @@ def get_script_driver(num_fenetre):
             else:
                 print(f"❌ Échec de la recréation de la fenêtre {num_fenetre}")
                 return None
-        print('window_handles', window_handles)
         # Connexion à la fenêtre
         driver = init_driver(config.localhost, window_handles[num_str])
         if driver:
