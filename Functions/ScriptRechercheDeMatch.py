@@ -621,7 +621,7 @@ def classementeDeMatch(driver, use_json_cache=True):
                             current_year = None
                             try:
                                 # Attendre jusqu'à 10 secondes que l'élément s'affiche dans bet_item
-                                time_element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
+                                time_element = WebDriverWait(bet_item, 10).until(EC.visibility_of_element_located(
                                     (By.CLASS_NAME, config.classes['events_time'][config.site_type])))
 
                                 if config.site_type == 'old_site':
