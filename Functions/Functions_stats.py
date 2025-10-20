@@ -282,6 +282,8 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
             return 0.0
     except Exception as e:
         config.log(f"Erreur lors de la récupération des IDs", 'warning')
+        if config.devMode:
+            config.log(f"Détails de l'erreur: {e}", 'warning')
         config.log_clear_line(line)
         # Ajouter un avertissement sur la désactivation de la vérification SSL
         return 0.0
