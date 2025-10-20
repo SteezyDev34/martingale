@@ -3823,5 +3823,473 @@
         "winscore": "15:15",
         "timestamp": "2025-10-18 14:33:15",
         "url": "atp basel qualification"
+    },
+    {
+        "montant": 1.16,
+        "cote": "2.1",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 14:38:15",
+        "url": "atp basel qualification"
+    },
+    {
+        "montant": 2.34,
+        "cote": "2.13",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 14:43:20",
+        "url": "atp basel qualification"
+    },
+    {
+        "montant": 4.5,
+        "cote": "2.15",
+        "jeu": 10,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 14:45:28",
+        "url": "atp basel qualification"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.03",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 14:54:22",
+        "url": "atp stockholm"
+    },
+    {
+        "montant": 0.58,
+        "cote": "2.03",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 14:58:34",
+        "url": "atp stockholm"
+    },
+    {
+        "montant": 1.31,
+        "cote": "2.05",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 15:02:00",
+        "url": "atp stockholm"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 15:44:57",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 0.63,
+        "cote": "1.95",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 15:50:53",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 1.43,
+        "cote": "2",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 15:56:19",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 3.22,
+        "cote": "1.95",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 16:15:19",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 6.82,
+        "cote": "1.95",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 16:27:28",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 14.21,
+        "cote": "1.95",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 16:59:19",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.03",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 17:44:14",
+        "url": "atp basel"
+    },
+    {
+        "montant": 0.58,
+        "cote": "2.03",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 17:49:34",
+        "url": "atp basel"
+    },
+    {
+        "montant": 1.34,
+        "cote": "2.03",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 17:53:38",
+        "url": "atp basel"
+    },
+    {
+        "montant": 0.24,
+        "cote": "1.85",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 18:06:58",
+        "url": "wta rio de janeiro"
+    },
+    {
+        "montant": 0.59,
+        "cote": "1.85",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 20:05:16",
+        "url": "wta rio de janeiro"
+    },
+    {
+        "montant": 0.57,
+        "cote": "1.87",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-18 23:54:49",
+        "url": "itf bakersfield women"
+    },
+    {
+        "montant": 0.53,
+        "cote": "1.95",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 03:36:13",
+        "url": "wta tokyo"
+    },
+    {
+        "montant": 1.41,
+        "cote": "1.87",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 03:41:35",
+        "url": "wta tokyo"
+    },
+    {
+        "montant": 0.5,
+        "cote": "2",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 03:45:04",
+        "url": "wta tokyo qualification"
+    },
+    {
+        "montant": 1.2,
+        "cote": "2",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 03:49:23",
+        "url": "wta tokyo qualification"
+    },
+    {
+        "montant": 2.99,
+        "cote": "1.87",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 03:55:11",
+        "url": "wta tokyo qualification"
+    },
+    {
+        "montant": 0.22,
+        "cote": "1.93",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 04:05:06",
+        "url": "wta tampico"
+    },
+    {
+        "montant": 0.21,
+        "cote": "1.95",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 05:04:55",
+        "url": "wta guangzhou"
+    },
+    {
+        "montant": 0.23,
+        "cote": "1.87",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 07:37:53",
+        "url": "wta guangzhou qualification"
+    },
+    {
+        "montant": 0.21,
+        "cote": "1.95",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 11:23:20",
+        "url": "wta ningbo"
+    },
+    {
+        "montant": 0.22,
+        "cote": "1.93",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 12:12:13",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 0.62,
+        "cote": "2",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 12:17:41",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 1.55,
+        "cote": "1.93",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 12:20:18",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 3.19,
+        "cote": "2",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 12:24:30",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 7.08,
+        "cote": "1.93",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 12:28:32",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 13.86,
+        "cote": "2",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 12:32:30",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 29.39,
+        "cote": "1.95",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 12:35:07",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 57.51,
+        "cote": "2",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 12:40:48",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 123.89,
+        "cote": "1.93",
+        "jeu": 10,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 12:44:13",
+        "url": "atp almaty"
+    },
+    {
+        "montant": 0.47,
+        "cote": "2.07",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 13:06:53",
+        "url": "atp basel qualification"
+    },
+    {
+        "montant": 0.5,
+        "cote": "2",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 14:10:07",
+        "url": "challenger brest qualification"
+    },
+    {
+        "montant": 1.29,
+        "cote": "1.93",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 14:14:18",
+        "url": "challenger brest qualification"
+    },
+    {
+        "montant": 2.86,
+        "cote": "1.94",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 14:18:35",
+        "url": "challenger brest qualification"
+    },
+    {
+        "montant": 5.37,
+        "cote": "2.07",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 14:21:00",
+        "url": "challenger brest qualification"
+    },
+    {
+        "montant": 12.17,
+        "cote": "1.93",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 14:24:37",
+        "url": "challenger brest qualification"
+    },
+    {
+        "montant": 25.2,
+        "cote": "1.94",
+        "jeu": 10,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 14:39:48",
+        "url": "challenger brest qualification"
+    },
+    {
+        "montant": 52.78,
+        "cote": "1.93",
+        "jeu": 3,
+        "set": "2",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 15:00:10",
+        "url": "challenger brest qualification"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.23",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 16:41:55",
+        "url": "atp brussels"
+    },
+    {
+        "montant": 0.4,
+        "cote": "2.25",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 18:50:12",
+        "url": "challenger brest qualification"
+    },
+    {
+        "montant": 0.81,
+        "cote": "2.35",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 18:54:48",
+        "url": "challenger brest qualification"
+    },
+    {
+        "montant": 0.57,
+        "cote": "1.87",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 19:08:38",
+        "url": "challenger hamburg qualification"
+    },
+    {
+        "montant": 0.54,
+        "cote": "1.93",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 19:35:33",
+        "url": "challenger hamburg qualification"
+    },
+    {
+        "montant": 1.1,
+        "cote": "2.13",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 19:39:52",
+        "url": "challenger hamburg qualification"
+    },
+    {
+        "montant": 2.82,
+        "cote": "1.9",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 19:48:58",
+        "url": "challenger hamburg qualification"
+    },
+    {
+        "montant": 0.44,
+        "cote": "2.13",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-19 20:00:36",
+        "url": "challenger sioux falls"
     }
 ]

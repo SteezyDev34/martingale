@@ -48,6 +48,7 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
     while not selection and tentative < 3:
         RetourTpsReg(driver)
         try:
+            driver.execute_script("window.scrollTo(0, 0);")
             element = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located(
                     (By.CLASS_NAME, config.classes['period_select'][config.site_type]))
@@ -65,6 +66,7 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
             config.log('Champ déroulant trouvé !', 'success', False, 2)
             logline +=1
             try:
+                driver.execute_script("window.scrollTo(0, 0);")
                 select_form[0].click()
                 time.sleep(1)
             except Exception as e:
@@ -73,6 +75,7 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                 ModalHandler(driver)
                 tentative = tentative + 1
             else:
+                driver.execute_script("window.scrollTo(0, 0);")
                 config.log('ouverture du champ déroulant...', 'info', True, 2)
                 time.sleep(1)
                 try:
@@ -119,15 +122,18 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                                     else:
                                         paris = 0
                                         tentative = 0
+                                        driver.execute_script("window.scrollTo(0, 0);")
                                         while paris == 0 and tentative < 1:
                                             try:
                                                 try:
+                                                    driver.execute_script("window.scrollTo(0, 0);")
                                                     toolbar.find_elements(By.CLASS_NAME,
                                                                           config.classes[
                                                                               'search_input'][
                                                                               config.site_type])[
                                                         0].clear()
                                                 except:
+                                                    driver.execute_script("window.scrollTo(0, 0);")
                                                     toolbar = driver.find_elements(By.CLASS_NAME,
                                                                                    config.classes['search_toolbar'][
                                                                                        config.site_type]

@@ -88,8 +88,6 @@ for i in config.scriptTypeList:
     config.ScriptConfig(i)
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
 config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
-config.running_file_name = f"{config.projectPath}/SCRIPTS 456P/running"
-config.matchlist_file_name = f"{config.projectPath}/SCRIPTS 456P/matchlist"
 config.total_want_win = config.total_want_win
 while (config.win < 100):
     try:

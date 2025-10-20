@@ -1,15 +1,12 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 
-# Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
 
-# Récupérer le dossier parent du fichier actuel
 parent_directory = os.path.dirname(current_file_path)
-# ajouter un autre niveau parent si nécessaire
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
-# Vérification de l'environnement
 if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
     import VenvDependencyManager
 
@@ -37,7 +34,7 @@ if len(parts) > 1:
     print(config.localhost)
     # Demander confirmation à l'utilisateur
     if config.systeme == 'Windows':
-        command = f'start chrome --remote-debugging-port={config.localhost} --user-data-dir="{project_directory}\\ChromeDebugProfile{config.localhost}"'
+        command = f"start chrome"
     else:
         command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
 

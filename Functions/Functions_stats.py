@@ -223,9 +223,15 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
         result = cache[p1_key] + cache[p2_key]
         # return result
 
+    print("Recherche des IDs des joueurs via API...")
+    line += 1
     url1 = f"http://datas.sc2vagr6376.universe.wf/api/sports/2/teams/search?search={playerName1.replace(' ', '+')}"
     url2 = f"http://datas.sc2vagr6376.universe.wf/api/sports/2/teams/search?search={playerName2.replace(' ', '+')}"
     try:
+        print(f"Requête API pour {playerName1}: {url1}")
+        line += 1
+        print(f"Requête API pour {playerName2}: {url2}")
+        line += 1
         # Désactiver la vérification SSL pour les certificats auto-signés
         d1 = requests.get(url1, headers=headers, verify=False).json()
         d2 = requests.get(url2, headers=headers, verify=False).json()
@@ -260,13 +266,13 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
         if pid1 is None and d1['data']:
             # pid1 = d1['data'][0]['sofascore_id']
             pid1 = d1['data'][0]['id']
-            print(f"Aucun joueur individuel trouvé pour {playerName1}, utilisation de (ID: {pid1})")
+            print(f"Aucun joueur individuel trouvé pour {playerName1}, utilisation du premier résultat (ID: {pid1})")
             line += 1
 
         if pid2 is None and d2['data']:
             # pid2 = d2['data'][0]['sofascore_id']
             pid2 = d2['data'][0]['id']
-            print(f"Aucun joueur individuel trouvé pour {playerName2}, utilisation de (ID: {pid2})")
+            print(f"Aucun joueur individuel trouvé pour {playerName2}, utilisation du premier résultat (ID: {pid2})")
             line += 1
 
         if not pid1 and not pid2:
