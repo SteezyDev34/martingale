@@ -321,10 +321,11 @@ def get_script_driver(num_fenetre):
 
     # Vérifie si le handle est toujours valide
     try:
+        print('driver init  ')
         driver = init_driver(config.localhost)
         if not driver:
             return None
-
+        print('check handle')
         # Vérifie si le handle existe encore dans la liste des fenêtres
         if window_handles[num_str] not in driver.window_handles:
             print(f"🔄 Le handle de la fenêtre {num_fenetre} n'est plus valide, création d'une nouvelle fenêtre...")
@@ -335,7 +336,7 @@ def get_script_driver(num_fenetre):
             else:
                 print(f"❌ Échec de la recréation de la fenêtre {num_fenetre}")
                 return None
-
+        print('window_handles', window_handles)
         # Connexion à la fenêtre
         driver = init_driver(config.localhost, window_handles[num_str])
         if driver:
