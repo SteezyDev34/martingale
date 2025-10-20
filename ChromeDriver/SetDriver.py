@@ -168,7 +168,10 @@ def create_new_window(port, num_fenetre, url=config.site_url):
         
         # Configure la position de la fenêtre en cascade
         x_pos = (num_fenetre - 1) * 500
-        y_pos = 0
+        if num_fenetre > 3:
+            y_pos = 375
+        else:
+            y_pos = 0
         temp_driver.set_window_position(x_pos, y_pos)
         temp_driver.set_window_size(500, 375)
         
@@ -285,7 +288,10 @@ def get_script_driver(num_fenetre):
         if not window_handles:
             print("🆕 Initialisation d'une nouvelle session...")
             window_handles['1'] = driver.current_window_handle
-            driver.set_window_position(0, 0)
+            if num_fenetre > 3:
+                driver.set_window_position(0, 375)
+            else:
+                driver.set_window_position(0, 0)
             driver.set_window_size(500, 375)
             print("✅ Fenêtre 1 (principale) initialisée")
             save_window_handles()  # Sauvegarde la configuration initiale
