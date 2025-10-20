@@ -21,7 +21,7 @@ def GetSetActuel(driver):
             0].text
     except Exception as e:
         set_container_selector = config.classes["set_container"][config.site_type]
-        config.log(f'#E0009 {set_container_selector} introuvable', 'warning')
+        config.log(f'#E0009 {set_container_selector} introuvable', 'warning', False)
         config.log_clear_line()
         return False
     else:
@@ -29,18 +29,18 @@ def GetSetActuel(driver):
             numset = config.set_actuel.split(' ')[0]
             numset = int(''.join(char for char in numset if char.isdigit()))
         except Exception as e:
-            config.log('#E0010 erreur : numset', 'warning', True, 3)
+            config.log('#E0010 erreur : numset', 'warning', False, 3)
             config.log_clear_line()
             return False
         else:
             config.set_actuel = str(numset)
             if config.saved_set != config.set_actuel:
-                config.log('Nouveau Set actuel : ' + str(config.set_actuel), '', True, 3)
-                # config.log_clear_line()
+                config.log('Nouveau Set actuel : ' + str(config.set_actuel), '', False, 3)
+                config.log_clear_line()
                 return True
             else:
-                config.log('Set actuel : ' + str(config.set_actuel), '', True, 3)
-                # config.log_clear_line()
+                config.log('Set actuel : ' + str(config.set_actuel), '', False, 3)
+                config.log_clear_line()
                 return True
 
     return True
@@ -64,7 +64,7 @@ def GetQTtActuel(driver):
             return False
         else:
             config.set_actuel = str(numset)
-            config.log(str(numset) + ' QT','info', True, 3)
+            config.log(str(numset) + ' QT', 'info', True, 3)
             if config.saved_set != config.set_actuel:
                 config.log('Nouveau QT actuel : ' + config.set_actuel, '', True, 3)
                 # config.log_clear_line()

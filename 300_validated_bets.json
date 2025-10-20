@@ -5578,5 +5578,14 @@
         "winscore": "0:30",
         "timestamp": "2025-10-20 11:36:11",
         "url": "wta guangzhou"
+    },
+    {
+        "montant": 0.33,
+        "cote": "2.8",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-20 11:45:09",
+        "url": "wta guangzhou"
     }
 ]

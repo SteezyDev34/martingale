@@ -4291,5 +4291,41 @@
         "winscore": "15:15",
         "timestamp": "2025-10-19 20:00:36",
         "url": "challenger sioux falls"
+    },
+    {
+        "montant": 0.22,
+        "cote": "1.9",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-20 11:38:43",
+        "url": "wta guangzhou"
+    },
+    {
+        "montant": 0.71,
+        "cote": "1.87",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-20 11:46:12",
+        "url": "wta guangzhou"
+    },
+    {
+        "montant": 1.65,
+        "cote": "1.93",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-20 11:50:42",
+        "url": "wta guangzhou"
+    },
+    {
+        "montant": 3.89,
+        "cote": "1.87",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2025-10-20 11:53:35",
+        "url": "wta guangzhou"
     }
 ]
