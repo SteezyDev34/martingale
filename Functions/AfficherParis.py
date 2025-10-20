@@ -37,7 +37,7 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
         elif config.scriptType == 'BREAK':
             key = 'Gagne dans le jeu'
         else:
-            key = 'Score du jeu. ' + theset + args
+            key = 'Score de la partie. ' + theset + args
     else:
         theset = ''
         args = categorie
@@ -57,14 +57,14 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
             period_select_selector = config.classes['period_select'][config.site_type]
             config.log(f"Champ déroulant {period_select_selector} introuvable !", "warning",
                        False, 2)
-            logline +=1
+            logline += 1
             config.log(f'tentative {tentative}', 'warning', False, 2)
-            logline +=1
+            logline += 1
             tentative = tentative + 1
         else:
             select_form = driver.find_elements(By.CLASS_NAME, config.classes['period_select'][config.site_type])
             config.log('Champ déroulant trouvé !', 'success', False, 2)
-            logline +=1
+            logline += 1
             try:
                 driver.execute_script("window.scrollTo(0, 0);")
                 select_form[0].click()
@@ -99,7 +99,7 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                                 select_option_text = select_option.text
                             except Exception as e:
                                 config.log('#E0015 Aucun élements multiselect__option', 'error', False, 3)
-                                logline +=1
+                                logline += 1
                                 tentative = tentative + 1
                                 config.log(f'tentative {tentative}', 'warning', False, 3)
                                 logline += 1
@@ -143,7 +143,6 @@ def AfficherParis(driver, categorie='', type_de_pari='', ):
                                                         'ui_search_to_click'][
                                                         config.site_type])[0]
                                                     searchbutton.click()
-
 
                                                 toolbar.find_elements(By.CLASS_NAME,
                                                                       config.classes[

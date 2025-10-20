@@ -5569,5 +5569,14 @@
         "winscore": "30:0",
         "timestamp": "2025-10-19 20:05:43",
         "url": "challenger sioux falls"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.55",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-20 11:36:11",
+        "url": "wta guangzhou"
     }
 ]

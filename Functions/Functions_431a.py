@@ -83,28 +83,31 @@ def all_script(driver):
     current_game = int(config.jeu_actuel)
     allfirstgamebet = False
     while not allfirstgamebet:
+        allfirstgamebet = True
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
-        # Check if all script types have global_match_win > 1
-        all_below_one = all(
-            float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
-            config.scriptTypeList)
-        if all_below_one:
-            for st in config.scriptTypeList:
-                config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
-                           'success', False)
-            return True
-        if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
-            config.log(
-                f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
-        else:
-            config.log(
-                f' {scriptType} Net profit: {config.global_match_win[scriptType]} /{config.total_want_win[scriptType]}')
-            config.log(f" {scriptType} FIN {config.scriptType}", 'success', False)
-            continue
+            # Check if all script types have global_match_win > 1
+            all_below_one = all(
+                float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
+                config.scriptTypeList)
+            if all_below_one:
+                for st in config.scriptTypeList:
+                    config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
+                               'success', False)
+                return True
+            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
+                config.log(
+                    f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
+            else:
+                config.log(
+                    f' {scriptType} Net profit: {config.global_match_win[scriptType]} /{config.total_want_win[scriptType]}')
+                config.log(f" {scriptType} FIN {config.scriptType}", 'success', False)
+                continue
 
-        ##PREPARATTION PREMIER PARIS
-        FirstGameBet(driver)
+            ##PREPARATTION PREMIER PARIS
+            FirstGameBet(driver)
+            if not config.validated_bet:
+                allfirstgamebet: False
 
     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
     print(f'{config.PURPLE}-' * 30)
@@ -126,7 +129,7 @@ def all_script(driver):
     passageset = False
     while not config.error:
         GetJeuActuel(driver)
-        
+
         # WAIT FOR GAME START
         if passageset:
             GetSetActuel(driver)
