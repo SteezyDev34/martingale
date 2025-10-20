@@ -1,6 +1,6 @@
 import os
 import sys
-
+import time
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
 
@@ -48,6 +48,7 @@ else:
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
 num_fenetre = 3
+time.sleep((num_fenetre - 1) * 30)  # Attendre un peu pour s'assurer que la fenêtre est prête
 driver = get_script_driver(num_fenetre)
 
 from Functions import Functions_456P

@@ -319,7 +319,7 @@ def get_script_driver(num_fenetre):
                 screen_width = screen_size[0]
                 fenetre_size = screen_width / 4
                 # Calcule la position en fonction de la taille de l'écran
-                x_pos = ((num - 1) * fenetre_size)
+                x_pos = ((int(num) - 1) * fenetre_size)
                 print('x_pos', x_pos)
                 if int(num) > 4:
                     y_pos = 375
