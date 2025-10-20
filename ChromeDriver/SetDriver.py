@@ -105,7 +105,7 @@ def init_driver(port, window_handle=None):
     """Initialise le driver Selenium avec une fenêtre spécifique en option"""
     Path = os.path.dirname(os.path.abspath(__file__))
     Path = Path + ('\\chromedriver.exe' if config.systeme == 'Windows' else '/chromedriver')
-    
+    print('win', window_handle)
     opt = Options()
     opt.add_experimental_option("debuggerAddress", f"localhost:{port}")
     
