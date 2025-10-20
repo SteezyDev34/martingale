@@ -220,6 +220,11 @@ classes = {
             'old_site': 'c-events__item_game',
             'new_site': 'dashboard-game-block'
         },
+    'dashboard-game__block':
+        {
+            'old_site': 'c-events__item_game',
+            'new_site': 'dashboard-game__block'
+        },
     'team_wrap':
         {
             'old_site': 'c-events__teams',

@@ -11,9 +11,10 @@ def WaitWhileTimeAppear():
     time_show = False
 
     while not time_show and tentative < 10:
+        tentative += 1
         try:
             bet_items = driver.find_elements(By.CLASS_NAME,
-                                             config.classes['dashboard_game_block_row'][
+                                             config.classes['dashboard-game__block'][
                                                  config.site_type])
         except:
             # s'il y une erreur on passe au suivant
@@ -30,7 +31,6 @@ def WaitWhileTimeAppear():
                     time_element = wait.until(EC.presence_of_element_located(
                         (By.CLASS_NAME, config.classes['events_time'][config.site_type])))
                 except Exception as e:
-                    tentative += 1
                     events_time_selector = config.classes['events_time'][config.site_type]
                     config.log(
                         f'heure de debut non trouvé {events_time_selector} ',
