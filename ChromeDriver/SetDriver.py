@@ -167,7 +167,12 @@ def create_new_window(port, num_fenetre, url=config.site_url):
         temp_driver.switch_to.window(new_handle)
         
         # Configure la position de la fenêtre en cascade
-        x_pos = (num_fenetre - 1) * 500
+        # Récupère la taille de l'écran
+        screen_size = temp_driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
+        screen_width = screen_size[0]
+        fenetre_size = screen_width / 4
+        # Calcule la position en fonction de la taille de l'écran
+        x_pos = ((num_fenetre - 1) * fenetre_size) 
         if num_fenetre > 4:
             y_pos = 375
         else:
@@ -288,11 +293,15 @@ def get_script_driver(num_fenetre):
         if not window_handles:
             print("🆕 Initialisation d'une nouvelle session...")
             window_handles['1'] = driver.current_window_handle
+            # Récupère la taille de l'écran
+            screen_size = driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
+            screen_width = screen_size[0]
+            fenetre_size = screen_width / 4
+            # Calcule la position en fonction de la taille de l'écran
+            x_pos = ((num_fenetre - 1) * fenetre_size)
             if num_fenetre > 4:
-                x_pos = (int(num_fenetre) - 1) * 500
                 y_pos = 375
             else:
-                x_pos = (int(num_fenetre) - 1) * 500
                 y_pos = 0
             driver.set_window_position(x_pos, y_pos)
             driver.set_window_size(500, 375)
@@ -303,11 +312,15 @@ def get_script_driver(num_fenetre):
         for num, handle in window_handles.items():
             try:
                 driver.switch_to.window(handle)
+                # Récupère la taille de l'écran
+                screen_size = driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
+                screen_width = screen_size[0]
+                fenetre_size = screen_width / 4
+                # Calcule la position en fonction de la taille de l'écran
+                x_pos = ((num_fenetre - 1) * fenetre_size)
                 if int(num) > 4:
-                    x_pos = (int(num) - 1) * 500
                     y_pos = 375
                 else:
-                    x_pos = (int(num) - 1) * 500
                     y_pos = 0
                 driver.set_window_position(x_pos, y_pos)
                 driver.set_window_size(500, 375)
