@@ -541,22 +541,8 @@ def log(message, type="", clear=True, indent=0, show_script_type=True):
     # Sauvegarde protégée contre les interruptions
     try:
         saveLog(message)
-    except KeyboardInterrupt:
-        # En cas d'interruption, essayer de sauvegarder rapidement puis continuer l'interruption
-        print(f"\n⚠️ Script interrompu pendant le logging. Message: {message[:50]}...")
-        try:
-            # Tentative de sauvegarde d'urgence sans formatage complexe
-            import datetime
-            timestamp = datetime.datetime.now().strftime("%H:%M:%S")
-            with open("emergency_log.txt", "a", encoding="utf-8") as emergency:
-                emergency.write(f"{timestamp}: [INTERRUPTED] {message}\n")
-        except:
-            pass  # Si même ça échoue, on abandonne silencieusement
-        raise  # Re-lancer l'interruption pour arrêter le script
-    except Exception as log_error:
-        # Pour autres erreurs de logging, continuer le script mais signaler l'erreur
-        print(f"⚠️ Erreur de logging (continuant quand même): {log_error}")
-        pass
+    except:
+        pass  # Si même ça échoue, on abandonne silencieusement
 
 
 def log_clear_line(line_number=1):
