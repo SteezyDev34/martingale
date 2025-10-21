@@ -50,7 +50,7 @@ else:
 # Chargement de Chrome driver
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
-num_fenetre = 1
+num_fenetre = 5
 driver = get_script_driver(num_fenetre)
 from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte
