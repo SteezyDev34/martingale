@@ -1,0 +1,9 @@
+requests>=2.32.3
+beautifulsoup4>=4.13.3
+opencv-python>=4.11.0.86
+pillow>=11.1.0
+pytesseract>=0.3.13
+telepot>=12.7
+numpy>=2.0.2
+certifi>=2023.7.22
+urllib3>=1.26.18

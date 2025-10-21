@@ -173,7 +173,6 @@ def create_new_window(port, num_fenetre, url=config.site_url):
         fenetre_size = screen_width / 4
         # Calcule la position en fonction de la taille de l'écran
         x_pos = ((num_fenetre - 1) * fenetre_size) 
-        print('x_pos', x_pos)
         if num_fenetre > 4:
             y_pos = 375
         else:
@@ -300,7 +299,6 @@ def get_script_driver(num_fenetre):
             fenetre_size = screen_width / 4
             # Calcule la position en fonction de la taille de l'écran
             x_pos = ((num_fenetre - 1) * fenetre_size)
-            print('x_pos', x_pos)
             if num_fenetre > 4:
                 y_pos = 375
             else:
@@ -320,7 +318,6 @@ def get_script_driver(num_fenetre):
                 fenetre_size = screen_width / 4
                 # Calcule la position en fonction de la taille de l'écran
                 x_pos = ((int(num) - 1) * fenetre_size)
-                print('x_pos', x_pos)
                 if int(num) > 4:
                     y_pos = 375
                 else:
