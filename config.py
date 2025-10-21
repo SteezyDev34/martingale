@@ -375,42 +375,85 @@ def saveLog(txt):
         os.makedirs(nom_du_repertoire)
 
     try:
-        # Gestion robuste des interruptions clavier
+        # Gestion robuste des interruptions clavier et des erreurs d'encodage
         try:
-            # Ouvrir le fichier en mode ajout avec timeout implicite
-            with open(nom_du_fichier, 'a+', encoding='utf-8', buffering=1) as fichier:
+            # Vérifier d'abord si le fichier existe et s'il est lisible
+            if os.path.exists(nom_du_fichier):
+                try:
+                    # Test de lecture pour détecter les problèmes d'encodage
+                    with open(nom_du_fichier, 'r', encoding='utf-8') as test_file:
+                        test_file.seek(0, 2)  # Aller à la fin pour tester
+                except UnicodeDecodeError:
+                    # Fichier corrompu, le sauvegarder et en créer un nouveau
+                    backup_file = f"{nom_du_fichier}.corrupted.{int(time.time())}"
+                    print(f"⚠️ Fichier de log corrompu, sauvegarde vers: {backup_file}")
+                    try:
+                        os.rename(nom_du_fichier, backup_file)
+                    except:
+                        # Si on ne peut pas renommer, supprimer le fichier corrompu
+                        os.remove(nom_du_fichier)
+                        print(f"❌ Fichier corrompu supprimé: {nom_du_fichier}")
+            
+            # Ouvrir le fichier en mode ajout avec gestion d'erreur renforcée
+            with open(nom_du_fichier, 'a+', encoding='utf-8', buffering=1, errors='replace') as fichier:
                 # Méthode plus efficace - éviter de lire tout le fichier
                 fichier.seek(0, 2)  # Aller à la fin du fichier
                 position = fichier.tell()
                 
                 # Ajouter un saut de ligne si le fichier n'est pas vide
                 if position > 0:
-                    # Vérifier le dernier caractère pour éviter les doubles sauts de ligne
-                    fichier.seek(position - 1)
-                    dernier_char = fichier.read(1)
-                    fichier.seek(0, 2)  # Retourner à la fin
-                    
-                    if dernier_char and dernier_char != '\n':
+                    try:
+                        # Vérifier le dernier caractère pour éviter les doubles sauts de ligne
+                        fichier.seek(position - 1)
+                        dernier_char = fichier.read(1)
+                        fichier.seek(0, 2)  # Retourner à la fin
+                        
+                        if dernier_char and dernier_char != '\n':
+                            fichier.write('\n')
+                    except:
+                        # En cas d'erreur de lecture, simplement ajouter une ligne
                         fichier.write('\n')
 
+                # Nettoyer le texte pour éviter les caractères problématiques
+                txt_clean = str(txt).encode('utf-8', errors='replace').decode('utf-8')
+                
                 # Écrire le texte à la fin du fichier
-                fichier.write(f"{heure_actuelle} : {txt}")
+                fichier.write(f"{heure_actuelle} : {txt_clean}")
                 fichier.flush()  # Forcer l'écriture immédiate
                 
         except KeyboardInterrupt:
             # Gestion spécifique de Ctrl+C - essayer de sauvegarder quand même
             print(f"⚠️ Interruption détectée lors de l'écriture du log: {txt[:50]}...")
             try:
-                # Tentative rapide de sauvegarde
-                with open(nom_du_fichier, 'a', encoding='utf-8') as fichier_urgence:
-                    fichier_urgence.write(f"\n{heure_actuelle} : [INTERROMPU] {txt}")
+                # Tentative rapide de sauvegarde avec nettoyage du texte
+                txt_clean = str(txt).encode('utf-8', errors='replace').decode('utf-8')
+                with open(nom_du_fichier, 'a', encoding='utf-8', errors='replace') as fichier_urgence:
+                    fichier_urgence.write(f"\n{heure_actuelle} : [INTERROMPU] {txt_clean}")
             except:
                 # Si même ça échoue, au moins l'afficher
                 print(f"❌ Impossible de sauvegarder: {txt}")
             raise  # Re-lancer l'interruption
             
     except Exception as e:
-        print(f'Erreur de log: {e}')
+        error_msg = str(e)
+        print(f'❌ Erreur de log: {error_msg}')
+        
+        # Essayer une sauvegarde d'urgence avec un nom de fichier alternatif
+        try:
+            emergency_file = f"{projectPath}/Logs/emergency_log_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+            os.makedirs(os.path.dirname(emergency_file), exist_ok=True)
+            
+            txt_clean = str(txt).encode('ascii', errors='replace').decode('ascii')
+            with open(emergency_file, 'w', encoding='ascii', errors='replace') as emergency:
+                emergency.write(f"{heure_actuelle} : [ERREUR_LOG] {txt_clean}\n")
+                emergency.write(f"Erreur originale: {error_msg}\n")
+            
+            print(f"💾 Log de secours créé: {emergency_file}")
+        
+        except Exception as emergency_error:
+            print(f"❌ Impossible de créer un log de secours: {emergency_error}")
+            # Dernière tentative: afficher dans la console seulement
+            print(f"LOG PERDU: {heure_actuelle} - {txt}")
 
 
 import colorama
