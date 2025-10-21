@@ -52,11 +52,6 @@ def all_script(driver):
         newmatchFromUrl(driver)
 
 
-
-        config.log("-" * 60, "success", False, False, False)
-        config.log(f'MATCH OK : {str(config.teams)} | {config.ligue_name}', 'success', False, 0, False)
-        config.log("-" * 60, "success", False, False, False)
-
         if not config.win_type:
             config.win_type = input("Quel est le win type V1/V2")
 
