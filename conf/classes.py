@@ -55,32 +55,38 @@ classes = {
     'multiselect_container_wrapper':
         {
             'old_site': 'multiselect__content-wrapper',
-            'new_site': 'multiselect__content-wrapper'
+            'new_site': 'multiselect__content-wrapper',
+            'mobile_site': 'game-sub-games__list'
         },
     'multiselect_element':
         {
             'old_site': 'multiselect__element',
-            'new_site': 'multiselect__element'
+            'new_site': 'multiselect__element',
+            'mobile_site': 'game-sub-games__item'
         },
     'search_toolbar':
         {
             'old_site': 'scoreboard-nav-items-search',
-            'new_site': 'game-toolbar'
+            'new_site': 'game-toolbar',
+            'mobile_site': 'game-search'
         },
     'ui_search_to_click':
         {
             'old_site': 'scoreboard-nav-items-search__input',
-            'new_site': 'ui-search-default__button'
+            'new_site': 'ui-search-default__button',
+            'mobile_site': 'game-search__input'
         },
     'search_input':
         {
             'old_site': 'scoreboard-nav-items-search__input',
-            'new_site': 'ui-search-default__input'
+            'new_site': 'ui-search-default__input',
+            'mobile_site': 'game-search__input'
         },
     'bet_list_container':
         {
             'old_site': 'bet_group',
-            'new_site': 'market-grid-canvas__container'
+            'new_site': 'market-grid-canvas__container',
+            'mobile_site': 'game-markets-content'
         },
     'coupon_bet_remove':
         {

@@ -60,58 +60,100 @@ def placer_pari(driver, codeList):
         config.tipster = donnees_test['tipster']
         config.match_name = equipe1 + ' - ' + equipe2
         find_match = False
-        driver.get('https://1xbet.com/fr')
+        driver.get('https://ca.1xbet.com/fr?platform_type=mobile')
         # BOUTON DE RECHERCHE
         try:
             WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.CLASS_NAME, 'games-search-app-search__button')))
+                EC.presence_of_element_located((By.CLASS_NAME, 'home-navigation__link--search')))
         except Exception as e:
             print(f'Erreur lors de la recherche du bouton de recherche: {str(e)}')
             exit()
         else:
-            search_button = driver.find_element(By.CLASS_NAME, 'games-search-app-search__button')
+            search_button = driver.find_element(By.CLASS_NAME, 'home-navigation__link--search')
             search_button.click()
         # POPUP DE RECHERCHE
         try:
 
             WebDriverWait(driver, 20).until(
-                EC.element_to_be_clickable((By.CLASS_NAME, 'games-search-modal__input')))
+                EC.element_to_be_clickable((By.CLASS_NAME, 'ui-search-default')))
             WebDriverWait(driver, 20).until(
-                EC.element_to_be_clickable((By.CLASS_NAME, 'modal__content')))
-            modal__content = driver.find_element(By.CLASS_NAME, 'modal__content')
+                EC.element_to_be_clickable((By.CLASS_NAME, 'search-app__head')))
+            modal__content = driver.find_element(By.CLASS_NAME, 'search-app__head')
         except Exception as e:
             print(f'Erreur lors de la recherche du champ de recherche: {str(e)}')
         else:
-            search_input = modal__content.find_element(By.CSS_SELECTOR, 'input.games-search-modal__input')
+            search_input = modal__content.find_element(By.CSS_SELECTOR, 'input.ui-search-default')
             search_input.send_keys(f"{equipe1} - {equipe2}")
-            search_popup_button = modal__content.find_element(By.CLASS_NAME, 'ico--search')
+            search_popup_button = modal__content.find_element(By.CLASS_NAME, 'ui-search-default__ico')
             search_popup_button.click()
         # RECHERCHE DU MATCH DANS LA LIST ET OUVERTURE DU MATCH
         try:
+            # Rechercher et cliquer sur le span "Avant-match"
+            try:
+                avant_match_span = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable((By.XPATH, "//span[contains(@class, 'ui-caption') and text()='Avant-match']"))
+                )
+                avant_match_span.click()
+                print("✅ Cliqué sur 'Avant-match'")
+                time.sleep(2)  # Attendre que la section se charge
+            except Exception as e:
+                print(f"⚠️ Impossible de cliquer sur 'Avant-match': {e}")
+            
             WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.CLASS_NAME, 'games-search-modal-results-list__item')))
+                EC.presence_of_element_located((By.CLASS_NAME, 'ui-game-card__content')))
         except Exception as e:
             print(f'Erreur lors de la recherche du match: {equipe1} vs {equipe2} : {str(e)}')
         else:
             # try:
-            matches = driver.find_elements(By.CLASS_NAME, 'games-search-modal-results-list__item')
+            matches = driver.find_elements(By.CLASS_NAME, 'ui-game-card__content')
             team1 = ''
             team2 = ''
 
             for match in matches:
-                teams = match.find_element(By.CLASS_NAME, 'games-search-modal-card-info__main').text
-                if ' - ' in teams:
-                    team1, team2 = teams.split(' - ')
-                if (equipe1 in team1 or team1 in equipe1) and (equipe2 in team2 or team2 in equipe2):
-                    print('Match found')
-                    link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
-                    driver.get(link)
-                    find_match = True
-                    break
+                try:
+                    # Nouvelle structure HTML - récupérer les noms d'équipes depuis les spans
+                    team_names = match.find_elements(By.CSS_SELECTOR, '.ui-game-card-scoreboard-teams-name__caption')
+                    
+                    if len(team_names) >= 2:
+                        team1 = team_names[0].text.strip()
+                        team2 = team_names[1].text.strip()
+                        
+                        print(f"🏆 Équipes trouvées: '{team1}' vs '{team2}'")
+                        print(f"🔍 Recherche: '{equipe1}' vs '{equipe2}'")
+                        
+                        # Comparaison flexible des noms d'équipes
+                        if (equipe1.lower() in team1.lower() or team1.lower() in equipe1.lower()) and \
+                           (equipe2.lower() in team2.lower() or team2.lower() in equipe2.lower()):
+                            print('✅ Match found!')
+                            link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
+                            driver.get(link)
+                            find_match = True
+                            break
+                    else:
+                        # Fallback vers l'ancienne méthode si la nouvelle structure n'est pas trouvée
+                        scoreboard = match.find_element(By.CLASS_NAME, 'ui-game-card-scoreboard')
+                        teams_text = scoreboard.text
+                        if ' - ' in teams_text:
+                            team1, team2 = teams_text.split(' - ')
+                            if (equipe1 in team1 or team1 in equipe1) and (equipe2 in team2 or team2 in equipe2):
+                                print('✅ Match found (fallback method)')
+                                link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
+                                driver.get(link)
+                                find_match = True
+                                break
+                        
+                except Exception as e:
+                    print(f"⚠️ Erreur lors de l'extraction des équipes: {e}")
+                    continue
             if not find_match:
                 for match in matches:
-                    teams = match.find_element(By.CLASS_NAME, 'games-search-modal-card-info__main').text
-                    if compare_match_name(teams, f'{equipe1} vs {equipe2}'):
+                    # Nouvelle structure HTML - récupérer les noms d'équipes depuis les spans
+                    team_names = match.find_elements(By.CSS_SELECTOR, '.ui-game-card-scoreboard-teams-name__caption')
+                    
+                    if len(team_names) >= 2:
+                        team1 = team_names[0].text.strip()
+                        team2 = team_names[1].text.strip()
+                    if compare_match_name(f"{team1} - {team2}", f'{equipe1} vs {equipe2}'):
                         print('Match found')
                         link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
                         driver.get(link)

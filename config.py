@@ -375,18 +375,40 @@ def saveLog(txt):
         os.makedirs(nom_du_repertoire)
 
     try:
-        # Ouvrir le fichier en mode ajout
-        with open(nom_du_fichier, 'a+') as fichier:
-            # Vérifier si le fichier est non vide
-            fichier.seek(0)
-            contenu = fichier.read()
+        # Gestion robuste des interruptions clavier
+        try:
+            # Ouvrir le fichier en mode ajout avec timeout implicite
+            with open(nom_du_fichier, 'a+', encoding='utf-8', buffering=1) as fichier:
+                # Méthode plus efficace - éviter de lire tout le fichier
+                fichier.seek(0, 2)  # Aller à la fin du fichier
+                position = fichier.tell()
+                
+                # Ajouter un saut de ligne si le fichier n'est pas vide
+                if position > 0:
+                    # Vérifier le dernier caractère pour éviter les doubles sauts de ligne
+                    fichier.seek(position - 1)
+                    dernier_char = fichier.read(1)
+                    fichier.seek(0, 2)  # Retourner à la fin
+                    
+                    if dernier_char and dernier_char != '\n':
+                        fichier.write('\n')
 
-            # Ajouter un saut de ligne si le fichier n'est pas vide
-            if contenu:
-                fichier.write('\n')
-
-            # Écrire le texte à la fin du fichier
-            fichier.write(f"{heure_actuelle} : {txt}")
+                # Écrire le texte à la fin du fichier
+                fichier.write(f"{heure_actuelle} : {txt}")
+                fichier.flush()  # Forcer l'écriture immédiate
+                
+        except KeyboardInterrupt:
+            # Gestion spécifique de Ctrl+C - essayer de sauvegarder quand même
+            print(f"⚠️ Interruption détectée lors de l'écriture du log: {txt[:50]}...")
+            try:
+                # Tentative rapide de sauvegarde
+                with open(nom_du_fichier, 'a', encoding='utf-8') as fichier_urgence:
+                    fichier_urgence.write(f"\n{heure_actuelle} : [INTERROMPU] {txt}")
+            except:
+                # Si même ça échoue, au moins l'afficher
+                print(f"❌ Impossible de sauvegarder: {txt}")
+            raise  # Re-lancer l'interruption
+            
     except Exception as e:
         print(f'Erreur de log: {e}')
 
@@ -472,7 +494,26 @@ def log(message, type="", clear=True, indent=0, show_script_type=True):
     sys.stdout.flush()
     # Mise à jour du message global
     log_message = message
-    saveLog(message)
+    
+    # Sauvegarde protégée contre les interruptions
+    try:
+        saveLog(message)
+    except KeyboardInterrupt:
+        # En cas d'interruption, essayer de sauvegarder rapidement puis continuer l'interruption
+        print(f"\n⚠️ Script interrompu pendant le logging. Message: {message[:50]}...")
+        try:
+            # Tentative de sauvegarde d'urgence sans formatage complexe
+            import datetime
+            timestamp = datetime.datetime.now().strftime("%H:%M:%S")
+            with open("emergency_log.txt", "a", encoding="utf-8") as emergency:
+                emergency.write(f"{timestamp}: [INTERRUPTED] {message}\n")
+        except:
+            pass  # Si même ça échoue, on abandonne silencieusement
+        raise  # Re-lancer l'interruption pour arrêter le script
+    except Exception as log_error:
+        # Pour autres erreurs de logging, continuer le script mais signaler l'erreur
+        print(f"⚠️ Erreur de logging (continuant quand même): {log_error}")
+        pass
 
 
 def log_clear_line(line_number=1):

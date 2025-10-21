@@ -24,7 +24,7 @@ def extract_bet_types_and_selections(browser):
     # Attendre que les éléments de paris soient chargés
     try:
         WebDriverWait(browser, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, ".bet-title"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".game-markets-group-header-title"))
         )
     except Exception as e:
         print(f"Erreur lors de l'attente des éléments: {e}")
@@ -32,38 +32,45 @@ def extract_bet_types_and_selections(browser):
 
     # Extraire tous les types de paris
     bet_types = {}
-    bet_titles = browser.find_elements(By.CLASS_NAME, "bet-title")
+    # Chercher les conteneurs principaux de groupes de paris
+    bet_containers = browser.find_elements(By.CSS_SELECTOR, ".game-markets-group.game-markets-content__item")
 
-    for bet_title in bet_titles:
+    for container in bet_containers:
         try:
-            # Extraire le nom du type de pari
-            # Faire défiler jusqu'à l'élément pour s'assurer qu'il est visible
-            # browser.execute_script("arguments[0].scrollIntoView(true);", bet_title)
-            bet_type_name = bet_title.find_element(By.CLASS_NAME, "bet-title__label").get_attribute(
-                "textContent").strip()
-            print('type de paris ', bet_type_name)
-            # Trouver le conteneur parent pour accéder aux sélections
-            parent_container = bet_title.find_element(By.XPATH, "./following-sibling::div[contains(@class, 'bets')]")
+            # Extraire le nom du type de pari depuis le titre
+            title_element = container.find_element(By.CSS_SELECTOR, ".game-markets-group-header-title .ui-caption")
+            bet_type_name = title_element.text.strip()
+            print('type de paris :', bet_type_name)
+            
+            # Le conteneur parent est déjà l'élément actuel
+            parent_container = container
 
-            # Extraire les sélections
+            # Extraire les sélections depuis la liste des marchés
             selections = []
-            bet_inners = parent_container.find_elements(By.CLASS_NAME, "bet-inner")
+            bet_markets = parent_container.find_elements(By.CSS_SELECTOR, ".game-markets-group__market")
 
-            for bet_inner in bet_inners[:10]:  # Limiter à 10 sélections
+            for market in bet_markets[:20]:  # Augmenter la limite pour récupérer plus d'options
                 try:
-                    # Faire défiler jusqu'à l'élément de sélection pour s'assurer qu'il est visible
-                    selection = bet_inner.find_element(By.CLASS_NAME, "bet_type").get_attribute("textContent").strip()
-                    print('selection ', selection)
+                    # Extraire le nom de la sélection depuis le span avec la classe ui-market__name
+                    market_name_element = market.find_element(By.CSS_SELECTOR, ".ui-market__name")
+                    market_name = market_name_element.text.strip()
+                    
+                    
+                    # Combiner nom et cote
+                    selection = f"{market_name}"
+                    print('selection :', selection)
                     selections.append(selection)
-                except Exception:
+                except Exception as e:
+                    print(f"Erreur extraction sélection: {e}")
                     continue
 
             if selections:
                 bet_types[bet_type_name] = selections
+                print(f"✅ {len(selections)} sélections trouvées pour '{bet_type_name}'")
             print('')
             print('')
         except Exception as e:
-            print(f"Erreur lors de l'extraction du type de pari: {e}")
+            print(f"❌ Erreur lors de l'extraction du type de pari: {e}")
             continue
 
     return bet_types

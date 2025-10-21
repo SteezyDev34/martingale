@@ -54,15 +54,6 @@ from Functions import Functions_1SET
 from Functions.ScriptRechercheDeMatch import classementeDeMatch
 from Functions.Authenticator import is_logged_in, loginProcess
 
-confirmation = input(f"Classement ? (Y/N): ")
-
-if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
-    classementeDeMatch(driver)
-
-
-is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
-if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
-    config.in_stat = True
 config.scriptTypeList = ['1SET']
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
 config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}

@@ -11,7 +11,7 @@ from Functions.GetScoreActuel import GetScoreActuel
 from Functions.getTextFromImageGPT import compare_selection
 
 
-def GetBetOld(driver, nextBet=False, selection=''):
+def GetBetOld(driver, nextBet=False, selection='', mobile=False):
     config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', False, 2)
     if config.scriptType in config.allScriptType:
         GetScoreActuel(driver)
@@ -135,30 +135,46 @@ def GetBetOld(driver, nextBet=False, selection=''):
                     EC.presence_of_element_located((By.XPATH, x_path))
                 )
             else:
-                x_path = (
-                    '//div[contains(@class, "bet_group_col")]'
-                    '//div[not(contains(@style, "display: none;"))]'
-                    '//div[contains(@class, "bet-inner")]'
-                )
+                if config.site_type == 'mobile_site':
+                    x_path = (
+                            '//div[contains(@class, "bet_group_col")]'
+                            '//div[not(contains(@style, "display: none;"))]'
+                            '//div[contains(@class, "game-markets-group__market")]'
+                    )
+                else:
+                    x_path = (
+                        '//div[contains(@class, "bet_group_col")]'
+                        '//div[not(contains(@style, "display: none;"))]'
+                        '//div[contains(@class, "bet-inner")]'
+                    )
                 list_of_bet_type = driver.find_elements(By.XPATH, x_path)
                 bet_list = []
                 betclic = False
                 for bet in list_of_bet_type:
-                    bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
+                    if config.site_type == 'mobile_site':
+                        bet_text = bet.find_element(By.CLASS_NAME, 'ui-market__name').text
+                    else:
+                        bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
                     if bet_text.strip() and sType in bet_text.strip():  # Only append if bet_text is not empty
                         bet.click()
                         betclic = True
                         break
                 if not betclic:
                     for bet in list_of_bet_type:
-                        bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
+                        if config.site_type == 'mobile_site':
+                            bet_text = bet.find_element(By.CLASS_NAME, 'ui-market__name').text
+                        else:
+                            bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
                         if bet_text.strip():  # Only append if bet_text is not empty
                             bet_list.append(bet_text)
                     bet_list = '[' + ','.join(bet_list) + ']'
                     sType = compare_selection(config.match_name, sType, bet_list)
                     if sType:
                         for bet in list_of_bet_type:
-                            bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
+                            if config.site_type == 'mobile_site':
+                                bet_text = bet.find_element(By.CLASS_NAME, 'ui-market__name').text
+                            else:
+                                bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
                             if bet_text.strip() and sType in bet_text.strip():  # Only append if bet_text is not empty
                                 bet.click()
                                 betclic = True

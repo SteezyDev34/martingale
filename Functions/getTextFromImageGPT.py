@@ -103,7 +103,6 @@ def extraire_pari_depuis_image(image_path, msg):
                     "- selection : la sélection faite (peut être générée dynamiquement si elle suit un format connu)\n"
                     "- odds : la cote du pari (nombre flottant)\n"
                     "- date : date du pari (extrait du nom de l'image, ou sinon date du jour)\n"
-                    "- tipster : toujours \"marco\"\n\n"
 
                     "⚠️ Règles strictes à suivre :\n"
                     "1. Tu dois OBLIGATOIREMENT choisir la catégorie et le type de pari parmi ceux du dictionnaire ci-dessous.\n"
@@ -121,6 +120,8 @@ def extraire_pari_depuis_image(image_path, msg):
                     "- Si le nom du fichier contient une date comme 'media_20250413_204440.jpg', la date du pari est 13/04/2025.\n"
                     "- Si le nom du fichier est 'Capture-decran_1-4-2025_205148.jpeg', la date est 01/04/2025.\n"
                     "- Si aucun format de date n'est détecté dans le nom de fichier, utilise la date du jour.\n\n"
+                    
+                    "set handicap correspond à Handicap des sets\n"
 
                     "📖 Voici la liste de référence des catégories, types et formats de sélections :\n"
                     f"{stringify_xbet_type_list(config.xbet_type_list)}\n\n"
