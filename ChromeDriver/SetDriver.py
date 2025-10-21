@@ -14,6 +14,35 @@ from selenium.webdriver.support import expected_conditions as EC
 
 import config
 
+def calculate_window_position(num_fenetre, screen_width, screen_height):
+    """
+    Calcule la position et la taille d'une fenêtre selon une grille de 4 colonnes
+    Args:
+        num_fenetre (int): Numéro de la fenêtre (1, 2, 3, etc.)
+        screen_width (int): Largeur de l'écran
+        screen_height (int): Hauteur de l'écran
+    Returns:
+        tuple: (x_pos, y_pos, width, height) Position et taille de la fenêtre
+    """
+    # Calcul de la taille de chaque fenêtre (grille 4 colonnes)
+    fenetre_width = int(screen_width / 4)
+    fenetre_height = 375  # Hauteur fixe ou calculée selon vos besoins
+    
+    # Calcul de la position dans la grille (base 0)
+    grid_position = num_fenetre - 1
+    
+    # Calcul de la colonne (0 à 3)
+    colonne = grid_position % 4
+    
+    # Calcul de la ligne (0, 1, 2, etc.)
+    ligne = grid_position // 4
+    
+    # Position finale
+    x_pos = int(colonne * fenetre_width)
+    y_pos = int(ligne * fenetre_height)
+    
+    return x_pos, y_pos, fenetre_width, fenetre_height
+
 def is_port_open(port):
     """Vérifie si un port est ouvert sur localhost"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -166,21 +195,18 @@ def create_new_window(port, num_fenetre, url=config.site_url):
         new_handle = new_handles[0]
         temp_driver.switch_to.window(new_handle)
         
-        # Configure la position de la fenêtre en cascade
-        # Récupère la taille de l'écran
+        # Configure la position et la taille de la fenêtre selon la grille
         screen_size = temp_driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
         screen_width = screen_size[0]
-        fenetre_size = screen_width / 4
-        # Calcule la position en fonction de la taille de l'écran
-        x_pos = ((num_fenetre - 1) * fenetre_size) 
-        if num_fenetre > 4:
-            y_pos = 375
-        else:
-            y_pos = 0
-        temp_driver.set_window_position(x_pos, y_pos)
-        temp_driver.set_window_size(500, 375)
+        screen_height = screen_size[1]
         
-        print(f"✅ Nouvelle fenêtre créée et configurée (handle: {new_handle[:8]}...)")
+        # Utilise la nouvelle fonction de calcul de position et taille
+        x_pos, y_pos, width, height = calculate_window_position(num_fenetre, screen_width, screen_height)
+        
+        temp_driver.set_window_position(x_pos, y_pos)
+        temp_driver.set_window_size(width, height)
+        
+        print(f"✅ Nouvelle fenêtre {num_fenetre} créée à ({x_pos}, {y_pos}) taille {width}x{height} (handle: {new_handle[:8]}...)")
         return new_handle
             
     except Exception as e:
@@ -293,38 +319,32 @@ def get_script_driver(num_fenetre):
         if not window_handles:
             print("🆕 Initialisation d'une nouvelle session...")
             window_handles['1'] = driver.current_window_handle
-            # Récupère la taille de l'écran
+            
+            # Configure la fenêtre principale avec la nouvelle méthode
             screen_size = driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
             screen_width = screen_size[0]
-            fenetre_size = screen_width / 4
-            # Calcule la position en fonction de la taille de l'écran
-            x_pos = ((num_fenetre - 1) * fenetre_size)
-            if num_fenetre > 4:
-                y_pos = 375
-            else:
-                y_pos = 0
+            screen_height = screen_size[1]
+            x_pos, y_pos, width, height = calculate_window_position(1, screen_width, screen_height)
+            
             driver.set_window_position(x_pos, y_pos)
-            driver.set_window_size(500, 375)
-            print("✅ Fenêtre 1 (principale) initialisée")
+            driver.set_window_size(width, height)
+            print(f"✅ Fenêtre 1 (principale) initialisée à ({x_pos}, {y_pos}) taille {width}x{height}")
             save_window_handles()  # Sauvegarde la configuration initiale
             
-        # Configure les fenêtres existantes
+        # Configure les fenêtres existantes avec les nouvelles positions et tailles
         for num, handle in window_handles.items():
             try:
                 driver.switch_to.window(handle)
-                # Récupère la taille de l'écran
                 screen_size = driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
                 screen_width = screen_size[0]
-                fenetre_size = screen_width / 4
-                # Calcule la position en fonction de la taille de l'écran
-                x_pos = ((int(num) - 1) * fenetre_size)
-                if int(num) > 4:
-                    y_pos = 375
-                else:
-                    y_pos = 0
+                screen_height = screen_size[1]
+                
+                # Utilise la nouvelle fonction de calcul avec taille
+                x_pos, y_pos, width, height = calculate_window_position(int(num), screen_width, screen_height)
+                
                 driver.set_window_position(x_pos, y_pos)
-                driver.set_window_size(500, 375)
-                print(f"✅ Fenêtre {num} configurée")
+                driver.set_window_size(width, height)
+                print(f"✅ Fenêtre {num} repositionnée à ({x_pos}, {y_pos}) taille {width}x{height}")
             except Exception as e:
                 print(f"❌ Erreur lors de la configuration de la fenêtre {num}: {e}")
                 
@@ -352,7 +372,7 @@ def get_script_driver(num_fenetre):
         # Vérifie si le handle existe encore dans la liste des fenêtres
         if window_handles[num_str] not in driver.window_handles:
             print(f"🔄 Le handle de la fenêtre {num_fenetre} n'est plus valide, création d'une nouvelle fenêtre...")
-            new_handle = create_new_window(config.localhost)
+            new_handle = create_new_window(config.localhost, num_fenetre)
             if new_handle:
                 window_handles[num_str] = new_handle
                 print(f"✅ Fenêtre {num_fenetre} recréée avec succès")
