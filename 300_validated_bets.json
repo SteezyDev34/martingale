@@ -5596,5 +5596,14 @@
         "winscore": "0:30",
         "timestamp": "2025-10-20 18:54:34",
         "url": "challenger hamburg"
+    },
+    {
+        "montant": 2.56,
+        "cote": "2.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-21 14:45:00",
+        "url": "itf sarreguemines"
     }
 ]

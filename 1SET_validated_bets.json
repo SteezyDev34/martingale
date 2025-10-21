@@ -1,0 +1,38 @@
+[
+    {
+        "montant": 0.31,
+        "cote": "1.648",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2025-10-21 00:50:18",
+        "url": "challenger costa do sauipe"
+    },
+    {
+        "montant": 1.14,
+        "cote": "1.175",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2025-10-21 02:22:39",
+        "url": "itf brisbane women qualification"
+    },
+    {
+        "montant": 0.35,
+        "cote": "1.565",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2025-10-21 08:51:05",
+        "url": "challenger suzhou"
+    },
+    {
+        "montant": 0.25,
+        "cote": "1.79",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2025-10-21 09:52:25",
+        "url": "wta tokyo"
+    }
+]

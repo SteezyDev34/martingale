@@ -3148,5 +3148,23 @@
         "winscore": "40:40",
         "timestamp": "2025-10-20 19:04:41",
         "url": "itf saguenay women qualification"
+    },
+    {
+        "montant": 2.08,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2025-10-21 14:45:19",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 2.53,
+        "cote": "3.75",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2025-10-21 14:49:07",
+        "url": "itf sarreguemines"
     }
 ]

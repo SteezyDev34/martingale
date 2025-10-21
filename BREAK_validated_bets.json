@@ -1,0 +1,674 @@
+[
+    {
+        "montant": 2.31,
+        "cote": "2.384",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-20 19:31:48",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 3.82,
+        "cote": "2.495",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-20 19:38:53",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 6.51,
+        "cote": "2.495",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-20 19:41:46",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 9.29,
+        "cote": "2.77",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-20 19:44:34",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 15.86,
+        "cote": "2.635",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-20 19:47:04",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 21.1,
+        "cote": "2.99",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-20 19:51:30",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 1.44,
+        "cote": "3.216",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 00:48:11",
+        "url": "challenger costa do sauipe"
+    },
+    {
+        "montant": 0.2,
+        "cote": "4.49",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 01:52:17",
+        "url": "challenger sioux falls"
+    },
+    {
+        "montant": 0.24,
+        "cote": "3.48",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 02:01:02",
+        "url": "challenger sioux falls"
+    },
+    {
+        "montant": 0.31,
+        "cote": "4.31",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 02:03:43",
+        "url": "challenger sioux falls"
+    },
+    {
+        "montant": 0.57,
+        "cote": "3.74",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 02:07:52",
+        "url": "challenger sioux falls"
+    },
+    {
+        "montant": 0.81,
+        "cote": "4.94",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 09:50:00",
+        "url": "itf santa margherita di pula women qualification"
+    },
+    {
+        "montant": 11.69,
+        "cote": "1.36",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 09:56:28",
+        "url": "itf santa margherita di pula women qualification"
+    },
+    {
+        "montant": 3.63,
+        "cote": "5.43",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 09:57:54",
+        "url": "itf santa margherita di pula women qualification"
+    },
+    {
+        "montant": 159.44,
+        "cote": "1.125",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 10:07:11",
+        "url": "itf santa margherita di pula women qualification"
+    },
+    {
+        "montant": 3.68,
+        "cote": "1.87",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 10:51:17",
+        "url": "itf bol women"
+    },
+    {
+        "montant": 3.92,
+        "cote": "1.816",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 11:11:12",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 9.89,
+        "cote": "1.74",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 11:20:28",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 2.88,
+        "cote": "2.112",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 11:53:15",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 1.29,
+        "cote": "3.48",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 12:04:29",
+        "url": "challenger hamburg"
+    },
+    {
+        "montant": 0.81,
+        "cote": "4.94",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 12:10:13",
+        "url": "challenger hamburg"
+    },
+    {
+        "montant": 1.9,
+        "cote": "3.216",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 12:16:05",
+        "url": "challenger hamburg"
+    },
+    {
+        "montant": 1.6,
+        "cote": "4.94",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 12:21:01",
+        "url": "challenger hamburg"
+    },
+    {
+        "montant": 0.65,
+        "cote": "5.92",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 12:32:50",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 1.14,
+        "cote": "4.54",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 12:42:13",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 2.43,
+        "cote": "3.216",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 12:48:03",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 1.61,
+        "cote": "5.98",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 12:54:16",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 4.94,
+        "cote": "2.99",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 12:55:40",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 2.19,
+        "cote": "7.84",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 12:58:13",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 7.29,
+        "cote": "3.38",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 13:01:10",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 3.29,
+        "cote": "8.56",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 13:05:22",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 10.34,
+        "cote": "3.74",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 13:12:35",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 6.61,
+        "cote": "6.88",
+        "jeu": 11,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 13:17:33",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 16.68,
+        "cote": "3.74",
+        "jeu": 12,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 13:21:47",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 22.84,
+        "cote": "3.74",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 13:33:21",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 12.52,
+        "cote": "7.84",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 13:40:26",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 35.89,
+        "cote": "3.74",
+        "jeu": 3,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 13:45:16",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 19.65,
+        "cote": "7.84",
+        "jeu": 4,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 13:49:07",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 56.3,
+        "cote": "3.74",
+        "jeu": 5,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 13:54:23",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 30.81,
+        "cote": "7.84",
+        "jeu": 6,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 13:57:58",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 26.86,
+        "cote": "10",
+        "jeu": 7,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 14:02:59",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 112.96,
+        "cote": "3.38",
+        "jeu": 9,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 14:12:17",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 55.85,
+        "cote": "7.84",
+        "jeu": 10,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 14:16:09",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 159.87,
+        "cote": "3.74",
+        "jeu": 11,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 14:22:36",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 0.4,
+        "cote": "9",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 14:30:33",
+        "url": "itf sheffield"
+    },
+    {
+        "montant": 2.15,
+        "cote": "2.77",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 14:35:39",
+        "url": "itf sheffield"
+    },
+    {
+        "montant": 1.74,
+        "cote": "4.54",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2025-10-21 14:42:20",
+        "url": "itf sheffield"
+    },
+    {
+        "montant": 4.07,
+        "cote": "2.99",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2025-10-21 14:45:31",
+        "url": "itf sheffield"
+    }
+]
