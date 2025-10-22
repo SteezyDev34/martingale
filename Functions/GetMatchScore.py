@@ -9,8 +9,9 @@ def main(div_bet_score: object, score_to_start: list[str]) -> bool:
     try:
         get_if_icon_ball = div_bet_score.find_elements(By.CLASS_NAME,
                                                        config.classes[
-                                                           'score_ball'][
+                                                           'score_ball_search'][
                                                            config.site_type])
+        print('tet',len(get_if_icon_ball))
         if config.site_type == 'old_site':
             icon_elements = div_bet_score.find_elements(By.CLASS_NAME, 'c-events-scoreboard__icon')
             get_if_icon_ball = [icon for icon in icon_elements if icon.is_displayed()]

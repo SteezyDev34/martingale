@@ -1044,6 +1044,7 @@
         "url": "wta guangzhou"
     },
     {
+<<<<<<< HEAD
         "montant": 2.06,
         "cote": "2.55",
         "jeu": 2,
@@ -1060,6 +1061,204 @@
         "winscore": "30:30",
         "timestamp": "2025-10-20 18:58:03",
         "url": "challenger hamburg"
+=======
+        "montant": 0.2,
+        "cote": "2.65",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 12:47:29",
+        "url": "atp basel"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.8",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 12:50:39",
+        "url": "atp basel"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.7",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 12:58:46",
+        "url": "atp basel"
+    },
+    {
+        "montant": 2.21,
+        "cote": "2.45",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 13:34:49",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 3.69,
+        "cote": "2.52",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 13:39:05",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 1.83,
+        "cote": "2.65",
+        "jeu": 3,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 16:00:58",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 3.37,
+        "cote": "2.5",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 16:02:18",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 5.07,
+        "cote": "2.7",
+        "jeu": 5,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 16:07:33",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 9.92,
+        "cote": "2.4",
+        "jeu": 6,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 16:09:03",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 2.11,
+        "cote": "2.52",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 16:17:22",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 2.21,
+        "cote": "2.45",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 16:32:57",
+        "url": "itf saguenay women"
+    },
+    {
+        "montant": 3.87,
+        "cote": "2.45",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 16:38:33",
+        "url": "itf saguenay women"
+    },
+    {
+        "montant": 6.45,
+        "cote": "2.5",
+        "jeu": 1,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 16:44:38",
+        "url": "itf saguenay women"
+    },
+    {
+        "montant": 11.66,
+        "cote": "2.4",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 16:47:02",
+        "url": "itf saguenay women"
+    },
+    {
+        "montant": 20.14,
+        "cote": "2.4",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 16:49:56",
+        "url": "itf saguenay women"
+    },
+    {
+        "montant": 31.31,
+        "cote": "2.55",
+        "jeu": 3,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 16:50:20",
+        "url": "itf saguenay women"
+    },
+    {
+        "montant": 1.88,
+        "cote": "2.7",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 17:11:02",
+        "url": "itf norman"
+    },
+    {
+        "montant": 3.52,
+        "cote": "2.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 17:14:06",
+        "url": "itf norman"
+    },
+    {
+        "montant": 3.52,
+        "cote": "2.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 17:14:46",
+        "url": "itf norman"
+    },
+    {
+        "montant": 2.13,
+        "cote": "2.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 17:21:35",
+        "url": "itf norman"
+    },
+    {
+        "montant": 2.11,
+        "cote": "2.52",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 17:41:24",
+        "url": "itf saguenay women"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.9",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 17:54:05",
+        "url": "itf sarreguemines"
+>>>>>>> 7e0cfc91a35d3cfff5f542dd8e04e2a0c7d01cfc
     },
     {
         "montant": 1.88,
@@ -1067,6 +1266,7 @@
         "jeu": 2,
         "set": "1",
         "winscore": "30:30",
+<<<<<<< HEAD
         "timestamp": "2025-10-21 14:45:56",
         "url": "itf sarreguemines"
     },
@@ -1078,5 +1278,36 @@
         "winscore": "30:30",
         "timestamp": "2025-10-21 14:50:40",
         "url": "itf sarreguemines"
+=======
+        "timestamp": "2025-10-22 20:55:52",
+        "url": "itf norman"
+    },
+    {
+        "montant": 2.29,
+        "cote": "2.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 21:10:11",
+        "url": "wta queretaro"
+    },
+    {
+        "montant": 2.29,
+        "cote": "2.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 21:21:43",
+        "url": "wta florianpolis"
+    },
+    {
+        "montant": 3.79,
+        "cote": "2.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 21:25:47",
+        "url": "wta florianpolis"
+>>>>>>> 7e0cfc91a35d3cfff5f542dd8e04e2a0c7d01cfc
     }
 ]

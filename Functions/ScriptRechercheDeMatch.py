@@ -128,6 +128,7 @@ def rechercheDeMatch(driver):
             classementeDeMatch(driver, False)
 
         logline = 0
+        print('test error', config.error)
         config.match_found = GetIfMatchPage(driver)
         page_de_match = config.match_found
         if not config.match_found and float(config.perte) > 0:
@@ -156,6 +157,7 @@ def rechercheDeMatch(driver):
             config.log_clear_line(logline)
             return False
         else:
+            print('#3TFRTYH2', config.error)
             config.log('ligues trouvées!', 'success', True, 2, False)
             # POUR CHAQUE LIGUE RÉCUPÉRÉE
             for bet_ligue in bet_list_ligue:
@@ -236,6 +238,7 @@ def rechercheDeMatch(driver):
                                         config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
                                                                                        config.matchlist_file_name)
                                         if config.newmatch[0]:
+                                            print('#3TFYH', config.error)
                                             if OuverturePageMatch.main(bet_item, config.script_num,
                                                                        config.newmatch[1],
                                                                        config.running_file_name,
@@ -262,6 +265,7 @@ def rechercheDeMatch(driver):
             time.sleep(5)
             config.log_clear_line()
         else:
+            print('MATCH TROUVE!')
             logline += 3
             config.log_clear_line(logline)
             time.sleep(3)

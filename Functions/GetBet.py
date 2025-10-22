@@ -1,9 +1,11 @@
 import time
-
+import os
+import sys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.DeleteBet import DeleteBet
@@ -14,7 +16,7 @@ from Functions.GetScoreActuel import GetScoreActuel
 
 
 def GetBet(driver, nextBet=False, selection=''):
-    if config.site_type == 'old_site':
+    if config.site_type == 'old_site' or config.site_type == 'mobile_site':
         return GetBetOld(driver, nextBet, selection)
     else:
         return GetBetNew(driver, nextBet, selection)

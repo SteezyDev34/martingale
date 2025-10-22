@@ -10,6 +10,8 @@ import config
 # VÉRIFIERR SI PAGE DE MATCH
 def GetIfNewSite(driver):
     # driver.switch_to.window(driver.window_handles[0])
+    if config.site_type == 'mobile_site':
+        return
     try:
         WebDriverWait(driver, 2).until(
             EC.presence_of_element_located(

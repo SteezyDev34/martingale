@@ -1,6 +1,9 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.GetIfNewSite import GetIfNewSite
@@ -34,9 +37,12 @@ def DeleteBet(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
-
+    config.localhost = 43151
+    from ChromeDriver.SetDriver import get_script_driver
+    num_fenetre = 1
+    driver = get_script_driver(num_fenetre)
+    # driver.switch_to.window(driver.window_handles[0])
+    config.site_type = 'mobile_site'
     config.scriptType = '40A'
-    GetIfNewSite(driver)
-    print(config.site_type)
+
     DeleteBet(driver)

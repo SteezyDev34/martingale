@@ -1,9 +1,12 @@
 import json
-
+import os
+import time
+import sys
 import requests
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.GetIfNewSite import GetIfNewSite
@@ -90,6 +93,7 @@ def ValidationDuParis(driver, nexbet=False):
                 config.log(f"Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.",
                            'warning', False)
                 validation = True
+                print(config.validated_bet)
                 already = True
                 break  # Sortir de la boucle si le jeu et le set ont déjà été pariés
         try:
@@ -145,7 +149,11 @@ def ValidationDuParis(driver, nexbet=False):
                                 while preloader == 1:
 
                                     try:
-                                        WebDriverWait(driver, 3).until(EC.visibility_of_element_located(
+                                        if printtext == 0:
+                                            waiting_time = 3
+                                        else:
+                                            waiting_time = 1
+                                        WebDriverWait(driver, waiting_time).until(EC.visibility_of_element_located(
                                             (By.CLASS_NAME, config.classes['preloader'][config.site_type])))
                                     except:
                                         config.log('pas de loader', 'infos', False, indent=3)
@@ -212,9 +220,13 @@ def ValidationDuParis(driver, nexbet=False):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
-
     # driver.switch_to.window(driver.window_handles[0])
-    GetIfNewSite(driver)
+    config.localhost = 43151
+    from ChromeDriver.SetDriver import get_script_driver
+    num_fenetre = 1
+    driver = get_script_driver(num_fenetre)
+    # driver.switch_to.window(driver.window_handles[0])
+    config.site_type = 'mobile_site'
+    config.scriptType = '40A'
     config.mise = 0.2
     ValidationDuParis(driver)

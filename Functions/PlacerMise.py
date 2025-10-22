@@ -1,8 +1,10 @@
 import time
-
+import os
+import sys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.GetIfNewSite import GetIfNewSite
@@ -43,8 +45,13 @@ def PlacerMise(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
 
-    GetIfNewSite(driver)
-    config.mise = 21.34
+    config.localhost = 43151
+    from ChromeDriver.SetDriver import get_script_driver
+    num_fenetre = 1
+    driver = get_script_driver(num_fenetre)
+    # driver.switch_to.window(driver.window_handles[0])
+    config.site_type = 'mobile_site'
+    config.scriptType = '40A'
+    config.perte = 21.34
     PlacerMise(driver)

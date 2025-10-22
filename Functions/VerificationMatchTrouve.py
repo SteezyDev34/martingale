@@ -30,13 +30,20 @@ def main(driver, bet_item, matchlist_file_name):
         match_is_todo = match_manager.is_match_todo(config.newmatch)
         print('match_is_done', match_is_done)
         print('match_is_todo', match_is_todo)
+        print('config.site_type ', config.site_type)
         if config.scriptType == '1SET' and not match_is_done:
             config.log('Le match autorisé!', 'success', False, 4, False)
+            if config.site_type == 'mobile_site':
+                newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
+                newmatchtxt = f'{newmatchtxt}?platform_type=mobile'
             driver.get(newmatchtxt)
             config.log_clear_line()
             return [True, config.newmatch]
         elif config.in_stat and match_is_todo and not match_is_done:
             config.log('Le match autorisé!', 'success', False, 4, False)
+            if config.site_type == 'mobile_site':
+                newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
+                newmatchtxt = f'{newmatchtxt}?platform_type=mobile'
             driver.get(newmatchtxt)
             config.log_clear_line()
             return [True, config.newmatch]
@@ -51,6 +58,9 @@ def main(driver, bet_item, matchlist_file_name):
                 return [False, config.newmatch]
             else:
                 config.log('Le match  non autorisé mais perte en cours', 'success', False, 4, False)
+                if config.site_type == 'mobile_site':
+                    newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
+                    newmatchtxt = f'{newmatchtxt}?platform_type=mobile'
                 driver.get(newmatchtxt)
                 config.log_clear_line()
                 return [True, config.newmatch]
@@ -79,6 +89,9 @@ def getstats(driver, bet_item, matchlist_file_name):
         if match_is_todo:
             txtlog = "          Le match n'a pas encore été parié!"
             config.log(txtlog, config.newmatch)
+            if config.site_type == 'mobile_site':
+                newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
+                newmatchtxt = f'{newmatchtxt}?platform_type=mobile'
             driver.get(newmatchtxt)
             return [True, config.newmatch]
         else:
@@ -92,6 +105,7 @@ def fromUrl(driver, matchlist_file_name):
     try:
         config.log('            Vérification si match déjà parié', 'info', True)
         newmatchtxt = driver.current_url
+
         newmatch = newmatchtxt.split(
             '-')
         config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
@@ -113,6 +127,8 @@ def fromUrl(driver, matchlist_file_name):
 def newmatchFromUrl(driver):
     try:
         newmatchtxt = driver.current_url
+        newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
+        newmatchtxt = newmatchtxt.replace('?platform_type=mobile', '')
         newmatch = newmatchtxt.split(
             '-')
         config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]

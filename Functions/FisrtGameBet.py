@@ -1,5 +1,8 @@
 import inspect
 import time
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.AfficherParis import AfficherParis
@@ -63,16 +66,19 @@ def FirstGameBet(driver):
                     f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
                     'error', False)
             continue
+        
+        
+            
         # ON RECHERCHE LES PERTES ET ON CALCUL LA MISE
         tentative_placermise = 0
         validate_bet = False
-        config.log('On place la mise', 'infos', True, 2)
-        while not PlacerMise(driver) and not config.error and tentative_placermise < 3:
+        #config.log('On place la mise', 'infos', True, 2)
+        '''while not PlacerMise(driver) and not config.error and tentative_placermise < 3:
             tentative_placermise += 1
             if tentative_placermise == 2:
                 validate_bet = True
             else:
-                validate_bet = False
+                validate_bet = False'''
         tentative = 0
         config.saved_score = ""
         config.log('On vérifie le score pour valider le paris', 'info', indent=2)
@@ -90,11 +96,14 @@ def FirstGameBet(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
-
+    config.localhost = 43151
+    from ChromeDriver.SetDriver import get_script_driver
+    num_fenetre = 1
+    driver = get_script_driver(num_fenetre)
     # driver.switch_to.window(driver.window_handles[0])
-    GetIfNewSite(driver)
-    config.newset = 1
+    config.site_type = 'mobile_site'
+    config.scriptType = '40A'
+    config.mise = 0.2
     GetSetActuel(driver)
     config.scriptType = '40A'
 

@@ -1,8 +1,11 @@
 # GetMise
 import requests
+import os
+import sys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.GetIfNewSite import GetIfNewSite
@@ -18,9 +21,9 @@ def GetMise(driver):
         config.log("Rattrapage, recuperation de la cote", 'info', False)
         logline+=1
         try:
-            config.cote = driver.find_elements(By.CLASS_NAME,
-                                               config.classes['coef_value'][config.site_type])[
-                0].text
+            config.cote = ''.join(filter(lambda x: x.isdigit() or x in ',.', 
+                                driver.find_elements(By.CLASS_NAME, 
+                                                   config.classes['coef_value'][config.site_type])[0].text))
         except:
             config.log('erreur recup cote', 'info',False)
             logline+=1
@@ -97,6 +100,12 @@ def GetMise(driver):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    GetIfNewSite(driver)
+    config.localhost = 43151
+    from ChromeDriver.SetDriver import get_script_driver
+    num_fenetre = 1
+    driver = get_script_driver(num_fenetre)
+    # driver.switch_to.window(driver.window_handles[0])
+    config.site_type = 'mobile_site'
+    config.perte = 2
     print(config.perte)
     GetMise(driver)

@@ -3,6 +3,9 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.GetIfMatchPage import GetIfMatchPage
@@ -39,8 +42,18 @@ def GetScoreActuel(driver):
                 return False
         else:
             try:
-                config.score_actuel = score_teams[0].text + ':' + score_teams[1].text
+                if config.site_type == 'mobile_site':
+                    block_score_teams = score_teams[0]
+                    team1_elements = block_score_teams.find_elements(By.CLASS_NAME, 'scoreboard-scores__item--team-1')
+                    team2_elements = block_score_teams.find_elements(By.CLASS_NAME, 'scoreboard-scores__item--team-2')
+                    if team1_elements and team2_elements:
+                        config.score_actuel = team1_elements[0].text + ':' + team2_elements[0].text
+                    else:
+                        raise Exception("Impossible de trouver les scores des équipes en mode mobile_site")
+                else:
+                    config.score_actuel = score_teams[0].text + ':' + score_teams[1].text
             except Exception as e:
+                print(f"#E0021\nUne erreur est survenue lors de la récupération du score : {e}")
                 continue
             else:
                 if config.saved_score != config.score_actuel:
@@ -68,8 +81,11 @@ def record_scores(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
-
+    config.localhost = 43151
+    from ChromeDriver.SetDriver import get_script_driver
+    num_fenetre = 1
+    driver = get_script_driver(num_fenetre)
     # driver.switch_to.window(driver.window_handles[0])
-    config.site_type = 'old_site'
+    config.site_type = 'mobile_site'
+    print("Démarrage de la récupération du score actuel...")
     GetScoreActuel(driver)

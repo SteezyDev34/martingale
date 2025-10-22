@@ -28,6 +28,7 @@ def fromUrl(driver):
     get_url = get_url.split('tennis/')
     get_url = get_url[1].split('/')
     get_url = get_url[0]
+    get_url = get_url.replace('?platform_type=mobile', '')
     get_url = get_url.split('-')
     del get_url[0]
     get_url = (' ').join(get_url)
