@@ -182,7 +182,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                             bet_text = bet.find_element(By.CLASS_NAME, 'ui-market__name').text
                         else:
                             bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
-                        if bet_text.strip() and sType in bet_text.strip():  # Only append if bet_text is not empty
+                        if bet_text.strip() and sType.lower() in bet_text.strip().lower():  # Only append if bet_text is not empty
                             bet.click()
                             betclic = True
                             break
@@ -270,23 +270,23 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                             tentative += 1
                         else:
                             if config.scriptType in ['15A', '30A', '40A', '030', '300']:
-                                if 'Jeu ' + str(
-                                        jeu) in cpn_bet_market_label and sType + ' - Oui' in cpn_bet_market_label:
+                                if 'Jeu '.lower() + str(
+                                        jeu) in cpn_bet_market_label.lower() and sType.lower() + ' - Oui'.lower() in cpn_bet_market_label.lower():
                                     clic = True
                                     return clic
                                 else:
                                     tentative += 1
                                     DeleteBet(driver)
                             elif config.scriptType in ['4P', '5P', '6P', '4030', '4015', '400', 'BREAK']:
-                                if 'Jeu ' + str(
-                                        jeu) in cpn_bet_market_label and sType in cpn_bet_market_label:
+                                if 'Jeu '.lower() + str(
+                                        jeu) in cpn_bet_market_label.lower() and sType.lower() in cpn_bet_market_label.lower():
                                     clic = True
                                     return clic
                                 else:
                                     tentative += 1
                                     DeleteBet(driver)
                             else:
-                                if sType in cpn_bet_market_label:
+                                if sType.lower() in cpn_bet_market_label.lower():
                                     clic = True
                                     return clic
                                 else:
