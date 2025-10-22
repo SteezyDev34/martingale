@@ -203,13 +203,13 @@ classes = {
         {
             'old_site': 'c-tablo__team',
             'new_site': 'scoreboard-intro__team',
-            'mobile_site': 'c-tablo__team'
+            'mobile_site': 'scoreboard-intro-team'
         },
     'team_name_text':
         {
             'old_site': 'c-tablo-container__text',
             'new_site': 'scoreboard-team-name__text',
-            'mobile_site': 'c-tablo-container__text'
+            'mobile_site': 'scoreboard-intro-team__container'
         },
     'dashboard_champ':
         {
