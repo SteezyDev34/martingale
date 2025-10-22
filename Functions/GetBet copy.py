@@ -147,7 +147,6 @@ def GetBetNew(driver, nextBet=False, selection=''):
                 if config.scriptType == '030':
                     config.win_type = '30:0'  # inversé
                     win_texte = '30-0'
-            print('first_player :', first_player)
         if config.scriptType == '300':
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]

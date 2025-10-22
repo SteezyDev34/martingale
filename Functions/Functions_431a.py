@@ -298,6 +298,7 @@ def all_script(driver):
                 vb_set = int(config.validated_bet.get('set', -1))
                 if int(config.jeu_actuel) == vb_jeu - 1 and int(config.set_actuel) == vb_set:
                     print('set du paris supérieur!')
+                    DeleteBet(driver)
                     continue
             if config.validated_bet.get('result') is None:
                 print('result', config.validated_bet.get('result'))

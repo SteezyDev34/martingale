@@ -105,6 +105,7 @@ def fromUrl(driver, matchlist_file_name):
     try:
         config.log('            Vérification si match déjà parié', 'info', True)
         newmatchtxt = driver.current_url
+
         newmatch = newmatchtxt.split(
             '-')
         config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
@@ -126,6 +127,8 @@ def fromUrl(driver, matchlist_file_name):
 def newmatchFromUrl(driver):
     try:
         newmatchtxt = driver.current_url
+        newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
+        newmatchtxt = newmatchtxt.replace('?platform_type=mobile', '')
         newmatch = newmatchtxt.split(
             '-')
         config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]

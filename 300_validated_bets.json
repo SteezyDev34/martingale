@@ -5641,5 +5641,176 @@
         "winscore": "30:0",
         "timestamp": "2025-10-22 13:44:36",
         "url": "wta rovereto"
+    },
+    {
+        "montant": 2.6,
+        "cote": "2.23",
+        "jeu": 3,
+        "set": "2",
+        "winscore": "0:30",
+        "timestamp": "2025-10-22 16:00:09",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 1.94,
+        "cote": "2.65",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-22 16:16:43",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 1.73,
+        "cote": "2.85",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-22 16:32:13",
+        "url": "itf saguenay women"
+    },
+    {
+        "montant": 1.78,
+        "cote": "2.8",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-22 17:11:23",
+        "url": "itf norman"
+    },
+    {
+        "montant": 2.88,
+        "cote": "2.8",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-22 17:13:25",
+        "url": "itf norman"
+    },
+    {
+        "montant": 2.88,
+        "cote": "2.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-22 17:14:30",
+        "url": "itf norman"
+    },
+    {
+        "montant": 1.94,
+        "cote": "2.65",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-22 17:20:50",
+        "url": "itf norman"
+    },
+    {
+        "montant": 5.18,
+        "cote": "2.03",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-22 17:22:08",
+        "url": "itf norman"
+    },
+    {
+        "montant": 6.31,
+        "cote": "2.7",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-22 17:26:30",
+        "url": "itf norman"
+    },
+    {
+        "montant": 16.73,
+        "cote": "2.03",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-22 17:35:20",
+        "url": "itf norman"
+    },
+    {
+        "montant": 1.94,
+        "cote": "2.65",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-22 17:40:41",
+        "url": "itf saguenay women"
+    },
+    {
+        "montant": 3.81,
+        "cote": "2.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-22 17:47:20",
+        "url": "itf saguenay women"
+    },
+    {
+        "montant": 3.2,
+        "cote": "2",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-22 17:53:20",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 4.26,
+        "cote": "2.55",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-22 18:00:26",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 12.29,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-22 18:06:28",
+        "url": "itf sarreguemines"
+    },
+    {
+        "montant": 2.46,
+        "cote": "2.3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:0",
+        "timestamp": "2025-10-22 20:55:18",
+        "url": "itf norman"
+    },
+    {
+        "montant": 3.26,
+        "cote": "2.8",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-22 20:59:39",
+        "url": "itf norman"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-22 21:09:37",
+        "url": "wta queretaro"
+    },
+    {
+        "montant": 1.39,
+        "cote": "3.3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2025-10-22 21:21:11",
+        "url": "wta florianpolis"
     }
 ]

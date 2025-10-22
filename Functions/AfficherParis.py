@@ -362,7 +362,7 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    config.scriptType = '40A'
+    config.scriptType = '030'
     config.site_type = 'mobile_site'
     #GetIfNewSite(driver)
     print(config.site_type)
