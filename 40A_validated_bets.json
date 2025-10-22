@@ -3112,5 +3112,68 @@
         "winscore": "40:40",
         "timestamp": "2025-10-19 19:23:59",
         "url": "wta rio de janeiro"
+    },
+    {
+        "montant": 0.4,
+        "cote": "1.5",
+        "jeu": false,
+        "set": "",
+        "winscore": "",
+        "timestamp": "2025-10-22 11:19:18",
+        "url": ""
+    },
+    {
+        "montant": 0.91,
+        "cote": "1.22",
+        "jeu": false,
+        "set": "",
+        "winscore": "",
+        "timestamp": "2025-10-22 11:21:27",
+        "url": ""
+    },
+    {
+        "montant": 0.2,
+        "cote": "3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2025-10-22 11:41:15",
+        "url": ""
+    },
+    {
+        "montant": 0.37,
+        "cote": "1.535",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2025-10-22 11:44:07",
+        "url": ""
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.75",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2025-10-22 11:49:55",
+        "url": ""
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.5",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2025-10-22 11:50:28",
+        "url": ""
+    },
+    {
+        "montant": 0.2,
+        "cote": "4.5",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2025-10-22 11:53:27",
+        "url": ""
     }
 ]

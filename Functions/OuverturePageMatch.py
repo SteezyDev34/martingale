@@ -9,4 +9,5 @@ def main(bet_item, script_num, newmatch, running_file_name, matchlist_file_name)
     except Exception as e:
         return False
     else:
+        print("Match opened successfully")
         return True

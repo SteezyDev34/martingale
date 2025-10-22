@@ -41,7 +41,7 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
         elif config.scriptType == 'BREAK':
             key = 'Gagne dans le jeu'
         else:
-            key = 'Score du jeu. ' + theset + args
+            key = 'Score de la partie. ' + theset + args
     else:
         theset = ''
         args = categorie
@@ -51,6 +51,10 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
 
     while not selection and tentative < 3:
         RetourTpsReg(driver)
+        GetSetActuel(driver)
+        if GetIfMatchPage(driver) != True:
+            config.error = True
+            break
         try:
             driver.execute_script("window.scrollTo(0, 0);")
             element = WebDriverWait(driver, 5).until(
@@ -136,6 +140,7 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
                                                                               'search_input'][
                                                                               config.site_type])[
                                                         0].clear()
+                                                    print('clear')
                                                 except:
                                                     driver.execute_script("window.scrollTo(0, 0);")
                                                     toolbar = driver.find_elements(By.CLASS_NAME,
@@ -212,14 +217,13 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
         GetSetActuel(driver)
         GetScoreActuel(driver)
         if str(config.set_actuel) == "1":
-            theset = "1er"
+            theset = "1er set"
         else:
-            theset = str(config.set_actuel) + "ème"
+            theset = str(config.set_actuel) + "ème set"
         if config.scriptType == '1SET' or config.scriptType == 'BREAK':
             args = ' set'
         else:
-            args = ' set Evénements rapides'
-
+            args = 'Evénements rapides'
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
             key = 'Gagne le jeu avec le score.'
         elif config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
@@ -229,7 +233,7 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
         elif config.scriptType == 'BREAK':
             key = 'Gagne dans le jeu'
         else:
-            key = 'Score du jeu. ' + theset + args
+            key = 'Score de la partie. ' + theset + ' ' + args
     else:
         theset = ''
         args = categorie
@@ -265,8 +269,12 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
                             logline += 1
 
                         else:
-                            if select_option_text.strip().lower() == str(
-                                    theset).lower() + f'{args}'.lower():
+                            if config.site_type == 'mobile_site':
+                                matching_text = select_option_text.strip().lower() == f'{args}'.lower() + '. ' + str(theset).lower()
+                            else:
+                                matching_text = select_option_text.strip().lower() == str(
+                                    theset).lower() + f'{args}'.lower()
+                            if matching_text:
                                 config.log('Lien ' + select_option_text.lower() + ' = ' + str(
                                     theset).lower() + 'set Evénements rapides'.lower(), 'warning', False, 3)
                                 logline += 1
@@ -294,15 +302,18 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
                                             searchbutton = toolbar.find_elements(By.CLASS_NAME, config.classes[
                                                 'search_input'][
                                                 config.site_type])[0]
-                                            searchbutton.click()
+                                            #searchbutton.click()
+                                            search_input = toolbar.find_element(By.CSS_SELECTOR, 
+                                                        f"input.{config.classes['search_input'][config.site_type]}")
+                                            search_input.click()  # Focus sur le champ
+                                            time.sleep(0.5)
                                             
-                                            toolbar.find_element(By.CSS_SELECTOR, 
-                                                        f"input.{config.classes['search_input'][config.site_type]}").clear()
-                                            toolbar.find_element(By.CSS_SELECTOR, 
-                                                        f"input.{config.classes['search_input'][config.site_type]}").send_keys(
-                                                key)
-                                            l = toolbar.find_element(By.CSS_SELECTOR, 
-                                                        f"input.{config.classes['search_input'][config.site_type]}").get_attribute("value")
+                                            # Méthode JavaScript pour vider le champ
+                                            driver.execute_script("arguments[0].value = '';", search_input)
+                                            driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", search_input)
+                                            
+                                            search_input.send_keys(key)
+                                            l = search_input.get_attribute("value")
                                             if l == key:
                                                 try:
                                                     element = WebDriverWait(driver, 2).until(
@@ -351,8 +362,8 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    config.scriptType = 'LIVE'
+    config.scriptType = '40A'
     config.site_type = 'mobile_site'
     #GetIfNewSite(driver)
     print(config.site_type)
-    AfficherParis(driver, 'Temps Réglementaire', '1X2')
+    AfficherParis(driver)

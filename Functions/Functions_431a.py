@@ -36,7 +36,7 @@ def all_script(driver):
     while not rechercheDeMatch(driver) and not config.error:
         config.log('Erreur lors de la recherche de match!', 'error', False, 2)
     # --------
-
+    print('error 0', config.error)  
     # Indique qu'un match a été trouvé
     config.match_found = True
 
@@ -44,26 +44,27 @@ def all_script(driver):
     if config.match_found and not config.error:
         # Démarre le script avec le type et numéro spécifiés
         script_manager.start_script(config.scriptType, config.script_num)
-
+        print('error 1', config.error)
         # Get league name and match URL
         ligue_info = GetLigueName.fromUrl(driver)
         config.ligue_name = ligue_info[0]
         config.match_Url = ligue_info[1]
-
+        print('error 2', config.error)
         # Récupère les noms des joueurs/équipes
         config.teams = GetPlayersName(driver)
-
+        print('error 3', config.error)
         # Vérifie si c'est un nouveau match depuis l'URL
         newmatchFromUrl(driver)
-
+        print('error 4', config.error)
         # Met à jour le statut du match dans le gestionnaire de matchs
         match_manager.add_match(config.newmatch)
-
+        print('error 5', config.error)
         config.log("-" * 60, "success", False, False, False)
         config.log(f'MATCH OK : {str(config.teams)} | {config.ligue_name}', 'success', False, 0, False)
         config.log("-" * 60, "success", False, False, False)
 
     if config.error:
+        print("❌ Une erreur est survenue, arrêt du script.")
         return False
 
     for scriptType in config.scriptTypeList:
@@ -381,7 +382,9 @@ def all_script(driver):
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
-        GetIfMatchPage(driver)
+        if not GetIfMatchPage(driver):
+            config.error = True
+            break
     config.switchScript('4315A')
     print("update : " + config.newmatch)
     for i in config.scriptTypeList:

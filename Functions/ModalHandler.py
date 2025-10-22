@@ -1,8 +1,11 @@
 import re
-
+import os
+import sys
+import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.DeleteBet import DeleteBet
@@ -32,7 +35,11 @@ def ModalHandler(driver):
             validation = driver.find_elements(By.CLASS_NAME,
                                               config.classes['modal_header'][config.site_type])[
                 0].text
-            if re.search("VOTRE PARI EST ACCEPTÉ !", validation, re.IGNORECASE) is not None:
+            if config.site_type == 'mobile_site':
+                search_result = re.search("effectué", validation, re.IGNORECASE)
+            else:
+                search_result = re.search("VOTRE PARI A ÉTÉ ACCEPTÉ !", validation, re.IGNORECASE)
+            if search_result is not None:
                 try:
                     element = WebDriverWait(driver, 3).until(
                         EC.visibility_of_element_located(
@@ -43,6 +50,7 @@ def ModalHandler(driver):
                     config.log(f'            Impossible de cliquer sur Ok', 'warning', False)
                     logline += 1
                 else:
+                    time.sleep(2)
                     modal_wrapper = \
                         driver.find_elements(By.CLASS_NAME, config.classes['close_modal_btn'][config.site_type])[0]
                     modal_wrapper.click()
@@ -147,7 +155,11 @@ def ModalHandler(driver):
             validation = driver.find_elements(By.CLASS_NAME,
                                               config.classes['modal_header'][config.site_type])[
                 0].text
-            if re.search("VOTRE PARI EST ACCEPTÉ !", validation, re.IGNORECASE) is not None:
+            if config.site_type == 'mobile_site':
+                search_result = re.search("effectué", validation, re.IGNORECASE)
+            else:
+                search_result = re.search("VOTRE PARI A ÉTÉ ACCEPTÉ !", validation, re.IGNORECASE)
+            if search_result is not None:
 
                 try:
                     element = WebDriverWait(driver, 3).until(
@@ -172,9 +184,13 @@ def ModalHandler(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
-
+     # driver.switch_to.window(driver.window_handles[0])
+    config.localhost = 43151
+    from ChromeDriver.SetDriver import get_script_driver
+    num_fenetre = 1
+    driver = get_script_driver(num_fenetre)
     # driver.switch_to.window(driver.window_handles[0])
+    config.site_type = 'mobile_site'
+    config.scriptType = '40A'
     config.mise = 0.2
-    GetIfNewSite(driver)
     ModalHandler(driver)

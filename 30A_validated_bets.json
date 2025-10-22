@@ -1042,5 +1042,50 @@
         "winscore": "30:30",
         "timestamp": "2025-10-20 12:11:44",
         "url": "wta guangzhou"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.65",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 12:47:29",
+        "url": "atp basel"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.8",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 12:50:39",
+        "url": "atp basel"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.7",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 12:58:46",
+        "url": "atp basel"
+    },
+    {
+        "montant": 2.21,
+        "cote": "2.45",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 13:34:49",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 3.69,
+        "cote": "2.52",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2025-10-22 13:39:05",
+        "url": "wta rovereto"
     }
 ]

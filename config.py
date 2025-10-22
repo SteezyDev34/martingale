@@ -34,9 +34,9 @@ tipster = '1xbet'
 scriptType = ""
 localhost = ''
 api_url = "http://auxobetbot.sc2vagr6376.universe.wf"
-site_url = "https://ca.1xbet.com/fr/live/tennis"
-site_line_url = "https://ca.1xbet.com/fr/line/tennis"
-site_type = 'new_site'
+site_url = "https://ca.1xbet.com/fr/live/tennis?platform_type=desktop"
+site_line_url = "https://ca.1xbet.com/fr/line/tennis?platform_type=desktop"
+site_type = 'mobile_site' # new_site, mobile_site, old_site
 match_name = ''
 nb_log_lines = 0
 # La configuration des scores est maintenant importée depuis le module config
