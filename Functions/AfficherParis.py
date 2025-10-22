@@ -233,7 +233,7 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
         elif config.scriptType == 'BREAK':
             key = 'Gagne dans le jeu'
         else:
-            key = 'Score de la partie. ' + theset + ' ' + args
+            key = 'Score du jeu. ' + theset + ' ' + args
     else:
         theset = ''
         args = categorie
