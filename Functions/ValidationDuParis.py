@@ -192,21 +192,27 @@ def ValidationDuParis(driver, nexbet=False):
         # Save validated bet to JSON file named after script type
         json_filename = f"{config.scriptType}_validated_bets.json"
         try:
-            # Load existing bets if file exists
+            # Chargement des paris existants avec gestion de corruption JSON
             try:
                 with open(json_filename, 'r') as f:
                     existing_bets = json.load(f)
             except FileNotFoundError:
                 existing_bets = []
+            except json.JSONDecodeError as e:
+                # Sauvegarde du fichier corrompu
+                backup_name = json_filename.replace('.json', f'_corrupted_{int(time.time())}.json')
+                os.rename(json_filename, backup_name)
+                config.log(f"Fichier JSON corrompu détecté, backup créé : {backup_name}", 'error', False)
+                existing_bets = []
 
-            # Append new bet
+            # Ajout du nouveau pari
             existing_bets.append(config.validated_bet)
 
-            # Save updated bets
+            # Sauvegarde des paris mis à jour
             with open(json_filename, 'w') as f:
                 json.dump(existing_bets, f, indent=4)
         except Exception as e:
-            config.log(f"Error saving validated bet to JSON: {e}", 'error', False)
+            config.log(f"Erreur lors de la sauvegarde du pari validé dans le JSON : {e}", 'error', False)
         config.placed_game = config.looking_game
         config.log(f'{config.validated_bet}', 'info', False, indent=3)
         config.perte = float(config.perte) + float(config.mise)
