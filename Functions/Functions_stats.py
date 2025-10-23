@@ -233,10 +233,30 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
         print(f"Requête API pour {playerName2}: {url2}")
         line += 1
         # Désactiver la vérification SSL pour les certificats auto-signés
-        d1 = requests.get(url1, headers=headers, verify=False).json()
-        d2 = requests.get(url2, headers=headers, verify=False).json()
-        print(f"d1: {d1}")
-        print(f"d2: {d2}")
+        resp1 = requests.get(url1, headers=headers, verify=False)
+        resp2 = requests.get(url2, headers=headers, verify=False)
+        print(f"resp1: {resp1}")
+        print(f"resp2: {resp2}")
+        try:
+            if resp1.ok and resp1.text.strip():
+                d1 = resp1.json()
+            else:
+                print(f"Réponse vide ou non-JSON pour {playerName1}: {resp1.text}")
+                d1 = {}
+        except Exception as e:
+            print(f"Erreur JSON pour {playerName1}: {e}, contenu: {resp1.text}")
+            d1 = {}
+
+        try:
+            if resp2.ok and resp2.text.strip():
+                d2 = resp2.json()
+            else:
+                print(f"Réponse vide ou non-JSON pour {playerName2}: {resp2.text}")
+                d2 = {}
+        except Exception as e:
+            print(f"Erreur JSON pour {playerName2}: {e}, contenu: {resp2.text}")
+            d2 = {}
+       
 
         # Vérifier si des résultats ont été trouvés
         if not d1.get('data') or len(d1['data']) == 0:
