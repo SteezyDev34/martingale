@@ -159,7 +159,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                             print('bet_text', bet_text)
                         else:
                             bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
-                        if bet_text.strip() and 'jeu '.lower()+str(jeu).lower() in bet_text.strip().lower() and sType.lower() in bet_text.strip().lower():  # Only append if bet_text is not empty
+                        if bet_text.strip() and sType.lower() in bet_text.strip().lower():  # Only append if bet_text is not empty
                             bet.click()
                             betclic = True
                             print('clic ok')
@@ -186,7 +186,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                                     bet_text = bet.find_element(By.CLASS_NAME, 'ui-market__name').text
                                 else:
                                     bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
-                                if bet_text.strip() and 'jeu '.lower()+str(jeu).lower() in bet_text.strip().lower() and sType.lower() in bet_text.strip().lower():  # Only append if bet_text is not empty
+                                if bet_text.strip() and sType.lower() in bet_text.strip().lower():  # Only append if bet_text is not empty
                                     bet.click()
                                     betclic = True
                                     break
