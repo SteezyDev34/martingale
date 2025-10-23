@@ -62,7 +62,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                         config.looking_game) + ' 40-0'
             if config.scriptType == '030':
                 sType = "Receveur va mener 30-0"
-                pint(sType)
+                print(sType)
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
                         len(first_player) > 0 and int(config.jeu_actuel) == int(config.looking_game)):
                     first_player = 1
