@@ -18,6 +18,7 @@ from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetJsonData import getCompet, DispatchPerte, set1DispatchPerte
 from Functions.Managers.MatchManager import match_manager
 from Functions.Managers.ScriptManager import script_manager
+from Functions.DeleteBet import DeleteBet
 from Functions.UpdateMatchDone import todo
 from Functions.VerificationListeMatchLive import VerificationListeMatchLive
 from Functions.WaitWhileTimeAppear import WaitWhileTimeAppear
@@ -144,6 +145,10 @@ def rechercheDeMatch(driver):
             config.log("PAGE VIDE", 'error', True)
             driver.get(config.site_url)
             return False"""
+        if config.site_type == 'mobile_site':
+            config.site_type = 'new_site'
+            DeleteBet(driver)
+            config.site_type = 'mobile_site'
         try:
             # RECUPERATION DES LIGUES EN COURS
             config.log('Récupération des ligues', 'info', False, 1, show_script_type=False)
@@ -237,6 +242,10 @@ def rechercheDeMatch(driver):
                                         # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
                                         config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
                                                                                        config.matchlist_file_name)
+                                        if config.site_type == 'mobile_site':
+                                            config.site_type = 'new_site'
+                                            DeleteBet(driver)
+                                            config.site_type = 'mobile_site'
                                         if config.newmatch[0]:
                                             print('#3TFYH', config.error)
                                             if OuverturePageMatch.main(bet_item, config.script_num,
