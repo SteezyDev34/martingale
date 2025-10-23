@@ -271,16 +271,17 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
                         else:
                             if config.site_type == 'mobile_site':
                                 if config.scriptType in ['1SET', 'BREAK']:
-                                    matching_text = select_option_text.strip().lower() == f'{theset}'.lower()
-                            else:
-                                matching_text = select_option_text.strip().lower() == f'{args}'.lower() + '. ' + str(theset).lower()
+                                    the_text = f'{theset}'.lower()
+                                    matching_text = select_option_text.strip().lower() == the_text
+                                else:
+                                    the_text = f'{args}'.lower() + '. ' + str(theset).lower()
+                                    matching_text = select_option_text.strip().lower() == the_text
 
                             else:
                                 matching_text = select_option_text.strip().lower() == str(
                                     theset).lower() + f'{args}'.lower()
                             if matching_text:
-                                config.log('Lien ' + select_option_text.lower() + ' = ' + str(
-                                    theset).lower() + 'set Evénements rapides'.lower(), 'warning', False, 3)
+                                config.log('Lien ' + select_option_text.lower() + ' = ' + the_text, 'warning', False, 3)
                                 logline += 1
                                 try:
                                     select_option.click()
@@ -354,8 +355,7 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
                                         else:
                                             selection = True
                             else:
-                                config.log('Lien ' + select_option_text.lower() + ' > ' + str(
-                                    theset).lower() + f'{args}'.lower(), 'warning', False, 3)
+                                config.log('Lien ' + select_option_text.lower() + ' > ' + the_text, 'warning', False, 3)
                                 logline += 1
                                 continue
 
