@@ -270,7 +270,11 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
 
                         else:
                             if config.site_type == 'mobile_site':
+                                if config.scriptType in ['1SET', 'BREAK']:
+                                    matching_text = select_option_text.strip().lower() == f'{theset}'.lower()
+                            else:
                                 matching_text = select_option_text.strip().lower() == f'{args}'.lower() + '. ' + str(theset).lower()
+
                             else:
                                 matching_text = select_option_text.strip().lower() == str(
                                     theset).lower() + f'{args}'.lower()
