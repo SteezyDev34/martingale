@@ -235,6 +235,9 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
         # Désactiver la vérification SSL pour les certificats auto-signés
         d1 = requests.get(url1, headers=headers, verify=False).json()
         d2 = requests.get(url2, headers=headers, verify=False).json()
+        if config.devMode:
+            print(f"d1: {d1}")
+            print(f"d2: {d2}")
 
         # Vérifier si des résultats ont été trouvés
         if not d1.get('data') or len(d1['data']) == 0:
