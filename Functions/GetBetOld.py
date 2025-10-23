@@ -103,13 +103,13 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                 config.win_type = '15:15'
 
             if config.scriptType == '6P':
-                sType = f"Jeu {jeu}, Nombre de Points 6"
+                sType = f"Jeu {jeu}, 6"
                 config.win_type = ['40:30', '30:40']  # inversé
             if config.scriptType == '5P':
-                sType = f"Jeu {jeu}, Nombre de Points 5"
+                sType = f"Jeu {jeu}, 5"
                 config.win_type = ['40:15', '15:40']  # inversé
             if config.scriptType == '4P':
-                sType = f"Jeu {jeu}, Nombre de Points 4"
+                sType = f"Jeu {jeu}, 4"
                 config.win_type = ['40:0', '0:40']  # inversé
             if config.site_type == 'mobile_site':
                 x_path = (
