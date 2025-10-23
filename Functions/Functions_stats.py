@@ -233,29 +233,28 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
         print(f"Requête API pour {playerName2}: {url2}")
         line += 1
         # Désactiver la vérification SSL pour les certificats auto-signés
-        resp1 = requests.get(url1, headers=headers, verify=False)
-        resp2 = requests.get(url2, headers=headers, verify=False)
-        print(f"resp1: {resp1}")
-        print(f"resp2: {resp2}")
-        try:
-            if resp1.ok and resp1.text.strip():
-                d1 = resp1.json()
-            else:
-                print(f"Réponse vide ou non-JSON pour {playerName1}: {resp1.text}")
-                d1 = {}
-        except Exception as e:
-            print(f"Erreur JSON pour {playerName1}: {e}, contenu: {resp1.text}")
-            d1 = {}
+        def get_json_with_retry(url, playerName, max_attempts=3, delay=5):
+            for attempt in range(max_attempts):
+                resp = requests.get(url, headers=headers, verify=False)
+                print(f"Tentative {attempt+1}/{max_attempts} pour {playerName}, statut: {resp.status_code}")
+                if resp.status_code == 429:
+                    print(f"429 Too Many Requests pour {playerName}, attente {delay}s...")
+                    time.sleep(delay)
+                    continue
+                try:
+                    if resp.ok and resp.text.strip():
+                        return resp.json()
+                    else:
+                        print(f"Réponse vide ou non-JSON pour {playerName}: {resp.text}")
+                        return {}
+                except Exception as e:
+                    print(f"Erreur JSON pour {playerName}: {e}, contenu: {resp.text}")
+                    return {}
+            print(f"Échec après {max_attempts} tentatives pour {playerName}")
+            return {}
 
-        try:
-            if resp2.ok and resp2.text.strip():
-                d2 = resp2.json()
-            else:
-                print(f"Réponse vide ou non-JSON pour {playerName2}: {resp2.text}")
-                d2 = {}
-        except Exception as e:
-            print(f"Erreur JSON pour {playerName2}: {e}, contenu: {resp2.text}")
-            d2 = {}
+        d1 = get_json_with_retry(url1, playerName1)
+        d2 = get_json_with_retry(url2, playerName2)
        
 
         # Vérifier si des résultats ont été trouvés
