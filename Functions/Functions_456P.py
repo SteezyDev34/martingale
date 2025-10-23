@@ -65,7 +65,7 @@ def all_script(driver):
 
     if config.error:
         return False
-
+    DeleteBet(driver)
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)

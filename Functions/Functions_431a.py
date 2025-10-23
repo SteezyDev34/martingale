@@ -66,6 +66,7 @@ def all_script(driver):
     if config.error:
         print("❌ Une erreur est survenue, arrêt du script.")
         return False
+    DeleteBet(driver)
 
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
