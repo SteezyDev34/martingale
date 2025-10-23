@@ -27,28 +27,9 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
     clic = False
     tentative_clic = 0
     sType = selection
-    if config.scriptType == "40A":
-        sType = ": 40-40"
-        config.win_type = '40:40'
+    
 
-    elif config.scriptType == "30A":
-        sType = " 30-30"
-        config.win_type = '30:30'
-    elif config.scriptType == "15A":
-        sType = " 15-15"
-        config.win_type = '15:15'
-
-    if config.scriptType == '6P':
-        sType = f"Jeu {jeu}, Nombre de Points 6"
-        config.win_type = ['40:30', '30:40']  # inversé
-    if config.scriptType == '5P':
-        sType = f"Jeu {jeu}, Nombre de Points 5"
-        config.win_type = ['40:15', '15:40']  # inversé
-    if config.scriptType == '4P':
-        sType = f"Jeu {jeu}, Nombre de Points 4"
-        config.win_type = ['40:0', '0:40']  # inversé
-
-    print('sType ',sType)
+    # print('i '+str(i))
     while not clic and tentative_clic < 5:
         if config.scriptType in config.allScriptType:
             scoreboard_player = driver.find_elements(By.CLASS_NAME, config.classes['scoreboard_player_score'][config.site_type] )
@@ -101,6 +82,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     first_player = 2
                     config.win_type = '0:30'  # inversé
             if config.scriptType == 'BREAK':
+            
 
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                     first_player = 2
@@ -109,24 +91,38 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     first_player = 1
                     config.win_type = ['40:0', '40:15', '40:30', 'A:40']
                 sType = "Joueur " + str(first_player) + " va gagner le"
-            if config.scriptType == '15A' or config.scriptType == '30A' or config.scriptType == '40A' or config.scriptType == '030' or config.scriptType == '300':
+            if config.scriptType == "40A":
+                sType = f"Jeu {jeu} : 40-40 - Oui"
+                config.win_type = '40:40'
+
+            elif config.scriptType == "30A":
+                sType = f"Jeu {jeu} : 30-30 - Oui"
+                config.win_type = '30:30'
+            elif config.scriptType == "15A":
+                sType = f"Jeu {jeu} : 15-15 - Oui"
+                config.win_type = '15:15'
+
+            if config.scriptType == '6P':
+                sType = f"Jeu {jeu}, Nombre de Points 6"
+                config.win_type = ['40:30', '30:40']  # inversé
+            if config.scriptType == '5P':
+                sType = f"Jeu {jeu}, Nombre de Points 5"
+                config.win_type = ['40:15', '15:40']  # inversé
+            if config.scriptType == '4P':
+                sType = f"Jeu {jeu}, Nombre de Points 4"
+                config.win_type = ['40:0', '0:40']  # inversé
+            if config.site_type == 'mobile_site':
                 x_path = (
-                    '//ul[contains(@class, "game-markets-group__list")]'
-                    '//li//button[contains(@class, "game-markets-group__market")]'
+                        '//ul[contains(@class, "game-markets-group__list")]'
+                        '//li//button[contains(@class, "game-markets-group__market") and .//span[contains(@class, "ui-market__name") and contains(text(), "' + str(sType) + '")]]'
                 )
             else:
-                if config.site_type == 'mobile_site':
-                    x_path = (
-                            '//ul[contains(@class, "game-markets-group__list")]'
-                            '//li//button[contains(@class, "game-markets-group__market") and .//span[contains(@class, "ui-market__name") and contains(text(), "' + str(sType) + '")]]'
-                    )
-                else:
-                    x_path = (
-                            '//div[contains(@class, "bet_group_col")]'
-                            '//div[not(contains(@style, "display: none;"))]'
-                            '//div[contains(@class, "bet-inner") and not(contains(@class, "blockSob"))]'
-                            '//span[contains(text(), "' + str(sType) + '")]'
-                    )
+                x_path = (
+                        '//div[contains(@class, "bet_group_col")]'
+                        '//div[not(contains(@style, "display: none;"))]'
+                        '//div[contains(@class, "bet-inner") and not(contains(@class, "blockSob"))]'
+                        '//span[contains(text(), "' + str(sType) + '")]'
+                )
             # TODO le xpath direct sur le mtodu bouton ne ofnctionne plus
         else:
             x_path = (
@@ -163,7 +159,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                             print('bet_text', bet_text)
                         else:
                             bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
-                        if bet_text.strip() and sType.lower() in bet_text.strip().lower():  # Only append if bet_text is not empty
+                        if bet_text.strip() and 'jeu '.lower()+str(jeu).lower() in bet_text.strip().lower() and sType.lower() in bet_text.strip().lower():  # Only append if bet_text is not empty
                             bet.click()
                             betclic = True
                             print('clic ok')
@@ -190,7 +186,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                                     bet_text = bet.find_element(By.CLASS_NAME, 'ui-market__name').text
                                 else:
                                     bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
-                                if bet_text.strip() and sType in bet_text.strip():  # Only append if bet_text is not empty
+                                if bet_text.strip() and 'jeu '.lower()+str(jeu).lower() in bet_text.strip().lower() and sType.lower() in bet_text.strip().lower():  # Only append if bet_text is not empty
                                     bet.click()
                                     betclic = True
                                     break
