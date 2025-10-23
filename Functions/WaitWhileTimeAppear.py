@@ -3,10 +3,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 import config
-from ChromeDriver.SetDriver1 import driver
 
 
-def WaitWhileTimeAppear():
+def WaitWhileTimeAppear(driver):
     tentative = 0
     time_show = False
 
@@ -40,4 +39,4 @@ def WaitWhileTimeAppear():
 
 
 if '__main__' == __name__:
-    print(WaitWhileTimeAppear())
+    print(WaitWhileTimeAppear(driver))

@@ -596,7 +596,7 @@ def classementeDeMatch(driver, use_json_cache=True):
                 else:
                     continue
 
-                if not WaitWhileTimeAppear():
+                if not WaitWhileTimeAppear(driver):
                     config.log('Wait time appear', 'warning', True)
                     continue
 
