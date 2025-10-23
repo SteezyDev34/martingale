@@ -407,6 +407,11 @@ def rechercheDeMatch1set(driver):
                                     config.log('Score ok', 'info', False, 4)
                                     # config.log_clear_line()
                                     # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
+                                    if config.site_type == 'mobile_site':
+                                        config.site_type = 'new_site'
+                                        DeleteBet(driver)
+                                        config.site_type = 'mobile_site'
+                                    
                                     config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
                                                                                    config.matchlist_file_name)
                                     if config.newmatch[0]:
