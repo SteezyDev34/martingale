@@ -92,14 +92,14 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     config.win_type = ['40:0', '40:15', '40:30', 'A:40']
                 sType = "Joueur " + str(first_player) + " va gagner le"
             if config.scriptType == "40A":
-                sType = f"Jeu {jeu} : 40-40 - Oui"
+                sType = f"Jeu {jeu}: 40-40 - Oui" # signe : collé au num du jeu 
                 config.win_type = '40:40'
 
             elif config.scriptType == "30A":
-                sType = f"Jeu {jeu} : 30-30 - Oui"
+                sType = f"Jeu {jeu} 30-30 - Oui" # pas de : 
                 config.win_type = '30:30'
             elif config.scriptType == "15A":
-                sType = f"Jeu {jeu} : 15-15 - Oui"
+                sType = f"Jeu {jeu} 15-15 - Oui" # pas de  : 
                 config.win_type = '15:15'
 
             if config.scriptType == '6P':
