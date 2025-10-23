@@ -545,6 +545,8 @@ def classementeDeMatch(driver, use_json_cache=True):
     driver.get(config.site_line_url)
     config.error = False
     config.match_found = False
+    save_site_type = config.site_type
+    config.site_type = 'new_site'
     while not config.match_found and not config.error:
         line = 0
         config.init_variable()
@@ -777,6 +779,7 @@ def classementeDeMatch(driver, use_json_cache=True):
                     config.log(f"Erreur lors du déplacement de {filename} vers done: {str(e)}", 'warning', True)
         config.log_clear_line(line)
         break
+    config.site_type = save_site_type
 
 
 # Fonction déplacée dans MatchManager
