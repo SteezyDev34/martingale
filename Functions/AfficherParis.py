@@ -221,7 +221,7 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
         else:
             theset = str(config.set_actuel) + "ème set"
         if config.scriptType == '1SET' or config.scriptType == 'BREAK':
-            args = ' set'
+            args = ''
         else:
             args = 'Evénements rapides'
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
