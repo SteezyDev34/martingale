@@ -83,7 +83,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     first_player = 1
                     if config.scriptType == '015':
                         config.win_type = '15:0'  # inversé
-                sType = f"Joueur {first_player} va gagner le point 1 dans le jeu {jeu}"
+                sType = f"V{first_player} Point 1 Dans le Jeu {jeu}"
                 print(sType)
 
             if config.scriptType == '300':
