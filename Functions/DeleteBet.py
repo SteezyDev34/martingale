@@ -11,29 +11,47 @@ from Functions.GetIfNewSite import GetIfNewSite
 
 def DeleteBet(driver):
     # driver.switch_to.window(driver.window_handles[0])
-    try:
-        element = WebDriverWait(driver, 1).until(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, config.classes['coupon_bet_remove'][config.site_type]))
-        )
-        element = driver.find_element(By.CLASS_NAME, config.classes['coupon_bet_remove'][config.site_type])
-        element.click()
-
-    except:
+    if config.site_type == 'mobile_site':
         try:
-            element = WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located(
-                    (By.CLASS_NAME, config.classes['coupon_bet_remove_lock'][config.site_type]))
-            )
-            element = driver.find_element(By.CLASS_NAME, config.classes['coupon_bet_remove_lock'][config.site_type])
-            element.click()
+            container = driver.find_element(By.CLASS_NAME, 'bottom-navigation-link-coupon-content__count')
+            if not container.is_displayed()  and container.text == '0':
+                return False
         except:
-            return False
+            pass
         else:
-            return True
-    else:
-        # print("coupon supprimé")
-        return True
+            try:
+                container = driver.find_element(By.CLASS_NAME, 'quick-coupon-container__coupon')
+                if not container.is_displayed():
+                    bottom_navigation_item_coupon = driver.find_element(By.CLASS_NAME, 'bottom-navigation__item--coupon')
+                    bottom_navigation_item_coupon.click()
+            except:
+                pass
+    count = 0
+    while True:
+        try:
+            element = WebDriverWait(driver, 0.5).until(
+                EC.presence_of_element_located(
+                    (By.CLASS_NAME, config.classes['coupon_bet_remove'][config.site_type]))
+            )
+            element = driver.find_element(By.CLASS_NAME, config.classes['coupon_bet_remove'][config.site_type])
+            element.click()
+
+        except:
+            try:
+                element = WebDriverWait(driver, 0.5).until(
+                    EC.presence_of_element_located(
+                        (By.CLASS_NAME, config.classes['coupon_bet_remove_lock'][config.site_type]))
+                )
+                element = driver.find_element(By.CLASS_NAME, config.classes['coupon_bet_remove_lock'][config.site_type])
+                element.click()
+            except:
+                count +=1
+                print('pas de bouton supprimé')
+                if count >=2:
+                    break
+        else:
+            count = 0
+            print("coupon supprimé")
 
 
 if __name__ == "__main__":

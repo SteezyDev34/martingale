@@ -1,5 +1,24 @@
 import os
 import sys
+import subprocess
+
+# Vérification et installation automatique des dépendances
+def auto_install_requirements():
+    try:
+        import cv2
+    except ImportError as e:
+        print(f"⚠️ Dépendance manquante : {e}. Installation automatique...")
+        try:
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
+            print("✅ Dépendances installées. Relance du script...")
+            os.execv(sys.executable, [sys.executable] + sys.argv)
+        except Exception as err:
+            print(f"❌ Échec de l'installation automatique des dépendances : {err}")
+            sys.exit(1)
+
+auto_install_requirements()
+import os
+import sys
 
 # Ajouter le répertoire parent au chemin Python
 current_file_path = os.path.abspath(__file__)
@@ -13,7 +32,7 @@ try:
     from dependency_manager import check_and_install_dependencies
     
     print("🔧 Vérification des dépendances...")
-    if not check_and_install_dependencies(auto_install=False):
+    if not check_and_install_dependencies(auto_install=True):
         print("❌ Erreur lors de l'installation des dépendances. Arrêt du programme.")
         sys.exit(1)
     print("✅ Toutes les dépendances sont prêtes!\n")
