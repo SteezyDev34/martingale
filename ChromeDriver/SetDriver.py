@@ -340,31 +340,6 @@ def get_script_driver(num_fenetre):
                 print(f"✅ Fenêtre 0 déjà existante, pas de création")
             
             save_window_handles()  # Sauvegarde la configuration initiale
-            
-        # Configure les fenêtres existantes avec les nouvelles positions et tailles
-        for num, handle in window_handles.items():
-            try:
-                driver.switch_to.window(handle)
-                screen_size = driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
-                screen_width = screen_size[0]
-                screen_height = screen_size[1]
-                
-                # Ne repositionne pas la fenêtre 0 (fenêtre de référence)
-                if num == '0':
-                    continue
-                
-                # Utilise la nouvelle fonction de calcul avec taille
-                x_pos, y_pos, width, height = calculate_window_position(int(num), screen_width, screen_height)
-                
-                driver.set_window_position(x_pos, y_pos)
-                driver.set_window_size(width, height)
-                print(f"✅ Fenêtre {num} repositionnée à ({x_pos}, {y_pos}) taille {width}x{height}")
-            except Exception as e:
-                print(f"❌ Erreur lors de la configuration de la fenêtre {num}: {e}")
-                
-        # Revient à la fenêtre 0 si elle existe
-        if '0' in window_handles:
-            driver.switch_to.window(window_handles['0'])
 
     # Si la fenêtre demandée n'existe pas encore, la créer
     if num_str not in window_handles:
