@@ -150,7 +150,7 @@ def ValidationDuParis(driver, nexbet=False):
 
                                     try:
                                         if printtext == 0:
-                                            waiting_time = 3
+                                            waiting_time = 5
                                         else:
                                             waiting_time = 1
                                         WebDriverWait(driver, waiting_time).until(EC.visibility_of_element_located(
