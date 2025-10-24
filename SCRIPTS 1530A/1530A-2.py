@@ -57,32 +57,7 @@ driver = get_script_driver(num_fenetre)
 from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
-
-confirmation = input(f"Classement ? (Y/N): ")
-config.log_clear_line()
-
-if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
-    confirmation = input(f"Type de Classement ? (1/2): ")
-    config.log_clear_line()
-    if confirmation == '1':
-        config.log("-" * 60, "info", False, False, False)
-        print("Classement simple en cours")
-        config.log("-" * 60, "info", False, False, False)
-        classementeDeMatch(driver)
-    else:
-        config.log("-" * 60, "info", False, False, False)
-        print("Classement complet en cours")
-        config.log("-" * 60, "info", False, False, False)
-        newclassementeDeMatch(driver)
-        classementeDeMatch(driver)
-
-is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
-config.log_clear_line()
-if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
-    config.in_stat = True
-    config.log("-" * 60, "purple", False, False, False)
-    print(f"{config.PURPLE}CLASSEMENT : OUI")
-    config.log("-" * 60, "purple", False, False, False)
+config.in_stat = True
 config.scriptTypeList = config.scriptTypeList
 for i in config.scriptTypeList:
     config.ScriptConfig(i)

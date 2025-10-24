@@ -75,14 +75,7 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
         config.log("-" * 60, "info", False, False, False)
         newclassementeDeMatch(driver)
         classementeDeMatch(driver)
-
-is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
-config.log_clear_line()
-if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in.upper() == 'o':
-    config.in_stat = True
-    config.log("-" * 60, "purple", False, False, False)
-    print(f"{config.PURPLE}CLASSEMENT : OUI")
-    config.log("-" * 60, "purple", False, False, False)
+config.in_stat = True
 config.scriptTypeList = config.scriptTypeList
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
