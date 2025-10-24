@@ -4,7 +4,7 @@ $Tabs = @(
     @{Title = "1530A-1"; Script = "$Project\1530A-1.ps1"},
     @{Title = "5P40A-1"; Script = "$Project\5P40A-1.ps1"},
     @{Title = "4P6P-1"; Script = "$Project\4P6P-1.ps1"},
-    @{Title = "BREAK-1"; Script = "$Project\BREAK-1.ps1"},
+    @{Title = "BREAK-1"; Script = "$Project\BREAK-1.ps1"}
 )
 
 # --- Créer dossier logs s'il n'existe pas ---
