@@ -25,17 +25,17 @@ def calculate_window_position(num_fenetre, screen_width, screen_height):
         tuple: (x_pos, y_pos, width, height) Position et taille de la fenêtre
     """
     # Calcul de la taille de chaque fenêtre (grille 4 colonnes)
-    fenetre_width = int(screen_width / 6)
+    fenetre_width = int(screen_width / 4)
     fenetre_height = 375  # Hauteur fixe ou calculée selon vos besoins
     
     # Calcul de la position dans la grille (base 0)
     grid_position = num_fenetre - 1
     
     # Calcul de la colonne (0 à 5)
-    colonne = grid_position % 6
+    colonne = grid_position % 4
     
     # Calcul de la ligne (0, 1, 2, etc.)
-    ligne = grid_position // 6
+    ligne = grid_position // 4
     
     # Position finale
     x_pos = int(colonne * fenetre_width)
