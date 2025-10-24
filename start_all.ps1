@@ -1,10 +1,10 @@
 # --- Configuration ---
 $Project = "C:\Users\Administrator\Projets\martingale\scripts_startup"
 $Tabs = @(
-    @{Title = "4315A-1"; Script = "$Project\4315A-1.ps1"},
-    @{Title = "4015-1"; Script = "$Project\4015-1.ps1"},
-    @{Title = "4030-1"; Script = "$Project\4030-1.ps1"},
-    @{Title = "1SET-1"; Script = "$Project\1SET-1.ps1"}
+    @{Title = "1530A-1"; Script = "$Project\1530A-1.ps1"},
+    @{Title = "5P40A-1"; Script = "$Project\5P40A-1.ps1"},
+    @{Title = "4P6P-1"; Script = "$Project\4P6P-1.ps1"},
+    @{Title = "BREAK-1"; Script = "$Project\BREAK-1.ps1"}
 )
 
 # --- Créer dossier logs s'il n'existe pas ---
