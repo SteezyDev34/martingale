@@ -13,9 +13,11 @@ $Tabs = @(
 
 # --- Créer dossier logs s'il n'existe pas ---
 $LogsFolder = "C:\Users\Administrator\Projets\martingale\logs"
-if (-not (Test-Path $LogsFolder)) { New-Item -ItemType Directory -Path $LogsFolder }
+if (-not (Test-Path $LogsFolder)) { 
+    New-Item -ItemType Directory -Path $LogsFolder | Out-Null
+}
 
-# --- Lancer chaque onglet WT ---
+# --- Lancer chaque onglet WT avec délai de 5 secondes ---
 $first = $true
 foreach ($tab in $Tabs) {
     $arg = "new-tab --title `"$($tab.Title)`" powershell -NoExit -File `"$($tab.Script)`""
@@ -26,4 +28,7 @@ foreach ($tab in $Tabs) {
     } else {
         Start-Process wt -ArgumentList "-w 0 $arg"
     }
+
+    # Délai de 5 secondes avant le prochain lancement
+    Start-Sleep -Seconds 5
 }
