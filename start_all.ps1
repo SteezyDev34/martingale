@@ -2,8 +2,8 @@
 $Project = "C:\Users\Administrator\Projets\martingale\scripts_startup"
 $Tabs = @(
     @{Title = "4315A-1"; Script = "$Project\4315A-1.ps1"},
-    @{Title = "4030-1"; Script = "$Project\4030-1.ps1"},
     @{Title = "4015-1"; Script = "$Project\4015-1.ps1"},
+    @{Title = "4030-1"; Script = "$Project\4030-1.ps1"},
     @{Title = "1SET-1"; Script = "$Project\1SET-1.ps1"}
 )
 
