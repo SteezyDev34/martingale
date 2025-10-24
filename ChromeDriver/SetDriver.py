@@ -324,17 +324,18 @@ def get_script_driver(num_fenetre):
         # Si aucun handle valide n'a été chargé
         if not window_handles:
             print("🆕 Initialisation d'une nouvelle session...")
-            window_handles['1'] = driver.current_window_handle
             
-            # Configure la fenêtre principale avec la nouvelle méthode
+            # Crée d'abord la fenêtre 0 comme fenêtre de référence
+            window_handles['0'] = driver.current_window_handle
             screen_size = driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
             screen_width = screen_size[0]
             screen_height = screen_size[1]
-            x_pos, y_pos, width, height = calculate_window_position(1, screen_width, screen_height)
             
-            driver.set_window_position(x_pos, y_pos)
-            driver.set_window_size(width, height)
-            print(f"✅ Fenêtre 1 (principale) initialisée à ({x_pos}, {y_pos}) taille {width}x{height}")
+            # Configure la fenêtre 0 (fenêtre de référence, positionnée hors écran ou minimale)
+            driver.set_window_position(0, 0)
+            driver.set_window_size(400, 300)
+            print(f"✅ Fenêtre 0 (référence) initialisée à (0, 0) taille 400x300")
+            
             save_window_handles()  # Sauvegarde la configuration initiale
             
         # Configure les fenêtres existantes avec les nouvelles positions et tailles
@@ -345,6 +346,10 @@ def get_script_driver(num_fenetre):
                 screen_width = screen_size[0]
                 screen_height = screen_size[1]
                 
+                # Ne repositionne pas la fenêtre 0 (fenêtre de référence)
+                if num == '0':
+                    continue
+                
                 # Utilise la nouvelle fonction de calcul avec taille
                 x_pos, y_pos, width, height = calculate_window_position(int(num), screen_width, screen_height)
                 
@@ -354,9 +359,9 @@ def get_script_driver(num_fenetre):
             except Exception as e:
                 print(f"❌ Erreur lors de la configuration de la fenêtre {num}: {e}")
                 
-        # Revient à la première fenêtre si elle existe
-        if '1' in window_handles:
-            driver.switch_to.window(window_handles['1'])
+        # Revient à la fenêtre 0 si elle existe
+        if '0' in window_handles:
+            driver.switch_to.window(window_handles['0'])
 
     # Si la fenêtre demandée n'existe pas encore, la créer
     if num_str not in window_handles:
@@ -388,15 +393,15 @@ def get_script_driver(num_fenetre):
         # Connexion à la fenêtre
         driver = init_driver(config.localhost, window_handles[num_str])
         if driver:
-            # Forcer le redimensionnement de la fenêtre 1 à chaque appel
-            if num_fenetre == 1:
+            # Forcer le redimensionnement des fenêtres à chaque appel (sauf fenêtre 0)
+            if num_fenetre != 0:
                 screen_size = driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
                 screen_width = screen_size[0]
                 screen_height = screen_size[1]
-                x_pos, y_pos, width, height = calculate_window_position(1, screen_width, screen_height)
+                x_pos, y_pos, width, height = calculate_window_position(num_fenetre, screen_width, screen_height)
                 driver.set_window_position(x_pos, y_pos)
                 driver.set_window_size(width, height)
-                print(f"✅ Fenêtre 1 forcée à ({x_pos}, {y_pos}) taille {width}x{height}")
+                print(f"✅ Fenêtre {num_fenetre} positionnée à ({x_pos}, {y_pos}) taille {width}x{height}")
             print(f"✅ Connecté à la fenêtre {num_fenetre}")
             return driver
 
