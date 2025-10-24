@@ -9,9 +9,9 @@ types de scripts de paris automatisés.
 # Configuration des gains souhaités par type de script
 total_want_win = {
     '030': 0.1,
-    '300': 0.1,
-    '15A': 0.1,
-    '30A': 0.1,
+    '300': 1,
+    '15A': 1,
+    '30A': 1,
     '40A': 0.1,
     '4P': 0.1,
     '5P': 0.1,
