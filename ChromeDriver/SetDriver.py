@@ -321,20 +321,23 @@ def get_script_driver(num_fenetre):
             print("🔄 Vérification des fenêtres sauvegardées...")
             window_handles = verify_handles(driver, saved_handles)
         
-        # Si aucun handle valide n'a été chargé
-        if not window_handles:
+        # Si aucun handle valide n'a été chargé OU si la fenêtre 0 n'existe pas
+        if not window_handles or '0' not in window_handles:
             print("🆕 Initialisation d'une nouvelle session...")
             
-            # Crée d'abord la fenêtre 0 comme fenêtre de référence
-            window_handles['0'] = driver.current_window_handle
-            screen_size = driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
-            screen_width = screen_size[0]
-            screen_height = screen_size[1]
-            
-            # Configure la fenêtre 0 (fenêtre de référence, positionnée hors écran ou minimale)
-            driver.set_window_position(0, 0)
-            driver.set_window_size(400, 300)
-            print(f"✅ Fenêtre 0 (référence) initialisée à (0, 0) taille 400x300")
+            # Crée la fenêtre 0 uniquement si elle n'existe pas encore
+            if '0' not in window_handles:
+                window_handles['0'] = driver.current_window_handle
+                screen_size = driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
+                screen_width = screen_size[0]
+                screen_height = screen_size[1]
+                
+                # Configure la fenêtre 0 (fenêtre de référence, positionnée hors écran ou minimale)
+                driver.set_window_position(0, 0)
+                driver.set_window_size(400, 300)
+                print(f"✅ Fenêtre 0 (référence) initialisée à (0, 0) taille 400x300")
+            else:
+                print(f"✅ Fenêtre 0 déjà existante, pas de création")
             
             save_window_handles()  # Sauvegarde la configuration initiale
             
