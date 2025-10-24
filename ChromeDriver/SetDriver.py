@@ -25,17 +25,17 @@ def calculate_window_position(num_fenetre, screen_width, screen_height):
         tuple: (x_pos, y_pos, width, height) Position et taille de la fenêtre
     """
     # Calcul de la taille de chaque fenêtre (grille 4 colonnes)
-    fenetre_width = int(screen_width / 4)
+    fenetre_width = int(screen_width / 6)
     fenetre_height = 375  # Hauteur fixe ou calculée selon vos besoins
     
     # Calcul de la position dans la grille (base 0)
     grid_position = num_fenetre - 1
     
-    # Calcul de la colonne (0 à 3)
-    colonne = grid_position % 4
+    # Calcul de la colonne (0 à 5)
+    colonne = grid_position % 6
     
     # Calcul de la ligne (0, 1, 2, etc.)
-    ligne = grid_position // 4
+    ligne = grid_position // 6
     
     # Position finale
     x_pos = int(colonne * fenetre_width)
@@ -181,9 +181,11 @@ def create_new_window(port, num_fenetre, url=config.site_url):
         # Récupère l'état initial
         initial_handles = temp_driver.window_handles
         initial_handle = temp_driver.current_window_handle
-        
+
+        x_pos, y_pos, width, height = calculate_window_position(num_fenetre)
+
         # Ouvre une nouvelle fenêtre avec l'URL spécifiée
-        temp_driver.execute_script(f"window.open('{url}', '_blank', 'width=500,height=375')")
+        temp_driver.execute_script(f"window.open('{url}', '_blank', 'width={width},height={height}')")
         time.sleep(1)
         
         # Récupère les nouveaux handles et trouve le nouveau
