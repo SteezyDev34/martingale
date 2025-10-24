@@ -388,6 +388,15 @@ def get_script_driver(num_fenetre):
         # Connexion à la fenêtre
         driver = init_driver(config.localhost, window_handles[num_str])
         if driver:
+            # Forcer le redimensionnement de la fenêtre 1 à chaque appel
+            if num_fenetre == 1:
+                screen_size = driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
+                screen_width = screen_size[0]
+                screen_height = screen_size[1]
+                x_pos, y_pos, width, height = calculate_window_position(1, screen_width, screen_height)
+                driver.set_window_position(x_pos, y_pos)
+                driver.set_window_size(width, height)
+                print(f"✅ Fenêtre 1 forcée à ({x_pos}, {y_pos}) taille {width}x{height}")
             print(f"✅ Connecté à la fenêtre {num_fenetre}")
             return driver
 
