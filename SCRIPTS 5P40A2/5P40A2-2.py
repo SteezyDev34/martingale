@@ -1,8 +1,6 @@
 import os
-import subprocess
 import sys
 import time
-
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
 
@@ -30,29 +28,33 @@ file_name = os.path.basename(__file__)  # ou directement '40-1.py' pour l'exempl
 name_part = os.path.splitext(file_name)[0]
 # Séparer les parties du nom
 parts = name_part.split('-')
-if len(parts) > 1:
+if len(parts) > 14:
     config.scriptType = parts[0]  # Suppose que le type est avant le tiret
     config.script_num = int(parts[1])  # Suppose que le numéro est avant le tiret
     localhost = str(config.scriptType) + str(config.script_num)
     config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
     if int(config.localhost) < 1024:
         config.localhost = 1024 + int(config.localhost)
-    # Demander confirmation à l'utilisateur
-    # Le lancement de Chrome est maintenant géré dans SetDriver.py
-    config.log_clear_line(3)
+   
 
-    print(f"{config.PURPLE}{text2art(f'Start martingal {config.scriptType} {config.script_num}')}")
+    print(f'{config.PURPLE}' + text2art(
+        f"Start martingal {config.scriptType} {config.script_num}"))  # Crée un texte en art ASCII
+    # sys.stdout.write(f"\rSCRIPT TYPE : {config.scriptType}")
+    # sys.stdout.write(f"\rSCRIPT NUM : {config.script_num}")
 else:
     print("Le format du nom du fichier est incorrect.")
     exit()
 
 # Chargement des functions
 # Chargement de Chrome driver
+# Chargement des functions
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
-num_fenetre = 6
+num_fenetre = 2
+time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 driver = get_script_driver(num_fenetre)
-from Functions import Functions_431a
+
+from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
 
@@ -87,15 +89,17 @@ for i in config.scriptTypeList:
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
 config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
 while (config.win < 100):
+    Functions_456P.all_script(driver)
+
     try:
-        Functions_431a.all_script(driver)
+        pass
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
         if config.perte > 0:
             DispatchPerte()
         for i in config.scriptTypeList:
-            config.switchScript('4315A')
+            config.switchScript('403015')
             config.ScriptConfig(i).reset()
             config.init_variable()
             config.switchScript(i)
