@@ -40,6 +40,8 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
             key = '1X2'
         elif config.scriptType == 'BREAK':
             key = 'Gagne dans le jeu'
+        elif config.scriptType == '015':
+            key = 'Point. ' + theset + args
         else:
             key = 'Score de la partie. ' + theset + args
     else:
@@ -232,6 +234,8 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
             key = '1X2'
         elif config.scriptType == 'BREAK':
             key = 'Gagne dans le jeu'
+        elif config.scriptType == '015':
+            key = f'Point. {theset} {args}'
         else:
             key = 'Score du jeu. ' + theset + ' ' + args
     else:

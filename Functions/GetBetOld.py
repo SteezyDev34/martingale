@@ -73,6 +73,19 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     first_player = 2
                     if config.scriptType == '030':
                         config.win_type = '30:0'  # inversé
+            if config.scriptType == '015':
+                if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
+                        len(first_player) > 0 and int(config.jeu_actuel) == int(config.looking_game)):
+                    first_player = 2
+                    if config.scriptType == '015':
+                        config.win_type = '0:15'  # inversé
+                else:
+                    first_player = 1
+                    if config.scriptType == '015':
+                        config.win_type = '15:0'  # inversé
+                sType = f"Joueur {first_player} va gagner le point 1 dans le jeu {jeu}"
+                print(sType)
+
             if config.scriptType == '300':
                 sType = f"Jeu {jeu}, Serveur va mener 30-0"
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):

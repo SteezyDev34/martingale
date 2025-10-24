@@ -38,6 +38,11 @@ def GetResult(driver):
                 '15:15', '30:0', '0:30', '30:15', '15:30', '30:30', '40:15',
                 '15:40', '30:40', '40:30', '40:0', '0:40', '40:40', '40:A', 'A:40'
             ]
+        elif config.scriptType == "015":
+            passed_score = [
+                '0:15', '15:0','15:15', '30:0', '0:30', '30:15', '15:30', '30:30', '40:15',
+                '15:40', '30:40', '40:30', '40:0', '0:40', '40:40', '40:A', 'A:40'
+            ]
         elif config.scriptType == '030' or config.scriptType == '300':
             passed_score = [
                 '30:0', '0:30', '40:15', '15:40', '30:40', '40:30', '40:0',
@@ -63,7 +68,7 @@ def GetResult(driver):
                 '0:0'
             ]
 
-        if config.scriptType == "40A" or config.scriptType == "30A" or config.scriptType == "15A" or config.scriptType == '030' or config.scriptType == '300':
+        if config.scriptType == "40A" or config.scriptType == "30A" or config.scriptType == "015" or config.scriptType == "15A" or config.scriptType == '030' or config.scriptType == '300':
             if int(config.set_actuel) != int(config.validated_bet.get('set')):
                 getresult = True
             elif config.jeu_actuel != int(config.validated_bet.get('jeu')):

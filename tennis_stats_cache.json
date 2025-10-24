@@ -1,8 +1,8 @@
 {
   "atp_ids": [],
-  "atp_ranking_date": "2025-10-22",
+  "atp_ranking_date": "2025-10-24",
   "wta_ids": [],
-  "wta_ranking_date": "2025-10-22",
+  "wta_ranking_date": "2025-10-24",
   "player_martina capurro taborda_40-40": 0.0,
   "player_victoria bosio_40-40": 0.2962962962962963,
   "player_alvaro guillen meza_40-40": 0.2505879757788155,
@@ -602,7 +602,7 @@
   "player_iryna shymanovich_40-40": 0.26091885935579207,
   "player_eryn cayetano_40-40": 0.0,
   "player_katherine sebov_40-40": 0.24014778325123154,
-  "player_hanne vandewinkel_40-40": 0.26320431669606725,
+  "player_hanne vandewinkel_40-40": 0.29160287559076087,
   "player_jessica pieri_40-40": 0.21739130434782608,
   "player_ekaterina alexandrova_40-40": 0.32063686589653445,
   "player_jiaqi wang_40-40": 0.0,
@@ -664,5 +664,6 @@
   "player_karen khachanov_40-40": 0.2755728240819383,
   "player_clara vlasselaer_40-40": 0.0,
   "player_alexandra osborne_40-40": 0.0,
-  "player_kristina novak_40-40": 0.39080459770114945
+  "player_kristina novak_40-40": 0.39080459770114945,
+  "player_sofia costoulas_40-40": 0.24615732368896925
 }

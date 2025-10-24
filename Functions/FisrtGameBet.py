@@ -34,7 +34,7 @@ def FirstGameBet(driver):
                 nextBet = True
                 config.log(f'Score : {config.score_actuel} nextBet : {nextBet}', 'warning', indent=3)
                 config.looking_game = int(config.jeu_actuel) + 1
-        elif config.scriptType == '15A' or config.scriptType == '400' or config.scriptType == '030' or config.scriptType == '300' or config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
+        elif config.scriptType == '015' or config.scriptType == '15A' or config.scriptType == '400' or config.scriptType == '030' or config.scriptType == '300' or config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
             if config.score_actuel != "0:0":
                 nextBet = True
                 config.log(f'Score : {config.score_actuel} nextBet : {nextBet}', 'warning', indent=3)
