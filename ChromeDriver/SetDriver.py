@@ -181,8 +181,12 @@ def create_new_window(port, num_fenetre, url=config.site_url):
         # Récupère l'état initial
         initial_handles = temp_driver.window_handles
         initial_handle = temp_driver.current_window_handle
+        # Configure la position et la taille de la fenêtre selon la grille
+        screen_size = temp_driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
+        screen_width = screen_size[0]
+        screen_height = screen_size[1]
 
-        x_pos, y_pos, width, height = calculate_window_position(num_fenetre)
+        x_pos, y_pos, width, height = calculate_window_position(num_fenetre, screen_width, screen_height)
 
         # Ouvre une nouvelle fenêtre avec l'URL spécifiée
         temp_driver.execute_script(f"window.open('{url}', '_blank', 'width={width},height={height}')")
