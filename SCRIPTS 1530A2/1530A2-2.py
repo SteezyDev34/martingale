@@ -57,7 +57,7 @@ from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
 config.in_stat = False
-config.scriptTypeList = config.scriptTypeList1
+config.scriptTypeList = config.scriptTypeList
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
