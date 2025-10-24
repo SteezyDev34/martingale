@@ -24,8 +24,8 @@ def GetAndPlaceBet(driver):
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
                 config.log(f"FIN {config.scriptType}", 'success', False)
                 continue
-            # if scriptType == actual_scryptType:
-            # break
+            if scriptType == actual_scryptType:
+                continue
             if config.scriptType == '15A' or config.scriptType == '300' or config.scriptType == '030':
                 if config.score_actuel == '0:0':
                     if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu', -1)):
