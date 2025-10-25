@@ -7,8 +7,13 @@ parent_directory = os.path.dirname(current_file_path)
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
 
-from Functions.getTextFromImageGPT import extraire_pari_depuis_image
+if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
+    # Simple écriture de lignes vides pour PyCharm
 
+    # Vérification de l'environnement
+    import VenvDependencyManager
+
+    VenvDependencyManager.main()
 # Imports des modules requis
 try:
     import requests
@@ -19,94 +24,70 @@ try:
     import time
     from datetime import datetime
     from PIL import Image
-    import telepot
-    import pytesseract
-    from ImageTreatment import getTextFromImage
+    from Functions.getTextFromImageGPT import extraire_pari_depuis_image
 except ImportError as e:
     print(f"❌ Erreur d'import: {e}")
-    print("Veuillez installer les dépendances manquantes avec:")
-    print("pip install -r requirements.txt")
+    print("Installation automatique...")
+    try:
+        import subprocess
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "requests", "beautifulsoup4", "pillow"])
+        print("✅ Dépendances installées, veuillez relancer le script")
+    except Exception as install_error:
+        print(f"❌ Échec de l'installation: {install_error}")
     sys.exit(1)
 
-# Correction des problèmes SSL pour Telegram
-try:
-    from ssl_fix import create_telegram_bot_with_ssl_fix, diagnose_ssl_issues
-
-    print("🔒 Vérification et correction SSL...")
-    ssl_ok = diagnose_ssl_issues()
-
-    if not ssl_ok:
-        print("🛠️  Application des corrections SSL...")
-        create_telegram_bot_with_ssl_fix()
-
-except ImportError:
-    print("⚠️  Module ssl_fix non trouvé, continuons sans correction SSL automatique...")
-
-# Configuration du bot Telegram avec gestion SSL améliorée
+# Configuration du bot Telegram simplifié
 try:
     from telegram_ssl import TelegramBotSSL
-
     bot = TelegramBotSSL('1910869556:AAGy6Xdbf0Uvk-tz8WFzdnPvo14fu4SOLvc')
     print("✅ Bot Telegram SSL configuré")
     use_ssl_bot = True
 except ImportError:
-    print("⚠️  Module telegram_ssl non trouvé, utilisation de telepot standard")
-    import telepot
-
-    bot = telepot.Bot('1910869556:AAGy6Xdbf0Uvk-tz8WFzdnPvo14fu4SOLvc')
-    use_ssl_bot = False
+    try:
+        import telepot
+        bot = telepot.Bot('1910869556:AAGy6Xdbf0Uvk-tz8WFzdnPvo14fu4SOLvc')
+        print("✅ Bot Telegram standard configuré")
+        use_ssl_bot = False
+    except ImportError:
+        print("❌ Aucun module Telegram disponible")
+        sys.exit(1)
 
 freeGroup = "-1001315247334"
+
 # En-têtes pour contourner le blocage 403
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
 }
 
 
-def send_telegram(freeGroup, message, retry_count=3):
-    """Envoie un message Telegram avec gestion d'erreurs SSL améliorée"""
-    global bot, use_ssl_bot
-
+def send_telegram(chat_id, message, retry_count=3):
+    """Envoie un message Telegram avec gestion d'erreurs optimisée"""
     for attempt in range(retry_count):
         try:
             if use_ssl_bot:
-                # Utilisation du bot SSL personnalisé
-                result = bot.send_message(freeGroup, message)
+                result = bot.send_message(chat_id, message)
                 if result:
                     return True
             else:
-                # Utilisation de telepot standard
-                bot.sendMessage(freeGroup, message)
+                bot.sendMessage(chat_id, message)
                 return True
 
         except Exception as e:
             error_msg = str(e)
-            print(f"❌ Tentative {attempt + 1}/{retry_count} échouée: {error_msg}")
+            print(f"❌ Tentative {attempt + 1}/{retry_count} - {error_msg}")
 
-            # Gestion des erreurs spécifiques
-            if ("SSL" in error_msg or "certificate" in error_msg) and not use_ssl_bot:
-                print("🔒 Erreur SSL détectée, basculement vers bot SSL personnalisé...")
-                try:
-                    from telegram_ssl import TelegramBotSSL
-                    bot = TelegramBotSSL('1910869556:AAGy6Xdbf0Uvk-tz8WFzdnPvo14fu4SOLvc')
-                    use_ssl_bot = True
-                    print("✅ Basculement vers bot SSL réussi")
-                    continue  # Retry avec le nouveau bot
-                except ImportError as ie:
-                    print(f"⚠️  Impossible d'importer le bot SSL: {ie}")
-
-            elif "429" in error_msg or "Too Many Requests" in error_msg:
-                # Gestion spéciale pour l'erreur 429
-                wait_time = 10 * (attempt + 1)  # Attente progressive plus longue
-                print(f"⏳ Rate limit atteint - Attente de {wait_time}s...")
+            # Gestion du rate limit
+            if "429" in error_msg or "Too Many Requests" in error_msg:
+                wait_time = 10 * (attempt + 1)
+                print(f"⏳ Rate limit - Attente de {wait_time}s...")
                 time.sleep(wait_time)
-                continue  # Retry sans compter comme échec
+                continue
 
-            # Pause avant retry pour autres erreurs
+            # Pause avant retry
             if attempt < retry_count - 1:
-                time.sleep(2 ** attempt)  # Backoff exponentiel
+                time.sleep(2 ** attempt)
 
-    print(f"❌ Échec définitif de l'envoi après {retry_count} tentatives")
+    print(f"❌ Échec définitif après {retry_count} tentatives")
     return False
 
 
@@ -188,115 +169,105 @@ def store_images_in_db(image_urls):
 
 
 def send_images_via_telegram(images):
+    """Traite et envoie les images de tempetebetting.com"""
     now = datetime.now()
     url = BASE_URL.format(year=now.year, month=now.month)
+    
     for i, image_url in enumerate(images):
-        # Délai entre les images pour éviter le rate limit
         if i > 0:
-            print(f"⏳ Attente de 3 secondes avant traitement de l'image suivante...")
-            time.sleep(3)
+            time.sleep(3)  # Délai entre images
 
-        response = requests.get(url + image_url, headers=HEADERS, timeout=10)
-        if response.status_code == 200:
-            # Save image locally
+        try:
+            response = requests.get(url + image_url, headers=HEADERS, timeout=10)
+            if response.status_code != 200:
+                print(f"❌ Impossible de télécharger: {image_url}")
+                continue
+
+            # Sauvegarder l'image localement
             with open('images.jpg', 'wb') as f:
                 f.write(response.content)
 
-            # Import and use ImageTreatment function avec gestion d'erreur
-            try:
-                print(f"🔍 Extraction du texte pour l'image {i + 1}/{len(images)}...")
-                text = extraire_pari_depuis_image('images.jpg', '')
-                print("✅ Texte extrait avec succès")
-            except Exception as e:
-                if "rate_limit_exceeded" in str(e):
-                    print("⚠️  Rate limit OpenAI atteint, attente de 70 secondes...")
-                    time.sleep(70)  # Attendre plus d'une minute pour réinitialiser la limite
-                    try:
-                        text = extraire_pari_depuis_image('images.jpg', '')
-                        print("✅ Texte extrait après attente")
-                    except Exception as retry_e:
-                        print(f"❌ Erreur persistante: {retry_e}")
-                        text = "Erreur d'extraction du texte (rate limit)"
-                else:
-                    print(f"❌ Erreur d'extraction: {e}")
-                    text = "Erreur d'extraction du texte"
+            # Extraction du texte avec gestion du rate limit
+            text = extract_text_with_retry('images.jpg', i, len(images))
 
-            # Extract text from image
-            print("Texte extrait :")
-            print(text)
+            # Envoi combiné pour réduire le nombre de messages
+            combined_message = f"🖼️ Nouvelle image:\n{url + image_url}\n\n📝 Texte:\n{text}"
 
-            try:
-                # Combiner URL et texte en un seul message pour réduire le taux d'envoi
-                combined_message = f"🖼️ Nouvelle image:\n{url + image_url}\n\n📝 Texte extrait:\n{text}"
-
-                # Découper le message si trop long (limite Telegram: 4096 caractères)
-                if len(combined_message) > 4000:
-                    send_telegram(freeGroup, f"🖼️ Nouvelle image:\n{url + image_url}")
-                    time.sleep(2)  # Délai entre messages Telegram
-                    send_telegram(freeGroup, f"📝 Texte extrait:\n{text}")
-                else:
-                    send_telegram(freeGroup, combined_message)
-
-                print(f"✅ Message envoyé pour: {image_url}")
-                time.sleep(2)  # Délai après envoi pour éviter spam Telegram
-            except Exception as e:
-                print(f"❌ Échec envoi pour {image_url} - {str(e)}")
-
-
-def send_images_via_telegram2(images):
-    now = datetime.now()
-    url = BASE_URL2.format(year=now.year, month=now.month)
-    for i, image_url in enumerate(images):
-        # Délai entre les images pour éviter le rate limit
-        if i > 0:
-            print(f"⏳ Attente de 3 secondes avant traitement de l'image suivante...")
-            time.sleep(3)
-
-        response = requests.get(url + image_url, headers=HEADERS, timeout=10)
-        if response.status_code == 200:
-
-            img = Image.open(BytesIO(response.content))
-            custom_config = r'--psm 6 --oem 3 -c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-
-            # Extraction avec gestion d'erreur pour rate limit
-            try:
-                print(f"🔍 Extraction du texte pour l'image ADR {i + 1}/{len(images)}...")
-                text = extraire_pari_depuis_image(img, '')
-                print("✅ Texte extrait avec succès")
-            except Exception as e:
-                if "rate_limit_exceeded" in str(e):
-                    print("⚠️  Rate limit OpenAI atteint, attente de 70 secondes...")
-                    time.sleep(70)  # Attendre plus d'une minute pour réinitialiser la limite
-                    try:
-                        text = extraire_pari_depuis_image(img, '')
-                        print("✅ Texte extrait après attente")
-                    except Exception as retry_e:
-                        print(f"❌ Erreur persistante: {retry_e}")
-                        text = "Erreur d'extraction du texte (rate limit)"
-                else:
-                    print(f"❌ Erreur d'extraction: {e}")
-                    text = "Erreur d'extraction du texte"
-
-            # Extraire le texte de l'image
-            print("Texte extrait :")
-            print(text)
-
-        try:
-            # Combiner URL et texte en un seul message pour réduire le taux d'envoi
-            combined_message = f"🖼️ Nouvelle image (ADR):\n{url + image_url}\n\n📝 Texte extrait:\n{text}"
-
-            # Découper le message si trop long (limite Telegram: 4096 caractères)
             if len(combined_message) > 4000:
-                send_telegram(freeGroup, f"🖼️ Nouvelle image (ADR):\n{url + image_url}")
-                time.sleep(2)  # Délai entre messages Telegram
-                send_telegram(freeGroup, f"📝 Texte extrait:\n{text}")
+                send_telegram(freeGroup, f"🖼️ Nouvelle image:\n{url + image_url}")
+                time.sleep(2)
+                send_telegram(freeGroup, f"📝 Texte:\n{text}")
             else:
                 send_telegram(freeGroup, combined_message)
 
-            print(f"✅ Message ADR envoyé pour: {image_url}")
-            time.sleep(2)  # Délai après envoi pour éviter spam Telegram
+            print(f"✅ Image {i + 1}/{len(images)} envoyée")
+            time.sleep(2)
+
         except Exception as e:
-            print(f"❌ Échec envoi ADR pour {image_url} - {str(e)}")
+            print(f"❌ Erreur pour {image_url}: {e}")
+
+
+def send_images_via_telegram2(images):
+    """Traite et envoie les images de adrbetting.fr"""
+    now = datetime.now()
+    url = BASE_URL2.format(year=now.year, month=now.month)
+    
+    for i, image_url in enumerate(images):
+        if i > 0:
+            time.sleep(3)
+
+        try:
+            response = requests.get(url + image_url, headers=HEADERS, timeout=10)
+            if response.status_code != 200:
+                print(f"❌ Impossible de télécharger: {image_url}")
+                continue
+
+            img = Image.open(BytesIO(response.content))
+            
+            # Extraction du texte avec gestion du rate limit
+            text = extract_text_with_retry(img, i, len(images), is_adr=True)
+
+            # Envoi combiné
+            combined_message = f"🖼️ Nouvelle image (ADR):\n{url + image_url}\n\n📝 Texte:\n{text}"
+
+            if len(combined_message) > 4000:
+                send_telegram(freeGroup, f"🖼️ Nouvelle image (ADR):\n{url + image_url}")
+                time.sleep(2)
+                send_telegram(freeGroup, f"📝 Texte:\n{text}")
+            else:
+                send_telegram(freeGroup, combined_message)
+
+            print(f"✅ Image ADR {i + 1}/{len(images)} envoyée")
+            time.sleep(2)
+
+        except Exception as e:
+            print(f"❌ Erreur pour {image_url}: {e}")
+
+
+def extract_text_with_retry(image_source, index, total, is_adr=False, max_retries=2):
+    """Extrait le texte d'une image avec gestion du rate limit OpenAI"""
+    label = "ADR" if is_adr else "Tempete"
+    
+    for attempt in range(max_retries):
+        try:
+            print(f"🔍 Extraction texte {label} [{index + 1}/{total}]...")
+            text = extraire_pari_depuis_image(image_source, '')
+            print("✅ Texte extrait")
+            return text
+            
+        except Exception as e:
+            if "rate_limit_exceeded" in str(e):
+                if attempt < max_retries - 1:
+                    print("⚠️  Rate limit OpenAI - Attente de 70s...")
+                    time.sleep(70)
+                else:
+                    print("❌ Rate limit persistant")
+                    return "Erreur: Rate limit OpenAI dépassé"
+            else:
+                print(f"❌ Erreur extraction: {e}")
+                return f"Erreur d'extraction: {str(e)[:100]}"
+    
+    return "Erreur: Échec extraction après plusieurs tentatives"
 
 
 def main():
