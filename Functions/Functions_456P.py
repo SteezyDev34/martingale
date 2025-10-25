@@ -285,7 +285,8 @@ def all_script(driver):
                 if int(config.jeu_actuel) < int(config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
                         config.validated_bet.get('set')):
                     print('already bet')
-                    continue
+                    if config.scriptType != config.scriptTypeList[-1]:
+                        continue
             if config.validated_bet.get('result') is None:
                 print('result', config.validated_bet.get('result'))
                 GetResult(driver)
