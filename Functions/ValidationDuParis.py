@@ -78,6 +78,7 @@ def SendBetData():
 def ValidationDuParis(driver, nexbet=False):
     validation = False
     tentative = 0
+    already = False
     while not validation and tentative < 3:
         config.log('Vérification des paris validés')
         config.log('Tentative', str(tentative))
@@ -173,7 +174,7 @@ def ValidationDuParis(driver, nexbet=False):
             else:
                 PlacerMise(driver)
                 tentative = tentative + 1
-    if validation:
+    if validation and not already:
         # Store bet information in validated_bet variable
         from datetime import datetime
         # SendBetData()
