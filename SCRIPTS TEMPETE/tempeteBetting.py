@@ -27,16 +27,34 @@ try:
     from datetime import datetime
     print("📦 Import PIL...")
     from PIL import Image
-    print("📦 Import extraire_pari_depuis_image...")
-    from Functions.getTextFromImageGPT import extraire_pari_depuis_image
-    print("✅ Tous les modules importés avec succès")
+    print("✅ Imports de base réussis")
+    
+    # Import lazy de la fonction d'extraction (ne sera chargé que quand nécessaire)
+    extraire_pari_depuis_image = None
+    
 except ImportError as e:
     print(f"❌ Erreur d'import: {e}")
     print("Installation automatique des dépendances...")
     import subprocess
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "requests", "beautifulsoup4", "pillow", "openai"])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "requests", "beautifulsoup4", "pillow"])
     print("✅ Dépendances installées, veuillez relancer le script")
     sys.exit(1)
+
+
+def lazy_import_extraction():
+    """Importe la fonction d'extraction seulement quand nécessaire"""
+    global extraire_pari_depuis_image
+    if extraire_pari_depuis_image is None:
+        print("📦 Chargement de l'extraction GPT (peut prendre quelques secondes)...")
+        try:
+            from Functions.getTextFromImageGPT import extraire_pari_depuis_image as extract_func
+            extraire_pari_depuis_image = extract_func
+            print("✅ Fonction d'extraction chargée")
+        except Exception as e:
+            print(f"⚠️  Impossible de charger l'extraction GPT: {e}")
+            # Fonction de fallback
+            extraire_pari_depuis_image = lambda img, _: "Extraction non disponible"
+    return extraire_pari_depuis_image
 
 # Configuration du bot Telegram simplifié
 try:
@@ -249,10 +267,13 @@ def extract_text_with_retry(image_source, index, total, is_adr=False, max_retrie
     """Extrait le texte d'une image avec gestion du rate limit OpenAI"""
     label = "ADR" if is_adr else "Tempete"
     
+    # Charge la fonction d'extraction seulement maintenant
+    extract_func = lazy_import_extraction()
+    
     for attempt in range(max_retries):
         try:
             print(f"🔍 Extraction texte {label} [{index + 1}/{total}]...")
-            text = extraire_pari_depuis_image(image_source, '')
+            text = extract_func(image_source, '')
             print("✅ Texte extrait")
             return text
             
