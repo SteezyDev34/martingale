@@ -362,6 +362,6 @@ if __name__ == "__main__":
             main()
             now = datetime.now()
             print(now)
-            time.sleep(600)  # Attendre 10 minutes avant la prochaine vérification
+            time.sleep(60)  # Attendre 10 minutes avant la prochaine vérification
         except Exception as e:
             print(e)
