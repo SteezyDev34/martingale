@@ -11,14 +11,23 @@ print("🚀 Démarrage du script tempeteBetting...")
 
 # Imports des modules requis
 try:
+    print("📦 Import requests...")
     import requests
+    print("📦 Import BeautifulSoup...")
     from bs4 import BeautifulSoup
+    print("📦 Import sqlite3...")
     import sqlite3
+    print("📦 Import re...")
     import re
+    print("📦 Import BytesIO...")
     from io import BytesIO
+    print("📦 Import time...")
     import time
+    print("📦 Import datetime...")
     from datetime import datetime
+    print("📦 Import PIL...")
     from PIL import Image
+    print("📦 Import extraire_pari_depuis_image...")
     from Functions.getTextFromImageGPT import extraire_pari_depuis_image
     print("✅ Tous les modules importés avec succès")
 except ImportError as e:
