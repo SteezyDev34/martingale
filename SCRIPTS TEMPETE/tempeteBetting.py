@@ -7,15 +7,17 @@ parent_directory = os.path.dirname(current_file_path)
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
 
-if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
-    # Simple écriture de lignes vides pour PyCharm
+# Vérification des dépendances (sans bloquer l'exécution)
+if os.getenv('PYCHARM_HOSTED') != '1':
+    try:
+        import VenvDependencyManager
+        # Vérifier seulement, ne pas bloquer avec main()
+        VenvDependencyManager.install_requirements_if_needed('requirements.txt')
+    except Exception as e:
+        print(f"⚠️  Avertissement dépendances: {e}")
+        print("Continuons quand même...")
 
-    # Vérification de l'environnement
-    import VenvDependencyManager
-
-    VenvDependencyManager.main()
 # Imports des modules requis
-
 import requests
 from bs4 import BeautifulSoup
 import sqlite3
