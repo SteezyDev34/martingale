@@ -7,26 +7,27 @@ parent_directory = os.path.dirname(current_file_path)
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
 
-# Vérification des dépendances (sans bloquer l'exécution)
-if os.getenv('PYCHARM_HOSTED') != '1':
-    try:
-        import VenvDependencyManager
-        # Vérifier seulement, ne pas bloquer avec main()
-        VenvDependencyManager.install_requirements_if_needed('requirements.txt')
-    except Exception as e:
-        print(f"⚠️  Avertissement dépendances: {e}")
-        print("Continuons quand même...")
+print("🚀 Démarrage du script tempeteBetting...")
 
 # Imports des modules requis
-import requests
-from bs4 import BeautifulSoup
-import sqlite3
-import re
-from io import BytesIO
-import time
-from datetime import datetime
-from PIL import Image
-from Functions.getTextFromImageGPT import extraire_pari_depuis_image
+try:
+    import requests
+    from bs4 import BeautifulSoup
+    import sqlite3
+    import re
+    from io import BytesIO
+    import time
+    from datetime import datetime
+    from PIL import Image
+    from Functions.getTextFromImageGPT import extraire_pari_depuis_image
+    print("✅ Tous les modules importés avec succès")
+except ImportError as e:
+    print(f"❌ Erreur d'import: {e}")
+    print("Installation automatique des dépendances...")
+    import subprocess
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "requests", "beautifulsoup4", "pillow", "openai"])
+    print("✅ Dépendances installées, veuillez relancer le script")
+    sys.exit(1)
 
 # Configuration du bot Telegram simplifié
 try:
