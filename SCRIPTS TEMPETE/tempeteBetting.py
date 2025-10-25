@@ -9,20 +9,6 @@ sys.path.append(project_directory)
 
 from Functions.getTextFromImageGPT import extraire_pari_depuis_image
 
-# Vérification et installation des dépendances au démarrage
-try:
-    from dependency_manager import check_and_install_dependencies
-
-    print("🔧 Vérification des dépendances...")
-    if not check_and_install_dependencies(auto_install=True):
-        print("❌ Erreur lors de l'installation des dépendances. Arrêt du programme.")
-        sys.exit(1)
-    print("✅ Toutes les dépendances sont prêtes!\n")
-
-except ImportError as e:
-    print(f"⚠️  Module dependency_manager non trouvé: {e}")
-    print("Le programme va continuer sans vérification automatique des dépendances.")
-
 # Imports des modules requis
 try:
     import requests
