@@ -94,33 +94,32 @@ def send_telegram(chat_id, message, retry_count=3):
 # Paramètres de configuration
 BASE_URL = "https://tempetebetting.com/wp-content/uploads/{year}/{month:02d}/"
 BASE_URL2 = "https://adrbetting.fr/wp-content/uploads/{year}/{month:02d}/"
-DB_PATH = "images.db"
+
+# Chemin absolu vers la base de données dans le dossier du script
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(SCRIPT_DIR, "images.db")
+
+print(f"📁 Chemin de la base de données : {DB_PATH}")
+
 TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
 TELEGRAM_CHAT_ID = "YOUR_CHAT_ID"
 
 
 def create_database():
+    """Crée la base de données SQLite pour stocker les URLs des images"""
+    print(f"🔧 Création/vérification de la base : {DB_PATH}")
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
-                   CREATE TABLE IF NOT EXISTS images
-                   (
-                       id
-                       INTEGER
-                       PRIMARY
-                       KEY
-                       AUTOINCREMENT,
-                       image_url
-                       TEXT
-                       UNIQUE,
-                       added_at
-                       DATETIME
-                       DEFAULT
-                       CURRENT_TIMESTAMP
-                   )
-                   ''')
+        CREATE TABLE IF NOT EXISTS images (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            image_url TEXT UNIQUE,
+            added_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
     conn.commit()
     conn.close()
+    print(f"✅ Base de données prête")
 
 
 def get_image_links(url):
