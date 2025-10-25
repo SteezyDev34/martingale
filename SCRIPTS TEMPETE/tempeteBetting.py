@@ -15,26 +15,16 @@ if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
 
     VenvDependencyManager.main()
 # Imports des modules requis
-try:
-    import requests
-    from bs4 import BeautifulSoup
-    import sqlite3
-    import re
-    from io import BytesIO
-    import time
-    from datetime import datetime
-    from PIL import Image
-    from Functions.getTextFromImageGPT import extraire_pari_depuis_image
-except ImportError as e:
-    print(f"❌ Erreur d'import: {e}")
-    print("Installation automatique...")
-    try:
-        import subprocess
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "requests", "beautifulsoup4", "pillow"])
-        print("✅ Dépendances installées, veuillez relancer le script")
-    except Exception as install_error:
-        print(f"❌ Échec de l'installation: {install_error}")
-    sys.exit(1)
+
+import requests
+from bs4 import BeautifulSoup
+import sqlite3
+import re
+from io import BytesIO
+import time
+from datetime import datetime
+from PIL import Image
+from Functions.getTextFromImageGPT import extraire_pari_depuis_image
 
 # Configuration du bot Telegram simplifié
 try:
