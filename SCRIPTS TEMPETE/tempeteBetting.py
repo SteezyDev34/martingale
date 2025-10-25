@@ -1,22 +1,3 @@
-import subprocess
-
-
-# Vérification et installation automatique des dépendances
-def auto_install_requirements():
-    try:
-        import cv2
-    except ImportError as e:
-        print(f"⚠️ Dépendance manquante : {e}. Installation automatique...")
-        try:
-            subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
-            print("✅ Dépendances installées. Relance du script...")
-            os.execv(sys.executable, [sys.executable] + sys.argv)
-        except Exception as err:
-            print(f"❌ Échec de l'installation automatique des dépendances : {err}")
-            sys.exit(1)
-
-
-auto_install_requirements()
 import os
 import sys
 
