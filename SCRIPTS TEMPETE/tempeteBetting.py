@@ -7,54 +7,24 @@ parent_directory = os.path.dirname(current_file_path)
 project_directory = os.path.dirname(parent_directory)
 sys.path.append(project_directory)
 
-print("🚀 Démarrage du script tempeteBetting...")
+if os.getenv('PYCHARM_HOSTED') != '1':  # Si exécuté dans PyCharm
+    # Simple écriture de lignes vides pour PyCharm
 
+    # Vérification de l'environnement
+    import VenvDependencyManager
+
+    VenvDependencyManager.main()
 # Imports des modules requis
-try:
-    print("📦 Import requests...")
-    import requests
-    print("📦 Import BeautifulSoup...")
-    from bs4 import BeautifulSoup
-    print("📦 Import sqlite3...")
-    import sqlite3
-    print("📦 Import re...")
-    import re
-    print("📦 Import BytesIO...")
-    from io import BytesIO
-    print("📦 Import time...")
-    import time
-    print("📦 Import datetime...")
-    from datetime import datetime
-    print("📦 Import PIL...")
-    from PIL import Image
-    print("✅ Imports de base réussis")
-    
-    # Import lazy de la fonction d'extraction (ne sera chargé que quand nécessaire)
-    extraire_pari_depuis_image = None
-    
-except ImportError as e:
-    print(f"❌ Erreur d'import: {e}")
-    print("Installation automatique des dépendances...")
-    import subprocess
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "requests", "beautifulsoup4", "pillow"])
-    print("✅ Dépendances installées, veuillez relancer le script")
-    sys.exit(1)
 
-
-def lazy_import_extraction():
-    """Importe la fonction d'extraction seulement quand nécessaire"""
-    global extraire_pari_depuis_image
-    if extraire_pari_depuis_image is None:
-        print("📦 Chargement de l'extraction GPT (peut prendre quelques secondes)...")
-        try:
-            from Functions.getTextFromImageGPT import extraire_pari_depuis_image as extract_func
-            extraire_pari_depuis_image = extract_func
-            print("✅ Fonction d'extraction chargée")
-        except Exception as e:
-            print(f"⚠️  Impossible de charger l'extraction GPT: {e}")
-            # Fonction de fallback
-            extraire_pari_depuis_image = lambda img, _: "Extraction non disponible"
-    return extraire_pari_depuis_image
+import requests
+from bs4 import BeautifulSoup
+import sqlite3
+import re
+from io import BytesIO
+import time
+from datetime import datetime
+from PIL import Image
+from Functions.getTextFromImageGPT import extraire_pari_depuis_image
 
 # Configuration du bot Telegram simplifié
 try:
@@ -267,13 +237,10 @@ def extract_text_with_retry(image_source, index, total, is_adr=False, max_retrie
     """Extrait le texte d'une image avec gestion du rate limit OpenAI"""
     label = "ADR" if is_adr else "Tempete"
     
-    # Charge la fonction d'extraction seulement maintenant
-    extract_func = lazy_import_extraction()
-    
     for attempt in range(max_retries):
         try:
             print(f"🔍 Extraction texte {label} [{index + 1}/{total}]...")
-            text = extract_func(image_source, '')
+            text = extraire_pari_depuis_image(image_source, '')
             print("✅ Texte extrait")
             return text
             

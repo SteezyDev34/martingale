@@ -7,3 +7,4 @@ telepot>=12.7
 numpy>=2.0.2
 certifi>=2023.7.22
 urllib3>=1.26.18
+openai==1.107.2
