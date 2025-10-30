@@ -110,7 +110,7 @@ def all_script(driver):
         config.switchScript(scriptType)
         if config.validated_bet and config.validated_bet.get('jeu') and int(config.jeu_actuel) == int(
                 config.validated_bet.get('jeu')) and int(
-                config.set_actuel) == int(
+            config.set_actuel) == int(
             config.validated_bet.get('set')):
             waitendgame = False
             break
@@ -283,11 +283,12 @@ def all_script(driver):
             if config.validated_bet:
                 if config.validated_bet.get('jeu') and int(config.jeu_actuel) < int(
                         config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
-                        config.validated_bet.get('set')):
+                    config.validated_bet.get('set')):
                     print('already bet')
                     if config.scriptType != config.scriptTypeList[-1]:
                         continue
                     else:
+                        print(' last waitendgame')
                         GetIfGameEnd(driver)
                         continue
             if config.validated_bet.get('result') is None:
