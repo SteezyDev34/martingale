@@ -1,14 +1,15 @@
-import time
 import os
 import sys
+import time
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.DeleteBet import DeleteBet
-from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.getTextFromImageGPT import compare_selection
 
@@ -27,14 +28,16 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
     clic = False
     tentative_clic = 0
     sType = selection
-    
 
     # print('i '+str(i))
     while not clic and tentative_clic < 5:
         if config.scriptType in config.allScriptType:
-            scoreboard_player = driver.find_elements(By.CLASS_NAME, config.classes['scoreboard_player_score'][config.site_type] )
-            scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, config.classes['ball_container'][config.site_type] )[0]
-            first_player = scoreboard_player1.find_elements(By.CLASS_NAME, config.classes['score_ball'][config.site_type])
+            scoreboard_player = driver.find_elements(By.CLASS_NAME,
+                                                     config.classes['scoreboard_player_score'][config.site_type])
+            scoreboard_player1 = \
+            scoreboard_player[0].find_elements(By.CLASS_NAME, config.classes['ball_container'][config.site_type])[0]
+            first_player = scoreboard_player1.find_elements(By.CLASS_NAME,
+                                                            config.classes['score_ball'][config.site_type])
             if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                     first_player = 1
@@ -85,7 +88,6 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                         config.win_type = '15:0'  # inversé
                 sType = f"V{first_player} Point 1 Dans le Jeu {jeu}"
                 print(sType)
-
             if config.scriptType == '300':
                 sType = f"Jeu {jeu}, Serveur va mener 30-0"
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
@@ -95,7 +97,6 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     first_player = 2
                     config.win_type = '0:30'  # inversé
             if config.scriptType == 'BREAK':
-            
 
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                     first_player = 2
@@ -105,14 +106,13 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     config.win_type = ['40:0', '40:15', '40:30', 'A:40']
                 sType = f"Game {jeu} - W{first_player}"
             if config.scriptType == "40A":
-                sType = f"Jeu {jeu}: 40-40 - Oui" # signe : collé au num du jeu 
+                sType = f"Jeu {jeu}: 40-40 - Oui"  # signe : collé au num du jeu
                 config.win_type = '40:40'
-
             elif config.scriptType == "30A":
-                sType = f"Jeu {jeu} 30-30 - Oui" # pas de : 
+                sType = f"Jeu {jeu} 30-30 - Oui"  # pas de :
                 config.win_type = '30:30'
             elif config.scriptType == "15A":
-                sType = f"Jeu {jeu} 15-15 - Oui" # pas de  : 
+                sType = f"Jeu {jeu} 15-15 - Oui"  # pas de  :
                 config.win_type = '15:15'
 
             if config.scriptType == '6P':
@@ -124,10 +124,13 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
             if config.scriptType == '4P':
                 sType = f"Jeu {jeu}, 4"
                 config.win_type = ['40:0', '0:40']  # inversé
+            if config.scriptType == "1SET":
+                sType = config.win_type
             if config.site_type == 'mobile_site':
                 x_path = (
                         '//ul[contains(@class, "game-markets-group__list")]'
-                        '//li//button[contains(@class, "game-markets-group__market") and .//span[contains(@class, "ui-market__name") and contains(text(), "' + str(sType) + '")]]'
+                        '//li//button[contains(@class, "game-markets-group__market") and .//span[contains(@class, "ui-market__name") and contains(text(), "' + str(
+                    sType) + '")]]'
                 )
             else:
                 x_path = (
@@ -146,7 +149,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
             )
         print('sType', sType)
         try:
-            print('tentative_clic',tentative_clic)
+            print('tentative_clic', tentative_clic)
             print('site_type', config.site_type)
             search_text = f"Jeu {jeu} {sType} - Oui"
             print(f"Searching for: '{search_text}'")
@@ -225,7 +228,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                         time.sleep(1)
                         cpn_bet_market_label = driver.find_element(By.CLASS_NAME, class_name).text
                         print('sType', sType)
-                        print('cpn_bet_market_label',cpn_bet_market_label)
+                        print('cpn_bet_market_label', cpn_bet_market_label)
                         if sType.lower() in cpn_bet_market_label.lower():
                             config.log('JEU TROUVÉ! : ' + cpn_bet_market_label, 'success', False, 2)
                             print('click ok ok ')
@@ -246,6 +249,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
 if __name__ == "__main__":
     config.localhost = 43151
     from ChromeDriver.SetDriver import get_script_driver
+
     num_fenetre = 1
     driver = get_script_driver(num_fenetre)
     # driver.switch_to.window(driver.window_handles[0])
