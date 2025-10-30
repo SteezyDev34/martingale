@@ -5,7 +5,6 @@ import config
 from Functions import GetLigueName
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
-from Functions.GetAndPlaceBet import GetAndPlaceBet
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetIfNewSite import GetIfNewSite
@@ -18,7 +17,6 @@ from Functions.GetSetActuel import GetSetActuel
 from Functions.Managers.MatchManager import match_manager
 from Functions.Managers.ScriptManager import script_manager
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
-from Functions.ValidationDuParis import ValidationDuParis
 from Functions.VerificationMatchTrouve import newmatchFromUrl
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
@@ -110,7 +108,8 @@ def all_script(driver):
     firstjeu = True
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
-        if config.validated_bet and int(config.jeu_actuel) == int(config.validated_bet.get('jeu')) and int(
+        if config.validated_bet and config.validated_bet.get('jeu') and int(config.jeu_actuel) == int(
+                config.validated_bet.get('jeu')) and int(
                 config.set_actuel) == int(
             config.validated_bet.get('set')):
             waitendgame = False
@@ -282,10 +281,14 @@ def all_script(driver):
                 continue
             GetScoreActuel(driver)
             if config.validated_bet:
-                if int(config.jeu_actuel) < int(config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
+                if config.validated_bet.get('jeu') and int(config.jeu_actuel) < int(
+                        config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
                         config.validated_bet.get('set')):
                     print('already bet')
                     if config.scriptType != config.scriptTypeList[-1]:
+                        continue
+                    else:
+                        GetIfGameEnd(driver)
                         continue
             if config.validated_bet.get('result') is None:
                 print('result', config.validated_bet.get('result'))
