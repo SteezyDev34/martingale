@@ -36,7 +36,7 @@ def all_script(driver):
     while not rechercheDeMatch(driver) and not config.error:
         config.log('Erreur lors de la recherche de match!', 'error', False, 2)
     # --------
-    print('error 0', config.error)  
+    print('error 0', config.error)
     # Indique qu'un match a été trouvé
     config.match_found = True
 
@@ -44,15 +44,15 @@ def all_script(driver):
     if config.match_found and not config.error:
         # Démarre le script avec le type et numéro spécifiés
         script_manager.start_script(config.scriptType, config.script_num)
-        print('error 1', config.error)
+
         # Get league name and match URL
         ligue_info = GetLigueName.fromUrl(driver)
         config.ligue_name = ligue_info[0]
         config.match_Url = ligue_info[1]
-        print('error 2', config.error)
+
         # Récupère les noms des joueurs/équipes
         config.teams = GetPlayersName(driver)
-        print('error 3', config.error)
+
         # Vérifie si c'est un nouveau match depuis l'URL
         newmatchFromUrl(driver)
         print('error 4', config.error)

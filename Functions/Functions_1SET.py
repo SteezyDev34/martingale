@@ -1,34 +1,30 @@
 import json
 import time
 from datetime import datetime, timedelta
-from time import sleep
 
 from selenium.webdriver.common.by import By
 
-from Functions.Managers.MatchManager import match_manager
-from Functions.Managers.ScriptManager import script_manager
 import Functions.GetJsonData
-from Functions._to_remove import AddRunning
 import config
-from Functions import Functions_1XBET, UpdateMatchDone
 from Functions import GetLigueName
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
-from Functions._to_remove.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import remove_match_from_json_file
 from Functions.GetJsonData import getPerte, set1DispatchPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.GetSetActuel import GetSetActuel
+from Functions.Managers.MatchManager import match_manager
+from Functions.Managers.ScriptManager import script_manager
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch1set
 from Functions.VerificationMatchTrouve import newmatchFromUrl
 
 
 def all_script(driver):
-    # driver.switch_to.window(driver.window_handles[0])
-    # Mise à jour du fichier txt des script en cours
-    scriptDelRunning()
+    # Nettoyer le script inactif
+    script_manager.stop_script(config.scriptType, config.script_num)
+
     config.all_scores = {}
 
     # --------
@@ -50,7 +46,6 @@ def all_script(driver):
 
         # Vérifie si c'est un nouveau match depuis l'URL
         newmatchFromUrl(driver)
-
 
         if not config.win_type:
             config.win_type = input("Quel est le win type V1/V2")
