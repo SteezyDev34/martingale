@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-import time 
+import time
+
 current_file_path = os.path.abspath(__file__)
 
 parent_directory = os.path.dirname(current_file_path)
@@ -44,15 +45,13 @@ else:
 # Chargement de Chrome driver
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
-num_fenetre = 4
+
+num_fenetre = 5
 time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 
 driver = get_script_driver(num_fenetre)
-from Functions import Functions_431a
 
 from Functions import Functions_1SET
-from Functions.ScriptRechercheDeMatch import classementeDeMatch
-from Functions.Authenticator import is_logged_in, loginProcess
 
 config.scriptTypeList = ['1SET']
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
