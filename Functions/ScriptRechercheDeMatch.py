@@ -273,6 +273,7 @@ def rechercheDeMatch(driver):
             time.sleep(5)
             config.log_clear_line()
         else:
+            print('get mobile url')
             get_url = driver.current_url
             get_url = get_url.replace('?platform_type=mobile', '')
             get_url += '?platform_type=mobile'
