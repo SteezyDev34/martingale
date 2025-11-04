@@ -288,12 +288,12 @@ def all_script(driver):
                         config.validated_bet.get('jeu')) and int(config.set_actuel) == int(
                     config.validated_bet.get('set')):
                     print('already bet')
-                if config.scriptType != config.scriptTypeList[-1]:
-                    continue
-                else:
-                    print(' last waitendgame')
-                    GetIfGameEnd(driver)
-                    continue
+                    if config.scriptType != config.scriptTypeList[-1]:
+                        continue
+                    else:
+                        print(' last waitendgame')
+                        GetIfGameEnd(driver)
+                        continue
 
             if config.validated_bet.get('result') is None:
                 print('result', config.validated_bet.get('result'))
