@@ -38,9 +38,9 @@ def GetResult(driver):
                 '15:15', '30:0', '0:30', '30:15', '15:30', '30:30', '40:15',
                 '15:40', '30:40', '40:30', '40:0', '0:40', '40:40', '40:A', 'A:40'
             ]
-        elif config.scriptType == "015":
+        elif config.scriptType == "015" or config.scriptType == "150":
             passed_score = [
-                '0:15', '15:0','15:15', '30:0', '0:30', '30:15', '15:30', '30:30', '40:15',
+                '0:15', '15:0', '15:15', '30:0', '0:30', '30:15', '15:30', '30:30', '40:15',
                 '15:40', '30:40', '40:30', '40:0', '0:40', '40:40', '40:A', 'A:40'
             ]
         elif config.scriptType == '030' or config.scriptType == '300':
@@ -75,7 +75,7 @@ def GetResult(driver):
                 getresult = True
             elif config.score_actuel in passed_score:
                 getresult = True
-            
+
             if getresult:
                 matching_scores = [score for score in config.all_scores.values()
                                    if score.get('set') is not None
@@ -95,7 +95,7 @@ def GetResult(driver):
                 config.validated_bet['result'] = result
                 return result
 
-        elif config.scriptType in ['4P', '6P', '5P','BREAK', '400', '4030', '4015']:
+        elif config.scriptType in ['4P', '6P', '5P', 'BREAK', '400', '4030', '4015']:
             if int(config.set_actuel) != int(config.validated_bet.get('set')):
                 getresult = True
             elif int(config.jeu_actuel) != int(config.validated_bet.get('jeu')):

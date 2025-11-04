@@ -10,6 +10,7 @@ types de scripts de paris automatisés.
 total_want_win_bpk = {
     '030': 0.1,
     '300': 0.1,
+    '150': 0.1,
     '015': 0.1,
     '15A': 0.1,
     '30A': 0.1,
@@ -25,6 +26,7 @@ total_want_win_bpk = {
 total_want_win = {
     '030': 0.1,
     '300': 0.1,
+    '150': 0.1,
     '015': 0.1,
     '15A': 0.1,
     '30A': 0.1,
@@ -41,6 +43,7 @@ total_want_win = {
 total_want_win_if_lost = {
     '030': 0.1,
     '300': 2,
+    '150': 2,
     '015': 2,
     '15A': 2,
     '30A': 2,

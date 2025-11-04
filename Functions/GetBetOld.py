@@ -35,7 +35,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
             scoreboard_player = driver.find_elements(By.CLASS_NAME,
                                                      config.classes['scoreboard_player_score'][config.site_type])
             scoreboard_player1 = \
-            scoreboard_player[0].find_elements(By.CLASS_NAME, config.classes['ball_container'][config.site_type])[0]
+                scoreboard_player[0].find_elements(By.CLASS_NAME, config.classes['ball_container'][config.site_type])[0]
             first_player = scoreboard_player1.find_elements(By.CLASS_NAME,
                                                             config.classes['score_ball'][config.site_type])
             if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
@@ -80,12 +80,20 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
                         len(first_player) > 0 and int(config.jeu_actuel) == int(config.looking_game)):
                     first_player = 2
-                    if config.scriptType == '015':
-                        config.win_type = '0:15'  # inversé
+                    config.win_type = '0:15'  # inversé
                 else:
                     first_player = 1
-                    if config.scriptType == '015':
-                        config.win_type = '15:0'  # inversé
+                    config.win_type = '15:0'  # inversé
+                sType = f"V{first_player} Point 1 Dans le Jeu {jeu}"
+                print(sType)
+            if config.scriptType == '150':
+                if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
+                        len(first_player) > 0 and int(config.jeu_actuel) == int(config.looking_game)):
+                    first_player = 1
+                    config.win_type = '15:0'  # inversé
+                else:
+                    first_player = 2
+                    config.win_type = '0:15'  # inversé
                 sType = f"V{first_player} Point 1 Dans le Jeu {jeu}"
                 print(sType)
             if config.scriptType == '300':
