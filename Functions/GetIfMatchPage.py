@@ -28,10 +28,10 @@ def GetIfMatchPage(driver):
                     (By.CLASS_NAME, config.classes['end_match_stats'][config.site_type]))
             )
         except:
-            config.log('Tableau des stats introuvable!', 'info', False, show_script_type=False)
-            config.log_clear_line()
-            config.log('PAGE DE MATCH!', 'info', False, show_script_type=False)
-            config.log_clear_line()
+            # config.log('Tableau des stats introuvable!', 'info', False, show_script_type=False)
+            # config.log_clear_line()
+            # config.log('PAGE DE MATCH!', 'info', False, show_script_type=False)
+            # config.log_clear_line()
             return True
         else:
             try:
