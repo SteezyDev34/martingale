@@ -4,7 +4,6 @@ import os
 import time
 from datetime import datetime
 
-import requests
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -13,12 +12,12 @@ import config
 from Functions import GetMatchScore, GetLigueName, Functions_stats
 from Functions import OuverturePageMatch
 from Functions import VerificationMatchTrouve
+from Functions.DeleteBet import DeleteBet
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetJsonData import getCompet, DispatchPerte, set1DispatchPerte
 from Functions.Managers.MatchManager import match_manager
 from Functions.Managers.ScriptManager import script_manager
-from Functions.DeleteBet import DeleteBet
 from Functions.UpdateMatchDone import todo
 from Functions.VerificationListeMatchLive import VerificationListeMatchLive
 from Functions.WaitWhileTimeAppear import WaitWhileTimeAppear
@@ -420,7 +419,7 @@ def rechercheDeMatch1set(driver):
                                         config.site_type = 'new_site'
                                         DeleteBet(driver)
                                         config.site_type = 'mobile_site'
-                                    
+
                                     config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
                                                                                    config.matchlist_file_name)
                                     if config.newmatch[0]:
@@ -448,7 +447,10 @@ def rechercheDeMatch1set(driver):
         driver.get(config.site_url)
         time.sleep(5)
     else:
-
+        get_url = driver.current_url
+        get_url = get_url.replace('?platform_type=mobile', '')
+        get_url += '?platform_type=mobile'
+        driver.get(get_url)
         config.log('MATCH TROUVE!', 'success', False, 2)
         time.sleep(5)
     # FIN# VERIFICATION SI PAGE DE MATCH LIVE
