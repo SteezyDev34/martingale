@@ -2,9 +2,10 @@
 # VERRIFICATION DU MATCH TROUVÉ
 
 from selenium.webdriver.common.by import By
+
 import config
-from Functions.Managers.MatchManager import MatchManager
 from Functions.GetJsonData import getIfGlobalPerte, getIf1setGlobalPerte
+from Functions.Managers.MatchManager import MatchManager
 
 # Initialiser l'instance du gestionnaire de matchs
 match_manager = MatchManager.get_instance()
@@ -65,6 +66,8 @@ def main(driver, bet_item, matchlist_file_name):
                 config.log_clear_line()
                 return [True, config.newmatch]
         else:
+            if config.scriptType == '1SET':
+                return [False, config.newmatch]
             p = config.perte
             if not p or p == 0:
                 p = getIfGlobalPerte()
@@ -99,7 +102,7 @@ def getstats(driver, bet_item, matchlist_file_name):
     else:
         print('newmatch : ' + config.newmatch)
         match_is_todo = match_manager.is_match_todo(config.newmatch)
-        
+
         if match_is_todo:
             txtlog = "          Le match n'a pas encore été parié!"
             config.log(txtlog, config.newmatch)
@@ -128,7 +131,7 @@ def fromUrl(driver, matchlist_file_name):
         return [False, config.newmatch]
     else:
         match_is_todo = match_manager.is_match_todo(config.newmatch)
-        
+
         if match_is_todo:
             config.log('        Le match autorisé!', 'warning', True)
             return [True, config.newmatch]
