@@ -21,7 +21,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
     DeleteBet(driver)
     if nextBet:
         jeu = int(config.jeu_actuel) + 1
-        print('jeu next bet ', jeu)
+        # print('jeu next bet ', jeu)
     else:
         jeu = config.jeu_actuel
     if_get_jeu = False
@@ -65,7 +65,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                         config.looking_game) + ' 40-0'
             if config.scriptType == '030':
                 sType = f"Jeu {jeu}, Receveur va mener 30-0"
-                print(sType)
+                # print(sType)
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
                         len(first_player) > 0 and int(config.jeu_actuel) == int(config.looking_game)):
                     first_player = 1
@@ -85,7 +85,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     first_player = 1
                     config.win_type = '15:0'  # inversé
                 sType = f"V{first_player} Point 1 Dans le Jeu {jeu}"
-                print(sType)
+                # print(sType)
             if config.scriptType == '150':
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
                         len(first_player) > 0 and int(config.jeu_actuel) == int(config.looking_game)):
@@ -95,7 +95,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     first_player = 2
                     config.win_type = '0:15'  # inversé
                 sType = f"V{first_player} Point 1 Dans le Jeu {jeu}"
-                print(sType)
+                # print(sType)
             if config.scriptType == '300':
                 sType = f"Jeu {jeu}, Serveur va mener 30-0"
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
@@ -155,13 +155,13 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     '//div[contains(@class, "bet-inner") and not(contains(@class, "blockSob"))]'
                     '//span[contains(text(), "' + str(sType) + '")]'
             )
-        print('sType', sType)
+        # print('sType', sType)
         try:
-            print('tentative_clic', tentative_clic)
-            print('site_type', config.site_type)
+            # print('tentative_clic', tentative_clic)
+            # print('site_type', config.site_type)
             search_text = f"Jeu {jeu} {sType} - Oui"
-            print(f"Searching for: '{search_text}'")
-            print(f"XPath: {x_path}")
+            # print(f"Searching for: '{search_text}'")
+            # print(f"XPath: {x_path}")
             if tentative_clic < 2 and config.site_type != 'mobile_site':
 
                 element = WebDriverWait(driver, 5).until(
@@ -180,13 +180,13 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     try:
                         if config.site_type == 'mobile_site':
                             bet_text = bet.find_element(By.CLASS_NAME, 'ui-market__name').text
-                            print('bet_text', bet_text)
+                            # print('bet_text', bet_text)
                         else:
                             bet_text = bet.find_element(By.CLASS_NAME, 'bet_type').text
                         if bet_text.strip() and sType.lower() in bet_text.strip().lower():  # Only append if bet_text is not empty
                             bet.click()
                             betclic = True
-                            print('clic ok')
+                            # print('clic ok')
                             break
                     except Exception as e:
                         continue
@@ -235,11 +235,11 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     else:
                         time.sleep(1)
                         cpn_bet_market_label = driver.find_element(By.CLASS_NAME, class_name).text
-                        print('sType', sType)
-                        print('cpn_bet_market_label', cpn_bet_market_label)
+                        # print('sType', sType)
+                        # print('cpn_bet_market_label', cpn_bet_market_label)
                         if sType.lower() in cpn_bet_market_label.lower():
                             config.log('JEU TROUVÉ! : ' + cpn_bet_market_label, 'success', False, 2)
-                            print('click ok ok ')
+                            # print('click ok ok ')
                             clic = True
                             return clic
                         else:
