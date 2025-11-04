@@ -278,6 +278,7 @@ def rechercheDeMatch(driver):
             get_url = get_url.replace('?platform_type=mobile', '')
             get_url += '?platform_type=mobile'
             driver.get(get_url)
+            print(get_url)
             print('MATCH TROUVE!')
             logline += 3
             config.log_clear_line(logline)
