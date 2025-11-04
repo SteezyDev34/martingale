@@ -38,7 +38,6 @@ driver = get_script_driver(num_fenetre)
 
 while 1:
     try:
-        driver.switch_to.window(driver.window_handles[0])
         driver.get('https://luckygames.io/')
         Functions_LuckyGame.all_script(driver)
     except Exception as e:
