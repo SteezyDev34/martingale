@@ -98,8 +98,10 @@ def GetResult(driver):
         elif config.scriptType in ['4P', '6P', '5P', 'BREAK', '400', '4030', '4015']:
             if int(config.set_actuel) != int(config.validated_bet.get('set')):
                 getresult = True
+                print('get result set diff')
             elif int(config.jeu_actuel) != int(config.validated_bet.get('jeu')):
                 getresult = True
+                print('get result jeu diff')
             elif config.score_actuel in passed_score:
                 getresult = True
             if getresult:
