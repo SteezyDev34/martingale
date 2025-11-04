@@ -1,6 +1,6 @@
 import os
-import subprocess
 import sys
+import time
 
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
@@ -28,57 +28,13 @@ file_name = os.path.basename(__file__)  # ou directement '40-1.py' pour l'exempl
 name_part = os.path.splitext(file_name)[0]
 # Séparer les parties du nom
 parts = name_part.split('-')
-if len(parts) > 1:
-    config.scriptType = parts[0]  # Suppose que le type est avant le tiret
-    config.script_num = int(parts[1])  # Suppose que le numéro est avant le tiret
-    localhost = str(config.scriptType) + str(config.script_num)
-    config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
-    if int(config.localhost) < 1024:
-        config.localhost = 1024 + int(config.localhost)
-    print(config.localhost)
-    # Demander confirmation à l'utilisateur
-    if config.systeme == 'Windows':
-        if config.is_chrome_running_with_port(config.localhost):
-            print(f"Chrome est déjà lancé avec le port de débogage {config.localhost}, pas de relancement.")
-        else:
-            # Trouver chrome_path comme avant
-            possible_paths = [
-                r"C:\Program Files\Google\Chrome\Application\chrome.exe",
-                r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
-            ]
+config.localhost = 43151
+from ChromeDriver.SetDriver import get_script_driver
 
-            chrome_path = None
-            for path in possible_paths:
-                if os.path.exists(path):
-                    chrome_path = path
-                    break
+num_fenetre = 6
+time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 
-            if chrome_path is None:
-                raise FileNotFoundError("Chrome executable not found.")
-            # User-Agent fourni (Mac)
-            args = [
-                f"--remote-debugging-port={config.localhost}",
-                f"--user-data-dir={project_directory}\\ChromeDebugProfile{config.localhost}",
-            ]
-
-            subprocess.Popen([chrome_path] + args)
-    else:
-        command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
-
-        confirmation = input(f"Avez-vous exécuté la commande \n{command}\n? (Y/N): ")
-
-        if confirmation.upper() != 'Y' and confirmation.upper() != 'y' and confirmation.upper() != 'O' and confirmation.upper() != 'o':
-            print("Programme arrêté par l'utilisateur.")
-            sys.exit(0)  # Arrêter le programme
-
-
-else:
-    print("Le format du nom du fichier est incorrect.")
-    exit()
-
-# Chargement des functions
-# Chargement de Chrome driver
-from ChromeDriver.SetDriver import driver
+driver = get_script_driver(num_fenetre)
 
 while 1:
     try:
