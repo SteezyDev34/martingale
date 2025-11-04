@@ -29,12 +29,14 @@ from Functions.getTextFromImageGPT import extraire_pari_depuis_image
 # Configuration du bot Telegram simplifié
 try:
     from telegram_ssl import TelegramBotSSL
+
     bot = TelegramBotSSL('1910869556:AAGy6Xdbf0Uvk-tz8WFzdnPvo14fu4SOLvc')
     print("✅ Bot Telegram SSL configuré")
     use_ssl_bot = True
 except ImportError:
     try:
         import telepot
+
         bot = telepot.Bot('1910869556:AAGy6Xdbf0Uvk-tz8WFzdnPvo14fu4SOLvc')
         print("✅ Bot Telegram standard configuré")
         use_ssl_bot = False
@@ -101,12 +103,22 @@ def create_database():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS images (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            image_url TEXT UNIQUE,
-            added_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
+                   CREATE TABLE IF NOT EXISTS images
+                   (
+                       id
+                       INTEGER
+                       PRIMARY
+                       KEY
+                       AUTOINCREMENT,
+                       image_url
+                       TEXT
+                       UNIQUE,
+                       added_at
+                       DATETIME
+                       DEFAULT
+                       CURRENT_TIMESTAMP
+                   )
+                   ''')
     conn.commit()
     conn.close()
     print(f"✅ Base de données prête")
@@ -161,7 +173,7 @@ def send_images_via_telegram(images):
     """Traite et envoie les images de tempetebetting.com"""
     now = datetime.now()
     url = BASE_URL.format(year=now.year, month=now.month)
-    
+
     for i, image_url in enumerate(images):
         if i > 0:
             time.sleep(3)  # Délai entre images
@@ -200,7 +212,7 @@ def send_images_via_telegram2(images):
     """Traite et envoie les images de adrbetting.fr"""
     now = datetime.now()
     url = BASE_URL2.format(year=now.year, month=now.month)
-    
+
     for i, image_url in enumerate(images):
         if i > 0:
             time.sleep(3)
@@ -212,7 +224,7 @@ def send_images_via_telegram2(images):
                 continue
 
             img = Image.open(BytesIO(response.content))
-            
+
             # Extraction du texte avec gestion du rate limit
             text = extract_text_with_retry(img, i, len(images), is_adr=True)
 
@@ -236,14 +248,14 @@ def send_images_via_telegram2(images):
 def extract_text_with_retry(image_source, index, total, is_adr=False, max_retries=2):
     """Extrait le texte d'une image avec gestion du rate limit OpenAI"""
     label = "ADR" if is_adr else "Tempete"
-    
+
     for attempt in range(max_retries):
         try:
             print(f"🔍 Extraction texte {label} [{index + 1}/{total}]...")
             text = extraire_pari_depuis_image(image_source, '')
             print("✅ Texte extrait")
             return text
-            
+
         except Exception as e:
             if "rate_limit_exceeded" in str(e):
                 if attempt < max_retries - 1:
@@ -255,7 +267,7 @@ def extract_text_with_retry(image_source, index, total, is_adr=False, max_retrie
             else:
                 print(f"❌ Erreur extraction: {e}")
                 return f"Erreur d'extraction: {str(e)[:100]}"
-    
+
     return "Erreur: Échec extraction après plusieurs tentatives"
 
 
@@ -289,6 +301,6 @@ if __name__ == "__main__":
             main()
             now = datetime.now()
             print(now)
-            time.sleep(60)  # Attendre 10 minutes avant la prochaine vérification
+            time.sleep(600)  # Attendre 10 minutes avant la prochaine vérification
         except Exception as e:
             print(e)
