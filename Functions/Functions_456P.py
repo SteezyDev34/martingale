@@ -243,11 +243,8 @@ def all_script(driver):
                     f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                 config.log(f"FIN {config.scriptType}", 'success', False)
                 if config.scriptType == config.scriptTypeList[-1]:
-                    continue
-                else:
                     print(' last waitendgame')
                     GetIfGameEnd(driver)
-                    continue
                 continue
             if config.jeu_actuel == 13:
                 config.log('Tie break en cours attente début')
