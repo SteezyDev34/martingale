@@ -66,24 +66,8 @@ def main(driver, bet_item, matchlist_file_name):
                 config.log_clear_line()
                 return [True, config.newmatch]
         else:
-            if config.scriptType == '1SET':
-                return [False, config.newmatch]
-            p = config.perte
-            if not p or p == 0:
-                p = getIfGlobalPerte()
-            if not p or p == 0:
-                p = getIf1setGlobalPerte()
-            if not p or p == 0:
-                config.log('Le match  n\'est pas autorisé!', 'warning', True, 4, False)
-                return [False, config.newmatch]
-            else:
-                config.log('Le match  non autorisé mais perte en cours', 'success', False, 4, False)
-                if config.site_type == 'mobile_site':
-                    newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
-                    newmatchtxt = f'{newmatchtxt}?platform_type=mobile'
-                driver.get(newmatchtxt)
-                config.log_clear_line()
-                return [True, config.newmatch]
+            config.log('Le match  n\'est pas autorisé!', 'warning', True, 4, False)
+            return [False, config.newmatch]
 
 
 def getstats(driver, bet_item, matchlist_file_name):
