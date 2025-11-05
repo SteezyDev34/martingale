@@ -227,6 +227,8 @@ def all_script(driver):
                 DeleteBet(driver)
                 continue
             if firstjeu or int(current_game) != int(config.jeu_actuel):
+                print('firstjeu', firstjeu)
+                print('current_game', current_game)
                 time.sleep(2)
                 firstjeu = False
                 current_game = config.jeu_actuel
@@ -325,7 +327,7 @@ def all_script(driver):
                         else:
                             FirstGameBet(driver)
                             validate_bet = True
-                            # firstjeu = True
+                            firstjeu = True
                             current_game = int(config.jeu_actuel)
                 elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                     txtlog = " ON EST SUR LE PROCHAIN SET"
@@ -377,7 +379,7 @@ def all_script(driver):
                             else:
                                 FirstGameBet(driver)
                                 validate_bet = True
-                                firstjeu = True
+                                # firstjeu = True
                                 current_game = int(config.jeu_actuel)
                     current_game = int(config.jeu_actuel)
                 else:

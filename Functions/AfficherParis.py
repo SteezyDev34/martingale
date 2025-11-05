@@ -287,8 +287,8 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
                             matching_text = select_option_text.strip().lower() == str(
                                 theset).lower() + f'{args}'.lower()
                         if matching_text:
-                            config.log('Lien ' + select_option_text.lower() + ' = ' + the_text, 'warning', False, 3)
-                            logline += 1
+                            # config.log('Lien ' + select_option_text.lower() + ' = ' + the_text, 'warning', False, 3)
+                            # logline += 1
                             try:
                                 select_option.click()
                             except Exception as e:
@@ -363,8 +363,8 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
                                     else:
                                         selection = True
                         else:
-                            config.log('Lien ' + select_option_text.lower() + ' > ' + the_text, 'warning', False, 3)
-                            logline += 1
+                            # config.log('Lien ' + select_option_text.lower() + ' > ' + the_text, 'warning', False, 3)
+                            # logline += 1
                             continue
 
     config.log_clear_line(logline)

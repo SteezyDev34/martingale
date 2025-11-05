@@ -232,6 +232,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     except Exception as e:
                         config.log(f'Pas de paris affiché!{e}', 'error', True, 2)
                         tentative_clic += 1
+                        return False
                     else:
                         time.sleep(1)
                         cpn_bet_market_label = driver.find_element(By.CLASS_NAME, class_name).text
