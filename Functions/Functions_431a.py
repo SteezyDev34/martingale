@@ -288,6 +288,7 @@ def all_script(driver):
                 break
             else:
                 GetAndPlaceBet(driver)
+                print('GetAndPlaceBet')
                 print(config.global_match_win)
             if config.result == 'RUN':
                 print('RUN')
@@ -324,7 +325,7 @@ def all_script(driver):
                         else:
                             FirstGameBet(driver)
                             validate_bet = True
-                            firstjeu = True
+                            # firstjeu = True
                             current_game = int(config.jeu_actuel)
                 elif str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                     txtlog = " ON EST SUR LE PROCHAIN SET"
