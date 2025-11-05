@@ -1,5 +1,4 @@
 import os
-import subprocess
 import sys
 import time
 
@@ -50,13 +49,14 @@ else:
 # Chargement de Chrome driver
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
+
 num_fenetre = 13
 time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 driver = get_script_driver(num_fenetre)
 from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte
-from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
-config.in_stat = False
+
+config.in_stat = True
 config.scriptTypeList = config.scriptTypeList
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
