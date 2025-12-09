@@ -26,25 +26,23 @@ from datetime import datetime
 from PIL import Image
 from Functions.getTextFromImageGPT import extraire_pari_depuis_image
 
-# Configuration du bot Telegram simplifié
-try:
-    from telegram_ssl import TelegramBotSSL
+# Configuration SSL pour éviter les erreurs de certificat
+os.environ['PYTHONHTTPSVERIFY'] = '0'
+os.environ['REQUESTS_CA_BUNDLE'] = ''
+os.environ['SSL_VERIFY'] = 'False'
 
-    bot = TelegramBotSSL('1910869556:AAGy6Xdbf0Uvk-tz8WFzdnPvo14fu4SOLvc')
-    print("✅ Bot Telegram SSL configuré")
-    use_ssl_bot = True
-except ImportError:
-    try:
-        import telepot
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
-        bot = telepot.Bot('1910869556:AAGy6Xdbf0Uvk-tz8WFzdnPvo14fu4SOLvc')
-        print("✅ Bot Telegram standard configuré")
-        use_ssl_bot = False
-    except ImportError:
-        print("❌ Aucun module Telegram disponible")
-        sys.exit(1)
-
+# Configuration du bot Telegram simplifié (comme Functions_telegram.py)
+BOT_TOKEN = '1910869556:AAGy6Xdbf0Uvk-tz8WFzdnPvo14fu4SOLvc'
 freeGroup = "-1001315247334"
+
+# Créer une session requests sans vérification SSL
+session = requests.Session()
+session.verify = False
+
+print("✅ Bot Telegram configuré (requests direct)")
 
 # En-têtes pour contourner le blocage 403
 HEADERS = {
@@ -53,34 +51,46 @@ HEADERS = {
 
 
 def send_telegram(chat_id, message, retry_count=3):
-    """Envoie un message Telegram avec gestion d'erreurs optimisée"""
-    for attempt in range(retry_count):
-        try:
-            if use_ssl_bot:
-                result = bot.send_message(chat_id, message)
-                if result:
+    """Envoie un message Telegram via requests (comme Functions_telegram.py)"""
+    try:
+        # Limiter la longueur du message
+        if len(message) > 4096:
+            message = message[:4090] + "\n..."
+        
+        # Utiliser requests directement avec notre session SSL configurée
+        url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+        data = {
+            'chat_id': chat_id,
+            'text': message
+        }
+        
+        for attempt in range(retry_count):
+            try:
+                response = session.post(url, data=data, verify=False, timeout=10)
+                
+                if response.status_code == 200:
                     return True
-            else:
-                bot.sendMessage(chat_id, message)
-                return True
-
-        except Exception as e:
-            error_msg = str(e)
-            print(f"❌ Tentative {attempt + 1}/{retry_count} - {error_msg}")
-
-            # Gestion du rate limit
-            if "429" in error_msg or "Too Many Requests" in error_msg:
-                wait_time = 10 * (attempt + 1)
-                print(f"⏳ Rate limit - Attente de {wait_time}s...")
-                time.sleep(wait_time)
-                continue
-
-            # Pause avant retry
-            if attempt < retry_count - 1:
-                time.sleep(2 ** attempt)
-
-    print(f"❌ Échec définitif après {retry_count} tentatives")
-    return False
+                elif response.status_code == 429:
+                    # Rate limit
+                    wait_time = 10 * (attempt + 1)
+                    print(f"⏳ Rate limit - Attente de {wait_time}s...")
+                    time.sleep(wait_time)
+                    continue
+                else:
+                    print(f"❌ Erreur HTTP {response.status_code}: {response.text[:200]}")
+                    if attempt < retry_count - 1:
+                        time.sleep(2 ** attempt)
+                    
+            except requests.exceptions.RequestException as e:
+                print(f"❌ Erreur réseau tentative {attempt + 1}/{retry_count}: {e}")
+                if attempt < retry_count - 1:
+                    time.sleep(2 ** attempt)
+        
+        return False
+        
+    except Exception as e:
+        print(f"❌ Erreur lors de l'envoi : {e}")
+        return False
 
 
 # Paramètres de configuration
@@ -190,16 +200,38 @@ def send_images_via_telegram(images):
 
             # Extraction du texte avec gestion du rate limit
             text = extract_text_with_retry('images.jpg', i, len(images))
+            
+            # Vérifier que le texte est valide
+            if not text or text.strip() == "":
+                text = "❌ Impossible d'extraire le texte de cette image"
+            
+            # Nettoyer le texte extrait
+            text = text.strip()
+            
+            # Limiter la longueur du texte
+            if len(text) > 3500:
+                text = text[:3500] + "\n... (texte tronqué)"
 
             # Envoi combiné pour réduire le nombre de messages
-            combined_message = f"🖼️ Nouvelle image:\n{url + image_url}\n\n📝 Texte:\n{text}"
+            image_msg = f"🖼️ Nouvelle image:\n{url + image_url}"
+            text_msg = f"📝 Texte:\n{text}"
+            combined_message = f"{image_msg}\n\n{text_msg}"
 
             if len(combined_message) > 4000:
-                send_telegram(freeGroup, f"🖼️ Nouvelle image:\n{url + image_url}")
-                time.sleep(2)
-                send_telegram(freeGroup, f"📝 Texte:\n{text}")
+                # Envoyer séparément si trop long
+                if send_telegram(freeGroup, image_msg):
+                    time.sleep(2)
+                    send_telegram(freeGroup, text_msg)
+                else:
+                    print(f"⚠️  Échec envoi URL, tentative texte seul...")
+                    send_telegram(freeGroup, text_msg)
             else:
-                send_telegram(freeGroup, combined_message)
+                # Envoyer ensemble si possible
+                if not send_telegram(freeGroup, combined_message):
+                    print(f"⚠️  Échec envoi combiné, tentative séparée...")
+                    send_telegram(freeGroup, image_msg)
+                    time.sleep(2)
+                    send_telegram(freeGroup, text_msg)
 
             print(f"✅ Image {i + 1}/{len(images)} envoyée")
             time.sleep(2)

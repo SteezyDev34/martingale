@@ -114,15 +114,21 @@ class TelegramBotSSL:
                 
                 url = f"{self.base_url}/sendMessage"
                 
-                data = {
+                payload = {
                     'chat_id': chat_id,
                     'text': text
                 }
                 
                 if parse_mode:
-                    data['parse_mode'] = parse_mode
+                    payload['parse_mode'] = parse_mode
                 
-                response = self.session.post(url, data=data, timeout=30)
+                # Utiliser json= au lieu de data= pour un meilleur encodage
+                response = self.session.post(
+                    url, 
+                    json=payload, 
+                    timeout=30,
+                    headers={'Content-Type': 'application/json'}
+                )
                 
                 # Gestion spécifique de l'erreur 429
                 if response.status_code == 429:
@@ -148,7 +154,12 @@ class TelegramBotSSL:
                 
                 try:
                     self._wait_for_rate_limit(chat_id)  # Rate limiting même en SSL fallback
-                    response = self.session.post(url, data=data, timeout=30)
+                    response = self.session.post(
+                        url, 
+                        json=payload, 
+                        timeout=30,
+                        headers={'Content-Type': 'application/json'}
+                    )
                     
                     if response.status_code == 429:
                         if attempt < max_retries - 1:
@@ -271,7 +282,7 @@ def test_telegram_bot_ssl():
     
     # Remplacez par votre vrai token
     token = '1910869556:AAGy6Xdbf0Uvk-tz8WFzdnPvo14fu4SOLvc'
-    chat_id = "-1001315247334"
+    chat_id = "-540044043"
     
     try:
         bot = TelegramBotSSL(token)

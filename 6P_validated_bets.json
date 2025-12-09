@@ -2782,5 +2782,1613 @@
         ],
         "timestamp": "2025-10-19 19:46:43",
         "url": "challenger sioux falls qualification"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 16:06:06",
+        "url": "atp metz"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 16:15:44",
+        "url": "atp metz"
+    },
+    {
+        "montant": 0.49,
+        "cote": "3.25",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 16:21:55",
+        "url": "atp metz"
+    },
+    {
+        "montant": 0.9,
+        "cote": "3",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 16:25:22",
+        "url": "atp metz"
+    },
+    {
+        "montant": 0.92,
+        "cote": "4.15",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 16:30:16",
+        "url": "atp metz"
+    },
+    {
+        "montant": 2.0,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 16:32:00",
+        "url": "atp metz"
+    },
+    {
+        "montant": 2.76,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 16:35:23",
+        "url": "atp metz"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 17:01:39",
+        "url": "wta tucuman"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 17:06:08",
+        "url": "wta tucuman"
+    },
+    {
+        "montant": 0.62,
+        "cote": "2.77",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 17:16:44",
+        "url": "wta tucuman"
+    },
+    {
+        "montant": 0.96,
+        "cote": "3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 17:22:29",
+        "url": "wta tucuman"
+    },
+    {
+        "montant": 1.54,
+        "cote": "3",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 17:28:27",
+        "url": "wta tucuman"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 17:46:18",
+        "url": "challenger lima 2"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 17:47:48",
+        "url": "challenger lima 2"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 18:04:15",
+        "url": "itf montreal qualification"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 18:08:01",
+        "url": "itf montreal qualification"
+    },
+    {
+        "montant": 0.49,
+        "cote": "3.25",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 18:12:17",
+        "url": "itf montreal qualification"
+    },
+    {
+        "montant": 0.9,
+        "cote": "3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 18:15:31",
+        "url": "itf montreal qualification"
+    },
+    {
+        "montant": 1.45,
+        "cote": "3",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 18:18:52",
+        "url": "itf montreal qualification"
+    },
+    {
+        "montant": 2.27,
+        "cote": "3",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 18:22:25",
+        "url": "itf montreal qualification"
+    },
+    {
+        "montant": 3.5,
+        "cote": "3",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 18:26:53",
+        "url": "itf montreal qualification"
+    },
+    {
+        "montant": 5.35,
+        "cote": "3",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 18:30:36",
+        "url": "itf montreal qualification"
+    },
+    {
+        "montant": 8.13,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 18:37:49",
+        "url": "itf montreal qualification"
+    },
+    {
+        "montant": 12.29,
+        "cote": "3",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 18:42:52",
+        "url": "itf montreal qualification"
+    },
+    {
+        "montant": 18.54,
+        "cote": "3",
+        "jeu": 3,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 18:47:20",
+        "url": "itf montreal qualification"
+    },
+    {
+        "montant": 27.91,
+        "cote": "3",
+        "jeu": 4,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 18:53:46",
+        "url": "itf montreal qualification"
+    },
+    {
+        "montant": 1.42,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 19:01:14",
+        "url": "atp metz"
+    },
+    {
+        "montant": 2.41,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 19:04:37",
+        "url": "atp metz"
+    },
+    {
+        "montant": 3.3,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 19:10:18",
+        "url": "atp metz"
+    },
+    {
+        "montant": 4.86,
+        "cote": "3.25",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 19:15:27",
+        "url": "atp metz"
+    },
+    {
+        "montant": 7.11,
+        "cote": "3.25",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 19:20:10",
+        "url": "atp metz"
+    },
+    {
+        "montant": 11.65,
+        "cote": "3",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 19:24:41",
+        "url": "atp metz"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 19:40:53",
+        "url": "itf east lansing"
+    },
+    {
+        "montant": 2.5,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 19:46:41",
+        "url": "itf east lansing"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 19:55:00",
+        "url": "wta austin"
+    },
+    {
+        "montant": 2.5,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 19:59:59",
+        "url": "wta austin"
+    },
+    {
+        "montant": 3.85,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 20:05:17",
+        "url": "wta austin"
+    },
+    {
+        "montant": 6.27,
+        "cote": "2.875",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 20:10:27",
+        "url": "wta austin"
+    },
+    {
+        "montant": 9.11,
+        "cote": "3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 20:17:22",
+        "url": "wta austin"
+    },
+    {
+        "montant": 13.76,
+        "cote": "3",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 20:21:05",
+        "url": "wta austin"
+    },
+    {
+        "montant": 20.74,
+        "cote": "3",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 20:23:19",
+        "url": "wta austin"
+    },
+    {
+        "montant": 31.21,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 20:26:30",
+        "url": "wta austin"
+    },
+    {
+        "montant": 41.71,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 20:31:02",
+        "url": "wta austin"
+    },
+    {
+        "montant": 67.88,
+        "cote": "3",
+        "jeu": 3,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 20:36:01",
+        "url": "wta austin"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 20:49:12",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 2.08,
+        "cote": "3.4",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 20:54:18",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 2.78,
+        "cote": "3.62",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 20:57:22",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 4.1,
+        "cote": "3.5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 21:00:30",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 5.82,
+        "cote": "3.5",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 21:04:30",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 10.29,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 21:09:30",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 11.3,
+        "cote": "3.75",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 21:13:35",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 21.29,
+        "cote": "3",
+        "jeu": 3,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 21:17:00",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 23.29,
+        "cote": "3.75",
+        "jeu": 4,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 21:19:01",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 43.77,
+        "cote": "3",
+        "jeu": 5,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 21:24:28",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 21:32:13",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 1.74,
+        "cote": "3.88",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 21:38:21",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 21:48:50",
+        "url": "itf east lansing"
+    },
+    {
+        "montant": 2.5,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 21:52:34",
+        "url": "itf east lansing"
+    },
+    {
+        "montant": 3.85,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 21:59:25",
+        "url": "itf east lansing"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 22:07:13",
+        "url": "wta tucuman"
+    },
+    {
+        "montant": 2.5,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 22:11:17",
+        "url": "wta tucuman"
+    },
+    {
+        "montant": 1.58,
+        "cote": "3.02",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 22:28:20",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 2.49,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 22:34:38",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 3.83,
+        "cote": "3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 22:40:56",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 5.85,
+        "cote": "3",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 22:52:22",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 8.88,
+        "cote": "3",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 23:02:14",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 13.42,
+        "cote": "3",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 23:07:10",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 20.23,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 23:11:16",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 30.44,
+        "cote": "3",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 23:20:22",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 45.76,
+        "cote": "3",
+        "jeu": 3,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 23:26:09",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 1.33,
+        "cote": "3.4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 23:34:59",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 1.89,
+        "cote": "3.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 23:44:05",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 3.41,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-04 23:51:22",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 00:08:18",
+        "url": "wta tucuman"
+    },
+    {
+        "montant": 2.22,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 00:14:21",
+        "url": "wta tucuman"
+    },
+    {
+        "montant": 3.71,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 00:17:26",
+        "url": "wta tucuman"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 00:29:03",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 2.08,
+        "cote": "3.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 00:33:06",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 2.91,
+        "cote": "3.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 00:36:44",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 4.95,
+        "cote": "3.1",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 00:45:24",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 6.47,
+        "cote": "3.4",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 00:51:58",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 8.88,
+        "cote": "3.5",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 00:56:01",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 15.64,
+        "cote": "3",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 01:05:27",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 20.95,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 01:08:33",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 34.14,
+        "cote": "3",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 01:17:24",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 1.42,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 01:27:38",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 2.14,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 01:35:14",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 3.18,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 01:45:46",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 4.68,
+        "cote": "3.25",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 01:49:58",
+        "url": "challenger knoxville"
+    },
+    {
+        "montant": 1.33,
+        "cote": "3.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 01:56:29",
+        "url": "challenger lima 2"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 02:13:35",
+        "url": "itf hamamatsu women"
+    },
+    {
+        "montant": 2.5,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 02:15:39",
+        "url": "itf hamamatsu women"
+    },
+    {
+        "montant": 3.85,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 02:20:14",
+        "url": "itf hamamatsu women"
+    },
+    {
+        "montant": 5.88,
+        "cote": "3",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 02:23:32",
+        "url": "itf hamamatsu women"
+    },
+    {
+        "montant": 8.91,
+        "cote": "3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 02:27:24",
+        "url": "itf hamamatsu women"
+    },
+    {
+        "montant": 13.47,
+        "cote": "3",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 02:34:31",
+        "url": "itf hamamatsu women"
+    },
+    {
+        "montant": 20.3,
+        "cote": "3",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 02:39:00",
+        "url": "itf hamamatsu women"
+    },
+    {
+        "montant": 1.78,
+        "cote": "2.8",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 02:49:44",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 2.56,
+        "cote": "3.02",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 02:54:26",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 3.89,
+        "cote": "3.04",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 03:01:42",
+        "url": "itf guadalajara"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 03:09:44",
+        "url": "challenger matsuyama"
+    },
+    {
+        "montant": 2.5,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 03:14:06",
+        "url": "challenger matsuyama"
+    },
+    {
+        "montant": 1.42,
+        "cote": "3.25",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 03:50:10",
+        "url": "challenger taipei"
+    },
+    {
+        "montant": 2.41,
+        "cote": "3",
+        "jeu": 11,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 03:55:01",
+        "url": "challenger taipei"
+    },
+    {
+        "montant": 3.71,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 03:56:08",
+        "url": "challenger taipei"
+    },
+    {
+        "montant": 5.04,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 03:59:51",
+        "url": "challenger taipei"
+    },
+    {
+        "montant": 8.29,
+        "cote": "3",
+        "jeu": 3,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 04:02:54",
+        "url": "challenger taipei"
+    },
+    {
+        "montant": 11.14,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 04:05:24",
+        "url": "challenger taipei"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 04:11:37",
+        "url": "challenger matsuyama"
+    },
+    {
+        "montant": 2.5,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 04:19:13",
+        "url": "challenger matsuyama"
+    },
+    {
+        "montant": 3.85,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 04:22:17",
+        "url": "challenger matsuyama"
+    },
+    {
+        "montant": 5.88,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 04:26:26",
+        "url": "challenger matsuyama"
+    },
+    {
+        "montant": 8.91,
+        "cote": "3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 04:32:21",
+        "url": "challenger matsuyama"
+    },
+    {
+        "montant": 13.47,
+        "cote": "3",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 04:37:04",
+        "url": "challenger matsuyama"
+    },
+    {
+        "montant": 20.3,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 04:40:23",
+        "url": "challenger matsuyama"
+    },
+    {
+        "montant": 30.56,
+        "cote": "3",
+        "jeu": 3,
+        "set": "2",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 04:53:29",
+        "url": "challenger matsuyama"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 12:10:44",
+        "url": "atp metz"
+    },
+    {
+        "montant": 2.13,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 12:16:48",
+        "url": "atp metz"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 12:29:48",
+        "url": "itf manama"
+    },
+    {
+        "montant": 2.13,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 12:37:11",
+        "url": "itf manama"
+    },
+    {
+        "montant": 3.08,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 12:45:57",
+        "url": "itf manama"
+    },
+    {
+        "montant": 4.45,
+        "cote": "3.25",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 12:54:46",
+        "url": "itf manama"
+    },
+    {
+        "montant": 6.02,
+        "cote": "3.4",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 12:59:03",
+        "url": "itf manama"
+    },
+    {
+        "montant": 10.24,
+        "cote": "3",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 13:03:45",
+        "url": "itf manama"
+    },
+    {
+        "montant": 12.8,
+        "cote": "3.4",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 13:10:17",
+        "url": "itf manama"
+    },
+    {
+        "montant": 1.42,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 13:18:02",
+        "url": "atp metz"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 14:52:16",
+        "url": "itf valencia"
+    },
+    {
+        "montant": 2.5,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 15:03:12",
+        "url": "itf valencia"
+    },
+    {
+        "montant": 3.85,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 15:12:20",
+        "url": "itf valencia"
+    },
+    {
+        "montant": 5.73,
+        "cote": "3.05",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 15:21:24",
+        "url": "itf valencia"
+    },
+    {
+        "montant": 1.42,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 16:02:56",
+        "url": "atp metz"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 16:16:44",
+        "url": "itf montreal"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 16:49:04",
+        "url": "wta world tour finals riyadh"
+    },
+    {
+        "montant": 2.5,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2025-11-05 17:00:44",
+        "url": "wta world tour finals riyadh"
     }
 ]

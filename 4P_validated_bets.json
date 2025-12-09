@@ -1,0 +1,1982 @@
+[
+    {
+        "montant": 0.2,
+        "cote": "6",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 12:37:36",
+        "url": "itf lagos women"
+    },
+    {
+        "montant": 0.2,
+        "cote": "6.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 12:46:09",
+        "url": "itf lagos women"
+    },
+    {
+        "montant": 0.2,
+        "cote": "6.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 12:47:30",
+        "url": "itf lagos women"
+    },
+    {
+        "montant": 0.25,
+        "cote": "6.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 12:56:31",
+        "url": "itf lagos women"
+    },
+    {
+        "montant": 0.34,
+        "cote": "6.5",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 12:58:36",
+        "url": "itf lagos women"
+    },
+    {
+        "montant": 0.22,
+        "cote": "6.5",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 14:09:52",
+        "url": "itf lagos women"
+    },
+    {
+        "montant": 0.69,
+        "cote": "2.75",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 14:27:26",
+        "url": "atp basel"
+    },
+    {
+        "montant": 0.27,
+        "cote": "5.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 15:15:39",
+        "url": "itf santiago"
+    },
+    {
+        "montant": 0.27,
+        "cote": "5.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 15:57:06",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 0.27,
+        "cote": "5.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 15:57:55",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 0.61,
+        "cote": "4.5",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 16:03:39",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 0.66,
+        "cote": "5.5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 16:07:58",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 1.09,
+        "cote": "4.5",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 16:12:38",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 1.13,
+        "cote": "5.5",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 16:24:30",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 1.84,
+        "cote": "4.5",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 16:29:05",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 0.3,
+        "cote": "5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 16:35:12",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 0.31,
+        "cote": "6.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 16:40:38",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 0.55,
+        "cote": "5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 16:44:27",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 0.54,
+        "cote": "6.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 16:47:14",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 0.93,
+        "cote": "5",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 16:51:49",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 0.88,
+        "cote": "6.5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 16:53:47",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 1.48,
+        "cote": "5",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 17:01:00",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 1.26,
+        "cote": "7",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 17:05:51",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 2.01,
+        "cote": "5.5",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 17:12:38",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 1.88,
+        "cote": "7",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 17:18:12",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 0.22,
+        "cote": "6.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 17:33:42",
+        "url": "itf santiago"
+    },
+    {
+        "montant": 0.22,
+        "cote": "6.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 17:52:03",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 0.41,
+        "cote": "5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 17:57:04",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 0.41,
+        "cote": "6.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 18:02:56",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 0.71,
+        "cote": "5",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 18:12:11",
+        "url": "itf hamburg women"
+    },
+    {
+        "montant": 0.22,
+        "cote": "6.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 18:57:26",
+        "url": "itf norman"
+    },
+    {
+        "montant": 0.3,
+        "cote": "5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 19:15:33",
+        "url": "itf ibague women"
+    },
+    {
+        "montant": 0.31,
+        "cote": "6.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 19:22:39",
+        "url": "itf ibague women"
+    },
+    {
+        "montant": 0.31,
+        "cote": "3.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 19:23:46",
+        "url": "itf ibague women"
+    },
+    {
+        "montant": 0.68,
+        "cote": "5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 19:25:50",
+        "url": "itf ibague women"
+    },
+    {
+        "montant": 0.65,
+        "cote": "6.5",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 19:34:45",
+        "url": "itf ibague women"
+    },
+    {
+        "montant": 1.11,
+        "cote": "5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 19:36:55",
+        "url": "itf ibague women"
+    },
+    {
+        "montant": 0.22,
+        "cote": "6.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-23 19:43:35",
+        "url": "itf norman women"
+    },
+    {
+        "montant": 0.3,
+        "cote": "5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 11:48:02",
+        "url": "wta guangzhou"
+    },
+    {
+        "montant": 0.34,
+        "cote": "6",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 11:50:40",
+        "url": "wta guangzhou"
+    },
+    {
+        "montant": 0.5,
+        "cote": "5.5",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 11:59:53",
+        "url": "wta guangzhou"
+    },
+    {
+        "montant": 0.53,
+        "cote": "6.5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 12:05:17",
+        "url": "wta guangzhou"
+    },
+    {
+        "montant": 0.82,
+        "cote": "5.5",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 12:08:42",
+        "url": "wta guangzhou"
+    },
+    {
+        "montant": 0.85,
+        "cote": "6.5",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 12:12:11",
+        "url": "wta guangzhou"
+    },
+    {
+        "montant": 1.28,
+        "cote": "5.5",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 12:16:29",
+        "url": "wta guangzhou"
+    },
+    {
+        "montant": 0.74,
+        "cote": "4.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 14:12:12",
+        "url": "atp basel"
+    },
+    {
+        "montant": 0.2,
+        "cote": "5.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 16:37:42",
+        "url": "itf lagos women"
+    },
+    {
+        "montant": 0.22,
+        "cote": "6.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 16:53:09",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 0.36,
+        "cote": "5.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 16:58:24",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 0.44,
+        "cote": "6",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:04:09",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 0.63,
+        "cote": "5.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:06:55",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 0.63,
+        "cote": "5.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:11:29",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 0.9,
+        "cote": "6",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:14:56",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 1.24,
+        "cote": "5.5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:18:50",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 0.27,
+        "cote": "5.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:22:54",
+        "url": "challenger costa do sauipe"
+    },
+    {
+        "montant": 1.4,
+        "cote": "6",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:24:03",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 0.33,
+        "cote": "6",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:24:41",
+        "url": "challenger costa do sauipe"
+    },
+    {
+        "montant": 1.92,
+        "cote": "5.5",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:28:24",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 0.49,
+        "cote": "5.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:34:36",
+        "url": "challenger costa do sauipe"
+    },
+    {
+        "montant": 1.95,
+        "cote": "6.5",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:36:39",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 0.58,
+        "cote": "6",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:38:13",
+        "url": "challenger costa do sauipe"
+    },
+    {
+        "montant": 2.58,
+        "cote": "6",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:41:34",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 3.13,
+        "cote": "6",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:43:47",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 3.45,
+        "cote": "6.5",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:48:22",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 3.45,
+        "cote": "6.5",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 17:49:40",
+        "url": "wta rovereto"
+    },
+    {
+        "montant": 0.74,
+        "cote": "2.625",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 18:04:32",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 0.4,
+        "cote": "4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 19:47:06",
+        "url": "atp basel"
+    },
+    {
+        "montant": 0.27,
+        "cote": "5.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 20:26:24",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 0.48,
+        "cote": "4.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 20:30:34",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 0.52,
+        "cote": "5.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 20:37:52",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 0.92,
+        "cote": "4.33",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 20:41:57",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 0.93,
+        "cote": "5.5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 20:46:16",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 1.6,
+        "cote": "4.33",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 20:52:08",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 1.6,
+        "cote": "4.33",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 20:55:29",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 1.78,
+        "cote": "6",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 20:57:26",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 3.27,
+        "cote": "4.33",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 21:06:29",
+        "url": "atp vienna"
+    },
+    {
+        "montant": 0.44,
+        "cote": "3.75",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-24 23:33:34",
+        "url": "challenger sioux falls"
+    },
+    {
+        "montant": 0.27,
+        "cote": "5.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 00:11:21",
+        "url": "wta queretaro"
+    },
+    {
+        "montant": 0.3,
+        "cote": "6.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 00:21:01",
+        "url": "wta queretaro"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 00:23:47",
+        "url": "wta queretaro"
+    },
+    {
+        "montant": 0.53,
+        "cote": "6",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 00:25:16",
+        "url": "wta queretaro"
+    },
+    {
+        "montant": 0.62,
+        "cote": "6.5",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 00:31:32",
+        "url": "wta queretaro"
+    },
+    {
+        "montant": 0.24,
+        "cote": "6",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 01:24:00",
+        "url": "wta florianpolis"
+    },
+    {
+        "montant": 0.3,
+        "cote": "6.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 01:29:00",
+        "url": "wta florianpolis"
+    },
+    {
+        "montant": 0.39,
+        "cote": "6.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 01:34:07",
+        "url": "wta florianpolis"
+    },
+    {
+        "montant": 0.39,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 01:37:56",
+        "url": "wta florianpolis"
+    },
+    {
+        "montant": 0.55,
+        "cote": "7",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 01:41:04",
+        "url": "wta florianpolis"
+    },
+    {
+        "montant": 0.74,
+        "cote": "6.5",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 01:45:43",
+        "url": "wta florianpolis"
+    },
+    {
+        "montant": 0.3,
+        "cote": "5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 02:12:22",
+        "url": "wta queretaro"
+    },
+    {
+        "montant": 0.34,
+        "cote": "4.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 04:01:23",
+        "url": "itf huzhou"
+    },
+    {
+        "montant": 0.32,
+        "cote": "6.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 04:07:18",
+        "url": "itf huzhou"
+    },
+    {
+        "montant": 0.65,
+        "cote": "4.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 04:09:57",
+        "url": "itf huzhou"
+    },
+    {
+        "montant": 0.57,
+        "cote": "6.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 04:16:55",
+        "url": "itf huzhou"
+    },
+    {
+        "montant": 1.17,
+        "cote": "4.33",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 04:21:44",
+        "url": "itf huzhou"
+    },
+    {
+        "montant": 0.95,
+        "cote": "6.5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 04:24:12",
+        "url": "itf huzhou"
+    },
+    {
+        "montant": 0.3,
+        "cote": "5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 04:55:17",
+        "url": "itf brisbane women"
+    },
+    {
+        "montant": 0.22,
+        "cote": "6.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 05:26:19",
+        "url": "wta queretaro"
+    },
+    {
+        "montant": 0.29,
+        "cote": "6.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 05:29:41",
+        "url": "wta queretaro"
+    },
+    {
+        "montant": 0.27,
+        "cote": "5.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 05:57:28",
+        "url": "itf tanagura"
+    },
+    {
+        "montant": 0.42,
+        "cote": "5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 06:01:32",
+        "url": "itf tanagura"
+    },
+    {
+        "montant": 0.51,
+        "cote": "5.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 06:04:59",
+        "url": "itf tanagura"
+    },
+    {
+        "montant": 0.75,
+        "cote": "5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 06:14:46",
+        "url": "itf tanagura"
+    },
+    {
+        "montant": 0.34,
+        "cote": "4.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:01:06",
+        "url": "atp paris qualification"
+    },
+    {
+        "montant": 0.34,
+        "cote": "4.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:13:55",
+        "url": "atp paris qualification"
+    },
+    {
+        "montant": 0.5,
+        "cote": "4.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:17:45",
+        "url": "atp paris qualification"
+    },
+    {
+        "montant": 0.73,
+        "cote": "4.33",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:21:08",
+        "url": "atp paris qualification"
+    },
+    {
+        "montant": 0.96,
+        "cote": "4.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:24:13",
+        "url": "atp paris qualification"
+    },
+    {
+        "montant": 1.36,
+        "cote": "4.33",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:27:07",
+        "url": "atp paris qualification"
+    },
+    {
+        "montant": 0.24,
+        "cote": "6",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:35:50",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 0.3,
+        "cote": "6.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:40:11",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 0.43,
+        "cote": "6",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:44:19",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 0.46,
+        "cote": "7",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:47:28",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 0.69,
+        "cote": "6",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:52:04",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 0.72,
+        "cote": "7",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:54:54",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 1.05,
+        "cote": "6",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 12:58:44",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 1.08,
+        "cote": "7",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 13:03:27",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 1.55,
+        "cote": "6",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 13:09:21",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 1.59,
+        "cote": "7",
+        "jeu": 3,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 13:17:30",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 2.26,
+        "cote": "6",
+        "jeu": 4,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 13:21:22",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 2.29,
+        "cote": "7",
+        "jeu": 5,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 13:27:43",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 3.25,
+        "cote": "6",
+        "jeu": 6,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 13:31:37",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 3.58,
+        "cote": "6.5",
+        "jeu": 7,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 13:35:26",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 4.7,
+        "cote": "6",
+        "jeu": 8,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 13:41:29",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 5.16,
+        "cote": "6.5",
+        "jeu": 10,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 13:58:04",
+        "url": "wta chennai qualification"
+    },
+    {
+        "montant": 0.3,
+        "cote": "5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 14:08:23",
+        "url": "atp paris qualification"
+    },
+    {
+        "montant": 0.49,
+        "cote": "4.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 14:10:33",
+        "url": "atp paris qualification"
+    },
+    {
+        "montant": 0.6,
+        "cote": "5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 14:15:59",
+        "url": "atp paris qualification"
+    },
+    {
+        "montant": 0.27,
+        "cote": "5.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 20:23:46",
+        "url": "itf saguenay women"
+    },
+    {
+        "montant": 0.34,
+        "cote": "4.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 20:41:16",
+        "url": "challenger sioux falls"
+    },
+    {
+        "montant": 0.7,
+        "cote": "3.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 20:45:43",
+        "url": "challenger sioux falls"
+    },
+    {
+        "montant": 0.79,
+        "cote": "4.33",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 20:47:58",
+        "url": "challenger sioux falls"
+    },
+    {
+        "montant": 1.32,
+        "cote": "3.75",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 20:52:19",
+        "url": "challenger sioux falls"
+    },
+    {
+        "montant": 0.24,
+        "cote": "6",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 21:33:00",
+        "url": "itf sintra"
+    },
+    {
+        "montant": 0.55,
+        "cote": "4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 21:39:40",
+        "url": "itf sintra"
+    },
+    {
+        "montant": 0.48,
+        "cote": "6",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 21:42:05",
+        "url": "itf sintra"
+    },
+    {
+        "montant": 1.02,
+        "cote": "4",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-25 21:49:47",
+        "url": "itf sintra"
+    },
+    {
+        "montant": 0.2,
+        "cote": "4.33",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 11:16:15",
+        "url": "atp paris"
+    },
+    {
+        "montant": 0.2,
+        "cote": "4.33",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 11:18:35",
+        "url": "atp paris"
+    },
+    {
+        "montant": 0.3,
+        "cote": "4.33",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 11:23:50",
+        "url": "atp paris"
+    },
+    {
+        "montant": 0.45,
+        "cote": "4.33",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 11:25:57",
+        "url": "atp paris"
+    },
+    {
+        "montant": 0.61,
+        "cote": "4.5",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 11:31:57",
+        "url": "atp paris"
+    },
+    {
+        "montant": 0.99,
+        "cote": "4",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 11:34:49",
+        "url": "atp paris"
+    },
+    {
+        "montant": 0.2,
+        "cote": "5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 13:08:23",
+        "url": "atp paris"
+    },
+    {
+        "montant": 0.2,
+        "cote": "5.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 14:17:28",
+        "url": "wta chennai"
+    },
+    {
+        "montant": 0.2,
+        "cote": "6.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 14:22:10",
+        "url": "wta chennai"
+    },
+    {
+        "montant": 0.22,
+        "cote": "5.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 14:25:08",
+        "url": "wta chennai"
+    },
+    {
+        "montant": 0.26,
+        "cote": "6.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 14:29:34",
+        "url": "wta chennai"
+    },
+    {
+        "montant": 0.2,
+        "cote": "5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 14:52:46",
+        "url": "wta chennai"
+    },
+    {
+        "montant": 0.2,
+        "cote": "6.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 14:58:42",
+        "url": "wta chennai"
+    },
+    {
+        "montant": 0.29,
+        "cote": "4.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 15:00:30",
+        "url": "wta chennai"
+    },
+    {
+        "montant": 0.25,
+        "cote": "7",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 15:06:03",
+        "url": "wta chennai"
+    },
+    {
+        "montant": 0.55,
+        "cote": "4.5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 15:09:31",
+        "url": "wta chennai"
+    },
+    {
+        "montant": 0.45,
+        "cote": "7",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 15:15:49",
+        "url": "wta chennai"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 16:05:23",
+        "url": "atp paris"
+    },
+    {
+        "montant": 0.22,
+        "cote": "3.75",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 16:10:03",
+        "url": "atp paris"
+    },
+    {
+        "montant": 0.41,
+        "cote": "3.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 16:12:56",
+        "url": "atp paris"
+    },
+    {
+        "montant": 0.2,
+        "cote": "6.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 16:32:18",
+        "url": "itf toronto women"
+    },
+    {
+        "montant": 0.2,
+        "cote": "5.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 16:38:56",
+        "url": "itf toronto women"
+    },
+    {
+        "montant": 0.2,
+        "cote": "6.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 16:42:12",
+        "url": "itf toronto women"
+    },
+    {
+        "montant": 0.31,
+        "cote": "5.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 16:46:01",
+        "url": "itf toronto women"
+    },
+    {
+        "montant": 0.35,
+        "cote": "6.5",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 16:49:43",
+        "url": "itf toronto women"
+    },
+    {
+        "montant": 0.61,
+        "cote": "5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 16:53:41",
+        "url": "itf toronto women"
+    },
+    {
+        "montant": 0.59,
+        "cote": "6.5",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 17:01:30",
+        "url": "itf toronto women"
+    },
+    {
+        "montant": 1.01,
+        "cote": "5",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 17:06:30",
+        "url": "itf toronto women"
+    },
+    {
+        "montant": 0.88,
+        "cote": "7",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "0:40"
+        ],
+        "timestamp": "2025-10-30 17:13:03",
+        "url": "itf toronto women"
+    }
+]
