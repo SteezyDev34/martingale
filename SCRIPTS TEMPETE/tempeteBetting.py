@@ -24,7 +24,7 @@ from io import BytesIO
 import time
 from datetime import datetime
 from PIL import Image
-from Functions.getTextFromImageGPT import extraire_pari_depuis_image
+from Functions.getTextFromImageGPT import extraire_pari_depuis_image, extraire_pari_joueur_nba_depuis_image
 
 # Configuration SSL pour éviter les erreurs de certificat
 os.environ['PYTHONHTTPSVERIFY'] = '0'
@@ -36,13 +36,14 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 # Configuration du bot Telegram simplifié (comme Functions_telegram.py)
 BOT_TOKEN = '1910869556:AAGy6Xdbf0Uvk-tz8WFzdnPvo14fu4SOLvc'
-freeGroup = "-1001315247334"
+# Utiliser auxo_bot_id pour l'envoi direct au bot
+freeGroup = "820171667"  # auxo_bot - Testé et fonctionne ✅
 
 # Créer une session requests sans vérification SSL
 session = requests.Session()
 session.verify = False
 
-print("✅ Bot Telegram configuré (requests direct)")
+print("✅ Bot Telegram configuré (requests direct)", flush=True)
 
 # En-têtes pour contourner le blocage 403
 HEADERS = {
@@ -73,7 +74,7 @@ def send_telegram(chat_id, message, retry_count=3):
                 elif response.status_code == 429:
                     # Rate limit
                     wait_time = 10 * (attempt + 1)
-                    print(f"⏳ Rate limit - Attente de {wait_time}s...")
+                    print(f"⏳ Rate limit - Attente de {wait_time}s...", flush=True)
                     time.sleep(wait_time)
                     continue
                 else:
@@ -101,7 +102,7 @@ BASE_URL2 = "https://adrbetting.fr/wp-content/uploads/{year}/{month:02d}/"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(SCRIPT_DIR, "images.db")
 
-print(f"📁 Chemin de la base de données : {DB_PATH}")
+print(f"📁 Chemin de la base de données : {DB_PATH}", flush=True)
 
 TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
 TELEGRAM_CHAT_ID = "YOUR_CHAT_ID"
@@ -131,7 +132,7 @@ def create_database():
                    ''')
     conn.commit()
     conn.close()
-    print(f"✅ Base de données prête")
+    print(f"✅ Base de données prête", flush=True)
 
 
 def get_image_links(url):
@@ -195,8 +196,30 @@ def send_images_via_telegram(images):
                 continue
 
             # Sauvegarder l'image localement
-            with open('images.jpg', 'wb') as f:
+            with open(image_url, 'wb') as f:
                 f.write(response.content)
+            
+            # Envoyer l'image locale à Telegram
+            try:
+                telegram_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
+                with open(image_url, 'rb') as photo:
+                    files = {'photo': photo}
+                    data = {'chat_id': freeGroup}
+                    photo_response = session.post(telegram_url, data=data, files=files, verify=False, timeout=30)
+                    
+                    if photo_response.status_code == 200:
+                        print(f"📸 Image envoyée à Telegram", flush=True)
+                    else:
+                        print(f"⚠️ Erreur envoi image: {photo_response.status_code}", flush=True)
+                        # Envoi de l'URL en fallback si l'upload échoue
+                        send_telegram(freeGroup, url + image_url)
+                        
+            except Exception as img_error:
+                print(f"❌ Erreur upload image: {img_error}", flush=True)
+                # Envoi de l'URL en fallback
+                send_telegram(freeGroup, url + image_url)
+            
+            time.sleep(2)
 
             # Extraction du texte avec gestion du rate limit
             text = extract_text_with_retry('images.jpg', i, len(images))
@@ -211,29 +234,10 @@ def send_images_via_telegram(images):
             # Limiter la longueur du texte
             if len(text) > 3500:
                 text = text[:3500] + "\n... (texte tronqué)"
+            send_telegram(freeGroup, text)
 
-            # Envoi combiné pour réduire le nombre de messages
-            image_msg = f"🖼️ Nouvelle image:\n{url + image_url}"
-            text_msg = f"📝 Texte:\n{text}"
-            combined_message = f"{image_msg}\n\n{text_msg}"
 
-            if len(combined_message) > 4000:
-                # Envoyer séparément si trop long
-                if send_telegram(freeGroup, image_msg):
-                    time.sleep(2)
-                    send_telegram(freeGroup, text_msg)
-                else:
-                    print(f"⚠️  Échec envoi URL, tentative texte seul...")
-                    send_telegram(freeGroup, text_msg)
-            else:
-                # Envoyer ensemble si possible
-                if not send_telegram(freeGroup, combined_message):
-                    print(f"⚠️  Échec envoi combiné, tentative séparée...")
-                    send_telegram(freeGroup, image_msg)
-                    time.sleep(2)
-                    send_telegram(freeGroup, text_msg)
-
-            print(f"✅ Image {i + 1}/{len(images)} envoyée")
+            print(f"✅ Image {i + 1}/{len(images)} envoyée", flush=True)
             time.sleep(2)
 
         except Exception as e:
@@ -283,9 +287,15 @@ def extract_text_with_retry(image_source, index, total, is_adr=False, max_retrie
 
     for attempt in range(max_retries):
         try:
-            print(f"🔍 Extraction texte {label} [{index + 1}/{total}]...")
-            text = extraire_pari_depuis_image(image_source, '')
-            print("✅ Texte extrait")
+            print(f"🔍 Extraction texte {label} [{index + 1}/{total}]...", flush=True)
+            
+            # Utiliser la fonction spécialisée NBA pour Tempete
+            if not is_adr:
+                text = extraire_pari_joueur_nba_depuis_image(image_source, '')
+            else:
+                text = extraire_pari_depuis_image(image_source, '')
+                
+            print("✅ Texte extrait", flush=True)
             return text
 
         except Exception as e:
@@ -319,7 +329,7 @@ def main():
 
     # Envoyer les nouvelles images via Telegram
     if new_images:
-        print(f"Found {len(new_images)} new images.")
+        print(f"Found {len(new_images)} new images.", flush=True)
         send_images_via_telegram(new_images)
     else:
         print("No new images found.")

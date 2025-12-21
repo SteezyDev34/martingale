@@ -110,6 +110,7 @@ def extraire_pari_depuis_image(image_path, msg):
                     "3. Tu ne dois jamais inventer un type de pari ou une catégorie.\n"
                     "4. Si le texte 'générateur de paris' apparaît dans l’image, retourne une erreur avec le texte brut de l’image.\n"
                     "5. Tu dois ignorer les textes superflus et te concentrer uniquement sur les données mentionnées ci-dessus.\n\n"
+                    "6. Si tu vois le mot \"combiné\" tu renvoies \"Ce  paris est un combiné\"\n\n"
 
                     "🧠 Exemples de correspondance dynamique :\n"
                     "- Texte image : 'Total 1: (0.5) Plus de' → type_de_pari : 'Total 1', selection : 'Total Individuel 1 Plus de 0.5'\n"
@@ -151,6 +152,91 @@ def extraire_pari_depuis_image(image_path, msg):
             }
         ],
         max_tokens=500
+    )
+    return cleanJson(response.choices[0].message.content)
+
+
+def extraire_pari_joueur_nba_depuis_image(image_path, msg):
+    """
+    Fonction spécialisée pour extraire les paris sur les performances de joueurs NBA.
+    Optimisée pour détecter les props joueurs (points, rebonds, passes, etc.)
+    """
+    image_b64 = image_to_base64(image_path)
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {
+                "role": "system",
+                "content":
+                    "Tu es un agent OCR spécialisé dans les paris sur les performances individuelles des joueurs NBA."
+                    "Ton rôle est d'extraire les données de paris props joueurs depuis des captures d'écran."
+                    
+                    "📊 Données à extraire :\n"
+                    "- date : date du pari (format DD/MM/YYYY)\n"
+                    "- match : les deux équipes qui s'affrontent (ex: 'Lakers vs Celtics')\n"
+                    "- joueur : nom complet du joueur concerné\n"
+                    "- equipe_joueur : équipe du joueur\n"
+                    "- statistique : type de statistique (Points, Rebonds, Passes, Interceptions, etc.)\n"
+                    "- ligne : la ligne du pari (ex: 25.5, 8.5, 10.5)\n"
+                    "- sens : 'Plus de' ou 'Moins de'\n"
+                    "- odds : la cote du pari (nombre flottant)\n"
+                    "- bookmaker : nom du bookmaker si visible\n"
+                    
+                    "🏀 Types de statistiques NBA reconnues :\n"
+                    "- Points (PTS)\n"
+                    "- Rebonds (REB / Rebounds)\n"
+                    "- Passes décisives (AST / Assists)\n"
+                    "- Interceptions (STL / Steals)\n"
+                    "- Contres (BLK / Blocks)\n"
+                    "- Points + Rebonds (PTS+REB)\n"
+                    "- Points + Passes (PTS+AST)\n"
+                    "- Rebonds + Passes (REB+AST)\n"
+                    "- Points + Rebonds + Passes (PTS+REB+AST)\n"
+                    "- Tirs à 3 points réussis (3PM / 3-Points Made)\n"
+                    "- Double-Double (Double Double)\n"
+                    "- Triple-Double (Triple Double)\n"
+                    
+                    "⚠️ Règles strictes :\n"
+                    "1. Normalise les noms de joueurs (ex: 'LeBron' → 'LeBron James')\n"
+                    "2. Convertis les abréviations en texte complet (ex: 'PTS' → 'Points')\n"
+                    "3. Détecte automatiquement si c'est 'Plus de' ou 'Moins de' (Over/Under, +/-)\n"
+                    "4. Extrait la ligne exacte (nombre avec décimale)\n"
+                    "5. Si plusieurs props du même joueur, crée un objet JSON par prop\n"
+                    "6. Si c'est un parlay/combiné de plusieurs joueurs, retourne 'COMBINE_MULTIPLE_JOUEURS'\n"
+                    
+                    "📆 Gestion de la date :\n"
+                    "- Extrait depuis le nom de fichier si disponible\n"
+                    "- Sinon cherche dans l'image (date du match)\n"
+                    "- Sinon utilise la date du jour\n"
+                    
+                    "🧾 Format de réponse JSON attendu (uniquement le JSON, sans explication) :\n"
+                    "{\n"
+                    "  \"date\": \"10/12/2025\",\n"
+                    "  \"match\": \"Lakers vs Celtics\",\n"
+                    "  \"joueur\": \"LeBron James\",\n"
+                    "  \"equipe_joueur\": \"Lakers\",\n"
+                    "  \"statistique\": \"Points + Rebonds + Passes\",\n"
+                    "  \"ligne\": \"45.5\",\n"
+                    "  \"sens\": \"Plus de\",\n"
+                    "  \"odds\": \"1.85\",\n"
+                    "  \"bookmaker\": \"1xBet\"\n"
+                    "}\n\n"
+                    
+                    "🎯 Exemples de reconnaissance :\n"
+                    "- Image: 'Stephen Curry O 25.5 PTS @1.90' → statistique='Points', ligne='25.5', sens='Plus de'\n"
+                    "- Image: 'Giannis Antetokounmpo Under 12.5 REB' → statistique='Rebonds', ligne='12.5', sens='Moins de'\n"
+                    "- Image: 'Luka Doncic 35.5+ PTS+REB+AST' → statistique='Points + Rebonds + Passes', sens='Plus de'\n"
+            },
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text",
+                     "text": f"Voici une capture de pari NBA sur un joueur. Fichier: {image_path}. Message contexte: {msg}. Extrait uniquement le JSON des données du pari joueur."},
+                    {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}}
+                ]
+            }
+        ],
+        max_tokens=600
     )
     return cleanJson(response.choices[0].message.content)
 
