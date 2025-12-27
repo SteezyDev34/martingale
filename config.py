@@ -9,7 +9,6 @@ import requests
 
 # System detection
 systeme = platform.system()
-
 SUPPORTED_SYSTEMS = ['Darwin', 'Windows']  # Extraction de constante
 
 system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inconnu : {systeme}"  # Introduction de variable
@@ -219,7 +218,7 @@ class ScriptConfig:
 
     def _init_variables(self):
 
-        url = f"http://p-com.studio/api/strategy{self.script_type}/"
+        url = f"http://auxobetbot.sc2vagr6376.universe.wf/api/strategy{self.script_type}/"
         strategy = getJsonData(url)
         print('init scriptconfig')
         print(strategy)

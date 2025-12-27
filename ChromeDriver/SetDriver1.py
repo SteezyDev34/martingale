@@ -1,6 +1,5 @@
 import os
 import sys
-
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -14,18 +13,18 @@ if config.systeme == 'Windows':
 else:
     Path = Path + '/chromedriver'
 try:
-    opt.add_experimental_option("debuggerAddress", "localhost:43151")
+    opt.add_experimental_option("debuggerAddress", "localhost:43152")
     # Utilisation correcte du chemin pour macOS
     driver = webdriver.Chrome(executable_path=Path, options=opt)
 except Exception as e:
     try:
-        opt.add_experimental_option("debuggerAddress", "localhost:43151")
+        opt.add_experimental_option("debuggerAddress", "localhost:43152")
         service = Service(executable_path=Path)  # Modification du chemin
         driver = webdriver.Chrome(service=service, options=opt)
     except Exception as e:
         try:
             opt = webdriver.ChromeOptions()
-            opt.add_experimental_option("debuggerAddress", "localhost:43151")
+            opt.add_experimental_option("debuggerAddress", "localhost:43152")
             opt.binary_location = Path  # Chemin binaire adapté pour macOS
             # Initialiser l'instance de WebDriver avec les options
             driver = webdriver.Chrome(options=opt)

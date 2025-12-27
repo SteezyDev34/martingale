@@ -2,7 +2,6 @@ import time
 
 from selenium.webdriver.common.by import By
 
-import config
 from Functions import GetMatchScore, GetLigueName, AddRunning
 from Functions import OuverturePageMatch
 from Functions import VerificationMatchTrouve
@@ -144,6 +143,7 @@ def rechercheDeMatch(driver):
 
 
 if __name__ == "__main__":
+    import config
     from ChromeDriver.SetDriver1 import driver
     import sys
     import os
