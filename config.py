@@ -23,6 +23,7 @@ win = 0  # Nombre de victoire
 cote = 3
 scriptType = "40A"
 localhost = ''
+api_url = 'http://auxobetbot.sc2vagr6376.universe.wf'
 site_url = "https://ca.1xbet.com/fr/live/basketball"
 # Score configurations
 score_to_start = [
@@ -218,7 +219,7 @@ class ScriptConfig:
 
     def _init_variables(self):
 
-        url = f"http://auxobetbot.sc2vagr6376.universe.wf/api/strategy{self.script_type}/"
+        url = fconfig.api_url + "/strategy{self.script_type}/"
         strategy = getJsonData(url)
         print('init scriptconfig')
         print(strategy)

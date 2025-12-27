@@ -12,7 +12,7 @@ import config
 
 def getPerte():
     if getCompetRecup():
-        url = "http://auxobetbot.sc2vagr6376.universe.wf/api/strategy" + config.scriptType + "/get_perte.php"
+        url = config.api_url + "/strategy" + config.scriptType + "/get_perte.php"
         try:
             # Envoyer une requête GET à l'URL
             response = requests.get(url)
@@ -40,7 +40,7 @@ def getPerte():
 
 
 def getGlobalPerte():
-    url = "http://auxobetbot.sc2vagr6376.universe.wf/api/strategy40A/get_global_perte.php"
+    url = config.api_url + "/strategy40A/get_global_perte.php"
     try:
         # Envoyer une requête GET à l'URL
         response = requests.get(url)
@@ -76,7 +76,7 @@ def getGlobalPerte():
 
 
 def delPerte(id):
-    url = "http://auxobetbot.sc2vagr6376.universe.wf/api/strategy" + config.scriptType + "/del_perte.php?id=" + str(id)
+    url = config.api_url + "/strategy" + config.scriptType + "/del_perte.php?id=" + str(id)
     try:
         # Envoyer une requête GET à l'URL
         response = requests.get(url)
@@ -100,7 +100,7 @@ def delPerte(id):
 
 
 def getCompetRecup():
-    url = "http://auxobetbot.sc2vagr6376.universe.wf/api/strategy" + config.scriptType + "/get_compet_recup.php"
+    url = config.api_url + "/strategy" + config.scriptType + "/get_compet_recup.php"
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
@@ -141,7 +141,7 @@ def getCompetRecup():
 def getCompet():
     config.log('Recherche compet', 'info', False, 3)
     config.log_clear_line()
-    url = "http://auxobetbot.sc2vagr6376.universe.wf/api/strategy" + config.scriptType + "/get_compet.php"
+    url = config.api_url + "/strategy" + config.scriptType + "/get_compet.php"
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
@@ -185,7 +185,7 @@ def getCompet():
 
 
 def SendPerte(scriptType, perte):
-    url = "http://auxobetbot.sc2vagr6376.universe.wf/api/strategy" + str(scriptType) + "/insert_perte.php?perte=" + str(
+    url = config.api_url + "/strategy" + str(scriptType) + "/insert_perte.php?perte=" + str(
         perte)
     # URL du lien JSON de la strategy
     try:
@@ -216,7 +216,7 @@ def SendPerte(scriptType, perte):
 
 
 def SendGlobalPerte(scriptType, mise):
-    url = "http://auxobetbot.sc2vagr6376.universe.wf/api/strategy" + str(
+    url = config.api_url + "/strategy" + str(
         scriptType) + "/insert_global_perte.php?mise=" + str(mise)
     # URL du lien JSON de la strategy
     try:
@@ -248,7 +248,7 @@ def SendGlobalPerte(scriptType, mise):
 
 def SendBetPlaced(scriptType, mise):
     # Construction de l'URL de l'API
-    url = "http://auxobetbot.sc2vagr6376.universe.wf/api/strategy" + str(scriptType) + "/insert_bet_placed.php"
+    url = config.api_url + "/strategy" + str(scriptType) + "/insert_bet_placed.php"
     # URL du lien JSON de la strategy
     try:
         # Préparation des données à envoyer en POST

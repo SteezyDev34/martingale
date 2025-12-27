@@ -50,7 +50,7 @@ def SendBetData(driver):
         print("✅ Informations extraites :", bet_data)
 
         # Envoyer les données à l'API en JSON
-        api_url = "http://auxobetbot.sc2vagr6376.universe.wf/api/save_bet" + config.scriptType + "/"
+        api_url = config.api_url + "/save_bet" + config.scriptType + "/"
         response = requests.post(api_url, json=bet_data)
 
         # Vérifier la réponse de l'API
