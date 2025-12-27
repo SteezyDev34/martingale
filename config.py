@@ -7,8 +7,13 @@ from typing import Dict, Any, Optional
 
 import requests
 
+# Import des configurations depuis le module config
+from conf import classes, score_to_start, total_want_win, total_want_winset1
+
+__all__ = ['classes', 'score_to_start', 'total_want_win', 'total_want_winset1']
 # System detection
 systeme = platform.system()
+
 SUPPORTED_SYSTEMS = ['Darwin', 'Windows']  # Extraction de constante
 
 system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inconnu : {systeme}"  # Introduction de variable
@@ -21,14 +26,16 @@ scriptTypeList = ['QT', 'QTV2']
 script_num = 0  # Numéro du Script
 win = 0  # Nombre de victoire
 cote = 3
-scriptType = "40A"
+tipster = '1xbet'
+scriptType = ""
 localhost = ''
 api_url = 'http://auxobetbot.sc2vagr6376.universe.wf'
 site_url = "https://ca.1xbet.com/fr/live/basketball"
-# Score configurations
-score_to_start = [
-    '0000'
-]
+
+match_name = ''
+nb_log_lines = 0
+# La configuration des scores est maintenant importée depuis le module config
+passed_score = []
 # Game state variables
 validated_bet = {}  # Dictionnaire pour stocker les paris validés
 ligue_name = ""
@@ -42,17 +49,17 @@ score_actuel = False
 looking_game = False
 placed_game = False
 saved_score = False
-all_scores = {}
+
 numset = ""
-set = ""
 game_end = False
 game_start = False
 gain = 0
 netprofit = 0
 result = False
 # File paths
-matchlist_file_name = ""
-matchlisttodo_file_name = ""
+matchlist_file_name = f"{projectPath}/matchlist"
+matchlisttodo_file_name = f"{projectPath}/matchlisttodo"
+matchlist1set_name = ""
 running_file_name = ""
 in_stat = False
 # Game variables
@@ -70,18 +77,45 @@ nb_tour = 1
 increment = 0
 mtt_recup = 0
 recup30 = 0
-rattrape_perte = 0
+rattrape_perte = 1  # ne pas changer
 print_running_text = False
 print_match_live_text = False
 error = False
-devMode = 1
+devMode = True
 restart_set2 = 0
 log_message = ''
 newqt = 2
 teams = False
+all_scores = {}
+# Récupération du dernier classement depuis le fichier
+try:
+    with open(os.path.join(projectPath, 'DataFiles', 'last_classement.txt'), 'r') as f:
+        last_classement = f.read().strip()
+except FileNotFoundError:
+    last_classement = 'test'  # Valeur par défaut si le fichier n'existe pas
+# Le dictionnaire classes est maintenant importé depuis le module config
+# Importation des types de paris 1xBet depuis le fichier JSON
+xbet_types_file = os.path.join(projectPath, 'xbet_types.json')
+with open(xbet_types_file, 'r', encoding='utf-8') as f:
+    xbet_types_data = json.load(f)
+
+# Préserver la structure originale des données JSON pour une meilleure utilisation
+xbet_type_list = xbet_types_data
+
+# Créer également une version avec des sets pour la compatibilité avec l'ancien code si nécessaire
+xbet_type_list_sets = {}
+for period, bet_types_list in xbet_types_data.items():
+    # Créer un ensemble de toutes les sélections pour cette période
+    # bet_types_list est une liste de types de paris, pas un dictionnaire
+    all_selections = set(bet_types_list)
+    xbet_type_list_sets[period] = all_selections
 # Initialize dictionaries to track wins per script type
 winmatch = {script_type: 0 for script_type in scriptTypeList}
-global_match_win = {script_type: 0 for script_type in scriptTypeList}
+# Net profit per script type is tracked as float values
+global_match_win: Dict[str, float] = {script_type: 0.0 for script_type in scriptTypeList}
+
+
+# Configurations de paris importées depuis config.betting_config
 
 
 def getJsonData(url: str) -> Optional[Dict[str, Any]]:
@@ -94,7 +128,7 @@ def getJsonData(url: str) -> Optional[Dict[str, Any]]:
     Returns:
         Un dictionnaire contenant les données JSON ou None en cas d'erreur
     """
-    max_attempts = 5
+    max_attempts = 1
     for attempt in range(max_attempts):
         try:
             response = requests.get(url, timeout=10)
@@ -104,10 +138,9 @@ def getJsonData(url: str) -> Optional[Dict[str, Any]]:
                 return data[0]
             return None
         except requests.exceptions.RequestException as e:
-            print(f"Tentative {attempt + 1}/{max_attempts} - Erreur lors de la récupération des données : {e}")
-        except json.JSONDecodeError as e:
-            print(f"Tentative {attempt + 1}/{max_attempts} - Erreur lors du parsing du JSON : {e}")
-
+            log(f" Erreur lors de la récupération des données", 'warning')
+        except json.JSONDecodeError:
+            log(f" Erreur lors du parsing du JSON", 'warning')
         # Attendre un peu plus longtemps entre chaque tentative
         if attempt < max_attempts - 1:
             import time
@@ -119,54 +152,106 @@ def getJsonData(url: str) -> Optional[Dict[str, Any]]:
 def init_variable():
     """Initialize global variables from strategy data"""
     global mise, perte, wantwin, increment, probamini
-    global running_file_name, matchlist_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
-    global print_match_live_text, devMode, gain, netprofit, perte, placed_game, looking_game, saved_score
-    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result
+    global running_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
+    global print_match_live_text, gain, netprofit, perte, placed_game, looking_game, saved_score
+    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, matchlist1set_name
     config_global = ScriptConfig(scriptType)
 
     # Initialize variables from config
-    devMode = config_global.get("devmode")
     error = config_global.get("error")
     validated_bet = config_global.get("validated_bet")
 
+    # On suppose que chacune de ces variables a déjà une valeur par défaut
+    # définie avant ce bloc. On ne modifie la variable que si la clé existe
+    # dans config_global et que sa valeur n’est pas None.
+
     # Game settings
-    cotebase = float(config_global.get("cote_base"))
-    mise = float(config_global.get("mise"))
-    nb_tour = int(config_global.get("nb_tour"))
-    probamini = float(config_global.get("proba_mini"))
+    val = config_global.get("cote_base")
+    if val is not None:
+        cotebase = float(val)
+    val = config_global.get("mise")
+    if val is not None:
+        mise = float(val)
+
+    val = config_global.get("nb_tour")
+    if val is not None:
+        nb_tour = int(val)
+
+    val = config_global.get("proba_mini")
+    if val is not None:
+        probamini = float(val)
 
     # Game state
-    gain = float(config_global.get("gain"))
-    increment = float(config_global.get("increment"))
-    looking_game = int(config_global.get("looking_game"))
-    netprofit = float(config_global.get("netprofit"))
-    perte = float(config_global.get("perte"))
-    placed_game = int(config_global.get("placed_game"))
-    rattrape_perte = int(config_global.get("rattrape_perte"))
-    restart_set2 = int(config_global.get("restart_set2"))
-    saved_score = config_global.get("saved_score")
-    validated_bet = config_global.get("validated_bet")
-    wantwin = float(config_global.get("wantwin"))
-    win_type = config_global.get("win_type")
-    mtt_recup = float(config_global.get("mtt_recup"))
-    result = config_global.get('result')
+    val = config_global.get("gain")
+    if val is not None:
+        gain = float(val)
+
+    val = config_global.get("increment")
+    if val is not None:
+        increment = float(val)
+
+    val = config_global.get("looking_game")
+    if val is not None:
+        looking_game = int(val)
+
+    val = config_global.get("netprofit")
+    if val is not None:
+        netprofit = float(val)
+
+    val = config_global.get("perte")
+    if val is not None:
+        perte = float(val)
+
+    val = config_global.get("placed_game")
+    if val is not None:
+        placed_game = int(val)
+
+    val = config_global.get("rattrape_perte")
+    if val is not None:
+        rattrape_perte = int(val)
+
+    val = config_global.get("restart_set2")
+    if val is not None:
+        restart_set2 = int(val)
+
+    val = config_global.get("saved_score")
+    if val is not None:
+        saved_score = val
+
+    val = config_global.get("validated_bet")
+    if val is not None:
+        validated_bet = val
+
+    val = config_global.get("wantwin")
+    if val is not None:
+        wantwin = float(val)
+
+    val = config_global.get("win_type")
+    if val is not None:
+        win_type = val
+
+    val = config_global.get("mtt_recup")
+    if val is not None:
+        mtt_recup = float(val)
+
+    val = config_global.get("result")
+    if val is not None:
+        result = val
 
     # Display settings
     print_match_live_text = config_global.get("print_match_live_text")
     print_running_text = config_global.get("print_running_text")
 
     # File paths configuration
-    running_file_name = f"{projectPath}/SCRIPTS {scriptType}/running"
-    matchlist_file_name = f"{projectPath}/SCRIPTS {scriptType}/matchlist"
     matchlisttodo_file_name = f"{projectPath}/matchlisttodo"
 
 
 def save_variables():
     """Initialize global variables from strategy data"""
     global mise, perte, wantwin, increment, probamini
-    global running_file_name, matchlist_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
-    global print_match_live_text, devMode, gain, netprofit, perte, placed_game, looking_game, saved_score
-    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result
+    global running_file_name, matchlisttodo_file_name, print_running_text, rattrape_perte
+    global print_match_live_text, gain, netprofit, perte, placed_game, looking_game, saved_score
+    global error, cotebase, nb_tour, restart_set2, validated_bet, win_type, mtt_recup, result, matchlist1set_name
 
     """Save current variables state back to config"""
     config_global = ScriptConfig(scriptType)
@@ -196,6 +281,7 @@ def save_variables():
     # Save display settings
     config_global.set("print_match_live_text", print_match_live_text)
     config_global.set("print_running_text", print_running_text)
+    matchlisttodo_file_name = f"{projectPath}/matchlisttodo"
 
 
 def switchScript(newScriptType):
@@ -219,10 +305,8 @@ class ScriptConfig:
 
     def _init_variables(self):
 
-        url = fconfig.api_url + "/strategy{self.script_type}/"
+        url = f"{api_url}/strategy{self.script_type}/"
         strategy = getJsonData(url)
-        print('init scriptconfig')
-        print(strategy)
         # Configuration par défaut selon le type de script
         default_configs = {
         }
@@ -241,7 +325,7 @@ class ScriptConfig:
             config['looking_game'] = False
             config['placed_game'] = False
             config['saved_score'] = False
-            config['rattrape_perte'] = False
+            config['rattrape_perte'] = 1
             config['result'] = False
 
         return config
@@ -284,20 +368,85 @@ def saveLog(txt):
         os.makedirs(nom_du_repertoire)
 
     try:
-        # Ouvrir le fichier en mode ajout
-        with open(nom_du_fichier, 'a+') as fichier:
-            # Vérifier si le fichier est non vide
-            fichier.seek(0)
-            contenu = fichier.read()
+        # Gestion robuste des interruptions clavier et des erreurs d'encodage
+        try:
+            # Vérifier d'abord si le fichier existe et s'il est lisible
+            if os.path.exists(nom_du_fichier):
+                try:
+                    # Test de lecture pour détecter les problèmes d'encodage
+                    with open(nom_du_fichier, 'r', encoding='utf-8') as test_file:
+                        test_file.seek(0, 2)  # Aller à la fin pour tester
+                except UnicodeDecodeError:
+                    # Fichier corrompu, le sauvegarder et en créer un nouveau
+                    backup_file = f"{nom_du_fichier}.corrupted.{int(time.time())}"
+                    print(f"⚠️ Fichier de log corrompu, sauvegarde vers: {backup_file}")
+                    try:
+                        os.rename(nom_du_fichier, backup_file)
+                    except:
+                        # Si on ne peut pas renommer, supprimer le fichier corrompu
+                        os.remove(nom_du_fichier)
+                        print(f"❌ Fichier corrompu supprimé: {nom_du_fichier}")
 
-            # Ajouter un saut de ligne si le fichier n'est pas vide
-            if contenu:
-                fichier.write('\n')
+            # Ouvrir le fichier en mode ajout avec gestion d'erreur renforcée
+            with open(nom_du_fichier, 'a+', encoding='utf-8', buffering=1, errors='replace') as fichier:
+                # Méthode plus efficace - éviter de lire tout le fichier
+                fichier.seek(0, 2)  # Aller à la fin du fichier
+                position = fichier.tell()
 
-            # Écrire le texte à la fin du fichier
-            fichier.write(f"{heure_actuelle} : {txt}")
+                # Ajouter un saut de ligne si le fichier n'est pas vide
+                if position > 0:
+                    try:
+                        # Vérifier le dernier caractère pour éviter les doubles sauts de ligne
+                        fichier.seek(position - 1)
+                        dernier_char = fichier.read(1)
+                        fichier.seek(0, 2)  # Retourner à la fin
+
+                        if dernier_char and dernier_char != '\n':
+                            fichier.write('\n')
+                    except:
+                        # En cas d'erreur de lecture, simplement ajouter une ligne
+                        fichier.write('\n')
+
+                # Nettoyer le texte pour éviter les caractères problématiques
+                txt_clean = str(txt).encode('utf-8', errors='replace').decode('utf-8')
+
+                # Écrire le texte à la fin du fichier
+                fichier.write(f"{heure_actuelle} : {txt_clean}")
+                fichier.flush()  # Forcer l'écriture immédiate
+
+        except KeyboardInterrupt:
+            # Gestion spécifique de Ctrl+C - essayer de sauvegarder quand même
+            print(f"⚠️ Interruption détectée lors de l'écriture du log: {txt[:50]}...")
+            try:
+                # Tentative rapide de sauvegarde avec nettoyage du texte
+                txt_clean = str(txt).encode('utf-8', errors='replace').decode('utf-8')
+                with open(nom_du_fichier, 'a', encoding='utf-8', errors='replace') as fichier_urgence:
+                    fichier_urgence.write(f"\n{heure_actuelle} : [INTERROMPU] {txt_clean}")
+            except:
+                # Si même ça échoue, au moins l'afficher
+                print(f"❌ Impossible de sauvegarder: {txt}")
+            raise  # Re-lancer l'interruption
+
     except Exception as e:
-        print(f'Erreur de log: {e}')
+        error_msg = str(e)
+        print(f'❌ Erreur de log: {error_msg}')
+
+        # Essayer une sauvegarde d'urgence avec un nom de fichier alternatif
+        try:
+            emergency_file = f"{projectPath}/Logs/emergency_log_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+            os.makedirs(os.path.dirname(emergency_file), exist_ok=True)
+
+            txt_clean = str(txt).encode('ascii', errors='replace').decode('ascii')
+            with open(emergency_file, 'w', encoding='ascii', errors='replace') as emergency:
+                emergency.write(f"{heure_actuelle} : [ERREUR_LOG] {txt_clean}\n")
+                emergency.write(f"Erreur originale: {error_msg}\n")
+
+            print(f"💾 Log de secours créé: {emergency_file}")
+
+        except Exception as emergency_error:
+            print(f"❌ Impossible de créer un log de secours: {emergency_error}")
+            # Dernière tentative: afficher dans la console seulement
+            print(f"LOG PERDU: {heure_actuelle} - {txt}")
 
 
 import colorama
@@ -306,7 +455,6 @@ import sys
 import os
 
 # Forcer l'encodage en UTF-8 pour stdout
-print(sys.platform)
 if sys.platform == "win32":
     sys.stdout = codecs.getwriter("utf-8")(sys.stdout.buffer, errors="backslashreplace")
     sys.stderr = codecs.getwriter("utf-8")(sys.stderr.buffer, errors="backslashreplace")
@@ -318,6 +466,7 @@ colorama.init()
 
 # Définition des couleurs ANSI avec colorama pour la compatibilité Windows
 RESET = colorama.Style.RESET_ALL  # Réinitialisation des styles
+WHITE = colorama.Fore.WHITE
 BOLD = colorama.Style.BRIGHT  # Texte en gras
 YELLOW = colorama.Fore.YELLOW  # Texte jaune
 GREEN = colorama.Fore.GREEN  # Texte vert
@@ -331,7 +480,7 @@ BGBLUE = colorama.Back.BLUE  # Fond bleu
 BGRESET = colorama.Back.BLACK  # Fond noir (réinitialisation)
 
 
-def log(message, type="", clear=True, indent=0):
+def log(message, type="", clear=True, indent=0, show_script_type=True):
     """
     Affiche un message dans le terminal tout en effaçant dynamiquement la ligne précédente si demandé.
 
@@ -342,7 +491,7 @@ def log(message, type="", clear=True, indent=0):
     global log_message
     # Détermination de la couleur en fonction du type de message
     if type == "info":
-        color = BOLD
+        color = WHITE
     elif type == "title":
         color = CYAN
     elif type == "success":
@@ -351,23 +500,42 @@ def log(message, type="", clear=True, indent=0):
         color = YELLOW
     elif type == "error":
         color = RED
+    elif type == "purple":
+        color = PURPLE
+    elif type == "bgpurple":
+        color = BGPURPLE
+    elif type == "bgcyan":
+        color = BGCYAN
+    elif type == "bgblue":
+        color = BGBLUE
+    elif type == "bgreset":
+        color = BGRESET
     else:
         color = RESET  # Pas de couleur par défaut
 
     # Gestion de l'indentation
     indent = "    " * indent if indent > 0 else ""
-    sys.stdout.write(f"{scriptType}{color}{indent}{message}{RESET}\n")
+    s = ''
+    if show_script_type:
+        s = scriptType
+    sys.stdout.write(f"{color}{s} {indent}{message}{RESET}\n")
 
     if clear:
         # Effacement de la ligne précédente
         # Affichage du nouveau message sur la même ligne
+        time.sleep(0.3)
         log_clear_line()
 
     # Force l'écriture du buffer
     sys.stdout.flush()
     # Mise à jour du message global
     log_message = message
-    saveLog(message)
+
+    # Sauvegarde protégée contre les interruptions
+    try:
+        saveLog(message)
+    except:
+        pass  # Si même ça échoue, on abandonne silencieusement
 
 
 def log_clear_line(line_number=1):
@@ -377,17 +545,77 @@ def log_clear_line(line_number=1):
     :param line_number: Nombre de lignes à effacer (par défaut 1)
     """
     if os.getenv('PYCHARM_HOSTED') == '1':  # Si exécuté dans PyCharm
-        time.sleep(0.5)
-
         # Simple écriture de lignes vides pour PyCharm
         for _ in range(line_number):
-            # sys.stdout.write("clear\n")
+            sys.stdout.write("clear\n")
             continue
     else:
         # Délai pour éviter les problèmes d'affichage
-        time.sleep(0.5)
         for _ in range(line_number):
-            # Remonte d'une ligne et l'efface
-            # sys.stdout.write("clear\n")
-            sys.stdout.write("\033[F\033[K\r")
-            sys.stdout.flush()
+            if not devMode:
+                sys.stdout.write("\x1b[1A\x1b[2K\r")
+            # Monte d’une ligne et efface-la entièrement
+
+        sys.stdout.flush()
+
+
+win_session = False
+win = False
+min_unit = float(0.00000001)
+unit = min_unit
+old_unit = False
+perte = float(0.00000000)
+side = 'over'
+old_side = 'under'
+old_result = False
+xpath_over = '//*[@id="root"]/div[1]/div[2]/div[1]/div/section/div/div[4]/div[2]/button'
+xpath_under = '//*[@id="root"]/div[1]/div[2]/div[1]/div/section/div/div[4]/div[1]/button'
+
+
+def configure_site_type(use_ca_site=None):
+    """
+    Configure le type de site et les URLs en fonction du choix utilisateur.
+
+    Args:
+        use_ca_site (bool, optional): Si True, utilise le site CA. Si False, utilise le site standard.
+                                     Si None, demande à l'utilisateur.
+
+    Returns:
+        str: Le type de site configuré ('new_site' ou 'old_site')
+    """
+    global site_url, site_line_url, site_type
+
+    if use_ca_site is None:
+        wich_site = input("1XBET CA? (Y/N): ")
+        use_ca_site = wich_site.upper() in ['Y', 'O']
+        log_clear_line(1)
+
+    if use_ca_site:
+        site_url = "https://ca.1xbet.com/fr/live/tennis"
+        site_line_url = "https://ca.1xbet.com/fr/line/tennis"
+        site_type = 'new_site'
+    else:
+        site_url = 'https://1xbet.com/fr/live/tennis'
+        site_line_url = 'https://1xbet.com/fr/line/tennis'
+        site_type = 'old_site'
+
+    log("-" * 60, "info", False)
+    log(f"SITE CONFIGURÉ: {site_type.upper()} - {site_url}", "info", False)
+    log("-" * 60, "info", False)
+    return site_type
+
+
+if systeme == 'Windows':
+    import psutil
+
+
+    def is_chrome_running_with_port(port):
+        for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+            try:
+                if proc.info['name'] and 'chrome.exe' in proc.info['name'].lower():
+                    cmdline = proc.info['cmdline']
+                    if cmdline and any(f'--remote-debugging-port={port}' in arg for arg in cmdline):
+                        return True
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                continue
+        return False
