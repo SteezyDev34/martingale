@@ -94,21 +94,9 @@ try:
 except FileNotFoundError:
     last_classement = 'test'  # Valeur par défaut si le fichier n'existe pas
 # Le dictionnaire classes est maintenant importé depuis le module config
-# Importation des types de paris 1xBet depuis le fichier JSON
-xbet_types_file = os.path.join(projectPath, 'xbet_types.json')
-with open(xbet_types_file, 'r', encoding='utf-8') as f:
-    xbet_types_data = json.load(f)
-
-# Préserver la structure originale des données JSON pour une meilleure utilisation
-xbet_type_list = xbet_types_data
 
 # Créer également une version avec des sets pour la compatibilité avec l'ancien code si nécessaire
 xbet_type_list_sets = {}
-for period, bet_types_list in xbet_types_data.items():
-    # Créer un ensemble de toutes les sélections pour cette période
-    # bet_types_list est une liste de types de paris, pas un dictionnaire
-    all_selections = set(bet_types_list)
-    xbet_type_list_sets[period] = all_selections
 # Initialize dictionaries to track wins per script type
 winmatch = {script_type: 0 for script_type in scriptTypeList}
 # Net profit per script type is tracked as float values
