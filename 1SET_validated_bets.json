@@ -7,5 +7,23 @@
         "winscore": "V2",
         "timestamp": "2026-01-07 09:11:36",
         "url": "itf hurghada"
+    },
+    {
+        "montant": 1.04,
+        "cote": "1.192",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2026-01-07 09:14:27",
+        "url": "itf antalya women"
+    },
+    {
+        "montant": 0.3,
+        "cote": "1.66",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2026-01-07 09:15:58",
+        "url": "itf hurghada"
     }
 ]
