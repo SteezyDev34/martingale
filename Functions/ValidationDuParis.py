@@ -180,6 +180,16 @@ def ValidationDuParis(driver, nexbet=False):
         # SendBetData()
         current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         # Create validated bet data
+        # Déterminer l'URL à stocker : pour le script 1SET on veut l'URL courante du driver
+        try:
+            if getattr(config, 'scriptType', None) == '1SET':
+                url_to_store = driver.current_url
+            else:
+                url_to_store = config.ligue_name
+        except Exception:
+            # En cas de problème d'accès au driver, revenir à la valeur par défaut
+            url_to_store = getattr(config, 'ligue_name', None)
+
         config.validated_bet = {
             'montant': config.mise,
             'cote': config.cote,
@@ -187,7 +197,7 @@ def ValidationDuParis(driver, nexbet=False):
             'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
             'winscore': config.win_type,
             'timestamp': current_timestamp,
-            'url': config.ligue_name
+            'url': url_to_store
         }
 
         # Save validated bet to JSON file named after script type

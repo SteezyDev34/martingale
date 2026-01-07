@@ -78,7 +78,7 @@ def all_script(driver):
         config.log('ligues introuvables!', 'warning', True, 2)
         return False
     else:
-        # config.log('ligues trouvées!', 'success', True, 2)
+        config.log('ligues trouvées!', 'success', True, 2)
         # POUR CHAQUE LIGUE RÉCUPÉRÉE
         for bet_ligue in bet_list_ligue:
             # ON RÉCUPÈRE LE NOM DE LA LIGUE
@@ -93,7 +93,7 @@ def all_script(driver):
             # config.log(' ' + config.ligue_name, 'info', False, 2)
             # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
             try:
-                # config.log('Récupération des matchs', 'info', False, 3)
+                config.log('Récupération des matchs', 'info', False, 3)
                 config.log_clear_line()
                 bet_items = bet_ligue.find_elements(By.CLASS_NAME,
                                                     'dashboard-champ__game')
@@ -117,7 +117,7 @@ def all_script(driver):
                     newmatch = newmatchtxt.split(
                         '-')
                     config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
-                    # config.log(config.newmatch, 'info', False, 4)
+                    config.log(config.newmatch, 'info', False, 4)
                     # Check if newmatch exists in JSON file
                     try:
                         with open('1SET_validated_bets.json', 'r') as f:
@@ -141,6 +141,8 @@ def all_script(driver):
                                     text = div_bet_score[0].text
                                     text = text.replace(
                                         '\n', '')
+
+                                    print('score : ', text)
                                     if '6' not in text and '7' not in text:
                                         # print('MATCH NON TERMINÉ SELON SCORE')
                                         continue
