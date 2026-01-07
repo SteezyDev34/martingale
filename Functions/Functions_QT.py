@@ -1,17 +1,14 @@
-from Functions.FisrtQTBet import FirstQTBet
-
-from Functions._to_remove import AddRunning
 import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName
 from Functions.DeleteBet import DeleteBet
-from Functions.GetSetActuel import GetQTActuel
-from Functions._to_remove.Function_scriptDelRunning import scriptDelRunning
+from Functions.FisrtQTBet import FirstQTBet
+from Functions.Function_GetSetActuel import GetQTActuel
 from Functions.GetIfGameStart import GetIfQTEnd, GetIfQTStart
 from Functions.GetJsonData import DispatchPerte, getGlobalPerte, SendGlobalPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
-from Functions.ScriptRechercheDeMatch import rechercheDeMatch
+from Functions.ScriptRechercheDeMatch import rechercheDeMatchNBA
 from Functions.VerificationMatchTrouve import newmatchFromUrl
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
@@ -19,17 +16,14 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 def all_script(driver):
     driver.switch_to.window(driver.window_handles[0])
     result = False
-    # Mise à jour du fichier txt des script en cours
-    scriptDelRunning()
     # --------
     # SCRIPT RECHERCHE DE MATCH
-    while not rechercheDeMatch(driver) and not config.error:
+    while not rechercheDeMatchNBA(driver) and not config.error:
         config.log('Erreur lors de la recherche de match!', 'error', False, 2)
 
     # --------
     config.match_found = True
     if config.match_found and not config.error:
-        AddRunning.main(config.script_num, config.running_file_name)
         config.ligue_name = GetLigueName.fromUrl(driver)[0]
         config.match_Url = GetLigueName.fromUrl(driver)[1]
         config.teams = GetPlayersName(driver)

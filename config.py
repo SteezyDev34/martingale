@@ -2,10 +2,9 @@ import datetime
 import json
 import os
 import platform
+import requests
 import time
 from typing import Dict, Any, Optional
-
-import requests
 
 # Import des configurations depuis le module config
 from conf import classes, score_to_start, total_want_win, total_want_winset1
@@ -20,7 +19,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['150', '015', '300', '30A']
+scriptTypeList = ['150', '300', '30A']
 scriptTypeList1 = ['5P', '40A']
 scriptTypeList2 = ['BREAK', '6P']
 scriptTypeList3 = ['BREAK']
