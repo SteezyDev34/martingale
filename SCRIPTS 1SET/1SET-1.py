@@ -33,6 +33,8 @@ if len(parts) > 1:
     if int(config.localhost) < 1024:
         config.localhost = 1024 + int(config.localhost)
     print(config.localhost)
+    command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
+    print(command)
     print(f'{config.PURPLE}' + text2art(
         f"Start martingal {config.scriptType} {config.script_num}"))  # Crée un texte en art ASCII
     # sys.stdout.write(f"\rSCRIPT TYPE : {config.scriptType}")

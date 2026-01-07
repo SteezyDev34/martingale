@@ -1,7 +1,7 @@
 <?php
 
 // Inclure le fichier de configuration
-require_once __DIR__ . '/../../config.php';
+require_once __DIR__ . '/../config.php';
 
 // Obtenir la connexion à la base de données
 $conn = getDbConnection();
@@ -10,7 +10,7 @@ $conn = getDbConnection();
 $response = array("status" => "error", "message" => "Paramètres d'URL manquants.");
 
 // Vérifier si les paramètres d'URL nécessaires sont définis
-if (isset($_GET['perte']) && isset($_GET['ligue']) ) {
+if (isset($_GET['perte']) && isset($_GET['ligue'])) {
     // Récupérer les données des paramètres d'URL
     $perte = $_GET['perte'];
     $ligue = $_GET['ligue'];
@@ -34,10 +34,8 @@ if (isset($_GET['perte']) && isset($_GET['ligue']) ) {
     } else {
         $response = array("status" => "error", "message" => "Erreur lors de la préparation de la requête : " . $conn->error);
     }
-}
-else{
+} else {
     $response = array("status" => "error", "message" => "Pas de données : " . $conn->error);
-
 }
 
 // Fermer la connexion
@@ -48,5 +46,3 @@ header('Content-Type: application/json');
 
 // Retourner la réponse en JSON
 echo json_encode($response);
-
-
