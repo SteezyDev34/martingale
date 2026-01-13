@@ -82,7 +82,7 @@ win_type = ''
 wantwin = 0.2
 nb_tour = 1
 increment = 0
-mtt_recup = 0
+mtt_recup = 0.2
 
 recup30 = 0
 rattrape_perte = 1  # ne pas changer
@@ -569,7 +569,8 @@ def log_clear_line(line_number=1):
 
 win_session = False
 win = False
-min_unit = float(0.00000001)
+#min unit of lucky games is 0.00000001 with 7x0
+min_unit = float(0.00000002)
 unit = min_unit
 old_unit = False
 perte = float(0.00000000)

@@ -1,6 +1,12 @@
 import datetime
 import json
 import time
+import sys
+from functools import partial
+
+# Forcer tous les prints dans ce module à utiliser flush=True afin
+# que les sorties apparaissent immédiatement (pas bufferisées).
+print = partial(print, flush=True)
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -109,10 +115,15 @@ def all_script(driver):
         except Exception as e:
             print(f"#E0003\nUne erreur send key suggestedNumbers : {e}")
         else:
-            if unit <= min_unit:
+            if unit <= 0.00000001:
                 driver.find_element(By.XPATH,
                                     '//*[@id="root"]/div[1]/div[2]/div[1]/div/div/div/div[2]/div[1]/div[1]/div[1]/div/div[3]').click()
+                unit = 0.00000001
+                old_unit = unit
+            elif unit < min_unit:
                 unit = min_unit
+                bet.clear()
+                bet.send_keys(f"{unit:.8f}")  # Format with 9 decimal places to ensure proper decimal representation
                 old_unit = unit
             else:
                 bet.clear()

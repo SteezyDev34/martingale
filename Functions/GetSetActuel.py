@@ -20,6 +20,7 @@ def GetSetActuel(driver):
         config.set_actuel = driver.find_elements(By.CLASS_NAME, config.classes['set_container'][config.site_type])[
             0].text
     except Exception as e:
+        print(config.site_type)
         set_container_selector = config.classes["set_container"][config.site_type]
         config.log(f'#E0009 {set_container_selector} introuvable', 'warning', False)
         config.log_clear_line()

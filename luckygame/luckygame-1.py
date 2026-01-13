@@ -32,11 +32,12 @@ config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
 
 num_fenetre = 6
-time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
+#time.sleep((num_fenetre - 1) * 1)  # Attendre un peu pour s'assurer que la fenêtre est prête
 
 driver = get_script_driver(num_fenetre)
 
 while 1:
+    time.sleep(10)
     try:
         driver.get('https://luckygames.io/')
         Functions_LuckyGame.all_script(driver)

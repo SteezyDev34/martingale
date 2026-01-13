@@ -10,7 +10,7 @@ from Functions import GetLigueName
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Functions_1XBET import remove_match_from_json_file
-from Functions.GetJsonData import getPerte, set1DispatchPerte
+from Functions.GetJsonData import getPerte, set1DispatchPerte, get1setGlobalPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.GetScoreActuel import GetScoreActuel
@@ -38,24 +38,35 @@ def all_script(driver):
 
         # Get league name and match URL
         ligue_info = GetLigueName.fromUrl(driver)
-        config.ligue_name = ligue_info[0]
+        print(ligue_info)
+        config.ligue_name = ligue_info[0] + ' ' + str(config.cote_base)
         config.match_Url = ligue_info[1]
-
+        print('LIGUE NAME:', config.ligue_name)
         # Récupère les noms des joueurs/équipes
         config.teams = GetPlayersName(driver)
 
         # Vérifie si c'est un nouveau match depuis l'URL
         newmatchFromUrl(driver)
+        for scriptType in config.scriptTypeList:
+            config.switchScript(scriptType)
 
-        if not config.win_type:
-            config.win_type = input("Quel est le win type V1/V2")
+            if not config.win_type:
+                config.win_type = input("Quel est le win type V1/V2")
 
-        config.log('RECHERCHE INFOS DE MISE', 'title', False)
-        infosperte = getPerte()
-        if infosperte and config.perte == 0:
-            config.perte = float(infosperte['perte'])
-            Functions.GetJsonData.delPerte(infosperte['id'])
-        config.rattrape_perte = 1
+            config.log('RECHERCHE INFOS DE MISE', 'title', False)
+            infosperte = getPerte()
+            print(infosperte)
+            print(config.perte)
+            if infosperte and config.perte == 0:
+                config.perte = float(infosperte['perte'])
+                print('PERTE RECUPERÉE DANS JSON :', config.perte)
+                Functions.GetJsonData.delPerte(infosperte['id'])
+            if not config.perte or config.perte == 0:
+                infosperte = get1setGlobalPerte()
+                config.perte = float(infosperte['perte'])
+                print('PERTE RECUPERÉE DANS GLOBAL :', config.perte)
+                
+            config.rattrape_perte = 1
         # END RECHERCHE INFOS DE MISE
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
@@ -82,7 +93,7 @@ def all_script(driver):
         # POUR CHAQUE LIGUE RÉCUPÉRÉE
         for bet_ligue in bet_list_ligue:
             # ON RÉCUPÈRE LE NOM DE LA LIGUE
-            config.ligue_name = GetLigueName.main(bet_ligue)
+            config.ligue_name = GetLigueName.main(bet_ligue) + ' ' + str(config.cote_base)
             # EN CAS D'ERREUR
             if not config.ligue_name:
                 # config.log('nom ligues introuvalbe!', 'warning', False, 2)
@@ -156,15 +167,23 @@ def all_script(driver):
                                         0].get_attribute(
                                         "href")
                                     print('# ✅ Ouvre un nouvel onglet via JavaScript')
+                                    if config.site_type == 'mobile_site':
+                                        newurl = newurl.replace('?platform_type=desktop', '')
+                                        newurl = f'{newurl}?platform_type=mobile'
                                     driver.get(newurl)
                                     time.sleep(5)
                                     config.switchScript(config.scriptType)
                                     GetSetActuel(driver)
                                     config.validated_bet = match
-                                    print(config.validated_bet)
                                     print(config.set_actuel)
                                     print(config.validated_bet['set'])
-                                    config.ligue_name = GetLigueName.fromUrl(driver)[0]
+                                    if float(config.validated_bet['cote']) > 1.1 and float(config.validated_bet['cote']) < 1.4:
+                                        config.cote_base = 1.3
+                                    elif float(config.validated_bet['cote']) > 1.4 and float(config.validated_bet['cote']) < 1.7:
+                                        config.cote_base = 1.5
+                                    elif float(config.validated_bet['cote']) > 1.7 and float(config.validated_bet['cote']) < 1.9:
+                                        config.cote_base = 1.8
+                                    config.ligue_name = GetLigueName.fromUrl(driver)[0] + ' ' + str(config.cote_base)
                                     ##ATTENTE QUE LE QT SE TERMINE
                                     if int(config.set_actuel) == int(config.validated_bet['set']):
                                         print('1ER SET NON TERMINÉ')
