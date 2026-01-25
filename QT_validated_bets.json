@@ -1,0 +1,20 @@
+[
+    {
+        "montant": 0.23,
+        "cote": "1.856",
+        "scripttype": "QT",
+        "qt": 1,
+        "win": "V1",
+        "timestamp": "2026-01-18 18:31:11",
+        "url": "https://ca.1xbet.com/fr/live/basketball/25605-israel-superleague/687943856-maccabi-rishon-lezion-ironi-ramat-gan"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.112",
+        "scripttype": "QTV2",
+        "qt": 1,
+        "win": "V2",
+        "timestamp": "2026-01-18 18:31:34",
+        "url": "https://ca.1xbet.com/fr/live/basketball/25605-israel-superleague/687943856-maccabi-rishon-lezion-ironi-ramat-gan"
+    }
+]

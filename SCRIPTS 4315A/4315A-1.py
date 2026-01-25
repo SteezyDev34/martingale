@@ -41,7 +41,7 @@ if len(parts) > 1:
     # Le lancement de Chrome est maintenant géré dans SetDriver.py
     config.log_clear_line(3)
 
-    print(f"{config.PURPLE}{text2art(f'Start martingal {config.scriptType} {config.script_num}')}")
+    print(f'{config.PURPLE}{text2art(f'Start martingal {config.scriptType} {config.script_num}')}')
 else:
     print("Le format du nom du fichier est incorrect.")
     exit()
