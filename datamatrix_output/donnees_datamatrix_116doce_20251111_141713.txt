@@ -1,0 +1,44 @@
+# Données des Data Matrix 2D - Format 116 DOCE
+# Généré le: 11/11/2025 à 14:17:14
+# Grille 4x4 - 16 Data Matrix
+# Format: 116DOCE + Index + Timestamp + Code unique
+# Standard: ISO/IEC 16022 (Data Matrix)
+
+POSITION		DATA
+------------------------------------------------------------
+DM 01 (L1C1)	116DOCE00-202511111417-0023
+DM 02 (L1C2)	116DOCE01-202511111417-0040
+DM 03 (L1C3)	116DOCE02-202511111417-0057
+DM 04 (L1C4)	116DOCE03-202511111417-0074
+DM 05 (L2C1)	116DOCE04-202511111417-0091
+DM 06 (L2C2)	116DOCE05-202511111417-0108
+DM 07 (L2C3)	116DOCE06-202511111417-0125
+DM 08 (L2C4)	116DOCE07-202511111417-0142
+DM 09 (L3C1)	116DOCE08-202511111417-0159
+DM 10 (L3C2)	116DOCE09-202511111417-0176
+DM 11 (L3C3)	116DOCE10-202511111417-0193
+DM 12 (L3C4)	116DOCE11-202511111417-0210
+DM 13 (L4C1)	116DOCE12-202511111417-0227
+DM 14 (L4C2)	116DOCE13-202511111417-0244
+DM 15 (L4C3)	116DOCE14-202511111417-0261
+DM 16 (L4C4)	116DOCE15-202511111417-0278
+
+============================================================
+INFORMATIONS TECHNIQUES:
+Type: Data Matrix 2D (ISO/IEC 16022)
+Taille: 150x150 pixels par code
+Format des données: 116DOCE[Index]-[Timestamp]-[Code]
+Correction d'erreur: Reed-Solomon
+Capacité: Jusqu'à 2335 caractères alphanumériques
+Lecture: Omnidirectionnelle (360°)
+
+LÉGENDE:
+L = Ligne (1-4)
+C = Colonne (1-4)
+DM = Data Matrix
+
+CARACTÉRISTIQUES DATA MATRIX:
+• Bordure continue (Finder Pattern) en bas et à gauche
+• Pattern de synchronisation en pointillés en haut et à droite
+• Structure en damier pour les données
+• Correction d'erreur intégrée Reed-Solomon

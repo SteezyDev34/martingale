@@ -1,44 +1,112 @@
+import json
+import os
+import sys
+import time
+
+import requests
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.ModalHandler import ModalHandler
 from Functions.PlacerMise import PlacerMise
 
 
+def SendBetData():
+    """
+    Envoie les données du pari à l'API.
+
+    Args:
+        coupon_number (str): Numéro du coupon
+        cote_globale (str): Cote globale du pari
+        type_pari (str): Type de pari
+        mise (float): Montant de la mise
+        gains_potentiels (float): Gains potentiels
+        match_details (dict): Détails du match (équipes, ligue)
+        cote (str): Cote du pari
+        statut (str): Statut du pari
+        script (str): Type de script
+
+    Returns:
+        bool: True si l'envoi a réussi, False sinon
+    """
+
+    # Construction de l'URL de l'API
+    url = "https://p-com.studio/api/insert_paris.php"
+
+    try:
+        # Préparation des données à envoyer en POST
+        data = {
+            'coupon_number': '0',
+            'type_pari': config.win_type,
+            'mise': config.mise,
+            'gains_potentiels': config.netprofit,
+            'match_details': json.dumps({'teams': config.teams, 'league': config.ligue_name}),
+            'cote': config.cote,
+            'script': config.scriptType
+        }
+
+        # Envoi de la requête POST avec les données
+        response = requests.post(url, data=data)
+
+        # Vérifier que la requête a réussi
+        response.raise_for_status()
+
+        # Parser le JSON depuis la réponse
+        result = response.json()
+
+        if result['status'] == "success":
+            print(f"✅ Paris enregistré avec succès (ID: {result['id']})")
+            return True
+        else:
+            print(f"❌ Erreur lors de l'enregistrement : {result['message']}")
+            return False
+
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Erreur lors de la requête HTTP : {e}")
+        return False
+    except json.JSONDecodeError as e:
+        print(f"❌ Erreur lors du parsing du JSON : {e}")
+        return False
+    except Exception as e:
+        print(f"❌ Erreur inattendue : {e}")
+        return False
+
+
 def ValidationDuParis(driver, nexbet=False):
     validation = False
     tentative = 0
-    config.log('validation paris', 'info', False, 2)
-    config.log_clear_line()
-    while not validation and tentative < 2:
+    already = False
+    while not validation and tentative < 3:
         config.log('Vérification des paris validés')
-        config.log_clear_line()
-        config.log('        tentative', str(tentative))
-        config.log_clear_line()
+        config.log('Tentative', str(tentative))
 
         # Vérification que le jeu actuel et le set actuel n'ont pas déjà été pariés
         if hasattr(config, 'validated_bet') and config.validated_bet is not None:
-            current_qt = getattr(config, 'qt_actuel', None)
+            current_set = getattr(config, 'set_actuel', None)
 
-            if (config.looking_game is not None and current_qt is not None and
+            if (config.looking_game is not None and current_set is not None and
                     config.validated_bet.get('jeu') == config.looking_game and
-                    config.validated_bet.get('qt') == current_qt):
-                config.log(f"Ce jeu ({config.looking_game}) et ce set ({current_qt}) ont déjà été pariés. Annulation.")
+                    config.validated_bet.get('set') == current_set and config.validated_bet.get(
+                        'url') == config.ligue_name):
+                config.log(f"Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.",
+                           'warning', False)
                 validation = True
+                print(config.validated_bet)
+                already = True
                 break  # Sortir de la boucle si le jeu et le set ont déjà été pariés
-        config.log('boucle validation paris')
-        config.log_clear_line()
         try:
-            cpn_setting = driver.find_elements(By.CLASS_NAME, 'ui-number-input__field')[0]
+            cpn_setting = driver.find_elements(By.CLASS_NAME, config.classes['cpn_amount_input'][config.site_type])[0]
             l = cpn_setting.get_attribute("value")
-            config.log("mise insérée : " + str(l), 'info', False, 2)
+            config.log("mise insérée : " + str(l), 'info', indent=2)
         except Exception as e:
-            config.log(e)
             tentative += 1
             config.log('erreur verification mise')
-            break
+            if tentative > 2:
+                break
         else:
             if str(l) == str(config.mise):
                 sending_mise = 1
@@ -46,17 +114,17 @@ def ValidationDuParis(driver, nexbet=False):
                 try:
                     element = WebDriverWait(driver, 3).until(
                         EC.presence_of_element_located((By.CLASS_NAME,
-                                                        'coupon-buttons'))
+                                                        config.classes['coupon_buttons'][config.site_type]))
                     )
                 except Exception as e:
-                    config.log(f"#E0021\nUne erreur est survenue : {e}")
-                    config.log('zone de bouton non trouvé!')
+                    config.log('zone de bouton non trouvé!', 'error', False)
                     tentative = tentative + 1
                     validation = ModalHandler(driver)
                 else:
                     try:
                         PlacerMise(driver)
-                        cpn_setting = driver.find_elements(By.CLASS_NAME, 'ui-number-input__field')[0]
+                        cpn_setting = \
+                            driver.find_elements(By.CLASS_NAME, config.classes['cpn_amount_input'][config.site_type])[0]
                         l = cpn_setting.get_attribute(
                             "value")
                         config.log("mise insérrer : " + str(l))
@@ -67,7 +135,8 @@ def ValidationDuParis(driver, nexbet=False):
                             validation = True
                     else:
                         if str(l) == str(config.mise):
-                            getbtn = driver.find_element(By.CLASS_NAME, 'coupon-buttons')
+                            getbtn = driver.find_element(By.CLASS_NAME,
+                                                         config.classes['coupon_buttons'][config.site_type])
                             try:
                                 getbtn.click()
                             except:
@@ -78,18 +147,26 @@ def ValidationDuParis(driver, nexbet=False):
                                 tentative = tentative + 1
                                 preloader = 1
                                 printtext = 0
+                                line = 0
                                 while preloader == 1:
+
                                     try:
-                                        WebDriverWait(driver, 3).until(EC.visibility_of_element_located(
-                                            (By.CLASS_NAME, "coupon-main-tab__preloader")))
+                                        if printtext == 0:
+                                            waiting_time = 5
+                                        else:
+                                            waiting_time = 1
+                                        WebDriverWait(driver, waiting_time).until(EC.visibility_of_element_located(
+                                            (By.CLASS_NAME, config.classes['preloader'][config.site_type])))
                                     except:
-                                        config.log('        pas de loader')
+                                        config.log('pas de loader', 'infos', False, indent=3)
+                                        line += 1
                                         preloader = 0
                                     else:
                                         if printtext == 0:
-                                            config.log('        loading...')
+                                            config.log('loading...', 'infos', False, indent=3)
+                                            line += 1
                                             printtext = 1
-
+                                config.log_clear_line(line)
                                 if ModalHandler(driver):
                                     validation = True
                         else:
@@ -98,24 +175,65 @@ def ValidationDuParis(driver, nexbet=False):
             else:
                 PlacerMise(driver)
                 tentative = tentative + 1
-    if validation:
+    if validation and not already:
         # Store bet information in validated_bet variable
         from datetime import datetime
+        # SendBetData()
         current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # Create validated bet data
+        # Déterminer l'URL à stocker : pour le script QT on veut l'URL courante du driver
+        try:
+            if 'QT' in getattr(config, 'scriptType', None):
+                url_to_store = driver.current_url
+            else:
+                url_to_store = config.ligue_name
+        except Exception:
+            # En cas de problème d'accès au driver, revenir à la valeur par défaut
+            url_to_store = getattr(config, 'ligue_name', None)
+
         config.validated_bet = {
             'montant': config.mise,
+            'cote': config.cote,
+            'scripttype': config.scriptType,
             'qt': config.qt_actuel if hasattr(config, 'qt_actuel') else None,
             'win': config.win_type,
-            'timestamp': current_timestamp
+            'timestamp': current_timestamp,
+            'url': url_to_store
         }
+
+        # Save validated bet to JSON file named after script type
+        json_filename = f"QT_validated_bets.json"
+        try:
+            # Chargement des paris existants avec gestion de corruption JSON
+            try:
+                with open(json_filename, 'r') as f:
+                    existing_bets = json.load(f)
+            except FileNotFoundError:
+                existing_bets = []
+            except json.JSONDecodeError as e:
+                # Sauvegarde du fichier corrompu
+                backup_name = json_filename.replace('.json', f'_corrupted_{int(time.time())}.json')
+                os.rename(json_filename, backup_name)
+                config.log(f"Fichier JSON corrompu détecté, backup créé : {backup_name}", 'error', False)
+                existing_bets = []
+
+            # Ajout du nouveau pari
+            existing_bets.append(config.validated_bet)
+
+            # Sauvegarde des paris mis à jour
+            with open(json_filename, 'w') as f:
+                json.dump(existing_bets, f, indent=4)
+        except Exception as e:
+            config.log(f"Erreur lors de la sauvegarde du pari validé dans le JSON : {e}", 'error', False)
         config.placed_game = config.looking_game
-        config.log(f'           {config.validated_bet}', 'info', True)
+        config.log(f'{config.validated_bet}', 'info', False, indent=3)
         config.perte = float(config.perte) + float(config.mise)
         config.wantwin = float(config.wantwin) + float(config.increment)
         # Calculate net profit based on stake, odds and losses
+        config.log('Perte ' + str(config.perte))
         config.netprofit = round(
             (float(config.mise) * float(config.cote)) - float(config.perte), 2)
-        config.log(f'Potential Net profit: {config.netprofit}')
+        config.log(f'Potential Net profit: {config.netprofit}', 'title', clear=False, indent=3)
     return validation
 
 

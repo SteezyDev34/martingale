@@ -11,6 +11,7 @@ from Functions.GetJsonData import getCompet, DispatchPerte
 
 
 def rechercheDeMatch(driver):
+    import config
     config.error = False
     config.log(' RECHERCHE DE MATCH', 'title', False)
     config.match_found = False
@@ -132,11 +133,13 @@ def rechercheDeMatch(driver):
             config.log('PAS DE MATCH TROUVE!', 'warning', True, 2)
             config.log_clear_line(3)
             driver.get(config.site_url)
+            return config.match_found
             time.sleep(5)
         else:
 
             config.log('MATCH TROUVE!', 'success', False, 2)
             time.sleep(5)
+            return config.match_found
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE
     # END SCRIPT RECHERCHE DE MATCH
     return config.match_found

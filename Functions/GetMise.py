@@ -1,47 +1,55 @@
 # GetMise
+import os
+import sys
 
+import requests
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import config
-from Functions.GetBet import GetBet
 
 
 def GetMise(driver):
+    logline = 0
     if config.rattrape_perte == 3:
-        txtlog = 'Bonne proba, cote : 3'
-        config.log(txtlog, 'info', '', 3)
-        config.log_clear_line()
+        config.log('Bonne proba, cote : 3', 'info', False)
+        logline += 1
         config.cote = config.cotebase
     else:
-        txtlog = "Rattrapage, recuperation de la cote"
-        config.log(txtlog, 'info', '', 3)
-        config.log_clear_line()
+        config.log("Rattrapage, recuperation de la cote", 'info', False)
+        logline += 1
         try:
-            config.cote = driver.find_elements(By.CLASS_NAME,
-                                               'coupon-result-coef-value')[
-                0].text
+            config.cote = ''.join(filter(lambda x: x.isdigit() or x in ',.',
+                                         driver.find_elements(By.CLASS_NAME,
+                                                              config.classes['coef_value'][config.site_type])[0].text))
         except:
-            txtlog = 'erreur recup cote : 3'
-            config.log(txtlog, 'info', '', 3)
-            config.log_clear_line()
+            config.log('erreur recup cote', 'info', False)
+            logline += 1
             config.cote = config.cotebase
         else:
-
-            txtlog = 'cote recupéré ' + str(config.cote)
-            config.log(txtlog, 'info', '', 3)
-            config.log_clear_line()
-            if config.cote == '' or str(config.cote) == '0':
+            config.log(f'cote recupéré {str(config.cote)}', 'info', False)
+            logline += 1
+            if config.cote == '' or str(config.cote) == '0' or str(config.cote) == '1' or config.cote == 0:
                 config.cote = config.cotebase
-    config.mise = (float(config.wantwin) + float(config.perte)) / (float(config.cote) - 1)
+    if config.scriptType == 'LIVE':
+        api_url = f'https://bettracker.sc2vagr6376.universe.wf/backend/api.php?action=recommended_stake&tipster={config.tipster}&odds={config.cote}&target_percentage=1&recover_losses=1'
+        req = requests.get(api_url, verify=False)
+        config.mise = round(float(req.json()['recommended_stake']), 2)
+        config.log_clear_line(logline)
+        return True
+    else:
+        config.mise = (float(config.wantwin) + float(config.perte)) / (float(config.cote) - 1)
     config.mise = round(config.mise, 2)
     if config.mise < 0.2:
         config.mise = 0.2
     txtlog = "cote : " + str(config.cote) + " | perte : " + str(
         config.perte) + " | wantwin : " + str(
         config.wantwin) + " | mise : " + str(config.mise)
-    config.log(txtlog, 'info', '', 3)
+    config.log(txtlog, 'info', False, indent=3)
+    logline += 1
     getmisemax = True
     tentative = 0
     while not getmisemax:
@@ -90,8 +98,13 @@ def GetMise(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    config.localhost = 43151
+    from ChromeDriver.SetDriver import get_script_driver
 
+    num_fenetre = 1
+    driver = get_script_driver(num_fenetre)
+    # driver.switch_to.window(driver.window_handles[0])
+    config.site_type = 'mobile_site'
+    config.perte = 2
     print(config.perte)
-    GetBet(driver)
     GetMise(driver)

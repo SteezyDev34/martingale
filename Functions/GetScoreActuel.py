@@ -70,5 +70,6 @@ def record_scores():
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
+    config.qt_actuel = 1
     GetQTScoreActuel(driver)
     print(config.score_actuel)

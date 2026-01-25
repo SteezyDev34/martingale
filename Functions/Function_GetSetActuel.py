@@ -24,6 +24,12 @@ def GetQTActuel(driver):
             return False
         else:
             config.qt_actuel = int(numset)
+            period = driver.find_elements(By.CLASS_NAME, 'scoreboard-status')
+            period = period[0].text
+            if 'mi-temps' in period.lower():
+                config.qt_actuel = config.qt_actuel + 1
+            if 'fin' in period.lower():
+                config.qt_actuel = 9
             # config.log(str(numset) + ' QT', 0, config.newmatch)
             if config.saved_set != config.qt_actuel:
                 print('QT actuel : ', config.qt_actuel)

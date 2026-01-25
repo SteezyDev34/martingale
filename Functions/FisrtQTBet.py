@@ -15,7 +15,6 @@ def FirstQTBet(driver):
     tentative = 0
     nextBet = False
     while not bet_qt and not config.error and tentative < 3:
-        GetQTScoreActuel(driver)
         if not AfficherParis(driver):
             current_frame = inspect.currentframe()
             config.log(

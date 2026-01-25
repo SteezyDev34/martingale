@@ -1,6 +1,8 @@
 import inspect
 import time
 
+from selenium.webdriver.common.by import By
+
 import config
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetScoreActuel import GetQTScoreActuel
@@ -61,14 +63,22 @@ def GetIfQTEnd(driver):
             config.game_end = True
             config.game_start = False
         else:
-            config.game_end = False
-            config.game_start = True
-            if not GetIfMatchPage(driver):
-                config.error = True
-                current_frame = inspect.currentframe()
-                config.log(
-                    f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
-                    'error', True)
+            period = driver.find_elements(By.CLASS_NAME, 'scoreboard-status')
+            period = period[0].text
+            if 'mi-temps' in period.lower():
+                config.log('FIN DE QT', 'info', False, 4)
+                config.log_clear_line()
+                config.game_end = True
+                config.game_start = False
+            else:
+                config.game_end = False
+                config.game_start = True
+                if not GetIfMatchPage(driver):
+                    config.error = True
+                    current_frame = inspect.currentframe()
+                    config.log(
+                        f'Error in file {inspect.getfile(current_frame)} at line {current_frame.f_lineno} in function {current_frame.f_code.co_name}',
+                        'error', True)
     return config.game_end
 
 

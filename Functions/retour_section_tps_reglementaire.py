@@ -19,7 +19,7 @@ def RetourTpsReg(driver):
         try:
             element = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located(
-                    (By.CLASS_NAME, 'game-toolbar__sub-games-dropdown'))
+                    (By.CLASS_NAME, 'sub-games-dropdown'))
             )
         except Exception as e:
             config.log(f"#E0012\nUne erreur est survenue : {e}")
@@ -34,7 +34,7 @@ def RetourTpsReg(driver):
                 print('error champ deroul##12321')
                 break
         else:
-            select_form = driver.find_elements(By.CLASS_NAME, 'game-toolbar__sub-games-dropdown')
+            select_form = driver.find_elements(By.CLASS_NAME, 'sub-games-dropdown')
             try:
                 select_form[0].click()
             except Exception as e:

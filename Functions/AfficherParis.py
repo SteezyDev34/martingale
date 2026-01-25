@@ -23,14 +23,14 @@ def AfficherParis(driver):
         try:
             element = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located(
-                    (By.CLASS_NAME, 'game-toolbar__sub-games-dropdown'))
+                    (By.CLASS_NAME, 'sub-games-dropdown'))
             )
         except Exception as e:
             config.log('Champ déroulant introuvable !', 'warning', False, 2)
             config.log(f'tentative {tentative}', 'warning', True, 2)
             tentative = tentative + 1
         else:
-            select_form = driver.find_elements(By.CLASS_NAME, 'game-toolbar__sub-games-dropdown')
+            select_form = driver.find_elements(By.CLASS_NAME, 'sub-games-dropdown')
             config.log('Champ déroulant trouvé !', 'success', True, 2)
             try:
                 select_form[0].click()
@@ -88,17 +88,19 @@ def AfficherParis(driver):
                                                 toolbar = driver.find_elements(By.CLASS_NAME,
                                                                                'game-toolbar')[
                                                     0]
-                                                searchbutton = toolbar.find_elements(By.CLASS_NAME, 'ui-search')[0]
+                                                searchbutton = \
+                                                    toolbar.find_elements(By.CLASS_NAME, 'ui-search-default__button')[0]
                                                 searchbutton.click()
+                                                time.sleep(1)
                                                 toolbar.find_elements(By.CLASS_NAME,
-                                                                      'ui-search__input')[
+                                                                      'ui-search-default__input')[
                                                     0].clear()
                                                 toolbar.find_elements(By.CLASS_NAME,
-                                                                      'ui-search__input')[
+                                                                      'ui-search-default__input')[
                                                     0].send_keys(
                                                     key)
                                                 l = toolbar.find_elements(By.CLASS_NAME,
-                                                                          'ui-search__input')[
+                                                                          'ui-search-default__input')[
                                                     0].get_attribute("value")
 
                                                 if l == key:

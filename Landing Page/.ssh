@@ -1,0 +1,7 @@
+LOGIN="sc2vagr6376"
+SERVER="bouteille.o2switch.net"
+REMOTEDIR="./auxobot/"
+MDP="TGPg+j.B:v)AEC4"
+EXCLUDE=".rsync_excludes"
+LOCALDIR="./"
+OPTIONS="-arvp"

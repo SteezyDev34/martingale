@@ -48,7 +48,7 @@ classes = {
             'new_site': 'scoreboard-periods-table__col',
             'mobile_site': 'scoreboard-periods-column__body'
         },
-        'ball_container':
+    'ball_container':
         {
             'old_site': 'c-scoreboard-player-score__row',
             'new_site': 'scoreboard-periods-table__col',
@@ -60,23 +60,23 @@ classes = {
             'new_site': 'scoreboard-periods-table-cell--td',
             'mobile_site': 'scoreboard-periods-column__td'
         },
-        'score_ball':
+    'score_ball':
         {
             'old_site': 'c-scoreboard-player-score__ball',
             'new_site': 'scoreboard-periods-table-cell--td',
             'mobile_site': 'scoreboard-periods__inning'
         },
-        'score_ball_search':
+    'score_ball_search':
         {
             'old_site': 'c-scoreboard-player-score__ball',
             'new_site': 'ui-game-scores__item--inning',
             'mobile_site': 'ui-game-scores__item--inning'
         },
-        
+
     'period_select':
         {
             'old_site': 'scoreboard-nav__select',
-            'new_site': 'game-toolbar__sub-games-dropdown',
+            'new_site': 'sub-games-dropdown',
             'mobile_site': 'scoreboard-nav__select'
         },
     'multiselect_container_wrapper':
@@ -313,7 +313,7 @@ classes = {
             'new_site': 'dashboard-game-block__info',
             'mobile_site': 'dashboard-game-block__info'
         },
-        'scoreboard_player_score':
+    'scoreboard_player_score':
         {
             'old_site': 'c-scoreboard-player-score',
             'new_site': 'scoreboard-player-score',

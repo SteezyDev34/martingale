@@ -31,7 +31,7 @@ scriptType = ""
 localhost = ''
 api_url = 'http://auxobetbot.sc2vagr6376.universe.wf'
 site_url = "https://ca.1xbet.com/fr/live/basketball"
-
+site_type = 'new_site'
 match_name = ''
 nb_log_lines = 0
 # La configuration des scores est maintenant importée depuis le module config
