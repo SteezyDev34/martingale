@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-import time
 
 current_file_path = os.path.abspath(__file__)
 
@@ -48,8 +47,8 @@ else:
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
 
-num_fenetre = 5
-time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
+num_fenetre = 0
+# time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 
 driver = get_script_driver(num_fenetre)
 

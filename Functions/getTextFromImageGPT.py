@@ -2,6 +2,9 @@ import base64
 import os
 import sys
 import time
+import requests
+import json
+from types import SimpleNamespace
 
 # Ajouter le chemin du projet au PYTHONPATH pour permettre l'importation de config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -13,11 +16,36 @@ import config
 
 
 def cleanJson(raw_response):
-    cleaned_response = raw_response.strip().removeprefix("```json").removesuffix("```").strip()
-    return cleaned_response
+    print('cleand json ')
+    # Assurer que l'on travaille sur une chaîne Unicode
+    try:
+        if isinstance(raw_response, bytes):
+            raw = raw_response.decode('utf-8', errors='replace')
+        else:
+            raw = str(raw_response)
+    except Exception:
+        raw = repr(raw_response)
+
+    raw = raw.strip()
+
+    # Retirer les balises de code si presentes (```json ou ```)
+    lower = raw.lower()
+    if lower.startswith('```json'):
+        raw = raw[len('```json'):].lstrip('\n')
+    elif raw.startswith('```'):
+        raw = raw[3:]
+
+    if raw.endswith('```'):
+        raw = raw[:-3]
+
+    cleaned = raw.strip()
+
+    # Forcer le format UTF-8 en remplacant les caracteres invalides
+    cleaned = cleaned.encode('utf-8', errors='replace').decode('utf-8')
+    return cleaned
 
 
-# Initialisation du client OpenAI avec la clé API
+# Initialisation du client OpenAI avec la cle API
 from openai import OpenAI
 
 
@@ -33,7 +61,7 @@ def load_env_file():
                 line = line.strip()
                 if line and not line.startswith('#') and '=' in line:
                     key, value = line.split('=', 1)
-                    # Supprimer les guillemets si présents
+                    # Supprimer les guillemets si presents
                     value = value.strip().strip('"').strip("'")
                     os.environ[key.strip()] = value
 
@@ -41,20 +69,29 @@ def load_env_file():
 # Charger le fichier .env s'il existe
 load_env_file()
 
-# Charger la clé API depuis les variables d'environnement
+# Selection du provider et du modele via .env
+TEXT_PROVIDER = os.getenv('TEXT_PROVIDER', 'openai').lower()
+
+# Charger la cle OpenAI (toujours requise ici)
 api_key = os.getenv('OPENAI_API_KEY')
 if not api_key:
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     raise ValueError(
-        f"La clé API OpenAI n'est pas définie.\n"
+        f"La cle API OpenAI n'est pas definie.\n"
         f"Solutions possibles :\n"
-        f"1. Définir la variable d'environnement : export OPENAI_API_KEY='votre_clé'\n"
-        f"2. Créer un fichier .env dans {project_root} avec : OPENAI_API_KEY=votre_clé\n"
-        f"3. Voir le fichier .env.example pour un modèle"
+        f"1. Definir la variable d'environnement : export OPENAI_API_KEY='votre_cle'\n"
+        f"2. Creer un fichier .env dans {project_root} avec : OPENAI_API_KEY=votre_cle\n"
+        f"3. Voir le fichier .env.example pour un modele"
     )
 
-# Initialiser le client OpenAI
+# Initialiser le client OpenAI (utilise pour tous les providers ici)
 client = OpenAI(api_key=api_key)
+
+# Choisir le modele selon le provider (modifiable via .env)
+if TEXT_PROVIDER == 'perplexity':
+    MODEL = os.getenv('PERPLEXITY_MODEL', 'sonar')
+else:
+    MODEL = os.getenv('OPENAI_MODEL', 'gpt-4o')
 
 
 # 🖼️ Charger l'image et la convertir en base64
@@ -65,117 +102,137 @@ def image_to_base64(image_path):
 
 def stringify_xbet_type_list(xbet_type_list):
     """
-    Convertit la liste des types de paris en chaîne de caractères formatée.
+    Convertit la liste des types de paris en chaîne de caracteres formatee.
     
     Args:
-        xbet_type_list (dict): Dictionnaire où chaque clé est une catégorie 
+        xbet_type_list (dict): Dictionnaire ou chaque cle est une categorie 
                               et chaque valeur est une liste de types de paris
     
     Returns:
-        str: Chaîne formatée avec les catégories et types de paris
+        str: Chaîne formatee avec les categories et types de paris
     """
     lines = []
     for categorie, types_list in xbet_type_list.items():
         # types_list est maintenant une liste de types de paris, pas un dictionnaire
         for type_pari in types_list:
             lines.append(
-                f"Catégorie: {categorie} | Type: {type_pari}"
+                f"Categorie: {categorie} | Type: {type_pari}"
             )
     return "\n".join(lines)
 
 
-# 🧾 Envoyer l'image à ChatGPT avec des instructions spécifiques
+# 🧾 Envoyer l'image a ChatGPT avec des instructions specifiques
 def extraire_pari_depuis_image(image_path, msg):
+    print('extraire_pari_depuis_image called')
     image_b64 = image_to_base64(image_path)
-    response = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {
-                "role": "system",
-                "content":
-                    "Tu es un agent OCR intelligent. Ton rôle est de lire des captures d'écran de tickets de paris sportifs"
-                    "et d'en extraire les données principales sous forme de JSON structuré."
-                    "Les données à extraire sont les suivantes :\n"
-                    "- equipe_1 : première équipe (ou joueur)\n"
-                    "- equipe_2 : deuxième équipe (ou joueur)\n"
-                    "- categorie : catégorie du pari\n"
-                    "- type_de_pari : type de pari (doit être EXACTEMENT présent dans la liste ci-dessous)\n"
-                    "- selection : la sélection faite (peut être générée dynamiquement si elle suit un format connu)\n"
-                    "- odds : la cote du pari (nombre flottant)\n"
-                    "- date : date du pari (extrait du nom de l'image, ou sinon date du jour)\n"
+    print('Image converted to base64')
 
-                    "⚠️ Règles strictes à suivre :\n"
-                    "1. Tu dois OBLIGATOIREMENT choisir la catégorie et le type de pari parmi ceux du dictionnaire ci-dessous.\n"
-                    "2. Tu peux générer dynamiquement la sélection si elle respecte le même format qu'une sélection d'exemple.\n"
-                    "3. Tu ne dois jamais inventer un type de pari ou une catégorie.\n"
-                    "4. Si le texte 'générateur de paris' apparaît dans l’image, retourne une erreur avec le texte brut de l’image.\n"
-                    "5. Tu dois ignorer les textes superflus et te concentrer uniquement sur les données mentionnées ci-dessus.\n\n"
-                    "6. Si tu vois le mot \"combiné\" tu renvoies \"Ce  paris est un combiné\"\n\n"
+    def _safe_str(v):
+        try:
+            return str(v).encode('ascii', errors='replace').decode('ascii')
+        except Exception:
+            return ''
 
-                    "🧠 Exemples de correspondance dynamique :\n"
-                    "- Texte image : 'Total 1: (0.5) Plus de' → type_de_pari : 'Total 1', selection : 'Total Individuel 1 Plus de 0.5'\n"
-                    "- Texte image : 'Total 2: (1.5) Moins de' → type_de_pari : 'Total 2', selection : 'Total Individuel 2 Moins de 1.5'\n"
-                    "- Texte image : 'Handicap 1 (-2)' → type_de_pari : 'Handicap', selection : 'Handicap 1 (-2)'\n\n"
+    # Attempt to call the OpenAI client, sanitize headers first
+    try:
+        try:
+            # sanitize possible internal header containers
+            if hasattr(client, '_default_headers') and isinstance(client._default_headers, dict):
+                client._default_headers = {k: _safe_str(v) for k, v in client._default_headers.items()}
+            httpx_client = getattr(client, '_httpx_client', None)
+            if httpx_client is not None and hasattr(httpx_client, 'headers'):
+                try:
+                    httpx_client.headers = {k: _safe_str(v) for k, v in dict(httpx_client.headers).items()}
+                except Exception:
+                    for k, v in dict(httpx_client.headers).items():
+                        try:
+                            httpx_client.headers[k] = _safe_str(v)
+                        except Exception:
+                            continue
+        except Exception:
+            pass
 
-                    "📆 Gestion de la date :\n"
-                    "- Si le nom du fichier contient une date comme 'media_20250413_204440.jpg', la date du pari est 13/04/2025.\n"
-                    "- Si le nom du fichier est 'Capture-decran_1-4-2025_205148.jpeg', la date est 01/04/2025.\n"
-                    "- Si aucun format de date n'est détecté dans le nom de fichier, utilise la date du jour.\n\n"
-                    
-                    "set handicap correspond à Handicap des sets\n"
-
-                    "📖 Voici la liste de référence des catégories, types et formats de sélections :\n"
-                    f"{stringify_xbet_type_list(config.xbet_type_list)}\n\n"
-                    "Si tu ne vois aucune information sur la catégories utilise Temps réglementaire."
-                    "Si c'est un pari remboursé si nul, ça correspond au type Handicap, et à la selection Handicap 1 (0) ou Handicap 2 (0), en fonction de si c'est équipe 1 ou équipe 2 si nul."
-                    "Si c'est le vainqueur du match la selection est V1 ou V2 en fonction de l'équipe 1 ou 2 vainqueur"
-                    "🧾 Format de réponse attendu (aucune explication, juste le JSON brut) :\n"
-                    "{\n"
-                    "  \"date\": \"25/09/2025\",\n"
-                    "  \"equipe_1\": \"Al Shabab Riyadh\",\n"
-                    "  \"equipe_2\": \"Al Kholood\",\n"
-                    "  \"categorie\": \"Temps réglementaire\",\n"
-                    "  \"type_de_pari\": \"Total 1\",\n"
-                    "  \"selection\": \"Total Individuel 1 Plus de 0.5\",\n"
-                    "  \"odds\": \"1.432\",\n"
-                    "  \"tipster\": \"marco\"\n"
-                    "}"
-
-            },
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text",
-                     "text": f"Voici une capture d'écran de ticket de pari, le fichier s'appelle {image_path} et le message qui l\'accompagen est : {msg},  merci d'extraire les données au format JSON. et de retourner uniquement le json"},
-                    {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}}
-                ]
+        response = client.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "Tu es un agent OCR intelligent. Ton role est de lire des captures d'ecran de tickets de paris sportifs "
+                        "et d'en extraire les donnees principales sous forme de JSON structure."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": f"Voici une capture d'ecran de ticket de pari, le fichier s'appelle {image_path} et le message qui l\'accompagen est : {msg}, merci d'extraire les donnees au format JSON. et de retourner uniquement le json"},
+                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}}
+                    ]
+                }
+            ],
+            max_tokens=500,
+        )
+    except (UnicodeEncodeError, TypeError) as ue:
+        # Fallback: call OpenAI via raw HTTP with ascii-safe headers
+        try:
+            print('Unicode/Type error with OpenAI client, using HTTP fallback:', ue)
+            url = 'https://api.openai.com/v1/chat/completions'
+            payload = {
+                'model': MODEL,
+                'messages': [
+                    {'role': 'system', 'content': 'Tu es un agent OCR intelligent. Extrais les donnees et reponds uniquement en JSON.'},
+                    {'role': 'user', 'content': f"Fichier: {image_path} ; message: {msg}"}
+                ],
+                'max_tokens': 500
             }
-        ],
-        max_tokens=500
-    )
+            headers = {
+                'Authorization': f'Bearer {api_key}',
+                'Content-Type': 'application/json',
+                'User-Agent': 'auxobetbot/1.0'
+            }
+            r = requests.post(url, headers=headers, json=payload, timeout=30)
+            r.raise_for_status()
+            jr = r.json()
+            # Try to extract content from OpenAI response
+            content = None
+            if isinstance(jr, dict):
+                choices = jr.get('choices') or jr.get('results')
+                if choices and isinstance(choices, list) and len(choices) > 0:
+                    first = choices[0]
+                    if isinstance(first, dict) and 'message' in first and isinstance(first['message'], dict):
+                        content = first['message'].get('content')
+                    elif isinstance(first, dict) and 'text' in first:
+                        content = first.get('text')
+            if content is None:
+                content = json.dumps(jr, ensure_ascii=False)
+            return cleanJson(content)
+        except Exception as e:
+            print('Fallback HTTP request failed:', e)
+            raise
+
     return cleanJson(response.choices[0].message.content)
 
 
 def extraire_pari_joueur_nba_depuis_image(image_path, msg):
     """
-    Fonction spécialisée pour extraire les paris sur les performances de joueurs NBA.
-    Optimisée pour détecter les props joueurs (points, rebonds, passes, etc.)
+    Fonction specialisee pour extraire les paris sur les performances de joueurs NBA.
+    Optimisee pour detecter les props joueurs (points, rebonds, passes, etc.)
     """
     image_b64 = image_to_base64(image_path)
     response = client.chat.completions.create(
-        model="gpt-4o",
+        model=MODEL,
         messages=[
             {
                 "role": "system",
                 "content":
-                    "Tu es un agent OCR spécialisé dans les paris sur les performances individuelles des joueurs NBA."
-                    "Ton rôle est d'extraire les données de paris props joueurs depuis des captures d'écran."
+                    "Tu es un agent OCR specialise dans les paris sur les performances individuelles des joueurs NBA."
+                    "Ton role est d'extraire les donnees de paris props joueurs depuis des captures d'ecran."
                     
-                    "📊 Données à extraire :\n"
+                    "📊 Donnees a extraire :\n"
                     "- date : date du pari (format DD/MM/YYYY)\n"
-                    "- match : les deux équipes qui s'affrontent (ex: 'Lakers vs Celtics')\n"
-                    "- joueur : nom complet du joueur concerné\n"
-                    "- equipe_joueur : équipe du joueur\n"
+                    "- match : les deux equipes qui s'affrontent (ex: 'Lakers vs Celtics')\n"
+                    "- joueur : nom complet du joueur concerne\n"
+                    "- equipe_joueur : equipe du joueur\n"
                     "- statistique : type de statistique (Points, Rebonds, Passes, Interceptions, etc.)\n"
                     "- ligne : la ligne du pari (ex: 25.5, 8.5, 10.5)\n"
                     "- sens : 'Plus de' ou 'Moins de'\n"
@@ -185,31 +242,31 @@ def extraire_pari_joueur_nba_depuis_image(image_path, msg):
                     "🏀 Types de statistiques NBA reconnues :\n"
                     "- Points (PTS)\n"
                     "- Rebonds (REB / Rebounds)\n"
-                    "- Passes décisives (AST / Assists)\n"
+                    "- Passes decisives (AST / Assists)\n"
                     "- Interceptions (STL / Steals)\n"
                     "- Contres (BLK / Blocks)\n"
                     "- Points + Rebonds (PTS+REB)\n"
                     "- Points + Passes (PTS+AST)\n"
                     "- Rebonds + Passes (REB+AST)\n"
                     "- Points + Rebonds + Passes (PTS+REB+AST)\n"
-                    "- Tirs à 3 points réussis (3PM / 3-Points Made)\n"
+                    "- Tirs a 3 points reussis (3PM / 3-Points Made)\n"
                     "- Double-Double (Double Double)\n"
                     "- Triple-Double (Triple Double)\n"
                     
-                    "⚠️ Règles strictes :\n"
+                    "⚠️ Regles strictes :\n"
                     "1. Normalise les noms de joueurs (ex: 'LeBron' → 'LeBron James')\n"
-                    "2. Convertis les abréviations en texte complet (ex: 'PTS' → 'Points')\n"
-                    "3. Détecte automatiquement si c'est 'Plus de' ou 'Moins de' (Over/Under, +/-)\n"
-                    "4. Extrait la ligne exacte (nombre avec décimale)\n"
-                    "5. Si plusieurs props du même joueur, crée un objet JSON par prop\n"
-                    "6. Si c'est un parlay/combiné de plusieurs joueurs, retourne 'COMBINE_MULTIPLE_JOUEURS'\n"
+                    "2. Convertis les abreviations en texte complet (ex: 'PTS' → 'Points')\n"
+                    "3. Detecte automatiquement si c'est 'Plus de' ou 'Moins de' (Over/Under, +/-)\n"
+                    "4. Extrait la ligne exacte (nombre avec decimale)\n"
+                    "5. Si plusieurs props du meme joueur, cree un objet JSON par prop\n"
+                    "6. Si c'est un parlay/combine de plusieurs joueurs, retourne 'COMBINE_MULTIPLE_JOUEURS'\n"
                     
                     "📆 Gestion de la date :\n"
                     "- Extrait depuis le nom de fichier si disponible\n"
                     "- Sinon cherche dans l'image (date du match)\n"
                     "- Sinon utilise la date du jour\n"
                     
-                    "🧾 Format de réponse JSON attendu (uniquement le JSON, sans explication) :\n"
+                    "🧾 Format de reponse JSON attendu (uniquement le JSON, sans explication) :\n"
                     "{\n"
                     "  \"date\": \"10/12/2025\",\n"
                     "  \"match\": \"Lakers vs Celtics\",\n"
@@ -231,7 +288,7 @@ def extraire_pari_joueur_nba_depuis_image(image_path, msg):
                 "role": "user",
                 "content": [
                     {"type": "text",
-                     "text": f"Voici une capture de pari NBA sur un joueur. Fichier: {image_path}. Message contexte: {msg}. Extrait uniquement le JSON des données du pari joueur."},
+                     "text": f"Voici une capture de pari NBA sur un joueur. Fichier: {image_path}. Message contexte: {msg}. Extrait uniquement le JSON des donnees du pari joueur."},
                     {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}}
                 ]
             }
@@ -243,11 +300,11 @@ def extraire_pari_joueur_nba_depuis_image(image_path, msg):
 
 def compare_match_name(match_name1, match_name2):
     response = client.chat.completions.create(
-        model="gpt-4o",
+        model=MODEL,
         messages=[
             {
                 "role": "system",
-                "content": "Tu es un agent qui compare deux noms de matchs sportifs. Réponds uniquement par true ou false en suivant ces règles : ignorer les accents, la casse, les séparateurs et certains mots comme FC, Real, etc."
+                "content": "Tu es un agent qui compare deux noms de matchs sportifs. Reponds uniquement par true ou false en suivant ces regles : ignorer les accents, la casse, les separateurs et certains mots comme FC, Real, etc."
 
             },
             {
@@ -261,7 +318,7 @@ def compare_match_name(match_name1, match_name2):
         ],
         max_tokens=500
     )
-    # Convertir la réponse string "true"/"false" en booléen correspondant
+    # Convertir la reponse string "true"/"false" en booleen correspondant
     response_content = response.choices[0].message.content
     if response_content is None:
         return False
@@ -272,53 +329,53 @@ def compare_match_name(match_name1, match_name2):
 def compare_selection(match, selection, selection_list):
     print(f"pour le match {match} Compare ces deux selections :  {selection} et {selection_list}")
     response = client.chat.completions.create(
-        model="gpt-4o",
+        model=MODEL,
         messages=[
             {
                 "role": "system",
                 "content": """
-                        Tu es un agent spécialisé dans la comparaison de sélections de paris sportifs.
-                        Ton objectif est de déterminer si une sélection donnée correspond exactement à une liste de sélections possibles.
+                        Tu es un agent specialise dans la comparaison de selections de paris sportifs.
+                        Ton objectif est de determiner si une selection donnee correspond exactement a une liste de selections possibles.
                         
                         Instructions :
-                        1. Compare la sélection demandée avec les options fournies.
+                        1. Compare la selection demandee avec les options fournies.
                         2. Ignore :
                            - La casse (majuscule/minuscule)
-                           - Les accents (ex. Gérone = Girona)
-                           - Les espaces supplémentaires
-                        3. Répond strictement par :
-                           - Le texte exact de la sélection correspondante dans la liste si elle existe
-                           - "false" si aucune sélection ne correspond
+                           - Les accents (ex. Gerone = Girona)
+                           - Les espaces supplementaires
+                        3. Repond strictement par :
+                           - Le texte exact de la selection correspondante dans la liste si elle existe
+                           - "false" si aucune selection ne correspond
                         4. Ne rajoute aucun autre texte ni explication.
                         
                         Exemples :
-                        - Sélection recherchée : "Total jeux Moins de 21.5"
+                        - Selection recherchee : "Total jeux Moins de 21.5"
                           Liste : ["Total Moins de 21", "Total Moins de 21.5", "Total Plus de 21.5"]
-                          Réponse : "Total Moins de 21.5"
+                          Reponse : "Total Moins de 21.5"
                         
-                        - Sélection recherchée : "Equipe 1 gagne et Total > 19.5"
+                        - Selection recherchee : "Equipe 1 gagne et Total > 19.5"
                           Liste : ["Equipe 1 va gagner et Total > 19.5 - Oui", "Equipe 1 va gagner et Total < 19.5 - Oui"]
-                          Réponse : "Equipe 1 va gagner et Total > 19.5 - Oui"
+                          Reponse : "Equipe 1 va gagner et Total > 19.5 - Oui"
                         
-                        - Sélection recherchée : "Total jeux Moins de 25"
+                        - Selection recherchee : "Total jeux Moins de 25"
                           Liste : ["Total Moins de 21", "Total Moins de 21.5", "Total Plus de 21.5"]
-                          Réponse : "false"
+                          Reponse : "false"
                           
-                          Retourne le texte exacte dans la liste donnée.
+                          Retourne le texte exacte dans la liste donnee.
                         """
             },
             {
                 "role": "user",
                 "content": [
                     {"type": "text",
-                     "text": f"Pour le match {match} compare {selection}  avec les selections suivantes: {selection_list} et retourne la selction de cette liste qui correspond sans texte superflu juste le texte de la liste qui correspond a la selectione envoyée."
+                     "text": f"Pour le match {match} compare {selection}  avec les selections suivantes: {selection_list} et retourne la selction de cette liste qui correspond sans texte superflu juste le texte de la liste qui correspond a la selectione envoyee."
                      },
                 ]
             }
         ],
         max_tokens=500
     )
-    # Convertir la réponse string "true"/"false" en booléen correspondant
+    # Convertir la reponse string "true"/"false" en booleen correspondant
     response_content = response.choices[0].message.content
     print(response_content)
     if response_content is None or response_content == 'false':
@@ -356,7 +413,7 @@ if __name__ == "__main__":
     project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     image_path = os.path.join(project_path, "images.jpg")
 
-    msg = "J'espere que tout le monde va bien. Après une courte pause de quelques jours, place à un nouveau magnifique run qui nous attend sur cette tournée asiatique. Sur ce type de tournoi ATP 250, surtout après de longs voyages et des conditions de jeu différentes, il convient de rester prudent dans ses mises. Alejandro Tabilo a poursuivi son parcours de qualification en écartant Jordan Thompson. Le Chilien s’est montré plus rapide et incisif que son adversaire australien, s’imposant en deux sets secs, 6-4, 6-3. Il retrouvera désormais la deuxième tête de série, Luciano Darderi, qui quitte sa surface de prédilection ( la terre battue ) après avoir triomphé au Challenger de Gênes. Ce sera leur troisième affrontement sur le circuit, avec pour l’instant une victoire chacun. Darderi a déjà soulevé trois trophées ATP cette saison (dont Cordoba 2024), mais son jeu en dehors de l’ocre reste perfectible. Sa meilleure victoire sur dur à ce jour reste d’ailleurs son succès contre Tabilo à Cincinnati l’an dernier. L’Italien possède certains atouts pour s’adapter à des conditions plus rapides, mais son manque de constance se fait encore sentir. De son côté, Tabilo apparaît comme le favori : élevé au Canada, il a grandi sur surface dure et vient d’aligner trois victoires convaincantes ici, porté par un service très efficace. Or, la relance de Darderi demeure un point faible : si Tabilo conserve la même qualité au service qu’au cours de ses précédents tours, cela pourrait bien lui offrir un avantage décisif pour décrocher la victoire. LET'S GOOO !"
+    msg = "J'espere que tout le monde va bien. Apres une courte pause de quelques jours, place a un nouveau magnifique run qui nous attend sur cette tournee asiatique. Sur ce type de tournoi ATP 250, surtout apres de longs voyages et des conditions de jeu differentes, il convient de rester prudent dans ses mises. Alejandro Tabilo a poursuivi son parcours de qualification en ecartant Jordan Thompson. Le Chilien s’est montre plus rapide et incisif que son adversaire australien, s’imposant en deux sets secs, 6-4, 6-3. Il retrouvera desormais la deuxieme tete de serie, Luciano Darderi, qui quitte sa surface de predilection ( la terre battue ) apres avoir triomphe au Challenger de Genes. Ce sera leur troisieme affrontement sur le circuit, avec pour l’instant une victoire chacun. Darderi a deja souleve trois trophees ATP cette saison (dont Cordoba 2024), mais son jeu en dehors de l’ocre reste perfectible. Sa meilleure victoire sur dur a ce jour reste d’ailleurs son succes contre Tabilo a Cincinnati l’an dernier. L’Italien possede certains atouts pour s’adapter a des conditions plus rapides, mais son manque de constance se fait encore sentir. De son cote, Tabilo apparaît comme le favori : eleve au Canada, il a grandi sur surface dure et vient d’aligner trois victoires convaincantes ici, porte par un service tres efficace. Or, la relance de Darderi demeure un point faible : si Tabilo conserve la meme qualite au service qu’au cours de ses precedents tours, cela pourrait bien lui offrir un avantage decisif pour decrocher la victoire. LET'S GOOO !"
 
     if os.path.exists(image_path):
         result = extraire_pari_depuis_image(image_path, msg)

@@ -6,6 +6,59 @@ import json
 import requests
 from typing import Dict, List, Optional
 import config
+import os
+
+# Cache des expéditeurs ignorés (chargé à la demande)
+_IGNORED_SENDERS = None
+
+
+def load_ignored_senders() -> set:
+    """
+    Charge la liste des expéditeurs à ignorer depuis `conf/ignored_senders.txt`.
+    Format attendu: une valeur par ligne, commentaires possibles avec '#'.
+    Les usernames peuvent commencer par '@' ou non. Les chat IDs sont traités comme des chaînes.
+    Retourne un set de chaînes en minuscules.
+    """
+    global _IGNORED_SENDERS
+    if _IGNORED_SENDERS is not None:
+        return _IGNORED_SENDERS
+
+    ignored = set()
+    try:
+        base = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        path = os.path.join(base, 'conf', 'ignored_senders.txt')
+        if not os.path.exists(path):
+            _IGNORED_SENDERS = ignored
+            return ignored
+
+        with open(path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                # Normaliser username: enlever @ et forcer minuscule
+                normalized = line.lstrip('@').lower()
+                ignored.add(normalized)
+    except Exception as e:
+        config.log(f"Erreur chargement ignored_senders: {e}", 'error')
+
+    _IGNORED_SENDERS = ignored
+    return ignored
+
+
+def is_ignored_sender(sender_username: str = None, chat_id: Optional[int] = None) -> bool:
+    """
+    Vérifie si `sender_username` ou `chat_id` figure dans la liste d'ignore.
+    Retourne True si l'expéditeur doit être ignoré.
+    """
+    ignored = load_ignored_senders()
+    if sender_username:
+        if sender_username.lstrip('@').lower() in ignored:
+            return True
+    if chat_id is not None:
+        if str(chat_id) in ignored:
+            return True
+    return False
 
 
 class TelegramBetsAPI:
@@ -37,6 +90,10 @@ class TelegramBetsAPI:
             bool: True si l'envoi est réussi, False sinon
         """
         try:
+            # Vérifier si l'expéditeur est dans la liste d'ignore
+            if sender_username and is_ignored_sender(sender_username=sender_username):
+                config.log(f"Expéditeur ignoré, pari non envoyé: {sender_username}", 'info')
+                return False
             # Préparer les données pour l'API
             api_data = {
                 "date": bet_data.get("date", ""),

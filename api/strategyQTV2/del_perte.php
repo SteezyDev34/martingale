@@ -1,7 +1,7 @@
 <?php
 
-// Inclure le fichier de configuration
-require_once __DIR__ . '/../config.php';
+// Inclure la compat PDO/mysqli
+require_once __DIR__ . '/../src/DbCompat.php';
 
 // Obtenir la connexion à la base de données
 $conn = getDbConnection();
@@ -43,4 +43,3 @@ if (isset($_GET['id'])) {
 
 // Fermer la connexion
 $conn->close();
-?>

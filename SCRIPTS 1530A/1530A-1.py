@@ -49,7 +49,12 @@ else:
 # Chargement des functions
 # Chargement de Chrome driver
 config.localhost = 43151
+command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
+
+print(command)
+
 from ChromeDriver.SetDriver import get_script_driver
+
 num_fenetre = 1
 time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 

@@ -14,7 +14,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 from Functions.TelegramBetsAPI import telegram_bets_api
 from Functions.PlacerPari import placer_pari
-
+from Functions.Logs.Logger import log, log_clear_line
 
 def process_api_bets(driver, limit: int = 10) -> int:
     """
@@ -32,10 +32,10 @@ def process_api_bets(driver, limit: int = 10) -> int:
         unprocessed_bets = telegram_bets_api.get_unprocessed_bets(limit)
         
         if not unprocessed_bets:
-            print("Aucun pari non traité trouvé dans l'API")
+            log("Aucun pari non traité trouvé dans l'API", "info")
             return 0
         
-        print(f"Trouvé {len(unprocessed_bets)} paris non traités")
+        log(f"Trouvé {len(unprocessed_bets)} paris non traités", "info")
         processed_count = 0
         
         for bet in unprocessed_bets:
@@ -52,7 +52,7 @@ def process_api_bets(driver, limit: int = 10) -> int:
                     "tipster": bet.get("tipster")
                 }
                 
-                print(f"Traitement du pari ID {bet['id']}: {bet_data['equipe_1']} vs {bet_data['equipe_2']}")
+                log(f"Traitement du pari ID {bet['id']}: {bet_data['equipe_1']} vs {bet_data['equipe_2']}", "info", clear=False)
                 
                 # Placer le pari
                 success = placer_pari(driver, [bet_data])
@@ -61,24 +61,22 @@ def process_api_bets(driver, limit: int = 10) -> int:
                     # Marquer le pari comme traité dans l'API
                     if telegram_bets_api.mark_bet_as_processed(bet['id']):
                         processed_count += 1
-                        print(f"Pari ID {bet['id']} traité avec succès")
+                        log(f"Pari ID {bet['id']} traité avec succès", "info", clear=False)
                     else:
-                        print(f"Erreur lors du marquage du pari ID {bet['id']} comme traité")
+                        log(f"Erreur lors du marquage du pari ID {bet['id']} comme traité", "error", clear=False)
                 else:
-                    print(f"Échec du placement du pari ID {bet['id']}")
+                    log(f"Échec du placement du pari ID {bet['id']}", "error", clear=False)
                 
                 # Attendre un peu entre chaque pari pour éviter de surcharger le système
                 time.sleep(2)
                 
             except Exception as e:
-                print(f"Erreur lors du traitement du pari ID {bet.get('id', 'unknown')}: {e}")
-                config.log(f"Erreur traitement pari API ID {bet.get('id')}: {str(e)}", 'error', True)
+                log(f"Erreur lors du traitement du pari ID {bet.get('id', 'unknown')}: {e}", "error", clear=False)
         
         return processed_count
         
     except Exception as e:
-        print(f"Erreur générale lors du traitement des paris API: {e}")
-        config.log(f"Erreur process_api_bets: {str(e)}", 'error', True)
+        log(f"Erreur générale lors du traitement des paris API: {e}", "error", clear=False)
         return 0
 
 

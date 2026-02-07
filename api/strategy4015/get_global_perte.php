@@ -1,30 +1,21 @@
 <?php
 
 // Inclure le fichier de configuration
-require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../src/Database.php';
 
-// Obtenir la connexion à la base de données
-$conn = getDbConnection();
+$db = new Database();
+$pdo = $db->getPdo();
 
 // Exécuter une requête SQL
 $sql = "SELECT * FROM 0_perte";
-$result = $conn->query($sql);
+$stmt = $pdo->query($sql);
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Préparer les données pour JSON
-$data = array();
-if ($result->num_rows > 0) {
-    // Parcourir les résultats et ajouter chaque ligne au tableau
-    while ($row = $result->fetch_assoc()) {
-        $data[] = $row;
-    }
-}
-
-// Fermer la connexion
-$conn->close();
+$data = $rows;
 
 // Définir le type de contenu comme JSON
 header('Content-Type: application/json');
 
 // Retourner les données en JSON
 echo json_encode($data);
-

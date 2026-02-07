@@ -20,6 +20,7 @@ except:
     pass
 
 import telepot
+import config
 
 # Configuration SSL pour requests
 import requests.adapters
@@ -119,3 +120,45 @@ def send_telegram_group(groupid, message, code):
             print(f"Erreur HTTP {response.status_code}: {response.text}")
     except Exception as e:
         print(f"Une erreur est survenue : {e}")
+
+
+def load_ignored_senders():
+    """Charge la liste des expéditeurs à ignorer depuis `conf/ignored_senders.txt`.
+
+    Le fichier peut contenir des identifiants numériques ou des usernames (avec ou sans @),
+    une entrée par ligne. Les lignes vides et les commentaires (#) sont ignorés.
+    Retourne un set de valeurs en minuscules.
+    """
+    path = os.path.join(config.projectPath, 'conf', 'ignored_senders.txt')
+    ignored = set()
+    try:
+        if os.path.exists(path):
+            with open(path, 'r', encoding='utf-8') as f:
+                for line in f:
+                    s = line.strip()
+                    if not s or s.startswith('#'):
+                        continue
+                    ignored.add(s.lstrip('@').lower())
+    except Exception as e:
+        print(f"Erreur lecture ignored_senders: {e}")
+    return ignored
+
+
+def is_ignored_sender(sender_username: str = None, chat_id: str = None) -> bool:
+    """Vérifie si `sender_username` ou `chat_id` fait partie de la liste d'ignore.
+
+    Args:
+        sender_username: username Telegram (avec ou sans @)
+        chat_id: identifiant de channel/groupe (string ou int)
+
+    Retourne True si l'expéditeur doit être ignoré, False sinon.
+    """
+    ignored = load_ignored_senders()
+    if sender_username:
+        key = str(sender_username).lstrip('@').lower()
+        if key in ignored:
+            return True
+    if chat_id is not None:
+        if str(chat_id) in ignored:
+            return True
+    return False

@@ -88,7 +88,7 @@ rattrape_perte = 1  # ne pas changer
 print_running_text = False
 print_match_live_text = False
 error = False
-devMode = True
+devMode = False
 restart_set2 = 0
 log_message = ''
 newset = 2
@@ -462,9 +462,15 @@ import sys
 import os
 
 # Forcer l'encodage en UTF-8 pour stdout
-if sys.platform == "win32":
-    sys.stdout = codecs.getwriter("utf-8")(sys.stdout.buffer, errors="backslashreplace")
-    sys.stderr = codecs.getwriter("utf-8")(sys.stderr.buffer, errors="backslashreplace")
+try:
+    # Si l'encodage du stdout n'est pas UTF-8, remplacer l'écrivain
+    current_enc = getattr(sys.stdout, 'encoding', None)
+    if not current_enc or current_enc.lower() != 'utf-8':
+        sys.stdout = codecs.getwriter("utf-8")(sys.stdout.buffer, errors="replace")
+        sys.stderr = codecs.getwriter("utf-8")(sys.stderr.buffer, errors="replace")
+except Exception:
+    # Ne pas faire échouer le démarrage si on ne peut pas remplacer stdout/stderr
+    pass
 
 # Initialisation de colorama pour le support des couleurs sur Windows
 # Le terminal natif de Windows ne prend pas en charge les codes ANSI par défaut

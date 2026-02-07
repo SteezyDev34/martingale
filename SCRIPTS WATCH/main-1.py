@@ -43,6 +43,8 @@ import Functions.Functions_telegram
 from Functions.Functions_telegram import send_telegram
 from Functions.PlacerCode import PlacerCode
 from Functions.PlacerPari import placer_pari
+from Functions.Logs.Logger import log, log_clear_line
+
 import config
 
 # Recuperer le nom du script
@@ -61,11 +63,11 @@ if len(parts) > 1:
         config.localhost = 1024 + int(config.localhost)
     # Demander confirmation a l'utilisateur
     # Le lancement de Chrome est maintenant gere dans SetDriver.py
-    config.log_clear_line(3)
+    log_clear_line(3)
 
-    print(f'{config.PURPLE}{text2art(f'Start martingal {config.scriptType} {config.script_num}')}')
+    log(f'{text2art(f'Start martingal {config.scriptType} {config.script_num}')}', 'purple')
 else:
-    print("Le format du nom du fichier est incorrect.")
+    log("Le format du nom du fichier est incorrect.", "error")
     exit()
 
 # Chargement des functions
@@ -79,7 +81,6 @@ import ssl
 import os
 import urllib3
 from telethon import TelegramClient, events
-from ChromeDriver.SetDriver import driver
 
 # Configuration SSL pour eviter les erreurs de certificat
 os.environ['PYTHONHTTPSVERIFY'] = '0'
@@ -105,7 +106,7 @@ requests.adapters.DEFAULT_RETRIES = 3
 
 from Functions import Functions_telegram
 from Functions.getTextFromImageGPT import extraire_pari_depuis_image
-from Functions.TelegramBetsAPI import send_bet_data_to_api, telegram_bets_api
+from Functions.TelegramBetsAPI import send_bet_data_to_api, telegram_bets_api, is_ignored_sender
 
 # Declaration d'une variable globale qui va stocker les codes de paris
 global codeList, betList
@@ -135,7 +136,7 @@ def filter_txt(txt):
         return txt
     except Exception as e:
         send_telegram(Functions.Functions_telegram.alertGroup, f"#E0007\nUne erreur est survenue : {e}")
-        print(f"#E0007\nUne erreur est survenue : {e}")
+        log(f"#E0007\nUne erreur est survenue : {e}", "error", clear=False)
         return txt
 
 
@@ -149,7 +150,6 @@ def bot_msg_handler(txt):
         Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id, "team1 - team2\npick\nCOTE :\nMISE :")
         success = 1
 
-
 def add_word_to_replace(word):
     try:
         words = word.split('\n')
@@ -158,13 +158,12 @@ def add_word_to_replace(word):
             codes = open(f"{config.projectPath}/conf/excluded_words.txt", "a")
             codes.write('\n' + word)
             codes.close()
-            print("word ADDED  : " + word)
+            log("word ADDED  : " + word, "info", clear=False)
         return True
     except Exception as e:
         send_telegram(Functions.Functions_telegram.alertGroup, f"#E00017\nUne erreur est survenue : {e}")
-        print(f"#E00017\nUne erreur est survenue : {e}")
+        log(f"#E00017\nUne erreur est survenue : {e}", "error", clear=False)
         return False
-
 
 def delete_word_to_replace(word):
     try:
@@ -180,13 +179,12 @@ def delete_word_to_replace(word):
         codes = open(f"{config.projectPath}/conf/excluded_words.txt", "w")
         codes.write(updates_used_codes)
         codes.close()
-        # print("CODES UPDATED : "+updates_used_codes)
+        log("CODES UPDATED : "+updates_used_codes, "info", clear=False)
         return True
     except Exception as e:
         send_telegram(Functions_telegram.alertGroup, f"#E00018\nUne erreur est survenue : {e}")
-        print(f"#E00018\nUne erreur est survenue : {e}")
+        log(f"#E00018\nUne erreur est survenue : {e}", "error", clear=False)
         return False
-
 
 def extract_code_1XBET(txt):
     """
@@ -208,7 +206,7 @@ def extract_code_1XBET(txt):
     codes = re.findall(r"\b[A-Z0-9]{5}\b", txt)
     # Retourne le code uniquement si exactement un code est trouve
     if len(codes) == 1:
-        print(f"Codes trouves : {codes}")
+        log(f"Codes trouves : {codes}", "info")
         return codes
     else:
         return False
@@ -242,9 +240,9 @@ try:
         lang_code="fr",
         system_lang_code="fr"
     )
-    print("Client Telegram initialise avec succès")
+    log("Client Telegram initialise avec succès", "success", clear=False)
 except Exception as e:
-    print(f"Erreur lors de l'initialisation du client Telegram : {e}")
+    log(f"Erreur lors de l'initialisation du client Telegram : {e}", "error", clear=False)
     # Fallback vers une configuration simple
     client = TelegramClient('2', api_id, api_hash)
 
@@ -252,12 +250,13 @@ except Exception as e:
 # Gestionnaire d'evenements pour detecter les nouveaux messages Telegram
 @client.on(events.NewMessage())
 async def my_event_handler(event):
-    # Chaque fois qu'un nouveau message est reçu, cette fonction est declenchee
-    print('Nouvel evenement detecte')
-    print(event.raw_text)  # Affiche le texte brut du message
-    print('chat id', event.chat_id)  # Affiche l'ID du chat d'où vient le message
     try:
-        success = 0  # Indicateur pour contrôler le succès du traitement
+        e = event
+    except Exception as e:
+        pass
+    
+    success = 0  # Indicateur pour contrôler le succès du traitement
+    if success == 0:
         while success == 0:
             success = 1  # Passe a 1 une fois que le traitement est reussi
             # Recuperation et affichage du pseudo de l'expediteur
@@ -276,7 +275,7 @@ async def my_event_handler(event):
                             if word == True:
                                 Functions_telegram.send_telegram(auxo_bot_id, txt + ' Ajoute!')
                         except Exception as e:
-                            print(f"Erreur : {e}")
+                            log(f"Erreur : {e}", "error", clear=False)
 
                     # Cas où on supprime un mot de la liste
                     elif reply_raw_text == "Mot a supprimer?":
@@ -285,99 +284,114 @@ async def my_event_handler(event):
                             if word == True:
                                 Functions_telegram.send_telegram(auxo_bot_id, txt + ' Supprime!')
                         except Exception as e:
-                            print(f"Erreur : {e}")
-            if sender:
+                            log(f"Erreur : {e}", "error", clear=False)
+            if sender or event.chat_id:
+                sender_username = sender.username if sender and sender.username else None
+                if is_ignored_sender(sender.username, event.chat_id):
+                    log("Expediteur ignore, message ignore", "warning", clear=True)
+                    return  # Ignorer le message si l'expediteur est dans la liste d'ignorés
                 # Affiche le nom d'utilisateur s'il existe, sinon le nom complet
                 if sender.username:
-                    print('Pseudo de l\'expediteur:', sender.username)
-                    # Check if message contains media/image
-                    has_media = event.message.media is not None
-                    print('Message contains media:', has_media)
-                    code = extract_code_1XBET(event.raw_text)
-                    if code:
-                        codeList.append(code)
-                    # Download media if present
-                    elif has_media:
-                        try:
-                            # Create unique filename using timestamp
-                            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-                            filename = f"media_{timestamp}.jpg"
-                            # Create temp directory in the script directory
-                            script_dir = os.path.dirname(os.path.abspath(__file__))
-                            temp_dir = os.path.join(script_dir, 'media')
-                            os.makedirs(temp_dir, exist_ok=True)
-                            # Set full path for the image in temp directory
-                            image_path = os.path.join(temp_dir, filename)
-                            print(f"Repertoire temp cree: {temp_dir}")
-                            print(f"Chemin de l'image: {image_path}")
-                            # Download the media directly to temp directory
-                            await event.message.download_media(file=image_path)
-                            print(f"Media downloaded successfully as {image_path}")
-                            # Process the image
-                            result = extraire_pari_depuis_image(image_path, event.raw_text)
-                            # Delete the downloaded image file
-                            try:
-                                # Verifier que le fichier existe avant de le supprimer
-                                if os.path.exists(image_path):
-                                    # Verifier les permissions de lecture/ecriture
-                                    if os.access(image_path, os.W_OK):
-                                        os.remove(image_path)
-                                        print(f"Fichier image supprime avec succès: {filename}")
-                                    else:
-                                        print(f"Erreur: Pas de permission d'ecriture pour {image_path}")
-                                        # Essayer de changer les permissions
-                                        try:
-                                            os.chmod(image_path, 0o666)
-                                            os.remove(image_path)
-                                            print(f"Fichier image supprime après changement de permissions: {filename}")
-                                        except OSError as chmod_error:
-                                            print(f"Impossible de changer les permissions: {chmod_error}")
+                    log(f'Pseudo de l\'expediteur: {sender.username}', "info", clear=False)
+                else:
+                    log(f'Channel ID: {event.chat_id} - {event.chat.title if hasattr(event.chat, "title") else "N/A"}', "info", clear=False)
+                # Chaque fois qu'un nouveau message est reçu, cette fonction est declenchee
+                log('Nouvel evenement detecte')
+                log(event.raw_text, "info", clear=False)  # Affiche le texte brut du message
+                log(f'chat id {event.chat_id}', "info", clear=False)  # Affiche l'ID du chat d'où vient le message
+                # Check if message contains media/image
+                has_media = event.message.media is not None
+                log(f'Message contains media: {has_media}', "info", clear=False)
+                code = extract_code_1XBET(event.raw_text)
+                if code:
+                    codeList.append(code)
+                # Download media if present
+                elif has_media:
+                    #try:
+                    if has_media:
+                        # Create unique filename using timestamp
+                        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                        filename = f"media_{timestamp}.jpg"
+                        # Create temp directory in the script directory
+                        script_dir = os.path.dirname(os.path.abspath(__file__))
+                        temp_dir = os.path.join(script_dir, 'media')
+                        os.makedirs(temp_dir, exist_ok=True)
+                        # Set full path for the image in temp directory
+                        image_path = os.path.join(temp_dir, filename)
+                        log(f"Repertoire temp cree: {temp_dir}", "info", clear=False)
+                        log(f"Chemin de l'image: {image_path}", "info", clear=False)
+                        # Download the media directly to temp directory
+                        await event.message.download_media(file=image_path)
+                        log(f"Media downloaded successfully as {image_path}", "info", clear=False)
+                        # Process the image
+                        result = extraire_pari_depuis_image(image_path, '')
+                        # Delete the downloaded image file
+                        print("Attempting to delete the image file...")
+                        #try:
+                        if image_path:
+                            # Verifier que le fichier existe avant de le supprimer
+                            if os.path.exists(image_path):
+                                # Verifier les permissions de lecture/ecriture
+                                if os.access(image_path, os.W_OK):
+                                    os.remove(image_path)
+                                    log(f"Fichier image supprime avec succès: {filename}", "info", clear=False)
                                 else:
-                                    print(f"Erreur: Le fichier {image_path} n'existe pas")
-                            except OSError as e:
-                                print(f"Erreur lors de la suppression du fichier image: {e}")
-                                print(f"Chemin du fichier: {image_path}")
-                                print(f"Repertoire courant: {os.getcwd()}")
-                                print(f"Le fichier existe: {os.path.exists(image_path)}")
-                            # Clean up empty temp directory
+                                    log(f"Erreur: Pas de permission d'ecriture pour {image_path}", "error", clear=False)
+                                    # Essayer de changer les permissions
+                                    try:
+                                        os.chmod(image_path, 0o666)
+                                        os.remove(image_path)
+                                        log(f"Fichier image supprime après changement de permissions: {filename}", "info", clear=False)
+                                    except OSError as chmod_error:
+                                        log(f"Impossible de changer les permissions: {chmod_error}", "error", clear=False)
+                            else:
+                                log(f"Erreur: Le fichier {image_path} n'existe pas", "error", clear=False)
+                        #except OSError as e:
+                            #log(f"Erreur lors de la suppression du fichier image: {e}", "error", clear=False)
+                            #log(f"Chemin du fichier: {image_path}", "info", clear=False)
+                            #log(f"Repertoire courant: {os.getcwd()}", "info", clear=False)
+                            #log(f"Le fichier existe: {os.path.exists(image_path)}", "info", clear=False)
+                        # Clean up empty temp directory
+                        try:
+                            # Verifier que le repertoire existe et est vide
+                            if os.path.exists(temp_dir) and not os.listdir(temp_dir):
+                                os.rmdir(temp_dir)
+                                log(f"Repertoire temporaire supprime: {temp_dir}", "info", clear=False)
+                        except OSError as e:
+                            log(f"Impossible de supprimer le repertoire temporaire: {e}", "error", clear=False)
+                        # Revenir au repertoire original
+                        os.chdir(original_cwd)
+                        # Convertir le resultat JSON en dictionnaire et l'ajouter a codeList
+                        try:
+                            pari_dict = json.loads(result)
+                            betList.append(pari_dict)
+                            log(f"Pari ajoute a betList: {pari_dict}", "info", clear=False)
+                            
+                            # Envoyer le pari a l'API
                             try:
-                                # Verifier que le repertoire existe et est vide
-                                if os.path.exists(temp_dir) and not os.listdir(temp_dir):
-                                    os.rmdir(temp_dir)
-                                    print(f"Repertoire temporaire supprime: {temp_dir}")
-                            except OSError as e:
-                                print(f"Impossible de supprimer le repertoire temporaire: {e}")
-                            # Revenir au repertoire original
-                            os.chdir(original_cwd)
-                            # Convertir le resultat JSON en dictionnaire et l'ajouter a codeList
-                            try:
-                                pari_dict = json.loads(result)
-                                betList.append(pari_dict)
-                                print(f"Pari ajoute a betList: {pari_dict}")
+                                sender_username = sender.username if sender and sender.username else None
+                                api_success = send_bet_data_to_api(
+                                    pari_dict, 
+                                    message_original=event.raw_text,
+                                    sender_username=sender_username
+                                )
+                                if api_success:
+                                    log(f"Pari envoye avec succès a l'API", "info", clear=False)
+                                else:
+                                    log(f"echec de l'envoi du pari a l'API", "error", clear=False)
+                            except Exception as api_error:
+                                log(f"Erreur lors de l'envoi a l'API: {api_error}", "error", clear=False)
                                 
-                                # Envoyer le pari a l'API
-                                try:
-                                    sender_username = sender.username if sender and sender.username else None
-                                    api_success = send_bet_data_to_api(
-                                        pari_dict, 
-                                        message_original=event.raw_text,
-                                        sender_username=sender_username
-                                    )
-                                    if api_success:
-                                        print(f"Pari envoye avec succès a l'API")
-                                    else:
-                                        print(f"echec de l'envoi du pari a l'API")
-                                except Exception as api_error:
-                                    print(f"Erreur lors de l'envoi a l'API: {api_error}")
-                                    
-                            except json.JSONDecodeError as e:
-                                print(f"Erreur lors de la conversion JSON: {e}")
-                                print(f"Resultat brut: {result}")
-                        except Exception as e:
-                            print(f"Error downloading media: {e}")
-
-    except Exception as e:
-        print('Erreur dans le traitement du message', e)
+                        except json.JSONDecodeError as e:
+                            log(f"Erreur lors de la conversion JSON: {e}", "error", clear=False)
+                            log(f"Resultat brut: {result}", "info", clear=False)
+                    #except Exception as e:
+                        #log(f"Error downloading media: {e}", "error", clear=False)
+        
+            else:
+                log("Expediteur introuvable", "warning", clear=False)
+    #except Exception as e:
+        #log('Erreur dans le traitement du message', e, "error", clear=False)
 
 
 # Demarrage du client Telegram
@@ -401,33 +415,35 @@ def check():
             try:
                 PlacerCode(driver, codeList[0])
             except Exception as e:
-                print(f"Erreur lors du placement du code: {e}")
+                log(f"Erreur lors du placement du code: {e}", "error", clear=False)
             else:
-                print(f"Code place avec succès: {codeList[0]}")
+                log(f"Code place avec succès: {codeList[0]}", "info", clear=False)
                 del codeList[0]
         
         # Traitement des paris en temps reel
         if betList != []:
             try:
-                print('Gestion du pari en temps reel')
+                log('Gestion du pari en temps reel', "info", clear=False)
                 placer_pari(driver, betList)
             except Exception as e:
-                print(f"Erreur lors du placement du pari: {e}")
+                log(f"Erreur lors du placement du pari: {e}", "error", clear=False)
             else:
-                print(f"Pari place avec succès: {betList[0]}")
+                log(f"Pari place avec succès: {betList[0]}", "info", clear=False)
                 del betList[0]
         
         # Verification periodique de l'API pour les paris non traites
         current_time = time.time()
         if current_time - last_api_check > api_check_interval:
             try:
-                print("Verification des paris non traites dans l'API...")
+                log("Verification des paris non traites dans l'API...", "info", clear=False)
                 processed_count = process_api_bets(driver, limit=5)
                 if processed_count > 0:
-                    print(f"Traite {processed_count} paris depuis l'API")
+                    log(f"Traite {processed_count} paris depuis l'API", "info", clear=False)
+                else:
+                    log_clear_line()
                 last_api_check = current_time
             except Exception as e:
-                print(f"Erreur lors du traitement des paris API: {e}")
+                log(f"Erreur lors du traitement des paris API: {e}", "error", clear=False)
         
         # Petite pause pour eviter une boucle trop intensive
         time.sleep(1)

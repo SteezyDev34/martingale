@@ -1,7 +1,7 @@
 <?php
 
-// Inclure le fichier de configuration
-require_once __DIR__ . '/../config.php';
+// Inclure la compat PDO/mysqli
+require_once __DIR__ . '/../src/DbCompat.php';
 
 // Obtenir la connexion à la base de données
 $conn = getDbConnection();
@@ -27,4 +27,3 @@ header('Content-Type: application/json');
 
 // Retourner les données en JSON
 echo json_encode($data);
-

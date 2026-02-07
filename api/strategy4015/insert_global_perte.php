@@ -1,18 +1,9 @@
 <?php
 
 // Inclure le fichier de configuration
-require_once __DIR__ . '/../config.php';
-
-// Obtenir la connexion à la base de données
-$conn = getDbConnection();
-
-// Définir l'encodage de la connexion en UTF-8
-if (!$conn->set_charset("utf8")) {
-    $response = array("status" => "error", "message" => "Erreur lors du chargement du jeu de caractères utf8 : " . $conn->error);
-    header('Content-Type: application/json');
-    echo json_encode($response);
-    exit();
-}
+require_once __DIR__ . '/../src/Database.php';
+$db = new Database();
+$pdo = $db->getPdo();
 
 // Préparer la réponse par défaut
 $response = array("status" => "error", "message" => "Paramètres d'URL manquants.");
@@ -24,45 +15,27 @@ if (isset($_GET['mise'])) {
 
     // Récupérer la dernière valeur enregistrée
     $query_last_perte = "SELECT perte FROM 0_perte ORDER BY id DESC LIMIT 1";
-    $result = $conn->query($query_last_perte);
-
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $derniere_perte = $row['perte'];
-    } else {
-        $derniere_perte=0;
-    }
-    $nouvelle_perte = floatval($derniere_perte) +floatval($nouvelle_mise);
-    $nouvelle_perte = $nouvelle_perte<0?0:$nouvelle_perte;
+    $stmt_last = $pdo->query($query_last_perte);
+    $row = $stmt_last->fetch(PDO::FETCH_ASSOC);
+    $derniere_perte = $row['perte'] ?? 0;
+    $nouvelle_perte = floatval($derniere_perte) + floatval($nouvelle_mise);
+    $nouvelle_perte = $nouvelle_perte < 0 ? 0 : $nouvelle_perte;
     // Supprimer toutes les anciennes entrées
     $delete_query = "DELETE FROM 0_perte";
-    if ($conn->query($delete_query) === TRUE) {
-        // Insérer la nouvelle perte
-        $stmt = $conn->prepare("INSERT INTO 0_perte (perte) VALUES (?)");
-        if ($stmt) {
-            $stmt->bind_param("d", $nouvelle_perte);
+    $pdo->exec($delete_query);
 
-            // Exécuter la requête d'insertion
-            if ($stmt->execute()) {
-                $response = array(
-                    "status" => "success",
-                    "message" => "Données mises à jour avec succès.",
-                    "derniere_perte" => $derniere_perte,
-                    "nouvelle_perte" => $nouvelle_perte
-                );
-            } else {
-                $response = array("status" => "error", "message" => "Erreur lors de l'insertion des données : " . $stmt->error);
-            }
-
-            // Fermer la requête préparée
-            $stmt->close();
-        } else {
-            $response = array("status" => "error", "message" => "Erreur lors de la préparation de la requête : " . $conn->error);
-        }
+    // Insérer la nouvelle perte
+    $stmt = $pdo->prepare("INSERT INTO 0_perte (perte) VALUES (:perte)");
+    if ($stmt->execute([':perte' => $nouvelle_perte])) {
+        $response = array(
+            "status" => "success",
+            "message" => "Données mises à jour avec succès.",
+            "derniere_perte" => $derniere_perte,
+            "nouvelle_perte" => $nouvelle_perte
+        );
     } else {
-        $response = array("status" => "error", "message" => "Erreur lors de la suppression des données : " . $conn->error);
+        $response = array("status" => "error", "message" => "Erreur lors de l'insertion des données.");
     }
-
 } else {
     $response = array("status" => "error", "message" => "Aucune donnée reçue.");
 }

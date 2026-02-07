@@ -1,8 +1,8 @@
 <?php
-ini_set( 'display_errors', 1 );
-error_reporting( E_ALL );
-// Inclure le fichier de configuration
-require_once __DIR__ . '/../config.php';
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+// Inclure la compat PDO/mysqli
+require_once __DIR__ . '/../src/DbCompat.php';
 
 // Obtenir la connexion à la base de données
 $conn = getDbConnection();
@@ -42,7 +42,6 @@ if ($result->num_rows > 0) {
 
             $column2_data[] = $compet_not_ok;
         }
-
     }
 }
 
@@ -64,4 +63,3 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 }
 // Retourner les données en JSON
 echo $json_response;
-

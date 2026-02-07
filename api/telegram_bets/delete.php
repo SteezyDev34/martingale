@@ -10,34 +10,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-require_once '../config.php';
+require_once __DIR__ . '/../src/Database.php';
+require_once __DIR__ . '/../src/TelegramBetsRepository.php';
 
 try {
-    // Connexion à la base de données
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
+    $db = new Database();
+    $repo = new TelegramBetsRepository($db);
+
     // Récupérer l'ID depuis les paramètres GET ou POST
     $id = $_GET['id'] ?? null;
-    
+
     if (!$id) {
         $input = json_decode(file_get_contents('php://input'), true);
         $id = $input['id'] ?? null;
     }
-    
+
     if (!$id) {
         throw new Exception('ID du pari requis');
     }
-    
+
     $id = intval($id);
-    
-    // Supprimer le pari
-    $sql = "DELETE FROM telegram_bets WHERE id = :id";
-    $stmt = $pdo->prepare($sql);
-    
-    $result = $stmt->execute([':id' => $id]);
-    
-    if ($result && $stmt->rowCount() > 0) {
+
+    $rows = $repo->delete($id);
+
+    if ($rows > 0) {
         echo json_encode([
             'success' => true,
             'message' => 'Pari supprimé avec succès',
@@ -46,7 +42,6 @@ try {
     } else {
         throw new Exception('Pari non trouvé');
     }
-    
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode([
@@ -60,4 +55,3 @@ try {
         'message' => $e->getMessage()
     ]);
 }
-?>

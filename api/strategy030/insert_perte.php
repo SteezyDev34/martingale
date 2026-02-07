@@ -1,8 +1,8 @@
 <?php
 
 
-// Inclure le fichier de configuration
-require_once __DIR__ . '/../config.php';
+// Inclure la compat PDO/mysqli
+require_once __DIR__ . '/../src/DbCompat.php';
 
 // Obtenir la connexion à la base de données
 $conn = getDbConnection();
@@ -40,10 +40,8 @@ if (isset($_GET['perte'])) {
     } else {
         $response = array("status" => "error", "message" => "Erreur lors de la préparation de la requête : " . $conn->error);
     }
-}
-else{
+} else {
     $response = array("status" => "error", "message" => "Pas de données : " . $conn->error);
-
 }
 // Fermer la connexion
 $conn->close();
@@ -53,5 +51,3 @@ header('Content-Type: application/json');
 
 // Retourner la réponse en JSON
 echo json_encode($response);
-
-

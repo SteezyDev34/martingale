@@ -131,7 +131,7 @@ classes = {
         {
             'old_site': 'cpn-bet__coef',
             'new_site': 'coupon-result-coef-value',
-            'mobile_site': 'quick-coupon-events-coef'
+            'mobile_site': 'quick-coupon-events-card-coefs__new'
         },
     'cpn_amount':
         {

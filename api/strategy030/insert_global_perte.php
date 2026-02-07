@@ -1,7 +1,7 @@
 <?php
 
-// Inclure le fichier de configuration
-require_once __DIR__ . '/../config.php';
+// Inclure la compat PDO/mysqli
+require_once __DIR__ . '/../src/DbCompat.php';
 
 // Obtenir la connexion à la base de données
 $conn = getDbConnection();
@@ -30,10 +30,10 @@ if (isset($_GET['mise'])) {
         $row = $result->fetch_assoc();
         $derniere_perte = $row['perte'];
     } else {
-        $derniere_perte=0;
+        $derniere_perte = 0;
     }
-    $nouvelle_perte = floatval($derniere_perte) +floatval($nouvelle_mise);
-    $nouvelle_perte = $nouvelle_perte<0?0:$nouvelle_perte;
+    $nouvelle_perte = floatval($derniere_perte) + floatval($nouvelle_mise);
+    $nouvelle_perte = $nouvelle_perte < 0 ? 0 : $nouvelle_perte;
     // Supprimer toutes les anciennes entrées
     $delete_query = "DELETE FROM 0_perte";
     if ($conn->query($delete_query) === TRUE) {
@@ -62,7 +62,6 @@ if (isset($_GET['mise'])) {
     } else {
         $response = array("status" => "error", "message" => "Erreur lors de la suppression des données : " . $conn->error);
     }
-
 } else {
     $response = array("status" => "error", "message" => "Aucune donnée reçue.");
 }
