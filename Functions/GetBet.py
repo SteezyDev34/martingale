@@ -1,10 +1,12 @@
-import time
 import os
 import sys
+import time
+
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
@@ -48,7 +50,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
         )
     except:
         config.log('erreur recup market-grid-canvas__container', 'error', False, 2)
-        logline+=1
+        logline += 1
         config.log_clear_line(logline)
         return False
     # Récupérer les coordonnées du div
@@ -99,7 +101,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
         GetScoreActuel(driver)
         DeleteBet(driver)
         config.log(f'jeu recherhcé : {config.looking_game}', 'info', False)
-        logline +=1
+        logline += 1
         if_get_jeu = False
 
         if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
@@ -224,7 +226,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
             )
         except Exception as e:
             config.log('tentative_clic : ' + str(tentative_clic), clear=False)
-            logline+=1
+            logline += 1
             tentative_clic = tentative_clic + 1
             if tentative_clic < 4:
                 if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
@@ -285,7 +287,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
                 else:
                     sautDeLigne = sautDeLigne + 30
                 config.log(f"#E0015 Infos de paris non lisible", clear=False)
-                logline +=1
+                logline += 1
             else:
                 list_of_newbet_type = list_of_bet_type.text
                 if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
@@ -433,6 +435,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    config.scriptType = '40A'
+    config.scriptType = '300'
+    config.site_type = 'mobile_site'
     GetIfNewSite(driver)
     GetBet(driver, True)

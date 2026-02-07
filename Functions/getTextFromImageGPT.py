@@ -1,18 +1,16 @@
 import base64
+import json
 import os
 import sys
 import time
+
 import requests
-import json
-from types import SimpleNamespace
 
 # Ajouter le chemin du projet au PYTHONPATH pour permettre l'importation de config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-
-import config
 
 
 def cleanJson(raw_response):
@@ -165,7 +163,8 @@ def extraire_pari_depuis_image(image_path, msg):
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": f"Voici une capture d'ecran de ticket de pari, le fichier s'appelle {image_path} et le message qui l\'accompagen est : {msg}, merci d'extraire les donnees au format JSON. et de retourner uniquement le json"},
+                        {"type": "text",
+                         "text": f"Voici une capture d'ecran de ticket de pari, le fichier s'appelle {image_path} et le message qui l\'accompagen est : {msg}, merci d'extraire les donnees au format JSON. et de retourner uniquement le json"},
                         {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}}
                     ]
                 }
@@ -180,7 +179,8 @@ def extraire_pari_depuis_image(image_path, msg):
             payload = {
                 'model': MODEL,
                 'messages': [
-                    {'role': 'system', 'content': 'Tu es un agent OCR intelligent. Extrais les donnees et reponds uniquement en JSON.'},
+                    {'role': 'system',
+                     'content': 'Tu es un agent OCR intelligent. Extrais les donnees et reponds uniquement en JSON.'},
                     {'role': 'user', 'content': f"Fichier: {image_path} ; message: {msg}"}
                 ],
                 'max_tokens': 500
@@ -227,7 +227,7 @@ def extraire_pari_joueur_nba_depuis_image(image_path, msg):
                 "content":
                     "Tu es un agent OCR specialise dans les paris sur les performances individuelles des joueurs NBA."
                     "Ton role est d'extraire les donnees de paris props joueurs depuis des captures d'ecran."
-                    
+
                     "📊 Donnees a extraire :\n"
                     "- date : date du pari (format DD/MM/YYYY)\n"
                     "- match : les deux equipes qui s'affrontent (ex: 'Lakers vs Celtics')\n"
@@ -238,7 +238,7 @@ def extraire_pari_joueur_nba_depuis_image(image_path, msg):
                     "- sens : 'Plus de' ou 'Moins de'\n"
                     "- odds : la cote du pari (nombre flottant)\n"
                     "- bookmaker : nom du bookmaker si visible\n"
-                    
+
                     "🏀 Types de statistiques NBA reconnues :\n"
                     "- Points (PTS)\n"
                     "- Rebonds (REB / Rebounds)\n"
@@ -252,7 +252,7 @@ def extraire_pari_joueur_nba_depuis_image(image_path, msg):
                     "- Tirs a 3 points reussis (3PM / 3-Points Made)\n"
                     "- Double-Double (Double Double)\n"
                     "- Triple-Double (Triple Double)\n"
-                    
+
                     "⚠️ Regles strictes :\n"
                     "1. Normalise les noms de joueurs (ex: 'LeBron' → 'LeBron James')\n"
                     "2. Convertis les abreviations en texte complet (ex: 'PTS' → 'Points')\n"
@@ -260,12 +260,12 @@ def extraire_pari_joueur_nba_depuis_image(image_path, msg):
                     "4. Extrait la ligne exacte (nombre avec decimale)\n"
                     "5. Si plusieurs props du meme joueur, cree un objet JSON par prop\n"
                     "6. Si c'est un parlay/combine de plusieurs joueurs, retourne 'COMBINE_MULTIPLE_JOUEURS'\n"
-                    
+
                     "📆 Gestion de la date :\n"
                     "- Extrait depuis le nom de fichier si disponible\n"
                     "- Sinon cherche dans l'image (date du match)\n"
                     "- Sinon utilise la date du jour\n"
-                    
+
                     "🧾 Format de reponse JSON attendu (uniquement le JSON, sans explication) :\n"
                     "{\n"
                     "  \"date\": \"10/12/2025\",\n"
@@ -278,7 +278,7 @@ def extraire_pari_joueur_nba_depuis_image(image_path, msg):
                     "  \"odds\": \"1.85\",\n"
                     "  \"bookmaker\": \"1xBet\"\n"
                     "}\n\n"
-                    
+
                     "🎯 Exemples de reconnaissance :\n"
                     "- Image: 'Stephen Curry O 25.5 PTS @1.90' → statistique='Points', ligne='25.5', sens='Plus de'\n"
                     "- Image: 'Giannis Antetokounmpo Under 12.5 REB' → statistique='Rebonds', ligne='12.5', sens='Moins de'\n"
@@ -327,7 +327,6 @@ def compare_match_name(match_name1, match_name2):
 
 
 def compare_selection(match, selection, selection_list):
-    print(f"pour le match {match} Compare ces deux selections :  {selection} et {selection_list}")
     response = client.chat.completions.create(
         model=MODEL,
         messages=[

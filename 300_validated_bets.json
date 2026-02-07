@@ -1177,5 +1177,32 @@
         "winscore": "30:0",
         "timestamp": "2025-11-05 17:19:11",
         "url": "wta world tour finals riyadh"
+    },
+    {
+        "montant": 1.6,
+        "cote": "1.75",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "30:0",
+        "timestamp": "2026-02-07 13:42:31",
+        "url": "atp rotterdam qualification"
+    },
+    {
+        "montant": 2.07,
+        "cote": "2.45",
+        "jeu": 5,
+        "set": "2",
+        "winscore": "0:30",
+        "timestamp": "2026-02-07 13:52:07",
+        "url": "atp rotterdam qualification"
+    },
+    {
+        "montant": 0.8,
+        "cote": "2.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "0:30",
+        "timestamp": "2026-02-07 14:09:18",
+        "url": "wta abu dhabi"
     }
 ]

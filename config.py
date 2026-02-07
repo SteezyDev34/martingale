@@ -2,9 +2,10 @@ import datetime
 import json
 import os
 import platform
-import requests
 import time
 from typing import Dict, Any, Optional
+
+import requests
 
 # Import des configurations depuis le module config
 from conf import classes, score_to_start, total_want_win, total_want_winset1
@@ -19,7 +20,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['150', '300', '30A']
+scriptTypeList = ['15A', '150', '300', '30A']
 scriptTypeList1 = ['5P', '40A']
 scriptTypeList2 = ['BREAK', '6P']
 scriptTypeList3 = ['BREAK']
@@ -574,7 +575,7 @@ def log_clear_line(line_number=1):
 
 win_session = False
 win = False
-#min unit of lucky games is 0.00000001 with 7x0
+# min unit of lucky games is 0.00000001 with 7x0
 min_unit = float(0.00000002)
 unit = min_unit
 old_unit = False
