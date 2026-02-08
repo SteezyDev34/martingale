@@ -27,24 +27,6 @@
         "url": "https://ca.1xbet.com/fr/live/tennis/2809488-challenger-brisbane-qualification/693854331-matthew-dellavedova-jesse-delaney"
     },
     {
-        "montant": 0.81,
-        "cote": "1.248",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V2",
-        "timestamp": "2026-02-08 09:53:38",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1877609-challenger-pau-qualification/693939877-pierre-antoine-faut-robin-bertrand"
-    },
-    {
-        "montant": 0.81,
-        "cote": "1.248",
-        "jeu": 1,
-        "set": "1",
-        "winscore": "V1",
-        "timestamp": "2026-02-08 09:54:52",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1877609-challenger-pau-qualification/693939831-remy-bertola-leo-raquillet"
-    },
-    {
         "montant": 0.23,
         "cote": "1.87",
         "jeu": 1,
@@ -61,5 +43,14 @@
         "winscore": "V2",
         "timestamp": "2026-02-08 10:04:27",
         "url": "https://ca.1xbet.com/fr/live/tennis/1867260-challenger-chennai-qualification/693943433-keerthivassan-suresh-siddhant-banthia"
+    },
+    {
+        "montant": 0.74,
+        "cote": "1.54",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2026-02-08 10:49:07",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1445657-itf-javea/693950141-gabriele-maria-noce-carles-cordoba"
     }
 ]
