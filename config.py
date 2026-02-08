@@ -20,7 +20,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['150', '300', '30A']
+scriptTypeList = ['015', '150', '15A', '030', '300', '30A']
 scriptTypeList1 = ['6P', '40A']
 scriptTypeList2 = ['BREAK', '5P']
 scriptTypeList3 = ['BREAK']
@@ -89,7 +89,7 @@ rattrape_perte = 1  # ne pas changer
 print_running_text = False
 print_match_live_text = False
 error = False
-devMode = False
+devMode = True
 restart_set2 = 0
 log_message = ''
 newset = 2
