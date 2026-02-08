@@ -49,6 +49,9 @@ def main(driver, bet_item, matchlist_file_name):
             config.log_clear_line()
             return [True, config.newmatch]
         elif not config.in_stat and not match_is_todo and not match_is_done:
+            config.log('Le match  n\'est pas autorisé!', 'warning', True, 4, False)
+            # blocage des autres match en atente d'un plus gros BK
+            return [False, config.newmatch]
             p = config.perte
             if not p or p == 0:
                 p = getIfGlobalPerte()
