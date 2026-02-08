@@ -31,8 +31,8 @@ parts = name_part.split('-')
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
 
-num_fenetre = 6
-#time.sleep((num_fenetre - 1) * 1)  # Attendre un peu pour s'assurer que la fenêtre est prête
+num_fenetre = 3
+time.sleep((num_fenetre - 1) * 1)  # Attendre un peu pour s'assurer que la fenêtre est prête
 
 driver = get_script_driver(num_fenetre)
 
