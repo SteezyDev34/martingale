@@ -47,7 +47,7 @@ else:
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
 
-num_fenetre = 0
+num_fenetre = 5
 # time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 
 driver = get_script_driver(num_fenetre)
