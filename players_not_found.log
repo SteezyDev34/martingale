@@ -533,6 +533,7 @@
 [2026-01-07 13:41:57] Joueur non trouvé: Leyton Rivera (fonction: get_wta_proba_40A_sofascore)
 [2026-01-07 13:41:59] Joueur non trouvé: Patrik Munkhammar (fonction: get_wta_proba_40A_sofascore)
 [2026-01-07 13:41:59] Joueur non trouvé: Tias Lagoni Odegaard (fonction: get_wta_proba_40A_sofascore)
+<<<<<<< HEAD
 [2026-02-07 14:47:01] Joueur non trouvé: Juan Pablo Patino-Samudio (fonction: get_wta_proba_40A_sofascore)
 [2026-02-07 14:47:19] Joueur non trouvé: Alexandre Chevtchenko (fonction: get_wta_proba_40A_sofascore)
 [2026-02-07 14:47:19] Joueur non trouvé: Hugo Nys (fonction: get_wta_proba_40A_sofascore)
@@ -557,3 +558,20 @@
 [2026-02-08 00:06:49] Joueur non trouvé: Xiaoyan Xue (fonction: get_wta_proba_40A_sofascore)
 [2026-02-08 00:06:56] Joueur non trouvé: Louie Fannin (fonction: get_wta_proba_40A_sofascore)
 [2026-02-08 00:07:16] Joueur non trouvé: Sarah Mildren (fonction: get_wta_proba_40A_sofascore)
+=======
+[2026-02-07 12:44:43] Joueur non trouvé: Elmer Moeller (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:44:55] Joueur non trouvé: Iliyan Radulov (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:45:03] Joueur non trouvé: Alexandre Chevtchenko (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:45:03] Joueur non trouvé: Hugo Nys (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:45:22] Joueur non trouvé: Codie Schalk Van Schalkwyk (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:45:30] Joueur non trouvé: Leandro Riedi (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:45:34] Joueur non trouvé: Taym Al-Azmeh (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:45:43] Joueur non trouvé: Wayne Montgomery (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:51:30] Joueur non trouvé: Elmer Moeller (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:51:39] Joueur non trouvé: Iliyan Radulov (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:52:05] Joueur non trouvé: Alexandre Chevtchenko (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:52:05] Joueur non trouvé: Hugo Nys (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:52:17] Joueur non trouvé: Leandro Riedi (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:52:23] Joueur non trouvé: Taym Al-Azmeh (fonction: get_wta_proba_40A_sofascore)
+[2026-02-07 12:52:31] Joueur non trouvé: Wayne Montgomery (fonction: get_wta_proba_40A_sofascore)
+>>>>>>> 8aa75760a602b43b909bb72168c2c266b2eef21c
