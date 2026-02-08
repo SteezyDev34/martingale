@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
 
@@ -35,7 +36,6 @@ if len(parts) > 1:
     config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
     if int(config.localhost) < 1024:
         config.localhost = 1024 + int(config.localhost)
-   
 
     print(f'{config.PURPLE}' + text2art(
         f"Start martingal {config.scriptType} {config.script_num}"))  # Crée un texte en art ASCII
@@ -50,13 +50,14 @@ else:
 # Chargement des functions
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
-num_fenetre = 2
+
+num_fenetre = 1
 time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 driver = get_script_driver(num_fenetre)
 
 from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
-from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
+
 config.in_stat = True
 config.scriptTypeList = config.scriptTypeList1
 for i in config.scriptTypeList:

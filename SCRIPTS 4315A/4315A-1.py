@@ -1,7 +1,5 @@
 import os
-import subprocess
 import sys
-import time
 
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
@@ -50,6 +48,7 @@ else:
 # Chargement de Chrome driver
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
+
 num_fenetre = 1
 driver = get_script_driver(num_fenetre)
 from Functions import Functions_431a
@@ -81,7 +80,7 @@ if is_in.upper() == 'Y' or is_in.upper() == 'y' or is_in.upper() == 'O' or is_in
     config.log("-" * 60, "purple", False, False, False)
     print(f"{config.PURPLE}CLASSEMENT : OUI")
     config.log("-" * 60, "purple", False, False, False)
-config.scriptTypeList = config.scriptTypeList
+config.scriptTypeList = config.scriptTypeList1
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
