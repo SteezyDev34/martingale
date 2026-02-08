@@ -177,78 +177,50 @@ def create_new_window(port, num_fenetre, url=config.site_url):
         temp_driver = init_driver(port)
         if not temp_driver:
             return None
-            
-        # Récupère l'état initial
-        initial_handles = temp_driver.window_handles
+
+        # État initial des handles
+        initial_handles = list(temp_driver.window_handles)
         initial_handle = temp_driver.current_window_handle
-        # Configure la position et la taille de la fenêtre selon la grille
+
+        # Récupère la taille d'écran et calcule position/tailles
         screen_size = temp_driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
         screen_width = screen_size[0]
         screen_height = screen_size[1]
-
         x_pos, y_pos, width, height = calculate_window_position(num_fenetre, screen_width, screen_height)
 
-        # Ouvre une nouvelle fenêtre avec l'URL spécifiée
-        temp_driver.execute_script(f"window.open('{url}', '_blank', 'width={width},height={height}')")
-        time.sleep(1)
-        
-        # Récupère les nouveaux handles et trouve le nouveau
+        # Première tentative: utiliser l'API Selenium moderne pour créer une nouvelle fenêtre
+        try:
+            temp_driver.switch_to.new_window('window')
+            temp_driver.get(url)
+        except Exception:
+            # Fallback: ouvrir via JS (certaines configurations de Chrome peuvent bloquer les popups)
+            temp_driver.execute_script(f"window.open('{url}', '_blank', 'width={width},height={height}')")
+
+        # Laisser un peu de temps pour que le navigateur crée le nouvel handle
+        time.sleep(1.0)
+
+        # Trouver le nouveau handle
         new_handles = [h for h in temp_driver.window_handles if h not in initial_handles]
         if not new_handles:
             raise Exception("Aucune nouvelle fenêtre détectée")
-            
-        # Passe à la nouvelle fenêtre
+
         new_handle = new_handles[0]
         temp_driver.switch_to.window(new_handle)
-        
-        # Configure la position et la taille de la fenêtre selon la grille
-        screen_size = temp_driver.execute_script("return [window.screen.availWidth, window.screen.availHeight];")
-        screen_width = screen_size[0]
-        screen_height = screen_size[1]
-        
-        # Utilise la nouvelle fonction de calcul de position et taille
-        x_pos, y_pos, width, height = calculate_window_position(num_fenetre, screen_width, screen_height)
-        
+
+        # Positionner et redimensionner
         temp_driver.set_window_position(x_pos, y_pos)
         temp_driver.set_window_size(width, height)
-        
+
         print(f"✅ Nouvelle fenêtre {num_fenetre} créée à ({x_pos}, {y_pos}) taille {width}x{height} (handle: {new_handle[:8]}...)")
         return new_handle
-            
+
     except Exception as e:
         print(f"❌ Erreur lors de la création d'une nouvelle fenêtre : {e}")
-        # Retour à la fenêtre initiale en cas d'erreur
+        # Retour à la fenêtre initiale si possible
         try:
-            temp_driver.switch_to.window(initial_handle)
-        except:
-            pass
-        return None
-        time.sleep(2)  # Attente un peu plus longue pour la création
-        
-        # Récupère les nouveaux handles
-        new_handles = [h for h in temp_driver.window_handles if h not in initial_handles]
-        if not new_handles:
-            raise Exception("Aucune nouvelle fenêtre détectée")
-            
-        # Sélectionne la nouvelle fenêtre
-        new_handle = new_handles[0]
-        temp_driver.switch_to.window(new_handle)
-        
-        # Configure la nouvelle fenêtre
-        temp_driver.set_window_position(200, 200)
-        temp_driver.set_window_size(1000, 800)
-        
-        
-        print(f"✅ Nouvelle fenêtre créée et configurée (handle: {new_handle[:8]}...)")
-        return new_handle
-            
-    except Exception as e:
-        print(f"❌ Erreur lors de la création d'une nouvelle fenêtre : {e}")
-        # Retour à la fenêtre initiale en cas d'erreur si possible
-        try:
-            if 'initial_handle' in locals():
+            if 'temp_driver' in locals() and 'initial_handle' in locals():
                 temp_driver.switch_to.window(initial_handle)
-        except:
+        except Exception:
             pass
         return None
 
