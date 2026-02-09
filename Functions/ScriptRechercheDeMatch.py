@@ -747,8 +747,68 @@ def classementeDeMatch(driver, use_json_cache=True):
         # Tri en fonction de la dernière valeur (indice -1) en ordre décroissant
         tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
 
-        # Retenir les 30 premiers matchs
-        top_matches = tableau_trie[:30]
+        # Fonction de priorisation des matchs par ligue
+        def prioritize_matches_by_league(matches, max_matches=30):
+            """
+            Priorise les matchs selon la hiérarchie des ligues :
+            1. ATP sans "qualification"
+            2. Challenger sans "qualification"  
+            3. WTA sans "qualification"
+            4. ATP avec "qualification"
+            5. Challenger avec "qualification"
+            6. WTA avec "qualification"
+            7. ITF sans "qualification"
+            8. ITF avec "qualification"
+            """
+            # Catégoriser les matchs par priorité
+            priority_groups = {
+                1: [],  # ATP sans qualification
+                2: [],  # Challenger sans qualification
+                3: [],  # WTA sans qualification
+                4: [],  # ATP avec qualification
+                5: [],  # Challenger avec qualification
+                6: [],  # WTA avec qualification
+                7: [],  # ITF sans qualification
+                8: []   # ITF avec qualification
+            }
+            
+            for match in matches:
+                ligue_name = match[1].lower()
+                has_qualification = 'qualification' in ligue_name
+                
+                # Déterminer la priorité basée sur le nom de la ligue
+                if 'atp' in ligue_name:
+                    priority = 4 if has_qualification else 1
+                elif 'challenger' in ligue_name:
+                    priority = 5 if has_qualification else 2
+                elif any(wta_term in ligue_name for wta_term in ['wta', 'féminin', 'femmes', 'women']):
+                    priority = 6 if has_qualification else 3
+                elif 'itf' in ligue_name:
+                    priority = 8 if has_qualification else 7
+                else:
+                    # Autres ligues, priorité basse
+                    priority = 8
+                
+                priority_groups[priority].append(match)
+            
+            # Construire la liste finale en respectant les priorités
+            final_matches = []
+            for priority in sorted(priority_groups.keys()):
+                group = priority_groups[priority]
+                # Trier chaque groupe par probabilité décroissante
+                group_sorted = sorted(group, key=lambda x: x[-1], reverse=True)
+                
+                # Ajouter les matchs jusqu'à atteindre la limite
+                remaining_slots = max_matches - len(final_matches)
+                if remaining_slots <= 0:
+                    break
+                    
+                final_matches.extend(group_sorted[:remaining_slots])
+            
+            return final_matches
+
+        # Appliquer la priorisation pour retenir les 30 meilleurs matchs
+        top_matches = prioritize_matches_by_league(tableau_trie, 30)
 
         for match in top_matches:
             try:
@@ -1036,9 +1096,69 @@ def newclassementeDeMatch(driver):
         # Tri en fonction de la dernière valeur (indice -1) en ordre décroissant
         tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
 
-        # Retenir les 10 premières lignes
-        top_10 = tableau_trie[:10]
-        for m in top_10:
+        # Fonction de priorisation des matchs par ligue (même logique que classementeDeMatch)
+        def prioritize_matches_by_league_new(matches, max_matches=30):
+            """
+            Priorise les matchs selon la hiérarchie des ligues :
+            1. ATP sans "qualification"
+            2. Challenger sans "qualification"  
+            3. WTA sans "qualification"
+            4. ATP avec "qualification"
+            5. Challenger avec "qualification"
+            6. WTA avec "qualification"
+            7. ITF sans "qualification"
+            8. ITF avec "qualification"
+            """
+            # Catégoriser les matchs par priorité
+            priority_groups = {
+                1: [],  # ATP sans qualification
+                2: [],  # Challenger sans qualification
+                3: [],  # WTA sans qualification
+                4: [],  # ATP avec qualification
+                5: [],  # Challenger avec qualification
+                6: [],  # WTA avec qualification
+                7: [],  # ITF sans qualification
+                8: []   # ITF avec qualification
+            }
+            
+            for match in matches:
+                ligue_name = match[1].lower()
+                has_qualification = 'qualification' in ligue_name
+                
+                # Déterminer la priorité basée sur le nom de la ligue
+                if 'atp' in ligue_name:
+                    priority = 4 if has_qualification else 1
+                elif 'challenger' in ligue_name:
+                    priority = 5 if has_qualification else 2
+                elif any(wta_term in ligue_name for wta_term in ['wta', 'féminin', 'femmes', 'women']):
+                    priority = 6 if has_qualification else 3
+                elif 'itf' in ligue_name:
+                    priority = 8 if has_qualification else 7
+                else:
+                    # Autres ligues, priorité moyenne
+                    priority = 4 if has_qualification else 2
+                
+                priority_groups[priority].append(match)
+            
+            # Construire la liste finale en respectant les priorités
+            final_matches = []
+            for priority in sorted(priority_groups.keys()):
+                group = priority_groups[priority]
+                # Trier chaque groupe par probabilité décroissante
+                group_sorted = sorted(group, key=lambda x: x[-1], reverse=True)
+                
+                # Ajouter les matchs jusqu'à atteindre la limite
+                remaining_slots = max_matches - len(final_matches)
+                if remaining_slots <= 0:
+                    break
+                    
+                final_matches.extend(group_sorted[:remaining_slots])
+            
+            return final_matches
+
+        # Appliquer la priorisation pour retenir les 30 meilleurs matchs (ou 10 si souhaité)
+        top_matches = prioritize_matches_by_league_new(tableau_trie, 30)
+        for m in top_matches:
             # Join array elements with pipe separator before adding to todo
             try:
                 todo("add", "|".join(str(x) for x in m), config.matchlisttodo_file_name)
