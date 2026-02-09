@@ -3,9 +3,11 @@ Module de gestion des matchs avec une instance unique globale.
 """
 import os
 import sqlite3
-from typing import List, Optional
 from datetime import datetime
+from typing import List, Optional
+
 import config
+
 
 class MatchManager:
     """
@@ -33,7 +35,9 @@ class MatchManager:
         Configure la connexion à la base de données centrale.
         """
         if not hasattr(self, '_initialized') or not self._initialized:
-            base_path = config.projectPath if isinstance(getattr(config, 'projectPath', None), str) and getattr(config, 'projectPath', None) else os.getcwd()
+            base_path = config.projectPath if isinstance(getattr(config, 'projectPath', None), str) and getattr(config,
+                                                                                                                'projectPath',
+                                                                                                                None) else os.getcwd()
             self.db_path = os.path.join(base_path, 'DataFiles', 'matches.db')
             self.strategy_name: Optional[str] = None
             self._init_db()
@@ -93,8 +97,8 @@ class MatchManager:
         headers = {
             "Content-Type": "application/json",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                        "AppleWebKit/537.36 (KHTML, like Gecko) "
-                        "Chrome/122.0.0.0 Safari/537.36"
+                          "AppleWebKit/537.36 (KHTML, like Gecko) "
+                          "Chrome/122.0.0.0 Safari/537.36"
         }
         # Normaliser le format si 'match' est un dict
         if isinstance(match, dict):
@@ -143,6 +147,7 @@ class MatchManager:
         try:
             # Envoyer les données en GET
             response = requests.get(url, params=params, headers=headers, timeout=10)
+            print(response)
             if response.status_code == 200:
                 try:
                     json_resp = response.json()
@@ -254,7 +259,7 @@ class MatchManager:
                     PRIMARY KEY (match_id, strategy)
                 )
             ''')
-            
+
             # Table pour les matchs à faire
             conn.execute('''
                 CREATE TABLE IF NOT EXISTS matches_todo (
@@ -275,15 +280,14 @@ class MatchManager:
             List[dict]: Liste des matchs à faire au format [{"match_id": str, "players": str, ...}]
         """
         import requests
-        import json
         import config
 
         url = f"{config.api_url}/matchlist/get.php"
         headers = {
             "Content-Type": "application/json",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                        "AppleWebKit/537.36 (KHTML, like Gecko) "
-                        "Chrome/122.0.0.0 Safari/537.36"
+                          "AppleWebKit/537.36 (KHTML, like Gecko) "
+                          "Chrome/122.0.0.0 Safari/537.36"
         }
 
         try:
@@ -401,7 +405,7 @@ class MatchManager:
 
             # Envoi au serveur distant
             added_remotely = self.send_matchlist_to_remote(match_payload)
-            
+
             # Si l'ajout a réussi soit localement soit à distance, on considère que c'est un succès
             return added_locally or added_remotely
 
@@ -436,8 +440,8 @@ class MatchManager:
             headers = {
                 "Content-Type": "application/json",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                            "AppleWebKit/537.36 (KHTML, like Gecko) "
-                            "Chrome/122.0.0.0 Safari/537.36"
+                              "AppleWebKit/537.36 (KHTML, like Gecko) "
+                              "Chrome/122.0.0.0 Safari/537.36"
             }
             data = {
                 "match_id": match_id
@@ -495,7 +499,7 @@ class MatchManager:
                 (self.strategy_name, f'-{days} days')
             )
             deleted_count = cursor.rowcount
-            
+
             # Nettoyer aussi les matchs_todo
             cursor = conn.execute(
                 """
@@ -505,7 +509,7 @@ class MatchManager:
                 (f'-{days} days',)
             )
             deleted_count += cursor.rowcount
-            
+
             return deleted_count
 
     def clear_all_matches(self, strategy_only: bool = True) -> int:
@@ -531,7 +535,7 @@ class MatchManager:
         """
         if strategy_only and not self.strategy_name:
             raise ValueError("Une stratégie doit être définie pour supprimer les matchs par stratégie")
-            
+
         with sqlite3.connect(self.db_path) as conn:
             if strategy_only:
                 cursor = conn.execute(
@@ -541,8 +545,9 @@ class MatchManager:
             else:
                 cursor = conn.execute("DELETE FROM matches")
                 cursor.execute("DELETE FROM matches_todo")
-            
+
             return cursor.rowcount
+
 
 # Instance globale et helper pour récupérer l'instance configurée
 def get_match_manager(strategy_name: Optional[str] = None) -> MatchManager:
@@ -558,6 +563,7 @@ def get_match_manager(strategy_name: Optional[str] = None) -> MatchManager:
     """
     instance = MatchManager.get_instance(strategy_name)
     return instance
+
 
 # Expose une instance globale par défaut pour compatibilité
 try:

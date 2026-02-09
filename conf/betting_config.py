@@ -23,7 +23,7 @@ total_want_win_bpk = {
     '4015': 0.1,
     '4030': 0.1,
 }
-total_want_win_old = {
+total_want_win = {
     '030': 0.1,
     '300': 0.1,
     '150': 0.1,
@@ -40,11 +40,11 @@ total_want_win_old = {
     '4030': 0.1,
 }
 # if lost
-total_want_win = {
+total_want_win_if_lost = {
     '030': 0.1,
     '300': 1.9,
     '150': 1.9,
-    '015': 1.9,
+    '015': 0.1,
     '15A': 1.9,
     '30A': 1.9,
     '40A': 0.1,

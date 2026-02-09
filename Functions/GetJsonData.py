@@ -57,6 +57,7 @@ def get1setGlobalPerte():
         if len(response.json()) > 0:
             pertes = response.json()[0]
         else:
+            print(response.json())
             return False
         # Afficher les données pour vérification
     except requests.exceptions.RequestException as e:
