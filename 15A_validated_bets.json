@@ -106,5 +106,59 @@
         "winscore": "15:15",
         "timestamp": "2026-02-07 14:28:19",
         "url": "wta abu dhabi"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2026-02-09 02:23:07",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 0.69,
+        "cote": "1.87",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2026-02-09 02:25:56",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 1.49,
+        "cote": "2",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2026-02-09 02:29:47",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 3.74,
+        "cote": "1.85",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2026-02-09 02:33:13",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 7.12,
+        "cote": "2",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2026-02-09 02:38:14",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 16.99,
+        "cote": "1.85",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:15",
+        "timestamp": "2026-02-09 02:43:21",
+        "url": "challenger baton rouge qualification"
     }
 ]

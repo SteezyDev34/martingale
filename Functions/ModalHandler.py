@@ -10,7 +10,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 from Functions.DeleteBet import DeleteBet
 from Functions.GetIfNewSite import GetIfNewSite
-
+from Functions.GetScoreActuel import GetScoreActuel
 
 def ModalHandler(driver):
     validation = False
@@ -19,6 +19,7 @@ def ModalHandler(driver):
     logline = 1
     fenetre_validation = 0
     while fenetre_validation == 0 and tentative <= 2:
+        GetScoreActuel(driver)
         tentative = tentative + 1
         # NOTIF VALIDATION
         try:
@@ -46,16 +47,18 @@ def ModalHandler(driver):
                             (By.CLASS_NAME,
                              config.classes['close_modal_btn'][config.site_type]))
                     )
+                    modal_wrapper = \
+                        driver.find_elements(By.CLASS_NAME, config.classes['close_modal_btn'][config.site_type])[0]
                 except:
                     config.log(f'            Impossible de cliquer sur Ok', 'warning', False)
                     logline += 1
                 else:
                     time.sleep(2)
-                    modal_wrapper = \
-                        driver.find_elements(By.CLASS_NAME, config.classes['close_modal_btn'][config.site_type])[0]
+                    
                     modal_wrapper.click()
                     config.log(f'PARIS VALIDÉ', 'success', False, indent=3)
                     return True
+        GetScoreActuel(driver)
         # NOTIF QUESTION
         try:
             element = WebDriverWait(driver, 1).until(EC.visibility_of_element_located(
@@ -96,6 +99,7 @@ def ModalHandler(driver):
                 driver.find_element(By.CLASS_NAME, config.classes['popup_submit'][config.site_type]).click()
 
         # NOTIF ALERT
+        GetScoreActuel(driver)
         try:
             element = WebDriverWait(driver, 1).until(EC.visibility_of_element_located(
                 (By.CLASS_NAME, config.classes['notification_alert'][config.site_type])))
@@ -141,6 +145,7 @@ def ModalHandler(driver):
                 driver.find_element(By.CLASS_NAME, config.classes['popup_submit'][config.site_type]).click()
                 return False
         # NOTIF VALIDATION
+        GetScoreActuel(driver)
         try:
             element = WebDriverWait(driver, 2).until(
                 EC.visibility_of_element_located(
@@ -167,12 +172,13 @@ def ModalHandler(driver):
                             (By.CLASS_NAME,
                              config.classes['close_modal_btn'][config.site_type]))
                     )
+                    modal_wrapper = \
+                        driver.find_elements(By.CLASS_NAME, config.classes['close_modal_btn'][config.site_type])[0]
                 except:
                     config.log(f'Impossible de cliquer sur Ok', 'warning', False, indent=3)
                     logline +=1
                 else:
-                    modal_wrapper = \
-                        driver.find_elements(By.CLASS_NAME, config.classes['close_modal_btn'][config.site_type])[0]
+                   
                     modal_wrapper.click()
                     config.log_clear_line(logline)
                     config.log(f'PARIS VALIDÉ', 'success', False, indent=3)

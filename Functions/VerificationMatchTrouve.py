@@ -48,17 +48,18 @@ def main(driver, bet_item, matchlist_file_name):
             driver.get(newmatchtxt)
             config.log_clear_line()
             return [True, config.newmatch]
-        elif not config.in_stat and not match_is_todo and not match_is_done:
+        elif config.in_stat and not match_is_todo and not match_is_done:
             config.log('Le match  n\'est pas autorisé!', 'warning', True, 4, False)
-            # blocage des autres match en atente d'un plus gros BK
-            return [False, config.newmatch]
+            #blocage des autres match en atente d'un plus gros BK
+            #return [False, config.newmatch]
+            print('vérif si perte')
             p = config.perte
             if not p or p == 0:
                 p = getIfGlobalPerte()
             if not p or p == 0:
                 p = getIf1setGlobalPerte()
             if not p or p == 0:
-                config.log('Le match  n\'est pas autorisé!', 'warning', True, 4, False)
+                config.log('Le match  n\'est pas autorisé! pas de perte', 'warning', True, 4, False)
                 return [False, config.newmatch]
             else:
                 config.log('Le match  non autorisé mais perte en cours', 'success', False, 4, False)

@@ -5122,5 +5122,953 @@
         ],
         "timestamp": "2025-11-05 17:11:53",
         "url": "wta world tour finals riyadh"
+    },
+    {
+        "montant": 0.48,
+        "cote": "3.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 11:04:37",
+        "url": "wta doha"
+    },
+    {
+        "montant": 0.84,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 11:10:45",
+        "url": "wta doha"
+    },
+    {
+        "montant": 1.3,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 11:16:20",
+        "url": "wta doha"
+    },
+    {
+        "montant": 1.84,
+        "cote": "3.4",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 11:22:34",
+        "url": "wta doha"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.28",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 11:38:48",
+        "url": "wta doha"
+    },
+    {
+        "montant": 0.24,
+        "cote": "3.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 11:42:06",
+        "url": "wta doha"
+    },
+    {
+        "montant": 0.43,
+        "cote": "3.4",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 11:45:18",
+        "url": "wta doha"
+    },
+    {
+        "montant": 0.53,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 12:40:58",
+        "url": "atp rotterdam qualification"
+    },
+    {
+        "montant": 0.8,
+        "cote": "3.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 12:46:22",
+        "url": "atp rotterdam qualification"
+    },
+    {
+        "montant": 1.47,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 12:49:02",
+        "url": "atp rotterdam qualification"
+    },
+    {
+        "montant": 0.21,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 14:00:50",
+        "url": "atp rotterdam qualification"
+    },
+    {
+        "montant": 0.5,
+        "cote": "2.75",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 14:06:00",
+        "url": "atp rotterdam qualification"
+    },
+    {
+        "montant": 1.62,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 15:07:14",
+        "url": "atp montpellier"
+    },
+    {
+        "montant": 3.12,
+        "cote": "2.75",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 15:13:01",
+        "url": "atp montpellier"
+    },
+    {
+        "montant": 3.66,
+        "cote": "3.4",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-08 15:16:07",
+        "url": "atp montpellier"
+    },
+    {
+        "montant": 2.17,
+        "cote": "3.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-09 00:15:16",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 19:02:50",
+        "url": "itf sharm el sheikh women"
+    },
+    {
+        "montant": 0.24,
+        "cote": "3.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 19:11:21",
+        "url": "itf sharm el sheikh women"
+    },
+    {
+        "montant": 0.34,
+        "cote": "3.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 19:17:44",
+        "url": "itf sharm el sheikh women"
+    },
+    {
+        "montant": 0.49,
+        "cote": "3.4",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 19:21:41",
+        "url": "itf sharm el sheikh women"
+    },
+    {
+        "montant": 0.23,
+        "cote": "2.75",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 19:39:22",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 0.28,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 19:46:40",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 0.23,
+        "cote": "2.75",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 19:59:53",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 20:11:02",
+        "url": "challenger pau"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 20:14:40",
+        "url": "challenger pau"
+    },
+    {
+        "montant": 0.45,
+        "cote": "3",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 20:20:05",
+        "url": "challenger pau"
+    },
+    {
+        "montant": 0.6,
+        "cote": "3.25",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 20:24:09",
+        "url": "challenger pau"
+    },
+    {
+        "montant": 0.97,
+        "cote": "3",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 20:29:20",
+        "url": "challenger pau"
+    },
+    {
+        "montant": 1.22,
+        "cote": "3.4",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 20:31:50",
+        "url": "challenger pau"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 20:40:45",
+        "url": "challenger baton rouge"
+    },
+    {
+        "montant": 0.27,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 20:47:32",
+        "url": "challenger baton rouge"
+    },
+    {
+        "montant": 0.39,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 20:51:59",
+        "url": "challenger baton rouge"
+    },
+    {
+        "montant": 0.56,
+        "cote": "3.25",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 21:00:53",
+        "url": "challenger baton rouge"
+    },
+    {
+        "montant": 0.81,
+        "cote": "3.25",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 21:07:08",
+        "url": "challenger baton rouge"
+    },
+    {
+        "montant": 0.21,
+        "cote": "2.93",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 21:15:36",
+        "url": "atp dallas"
+    },
+    {
+        "montant": 0.23,
+        "cote": "2.75",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 21:36:53",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 22:09:20",
+        "url": "itf sunrise"
+    },
+    {
+        "montant": 0.27,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 22:18:24",
+        "url": "itf sunrise"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 23:27:43",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.29,
+        "cote": "3.04",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 23:32:16",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.42,
+        "cote": "3.1",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 23:36:24",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.58,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-11 23:38:33",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.25",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 00:01:39",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.27,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 00:08:29",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.23,
+        "cote": "2.75",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 02:07:00",
+        "url": "atp dallas"
+    },
+    {
+        "montant": 0.32,
+        "cote": "2.97",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 02:12:43",
+        "url": "atp dallas"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 11:08:24",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 11:17:23",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 14:38:45",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 14:44:37",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 0.45,
+        "cote": "3",
+        "jeu": 11,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 14:49:52",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 0.67,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 14:53:31",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 0.9,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 14:57:40",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 1.46,
+        "cote": "3",
+        "jeu": 3,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 15:00:16",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 2.19,
+        "cote": "3",
+        "jeu": 4,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 15:04:15",
+        "url": "atp rotterdam"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 15:09:19",
+        "url": "wta doha"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 15:34:57",
+        "url": "itf antalya"
+    },
+    {
+        "montant": 0.24,
+        "cote": "3.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 15:39:32",
+        "url": "itf antalya"
+    },
+    {
+        "montant": 0.37,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 15:41:58",
+        "url": "itf antalya"
+    },
+    {
+        "montant": 0.48,
+        "cote": "3.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 15:47:04",
+        "url": "itf antalya"
+    },
+    {
+        "montant": 0.75,
+        "cote": "3.25",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 15:52:26",
+        "url": "itf antalya"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.4",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 16:00:02",
+        "url": "itf antalya"
+    },
+    {
+        "montant": 0.27,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 16:11:07",
+        "url": "itf antalya"
+    },
+    {
+        "montant": 0.35,
+        "cote": "3.5",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 16:16:49",
+        "url": "itf antalya"
+    },
+    {
+        "montant": 0.54,
+        "cote": "3.25",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 16:21:20",
+        "url": "itf antalya"
+    },
+    {
+        "montant": 0.78,
+        "cote": "3.25",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 16:29:53",
+        "url": "itf antalya"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 16:41:19",
+        "url": "itf manacor women"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 19:36:27",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 19:42:52",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.18",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 19:46:20",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.25,
+        "cote": "3.4",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 19:50:36",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.35,
+        "cote": "3.4",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 19:54:15",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.5,
+        "cote": "3.4",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 20:06:24",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.77,
+        "cote": "3.22",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 20:12:04",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 1.03,
+        "cote": "3.4",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 20:15:01",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 1.56,
+        "cote": "3.25",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 20:21:36",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 2.11,
+        "cote": "3.4",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 20:26:28",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 3.55,
+        "cote": "3.02",
+        "jeu": 11,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 20:33:10",
+        "url": "atp buenos aires"
+    },
+    {
+        "montant": 4.47,
+        "cote": "3.4",
+        "jeu": 12,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-12 20:39:27",
+        "url": "atp buenos aires"
     }
 ]

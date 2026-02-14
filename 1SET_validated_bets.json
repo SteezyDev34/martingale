@@ -1,56 +1,92 @@
 [
     {
-        "montant": 0.53,
-        "cote": "1.752",
+        "montant": 1.43,
+        "cote": "1.28",
         "jeu": 1,
         "set": "1",
         "winscore": "V2",
-        "timestamp": "2026-02-07 03:46:06",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1093945-itf-brisbane-women/693556048-talia-gibson-lin-zhu"
+        "timestamp": "2026-02-12 10:58:00",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2962154-itf-almoradi/695030600-lucca-helguera-casado-imanol-lopez-morillo"
     },
     {
-        "montant": 0.68,
-        "cote": "1.585",
-        "jeu": 2,
-        "set": "1",
-        "winscore": "V2",
-        "timestamp": "2026-02-07 05:13:54",
-        "url": "https://ca.1xbet.com/fr/live/tennis/2928401-davis-cup-teams/693568086-china-portugal"
-    },
-    {
-        "montant": 0.96,
-        "cote": "1.248",
+        "montant": 0.46,
+        "cote": "1.432",
         "jeu": 1,
         "set": "1",
         "winscore": "V1",
-        "timestamp": "2026-02-08 00:58:56",
-        "url": "https://ca.1xbet.com/fr/live/tennis/2809488-challenger-brisbane-qualification/693854331-matthew-dellavedova-jesse-delaney"
+        "timestamp": "2026-02-13 05:11:49",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2809532-challenger-brisbane/695231517-rei-sakamoto-li-tu"
     },
     {
-        "montant": 0.23,
-        "cote": "1.87",
+        "montant": 0.87,
+        "cote": "1.23",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2026-02-13 06:47:49",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2813285-challenger-brisbane-2/695242703-hiroki-moriya-dane-sweeny"
+    },
+    {
+        "montant": 0.42,
+        "cote": "1.475",
         "jeu": 1,
         "set": "1",
         "winscore": "V1",
-        "timestamp": "2026-02-08 09:59:39",
-        "url": "https://ca.1xbet.com/fr/live/tennis/945305-itf-grenoble-women-qualification/693940827-clara-vlasselaer-diana-martynov"
+        "timestamp": "2026-02-13 06:54:08",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1716975-wta-dubai-qualification/695245540-elsa-jacquemot-veronika-erjavec"
     },
     {
-        "montant": 1.04,
-        "cote": "1.192",
+        "montant": 0.31,
+        "cote": "1.648",
         "jeu": 1,
         "set": "1",
         "winscore": "V2",
-        "timestamp": "2026-02-08 10:04:27",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1867260-challenger-chennai-qualification/693943433-keerthivassan-suresh-siddhant-banthia"
+        "timestamp": "2026-02-13 06:55:23",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1716975-wta-dubai-qualification/695245660-moyuka-uchijima-anna-bondar"
     },
     {
-        "montant": 0.74,
-        "cote": "1.54",
+        "montant": 0.28,
+        "cote": "1.704",
         "jeu": 1,
         "set": "1",
         "winscore": "V2",
-        "timestamp": "2026-02-08 10:49:07",
-        "url": "https://ca.1xbet.com/fr/live/tennis/1445657-itf-javea/693950141-gabriele-maria-noce-carles-cordoba"
+        "timestamp": "2026-02-13 06:56:42",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1716975-wta-dubai-qualification/695245680-solana-sierra-kamilla-rakhimova"
+    },
+    {
+        "montant": 0.71,
+        "cote": "1.565",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2026-02-14 06:55:09",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1716975-wta-dubai-qualification/695529671-hailey-baptiste-rebecca-sramkova"
+    },
+    {
+        "montant": 0.48,
+        "cote": "1.825",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2026-02-14 06:56:23",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1716975-wta-dubai-qualification/695529677-kamilla-rakhimova-ella-seidel"
+    },
+    {
+        "montant": 0.77,
+        "cote": "1.52",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2026-02-14 06:57:52",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1716975-wta-dubai-qualification/695529680-veronika-erjavec-moyuka-uchijima"
+    },
+    {
+        "montant": 0.48,
+        "cote": "1.825",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2026-02-14 07:02:16",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2813285-challenger-brisbane-2/695530766-zhizhen-zhang-rei-sakamoto"
     }
 ]
