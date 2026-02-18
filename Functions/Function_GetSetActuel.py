@@ -8,7 +8,7 @@ import config
 
 def GetQTActuel(driver):
     try:
-        config.qt_actuel = driver.find_elements(By.CLASS_NAME, 'scoreboard-status')[0].text
+        period = driver.find_elements(By.CLASS_NAME, 'scoreboard-status')[0].text
     except Exception as e:
         config.log(f"#E0009\nUne erreur est survenue : {e}", config.newmatch)
         config.log("erreur : scoreboard-status", config.newmatch)
@@ -16,24 +16,27 @@ def GetQTActuel(driver):
     else:
         try:
             # config.log("Vérification si numéro de QT bien récupéré", 0, config.newmatch)
+            score_block = driver.find_element(By.CLASS_NAME, 'scoreboard-periods-table__content')
+            score_col = score_block.find_elements(By.CLASS_NAME, 'scoreboard-periods-table__col')[-1]
+            config.qt_actuel = score_col.find_element(By.CLASS_NAME, 'scoreboard-periods-table-cell--th').text
             numset = config.qt_actuel.split(' ')[0]
             numset = int(''.join(char for char in numset if char.isdigit()))
         except Exception as e:
-            config.log(f"#E0010\nUne erreur est survenue : {e}", config.newmatch)
+            config.log(f"#E0010AZ\nUne erreur est survenue : {e}", config.newmatch)
             config.log("erreur : numset", config.newmatch)
             return False
         else:
-            config.qt_actuel = int(numset)
-            period = driver.find_elements(By.CLASS_NAME, 'scoreboard-status')
-            period = period[0].text
             if 'mi-temps' in period.lower():
-                config.qt_actuel = config.qt_actuel + 1
-            if 'fin' in period.lower():
+                config.qt_actuel = numset + 1
+            elif 'fin' in period.lower():
                 config.qt_actuel = 9
-            # config.log(str(numset) + ' QT', 0, config.newmatch)
+            else:
+                config.qt_actuel = numset
+            config.log(str(config.qt_actuel) + ' QT', 0, config.newmatch)
+
             if config.saved_set != config.qt_actuel:
                 print('QT actuel : ', config.qt_actuel)
-                # config.log('Récupération du QT actuel : ' + str(config.qt_actuel), 0, config.newmatch)
+                config.log('Récupération du QT actuel : ' + str(config.qt_actuel), 0, config.newmatch)
 
     return True
 

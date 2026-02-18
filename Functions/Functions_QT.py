@@ -1,4 +1,5 @@
 import json
+import os
 import time
 from datetime import datetime, timedelta
 
@@ -12,11 +13,16 @@ from Functions.FisrtQTBet import FirstQTBet
 from Functions.Function_GetSetActuel import GetQTActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import remove_match_from_json_file
-from Functions.GetIfGameStart import GetIfQTEnd
 from Functions.GetJsonData import getGlobalPerte, SendGlobalPerte, QTDispatchPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
+from Functions.VerificationMatchTrouve import extract_match_slug_from_url
 from Functions.VerificationMatchTrouve import newmatchFromUrl
+
+
+def _get_qt_validated_bets_path():
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(project_root, 'QT_validated_bets.json')
 
 
 def all_script(driver):
@@ -26,7 +32,11 @@ def all_script(driver):
     scriptDelRunning()
     # --------
     # SCRIPT RECHERCHE DE MATCH
-    config.match_found = False  # rechercheDeMatch(driver)
+    #
+    #
+    #
+    # rechercheDeMatch(driver)
+    config.match_found = False
 
     # --------
     if config.match_found:
@@ -63,60 +73,67 @@ def all_script(driver):
     # VÉRIFICATION DES MATCH
     print('START CHEKING LIST')
     time.sleep(5)
-
-    try:
-        # RECUPERATION DES LIGUES EN COURS
-        # config.log(' Récupération des ligues', 'info', True, 1)
-        bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                              'dashboard-champ')
-    except:
-        config.log('ligues introuvables!', 'warning', True, 2)
-        return False
-    else:
-        config.log('ligues trouvées!', 'success', True, 2)
-        # POUR CHAQUE LIGUE RÉCUPÉRÉE
-        for bet_ligue in bet_list_ligue:
-            # ON RÉCUPÈRE LE NOM DE LA LIGUE
-            config.ligue_name = GetLigueName.main(bet_ligue)
-            # EN CAS D'ERREUR
-            if not config.ligue_name:
-                # config.log('nom ligues introuvalbe!', 'warning', False, 2)
-                config.log_clear_line()
-                config.error = False
-                continue
-            # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-            # config.log(' ' + config.ligue_name, 'info', False, 2)
-            # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
-            try:
-                config.log('Récupération des matchs', 'info', False, 3)
-                config.log_clear_line()
-                bet_items = bet_ligue.find_elements(By.CLASS_NAME,
-                                                    'dashboard-champ__game')
-            except:
-                # config.log('Listes des matchs introuvables!', 'warning', False, 3)
-                # s'il y une erreur on passe au suivant
-                continue
-            else:
-                if len(bet_items) <= 0:
+    matches_ok = True
+    while matches_ok:
+        matches_ok = False
+        try:
+            # RECUPERATION DES LIGUES EN COURS
+            # config.log(' Récupération des ligues', 'info', True, 1)
+            bet_list_ligue = driver.find_elements(By.CLASS_NAME,
+                                                  'dashboard-champ')
+        except:
+            config.log('ligues introuvables!', 'warning', True, 2)
+            return False
+        else:
+            config.log('ligues trouvées!', 'success', True, 2)
+            # POUR CHAQUE LIGUE RÉCUPÉRÉE
+            for bet_ligue in bet_list_ligue:
+                if matches_ok:
+                    break
+                # ON RÉCUPÈRE LE NOM DE LA LIGUE
+                config.ligue_name = GetLigueName.main(bet_ligue)
+                # EN CAS D'ERREUR
+                if not config.ligue_name:
+                    # config.log('nom ligues introuvalbe!', 'warning', False, 2)
+                    config.log_clear_line()
+                    config.error = False
+                    continue
+                # ON VÉRIFIE QUE LA COMPET EST JOUABLE
+                # config.log(' ' + config.ligue_name, 'info', False, 2)
+                # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
+                try:
+                    config.log('Récupération des matchs', 'info', False, 3)
+                    config.log_clear_line()
+                    bet_items = bet_ligue.find_elements(By.CLASS_NAME,
+                                                        'dashboard-champ__game')
+                except:
                     # config.log('Listes des matchs introuvables!', 'warning', False, 3)
                     # s'il y une erreur on passe au suivant
-                    config.log_clear_line(2)
-                    continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
-                for bet_item in bet_items:
-
-                    # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
-                    newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
-                                                         'dashboard-game-block__link')[
-                        0].get_attribute(
-                        "href")
-                    newmatch = newmatchtxt.split(
-                        '-')
-                    config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
-                    config.log(config.newmatch, 'info', False, 4)
-                    # Check if newmatch exists in JSON file
-                    try:
-                        with open('QT_validated_bets.json', 'r') as f:
-                            match_data = json.load(f)
+                    continue
+                else:
+                    if len(bet_items) <= 0:
+                        # config.log('Listes des matchs introuvables!', 'warning', False, 3)
+                        # s'il y une erreur on passe au suivant
+                        config.log_clear_line(2)
+                        continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
+                    for bet_item in bet_items:
+                        if matches_ok:
+                            break
+                        # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
+                        newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
+                                                             'dashboard-game-block__link')[
+                            0].get_attribute(
+                            "href")
+                        config.newmatch = extract_match_slug_from_url(newmatchtxt)
+                        # config.log(config.newmatch, 'info', False, 4)
+                        # Check if newmatch exists in JSON file
+                        try:
+                            json_file = _get_qt_validated_bets_path()
+                            try:
+                                with open(json_file, 'r') as f:
+                                    match_data = json.load(f)
+                            except FileNotFoundError:
+                                match_data = []
                             # Vérifie si config.newmatch est présent dans l'URL du fichier JSON
                             original_tab = driver.current_window_handle  # Mémorise l'onglet actuel
                             for match in match_data:
@@ -127,15 +144,20 @@ def all_script(driver):
                                         config.perte = float(match['montant']) * float(match['cote'])
                                         QTDispatchPerte()
                                         print('insertion')
-                                        remove_match_from_json_file('QT_validated_bets.json', match['url'],
+                                        remove_match_from_json_file(json_file, match['url'],
                                                                     match['scripttype'], match['timestamp'])
                                         print('remove')
                                         config.error = 'LOSE'
                                         continue
                                 for scriptType in config.scriptTypeList:
                                     config.switchScript(scriptType)
-                                    if 'url' in match and config.newmatch in match['url'] and config.scriptType in \
-                                            match['scriptype']:
+                                    print('scriptType : ' + scriptType)
+
+                                    if 'url' in match and config.newmatch in match[
+                                        'url'] and config.scriptType.lower() in \
+                                            match['scripttype'].lower():
+                                        print(config.newmatch, match['url'], match['scripttype'], config.scriptType)
+
                                         div_bet_score = bet_item.find_elements(By.CLASS_NAME,
                                                                                'ui-game-scores')
                                         qt_section = div_bet_score[0].find_elements(By.CLASS_NAME,
@@ -149,7 +171,7 @@ def all_script(driver):
                                         if period != "Mi-temps":
                                             period = period.split(' ')[0]
                                             period = int(''.join(char for char in period if char.isdigit()))
-
+                                        print('period', period, 'qt_actuel', qt_actuel)
                                         if (period == "Mi-temps" and int(qt_actuel) == int(match['qt'])) or (
                                                 period != "Mi-temps" and int(period) != int(match['qt'])):
                                             # print('MATCH NON TERMINÉ SELON SCORE')
@@ -160,7 +182,6 @@ def all_script(driver):
                                         newurl = bet_item.find_elements(By.CLASS_NAME, 'dashboard-game-block__link')[
                                             0].get_attribute(
                                             "href")
-                                        print('# ✅ Ouvre un nouvel onglet via JavaScript')
                                         driver.get(newurl)
                                         time.sleep(5)
                                         config.validated_bet = {
@@ -177,7 +198,6 @@ def all_script(driver):
                                         config.qt_actuel = match['qt']
                                         config.win_type = match['win']
                                         GetLigueName.fromUrl(driver)
-                                        GetIfQTEnd(driver)
                                         txtlog = "QT TERMINÉ ON PREPARE LE PROCHAIN BET"
                                         config.log(txtlog, config.newmatch)
                                         result = GetResult(driver)
@@ -187,26 +207,32 @@ def all_script(driver):
                                                 QTDispatchPerte()
                                             else:
                                                 FirstQTBet(driver)
-                                            remove_match_from_json_file('QT_validated_bets.json', match['url'],
-                                                                        match['scriptype'], match['timestamp'])
+                                                print('BET VALIDE')
+                                            remove_match_from_json_file(json_file, match['url'],
+                                                                        match['scripttype'], match['timestamp'])
                                         elif result == 'WIN':
                                             config.perte = 0
                                             config.init_variable()
                                             DeleteBet(driver)
-                                            remove_match_from_json_file('QT_validated_bets.json', match['url'],
-                                                                        match['scriptype'], match['timestamp'])
+                                            remove_match_from_json_file(json_file, match['url'],
+                                                                        match['scripttype'], match['timestamp'])
                                             Functions_1XBET.update_match_done("del", config.newmatch,
                                                                               config.matchlist_file_name)
 
-                                            continue
+                                        matches_ok = True
+                                        driver.get(config.site_url)
+                                        break
                                         ##PREPARATTION PREMIER PARIS
 
-                                # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
-                                # RetourTpsReg(driver)
+                                    # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
+
+                                    # RetourTpsReg(driver)
 
 
-                    except Exception as e:
-                        print(e)
+
+                        except Exception as e:
+                            print('ERR', e)
+            return True
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)
     return True

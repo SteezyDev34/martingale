@@ -5,4 +5,6 @@ def main(matchlist_file_name):
     get_matchlist = get_matchlist_file.read()
     get_matchlist_file.close()
     match_list = get_matchlist.split('\n')
+
+    print(match_list)
     return match_list

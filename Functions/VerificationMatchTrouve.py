@@ -1,10 +1,27 @@
 # Function_VerificationMatchTrouve
 # VERRIFICATION DU MATCH TROUVÉ
 
+from urllib.parse import urlparse
+
 from selenium.webdriver.common.by import By
 
 import config
 from Functions import GetMatchDone
+
+
+def extract_match_slug_from_url(match_url):
+    path = urlparse(match_url).path.strip('/')
+    if not path:
+        return ''
+
+    last_segment = path.split('/')[-1]
+    if not last_segment:
+        return ''
+
+    parts = [part for part in last_segment.split('-') if part]
+    if len(parts) >= 2 and parts[0].isdigit():
+        return '-'.join(parts[1:])
+    return '-'.join(parts)
 
 
 def main(driver, bet_item, matchlist_file_name):
@@ -14,15 +31,14 @@ def main(driver, bet_item, matchlist_file_name):
                                              'dashboard-game-block__link')[
             0].get_attribute(
             "href")
-        newmatch = newmatchtxt.split(
-            '-')
-        config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
+        config.newmatch = extract_match_slug_from_url(newmatchtxt)
+        print(config.newmatch)
     except Exception as e:
         config.log('Impossible de lire le lien du match!', 'warning', False, 4)
         config.log_clear_line()
         return [False, config.newmatch]
     else:
-        match_list = GetMatchDone.main(config.matchlisttodo_file_name)
+        match_list = GetMatchDone.main(config.matchlist_file_name)
         if config.in_stat and any(config.newmatch in x for x in match_list):
             config.log('Le match autorisé!', 'success', False, 4)
             driver.get(newmatchtxt)
@@ -42,9 +58,7 @@ def getstats(driver, bet_item, matchlist_file_name):
                                              'dashboard-game-block__link')[
             0].get_attribute(
             "href")
-        newmatch = newmatchtxt.split(
-            '-')
-        config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
+        config.newmatch = extract_match_slug_from_url(newmatchtxt)
     except Exception as e:
         print(f"#E0007\nUne erreur est survenue : {e}")
         print('Impossible de lire le lien du match!')
@@ -69,9 +83,7 @@ def fromUrl(driver, matchlist_file_name):
     try:
         config.log('            Vérification si match déjà parié', 'info', True)
         newmatchtxt = driver.current_url
-        newmatch = newmatchtxt.split(
-            '-')
-        config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
+        config.newmatch = extract_match_slug_from_url(newmatchtxt)
     except Exception as e:
         config.log('            Impossible de lire le lien du match!', 'warning', False)
         return [False, config.newmatch]
@@ -89,9 +101,7 @@ def fromUrl(driver, matchlist_file_name):
 def newmatchFromUrl(driver):
     try:
         newmatchtxt = driver.current_url
-        newmatch = newmatchtxt.split(
-            '-')
-        config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
+        config.newmatch = extract_match_slug_from_url(newmatchtxt)
     except Exception as e:
         config.log('        Impossible de lire le lien du match!', 'warning', False)
         config.log_clear_line()

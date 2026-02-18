@@ -15,6 +15,11 @@ from Functions.ModalHandler import ModalHandler
 from Functions.PlacerMise import PlacerMise
 
 
+def _get_qt_validated_bets_path():
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(project_root, 'QT_validated_bets.json')
+
+
 def SendBetData():
     """
     Envoie les données du pari à l'API.
@@ -138,7 +143,10 @@ def ValidationDuParis(driver, nexbet=False):
                             getbtn = driver.find_element(By.CLASS_NAME,
                                                          config.classes['coupon_buttons'][config.site_type])
                             try:
-                                getbtn.click()
+                                #getbtn.click()
+                                print('clic sur placer le pari pour dev a supp')
+                                validation = True
+                                break
                             except:
                                 tentative = tentative + 1
                                 if ModalHandler(driver):
@@ -202,7 +210,7 @@ def ValidationDuParis(driver, nexbet=False):
         }
 
         # Save validated bet to JSON file named after script type
-        json_filename = f"QT_validated_bets.json"
+        json_filename = _get_qt_validated_bets_path()
         try:
             # Chargement des paris existants avec gestion de corruption JSON
             try:
