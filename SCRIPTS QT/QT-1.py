@@ -59,10 +59,9 @@ config.init_variable()
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
 while (config.win < 100):
-    Functions_QT.all_script(driver)
     tour = 0
     try:
-        pass
+        Functions_QT.all_script(driver)
     except Exception as e:
         config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
@@ -74,10 +73,12 @@ while (config.win < 100):
         sucess = False
         while not sucess:
             try:
+                print(config.site_url)
                 driver.get(config.site_url)
             except:
                 continue
             else:
+                print("success", sucess)
                 sucess = True
 
 print('TOTAL WIN : ' + str(config.win))

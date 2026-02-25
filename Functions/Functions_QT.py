@@ -16,6 +16,7 @@ from Functions.Functions_1XBET import remove_match_from_json_file
 from Functions.GetJsonData import getGlobalPerte, SendGlobalPerte, QTDispatchPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
+from Functions.ScriptRechercheDeMatch import rechercheDeMatch
 from Functions.VerificationMatchTrouve import extract_match_slug_from_url
 from Functions.VerificationMatchTrouve import newmatchFromUrl
 
@@ -35,9 +36,8 @@ def all_script(driver):
     #
     #
     #
-    # rechercheDeMatch(driver)
     config.match_found = False
-
+    rechercheDeMatch(driver)
     # --------
     if config.match_found:
         if config.match_found and not config.error:
@@ -173,6 +173,8 @@ def all_script(driver):
                                             period = int(''.join(char for char in period if char.isdigit()))
                                         print('period', period, 'qt_actuel', qt_actuel)
                                         if (period == "Mi-temps" and int(qt_actuel) == int(match['qt'])) or (
+                                                period == "Mi-temps" and int(qt_actuel) > int(match['qt']) and
+                                                qt_section[-1].text.strip().replace('\n', '') == "00") or (
                                                 period != "Mi-temps" and int(period) != int(match['qt'])):
                                             # print('MATCH NON TERMINÉ SELON SCORE')
                                             print('MATCH TROUVÉ')

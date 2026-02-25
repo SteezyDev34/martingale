@@ -43,7 +43,7 @@ def rechercheDeMatch(driver):
             for bet_ligue in bet_list_ligue:
                 # ON RÉCUPÈRE LE NOM DE LA LIGUE
                 config.ligue_name = GetLigueName.main(bet_ligue)
-                config.ligue_name = config.ligue_name
+                # config.ligue_name = config.ligue_name
                 # EN CAS D'ERREUR
                 if not config.ligue_name:
                     config.log('nom ligues introuvalbe!', 'warning', False, 2)

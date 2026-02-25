@@ -18,6 +18,7 @@ def main(bet_ligue):
                                                             'dashboard-champ-name__caption')
             config.ligue_name = config.ligue_name.text.lower()
             config.ligue_name = config.ligue_name.replace('.', '')
+            print(config.ligue_name)
         except Exception as e:
             config.log(f'#E0005 Une erreur est survenue : {e}', 'warning', False, 2)
             config.ligue_name = False
