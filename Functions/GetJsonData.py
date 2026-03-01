@@ -256,7 +256,7 @@ def getCompetRecup():
 
 def getCompet():
     # config.log('Recherche compet', 'info', False, 3)
-    scriptType = '40A'
+    scriptType = 'QT'
     # config.log_clear_line()
     url = f"{config.api_url}/strategy" + scriptType + "/get_compet.php"
     # URL du lien JSON de la strategy
@@ -283,8 +283,8 @@ def getCompet():
         # config.log(compet_not_ok_list,0)
 
         try:
-            if not any(compet_ok in config.ligue_name for compet_ok in
-                       compet_ok_list) and not any(
+            if any(compet_ok in config.ligue_name for compet_ok in
+                   compet_ok_list) and not any(
                 compet_not_ok in config.ligue_name for
                 compet_not_ok in compet_not_ok_list):
                 config.log(f'Ligue OK!', 'info', True, 3)

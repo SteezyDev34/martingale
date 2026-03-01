@@ -4,6 +4,8 @@ import time
 from datetime import datetime, timedelta
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 import config
 from Functions import Functions_1XBET
@@ -13,7 +15,7 @@ from Functions.FisrtQTBet import FirstQTBet
 from Functions.Function_GetSetActuel import GetQTActuel
 from Functions.Function_scriptDelRunning import scriptDelRunning
 from Functions.Functions_1XBET import remove_match_from_json_file
-from Functions.GetJsonData import getGlobalPerte, SendGlobalPerte, QTDispatchPerte
+from Functions.GetJsonData import QTDispatchPerte, getGlobalPerte, SendGlobalPerte
 from Functions.GetPlayersName import GetPlayersName
 from Functions.GetResult import GetResult
 from Functions.ScriptRechercheDeMatch import rechercheDeMatch
@@ -47,6 +49,8 @@ def all_script(driver):
             config.teams = GetPlayersName(driver)
             newmatchFromUrl(driver)
 
+        for scriptType in config.scriptTypeList:
+            config.switchScript(scriptType)
             config.log('RECHERCHE INFOS DE MISE', 'title', False)
             infosperte = getGlobalPerte()
             if infosperte and config.perte == 0:
@@ -61,20 +65,20 @@ def all_script(driver):
                     config.perte = float(infosperte['perte'])
             config.rattrape_perte = 1
             # END RECHERCHE INFOS DE MISE
-        for scriptType in config.scriptTypeList:
-            config.switchScript(scriptType)
             print('wintwin', config.wantwin)
             GetQTActuel(driver)
             ##PREPARATTION PREMIER PARIS
             FirstQTBet(driver)
+            config.perte = 0
 
         config.lose = False
-    driver.get(config.site_url)
+        config.perte = 0
     # VÉRIFICATION DES MATCH
     print('START CHEKING LIST')
     time.sleep(5)
     matches_ok = True
     while matches_ok:
+        driver.get(config.site_url)
         matches_ok = False
         try:
             # RECUPERATION DES LIGUES EN COURS
@@ -128,6 +132,10 @@ def all_script(driver):
                         # config.log(config.newmatch, 'info', False, 4)
                         # Check if newmatch exists in JSON file
                         try:
+                            print('ok')
+                        except:
+                            print('tet')
+                        else:
                             json_file = _get_qt_validated_bets_path()
                             try:
                                 with open(json_file, 'r') as f:
@@ -137,6 +145,8 @@ def all_script(driver):
                             # Vérifie si config.newmatch est présent dans l'URL du fichier JSON
                             original_tab = driver.current_window_handle  # Mémorise l'onglet actuel
                             for match in match_data:
+                                if matches_ok:
+                                    break
                                 if 'timestamp' in match:
                                     match_time = datetime.strptime(match['timestamp'], "%Y-%m-%d %H:%M:%S")
                                     if match_time < datetime.now() - timedelta(days=2):
@@ -154,7 +164,7 @@ def all_script(driver):
                                     print('scriptType : ' + scriptType)
 
                                     if 'url' in match and config.newmatch in match[
-                                        'url'] and config.scriptType.lower() in \
+                                        'url'] and config.scriptType.lower() == \
                                             match['scripttype'].lower():
                                         print(config.newmatch, match['url'], match['scripttype'], config.scriptType)
 
@@ -163,6 +173,14 @@ def all_script(driver):
                                         qt_section = div_bet_score[0].find_elements(By.CLASS_NAME,
                                                                                     'ui-game-scores__item')
                                         qt_actuel = len(qt_section) - 1
+                                        try:
+                                            element = WebDriverWait(bet_item, 10).until(
+                                                EC.presence_of_element_located(
+                                                    (By.CLASS_NAME, 'dashboard-game-info__period'))
+                                            )
+                                        except:
+                                            matches_ok = True
+                                            break
                                         div_period = bet_item.find_elements(By.CLASS_NAME,
                                                                             'dashboard-game-info__period')
                                         period = div_period[0].text
@@ -172,7 +190,8 @@ def all_script(driver):
                                             period = period.split(' ')[0]
                                             period = int(''.join(char for char in period if char.isdigit()))
                                         print('period', period, 'qt_actuel', qt_actuel)
-                                        if (period == "Mi-temps" and int(qt_actuel) == int(match['qt'])) or (
+                                        if (period == "Mi-temps" and int(qt_actuel) == int(match['qt']) and
+                                            qt_section[-1].text.strip().replace('\n', '') != "00") or (
                                                 period == "Mi-temps" and int(qt_actuel) > int(match['qt']) and
                                                 qt_section[-1].text.strip().replace('\n', '') == "00") or (
                                                 period != "Mi-temps" and int(period) != int(match['qt'])):
@@ -208,10 +227,11 @@ def all_script(driver):
                                             if config.qt_actuel > 6:
                                                 QTDispatchPerte()
                                             else:
-                                                FirstQTBet(driver)
-                                                print('BET VALIDE')
-                                            remove_match_from_json_file(json_file, match['url'],
-                                                                        match['scripttype'], match['timestamp'])
+                                                if FirstQTBet(driver):
+                                                    print('BET VALIDE')
+                                                    remove_match_from_json_file(json_file, match['url'],
+                                                                                match['scripttype'], match['timestamp'])
+                                            config.perte = 0
                                         elif result == 'WIN':
                                             config.perte = 0
                                             config.init_variable()
@@ -230,10 +250,8 @@ def all_script(driver):
 
                                     # RetourTpsReg(driver)
 
-
-
-                        except Exception as e:
-                            print('ERR', e)
+                        # except Exception as e:
+                        # print('ERR', e)
             return True
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)

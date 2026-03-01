@@ -88,12 +88,17 @@ def fromUrl(driver, matchlist_file_name):
         config.log('            Impossible de lire le lien du match!', 'warning', False)
         return [False, config.newmatch]
     else:
-        match_list = GetMatchDone.main(config.matchlisttodo_file_name)
-        if any(config.newmatch in x for x in match_list):
-            config.log('        Le match autorisé!', 'warning', True)
+        match_list = GetMatchDone.main(config.matchlist_file_name)
+        if config.in_stat and any(config.newmatch in x for x in match_list):
+            config.log('Le match autorisé!', 'success', False, 4)
+            driver.get(newmatchtxt)
+            return [True, config.newmatch]
+        elif not config.in_stat and not any(config.newmatch in x for x in match_list):
+            config.log('Le match autorisé!', 'success', False, 4)
+            driver.get(newmatchtxt)
             return [True, config.newmatch]
         else:
-            config.log('            Le match  n\'est pas autorisé!', 'warning', True)
+            config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
             return [False, config.newmatch]
 
 

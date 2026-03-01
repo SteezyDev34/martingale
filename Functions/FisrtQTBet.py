@@ -69,6 +69,7 @@ def FirstQTBet(driver):
                 bet_qt = True
             else:
                 break
+    return validate_bet
 
 
 if __name__ == "__main__":

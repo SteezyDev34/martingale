@@ -34,7 +34,7 @@ classes = {
         {
             'old_site': 'c-scoreboard-score__period',
             'new_site': 'ui-game-timer__label',
-            'mobile_site': 'scoreboard-timer__container'
+            'mobile_site': 'scoreboard-timer'
         },
     'score_container':
         {
@@ -76,7 +76,7 @@ classes = {
     'period_select':
         {
             'old_site': 'scoreboard-nav__select',
-            'new_site': 'sub-games-dropdown',
+            'new_site': 'game-toolbar__sub-games-dropdown',
             'mobile_site': 'scoreboard-nav__select'
         },
     'multiselect_container_wrapper':
@@ -131,7 +131,7 @@ classes = {
         {
             'old_site': 'cpn-bet__coef',
             'new_site': 'coupon-result-coef-value',
-            'mobile_site': 'quick-coupon-events-coef'
+            'mobile_site': 'quick-coupon-events-card-coefs__new'
         },
     'cpn_amount':
         {

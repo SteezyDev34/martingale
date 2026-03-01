@@ -143,10 +143,10 @@ def ValidationDuParis(driver, nexbet=False):
                             getbtn = driver.find_element(By.CLASS_NAME,
                                                          config.classes['coupon_buttons'][config.site_type])
                             try:
-                                #getbtn.click()
-                                print('clic sur placer le pari pour dev a supp')
-                                validation = True
-                                break
+                                getbtn.click()
+                                # print('clic sur placer le pari pour dev a supp')
+                                # validation = True
+                                # break
                             except:
                                 tentative = tentative + 1
                                 if ModalHandler(driver):
