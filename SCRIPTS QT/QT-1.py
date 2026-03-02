@@ -2,8 +2,6 @@ import os
 import sys
 import time
 
-from Functions.GetJsonData import DispatchPerte
-
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
 
@@ -38,6 +36,7 @@ time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenê
 
 driver = get_script_driver(num_fenetre)
 from Functions import Functions_QT
+from Functions.GetJsonData import DispatchPerte
 
 config.init_variable()
 
