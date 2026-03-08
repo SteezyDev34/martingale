@@ -46,7 +46,7 @@ def GetBet(driver, nextBet=False):
             sautDeLigne = 50 * 3
         else:
             sautDeLigne = 68
-        decalageX = -50
+        decalageX = size['width'] / 2 - 50
 
     ligne = 1
     i = 1
