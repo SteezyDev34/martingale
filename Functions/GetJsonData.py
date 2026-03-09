@@ -47,12 +47,14 @@ def getPerte():
 
 
 def get1setGlobalPerte():
+    print('config.mtt_recup', config.mtt_recup)
     url = f"{config.api_url}/strategy1SET/get_last_perte.php?mtt_recup={config.mtt_recup}"
     try:
         # Envoyer une requête GET à l'URL
         response = requests.get(url)
         # Vérifier que la requête a réussi
         response.raise_for_status()
+        print(response.json())
         # Parser le JSON depuis la réponse
         if len(response.json()) > 0:
             pertes = response.json()[0]

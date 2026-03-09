@@ -16,6 +16,8 @@ from art import *
 
 # Chargement des variables globales
 import config
+import subprocess
+import time
 
 # Récupérer le nom du script
 # Nom du fichier
@@ -67,7 +69,72 @@ while (config.win < 100):
     try:
         Functions_1SET.all_script(driver)
     except Exception as e:
-        config.log(f"ERROR SCRIPT : {e}", 'error', False)
+        if "HTTPConnectionPool" in str(e) and "Read timed out" in str(e):
+            config.log(f"ERROR SCRIPT : {e}", 'error', False)
+            # 1) Essayer d'envoyer Ctrl+W pour fermer l'onglet proprement
+            try:
+                from selenium.webdriver.common.keys import Keys
+                try:
+                    body = driver.find_element('tag name', 'body')
+                except Exception:
+                    try:
+                        body = driver.find_element_by_tag_name('body')
+                    except Exception:
+                        body = None
+                if body:
+                    body.send_keys(Keys.CONTROL + 'w')
+            except Exception:
+                pass
+
+            # 2) Essayer de fermer la session webdriver
+            try:
+                try:
+                    driver.quit()
+                except Exception:
+                    try:
+                        driver.close()
+                    except Exception:
+                        pass
+            except Exception:
+                pass
+
+            # 3) Si Chrome a planté, tuer le processus écoutant sur le port de debug distant
+            def kill_process_listening_on_port(port):
+                try:
+                    cmd = f'netstat -ano -p tcp | findstr :{port}'
+                    out = subprocess.check_output(cmd, shell=True, text=True, stderr=subprocess.DEVNULL)
+                    lines = [l.strip() for l in out.splitlines() if l.strip()]
+                    pids = set()
+                    for line in lines:
+                        parts = line.split()
+                        if parts:
+                            pid = parts[-1]
+                            if pid.isdigit():
+                                pids.add(pid)
+                    for pid in pids:
+                        try:
+                            subprocess.call(['taskkill', '/F', '/PID', pid], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                        except Exception:
+                            pass
+                except subprocess.CalledProcessError:
+                    pass
+                except Exception:
+                    pass
+
+            try:
+                kill_process_listening_on_port(config.localhost)
+            except Exception:
+                pass
+
+            # Petite pause pour laisser le système libérer les ressources
+            time.sleep(2)
+
+            # 4) Relancer le driver (une tentative simple)
+            try:
+                driver = get_script_driver(num_fenetre)
+            except Exception as e2:
+                config.log(f"ERROR: impossible de relancer le driver: {e2}", 'error', False)
+                raise
     else:
         for i in config.scriptTypeList:
             config.switchScript('1SET')

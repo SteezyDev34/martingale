@@ -28,7 +28,6 @@ def all_script(driver):
 
     # Initialize dictionary to store all scores
     config.all_scores = {}
-
     # --------
     # SCRIPT RECHERCHE DE MATCH
     while not rechercheDeMatch(driver) and not config.error:
@@ -65,11 +64,15 @@ def all_script(driver):
         return False
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
+        
+
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
-        if config.perte == 0:
-            get1setGlobalPerte()
+        print('config/mtt_recup', config.mtt_recup)
         if config.perte == 0:
             getGlobalPerte()
+        if config.perte == 0:
+            get1setGlobalPerte()
+        
         config.log_clear_line()
 
         # END RECHERCHE INFOS DE MISE

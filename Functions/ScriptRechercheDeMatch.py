@@ -148,6 +148,7 @@ def rechercheDeMatch(driver):
             config.site_type = 'new_site'
             DeleteBet(driver)
             config.site_type = 'mobile_site'
+       
         try:
             # RECUPERATION DES LIGUES EN COURS
             config.log('Récupération des ligues', 'info', False, 1, show_script_type=False)
@@ -284,7 +285,6 @@ def rechercheDeMatch(driver):
             config.log_clear_line(logline)
             time.sleep(3)
         # FIN# VERIFICATION SI PAGE DE MATCH LIVE
-
     return config.match_found
 
 
@@ -475,6 +475,7 @@ def rechercheDeMatchNBA(driver):
     print('RECHERCHE DE MATCH NBA')
     config.match_found = False
     while not config.match_found and not config.error:
+        print('test error innit ')
         config.init_variable()
         """On vérifie si c'est la page d'un match """
         config.match_found = GetIfMatchPage(driver)
@@ -809,6 +810,7 @@ def classementeDeMatch(driver, use_json_cache=True):
 
         # Appliquer la priorisation pour retenir les 30 meilleurs matchs
         top_matches = prioritize_matches_by_league(tableau_trie, 30)
+        
 
         for match in top_matches:
             try:

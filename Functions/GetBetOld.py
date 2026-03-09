@@ -113,6 +113,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     first_player = 1
                     config.win_type = ['40:0', '40:15', '40:30', 'A:40']
                 sType = f"Game {jeu} - W{first_player}"
+                sType = f"Jeu {jeu} - V{first_player}"
             if config.scriptType == "40A":
                 sType = f"Jeu {jeu}: 40-40 - Oui"  # signe : collé au num du jeu
                 config.win_type = '40:40'

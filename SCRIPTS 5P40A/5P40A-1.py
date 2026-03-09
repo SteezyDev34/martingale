@@ -69,7 +69,17 @@ while (config.win < 100):
     try:
         Functions_456P.all_script(driver)
     except Exception as e:
-        config.log(f"ERROR SCRIPT : {e}", 'error', False)
+        # Récupérer les informations détaillées de l'erreur (fichier, ligne, fonction)
+        tb = traceback.extract_tb(e.__traceback__)
+        if tb:
+            last_frame = tb[-1]
+            fichier = last_frame.filename
+            ligne = last_frame.lineno
+            fonction = last_frame.name
+            config.log(f"ERROR SCRIPT : {e} | Fichier: {fichier} | Ligne: {ligne} | Fonction: {fonction}", 'error', False)
+            config.log(f"Traceback complet:\n{traceback.format_exc()}", 'error', False)
+        else:
+            config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
         if config.perte > 0:
             DispatchPerte()

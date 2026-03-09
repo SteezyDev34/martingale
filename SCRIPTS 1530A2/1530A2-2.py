@@ -50,8 +50,8 @@ else:
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
 
-num_fenetre = 13
-time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
+num_fenetre = 5
+time.sleep((num_fenetre - 1) * 1)  # Attendre un peu pour s'assurer que la fenêtre est prête
 driver = get_script_driver(num_fenetre)
 from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte
@@ -66,7 +66,17 @@ while (config.win < 100):
     try:
         Functions_431a.all_script(driver)
     except Exception as e:
-        config.log(f"ERROR SCRIPT : {e}", 'error', False)
+        # Récupérer les informations détaillées de l'erreur (fichier, ligne, fonction)
+        tb = traceback.extract_tb(e.__traceback__)
+        if tb:
+            last_frame = tb[-1]
+            fichier = last_frame.filename
+            ligne = last_frame.lineno
+            fonction = last_frame.name
+            config.log(f"ERROR SCRIPT : {e} | Fichier: {fichier} | Ligne: {ligne} | Fonction: {fonction}", 'error', False)
+            config.log(f"Traceback complet:\n{traceback.format_exc()}", 'error', False)
+        else:
+            config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
         if config.perte > 0:
             DispatchPerte()

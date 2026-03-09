@@ -6070,5 +6070,761 @@
         ],
         "timestamp": "2026-02-12 20:39:27",
         "url": "atp buenos aires"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-02-14 10:26:04",
+        "url": "wta dubai qualification"
+    },
+    {
+        "montant": 2.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 05:26:18",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 3.9,
+        "cote": "3",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 05:29:51",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 10:21:03",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 3.13,
+        "cote": "3.4",
+        "jeu": 5,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 10:25:56",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 2.32,
+        "cote": "3.24",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 10:41:37",
+        "url": "wta antalya qualification"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 12:42:46",
+        "url": "challenger hersonissos 2 qualification"
+    },
+    {
+        "montant": 2.6,
+        "cote": "3",
+        "jeu": 12,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 12:48:38",
+        "url": "challenger hersonissos 2 qualification"
+    },
+    {
+        "montant": 3.25,
+        "cote": "3.4",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 13:04:21",
+        "url": "challenger hersonissos 2 qualification"
+    },
+    {
+        "montant": 2.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 13:15:45",
+        "url": "challenger cherbourg qualification"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 13:24:56",
+        "url": "itf heraklion women qualification"
+    },
+    {
+        "montant": 3.34,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 13:34:33",
+        "url": "itf heraklion women qualification"
+    },
+    {
+        "montant": 5.42,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 13:37:28",
+        "url": "itf heraklion women qualification"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 13:43:36",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 3.0,
+        "cote": "3.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 13:47:53",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 4.67,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 13:51:35",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 6.33,
+        "cote": "3.4",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 13:55:20",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 2.08,
+        "cote": "3.5",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 14:24:16",
+        "url": "itf heraklion women qualification"
+    },
+    {
+        "montant": 2.91,
+        "cote": "3.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 14:29:52",
+        "url": "itf heraklion women qualification"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 14:36:35",
+        "url": "challenger kigali 2 qualification"
+    },
+    {
+        "montant": 3.34,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 14:48:30",
+        "url": "challenger kigali 2 qualification"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 14:58:52",
+        "url": "challenger hersonissos 2 qualification"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 15:09:55",
+        "url": "challenger brasilia"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 15:56:50",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 3.0,
+        "cote": "3.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 16:04:08",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 4.38,
+        "cote": "3.4",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 16:07:04",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 5.96,
+        "cote": "3.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 16:10:19",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 8.69,
+        "cote": "3.4",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 16:14:47",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 11.82,
+        "cote": "3.5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 16:17:57",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 17.23,
+        "cote": "3.4",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 16:24:06",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 23.44,
+        "cote": "3.5",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 16:29:53",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 34.18,
+        "cote": "3.4",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 16:37:51",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 46.48,
+        "cote": "3.5",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 16:47:16",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 16:55:20",
+        "url": "challenger cherbourg qualification"
+    },
+    {
+        "montant": 2.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 18:11:16",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 3.12,
+        "cote": "3.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 18:17:13",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 5.46,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 18:19:43",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 18:28:50",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 3.0,
+        "cote": "3.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 18:38:04",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 4.2,
+        "cote": "3.5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 18:53:44",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 6.54,
+        "cote": "3.25",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 18:59:47",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 8.5,
+        "cote": "3.5",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 19:05:06",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 13.22,
+        "cote": "3.25",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 19:10:33",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 17.9,
+        "cote": "3.4",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 19:12:47",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 25.36,
+        "cote": "3.4",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 19:19:50",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 35.93,
+        "cote": "3.4",
+        "jeu": 3,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 19:24:37",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 50.9,
+        "cote": "3.4",
+        "jeu": 4,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 19:27:49",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 72.11,
+        "cote": "3.4",
+        "jeu": 6,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 19:33:25",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 98.07,
+        "cote": "3.5",
+        "jeu": 7,
+        "set": "2",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 19:46:24",
+        "url": "challenger hersonissos qualification"
+    },
+    {
+        "montant": 2.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 21:11:12",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 3.9,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 21:14:23",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 5.91,
+        "cote": "2.98",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 21:18:48",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 2.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 23:37:23",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 3.12,
+        "cote": "3.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 23:43:55",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 5.46,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 23:47:51",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 6.55,
+        "cote": "3.5",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 23:50:57",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 11.46,
+        "cote": "3",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 23:55:23",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 13.76,
+        "cote": "3.5",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-08 23:58:28",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 24.07,
+        "cote": "3",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-09 00:02:34",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-09 00:13:21",
+        "url": "wta indian wells"
+    },
+    {
+        "montant": 3.0,
+        "cote": "3.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-09 00:17:43",
+        "url": "wta indian wells"
+    },
+    {
+        "montant": 4.67,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-09 00:20:11",
+        "url": "wta indian wells"
+    },
+    {
+        "montant": 2.31,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-03-09 00:32:07",
+        "url": "atp indian wells"
     }
 ]

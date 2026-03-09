@@ -5,7 +5,7 @@ import config
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
-
+from Functions.GetSetActuel import GetSetActuel
 
 def GetIfGameStart(driver):
     config.game_start = False
@@ -71,6 +71,10 @@ def GetIfGameEnd(driver):
     config.game_end = False
     printext = False
     RetourTpsReg(driver)
+    GetSetActuel(driver)
+    if int(config.set_actuel) > int(config.running_game):
+        config.running_game = int(config.set_actuel)
+        return True
     config.log('ATTENTE FIN DE JEU', 'info', False, 4)
     while not config.game_end and not config.error:
         GetScoreActuel(driver)
@@ -79,6 +83,9 @@ def GetIfGameEnd(driver):
             config.log_clear_line()
             config.game_end = True
             config.game_start = False
+            GetSetActuel(driver)
+            if int(config.set_actuel) > int(config.running_game):
+                config.running_game = int(config.set_actuel)
         else:
             config.game_end = False
             config.game_start = True

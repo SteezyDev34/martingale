@@ -177,6 +177,8 @@ def all_script(driver):
                             print("#RECHERCHE INFOS DE MISE")
 
                             getGlobalPerte()
+                            if config.perte == 0:
+                                get1setGlobalPerte()
                             config.error = False
                             config.log(
                                 f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
@@ -233,7 +235,24 @@ def all_script(driver):
                 firstjeu = False
                 current_game = config.jeu_actuel
             else:
-                GetIfGameEnd(driver)
+                config.log('verification du jeu actuel dans tous les script')
+                ok = True
+                for scriptType in config.scriptTypeList:
+                    config.switchScript(scriptType)
+                    if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
+                        config.log(f'Net profit: {config.global_match_win[scriptType]}')
+
+                    else:
+                        config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                        config.log(f"FIN {config.scriptType}", 'success', False)
+                        continue
+                    if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu', -1)):
+                        ok=False
+                        config.log(f"jeu actuel {config.jeu_actuel} non validé par le paris {config.validated_bet}", 'error', False)
+                    else:
+                        config.log(f"jeu actuel {config.jeu_actuel} validé par le paris {config.validated_bet}", 'success', False)
+                if ok:
+                    GetIfGameEnd(driver)
         # JEU FINI ON PREPARE LE IPROCHAIN BET
         txtlog = "JEU FINI ON PREPARE LE PROCHAIN BET"
         config.log(txtlog, config.newmatch)
@@ -356,6 +375,8 @@ def all_script(driver):
                 if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                     print("#RECHERCHE INFOS DE MISE")
                     getGlobalPerte()
+                    if config.perte == 0:
+                        get1setGlobalPerte()
                     config.error = False
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')

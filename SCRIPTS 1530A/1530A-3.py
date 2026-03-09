@@ -1,6 +1,8 @@
 import os
+import subprocess
 import sys
 import time
+
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
 
@@ -35,46 +37,52 @@ if len(parts) > 1:
     config.localhost = ''.join(caractere for caractere in localhost if caractere.isdigit())
     if int(config.localhost) < 1024:
         config.localhost = 1024 + int(config.localhost)
-   
+    # Demander confirmation à l'utilisateur
+    # Le lancement de Chrome est maintenant géré dans SetDriver.py
+    config.log_clear_line(3)
 
-    print(f'{config.PURPLE}' + text2art(
-        f"Start martingal {config.scriptType} {config.script_num}"))  # Crée un texte en art ASCII
-    # sys.stdout.write(f"\rSCRIPT TYPE : {config.scriptType}")
-    # sys.stdout.write(f"\rSCRIPT NUM : {config.script_num}")
+    print(f"{config.PURPLE}{text2art(f'Start martingal {config.scriptType} {config.script_num}')}")
 else:
     print("Le format du nom du fichier est incorrect.")
     exit()
 
 # Chargement des functions
 # Chargement de Chrome driver
-# Chargement des functions
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
-num_fenetre = 4
+num_fenetre = 7
 time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
-driver = get_script_driver(num_fenetre)
 
-from Functions import Functions_456P
+driver = get_script_driver(num_fenetre)
+from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
 config.in_stat = True
-config.scriptTypeList = config.scriptTypeList3
+config.scriptTypeList = config.scriptTypeList
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
 config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
 while (config.win < 100):
-    Functions_456P.all_script(driver)
-
     try:
-        pass
+        Functions_431a.all_script(driver)
     except Exception as e:
-        config.log(f"ERROR SCRIPT : {e}", 'error', False)
+        # Récupérer les informations détaillées de l'erreur (fichier, ligne, fonction)
+        tb = traceback.extract_tb(e.__traceback__)
+        if tb:
+            last_frame = tb[-1]
+            fichier = last_frame.filename
+            ligne = last_frame.lineno
+            fonction = last_frame.name
+            config.log(f"ERROR SCRIPT : {e} | Fichier: {fichier} | Ligne: {ligne} | Fonction: {fonction}", 'error', False)
+            config.log(f"Traceback complet:\n{traceback.format_exc()}", 'error', False)
+        else:
+            config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
         if config.perte > 0:
             DispatchPerte()
         for i in config.scriptTypeList:
-            config.switchScript('403015')
+            config.switchScript('4315A')
             config.ScriptConfig(i).reset()
             config.init_variable()
             config.switchScript(i)
