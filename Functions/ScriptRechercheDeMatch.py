@@ -58,7 +58,7 @@ def rechercheDeMatch(driver):
                         config.log('Récupération des matchs', 'info', False, 3)
                         config.log_clear_line()
                         bet_items = bet_ligue.find_elements(By.CLASS_NAME,
-                                                            'dashboard-game-block')
+                                                            'dashboard-champ__game')
                     except:
                         config.log('Listes des matchs introuvables!', 'warning', False, 3)
                         # s'il y une erreur on passe au suivant
