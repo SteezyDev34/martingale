@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 
 import config
 from Functions import GetMatchDone
+from Functions.GetJsonData import getIfGlobalPerte
 
 
 def extract_match_slug_from_url(match_url):
@@ -47,9 +48,24 @@ def main(driver, bet_item, matchlist_file_name):
             config.log('Le match autorisé!', 'success', False, 4)
             driver.get(newmatchtxt)
             return [True, config.newmatch]
+
         else:
             config.log('Le match  n\'est pas autorisé!', 'warning', True, 4)
-            return [False, config.newmatch]
+            print('vérif si perte')
+            p = config.perte
+            if not p or p == 0:
+                p = getIfGlobalPerte()
+            if not p or p == 0:
+                config.log('Le match  n\'est pas autorisé! pas de perte', 'warning', True, 4, False)
+                return [False, config.newmatch]
+            else:
+                config.log('Le match  non autorisé mais perte en cours', 'success', False, 4, False)
+                if config.site_type == 'mobile_site':
+                    newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
+                    newmatchtxt = f'{newmatchtxt}?platform_type=mobile'
+                driver.get(newmatchtxt)
+                config.log_clear_line()
+                return [True, config.newmatch]
 
 
 def getstats(driver, bet_item, matchlist_file_name):

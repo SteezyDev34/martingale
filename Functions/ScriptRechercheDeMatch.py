@@ -52,7 +52,7 @@ def rechercheDeMatch(driver):
                     continue
                 # ON VÉRIFIE QUE LA COMPET EST JOUABLE
                 config.log(' ' + config.ligue_name, 'info', False, 2)
-                if getCompet():
+                if not getCompet():
                     # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
                     try:
                         config.log('Récupération des matchs', 'info', False, 3)
@@ -100,6 +100,24 @@ def rechercheDeMatch(driver):
                                         time.sleep(2)
                                         config.log_clear_line()
                                         continue
+                                    try:
+                                        div_bet_cote = bet_item.find_element(By.CLASS_NAME,
+                                                                             'dashboard-markets__group')
+                                        btn_cote = div_bet_cote.find_elements(By.CLASS_NAME,
+                                                                              'dashboard-markets__market')
+                                        cotev1 = float(btn_cote[0].text)
+                                        print('cote v1', cotev1)
+                                        cotev2 = float(btn_cote[2].text)
+                                        print('cote v2', cotev2)
+                                    except Exception as e:
+                                        print(f'erreur de cote {e}')
+                                        continue
+                                    else:
+                                        if cotev1 > 1.1 and cotev1 < 1.8:
+                                            config.win_type = 'QT'
+                                            config.cote_base = 1.3
+                                            config.ligue_name = config.ligue_name
+
                                     # on le vérifie
                                     config.log('Vérification du score!', 'info', False, 4)
                                     config.log_clear_line()
