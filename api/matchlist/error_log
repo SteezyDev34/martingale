@@ -1,0 +1,537 @@
+[05-Oct-2025 08:52:11 UTC] PHP Warning:  Undefined array key 4 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 24
+[05-Oct-2025 08:52:11 UTC] PHP Warning:  Array to string conversion in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 31
+[05-Oct-2025 09:02:15 UTC] PHP Warning:  Undefined array key 4 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 24
+[05-Oct-2025 09:04:33 UTC] PHP Warning:  Undefined array key 4 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 24
+[11-Oct-2025 10:34:23 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:23 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:25 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:25 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:27 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:27 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:29 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:29 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:30 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:30 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:32 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:32 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:34 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:34 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:36 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:36 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:38 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:38 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:40 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:40 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:42 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:42 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:43 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:43 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:45 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:45 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:47 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:34:47 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:30 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:30 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:31 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:31 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:32 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:32 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:34 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:34 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:35 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:35 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:36 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:36 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:37 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:37 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:38 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:38 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:39 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:39 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:40 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:40 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:41 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:41 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:42 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:42 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:43 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:43 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:44 UTC] PHP Warning:  Undefined array key 0 in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 10:57:44 UTC] PHP Fatal error:  Uncaught TypeError: implode(): Argument #1 ($array) must be of type array, string given in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:22
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(22): implode()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 22
+[11-Oct-2025 11:32:00 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'andrea-lazaro-garcia-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:32:03 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'marc-andrea-huesler-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:32:04 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'dodig-hugo-gaston-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:32:05 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'yevseyev-bernard-tomic-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:32:06 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'wayenburg-jay-clarke-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:32:07 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'buse-arthur-fery-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:32:08 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'martineau-otto-virtanen-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:32:09 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'broady-robin-catry-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:32:10 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'diego-fernandez-flores-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:32:11 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'william-rejchtman-vinciguerra-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:32:12 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'nagel-stefan-seifert-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:45:39 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'andrea-lazaro-garcia-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:45:41 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'choinski-henri-squire-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:45:42 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'taberner-luka-mikrut-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:45:43 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'marc-andrea-huesler-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:45:45 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'dodig-hugo-gaston-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:45:46 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'yevseyev-bernard-tomic-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:45:47 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'wayenburg-jay-clarke-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:45:48 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'buse-arthur-fery-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:45:49 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'martineau-otto-virtanen-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:45:50 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'broady-robin-catry-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:45:51 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'william-rejchtman-vinciguerra-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:45:52 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:19 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'andrea-lazaro-garcia-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:20 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'radivojevic-teodora-kostovic-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:21 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'choinski-henri-squire-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:22 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'taberner-luka-mikrut-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:22 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'marc-andrea-huesler-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:23 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'dodig-hugo-gaston-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:24 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'yevseyev-bernard-tomic-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:24 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'wayenburg-jay-clarke-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:25 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'buse-arthur-fery-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:26 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'martineau-otto-virtanen-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:26 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'broady-robin-catry-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:27 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'william-rejchtman-vinciguerra-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:57:28 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:58:31 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:34
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(34): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 34
+[11-Oct-2025 11:59:13 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:01:52 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'andrea-lazaro-garcia-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:01:53 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'radivojevic-teodora-kostovic-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:01:53 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'choinski-henri-squire-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:01:55 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'taberner-luka-mikrut-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:01:56 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'marc-andrea-huesler-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:01:56 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'dodig-hugo-gaston-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:01:57 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'yevseyev-bernard-tomic-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:01:58 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'wayenburg-jay-clarke-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:01:58 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'buse-arthur-fery-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:01:59 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'martineau-otto-virtanen-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:02:00 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'broady-robin-catry-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:02:00 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'william-rejchtman-vinciguerra-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:02:01 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:43 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'andrea-lazaro-garcia-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:43 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'radivojevic-teodora-kostovic-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:44 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'choinski-henri-squire-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:45 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'taberner-luka-mikrut-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:45 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'marc-andrea-huesler-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:46 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'dodig-hugo-gaston-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:47 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'yevseyev-bernard-tomic-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:47 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'wayenburg-jay-clarke-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:48 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'buse-arthur-fery-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:49 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'martineau-otto-virtanen-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:49 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'broady-robin-catry-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:50 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'william-rejchtman-vinciguerra-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:04:51 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:13:15 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:13:16 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:13:17 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:13:17 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:13:17 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:13:18 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:13:18 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:13:19 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[11-Oct-2025 12:13:19 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'kennedy-raphael-perot-' for key 'unique_match' in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php:37
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
