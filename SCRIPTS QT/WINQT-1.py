@@ -44,6 +44,7 @@ for i in config.scriptTypeList:
     config.ScriptConfig(i)
 while (config.win < 100):
     tour = 0
+    
     try:
         Functions_QT.all_script(driver)
     except Exception as e:
