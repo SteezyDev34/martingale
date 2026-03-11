@@ -46,8 +46,10 @@ def GetBet(driver, nextBet=False):
             sautDeLigne = 50 * 3
         else:
             sautDeLigne = 68
-        decalageX = size['width'] / 2 - 50
-
+        if config.scriptType == "QTV2":
+            decalageX = size['width'] / 2 - 50
+        else:
+            decalageX = size['width'] / -2 + 50
     ligne = 1
     i = 1
     GetQTScoreActuel(driver)
@@ -130,7 +132,7 @@ def GetBet(driver, nextBet=False):
         elif config.systeme == 'Windows':
             if y > size['height']:
                 sautDeLigne = 68
-                decalageX = size['width'] / -2 + 50
+                decalageX = + 50
                 y = 0
                 ligne = 1
                 tentative = tentative + 1
