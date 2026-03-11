@@ -1,6 +1,8 @@
 import os
 import sys
 import time
+import traceback
+
 # Récupérer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
 

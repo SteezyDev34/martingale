@@ -3582,5 +3582,649 @@
         ],
         "timestamp": "2026-03-09 06:11:59",
         "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 1.38,
+        "cote": "1.87",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 07:35:44",
+        "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 0.58,
+        "cote": "5.43",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 07:45:57",
+        "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 3.63,
+        "cote": "1.87",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 07:50:02",
+        "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 1.53,
+        "cote": "5.43",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 07:53:23",
+        "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 1.05,
+        "cote": "2.145",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 19:06:00",
+        "url": "wta indian wells"
+    },
+    {
+        "montant": 1.14,
+        "cote": "2.05",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 19:16:12",
+        "url": "wta indian wells"
+    },
+    {
+        "montant": 0.92,
+        "cote": "3.54",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 19:19:58",
+        "url": "wta indian wells"
+    },
+    {
+        "montant": 0.85,
+        "cote": "2.42",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 19:30:34",
+        "url": "wta austin"
+    },
+    {
+        "montant": 1.44,
+        "cote": "2.42",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 19:38:51",
+        "url": "wta austin"
+    },
+    {
+        "montant": 2.46,
+        "cote": "2.42",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 19:41:59",
+        "url": "wta austin"
+    },
+    {
+        "montant": 3.88,
+        "cote": "2.535",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 19:45:06",
+        "url": "wta austin"
+    },
+    {
+        "montant": 3.51,
+        "cote": "3.8",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 19:54:07",
+        "url": "wta austin"
+    },
+    {
+        "montant": 8.16,
+        "cote": "2.635",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 19:56:49",
+        "url": "wta austin"
+    },
+    {
+        "montant": 14.38,
+        "cote": "2.495",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 20:06:13",
+        "url": "wta austin"
+    },
+    {
+        "montant": 21.94,
+        "cote": "2.635",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 20:12:33",
+        "url": "wta austin"
+    },
+    {
+        "montant": 0.6,
+        "cote": "2.99",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 20:51:20",
+        "url": "wta austin"
+    },
+    {
+        "montant": 1.41,
+        "cote": "2.275",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 20:59:30",
+        "url": "wta austin"
+    },
+    {
+        "montant": 0.47,
+        "cote": "3.54",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 21:08:49",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 0.24,
+        "cote": "7.97",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 21:15:03",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 0.68,
+        "cote": "3.8",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 21:17:34",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 0.33,
+        "cote": "8.93",
+        "jeu": 4,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 21:22:44",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 1.04,
+        "cote": "3.8",
+        "jeu": 5,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 21:25:53",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 0.45,
+        "cote": "9.89",
+        "jeu": 6,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 21:29:25",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 1.68,
+        "cote": "3.62",
+        "jeu": 7,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 21:33:54",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 0.77,
+        "cote": "8.93",
+        "jeu": 8,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 21:37:38",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 2.39,
+        "cote": "3.87",
+        "jeu": 9,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 21:42:49",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 1.33,
+        "cote": "7.97",
+        "jeu": 10,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 21:45:54",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 3.34,
+        "cote": "4.17",
+        "jeu": 11,
+        "set": "1",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 21:55:15",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 2.32,
+        "cote": "6.99",
+        "jeu": 12,
+        "set": "1",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 21:58:19",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 2.33,
+        "cote": "7.97",
+        "jeu": 1,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 22:07:39",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 6.07,
+        "cote": "4.06",
+        "jeu": 2,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 22:12:21",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 3.11,
+        "cote": "8.93",
+        "jeu": 3,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 22:15:29",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 8.21,
+        "cote": "4.38",
+        "jeu": 4,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 22:17:37",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 4.53,
+        "cote": "8.93",
+        "jeu": 5,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 22:23:44",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 11.98,
+        "cote": "4.38",
+        "jeu": 6,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 22:27:58",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 7.53,
+        "cote": "7.97",
+        "jeu": 7,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 22:35:06",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 19.61,
+        "cote": "4.06",
+        "jeu": 8,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 22:39:50",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 11.42,
+        "cote": "7.97",
+        "jeu": 9,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 22:44:43",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 29.75,
+        "cote": "4.06",
+        "jeu": 10,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 22:47:36",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 15.23,
+        "cote": "8.93",
+        "jeu": 11,
+        "set": "2",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 22:52:10",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 44.45,
+        "cote": "4.06",
+        "jeu": 12,
+        "set": "2",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 22:54:57",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 44.89,
+        "cote": "5.02",
+        "jeu": 1,
+        "set": "3",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 23:05:25",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 32.33,
+        "cote": "7.97",
+        "jeu": 2,
+        "set": "3",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 23:12:27",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 11.71,
+        "cote": "23",
+        "jeu": 7,
+        "set": "3",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 23:37:54",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 63.24,
+        "cote": "5.26",
+        "jeu": 8,
+        "set": "3",
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-03-09 23:39:33",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 73.59,
+        "cote": "5.52",
+        "jeu": 9,
+        "set": "3",
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-03-09 23:42:10",
+        "url": "atp indian wells"
     }
 ]

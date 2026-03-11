@@ -2959,5 +2959,122 @@
         "winscore": "40:40",
         "timestamp": "2026-03-09 06:08:32",
         "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 2.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 07:36:13",
+        "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 2.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 08:37:32",
+        "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 3.12,
+        "cote": "3.5",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 08:47:22",
+        "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 5.46,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 08:49:31",
+        "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 5.96,
+        "cote": "3.75",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 08:53:12",
+        "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 11.17,
+        "cote": "3",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 08:57:37",
+        "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 12.19,
+        "cote": "3.75",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 09:02:47",
+        "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 22.85,
+        "cote": "3",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 09:04:45",
+        "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 22.85,
+        "cote": "4",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 09:08:22",
+        "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 45.7,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 09:12:33",
+        "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 45.7,
+        "cote": "4",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 09:19:52",
+        "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 91.4,
+        "cote": "3",
+        "jeu": 3,
+        "set": "2",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 09:23:53",
+        "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 91.4,
+        "cote": "4",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "40:40",
+        "timestamp": "2026-03-09 09:26:36",
+        "url": "itf kolkata qualification"
     }
 ]

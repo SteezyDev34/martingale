@@ -105,11 +105,10 @@ while (config.win < 100):
         if config.perte > 0:
             DispatchPerte()
         for i in config.scriptTypeList:
-            config.switchScript('4315A')
-            config.ScriptConfig(i).reset()
-            config.init_variable()
             config.switchScript(i)
+            config.ScriptConfig(i).reset()
             DispatchPerte()
+            config.init_variable()
             config.global_match_win[i] = 0  # Initialize win counter for script type
             config.winmatch[i] = 0  # Initialize match counter for script type
             sucess = False

@@ -166,8 +166,12 @@ def ValidationDuParis(driver, nexbet=False):
                                             line += 1
                                             printtext = 1
                                 config.log_clear_line(line)
-                                if ModalHandler(driver):
-                                    validation = True
+                                try:
+                                    if ModalHandler(driver):
+                                        validation = True
+                                except Exception as e:
+                                    config.log(f"Erreur lors de la validation du pari : {e}", 'error', False)
+                                    validation = False
                         else:
                             PlacerMise(driver)
                             tentative = tentative + 1

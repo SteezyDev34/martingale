@@ -3949,5 +3949,230 @@
         "winscore": "30:30",
         "timestamp": "2026-03-09 06:31:21",
         "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 3.71,
+        "cote": "2.4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 07:38:13",
+        "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 4.46,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 07:41:14",
+        "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 5.98,
+        "cote": "1.87",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 08:43:52",
+        "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 3.71,
+        "cote": "2.4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 09:01:25",
+        "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 2.42,
+        "cote": "3.15",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 09:12:27",
+        "url": "challenger kigali qualification"
+    },
+    {
+        "montant": 3.25,
+        "cote": "2.6",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 11:07:31",
+        "url": "challenger kigali 2 qualification"
+    },
+    {
+        "montant": 0.73,
+        "cote": "2.65",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 15:54:26",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 1.33,
+        "cote": "2.45",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 15:58:39",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 1.98,
+        "cote": "2.65",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 16:04:34",
+        "url": "challenger santiago qualification"
+    },
+    {
+        "montant": 0.31,
+        "cote": "2.4",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 19:08:09",
+        "url": "wta indian wells"
+    },
+    {
+        "montant": 0.75,
+        "cote": "2.2",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 20:54:33",
+        "url": "wta austin"
+    },
+    {
+        "montant": 0.73,
+        "cote": "2.65",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 21:24:06",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 0.8,
+        "cote": "2.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 22:11:31",
+        "url": "wta austin"
+    },
+    {
+        "montant": 0.69,
+        "cote": "2.75",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-09 23:59:55",
+        "url": "wta indian wells"
+    },
+    {
+        "montant": 1.26,
+        "cote": "2.5",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-10 00:05:29",
+        "url": "wta indian wells"
+    },
+    {
+        "montant": 1.91,
+        "cote": "2.65",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-10 00:08:07",
+        "url": "wta indian wells"
+    },
+    {
+        "montant": 3.49,
+        "cote": "2.45",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-10 00:12:40",
+        "url": "wta indian wells"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-10 01:48:21",
+        "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.7",
+        "jeu": 10,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-10 03:25:42",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 0.24,
+        "cote": "2.65",
+        "jeu": 11,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-10 03:29:54",
+        "url": "atp indian wells"
+    },
+    {
+        "montant": 2.67,
+        "cote": "2.95",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-10 05:33:22",
+        "url": "wta indian wells"
+    },
+    {
+        "montant": 0.2,
+        "cote": "2.6",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-10 08:17:39",
+        "url": "itf hinode"
+    },
+    {
+        "montant": 3.71,
+        "cote": "2.4",
+        "jeu": 2,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-10 08:48:08",
+        "url": "itf heraklion women"
+    },
+    {
+        "montant": 6.36,
+        "cote": "2.4",
+        "jeu": 3,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-10 08:52:53",
+        "url": "itf heraklion women"
+    },
+    {
+        "montant": 10.91,
+        "cote": "2.4",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "30:30",
+        "timestamp": "2026-03-10 08:56:44",
+        "url": "itf heraklion women"
     }
 ]

@@ -135,6 +135,7 @@ def all_script(driver):
         if passageset:
             GetSetActuel(driver)
             config.game_start = True
+            passageset = False
             # if config.rattrape_perte == 1:
             if passageset:
                 config.error = False
@@ -193,16 +194,42 @@ def all_script(driver):
                         firstjeu = True
                         FirstGameBet(driver)
             elif config.perte > 0:
-                DispatchPerte()
-                config.init_variable()
-                txtlog = "passage set 2 restart"
-                print(txtlog)
-                config.log(txtlog, config.newmatch)
-                txtlog = "attente 30 sec"
-                print(txtlog)
-                if config.result != 'WIN':
-                    time.sleep(30)
-                FirstGameBet(driver)
+                for i in config.scriptTypeList:
+                    config.switchScript(i)
+                    config.ScriptConfig(i).reset()
+                    DispatchPerte()
+                    config.init_variable()
+                    txtlog = "passage set 2 restart"
+                    config.log(txtlog, config.newmatch)
+                allfirstgamebet = False
+                while not allfirstgamebet:
+                    allfirstgamebet = True
+                    for scriptType in config.scriptTypeList:
+                        config.switchScript(scriptType)
+                        # Check if all script types have global_match_win > 1
+                        all_below_one = all(
+                            float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
+                            config.scriptTypeList)
+                        if all_below_one:
+                            for st in config.scriptTypeList:
+                                config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
+                                        'success', False)
+                            return True
+                        if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
+                            config.log(
+                                f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
+                        else:
+                            config.log(
+                                f' {scriptType} Net profit: {config.global_match_win[scriptType]} /{config.total_want_win[scriptType]}')
+                            config.log(f" {scriptType} FIN {config.scriptType}", 'success', False)
+                            continue
+
+                        ##PREPARATTION PREMIER PARIS
+                        FirstGameBet(driver)
+                        if not config.validated_bet:
+ 
+                            allfirstgamebet = False
+
                 firstjeu = True
             else:
                 frame = inspect.currentframe()

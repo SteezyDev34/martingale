@@ -67,7 +67,6 @@ def all_script(driver):
         
 
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
-        print('config/mtt_recup', config.mtt_recup)
         if config.perte == 0:
             getGlobalPerte()
         if config.perte == 0:
@@ -128,6 +127,7 @@ def all_script(driver):
         if passageset:
             GetSetActuel(driver)
             config.game_start = True
+            passageset = False
             # if config.rattrape_perte == 1:
             if passageset:
                 config.error = False

@@ -6730,5 +6730,53 @@
         ],
         "timestamp": "2026-03-09 06:02:31",
         "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 2.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-03-09 07:35:50",
+        "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 3.47,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-03-09 07:42:55",
+        "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 5.63,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-03-09 07:49:28",
+        "url": "itf kyoto women qualification"
+    },
+    {
+        "montant": 2.6,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-03-09 08:37:11",
+        "url": "itf kolkata qualification"
     }
 ]
