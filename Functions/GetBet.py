@@ -130,7 +130,7 @@ def GetBet(driver, nextBet=False):
         elif config.systeme == 'Windows':
             if y > size['height']:
                 sautDeLigne = 68
-                decalageX = size['width'] / 2 - 50
+                decalageX = size['width'] / -2 + 50
                 y = 0
                 ligne = 1
                 tentative = tentative + 1
