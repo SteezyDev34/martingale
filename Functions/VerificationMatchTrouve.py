@@ -44,7 +44,7 @@ def main(driver, bet_item, matchlist_file_name):
             config.log('Le match autorisé!', 'success', False, 4)
             driver.get(newmatchtxt)
             return [True, config.newmatch]
-        elif config.in_stat and not any(config.newmatch in x for x in match_list):
+        elif not config.in_stat and not any(config.newmatch in x for x in match_list):
             print('vérif si perte')
             p = config.perte
             if not p or p == 0:
