@@ -42,6 +42,8 @@ def main(driver, bet_item, matchlist_file_name):
         match_list = GetMatchDone.main(config.matchlist_file_name)
         if config.in_stat and any(config.newmatch in x for x in match_list):
             config.log('Le match autorisé!', 'success', False, 4)
+            newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
+            newmatchtxt = f'{newmatchtxt}?platform_type=desktop'
             driver.get(newmatchtxt)
             return [True, config.newmatch]
         elif not config.in_stat and not any(config.newmatch in x for x in match_list):
@@ -54,9 +56,8 @@ def main(driver, bet_item, matchlist_file_name):
                 return [False, config.newmatch]
             else:
                 config.log('Le match  non autorisé mais perte en cours', 'success', False, 4, False)
-                if config.site_type == 'mobile_site':
-                    newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
-                    newmatchtxt = f'{newmatchtxt}?platform_type=mobile'
+                newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
+                newmatchtxt = f'{newmatchtxt}?platform_type=desktop'
                 driver.get(newmatchtxt)
                 config.log_clear_line()
                 return [True, config.newmatch]
