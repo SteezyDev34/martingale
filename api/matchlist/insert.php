@@ -3,9 +3,29 @@
 // Inclure le fichier de configuration
 require_once __DIR__ . '/../config.php';
 // Activer l'affichage des erreurs pour faciliter le débogage
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+// Ne pas afficher les erreurs directement dans la réponse JSON
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
 error_reporting(E_ALL);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/../error_log');
+// Démarrer un buffer de sortie pour s'assurer que seule la réponse JSON est renvoyée
+ob_start();
+
+/**
+ * Envoie une réponse JSON propre et termine le script.
+ */
+function send_json_and_exit($response, $httpCode = 200)
+{
+    // Vider tous les buffers de sortie pour éviter toute donnée non-JSON
+    while (ob_get_level() > 0) {
+        ob_end_clean();
+    }
+    http_response_code($httpCode);
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
 // Obtenir la connexion à la base de données
 $conn = getDbConnection();
 
@@ -52,9 +72,7 @@ if (isset($_GET['matches'])) {
                 $check->close();
                 // Fermer la connexion et retourner immédiatement la réponse
                 $conn->close();
-                header('Content-Type: application/json');
-                echo json_encode($response);
-                exit;
+                send_json_and_exit($response, 200);
             }
             $check->close();
         }
@@ -67,16 +85,13 @@ if (isset($_GET['matches'])) {
             try {
                 // Exécuter la requête
                 if ($stmt->execute()) {
-                    http_response_code(200);
                     $response = array("status" => "success", "message" => "Données insérées avec succès.");
                 }
             } catch (mysqli_sql_exception $e) {
                 // Gérer les doublons sans renvoyer une 500
                 if ($e->getCode() === 1062) { // Duplicate entry
-                    http_response_code(200);
                     $response = array("status" => "exists", "message" => "Match déjà présent.");
                 } else {
-                    http_response_code(500);
                     $response = array("status" => "error", "message" => "Erreur lors de l'insertion : " . $e->getMessage());
                 }
             } finally {
@@ -94,8 +109,5 @@ if (isset($_GET['matches'])) {
 // Fermer la connexion
 $conn->close();
 
-// Définir le type de contenu comme JSON
-header('Content-Type: application/json');
-
-// Retourner la réponse en JSON
-echo json_encode($response);
+// Envoyer la réponse JSON proprement
+send_json_and_exit($response, 200);

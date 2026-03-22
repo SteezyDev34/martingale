@@ -217,7 +217,7 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
 def AfficherParisMobile(driver, categorie='', type_de_pari=''):
     config.log('recherche du champ déroulant mobile...', '', indent=2)
     logline = 1
-    if config.scriptType in config.allScriptType:
+    if config.scriptType in config.allScriptType and config.scriptType != '1SET' and config.scriptType != 'QT' and config.scriptType != 'QTV2':
         GetSetActuel(driver)
         GetScoreActuel(driver)
         if str(config.set_actuel) == "1":
@@ -268,7 +268,7 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
                     try:
                         select_option_text = select_option.text
                     except Exception as e:
-                        config.log('#E0015 Aucun élements multiselect__option', 'error', False, 3)
+                        config.log(f'#E0015 Aucun élements multiselect__option {e}', 'error', False, 3)
                         logline += 1
                         tentative = tentative + 1
                         config.log(f'tentative {tentative}', 'warning', False, 3)
@@ -278,6 +278,9 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
                         if config.site_type == 'mobile_site':
                             if config.scriptType in ['1SET', 'BREAK']:
                                 the_text = f'{theset}'.lower()
+                                matching_text = select_option_text.strip().lower() == the_text
+                            elif config.scriptType in ['LIVE']:
+                                the_text = f'{args}'.lower()
                                 matching_text = select_option_text.strip().lower() == the_text
                             else:
                                 the_text = f'{args}'.lower() + '. ' + str(theset).lower()

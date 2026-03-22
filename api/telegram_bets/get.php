@@ -26,7 +26,7 @@ try {
     $date_to = $_GET['date_to'] ?? null;
 
     $filters = [];
-    if ($processed !== null) $filters['processed'] = ($processed === 'true' || $processed === '1') ? 1 : 0;
+    if ($processed !== null) $filters['processed'] = intval($processed);
     if ($tipster !== null) $filters['tipster'] = $tipster;
     if ($date_from !== null) $filters['date_from'] = $date_from;
     if ($date_to !== null) $filters['date_to'] = $date_to;

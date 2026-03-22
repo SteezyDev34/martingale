@@ -115,6 +115,24 @@ classes = {
             'new_site': 'market-grid-canvas__container',
             'mobile_site': 'game-markets-content'
         },
+    'coupon_loader_toggle':
+        {
+            'old_site': 'coupon-loader-toggle',
+            'new_site': 'coupon-loader-toggle',
+            'mobile_site': 'coupon-loader-toggle'
+        },
+    'coupon_loader_input':
+        {
+            'old_site': 'coupon-loader__input',
+            'new_site': 'coupon-loader__input',
+            'mobile_site': 'coupon-loader__input'
+        },
+    'coupon_loader_button':
+        {
+            'old_site': 'coupon-loader__button',
+            'new_site': 'coupon-loader__button',
+            'mobile_site': 'coupon-loader__button'
+        },
     'coupon_bet_remove':
         {
             'old_site': 'cpn-btn cpn-bet__remove',
@@ -133,11 +151,23 @@ classes = {
             'new_site': 'coupon-result-coef-value',
             'mobile_site': 'quick-coupon-events-card-coefs__new'
         },
+    'coupon_action_coef':
+        {
+            'old_site': 'cpn-action-coef',
+            'new_site': 'coupon-action-coef',
+            'mobile_site': 'coupon-total-coef__value'
+        },
     'cpn_amount':
         {
             'old_site': 'cpn-value-controls',
             'new_site': 'coupon-amount',
             'mobile_site': 'quick-coupon-bet-amount__steps'
+        },
+    'cpn_action_amount':
+        {
+            'old_site': 'cpn-value-controls__action',
+            'new_site': 'coupon-amount-action',
+            'mobile_site': 'coupon-action-bet__sum'
         },
     'cpn_amount_input':
         {
@@ -318,5 +348,17 @@ classes = {
             'old_site': 'c-scoreboard-player-score',
             'new_site': 'scoreboard-player-score',
             'mobile_site': 'scoreboard-periods-column__body'
+        },
+    'home_navigation_link_search':
+        {
+            'old_site': 'home-navigation__link--search',
+            'new_site': 'games-search-app-search__button',
+            'mobile_site': 'home-navigation__link--search'
+        },
+    'games_search_modal_input':
+        {
+            'old_site': 'games-search-modal__input',
+            'new_site': 'games-search-modal__input',
+            'mobile_site': 'games-search-modal__input'
         }
 }

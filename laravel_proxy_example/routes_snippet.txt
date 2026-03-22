@@ -1,0 +1,6 @@
+// Ajoutez ce snippet dans routes/web.php (ou api.php selon votre choix)
+// Route::get('/internal/proxy', [App\Http\Controllers\InternalProxyController::class, 'proxy']);
+
+// Exemple:
+// use App\Http\Controllers\InternalProxyController;
+// Route::get('/internal/proxy', [InternalProxyController::class, 'proxy']);

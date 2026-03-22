@@ -27,19 +27,21 @@ def process_api_bets(driver, limit: int = 10) -> int:
     Returns:
         int: Nombre de paris traités avec succès
     """
-    try:
+    #try:
+    if driver:
         # Récupérer les paris non traités
         unprocessed_bets = telegram_bets_api.get_unprocessed_bets(limit)
         
         if not unprocessed_bets:
-            log("Aucun pari non traité trouvé dans l'API", "info")
+            #log("Aucun pari non traité trouvé dans l'API", "info")
             return 0
         
         log(f"Trouvé {len(unprocessed_bets)} paris non traités", "info")
         processed_count = 0
         
         for bet in unprocessed_bets:
-            try:
+            #try:
+            if bet:
                 # Convertir les données de l'API au format attendu par placer_pari
                 bet_data = {
                     "date": bet.get("date_pari"),
@@ -48,7 +50,7 @@ def process_api_bets(driver, limit: int = 10) -> int:
                     "categorie": bet.get("categorie"),
                     "type_de_pari": bet.get("type_de_pari"),
                     "selection": bet.get("selection"),
-                    "odds": bet.get("odds"),
+                    "sport": bet.get("sport"),
                     "tipster": bet.get("tipster")
                 }
                 
@@ -65,19 +67,21 @@ def process_api_bets(driver, limit: int = 10) -> int:
                     else:
                         log(f"Erreur lors du marquage du pari ID {bet['id']} comme traité", "error", clear=False)
                 else:
+                    telegram_bets_api.mark_bet_as_processed(bet['id'], processed=2)
+                    
                     log(f"Échec du placement du pari ID {bet['id']}", "error", clear=False)
                 
                 # Attendre un peu entre chaque pari pour éviter de surcharger le système
                 time.sleep(2)
                 
-            except Exception as e:
-                log(f"Erreur lors du traitement du pari ID {bet.get('id', 'unknown')}: {e}", "error", clear=False)
+            #except Exception as e:
+                #log(f"Erreur lors du traitement du pari ID {bet.get('id', 'unknown')}: {e}", "error", clear=False)
         
         return processed_count
         
-    except Exception as e:
-        log(f"Erreur générale lors du traitement des paris API: {e}", "error", clear=False)
-        return 0
+    #except Exception as e:
+        #log(f"Erreur générale lors du traitement des paris API: {e}", "error", clear=False)
+        #return 0
 
 
 def get_betting_statistics() -> Dict:

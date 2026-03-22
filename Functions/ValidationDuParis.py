@@ -1,17 +1,20 @@
 import json
 import os
-import time
 import sys
+import time
+from datetime import datetime
+
 import requests
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
-from Functions.GetIfNewSite import GetIfNewSite
 from Functions.ModalHandler import ModalHandler
 from Functions.PlacerMise import PlacerMise
+from Functions.GetCouponInfo import GetCouponInfo
 
 
 def SendBetData():
@@ -29,41 +32,78 @@ def SendBetData():
         statut (str): Statut du pari
         script (str): Type de script
         
-    Returns:
+    Returns:    
         bool: True si l'envoi a réussi, False sinon
     """
 
     # Construction de l'URL de l'API
-    url = "https://p-com.studio/api/insert_paris.php"
+    url = "http://bettracker.sc2vagr6376.universe.wf/backend/api.php?action=add"
+
+    # Récupérer les données du pari validé si disponibles
+    vb = getattr(config, 'validated_bet', None)
+
+    # Préparer le payload conforme au format demandé
+    # date doit être au format YYYY-MM-DD
+    if vb and vb.get('timestamp'):
+        date_val = vb.get('timestamp')[:10]
+    else:
+        date_val = datetime.now().strftime('%Y-%m-%d')
+
+    stake_val = None
+    try:
+        stake_val = float(vb.get('montant')) if vb and vb.get('montant') is not None else float(
+            getattr(config, 'mise', 0))
+    except Exception:
+        stake_val = float(getattr(config, 'mise', 0))
+
+    odds_val = None
+    try:
+        odds_val = float(vb.get('cote')) if vb and vb.get('cote') is not None else float(getattr(config, 'cote', 0))
+    except Exception:
+        odds_val = float(getattr(config, 'cote', 0))
+
+    match_val = ''
+    if vb:
+        match_val = vb.get('match') or (vb.get('equipe_1', '') + ' - ' + vb.get('equipe_2', '')).strip(' -')
+    # Preferer la sélection (`bet`) extraite du coupon pour `bet_event`, sinon fallback sur le match
+    bet_event_val = ''
+    if vb and vb.get('bet'):
+        bet_event_val = vb.get('bet')
+    else:
+        bet_event_val = match_val
+
+    payload = {
+        'date': date_val,
+        'bookmaker': vb.get('bookmaker') if vb and vb.get('bookmaker') else '1xbet',
+        'stake': stake_val,
+        'odds': odds_val,
+        'result': vb.get('result') if vb and vb.get('result') else 'en cours',
+        'tipster': vb.get('tipster') if vb and vb.get('tipster') else getattr(config, 'tipster', 'ADR'),
+        'bet_event': bet_event_val,
+        'bet_to_recover_id': vb.get('bet_to_recover_id', '') if vb else '',
+        'coupon': vb.get('coupon') if vb and vb.get('coupon') else '',
+        'type_de_pari': vb.get('type_de_pari') if vb and vb.get('type_de_pari') else '',
+        'equipe_1': vb.get('equipe_1') if vb and vb.get('equipe_1') else '',
+        'equipe_2': vb.get('equipe_2') if vb and vb.get('equipe_2') else '',
+        'match': match_val,
+    }
+
+    # Ajouter des champs utiles (coupon, raw match) si présents
+    if vb:
+        if vb.get('coupon'):
+            payload['coupon'] = vb.get('coupon')
+        payload['raw'] = vb
 
     try:
-        # Préparation des données à envoyer en POST
-        data = {
-            'coupon_number': '0',
-            'type_pari': config.win_type,
-            'mise': config.mise,
-            'gains_potentiels': config.netprofit,
-            'match_details': json.dumps({'teams': config.teams, 'league': config.ligue_name}),
-            'cote': config.cote,
-            'script': config.scriptType
-        }
-
-        # Envoi de la requête POST avec les données
-        response = requests.post(url, data=data)
-
-        # Vérifier que la requête a réussi
+        response = requests.post(url, json=payload)
         response.raise_for_status()
-
-        # Parser le JSON depuis la réponse
         result = response.json()
-
-        if result['status'] == "success":
-            print(f"✅ Paris enregistré avec succès (ID: {result['id']})")
+        if isinstance(result, dict) and result.get('success') == True:
+            print(f"✅ Paris enregistré avec succès (ID: {result.get('id')})")
             return True
         else:
-            print(f"❌ Erreur lors de l'enregistrement : {result['message']}")
+            print(f"❌ Erreur lors de l'enregistrement : {result}")
             return False
-
     except requests.exceptions.RequestException as e:
         print(f"❌ Erreur lors de la requête HTTP : {e}")
         return False
@@ -79,6 +119,7 @@ def ValidationDuParis(driver, nexbet=False):
     validation = False
     tentative = 0
     already = False
+    #return True # Temporary bypass for testing purposes, remove this line to enable full validation logic
     while not validation and tentative < 3:
         config.log('Vérification des paris validés')
         config.log('Tentative', str(tentative))
@@ -107,6 +148,13 @@ def ValidationDuParis(driver, nexbet=False):
             if tentative > 2:
                 break
         else:
+            try:
+                if config.scriptType == 'LIVE' and config.site_type == 'mobile_site':
+                    info = GetCouponInfo(driver)
+            except Exception as e:
+                config.log(f"Erreur GetCouponInfo: {e}", 'error', False)
+                info = {}
+
             if str(l) == str(config.mise):
                 sending_mise = 1
                 config.log('RECHERCHE DU BOUTON PLACER UN PARIS', 'info', False, 2)
@@ -167,7 +215,12 @@ def ValidationDuParis(driver, nexbet=False):
                                             printtext = 1
                                 config.log_clear_line(line)
                                 try:
-                                    if ModalHandler(driver):
+                                    if config.scriptType == 'LIVE' and config.site_type == 'mobile_site':
+                                        close = False
+                                    else:
+                                        info = GetCouponInfo(driver)
+                                        close = True
+                                    if ModalHandler(driver, close):
                                         validation = True
                                 except Exception as e:
                                     config.log(f"Erreur lors de la validation du pari : {e}", 'error', False)
@@ -194,15 +247,39 @@ def ValidationDuParis(driver, nexbet=False):
             # En cas de problème d'accès au driver, revenir à la valeur par défaut
             url_to_store = getattr(config, 'ligue_name', None)
 
-        config.validated_bet = {
-            'montant': config.mise,
-            'cote': config.cote,
-            'jeu': config.looking_game,
-            'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
-            'winscore': config.win_type,
-            'timestamp': current_timestamp,
-            'url': url_to_store
-        }
+        if config.scriptType != 'LIVE':
+            config.validated_bet = {
+                'montant': config.mise,
+                'cote': config.cote,
+                'jeu': config.looking_game,
+                'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
+                'winscore': config.win_type,
+                'timestamp': current_timestamp,
+                'url': url_to_store
+            }
+        else:
+            # Récupérer les informations depuis la modal via GetCouponInfo
+            # Fusionner les valeurs essentielles
+            if info:
+                validated = {
+                    'montant': info.get('montant', config.mise),
+                    'cote': info.get('cote', config.cote),
+                    'match': info.get('match'),
+                    'equipe_1': info.get('equipe_1'),
+                    'equipe_2': info.get('equipe_2'),
+                    'type_de_pari': info.get('type_de_pari'),
+                    'bet': info.get('bet'),
+                    'coupon': info.get('coupon'),
+                    'timestamp': info.get('timestamp'),
+                    'tipster': info.get('tipster'),
+                    'bet_to_recover_id': config.bet_to_recover_id if hasattr(config, 'bet_to_recover_id') else '',
+                }
+                config.validated_bet = validated
+            # Envoyer les données au service distant
+            try:
+                SendBetData()
+            except Exception as e:
+                config.log(f"Erreur lors de l'envoi des données du pari : {e}", 'error', False)
 
         # Save validated bet to JSON file named after script type
         json_filename = f"{config.scriptType}_validated_bets.json"
@@ -244,10 +321,12 @@ if __name__ == "__main__":
     # driver.switch_to.window(driver.window_handles[0])
     config.localhost = 43151
     from ChromeDriver.SetDriver import get_script_driver
+
     num_fenetre = 1
     driver = get_script_driver(num_fenetre)
     # driver.switch_to.window(driver.window_handles[0])
-    config.site_type = 'mobile_site'
-    config.scriptType = '40A'
+    config.site_type = 'new_site'
+    config.scriptType = 'LIVE'
+    config.tipster = 'ADR'
     config.mise = 0.2
     ValidationDuParis(driver)

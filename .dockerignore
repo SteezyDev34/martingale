@@ -1,0 +1,27 @@
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# Environnements
+venv/
+.venv/
+
+# Git
+.git/
+
+# Logs / artefacts
+Logs/
+*.log
+error_log
+
+# Données volumineuses / temporaires
+*.json
+!config.json
+
+# Outils IDE
+.idea/
+.vscode/
+
+# Divers
+.DS_Store

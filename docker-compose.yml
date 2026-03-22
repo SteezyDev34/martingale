@@ -1,0 +1,38 @@
+services:
+  getprobas:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      PYTHONUNBUFFERED: "1"
+      # Ajout d'envars pour intégration reverse-proxy / réseau partagé
+      VIRTUAL_HOST: getprobas.local
+      VIRTUAL_PORT: "80"
+      LETSENCRYPT_HOST: getprobas.local
+      LETSENCRYPT_EMAIL: you@example.local
+      # Utiliser le backend Laravel exposé sur le réseau partagé comme proxy interne
+      # Le backend doit implémenter un endpoint /internal/proxy qui accepte ?u=<url>
+      PROXY_URL: "http://api.auxotracker/internal/proxy"
+    command: ["python", "-u", "Functions/GetProbas.py"]
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+    networks:
+      - shared_network
+
+networks:
+  shared_network:
+    external: true
+

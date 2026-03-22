@@ -14,15 +14,19 @@ from Functions.GetMise import GetMise
 # from ChromeDriver.SetDriver1 import driver
 
 
-def PlacerMise(driver):
+def PlacerMise(driver, constructor=False):
     sending_mise = False
+    if config.scriptType == 'LIVE' and config.site_type == 'mobile_site' and constructor:
+        saved_class_cpn_amount = config.classes['cpn_amount']
+        config.classes['cpn_amount'] = config.classes['cpn_action_amount']
+        
     try:
 
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, config.classes['cpn_amount'][config.site_type])))
     except Exception as e:
 
-        config.log("CHAMP DE MISE NON TROUVÉ", 'error', False)
+        config.log(f"CHAMP DE MISE NON TROUVÉ {config.classes['cpn_amount'][config.site_type]}", 'error', False)
         return False
     else:
         cpn_setting = driver.find_element(By.CLASS_NAME, config.classes['cpn_amount'][config.site_type])
@@ -41,6 +45,8 @@ def PlacerMise(driver):
                 tentative = tentative + 1
                 config.log('mauvaise mise insérée!', 'warning', False)
                 time.sleep(1)
+    if config.scriptType == 'LIVE' and config.site_type == 'mobile_site' and constructor:
+        config.classes['cpn_amount'] = saved_class_cpn_amount
     return sending_mise
 
 

@@ -237,11 +237,17 @@
             "Equipe 1 va gagner et Total > 22.5 - Non",
             "Equipe 1 va gagner et Total > 22.5 - Oui",
             "Equipe 1 va gagner et Total > 227.5 - Oui",
-            "Equipe 1 va gagner et Total > 23.5 - Non",
-            "V1 et Total Sets < 2.5 - Non",
-            "V1 et Total Sets < 2.5 - Oui",
-            "V1 et Total Sets > 2.5 - Non",
-            "V1 et Total Sets > 2.5 - Oui"
+            "Equipe 1 va gagner et Total > 23.5 - Non"
+        ],
+        "1, Résultat + Total de Sets": [
+            "V1 et TM 2.5 - Non",
+            "V1 et TM 2.5 - Oui",
+            "V1 et TP 2.5 - Non",
+            "V1 et TP 2.5 - Oui",
+            "V1 et TM 3.5 - Non",
+            "V1 et TM 3.5 - Oui",
+            "V1 et TP 3.5 - Non",
+            "V1 et TP 3.5 - Oui"
         ],
         "2, Résultat + Total": [
             "Equipe 2 va gagner et Total < 19.5 - Oui",
@@ -261,66 +267,23 @@
             "Equipe 2 va gagner et Total > 21.5 - Oui",
             "Equipe 2 va gagner et Total > 22.5 - Non",
             "Equipe 2 va gagner et Total > 22.5 - Oui",
-            "Equipe 2 va gagner et Total > 227.5 - Oui",
-            "V2 et Total Sets < 2.5 - Non",
-            "V2 et Total Sets < 2.5 - Oui",
-            "V2 et Total Sets > 2.5 - Non",
-            "V2 et Total Sets > 2.5 - Oui"
+            "Equipe 2 va gagner et Total > 227.5 - Oui"
         ],
-        "Jeu Décisif": [
-            "Jeu Décisif - Non",
-            "Jeu Décisif - Oui"
-        ],
-        "Pair/Impair": [
-            "Total Pair - Non",
-            "Total Pair - Oui"
-        ],
-        "Handicap Européen": [
-            "Handicap Européen 2:0 V1",
-            "Handicap Européen 2:0 V2",
-            "Handicap Européen 2:0 X",
-            "Handicap Européen 3:0 V1",
-            "Handicap Européen 3:0 V2",
-            "Handicap Européen 3:0 X",
-            "Handicap Européen 4:0 V1",
-            "Handicap Européen 4:0 V2",
-            "Handicap Européen 4:0 X",
-            "Handicap Européen 5:0 V1",
-            "Handicap Européen 5:0 V2",
-            "Handicap Européen 5:0 X",
-            "Handicap Européen 6:0 V1",
-            "Handicap Européen 6:0 V2",
-            "Handicap Européen 6:0 X"
-        ],
-        "3 Issues Total": [
-            "Total Moins de 18 (3 Issues)",
-            "Total Moins de 19 (3 Issues)",
-            "Total Moins de 20 (3 Issues)",
-            "Total Moins de 22 (3 Issues)",
-            "Total Moins de 23 (3 Issues)",
-            "Total Plus de 18 (3 Issues)",
-            "Total Plus de 19 (3 Issues)",
-            "Total Plus de 20 (3 Issues)",
-            "Total Plus de 22 (3 Issues)",
-            "Total Plus de 23 (3 Issues)",
-            "Total égal à 18 (3 Issues)",
-            "Total égal à 19 (3 Issues)",
-            "Total égal à 20 (3 Issues)",
-            "Total égal à 22 (3 Issues)",
-            "Total égal à 23 (3 Issues)"
+        "2, Résultat + Total de Sets": [
+            "V2 et TM 2.5 - Non",
+            "V2 et TM 2.5 - Oui",
+            "V2 et TP 2.5 - Non",
+            "V2 et TP 2.5 - Oui",
+            "V2 et TM 3.5 - Non",
+            "V2 et TM 3.5 - Oui",
+            "V2 et TP 3.5 - Non",
+            "V2 et TP 3.5 - Oui"
         ],
         "Handicap des sets": [
             "1 Handicap (+1.5) Sets",
             "1 Handicap (-1.5) Sets",
             "2 Handicap (+1.5) Sets",
             "2 Handicap (-1.5) Sets"
-        ],
-        "Perdre sans marquer aucun jeu": [
-            "Set se termine à 6:0 (0:6) dans le Match - Oui"
-        ],
-        "Revenir au score et gagner le match": [
-            "Le Joueur va perdre le premier Set et va gagner le Match - Non",
-            "Le Joueur va perdre le premier Set et va gagner le Match - Oui"
         ],
         "Total de Sets": [
             "Total des Sets Moins de 2.5",
@@ -334,48 +297,10 @@
             "Joueur 1 va sauver une balle de match et gagner le match - OUI",
             "Joueur 2 va sauver une balle de match et gagner le match - OUI"
         ],
-        "Score des Sets": [
-            "1er Set < 2ème",
-            "1er Set = 2ème",
-            "1er Set > 2ème",
-            "Set avec le score le plus élevé Moins de 10.5",
-            "Set avec le score le plus élevé Plus de 10.5"
-        ],
-        "Set / match": [
-            "Set / Match V1V1",
-            "Set / Match V1V2",
-            "Set / Match V2V1",
-            "Set / Match V2V2"
-        ],
+
         "Chaque joueur va gagner au moins un set": [
             "Les deux vont gagner au moins un set - Non",
             "Les deux vont gagner au moins un set - Oui"
-        ],
-        "Joueur 1, Score 1er Service": [
-            "Joueur 1 Va Perdre Son Premier Jeu de Service 0-40",
-            "Joueur 1 Va Perdre Son Premier Jeu de Service 15-40",
-            "Joueur 1 Va Perdre Son Premier Jeu de Service 30-40",
-            "Joueur 1 Va Perdre Son Premier Jeu de Service 40-40",
-            "Joueur 1 Va remporter Son Premier Jeu de Service 40-0",
-            "Joueur 1 Va remporter Son Premier Jeu de Service 40-15",
-            "Joueur 1 Va remporter Son Premier Jeu de Service 40-30",
-            "Joueur 1 Va remporter Son Premier Jeu de Service 40-40"
-        ],
-        "Joueur 2, Score 1er Service": [
-            "Joueur 2 Va Perdre Son Premier Jeu de Service 0-40",
-            "Joueur 2 Va Perdre Son Premier Jeu de Service 15-40",
-            "Joueur 2 Va Perdre Son Premier Jeu de Service 30-40",
-            "Joueur 2 Va Perdre Son Premier Jeu de Service 40-40",
-            "Joueur 2 Va remporter Son Premier Jeu de Service 40-0",
-            "Joueur 2 Va remporter Son Premier Jeu de Service 40-15",
-            "Joueur 2 Va remporter Son Premier Jeu de Service 40-30",
-            "Joueur 2 Va remporter Son Premier Jeu de Service 40-40"
-        ],
-        "Jeux décisifs, Total": [
-            "Total Jeux décisifs Exactement 0",
-            "Total Jeux décisifs Exactement 1",
-            "Total Jeux décisifs Exactement 2",
-            "Total Jeux décisifs Exactement 3"
         ],
         "Double chance": [
             "12",
@@ -474,33 +399,6 @@
             "Equipe 2 va marquer le prochain But 3",
             "Equipe 2 va marquer le prochain But 4",
             "Equipe 2 va marquer le prochain But 5"
-        ],
-        "Comment le but sera marqué": [
-            "But Numéro 1 - But contre son camp",
-            "But Numéro 1 - Marqué par un tir Dans Le Jeu",
-            "But Numéro 1 - Pénalty",
-            "But Numéro 1 - Tête",
-            "But Numéro 1 va être marqué sur Coup franc direct",
-            "Pas de But numéro 1"
-        ],
-        "Score Exact (17 Issues)": [
-            "Score exact 0-0 (17 Issues)",
-            "Score exact 0-1 (17 Issues)",
-            "Score exact 0-2 (17 Issues)",
-            "Score exact 0-3 (17 Issues)",
-            "Score exact 1-0 (17 Issues)",
-            "Score exact 1-1 (17 Issues)",
-            "Score exact 1-2 (17 Issues)",
-            "Score exact 1-3 (17 Issues)",
-            "Score exact 2-0 (17 Issues)",
-            "Score exact 2-1 (17 Issues)",
-            "Score exact 2-2 (17 Issues)",
-            "Score exact 2-3 (17 Issues)",
-            "Score exact 3-0 (17 Issues)",
-            "Score exact 3-1 (17 Issues)",
-            "Score exact 3-2 (17 Issues)",
-            "Score exact 3-3 (17 Issues)",
-            "Score exact après 3-3 - Tout autre (17 issues)"
         ],
         "Equipe gagne": [
             "Equipe 1 gagne",

@@ -3,10 +3,12 @@ Module de gestion de l'API Telegram Bets.
 Envoie et récupère les paris détectés via Telegram et GPT.
 """
 import json
-import requests
-from typing import Dict, List, Optional
-import config
 import os
+from typing import Dict, List, Optional
+
+import requests
+
+import config
 
 # Cache des expéditeurs ignorés (chargé à la demande)
 _IGNORED_SENDERS = None
@@ -66,17 +68,17 @@ class TelegramBetsAPI:
     Classe pour gérer l'API des paris Telegram.
     Permet d'envoyer, récupérer et gérer les paris extraits des messages Telegram.
     """
-    
+
     def __init__(self):
         """Initialise l'instance de l'API avec l'URL de base."""
         self.base_url = f"{config.api_url}/telegram_bets"
         self.headers = {
             "Content-Type": "application/json",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                        "AppleWebKit/537.36 (KHTML, like Gecko) "
-                        "Chrome/122.0.0.0 Safari/537.36"
+                          "AppleWebKit/537.36 (KHTML, like Gecko) "
+                          "Chrome/122.0.0.0 Safari/537.36"
         }
-    
+
     def send_bet_to_api(self, bet_data: Dict, message_original: str = None, sender_username: str = None) -> bool:
         """
         Envoie un pari extrait par GPT vers l'API.
@@ -95,23 +97,41 @@ class TelegramBetsAPI:
                 config.log(f"Expéditeur ignoré, pari non envoyé: {sender_username}", 'info')
                 return False
             # Préparer les données pour l'API
-            api_data = {
-                "date": bet_data.get("date", ""),
-                "equipe_1": bet_data.get("equipe_1", ""),
-                "equipe_2": bet_data.get("equipe_2", ""),
-                "categorie": bet_data.get("categorie", ""),
-                "type_de_pari": bet_data.get("type_de_pari", ""),
-                "selection": bet_data.get("selection", ""),
-                "odds": str(bet_data.get("odds", "0")),
-                "tipster": bet_data.get("tipster", "marco"),
-                "message_original": message_original,
-                "sender_username": sender_username
-            }
+            # Si 'combined_events' existe et n'est pas False, l'envoyer comme array sérialisé (JSON), sans 'selection'
+            if bet_data.get("combined_events"):
+                api_data = {
+                    "date": bet_data.get("date", ""),
+                    "equipe_1": bet_data.get("equipe_1", ""),
+                    "equipe_2": bet_data.get("equipe_2", ""),
+                    "categorie": bet_data.get("categorie", ""),
+                    "type_de_pari": "combiné",
+                    "sport": bet_data.get("sport", ""),
+                    "odds": str(bet_data.get("odds", "0")),
+                    "tipster": bet_data.get("tipster", ""),
+                    "message_original": message_original,
+                    "sender_username": sender_username,
+                    "selection": json.dumps(bet_data.get("combined_events"))
+                }
+            else:
+                api_data = {
+                    "date": bet_data.get("date", ""),
+                    "equipe_1": bet_data.get("equipe_1", ""),
+                    "equipe_2": bet_data.get("equipe_2", ""),
+                    "categorie": bet_data.get("categorie", ""),
+                    "type_de_pari": bet_data.get("type_de_pari", ""),
+                    "selection": bet_data.get("selection", ""),
+                    "sport": bet_data.get("sport", ""),
+                    "odds": str(bet_data.get("odds", "0")),
+                    "tipster": bet_data.get("tipster", ""),
+                    "message_original": message_original,
+                    "sender_username": sender_username
+                }
+            print(f"Envoi à l'API: {api_data}")
             
             url = f"{self.base_url}/insert.php"
-            
+
             response = requests.post(url, headers=self.headers, data=json.dumps(api_data), timeout=10)
-            
+
             if response.status_code == 200:
                 try:
                     json_resp = response.json()
@@ -125,13 +145,14 @@ class TelegramBetsAPI:
                     config.log("Réponse API invalide (pas de JSON)", 'warning', True)
                     return False
             else:
-                config.log(f"Erreur HTTP lors de l'envoi du pari: {response.status_code} - {response.text}", 'error', True)
+                config.log(f"Erreur HTTP lors de l'envoi du pari: {response.status_code} - {response.text}", 'error',
+                           True)
                 return False
-                
+
         except Exception as e:
             config.log(f"Exception lors de l'envoi du pari à l'API: {str(e)}", 'error', True)
             return False
-    
+
     def get_unprocessed_bets(self, limit: int = 50) -> List[Dict]:
         """
         Récupère les paris non traités depuis l'API.
@@ -148,9 +169,9 @@ class TelegramBetsAPI:
                 "processed": "false",
                 "limit": limit
             }
-            
+
             response = requests.get(url, params=params, headers=self.headers, timeout=10)
-            
+
             if response.status_code == 200:
                 json_resp = response.json()
                 if json_resp.get('success'):
@@ -161,17 +182,18 @@ class TelegramBetsAPI:
             else:
                 config.log(f"Erreur HTTP lors de la récupération: {response.status_code}", 'error')
                 return []
-                
+
         except Exception as e:
             config.log(f"Exception lors de la récupération des paris: {str(e)}", 'error')
             return []
-    
-    def mark_bet_as_processed(self, bet_id: int) -> bool:
+
+    def mark_bet_as_processed(self, bet_id: int, processed: int = 1) -> bool:
         """
         Marque un pari comme traité dans l'API.
         
         Args:
             bet_id (int): ID du pari à marquer comme traité
+            processed (int): Statut à définir (1 pour traité, 0 pour non traité)
             
         Returns:
             bool: True si la mise à jour est réussie, False sinon
@@ -180,11 +202,11 @@ class TelegramBetsAPI:
             url = f"{self.base_url}/update.php"
             data = {
                 "id": bet_id,
-                "processed": True
+                "processed": processed
             }
-            
+
             response = requests.post(url, headers=self.headers, data=json.dumps(data), timeout=10)
-            
+
             if response.status_code == 200:
                 json_resp = response.json()
                 if json_resp.get('success'):
@@ -196,11 +218,11 @@ class TelegramBetsAPI:
             else:
                 config.log(f"Erreur HTTP lors du marquage: {response.status_code}", 'error')
                 return False
-                
+
         except Exception as e:
             config.log(f"Exception lors du marquage du pari {bet_id}: {str(e)}", 'error')
             return False
-    
+
     def get_bets_by_tipster(self, tipster: str, processed: Optional[bool] = None, limit: int = 50) -> List[Dict]:
         """
         Récupère les paris d'un tipster spécifique.
@@ -219,12 +241,12 @@ class TelegramBetsAPI:
                 "tipster": tipster,
                 "limit": limit
             }
-            
+
             if processed is not None:
                 params["processed"] = "true" if processed else "false"
-            
+
             response = requests.get(url, params=params, headers=self.headers, timeout=10)
-            
+
             if response.status_code == 200:
                 json_resp = response.json()
                 if json_resp.get('success'):
@@ -235,7 +257,7 @@ class TelegramBetsAPI:
             else:
                 config.log(f"Erreur HTTP: {response.status_code}", 'error')
                 return []
-                
+
         except Exception as e:
             config.log(f"Exception lors de la récupération pour {tipster}: {str(e)}", 'error')
             return []

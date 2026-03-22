@@ -25,7 +25,6 @@ Cette API permet de stocker et gérer les paris extraits automatiquement des mes
   "type_de_pari": "Total 1",
   "selection": "Total Individuel 1 Plus de 0.5",
   "odds": "1.432",
-  "tipster": "marco",
   "message_original": "Message telegram original (optionnel)",
   "sender_username": "@username (optionnel)"
 }
@@ -47,7 +46,6 @@ bet_data = {
     "type_de_pari": "Vainqueur",
     "selection": "V1",
     "odds": "2.50",
-    "tipster": "marco"
 }
 
 success = telegram_bets_api.send_bet_to_api(bet_data, "Message original", "@sender")
@@ -128,7 +126,7 @@ monitor_telegram_bets()
 ### Table `telegram_bets`
 
 | Champ              | Type          | Description                         |
-| ------------------ | ------------- | ----------------------------------- |
+|--------------------|---------------|-------------------------------------|
 | `id`               | INT           | Identifiant unique (auto-increment) |
 | `date_pari`        | VARCHAR(20)   | Date du pari (DD/MM/YYYY)           |
 | `equipe_1`         | VARCHAR(255)  | Première équipe/joueur              |

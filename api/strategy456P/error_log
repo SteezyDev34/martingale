@@ -468,3 +468,21 @@ Stack trace:
 #0 /home2/sc2vagr6376/auxobetbot/strategy456P/index.php(10): mysqli->query()
 #1 {main}
   thrown in /home2/sc2vagr6376/auxobetbot/strategy456P/index.php on line 10
+[08-Mar-2026 04:49:07 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sc2vagr6376_auxobetbot.0_Strategy456P' doesn't exist in /home2/sc2vagr6376/auxobetbot/src/DbCompat.php:122
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/src/DbCompat.php(122): PDO->query()
+#1 /home2/sc2vagr6376/auxobetbot/strategy456P/index.php(10): MysqliCompat->query()
+#2 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/src/DbCompat.php on line 122
+[08-Mar-2026 10:01:43 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sc2vagr6376_auxobetbot.0_Strategy456P' doesn't exist in /home2/sc2vagr6376/auxobetbot/src/DbCompat.php:122
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/src/DbCompat.php(122): PDO->query()
+#1 /home2/sc2vagr6376/auxobetbot/strategy456P/index.php(10): MysqliCompat->query()
+#2 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/src/DbCompat.php on line 122
+[08-Mar-2026 13:22:24 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sc2vagr6376_auxobetbot.0_Strategy456P' doesn't exist in /home2/sc2vagr6376/auxobetbot/src/DbCompat.php:122
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/src/DbCompat.php(122): PDO->query()
+#1 /home2/sc2vagr6376/auxobetbot/strategy456P/index.php(10): MysqliCompat->query()
+#2 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/src/DbCompat.php on line 122

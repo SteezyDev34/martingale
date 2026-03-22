@@ -1,5 +1,6 @@
 [
     {
+<<<<<<< Updated upstream
         "montant": 0.61,
         "cote": "1.66",
         "jeu": 1,
@@ -64,11 +65,18 @@
     },
     {
         "montant": 5.93,
+=======
+        "montant": 0.35,
+>>>>>>> Stashed changes
         "cote": "1.57",
         "jeu": 6,
         "set": "1",
         "winscore": "0:15",
+<<<<<<< Updated upstream
         "timestamp": "2026-02-08 12:58:10",
+=======
+        "timestamp": "2026-02-08 13:01:34",
+>>>>>>> Stashed changes
         "url": "atp rotterdam qualification"
     },
     {
@@ -77,6 +85,7 @@
         "jeu": 7,
         "set": "1",
         "winscore": "15:0",
+<<<<<<< Updated upstream
         "timestamp": "2026-02-08 13:03:01",
         "url": "atp rotterdam qualification"
     },
@@ -1243,6 +1252,121 @@
     },
     {
         "montant": 2.78,
+=======
+        "timestamp": "2026-02-08 13:02:53",
+        "url": "atp rotterdam qualification"
+    },
+    {
+        "montant": 0.35,
+        "cote": "1.57",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 13:07:49",
+        "url": "atp rotterdam qualification"
+    },
+    {
+        "montant": 0.38,
+        "cote": "1.52",
+        "jeu": 10,
+        "set": "1",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 13:12:37",
+        "url": "atp rotterdam qualification"
+    },
+    {
+        "montant": 2.11,
+        "cote": "1.57",
+        "jeu": 8,
+        "set": "2",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 13:45:24",
+        "url": "wta doha"
+    },
+    {
+        "montant": 5.32,
+        "cote": "1.66",
+        "jeu": 9,
+        "set": "2",
+        "winscore": "15:0",
+        "timestamp": "2026-02-08 13:47:46",
+        "url": "wta doha"
+    },
+    {
+        "montant": 15.84,
+        "cote": "1.57",
+        "jeu": 10,
+        "set": "2",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 13:51:15",
+        "url": "wta doha"
+    },
+    {
+        "montant": 0.28,
+        "cote": "1.725",
+        "jeu": 11,
+        "set": "2",
+        "winscore": "15:0",
+        "timestamp": "2026-02-08 13:57:25",
+        "url": "wta doha"
+    },
+    {
+        "montant": 15.45,
+        "cote": "1.66",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 14:31:54",
+        "url": "wta doha"
+    },
+    {
+        "montant": 21.25,
+        "cote": "1.48",
+        "jeu": 5,
+        "set": "1",
+        "winscore": "15:0",
+        "timestamp": "2026-02-08 14:35:34",
+        "url": "wta doha"
+    },
+    {
+        "montant": 14.07,
+        "cote": "1.725",
+        "jeu": 6,
+        "set": "1",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 14:39:42",
+        "url": "wta doha"
+    },
+    {
+        "montant": 56.64,
+        "cote": "1.432",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "15:0",
+        "timestamp": "2026-02-08 14:53:12",
+        "url": "wta doha"
+    },
+    {
+        "montant": 7.17,
+        "cote": "1.725",
+        "jeu": 8,
+        "set": "1",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 14:55:02",
+        "url": "wta doha"
+    },
+    {
+        "montant": 7.45,
+        "cote": "1.725",
+        "jeu": 1,
+        "set": "2",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 14:57:26",
+        "url": "wta doha"
+    },
+    {
+        "montant": 12.04,
+>>>>>>> Stashed changes
         "cote": "1.432",
         "jeu": 11,
         "set": "1",
@@ -1272,8 +1396,9 @@
         "montant": 2.5,
         "cote": "1.48",
         "jeu": 2,
-        "set": "1",
+        "set": "2",
         "winscore": "15:0",
+<<<<<<< Updated upstream
         "timestamp": "2026-02-11 23:31:09",
         "url": "atp buenos aires"
     },
@@ -1465,13 +1590,135 @@
         "winscore": "15:0",
         "timestamp": "2026-02-12 10:08:09",
         "url": "itf sharm el sheikh"
+=======
+        "timestamp": "2026-02-08 14:59:58",
+        "url": "wta doha"
     },
     {
-        "montant": 1.98,
+        "montant": 40.37,
+        "cote": "1.432",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "15:0",
+        "timestamp": "2026-02-08 15:05:39",
+        "url": "wta doha"
+    },
+    {
+        "montant": 87.89,
+        "cote": "1.66",
+        "jeu": 5,
+        "set": "2",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 15:10:40",
+        "url": "wta doha"
+>>>>>>> Stashed changes
+    },
+    {
+        "montant": 1.48,
+        "cote": "1.52",
+        "jeu": 11,
+        "set": "1",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 17:58:24",
+        "url": "atp buenos aires qualification"
+    },
+    {
+        "montant": 4.71,
+        "cote": "1.52",
+        "jeu": 1,
+        "set": "2",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 18:01:37",
+        "url": "atp buenos aires qualification"
+    },
+    {
+        "montant": 12.91,
+        "cote": "1.57",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "15:0",
+        "timestamp": "2026-02-08 18:05:01",
+        "url": "atp buenos aires qualification"
+    },
+    {
+        "montant": 9.12,
+        "cote": "1.57",
+        "jeu": 4,
+        "set": "2",
+        "winscore": "15:0",
+        "timestamp": "2026-02-08 18:11:24",
+        "url": "atp buenos aires qualification"
+    },
+    {
+        "montant": 30.25,
+        "cote": "1.48",
+        "jeu": 5,
+        "set": "2",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 18:15:56",
+        "url": "atp buenos aires qualification"
+    },
+    {
+        "montant": 8.6,
+        "cote": "1.605",
+        "jeu": 6,
+        "set": "2",
+        "winscore": "15:0",
+        "timestamp": "2026-02-08 18:19:42",
+        "url": "atp buenos aires qualification"
+    },
+    {
+        "montant": 10.83,
+        "cote": "1.48",
+        "jeu": 7,
+        "set": "2",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 18:26:54",
+        "url": "atp buenos aires qualification"
+    },
+    {
+        "montant": 8.6,
+        "cote": "1.605",
+        "jeu": 8,
+        "set": "2",
+        "winscore": "15:0",
+        "timestamp": "2026-02-08 18:32:30",
+        "url": "atp buenos aires qualification"
+    },
+    {
+        "montant": 9.12,
+        "cote": "1.57",
+        "jeu": 9,
+        "set": "2",
+        "winscore": "0:15",
+        "timestamp": "2026-02-08 18:42:56",
+        "url": "atp buenos aires qualification"
+    },
+    {
+        "montant": 25.47,
+        "cote": "1.57",
+        "jeu": 10,
+        "set": "2",
+        "winscore": "15:0",
+        "timestamp": "2026-02-08 18:46:12",
+        "url": "atp buenos aires qualification"
+    },
+    {
+        "montant": 8.6,
         "cote": "1.605",
         "jeu": 2,
         "set": "1",
+        "winscore": "15:0",
+        "timestamp": "2026-02-09 00:15:55",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 12.04,
+        "cote": "1.432",
+        "jeu": 3,
+        "set": "1",
         "winscore": "0:15",
+<<<<<<< Updated upstream
         "timestamp": "2026-02-12 10:12:40",
         "url": "itf sharm el sheikh"
     },
@@ -1639,10 +1886,27 @@
     },
     {
         "montant": 2.01,
+=======
+        "timestamp": "2026-02-09 00:21:49",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 28.83,
+        "cote": "1.605",
+        "jeu": 4,
+        "set": "1",
+        "winscore": "15:0",
+        "timestamp": "2026-02-09 00:24:22",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 107.57,
+>>>>>>> Stashed changes
         "cote": "1.432",
         "jeu": 5,
         "set": "1",
         "winscore": "0:15",
+<<<<<<< Updated upstream
         "timestamp": "2026-02-12 12:28:16",
         "url": "itf vila real de santo antonio"
     },
@@ -2959,10 +3223,15 @@
         "winscore": "0:15",
         "timestamp": "2026-03-08 13:56:57",
         "url": "challenger cherbourg qualification"
+=======
+        "timestamp": "2026-02-09 00:30:54",
+        "url": "challenger baton rouge qualification"
+>>>>>>> Stashed changes
     },
     {
         "montant": 9.12,
         "cote": "1.57",
+<<<<<<< Updated upstream
         "jeu": 2,
         "set": "1",
         "winscore": "15:0",
@@ -2995,10 +3264,27 @@
         "winscore": "15:0",
         "timestamp": "2026-03-08 14:21:29",
         "url": "challenger hersonissos 2 qualification"
+=======
+        "jeu": 6,
+        "set": "1",
+        "winscore": "15:0",
+        "timestamp": "2026-02-09 00:34:03",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 13.16,
+        "cote": "1.395",
+        "jeu": 7,
+        "set": "1",
+        "winscore": "0:15",
+        "timestamp": "2026-02-09 00:38:13",
+        "url": "challenger baton rouge qualification"
+>>>>>>> Stashed changes
     },
     {
         "montant": 10.0,
         "cote": "1.52",
+<<<<<<< Updated upstream
         "jeu": 4,
         "set": "1",
         "winscore": "0:15",
@@ -4993,5 +5279,48 @@
         "winscore": "0:15",
         "timestamp": "2026-03-10 09:00:00",
         "url": "itf heraklion women"
+=======
+        "jeu": 8,
+        "set": "1",
+        "winscore": "15:0",
+        "timestamp": "2026-02-09 00:40:48",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 38.99,
+        "cote": "1.395",
+        "jeu": 9,
+        "set": "1",
+        "winscore": "0:15",
+        "timestamp": "2026-02-09 00:45:19",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 27.37,
+        "cote": "1.57",
+        "jeu": 1,
+        "set": "2",
+        "winscore": "15:0",
+        "timestamp": "2026-02-09 00:50:36",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 109.29,
+        "cote": "1.395",
+        "jeu": 2,
+        "set": "2",
+        "winscore": "0:15",
+        "timestamp": "2026-02-09 00:52:46",
+        "url": "challenger baton rouge qualification"
+    },
+    {
+        "montant": 10.83,
+        "cote": "1.48",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "0:15",
+        "timestamp": "2026-02-09 01:05:49",
+        "url": "challenger brisbane qualification"
+>>>>>>> Stashed changes
     }
 ]

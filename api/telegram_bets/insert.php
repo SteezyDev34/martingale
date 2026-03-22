@@ -28,7 +28,7 @@ try {
     }
 
     // Validation des champs obligatoires
-    $requiredFields = ['date', 'equipe_1', 'equipe_2', 'categorie', 'type_de_pari', 'selection', 'odds', 'tipster'];
+    $requiredFields = ['date', 'equipe_1', 'equipe_2', 'categorie', 'type_de_pari', 'selection','sport', 'odds', 'tipster'];
     foreach ($requiredFields as $field) {
         if (!isset($input[$field]) || empty($input[$field])) {
             throw new Exception("Champ obligatoire manquant: $field");

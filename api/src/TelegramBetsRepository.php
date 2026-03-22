@@ -22,8 +22,8 @@ class TelegramBetsRepository
     public function insert(array $data)
     {
         $sql = "INSERT INTO telegram_bets
-            (date_pari, equipe_1, equipe_2, categorie, type_de_pari, selection, odds, tipster, message_original, sender_username, sender_id)
-            VALUES (:date_pari, :equipe_1, :equipe_2, :categorie, :type_de_pari, :selection, :odds, :tipster, :message_original, :sender_username, :sender_id)";
+            (date_pari, equipe_1, equipe_2, categorie, type_de_pari, selection, sport, odds, tipster, message_original, sender_username, sender_id)
+            VALUES (:date_pari, :equipe_1, :equipe_2, :categorie, :type_de_pari, :selection, :sport, :odds, :tipster, :message_original, :sender_username, :sender_id)";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
@@ -33,6 +33,7 @@ class TelegramBetsRepository
             ':categorie' => $data['categorie'] ?? null,
             ':type_de_pari' => $data['type_de_pari'] ?? null,
             ':selection' => $data['selection'] ?? null,
+            ':sport' => $data['sport'] ?? null,
             ':odds' => isset($data['odds']) ? $data['odds'] : null,
             ':tipster' => $data['tipster'] ?? null,
             ':message_original' => $data['message_original'] ?? null,
@@ -94,11 +95,11 @@ class TelegramBetsRepository
         return ['data' => $data, 'total' => $total, 'limit' => $limit, 'offset' => $offset];
     }
 
-    public function updateProcessed(int $id, bool $processed)
+    public function updateProcessed(int $id, int $processed)
     {
         $sql = "UPDATE telegram_bets SET processed = :processed WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':processed' => $processed ? 1 : 0, ':id' => $id]);
+        $stmt->execute([':processed' => $processed ? $processed : 0, ':id' => $id]);
         return $stmt->rowCount();
     }
 

@@ -16,6 +16,7 @@ from Functions.DeleteBet import DeleteBet
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetJsonData import getCompet, DispatchPerte, set1DispatchPerte
+from Functions.GetResult import GetMatchResultFromDashboard
 from Functions.Managers.MatchManager import match_manager
 from Functions.Managers.ScriptManager import script_manager
 from Functions.UpdateMatchDone import todo
@@ -260,6 +261,8 @@ def rechercheDeMatch(driver):
                                                 continue
                                     else:
                                         config.log('Score NOT OK', 'warning', False, 4, False)
+                                        config.log('WIN MATCH', GetMatchResultFromDashboard(
+                                            div_bet_score[0].get_attribute('innerHTML')))
                                         logligueline += 1
 
                 if config.match_found:
@@ -770,13 +773,13 @@ def classementeDeMatch(driver, use_json_cache=True):
                 5: [],  # Challenger avec qualification
                 6: [],  # WTA avec qualification
                 7: [],  # ITF sans qualification
-                8: []   # ITF avec qualification
+                8: []  # ITF avec qualification
             }
-            
+
             for match in matches:
                 ligue_name = match[1].lower()
                 has_qualification = 'qualification' in ligue_name
-                
+
                 # Déterminer la priorité basée sur le nom de la ligue
                 if 'atp' in ligue_name:
                     priority = 4 if has_qualification else 1
@@ -789,23 +792,23 @@ def classementeDeMatch(driver, use_json_cache=True):
                 else:
                     # Autres ligues, priorité basse
                     priority = 8
-                
+
                 priority_groups[priority].append(match)
-            
+
             # Construire la liste finale en respectant les priorités
             final_matches = []
             for priority in sorted(priority_groups.keys()):
                 group = priority_groups[priority]
                 # Trier chaque groupe par probabilité décroissante
                 group_sorted = sorted(group, key=lambda x: x[-1], reverse=True)
-                
+
                 # Ajouter les matchs jusqu'à atteindre la limite
                 remaining_slots = max_matches - len(final_matches)
                 if remaining_slots <= 0:
                     break
-                    
+
                 final_matches.extend(group_sorted[:remaining_slots])
-            
+
             return final_matches
 
         # Appliquer la priorisation pour retenir les 30 meilleurs matchs
@@ -1120,13 +1123,13 @@ def newclassementeDeMatch(driver):
                 5: [],  # Challenger avec qualification
                 6: [],  # WTA avec qualification
                 7: [],  # ITF sans qualification
-                8: []   # ITF avec qualification
+                8: []  # ITF avec qualification
             }
-            
+
             for match in matches:
                 ligue_name = match[1].lower()
                 has_qualification = 'qualification' in ligue_name
-                
+
                 # Déterminer la priorité basée sur le nom de la ligue
                 if 'atp' in ligue_name:
                     priority = 4 if has_qualification else 1
@@ -1139,23 +1142,23 @@ def newclassementeDeMatch(driver):
                 else:
                     # Autres ligues, priorité moyenne
                     priority = 4 if has_qualification else 2
-                
+
                 priority_groups[priority].append(match)
-            
+
             # Construire la liste finale en respectant les priorités
             final_matches = []
             for priority in sorted(priority_groups.keys()):
                 group = priority_groups[priority]
                 # Trier chaque groupe par probabilité décroissante
                 group_sorted = sorted(group, key=lambda x: x[-1], reverse=True)
-                
+
                 # Ajouter les matchs jusqu'à atteindre la limite
                 remaining_slots = max_matches - len(final_matches)
                 if remaining_slots <= 0:
                     break
-                    
+
                 final_matches.extend(group_sorted[:remaining_slots])
-            
+
             return final_matches
 
         # Appliquer la priorisation pour retenir les 30 meilleurs matchs (ou 10 si souhaité)
@@ -1182,4 +1185,4 @@ if __name__ == "__main__":
     # ajouter un autre niveau parent si nécessaire
     project_directory = os.path.dirname(parent_directory)
     sys.path.append(project_directory)
-    classementeDeMatch(driver)
+    rechercheDeMatch(driver)

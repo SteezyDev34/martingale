@@ -16,9 +16,9 @@ from Functions.getTextFromImageGPT import compare_selection
 
 def GetBetOld(driver, nextBet=False, selection='', mobile=False):
     config.log("RECHERCHE DES PARIS " + config.scriptType + "....", 'info', False, 2)
-    if config.scriptType in config.allScriptType:
+    if config.scriptType in config.allScriptType and config.scriptType != '1SET' and config.scriptType != 'QT' and config.scriptType != 'QTV2':
         GetScoreActuel(driver)
-    DeleteBet(driver)
+        DeleteBet(driver)
     if nextBet:
         jeu = int(config.jeu_actuel) + 1
         # print('jeu next bet ', jeu)
@@ -31,7 +31,7 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
 
     # print('i '+str(i))
     while not clic and tentative_clic < 5:
-        if config.scriptType in config.allScriptType:
+        if config.scriptType in config.allScriptType and config.scriptType != '1SET' and config.scriptType != 'QT' and config.scriptType != 'QTV2':
             scoreboard_player = driver.find_elements(By.CLASS_NAME,
                                                      config.classes['scoreboard_player_score'][config.site_type])
             scoreboard_player1 = \

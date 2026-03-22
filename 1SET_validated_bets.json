@@ -1,5 +1,6 @@
 [
     {
+<<<<<<< Updated upstream
         "montant": 2.98,
         "cote": "1.248",
         "jeu": 1,
@@ -160,5 +161,68 @@
         "winscore": "V2",
         "timestamp": "2026-03-11 13:23:30",
         "url": "https://ca.1xbet.com/fr/live/tennis/964403-itf-porec/702672928-pietro-romeo-scomparin-adrian-oetzbach"
+=======
+        "montant": 0.54,
+        "cote": "1.74",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2026-02-12 07:17:30",
+        "url": "https://ca.1xbet.com/fr/live/tennis/291477-challenger-chennai/694991129-duje-ajdukovic-frederico-ferreira-silva"
+    },
+    {
+        "montant": 1.36,
+        "cote": "1.295",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2026-02-12 07:57:34",
+        "url": "https://ca.1xbet.com/fr/live/tennis/145903-itf-antalya/694996775-dusan-obradovic-martin-van-der-meerschen"
+    },
+    {
+        "montant": 0.56,
+        "cote": "1.71",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2026-02-12 07:58:49",
+        "url": "https://ca.1xbet.com/fr/live/tennis/103369-itf-antalya-women/694996829-alexandra-shubladze-ane-mintegi-del-olmo"
+    },
+    {
+        "montant": 0.46,
+        "cote": "1.87",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2026-02-12 08:00:06",
+        "url": "https://ca.1xbet.com/fr/live/tennis/103369-itf-antalya-women/694996845-antonia-vergara-rivera-aurora-zantedeschi"
+    },
+    {
+        "montant": 1.99,
+        "cote": "1.71",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V2",
+        "timestamp": "2026-02-12 08:01:27",
+        "url": "https://ca.1xbet.com/fr/live/tennis/103369-itf-antalya-women/694996884-laima-vladson-jennifer-ruggeri"
+    },
+    {
+        "montant": 0.81,
+        "cote": "1.496",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2026-02-12 08:02:53",
+        "url": "https://ca.1xbet.com/fr/live/tennis/103369-itf-antalya-women/694996887-luisina-giovannini-tena-lukas"
+    },
+    {
+        "montant": 0.77,
+        "cote": "1.52",
+        "jeu": 1,
+        "set": "1",
+        "winscore": "V1",
+        "timestamp": "2026-02-12 08:04:02",
+        "url": "https://ca.1xbet.com/fr/live/tennis/291477-challenger-chennai/694998009-ioannis-xilas-eric-vanshelboim"
+>>>>>>> Stashed changes
     }
 ]

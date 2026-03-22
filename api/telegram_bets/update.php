@@ -25,7 +25,15 @@ try {
     }
 
     $id = intval($input['id']);
-    $processed = isset($input['processed']) ? (bool)$input['processed'] : true;
+    if (isset($input['processed'])) {
+        if ($input['processed'] === true || $input['processed'] === 'true' || $input['processed'] === '1') {
+            $processed = 1;
+        } else {
+            $processed = intval($input['processed']);
+        }
+    } else {
+        $processed = 0;
+    }
 
     $rows = $repo->updateProcessed($id, $processed);
 
@@ -34,7 +42,7 @@ try {
             'success' => true,
             'message' => 'Statut mis à jour avec succès',
             'id' => $id,
-            'processed' => (bool)$processed
+            'processed' => (int)$processed
         ]);
     } else {
         throw new Exception('Pari non trouvé ou aucune modification');

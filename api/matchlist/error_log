@@ -535,3 +535,5 @@ Stack trace:
 #0 /home2/sc2vagr6376/auxobetbot/matchlist/insert.php(37): mysqli_stmt->execute()
 #1 {main}
   thrown in /home2/sc2vagr6376/auxobetbot/matchlist/insert.php on line 37
+[14-Feb-2026 05:57:38 UTC] PHP Warning:  Undefined property: MysqliCompat::$affected_rows in /home2/sc2vagr6376/auxobetbot/matchlist/delete_all.php on line 21
+[09-Mar-2026 04:39:54 UTC] PHP Warning:  Undefined property: MysqliCompat::$affected_rows in /home2/sc2vagr6376/auxobetbot/matchlist/delete_all.php on line 21

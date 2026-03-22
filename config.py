@@ -31,13 +31,22 @@ allScriptType = ['150', '015', '030', '300', '15A', '30A', '40A', '4P', '5P', '6
 script_num = 0  # Numéro du Script
 win = 0  # Nombre de victoire
 cote = 3
-tipster = '1xbet'
+tipster = 'AuxoBetting'
 scriptType = ""
 localhost = ''
 api_url = "http://auxobetbot.sc2vagr6376.universe.wf"
 site_url = "https://ca.1xbet.com/fr/live/tennis?platform_type=desktop"
 site_line_url = "https://ca.1xbet.com/fr/line/tennis?platform_type=desktop"
 site_type = 'mobile_site'  # new_site, mobile_site, old_site
+# Identifiant du pari à récupérer (vide par défaut)
+bet_to_recover_id = ''
+# Mode headless pour Selenium/Chrome (False par défaut)
+headless = True
+# Zoom delta en pourcent (None ou entier). Exemple : -25 pour dézoom de 25% (appliquera 75%),
+# 25 pour zoomer de 25% (appliquera 125%).
+zoom_percent = -10
+# Si True => forcer le dézoom maximal (facteur minimal)
+zoom_max = True
 match_name = ''
 nb_log_lines = 0
 # La configuration des scores est maintenant importée depuis le module config
@@ -104,7 +113,7 @@ except FileNotFoundError:
     last_classement = 'test'  # Valeur par défaut si le fichier n'existe pas
 # Le dictionnaire classes est maintenant importé depuis le module config
 # Importation des types de paris 1xBet depuis le fichier JSON
-xbet_types_file = os.path.join(projectPath, 'xbet_types.json')
+xbet_types_file = os.path.join(projectPath, 'xbet_selections.json')
 with open(xbet_types_file, 'r', encoding='utf-8') as f:
     xbet_types_data = json.load(f)
 

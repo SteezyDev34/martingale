@@ -6,9 +6,8 @@ import os
 import re
 import sys
 import threading
-import time
-from art import *
 
+from art import *
 
 # Recuperer le chemin absolu du fichier actuel
 current_file_path = os.path.abspath(__file__)
@@ -73,7 +72,9 @@ else:
 # Chargement des functions
 # Chargement de Chrome driver
 config.localhost = 43151
+config.site_type = 'new_site'
 from ChromeDriver.SetDriver import get_script_driver
+
 num_fenetre = 1
 driver = get_script_driver(num_fenetre)
 # First install telethon using: pip install telethon
@@ -106,7 +107,7 @@ requests.adapters.DEFAULT_RETRIES = 3
 
 from Functions import Functions_telegram
 from Functions.getTextFromImageGPT import extraire_pari_depuis_image
-from Functions.TelegramBetsAPI import send_bet_data_to_api, telegram_bets_api, is_ignored_sender
+from Functions.TelegramBetsAPI import send_bet_data_to_api, is_ignored_sender
 
 # Declaration d'une variable globale qui va stocker les codes de paris
 global codeList, betList
@@ -150,6 +151,7 @@ def bot_msg_handler(txt):
         Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id, "team1 - team2\npick\nCOTE :\nMISE :")
         success = 1
 
+
 def add_word_to_replace(word):
     try:
         words = word.split('\n')
@@ -165,6 +167,7 @@ def add_word_to_replace(word):
         log(f"#E00017\nUne erreur est survenue : {e}", "error", clear=False)
         return False
 
+
 def delete_word_to_replace(word):
     try:
         words = word.split('\n')
@@ -179,12 +182,13 @@ def delete_word_to_replace(word):
         codes = open(f"{config.projectPath}/conf/excluded_words.txt", "w")
         codes.write(updates_used_codes)
         codes.close()
-        log("CODES UPDATED : "+updates_used_codes, "info", clear=False)
+        log("CODES UPDATED : " + updates_used_codes, "info", clear=False)
         return True
     except Exception as e:
         send_telegram(Functions_telegram.alertGroup, f"#E00018\nUne erreur est survenue : {e}")
         log(f"#E00018\nUne erreur est survenue : {e}", "error", clear=False)
         return False
+
 
 def extract_code_1XBET(txt):
     """
@@ -254,7 +258,7 @@ async def my_event_handler(event):
         e = event
     except Exception as e:
         pass
-    
+
     success = 0  # Indicateur pour contrôler le succès du traitement
     if success == 0:
         while success == 0:
@@ -294,7 +298,8 @@ async def my_event_handler(event):
                 if sender.username:
                     log(f'Pseudo de l\'expediteur: {sender.username}', "info", clear=False)
                 else:
-                    log(f'Channel ID: {event.chat_id} - {event.chat.title if hasattr(event.chat, "title") else "N/A"}', "info", clear=False)
+                    log(f'Channel ID: {event.chat_id} - {event.chat.title if hasattr(event.chat, "title") else "N/A"}',
+                        "info", clear=False)
                 # Chaque fois qu'un nouveau message est reçu, cette fonction est declenchee
                 log('Nouvel evenement detecte')
                 log(event.raw_text, "info", clear=False)  # Affiche le texte brut du message
@@ -302,12 +307,13 @@ async def my_event_handler(event):
                 # Check if message contains media/image
                 has_media = event.message.media is not None
                 log(f'Message contains media: {has_media}', "info", clear=False)
-                code = extract_code_1XBET(event.raw_text)
-                if code:
-                    codeList.append(code)
+                codes = extract_code_1XBET(event.raw_text)
+                if codes and isinstance(codes, list):
+                    for code in codes:
+                        codeList.append(code)
                 # Download media if present
                 elif has_media:
-                    #try:
+                    # try:
                     if has_media:
                         # Create unique filename using timestamp
                         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -327,7 +333,7 @@ async def my_event_handler(event):
                         result = extraire_pari_depuis_image(image_path, '')
                         # Delete the downloaded image file
                         print("Attempting to delete the image file...")
-                        #try:
+                        # try:
                         if image_path:
                             # Verifier que le fichier existe avant de le supprimer
                             if os.path.exists(image_path):
@@ -341,16 +347,18 @@ async def my_event_handler(event):
                                     try:
                                         os.chmod(image_path, 0o666)
                                         os.remove(image_path)
-                                        log(f"Fichier image supprime après changement de permissions: {filename}", "info", clear=False)
+                                        log(f"Fichier image supprime après changement de permissions: {filename}",
+                                            "info", clear=False)
                                     except OSError as chmod_error:
-                                        log(f"Impossible de changer les permissions: {chmod_error}", "error", clear=False)
+                                        log(f"Impossible de changer les permissions: {chmod_error}", "error",
+                                            clear=False)
                             else:
                                 log(f"Erreur: Le fichier {image_path} n'existe pas", "error", clear=False)
-                        #except OSError as e:
-                            #log(f"Erreur lors de la suppression du fichier image: {e}", "error", clear=False)
-                            #log(f"Chemin du fichier: {image_path}", "info", clear=False)
-                            #log(f"Repertoire courant: {os.getcwd()}", "info", clear=False)
-                            #log(f"Le fichier existe: {os.path.exists(image_path)}", "info", clear=False)
+                        # except OSError as e:
+                        # log(f"Erreur lors de la suppression du fichier image: {e}", "error", clear=False)
+                        # log(f"Chemin du fichier: {image_path}", "info", clear=False)
+                        # log(f"Repertoire courant: {os.getcwd()}", "info", clear=False)
+                        # log(f"Le fichier existe: {os.path.exists(image_path)}", "info", clear=False)
                         # Clean up empty temp directory
                         try:
                             # Verifier que le repertoire existe et est vide
@@ -364,14 +372,15 @@ async def my_event_handler(event):
                         # Convertir le resultat JSON en dictionnaire et l'ajouter a codeList
                         try:
                             pari_dict = json.loads(result)
-                            betList.append(pari_dict)
-                            log(f"Pari ajoute a betList: {pari_dict}", "info", clear=False)
-                            
+                            pari_dict["tipster"] = sender.username if sender and sender.username else event.chat_id
+                            #betList.append(pari_dict)
+                            #log(f"Pari ajoute a betList: {pari_dict}", "info", clear=False)
+
                             # Envoyer le pari a l'API
                             try:
                                 sender_username = sender.username if sender and sender.username else None
                                 api_success = send_bet_data_to_api(
-                                    pari_dict, 
+                                    pari_dict,
                                     message_original=event.raw_text,
                                     sender_username=sender_username
                                 )
@@ -381,17 +390,17 @@ async def my_event_handler(event):
                                     log(f"echec de l'envoi du pari a l'API", "error", clear=False)
                             except Exception as api_error:
                                 log(f"Erreur lors de l'envoi a l'API: {api_error}", "error", clear=False)
-                                
+
                         except json.JSONDecodeError as e:
                             log(f"Erreur lors de la conversion JSON: {e}", "error", clear=False)
                             log(f"Resultat brut: {result}", "info", clear=False)
-                    #except Exception as e:
-                        #log(f"Error downloading media: {e}", "error", clear=False)
-        
+                    # except Exception as e:
+                    # log(f"Error downloading media: {e}", "error", clear=False)
+
             else:
                 log("Expediteur introuvable", "warning", clear=False)
-    #except Exception as e:
-        #log('Erreur dans le traitement du message', e, "error", clear=False)
+    # except Exception as e:
+    # log('Erreur dans le traitement du message', e, "error", clear=False)
 
 
 # Demarrage du client Telegram
@@ -404,10 +413,10 @@ config.scriptType = 'LIVE'
 def check():
     from Functions.ProcessTelegramBets import process_api_bets
     import time
-    
+
     last_api_check = 0
-    api_check_interval = 300  # Verifier l'API toutes les 5 minutes
-    
+    api_check_interval = 1  # Verifier l'API toutes les 5 minutes
+
     while True:
         # Traitement des codes directs
         if codeList != []:
@@ -419,7 +428,7 @@ def check():
             else:
                 log(f"Code place avec succès: {codeList[0]}", "info", clear=False)
                 del codeList[0]
-        
+
         # Traitement des paris en temps reel
         if betList != []:
             try:
@@ -430,21 +439,22 @@ def check():
             else:
                 log(f"Pari place avec succès: {betList[0]}", "info", clear=False)
                 del betList[0]
-        
+
         # Verification periodique de l'API pour les paris non traites
         current_time = time.time()
         if current_time - last_api_check > api_check_interval:
-            try:
-                log("Verification des paris non traites dans l'API...", "info", clear=False)
+            #try:
+            if current_time:
+                #log("Verification des paris non traites dans l'API...", "info", clear=False)
                 processed_count = process_api_bets(driver, limit=5)
                 if processed_count > 0:
                     log(f"Traite {processed_count} paris depuis l'API", "info", clear=False)
                 else:
                     log_clear_line()
                 last_api_check = current_time
-            except Exception as e:
-                log(f"Erreur lors du traitement des paris API: {e}", "error", clear=False)
-        
+            #except Exception as e:
+            #    log(f"Erreur lors du traitement des paris API: {e}", "error", clear=False)
+
         # Petite pause pour eviter une boucle trop intensive
         time.sleep(1)
 
