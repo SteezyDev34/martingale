@@ -93,13 +93,13 @@ def all_script(driver):
         # POUR CHAQUE LIGUE RÉCUPÉRÉE
         for bet_ligue in bet_list_ligue:
             # ON RÉCUPÈRE LE NOM DE LA LIGUE
-            config.ligue_name = GetLigueName.main(bet_ligue) + ' ' + str(config.cote_base)
-            # EN CAS D'ERREUR
-            if not config.ligue_name:
-                # config.log('nom ligues introuvalbe!', 'warning', False, 2)
+            ligue = GetLigueName.main(bet_ligue)
+            # EN CAS D'ERREUR: GetLigueName.main peut renvoyer False
+            if not ligue:
                 config.log_clear_line()
                 config.error = False
                 continue
+            config.ligue_name = ligue + ' ' + str(config.cote_base)
             # ON VÉRIFIE QUE LA COMPET EST JOUABLE
             # config.log(' ' + config.ligue_name, 'info', False, 2)
             # ON RÉCUPÈRE LES MATCHS DE LA LIGUE

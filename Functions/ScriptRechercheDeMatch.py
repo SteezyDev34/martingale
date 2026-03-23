@@ -401,28 +401,41 @@ def rechercheDeMatch1set(driver):
                                 else:
                                     if cotev1 > 1.1 and cotev1 < 1.4:
                                         config.win_type = 'V1'
+                                        if 'femmes' in config.ligue_name:
+                                            config.win_type = 'V2'
                                         config.cote_base = 1.3
                                         config.ligue_name = config.ligue_name + ' ' + str(config.cote_base)
                                     elif cotev1 > 1.4 and cotev1 < 1.7:
                                         config.win_type = 'V1'
+                                        if 'femmes' in config.ligue_name:
+                                            config.win_type = 'V2'
                                         config.cote_base = 1.5
                                         config.ligue_name = config.ligue_name + ' ' + str(config.cote_base)
                                     elif cotev1 > 1.7 and cotev1 < 1.9:
                                         config.win_type = 'V1'
+                                        if 'femmes' in config.ligue_name:
+                                            config.win_type = 'V2'
                                         config.cote_base = 1.8
                                         config.ligue_name = config.ligue_name + ' ' + str(config.cote_base)
                                     elif cotev2 > 1.1 and cotev2 < 1.4:
                                         config.cote_base = 1.3
                                         config.ligue_name = config.ligue_name + ' ' + str(config.cote_base)
                                         config.win_type = 'V2'
+                                        if 'femmes' in config.ligue_name:
+                                            config.win_type = 'V1'
                                     elif cotev2 > 1.4 and cotev2 < 1.7:
                                         config.cote_base = 1.5
                                         config.ligue_name = config.ligue_name + ' ' + str(config.cote_base)
                                         config.win_type = 'V2'
+                                        if 'femmes' in config.ligue_name:
+                                            config.win_type = 'V1'
                                     elif cotev2 > 1.7 and cotev2 < 1.9:
                                         config.cote_base = 1.8
                                         config.ligue_name = config.ligue_name + ' ' + str(config.cote_base)
                                         config.win_type = 'V2'
+                                        if 'femmes' in config.ligue_name:
+                                            config.win_type = 'V1'      
+
                                     else:
                                         continue
                                 if bet_score:  # SI LE MATCH EST PRET

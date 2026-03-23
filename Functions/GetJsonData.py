@@ -13,7 +13,7 @@ import config
 def getPerte():
     if getCompetRecup():
         url = f"{config.api_url}/strategy" + config.scriptType + "/get_perte.php"
-        if config.scriptType == '1SET':
+        if config.scriptType == '1SET' or config.scriptType == 'QT':
             url = url + '?ligue=' + config.ligue_name
             print(url)
         try:
