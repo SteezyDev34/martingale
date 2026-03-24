@@ -24,8 +24,7 @@ sys.path.append(project_directory)
 original_cwd = os.getcwd()
 
 if os.getenv('PYCHARM_HOSTED') != '1':  # Si execute dans PyCharm
-    # Simple ecriture de lignes vides pour PyCharm
-
+    # Simple ecriture de lignes vides pour PyChar
     # Verification de l'environnement
     # Changer vers le repertoire racine du projet pour VenvDependencyManager
     os.chdir(project_directory)
@@ -63,8 +62,6 @@ if len(parts) > 1:
     # Demander confirmation a l'utilisateur
     # Le lancement de Chrome est maintenant gere dans SetDriver.py
     log_clear_line(3)
-
-    log(f'{text2art(f'Start martingal {config.scriptType} {config.script_num}')}', 'purple')
 else:
     log("Le format du nom du fichier est incorrect.", "error")
     exit()

@@ -310,5 +310,18 @@
         "timestamp": "2026-03-20 14:05:41",
         "tipster": null,
         "bet_to_recover_id": ""
+    },
+    {
+        "montant": 0.49,
+        "cote": null,
+        "match": "Marin Cilic - Alexander Zverev",
+        "equipe_1": "Marin Cilic",
+        "equipe_2": "Alexander Zverev",
+        "type_de_pari": null,
+        "bet": null,
+        "coupon": null,
+        "timestamp": "2026-03-23 17:54:57",
+        "tipster": null,
+        "bet_to_recover_id": ""
     }
 ]

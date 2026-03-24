@@ -198,8 +198,7 @@ def extraire_pari_depuis_image(image_path, msg):
                         "1. Tu dois OBLIGATOIREMENT choisir la catégorie et le type de pari parmi ceux du dictionnaire ci-dessous.\n"
                         "2. Tu peux générer dynamiquement la sélection si elle respecte le même format qu'une sélection d'exemple.\n"
                         "3. Tu ne dois jamais inventer un type de pari ou une catégorie.\n"
-                        "4. Si le texte 'générateur de paris' apparaît dans l’image, retourne une erreur avec le texte brut de l’image.\n"
-                        "5. Tu dois ignorer les textes superflus et te concentrer uniquement sur les données mentionnées ci-dessus.\n\n"
+                        "4. Tu dois ignorer les textes superflus et te concentrer uniquement sur les données mentionnées ci-dessus.\n\n"
                         "Note importante : Un pari peut contenir plusieurs événements combinés (par ex. 'Vainqueur + Total de buts', 'Double chance + Total de buts').\n"
                         "Dans ce cas, tu dois :\n"
                         "Du dois d'abord chercher si une catégorie correspond à ce type de pari combiné (ex: '1, Résultat + Total' ou '2X Et chaque Equipe va marquer – Oui' ou '1, Résultat + Total de Sets'), et si oui, l'utiliser.\n"
@@ -209,6 +208,9 @@ def extraire_pari_depuis_image(image_path, msg):
                         "     Exemples de libellés combinés à rechercher : '2X Et chaque Equipe va marquer – Oui', 'Equipe 2 va gagner et Total > 1.5 - Oui'.\n"
                         "  3) Si le libellé combiné n'existe pas, mettre 'combined_label': null mais conserver 'combined_events' avec les composantes extraites.\n"
                         "  4) Si une composante ne peut être extraite proprement, indique sa valeur comme null mais conserve les autres composantes extraites.\n\n"
+                        "Si un des evenements concerne un match différent de celui des autres événements, alors considère que c'est un pari combiné multi-matchs, et traite chaque match séparément dans un tableau.\n"
+                        "il peut y avoir des matchs différent avec des events différents dans ce cas chaque match doit avoir son combined_events et son combined_label si il existe, mais tous les matchs doivent être regroupés dans un tableau 'matches' qui contient pour chaque match : equipe_1, equipe_2, categorie, type_de_pari, selection, odds, date, sport, combined_events (liste), combined_label (string ou null)\n\n"
+                        "s'il n'ya qu'un match mets le quand meme dans un tableau 'matches' avec un seul élément, pour uniformiser le format de réponse.\n\n"
 
                         "🧠 Exemples de correspondance dynamique :\n"
                         "- Texte image : 'Total 1: (0.5) Plus de' → type_de_pari : 'Total 1', selection : 'Total Individuel 1 Plus de 0.5'\n"
@@ -257,6 +259,7 @@ def extraire_pari_depuis_image(image_path, msg):
                         "Le type de paris et la selection doivent correspondre a leur lien dans le tableau exemple données, la selectiond doit être un enfant de t"
                         "🧾 Format de réponse attendu (aucune explication, juste le JSON brut) :\n"
                         "Tu dois egalement détecter le sport concerné (Football, Tennis, NBA) et l'indiquer dans le champ 'sport' du JSON extrait avec les id correspondants.\n"
+                        "Génère un intitulé simplifié compréhensible de tous, en combinant les éléments extraits (ex: 'Al Shabab Riyadh plus de 0.5 buts').\n\n"
                         "{\n"
                         "  \"date\": \"25/09/2025\",\n"
                         "  \"equipe_1\": \"Al Shabab Riyadh\",\n"
@@ -265,6 +268,7 @@ def extraire_pari_depuis_image(image_path, msg):
                         "  \"type_de_pari\": \"Total 1\",\n"
                         "  \"selection\": \"Total Individuel 1 Plus de 0.5\",\n"
                         "  \"sport\": \"3\",\n"
+                        "  \"intitule\": \"Al Shabab Riyadh plus de 0.5 buts\",\n"
                         "}"
 
                 },

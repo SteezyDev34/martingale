@@ -6,6 +6,10 @@ import time
 from typing import Dict, Any, Optional
 
 import requests
+from dotenv import load_dotenv
+
+# Charger les variables d'environnement depuis le fichier .env
+load_dotenv()
 
 # Import des configurations depuis le module config
 from conf import classes, score_to_start, total_want_win, total_want_winset1
@@ -35,6 +39,9 @@ tipster = 'AuxoBetting'
 scriptType = ""
 localhost = ''
 api_url = "http://auxobetbot.sc2vagr6376.universe.wf"
+# Configuration pour la nouvelle API AuxoTracker
+AUXOTRACK_API_URL = os.getenv('AUXOTRACK_API_URL', "https://api.auxotracker.lan/api/auxobot/bets")
+AUXOBOT_TOKEN = os.getenv('AUXOBOT_TOKEN')  # Token chargé depuis le fichier .env
 site_url = "https://ca.1xbet.com/fr/live/tennis?platform_type=desktop"
 site_line_url = "https://ca.1xbet.com/fr/line/tennis?platform_type=desktop"
 site_type = 'mobile_site'  # new_site, mobile_site, old_site

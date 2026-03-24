@@ -92,45 +92,11 @@ class TelegramBetsAPI:
             bool: True si l'envoi est réussi, False sinon
         """
         try:
-            # Vérifier si l'expéditeur est dans la liste d'ignore
-            if sender_username and is_ignored_sender(sender_username=sender_username):
-                config.log(f"Expéditeur ignoré, pari non envoyé: {sender_username}", 'info')
-                return False
-            # Préparer les données pour l'API
-            # Si 'combined_events' existe et n'est pas False, l'envoyer comme array sérialisé (JSON), sans 'selection'
-            if bet_data.get("combined_events"):
-                api_data = {
-                    "date": bet_data.get("date", ""),
-                    "equipe_1": bet_data.get("equipe_1", ""),
-                    "equipe_2": bet_data.get("equipe_2", ""),
-                    "categorie": bet_data.get("categorie", ""),
-                    "type_de_pari": "combiné",
-                    "sport": bet_data.get("sport", ""),
-                    "odds": str(bet_data.get("odds", "0")),
-                    "tipster": bet_data.get("tipster", ""),
-                    "message_original": message_original,
-                    "sender_username": sender_username,
-                    "selection": json.dumps(bet_data.get("combined_events"))
-                }
-            else:
-                api_data = {
-                    "date": bet_data.get("date", ""),
-                    "equipe_1": bet_data.get("equipe_1", ""),
-                    "equipe_2": bet_data.get("equipe_2", ""),
-                    "categorie": bet_data.get("categorie", ""),
-                    "type_de_pari": bet_data.get("type_de_pari", ""),
-                    "selection": bet_data.get("selection", ""),
-                    "sport": bet_data.get("sport", ""),
-                    "odds": str(bet_data.get("odds", "0")),
-                    "tipster": bet_data.get("tipster", ""),
-                    "message_original": message_original,
-                    "sender_username": sender_username
-                }
-            print(f"Envoi à l'API: {api_data}")
+            print(f"Envoi à l'API: {bet_data}")
             
             url = f"{self.base_url}/insert.php"
 
-            response = requests.post(url, headers=self.headers, data=json.dumps(api_data), timeout=10)
+            response = requests.post(url, headers=self.headers, data=json.dumps(bet_data), timeout=10)
 
             if response.status_code == 200:
                 try:

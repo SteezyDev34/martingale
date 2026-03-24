@@ -33,7 +33,8 @@ def ModalHandler(driver, close=True):
                      config.classes['modal_header'][config.site_type]))
             )  ###vérifaction d'affichage pop up validation
         except:
-            config.log(f'pas de fenetre de validation {config.classes['modal_header'][config.site_type]}', 'warning',
+            modal_class = config.classes['modal_header'][config.site_type]
+            config.log(f'pas de fenetre de validation {modal_class}', 'warning',
                        False, indent=3)
             logline += 1
 

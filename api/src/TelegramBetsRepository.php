@@ -22,23 +22,12 @@ class TelegramBetsRepository
     public function insert(array $data)
     {
         $sql = "INSERT INTO telegram_bets
-            (date_pari, equipe_1, equipe_2, categorie, type_de_pari, selection, sport, odds, tipster, message_original, sender_username, sender_id)
-            VALUES (:date_pari, :equipe_1, :equipe_2, :categorie, :type_de_pari, :selection, :sport, :odds, :tipster, :message_original, :sender_username, :sender_id)";
+            ( selection)
+            VALUES (:selection)";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
-            ':date_pari' => $data['date'] ?? $data['date_pari'] ?? null,
-            ':equipe_1' => $data['equipe_1'] ?? null,
-            ':equipe_2' => $data['equipe_2'] ?? null,
-            ':categorie' => $data['categorie'] ?? null,
-            ':type_de_pari' => $data['type_de_pari'] ?? null,
             ':selection' => $data['selection'] ?? null,
-            ':sport' => $data['sport'] ?? null,
-            ':odds' => isset($data['odds']) ? $data['odds'] : null,
-            ':tipster' => $data['tipster'] ?? null,
-            ':message_original' => $data['message_original'] ?? null,
-            ':sender_username' => $data['sender_username'] ?? null,
-            ':sender_id' => $data['sender_id'] ?? null,
         ]);
 
         return (int)$this->pdo->lastInsertId();
