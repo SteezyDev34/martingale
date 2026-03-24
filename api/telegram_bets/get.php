@@ -19,17 +19,11 @@ try {
 
     // Paramètres de requête
     $processed = $_GET['processed'] ?? null;
-    $tipster = $_GET['tipster'] ?? null;
     $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 50;
     $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
-    $date_from = $_GET['date_from'] ?? null;
-    $date_to = $_GET['date_to'] ?? null;
 
     $filters = [];
     if ($processed !== null) $filters['processed'] = intval($processed);
-    if ($tipster !== null) $filters['tipster'] = $tipster;
-    if ($date_from !== null) $filters['date_from'] = $date_from;
-    if ($date_to !== null) $filters['date_to'] = $date_to;
 
     $result = $repo->get($filters, $limit, $offset);
 

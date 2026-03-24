@@ -45,25 +45,7 @@ class TelegramBetsRepository
             $params[':processed'] = $filters['processed'] ? 1 : 0;
         }
 
-        if (!empty($filters['tipster'])) {
-            $sql .= " AND tipster = :tipster";
-            $countSql .= " AND tipster = :tipster";
-            $params[':tipster'] = $filters['tipster'];
-        }
-
-        if (!empty($filters['date_from'])) {
-            $sql .= " AND date_pari >= :date_from";
-            $countSql .= " AND date_pari >= :date_from";
-            $params[':date_from'] = $filters['date_from'];
-        }
-
-        if (!empty($filters['date_to'])) {
-            $sql .= " AND date_pari <= :date_to";
-            $countSql .= " AND date_pari <= :date_to";
-            $params[':date_to'] = $filters['date_to'];
-        }
-
-        $sql .= " ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+        $sql .= " ORDER BY id DESC LIMIT :limit OFFSET :offset";
 
         $stmt = $this->pdo->prepare($sql);
         foreach ($params as $k => $v) {
