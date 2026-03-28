@@ -263,6 +263,22 @@ async def my_event_handler(event):
             # Recuperation et affichage du pseudo de l'expediteur
             sender = await event.get_sender()
             txt = event.raw_text  # Convertit le texte en majuscules pour faciliter le traitement
+            
+            # Filtre pour ignorer les messages contenant certains mots/phrases
+            try:
+                with open(f"{config.projectPath}/conf/ignored_messages.txt", "r", encoding='utf-8') as fichier:
+                    ignored_phrases = [line.strip().lower() for line in fichier.read().split('\n') if line.strip() and not line.strip().startswith('#')]
+                    
+                # Vérifier si le message contient une phrase à ignorer
+                txt_lower = txt.lower()
+                for phrase in ignored_phrases:
+                    if phrase in txt_lower:
+                        log(f"Message ignoré car contient '{phrase}': {txt[:50]}...", "info", clear=False)
+                        return  # Ignorer ce message
+                        
+            except FileNotFoundError:
+                # Si le fichier n'existe pas, continuer normalement
+                log(f"Fichier ignored_messages.txt non trouvé, aucun filtrage appliqué", "warning", clear=False)
 
             if str(event.chat_id) == '1910869556':
                 bot_msg_handler(txt)
@@ -453,7 +469,8 @@ def check():
             #    log(f"Erreur lors du traitement des paris API: {e}", "error", clear=False)
 
         # Petite pause pour eviter une boucle trop intensive
-        time.sleep(1)
+        time.sleep(10)
+        print("...")  # Affiche des points pour indiquer que le bot est actif et en attente de nouveaux messages/paris
 
 
 # Lancement d'un thread pour verifier les messages en continu

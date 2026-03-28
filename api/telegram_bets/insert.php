@@ -27,14 +27,6 @@ try {
         throw new Exception('Aucune donnée reçue ou format JSON invalide');
     }
 
-    // Validation des champs obligatoires
-    $requiredFields = ['date', 'equipe_1', 'equipe_2', 'categorie', 'type_de_pari', 'selection','sport', 'odds', 'tipster'];
-    foreach ($requiredFields as $field) {
-        if (!isset($input[$field]) || empty($input[$field])) {
-            throw new Exception("Champ obligatoire manquant: $field");
-        }
-    }
-
     $insertId = $repo->insert($input);
 
     echo json_encode([

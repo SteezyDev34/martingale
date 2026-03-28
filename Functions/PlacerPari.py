@@ -22,44 +22,79 @@ from Functions.ValidationDuParis import ValidationDuParis
 from Functions.getTextFromImageGPT import compare_match_name
 
 
+def log_message(message, level="INFO", flush_output=True):
+    """
+    Fonction utilitaire pour l'affichage des messages avec flush automatique
+    pour éviter les freezes du terminal
+    """
+    timestamp = time.strftime("%H:%M:%S")
+    formatted_message = f"[{timestamp}] {level}: {message}"
+    print(formatted_message, flush=flush_output)
+    return formatted_message
+
+
+def optimized_wait(driver, condition, timeout=10, poll_frequency=0.5):
+    """
+    Attente optimisée avec des messages de progression pour éviter l'impression de freeze
+    """
+    start_time = time.time()
+    elapsed_dots = 0
+    
+    while time.time() - start_time < timeout:
+        try:
+            if condition(driver):
+                return True
+            
+            # Afficher des points de progression toutes les 2 secondes
+            if int(time.time() - start_time) > elapsed_dots * 2:
+                log_message(".", level="", flush_output=True)
+                elapsed_dots += 1
+                
+        except Exception:
+            pass
+        
+        time.sleep(poll_frequency)
+    
+    return False
+
+
 def placer_pari(driver, codeList):
     """
     Fonction pour placer un pari sur 1xBet
     
     :param driver: Instance du driver Selenium
-    :param equipe1: Nom de la première équipe
-    :param equipe2: Nom de la deuxième équipe
-    :param categorie: Nom de la categorie
-    :param selection: Nom de la selection
-    :param type_de_pari: Type de pari (ex: '1', 'X', '2', 'Over 2.5', etc.)
-    :param mise: Montant de la mise
-    :param cote_min: Cote minimum acceptée (optionnel)
+    :param codeList: Données du pari au format {'matches': [...], 'tipster': '...'}
     :return: Dictionnaire avec le résultat de l'opération
     """
     config.site_type = 'mobile_site'
     tentative = 0
-    while codeList != [] and tentative < 3:
-        print('ok')
-        # Récupérer le premier élément de la liste (dictionnaire de pari)
-        matches = codeList[0]
-        for key, value in matches.items():
-            print(f"=== DONNÉES {key} ===")
-            print(f"Match: {value['equipe_1']} vs {value['equipe_2']}")
-            print(f"Date: {value['date']}")
-            print(f"Catégorie de pari: {value['categorie']}")
-            print(f"Type de pari: {value['type_de_pari']}")
-            print(f"Sélection: {value['selection']}")
-            print(f"sport: {value.get('sport', None)}")
-            print(f"Tipster: {value['tipster']}")
-            print("=" * 50)
-            print('etst')
+    
+    # Nouveau format : {'matches': [...], 'tipster': '...'}
+    matches_list = codeList['matches']
+    global_tipster = codeList.get('tipster', '')
+    
+    while tentative < 3:
+        log_message('Début de tentative de placement de pari')
+        success = True
+        # Traiter chaque match de la liste
+        for match in matches_list:
+            log_message("=== DONNÉES ===")
+            log_message(f"Match: {match['equipe_1']} vs {match['equipe_2']}")
+            log_message(f"Date: {match['date']}")
+            log_message(f"Catégorie de pari: {match['categorie']}")
+            log_message(f"Type de pari: {match['type_de_pari']}")
+            log_message(f"Sélection: {match['selection']}")
+            log_message(f"Sport: {match.get('sport', None)}")
+            log_message(f"Tipster: {global_tipster or match.get('tipster', '')}")
+            log_message("=" * 50)
+            log_message('Traitement du match en cours...')
 
-            equipe1 = value['equipe_1']
-            equipe2 = value['equipe_2']
-            categorie = value['categorie']
-            type_de_pari = value['type_de_pari']
-            selection = value['selection']  # "Plus De 20.5"
-            sport_id = value.get('sport', None)  # Valeur par défaut si 'sport' n'est pas présent
+            equipe1 = match['equipe_1']
+            equipe2 = match['equipe_2']
+            categorie = match['categorie']
+            type_de_pari = match['type_de_pari']
+            selection = match['selection']  # "Plus De 20.5"
+            sport_id = match.get('sport', None)  # Valeur par défaut si 'sport' n'est pas présent
             # Normaliser et gérer différents formats de `selection`:
             # - Si c'est une chaîne JSON sérialisée représentant une liste -> convertir en tableau de paris
             # - Si c'est déjà une liste Python -> l'utiliser comme tableau
@@ -73,7 +108,7 @@ def placer_pari(driver, codeList):
                         parsed = json.loads(selection)
                         if isinstance(parsed, list) and len(parsed) > 0:
                             for item in parsed:
-                                new_pari = value.copy()
+                                new_pari = match.copy()
                                 if isinstance(item, dict):
                                     new_pari['categorie'] = item.get('categorie', new_pari.get('categorie'))
                                     new_pari['type_de_pari'] = item.get('type_de_pari', new_pari.get('type_de_pari'))
@@ -81,61 +116,66 @@ def placer_pari(driver, codeList):
                                     new_pari['odds'] = item.get('odds', new_pari.get('odds'))
                                 combined_paris.append(new_pari)
                     else:
-                        new_pari = value.copy()
-                        new_pari['categorie'] = value.get('categorie', new_pari.get('categorie'))
-                        new_pari['type_de_pari'] = value.get('type_de_pari', new_pari.get('type_de_pari'))
-                        new_pari['selection'] = value.get('selection', new_pari.get('selection'))
-                        new_pari['odds'] = value.get('odds', new_pari.get('odds'))
+                        new_pari = match.copy()
+                        new_pari['categorie'] = match.get('categorie', new_pari.get('categorie'))
+                        new_pari['type_de_pari'] = match.get('type_de_pari', new_pari.get('type_de_pari'))
+                        new_pari['selection'] = match.get('selection', new_pari.get('selection'))
+                        new_pari['odds'] = match.get('odds', new_pari.get('odds'))
                         combined_paris.append(new_pari)
             except Exception as e:
-                print(f"Erreur lors du parsing/normalisation de 'selection': {e}")
+                print(f"Erreur lors du parsing/normalisation de 'selection': {e}", flush=True)
             else:
                 # Construction de la liste des sélections
                 selections_list = "\n".join([f"  - {pari['selection']}" for pari in combined_paris])
                 
                 formatted_telegram_msg = f"📊 Nouveau pari à placer:\n" \
                                     f"Match: {equipe1} vs {equipe2}\n" \
-                                    f"Date: {value['date']}\n" \
+                                    f"Date: {match['date']}\n" \
                                     f"Catégorie de pari: {categorie}\n" \
                                     f"Type de pari: {type_de_pari}\n" \
                                     f"Sélection:\n{selections_list}\n" \
                                     f"Sport: {sport_id}\n" \
-                                    f"Tipster: {value['tipster']}"
+                                    f"Tipster: {global_tipster}"
                 
-            config.tipster = value['tipster']
+            config.tipster = global_tipster
             config.match_name = equipe1 + ' - ' + equipe2
             find_match = False
+            log_message(f"🌐 Accès à 1xBet pour {equipe1} vs {equipe2}...")
             driver.get('https://ca.1xbet.com/fr?platform_type=mobile')
             # BOUTON DE RECHERCHE
             try:
                 WebDriverWait(driver, 20).until(
                     EC.presence_of_element_located((By.CLASS_NAME, 'home-navigation__link--search')))
             except Exception as e:
-                print(f'Erreur lors de la recherche du bouton de recherche: {str(e)}')
+                log_message(f'❌ Erreur lors de la recherche du bouton de recherche: {str(e)}', "ERROR")
                 tentative = tentative + 1
                 continue
             else:
+                log_message("🔍 Bouton de recherche trouvé, clic en cours...")
                 search_button = driver.find_element(By.CLASS_NAME, 'home-navigation__link--search')
                 search_button.click()
             # POPUP DE RECHERCHE
             # Attendre que la page soit complètement chargée (document.readyState == 'complete')
             try:
+                log_message("⏳ Attente du chargement de la page...")
                 time.sleep(2)
-                WebDriverWait(driver, 30).until(
+                WebDriverWait(driver, 15).until(
                     lambda d: d.execute_script("return document.readyState") == 'complete'
                 )
+                log_message("✅ Page chargée")
             except Exception:
-                # fallback court si l'attente échoue
-                time.sleep(3)
+                log_message("⚠️ Timeout du chargement, poursuite...", "WARNING")
+                time.sleep(2)
             try:
-                time.sleep(5)
-                WebDriverWait(driver, 20).until(
+                time.sleep(3)
+                log_message("🔍 Recherche du champ de saisie...")
+                WebDriverWait(driver, 15).until(
                     EC.presence_of_element_located((By.CLASS_NAME, 'search-app__content')))
-                WebDriverWait(driver, 20).until(
+                WebDriverWait(driver, 15).until(
                     EC.element_to_be_clickable((By.CLASS_NAME, 'ui-search-default')))
                 modal__content = driver.find_element(By.CLASS_NAME, 'search-app__content')
             except Exception as e:
-                print(f'Erreur lors de la recherche du champ de recherche: {str(e)}')
+                log_message(f'❌ Erreur lors de la recherche du champ de recherche: {str(e)}', "ERROR")
                 tentative = tentative + 1
                 continue
             else:
@@ -151,11 +191,12 @@ def placer_pari(driver, codeList):
                         continue
 
                 if not search_input:
-                    print('Champ de recherche introuvable avec les sélecteurs habituels')
+                    log_message('❌ Champ de recherche introuvable avec les sélecteurs habituels', "ERROR")
                 else:
                     # Remplissage robuste : scroll, ajouter id/name, injecter valeur via JS + dispatch d'événements
                     try:
                         search_term = f"{equipe1} - {equipe2}"
+                        log_message(f"⌨️ Saisie du terme de recherche: {search_term}")
                         search_input.send_keys(search_term)
 
                     except Exception as e:
@@ -165,7 +206,7 @@ def placer_pari(driver, codeList):
                             print(e)
                             search_input.send_keys(f"{equipe1} - {equipe2}")
                         except Exception as e2:
-                            print(f"Impossible d'envoyer le texte dans le champ de recherche: {e2} | original: {e}")
+                            log_message(f"❌ Impossible d'envoyer le texte dans le champ de recherche: {e2} | original: {e}", "ERROR")
             try:
                 # Rechercher et cliquer sur le span "Avant-match"
                 """try:
@@ -180,16 +221,17 @@ def placer_pari(driver, codeList):
                 except Exception as e:
                     print(f"⚠️ Impossible de cliquer sur 'Avant-match': {e}")"""
 
-                WebDriverWait(driver, 20).until(
+                log_message("🔍 Lancement de la recherche du match...")
+                WebDriverWait(driver, 15).until(
                     EC.presence_of_element_located((By.CLASS_NAME, 'ui-game-card__content')))
-                time.sleep(3)
+                time.sleep(2)
             except Exception as e:
-                print(f'Erreur lors de la recherche du match: {equipe1} vs {equipe2} : {str(e)}')
+                log_message(f'❌ Erreur lors de la recherche du match: {equipe1} vs {equipe2} : {str(e)}', "ERROR")
                 tentative = tentative + 1
                 continue
 
             else:
-                print('ui-game-cards found')
+                print('✅ Cartes de matches trouvées, recherche en cours...', flush=True)
                 # try:
                 matches = driver.find_elements(By.CLASS_NAME, 'search-game-card')
                 team1 = ''
@@ -204,13 +246,13 @@ def placer_pari(driver, codeList):
                             team1 = team_names[0].text.strip()
                             team2 = team_names[1].text.strip()
 
-                            print(f"🏆 Équipes trouvées: '{team1}' vs '{team2}'")
-                            print(f"🔍 Recherche: '{equipe1}' vs '{equipe2}'")
+                            log_message(f"🏆 Équipes trouvées: '{team1}' vs '{team2}'")
+                            log_message(f"🔍 Comparaison avec: '{equipe1}' vs '{equipe2}'")
 
                             # Comparaison flexible des noms d'équipes
                             if (equipe1.lower() in team1.lower() or team1.lower() in equipe1.lower()) and \
                                     (equipe2.lower() in team2.lower() or team2.lower() in equipe2.lower()):
-                                print('✅ Match found!')
+                                print('✅ Match trouvé! Accès à la page du match...', flush=True)
                                 link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
                                 driver.get(link)
                                 find_match = True
@@ -222,15 +264,14 @@ def placer_pari(driver, codeList):
                             if ' - ' in teams_text:
                                 team1, team2 = teams_text.split(' - ')
                                 if (equipe1 in team1 or team1 in equipe1) and (equipe2 in team2 or team2 in equipe2):
-                                    print('✅ Match found (fallback method)')
+                                    print('✅ Match trouvé (méthode alternative)!', flush=True)
                                     link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
                                     driver.get(link)
                                     find_match = True
                                     break
 
                     except Exception as e:
-                        print(f"⚠️ Erreur lors de l'extraction des équipes: {e}")
-                        tentative = tentative + 1
+                        log_message(f"⚠️ Erreur lors de l'extraction des équipes: {e}", "WARNING")
                         continue
                 if not find_match:
                     for match in matches:
@@ -240,26 +281,30 @@ def placer_pari(driver, codeList):
                         if len(team_names) >= 2:
                             team1 = team_names[0].text.strip()
                             team2 = team_names[1].text.strip()
-                        print('try to compare', f"{team1} - {team2}", f'{equipe1} vs {equipe2}')
+                        log_message(f'Tentative de comparaison: {team1} - {team2} avec {equipe1} vs {equipe2}')
                         try:
+                            if (equipe1 in team1 or team1 in equipe1) and (equipe2 in team2 or team2 in equipe2):
+                                log_message('✅ Match trouvé (méthode alternative 2)!')
+                                link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
+                                driver.get(link)
+                                find_match = True
+                                break
                             if compare_match_name(f"{team1} - {team2}", f'{equipe1} vs {equipe2}', sport_id):
-                                print('Match found')
+                                log_message('✅ Match trouvé via comparaison IA!')
                                 link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
                                 driver.get(link)
                                 find_match = True
                                 break
                         except Exception as e:
-                            print(f'Une erreur de comparaison {e}')
+                            log_message(f'Erreur lors de la comparaison: {e}', "WARNING")
 
                 # except Exception as e:
                 # print(f'Erreur lors de la selection du match: {equipe1} vs {equipe2} : {str(e)}')
                 # exit()
             if not find_match:
                 send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de la recherche du match : {formatted_telegram_msg}")
-                # Retirer l'élément de la liste avant de retourner
-                if codeList:
-                    del codeList[0]
-                return False
+                success = False
+                break
             # Afficher la categorie de paris
             tentative = 0
             try:
@@ -289,9 +334,6 @@ def placer_pari(driver, codeList):
                     tentative += 1
                     if tentative > 3:
                         send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de l'affichage du pari : {formatted_telegram_msg}")
-                        # Retirer l'élément de la liste avant de retourner
-                        if codeList:
-                            del codeList[0]
                         return False
 
                 tentative = 0
@@ -300,9 +342,6 @@ def placer_pari(driver, codeList):
                     tentative += 1
                     if tentative > 3:
                         send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de la récupération du pari : {formatted_telegram_msg}")
-                        # Retirer l'élément de la liste avant de retourner
-                        if codeList:
-                            del codeList[0]
                         return False
             if len(combined_paris)>1:
                 try:
@@ -321,18 +360,12 @@ def placer_pari(driver, codeList):
             tentative += 1
             if tentative > 3:
                 send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de la mise du pari : {formatted_telegram_msg}")
-                # Retirer l'élément de la liste avant de retourner
-                if codeList:
-                    del codeList[0]
                 return False
         validation = False
         while not validation:
             validation = ValidationDuParis(driver)
             tentative += 1
             if tentative > 3:
-                # Retirer l'élément de la liste avant de retourner
-                if codeList:
-                    del codeList[0]
                 return False
         if not validation:
             send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de la validation du pari : {formatted_telegram_msg}")
@@ -433,16 +466,29 @@ def placer_pari(driver, codeList):
                 'error': str(e)
             }
         finally:
-            # Retirer l'élément traité de la liste pour éviter une boucle infinie
-            if codeList:
-                del codeList[0]
-                print(f"Pari traité et retiré de la liste. Éléments restants: {len(codeList)}")
+            # Pari traité avec le nouveau format
+            print(f"Pari traité avec succès")
 
-    # Retour par défaut si la boucle se termine sans traitement
+        # Si on arrive ici sans exception, le traitement a réussi pour ce match
+        
+        # Fin de la boucle for (tous les matches traités)
+        # Si tous les matches ont été traités avec succès
+        if success:
+            return {
+                'success': True,
+                'message': 'Tous les paris ont été traités',
+                'processed_count': len(matches_list)
+            }
+        
+        # Si il y a eu un échec, incrémenter tentative et recommencer
+        tentative += 1
+        print(f"Tentative {tentative} échouée, nouvelle tentative...")
+
+    # Si on sort de la boucle while, toutes les tentatives ont échoué
     return {
-        'success': True,
-        'message': 'Tous les paris ont été traités',
-        'processed_count': len(donnees_test) if isinstance(donnees_test, list) else 1
+        'success': False,
+        'message': 'Échec après 3 tentatives',
+        'processed_count': 0
     }
 
 

@@ -1,0 +1,9 @@
+# Configuration des messages à ignorer
+# Une phrase par ligne
+# Les lignes commençant par # sont des commentaires
+# La recherche n'est pas sensible à la casse
+
+# Exemples de phrases à ignorer :
+on encaiss
+c'est validey
+bang bang

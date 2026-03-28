@@ -429,7 +429,7 @@ def _names_from_api(query, sport_id):
     Retourne set() si rien trouvé ou en cas d'erreur.
     """
     try:
-        url = f"http://datas.sc2vagr6376.universe.wf/api/sports/{sport_id}/teams/search?search={quote_plus(query)}"
+        url = f"http://api.auxotracker.p-com.studio/api/sports/{sport_id}/teams/search?search={quote_plus(query)}"
         print(f"🔍 API search URL: {url}")
         r = requests.get(url, timeout=5)
         j = r.json()
@@ -477,6 +477,7 @@ def compare_match_name(match_name1, match_name2, sport_id):
 
         # si aucune donnée API trouvée pour une des équipes, retourner False
         if not set_a1 or not set_a2 or not set_b1 or not set_b2:
+            print(f"⚠️ API search: no data found for one of the teams in '{match_name1}' or '{match_name2}'")
             return False
 
         def norm(s):
@@ -490,12 +491,16 @@ def compare_match_name(match_name1, match_name2, sport_id):
 
         # vérification ordre identique
         if (set_a1 & set_b1) and (set_a2 & set_b2):
+            print(f"✅ Match name comparison: '{match_name1}' vs '{match_name2}' => SAME MATCH (order match)")
             return True
         # vérification ordre inversé
         if (set_a1 & set_b2) and (set_a2 & set_b1):
+            print(f"✅ Match name comparison: '{match_name1}' vs '{match_name2}' => SAME MATCH (reverse order match)")
             return True
+        print(f"❌ Match name comparison: '{match_name1}' vs '{match_name2}' => DIFFERENT MATCHES")
         return False
     except Exception:
+        print(f"❌ Error in compare_match_name API comparison for '{match_name1}' vs '{match_name2}'")
         return False
 
 

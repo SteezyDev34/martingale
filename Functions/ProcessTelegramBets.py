@@ -42,22 +42,30 @@ def process_api_bets(driver, limit: int = 10) -> int:
         for bet in unprocessed_bets:
             #try:
             if bet:
-                # Convertir les données de l'API au format attendu par placer_pari
-                bet_data = {
-                    "date": bet.get("date_pari"),
-                    "equipe_1": bet.get("equipe_1"),
-                    "equipe_2": bet.get("equipe_2"),
-                    "categorie": bet.get("categorie"),
-                    "type_de_pari": bet.get("type_de_pari"),
-                    "selection": bet.get("selection"),
-                    "sport": bet.get("sport"),
-                    "tipster": bet.get("tipster")
-                }
+                bet = dict(bet)  # Convertir en dictionnaire standard si nécessaire
                 
-                log(f"Traitement du pari ID {bet['id']}: {bet_data['equipe_1']} vs {bet_data['equipe_2']}", "info", clear=False)
+                # Récupérer les données du pari
+                bet_data = None
                 
-                # Placer le pari
-                success = placer_pari(driver, [bet_data])
+                if not bet_data and bet.get('selection'):
+                    try:
+                        selection_data = json.loads(bet['selection'])
+                        print('traitement depuis selection', selection_data)
+                        
+                        # Si c'est le nouveau format avec matches
+                        if isinstance(selection_data, dict) and 'matches' in selection_data:
+                            bet_data = selection_data
+                    except (json.JSONDecodeError, TypeError):
+                        log(f"Erreur parsing selection pour pari ID {bet.get('id')}", "error")
+                        continue
+                
+                # Si on n'arrive pas à récupérer les données, passer au suivant
+                if not bet_data:
+                    log(f"Impossible de récupérer les données pour pari ID {bet.get('id')}", "error")
+                    continue
+                    
+                # Placer le pari avec les données structurées
+                success = placer_pari(driver, bet_data)
                 
                 if success:
                     # Marquer le pari comme traité dans l'API

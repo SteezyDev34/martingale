@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from Functions.Functions_telegram import send_telegram
 import config
 from Functions.DeleteBet import DeleteBet
 from Functions.GetIfNewSite import GetIfNewSite
@@ -375,9 +376,14 @@ def PlacerCode(driver, code):
                         validate_bet = False
                         config.log('On place la mise', 'infos', True, 2)
                         config.log_clear_line()
+                        tentative =0
                         while not PlacerMise(driver):
                             config.log('On vérifie le score pour valider le paris', 'info', False, 2)
                             config.log_clear_line()
+                            tentative = tentative + 1
+                            if tentative > 2:
+                                send_telegram('-1001848207367', f"Erreur lors du placement du code : {code}")
+                                return False
                             ##VALIDATION DU PARIS SI SCORE OK
                         while not validate_bet:
                             # VÉRIFICATION DU SCORE ACTUEL
