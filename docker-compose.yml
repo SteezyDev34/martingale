@@ -15,7 +15,7 @@ services:
       LETSENCRYPT_EMAIL: you@example.local
       # Utiliser le backend Laravel exposé sur le réseau partagé comme proxy interne
       # Le backend doit implémenter un endpoint /internal/proxy qui accepte ?u=<url>
-      PROXY_URL: "http://api.auxotracker/internal/proxy"
+      PROXY_URL: "https://api.auxotracker/internal/proxy"
     command: ["python", "-u", "Functions/GetProbas.py"]
     restart: unless-stopped
     logging:

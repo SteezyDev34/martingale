@@ -71,7 +71,9 @@ else:
 config.localhost = 43151
 config.site_type = 'new_site'
 from ChromeDriver.SetDriver import get_script_driver
+command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
 
+print(command)
 num_fenetre = 1
 driver = get_script_driver(num_fenetre)
 # First install telethon using: pip install telethon
@@ -385,18 +387,36 @@ async def my_event_handler(event):
                         # Convertir le resultat JSON en dictionnaire et l'ajouter a codeList
                         try:
                             pari_dict = json.loads(result)
-                            pari_dict["tipster"] = sender.username if sender and sender.username else event.chat_id
+                            pari_dict["tipster"] = sender.username if sender and sender.username else event.chat.title
                             #betList.append(pari_dict)
                             #log(f"Pari ajoute a betList: {pari_dict}", "info", clear=False)
 
                             # Envoyer le pari a l'API
                             try:
                                 sender_username = sender.username if sender and sender.username else None
-                                api_success = send_bet_data_to_api(
-                                    pari_dict,
-                                    message_original=event.raw_text,
-                                    sender_username=sender_username
-                                )
+                                api_success = False
+                                # Support pour deux formats de pari :
+                                # 1) dictionnaire plat avec 'equipe_1','equipe_2','selection'
+                                # 2) dictionnaire contenant 'matches' : [ { ... } ]
+                                send_dict = pari_dict.copy()
+                                # Si le format plat manque des clés, tenter d'extraire depuis 'matches'
+                                if not (send_dict.get("equipe_1") and send_dict.get("equipe_2") and send_dict.get("selection")):
+                                    matches = pari_dict.get("matches")
+                                    if isinstance(matches, list) and len(matches) > 0 and isinstance(matches[0], dict):
+                                        first = matches[0]
+                                        # Promouvoir quelques champs courants du premier match
+                                        for k in ("equipe_1", "equipe_2", "selection", "odds", "date", "sport", "intitule"):
+                                            if k in first and not send_dict.get(k):
+                                                send_dict[k] = first[k]
+
+                                if send_dict.get("equipe_1") and send_dict.get("equipe_2") and send_dict.get("selection"):
+                                    api_success = send_bet_data_to_api(
+                                        send_dict,
+                                        message_original=event.raw_text,
+                                        sender_username=sender_username
+                                    )
+                                else:
+                                    log(f"Conditions non remplies pour l'envoi du pari: {pari_dict}", "info", clear=False)
                                 if api_success:
                                     log(f"Pari envoye avec succès a l'API", "info", clear=False)
                                 else:

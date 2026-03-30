@@ -429,7 +429,7 @@ def _names_from_api(query, sport_id):
     Retourne set() si rien trouvé ou en cas d'erreur.
     """
     try:
-        url = f"http://api.auxotracker.p-com.studio/api/sports/{sport_id}/teams/search?search={quote_plus(query)}"
+        url = f"https://api.auxotracker.p-com.studio/api/sports/{sport_id}/teams/search?search={quote_plus(query)}"
         print(f"🔍 API search URL: {url}")
         r = requests.get(url, timeout=5)
         j = r.json()

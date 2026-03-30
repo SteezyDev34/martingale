@@ -22,16 +22,20 @@ def GetMise(driver):
         config.log("Rattrapage, recuperation de la cote", 'info', False)
         logline += 1
         try:
-            if config.scriptType == 'LIVE' and config.site_type == 'mobile_site':
-                config.classes['coef_value'] = config.classes['coupon_action_coef']
             config.cote = ''.join(filter(lambda x: x.isdigit() or x in ',.',
-                                         driver.find_elements(By.CLASS_NAME,
-                                                              config.classes['coef_value'][config.site_type])[0].text))
+                                        driver.find_elements(By.CLASS_NAME,
+                                                            config.classes['coupon_action_coef'][config.site_type])[0].text))
         except Exception as e:
-            print(e)
-            config.log('erreur recup cote', 'info', False)
-            logline += 1
-            config.cote = config.cotebase
+            try:
+                if config.scriptType == 'LIVE' and config.site_type == 'mobile_site':
+                    config.cote = ''.join(filter(lambda x: x.isdigit() or x in ',.',
+                                                    driver.find_elements(By.CLASS_NAME,
+                                                                        config.classes['coef_value'][config.site_type])[0].text))
+            except Exception as e:
+                print(e)
+                config.log('erreur recup cote', 'info', False)
+                logline += 1
+                config.cote = config.cotebase
         else:
             config.log(f'cote recupéré {str(config.cote)}', 'info', False)
             logline += 1

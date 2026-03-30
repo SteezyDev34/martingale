@@ -466,5 +466,83 @@
         "timestamp": "2026-03-26 14:31:54",
         "tipster": null,
         "bet_to_recover_id": ""
+    },
+    {
+        "montant": 0.5,
+        "cote": null,
+        "match": "Colombie - France",
+        "equipe_1": "Colombie",
+        "equipe_2": "France",
+        "type_de_pari": null,
+        "bet": null,
+        "coupon": null,
+        "timestamp": "2026-03-29 11:06:23",
+        "tipster": null,
+        "bet_to_recover_id": ""
+    },
+    {
+        "montant": 0.5,
+        "cote": null,
+        "match": "Colombie - France",
+        "equipe_1": "Colombie",
+        "equipe_2": "France",
+        "type_de_pari": null,
+        "bet": null,
+        "coupon": null,
+        "timestamp": "2026-03-29 11:15:11",
+        "tipster": null,
+        "bet_to_recover_id": ""
+    },
+    {
+        "montant": 0.5,
+        "cote": null,
+        "match": "Colombie - France",
+        "equipe_1": "Colombie",
+        "equipe_2": "France",
+        "type_de_pari": null,
+        "bet": null,
+        "coupon": null,
+        "timestamp": "2026-03-29 12:36:42",
+        "tipster": null,
+        "bet_to_recover_id": ""
+    },
+    {
+        "montant": 0.5,
+        "cote": null,
+        "match": "Atlanta Hawks - Celtics de Boston",
+        "equipe_1": "Atlanta Hawks",
+        "equipe_2": "Celtics de Boston",
+        "type_de_pari": null,
+        "bet": null,
+        "coupon": null,
+        "timestamp": "2026-03-31 01:05:59",
+        "tipster": null,
+        "bet_to_recover_id": ""
+    },
+    {
+        "montant": 0.5,
+        "cote": null,
+        "match": "Atlanta Hawks - Celtics de Boston",
+        "equipe_1": "Atlanta Hawks",
+        "equipe_2": "Celtics de Boston",
+        "type_de_pari": null,
+        "bet": null,
+        "coupon": null,
+        "timestamp": "2026-03-31 01:48:40",
+        "tipster": null,
+        "bet_to_recover_id": ""
+    },
+    {
+        "montant": 0.47,
+        "cote": "2.055",
+        "match": "Atlanta Hawks - Celtics de Boston",
+        "equipe_1": "Atlanta Hawks",
+        "equipe_2": "Celtics de Boston",
+        "type_de_pari": null,
+        "bet": null,
+        "coupon": null,
+        "timestamp": "2026-03-31 01:56:56",
+        "tipster": null,
+        "bet_to_recover_id": ""
     }
 ]

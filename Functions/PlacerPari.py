@@ -99,6 +99,10 @@ def placer_pari(driver, codeList):
             # - Si c'est une chaîne JSON sérialisée représentant une liste -> convertir en tableau de paris
             # - Si c'est déjà une liste Python -> l'utiliser comme tableau
             # - Sinon -> retourner un tableau contenant l'élément d'origine (marqué comme 'Combiné')
+            
+            if equipe1 is None or equipe2 is None:
+                log_message("❌ Données d'équipe manquantes, impossible de traiter ce match", "ERROR")
+                return False
             combined_paris = None
             try:
                 if isinstance(selection, str):
@@ -378,7 +382,7 @@ def placer_pari(driver, codeList):
                     "team1": equipe1,
                     "team2": equipe2,
                     "league": pari.get('league', 'Ligue Inconnue'),  # À ajuster selon vos données
-                    "description": pari['selection'],
+                    "description": pari['intitule'],
                     "odds": float(pari.get('odds', config.cote)),
                     "sport_id": sport_id or 1  # Valeur par défaut si sport_id est None
                 }

@@ -1,7 +1,7 @@
 # Example Internal Proxy for SofaScore
 
 Place these files into your Laravel project to expose a simple internal proxy endpoint
-that `getprobas` can call via `PROXY_URL` (e.g. `http://api.auxotracker/internal/proxy?u=<url>`).
+that `getprobas` can call via `PROXY_URL` (e.g. `https://api.auxotracker/internal/proxy?u=<url>`).
 
 Steps:
 
@@ -11,7 +11,7 @@ Steps:
 4. Vérifier en appelant depuis le host ou un autre container:
 
 ```bash
-curl "http://api.auxotracker/internal/proxy?u=https://www.sofascore.com/api/v1/sport/tennis/scheduled-events/2026-03-07"
+curl "https://api.auxotracker/internal/proxy?u=https://www.sofascore.com/api/v1/sport/tennis/scheduled-events/2026-03-07"
 ```
 
 Sécurité et recommandations:

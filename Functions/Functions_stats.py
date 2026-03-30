@@ -225,8 +225,8 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
 
     print("Recherche des IDs des joueurs via API...")
     line += 1
-    url1 = f"http://api.auxotracker.p-com.studio/api/sports/2/teams/search?search={playerName1.replace(' ', '+')}"
-    url2 = f"http://api.auxotracker.p-com.studio/api/sports/2/teams/search?search={playerName2.replace(' ', '+')}"
+    url1 = f"https://api.auxotracker.p-com.studio/api/sports/2/teams/search?search={playerName1.replace(' ', '+')}"
+    url2 = f"https://api.auxotracker.p-com.studio/api/sports/2/teams/search?search={playerName2.replace(' ', '+')}"
     try:
         print(f"Requête API pour {playerName1}: {url1}")
         line += 1
@@ -311,8 +311,8 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
     else:
         # url1 = f"https://www.sofascore.com/api/v1/team/{pid1}/year-statistics/2025"
         # url2 = f"https://www.sofascore.com/api/v1/team/{pid2}/year-statistics/2025"
-        url1 = f"http://api.auxotracker.p-com.studio/api/stats/tennis/player/{pid1}"
-        url2 = f"http://api.auxotracker.p-com.studio/api/stats/tennis/player/{pid2}"
+        url1 = f"https://api.auxotracker.p-com.studio/api/stats/tennis/player/{pid1}"
+        url2 = f"https://api.auxotracker.p-com.studio/api/stats/tennis/player/{pid2}"
         try:
             json_data = requests.get(url1, headers=headers, verify=False).json()
             d1 = json_data.get('data', {})  # ou {} ou [] selon ce que tu attends
