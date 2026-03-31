@@ -261,7 +261,7 @@ def rechercheDeMatch(driver):
                                                 continue
                                     else:
                                         config.log('Score NOT OK', 'warning', False, 4, False)
-                                        config.log('WIN MATCH', GetMatchResultFromDashboard(
+                                        #config.log('WIN MATCH', GetMatchResultFromDashboard(
                                             div_bet_score[0].get_attribute('innerHTML')))
                                         logligueline += 1
 
