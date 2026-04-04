@@ -671,6 +671,7 @@ def classementeDeMatch(driver, use_json_cache=True):
                             hour = None
                             current_year = None
                             try:
+                                var
                                 # Attendre jusqu'à 10 secondes que l'élément s'affiche dans bet_item
                                 time_element = WebDriverWait(bet_item, 10).until(EC.visibility_of_element_located(
                                     (By.CLASS_NAME, config.classes['events_time'][config.site_type])))
@@ -690,7 +691,7 @@ def classementeDeMatch(driver, use_json_cache=True):
                             except Exception as e:
                                 events_time_selector = config.classes['events_time'][config.site_type]
                                 config.log(
-                                    f'heure de debut non trouvé {events_time_selector} {e} ',
+                                    f'tet heure de debut non trouvé {events_time_selector} {e} ',
                                     'warning', True)
                             else:
                                 try:
