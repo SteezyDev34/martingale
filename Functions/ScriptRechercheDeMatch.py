@@ -16,7 +16,7 @@ from Functions.DeleteBet import DeleteBet
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetIfNewSite import GetIfNewSite
 from Functions.GetJsonData import getCompet, DispatchPerte, set1DispatchPerte
-from Functions.GetResult import GetMatchResultFromDashboard
+#from Functions.GetResult import GetMatchResultFromDashboard
 from Functions.Managers.MatchManager import match_manager
 from Functions.Managers.ScriptManager import script_manager
 from Functions.UpdateMatchDone import todo
