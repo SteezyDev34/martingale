@@ -154,7 +154,7 @@ classes = {
     'coupon_action_coef':
         {
             'old_site': 'cpn-action-coef',
-            'new_site': 'coupon-action-coef',
+            'new_site': 'coupon-result-coef-value',
             'mobile_site': 'coupon-total-coef__value'
         },
     'cpn_amount':
