@@ -218,7 +218,7 @@ def ValidationDuParis(driver, nexbet=False):
                                     if config.scriptType == 'LIVE' and config.site_type == 'mobile_site':
                                         close = False
                                     else:
-                                        info = GetCouponInfo(driver)
+                                        #info = GetCouponInfo(driver)
                                         close = True
                                     if ModalHandler(driver, close):
                                         validation = True
