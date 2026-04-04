@@ -217,7 +217,7 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
 def AfficherParisMobile(driver, categorie='', type_de_pari=''):
     config.log('recherche du champ déroulant mobile...', '', indent=2)
     logline = 1
-    if config.scriptType in config.allScriptType and config.scriptType != '1SET' and config.scriptType != 'QT' and config.scriptType != 'QTV2':
+    if config.scriptType in config.allScriptType and config.scriptType != 'QT' and config.scriptType != 'QTV2':
         GetSetActuel(driver)
         GetScoreActuel(driver)
         if str(config.set_actuel) == "1":
