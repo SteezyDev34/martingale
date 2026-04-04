@@ -680,6 +680,8 @@ def classementeDeMatch(driver, use_json_cache=True):
                                                                             config.classes['events_time'][
                                                                                 config.site_type]).text
                                 elif config.site_type == 'new_site':
+                                    time_element = WebDriverWait(bet_item, 10).until(EC.visibility_of_element_located(
+                                    (By.CLASS_NAME, 'dashboard-game-info__date')))
                                     start_date_text = time_element.find_element(By.CLASS_NAME,
                                                                                 'dashboard-game-info__date').text
                                     start_time_text = time_element.find_element(By.CLASS_NAME,
