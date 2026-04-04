@@ -680,13 +680,17 @@ def classementeDeMatch(driver, use_json_cache=True):
                                                                             config.classes['events_time'][
                                                                                 config.site_type]).text
                                 elif config.site_type == 'new_site':
+                                    config.log('Récupération de la date et de l heure du match', 'info', True)
                                     time_element = WebDriverWait(bet_item, 10).until(EC.visibility_of_element_located(
                                     (By.CLASS_NAME, 'dashboard-game-info__date')))
                                     start_date_text = time_element.find_element(By.CLASS_NAME,
                                                                                 'dashboard-game-info__date').text
+                                    config.log(f'Date du match: {start_date_text}', 'info', True)
                                     start_time_text = time_element.find_element(By.CLASS_NAME,
                                                                                 'dashboard-game-info__time').text
+                                    config.log(f'Heure du match: {start_time_text}', 'info', True)
                                     start_time_text = start_date_text + ' ' + start_time_text
+                                    config.log(f'Date et heure du match: {start_time_text}', 'info', True)
                             except Exception as e:
                                 events_time_selector = config.classes['events_time'][config.site_type]
                                 config.log(
