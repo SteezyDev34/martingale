@@ -674,12 +674,18 @@ def classementeDeMatch(driver, use_json_cache=True):
                                 # Attendre jusqu'à 10 secondes que l'élément s'affiche dans bet_item
                                 time_element = WebDriverWait(bet_item, 10).until(EC.visibility_of_element_located(
                                     (By.CLASS_NAME, 'dashboard-game-info__date')))
+                                
+                                time_element = bet_item.find_element(By.CLASS_NAME,
+                                                                            config.classes['events_time'][
+                                                                                config.site_type])
 
                                 if config.site_type == 'old_site':
                                     start_time_text = bet_item.find_element(By.CLASS_NAME,
                                                                             config.classes['events_time'][
                                                                                 config.site_type]).text
                                 elif config.site_type == 'new_site':
+                                    start_date_text = time_element.find_element(By.CLASS_NAME,
+                                                                                'dashboard-game-info__date').text
                                     start_date_text = time_element.find_element(By.CLASS_NAME,
                                                                                 'dashboard-game-info__date').text
                                     start_time_text = time_element.find_element(By.CLASS_NAME,
