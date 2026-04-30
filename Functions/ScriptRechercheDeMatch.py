@@ -1,6 +1,7 @@
 import time
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
 
 from Functions import GetMatchScore, GetLigueName, AddRunning
 from Functions import OuverturePageMatch
@@ -17,6 +18,12 @@ def rechercheDeMatch(driver):
     config.match_found = False
     while not config.match_found and not config.error:
         # config.init_variable()
+        # Attendre que la page soit complètement chargée
+        WebDriverWait(driver, 15).until(
+            lambda d: d.execute_script('return document.readyState') == 'complete'
+        )
+        time.sleep(1)
+        
         config.match_found = GetIfMatchPage(driver)
         if not config.match_found and float(config.perte) > 0:
             DispatchPerte()
@@ -152,8 +159,12 @@ def rechercheDeMatch(driver):
             config.log('PAS DE MATCH TROUVE!', 'warning', True, 2)
             config.log_clear_line(3)
             driver.get(config.site_url)
+            # Attendre que la page soit complètement chargée
+            WebDriverWait(driver, 15).until(
+                lambda d: d.execute_script('return document.readyState') == 'complete'
+            )
+            time.sleep(1)
             return config.match_found
-            time.sleep(5)
         else:
 
             config.log('MATCH TROUVE!', 'success', False, 2)

@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from Functions.GetIfMatchPage import GetIfMatchPage
 import config
 from Functions import Functions_1XBET
 from Functions import GetLigueName, AddRunning
@@ -54,11 +55,11 @@ def all_script(driver):
             config.log('RECHERCHE INFOS DE MISE', 'title', False)
             infosperte = getGlobalPerte()
             if infosperte and config.perte == 0:
-                if float(infosperte['perte']) > 20:
+                if float(infosperte['perte']) > 20000:
                     SendGlobalPerte(config.scriptType, -20)
                     config.perte = 20
                     config.rattrape_perte = 1
-                elif float(infosperte['perte']) <= 20:
+                elif float(infosperte['perte']) <= 20000000:
                     config.perte = float(infosperte['perte'])
                     m = 0 - config.perte
                     SendGlobalPerte(config.scriptType, m)
@@ -75,10 +76,16 @@ def all_script(driver):
         config.perte = 0
     # VÉRIFICATION DES MATCH
     print('START CHEKING LIST')
-    time.sleep(5)
+  
     matches_ok = True
     while matches_ok:
         driver.get(config.site_url)
+        # Attendre que la page soit complètement chargée
+        WebDriverWait(driver, 15).until(
+            lambda d: d.execute_script('return document.readyState') == 'complete'
+        )
+        time.sleep(10)
+        GetIfMatchPage(driver)        
         matches_ok = False
         try:
             # RECUPERATION DES LIGUES EN COURS
@@ -89,13 +96,15 @@ def all_script(driver):
             config.log('ligues introuvables!', 'warning', True, 2)
             return False
         else:
-            config.log('ligues trouvées!', 'success', True, 2)
+            config.log(f'ligues trouvées! : {len(bet_list_ligue)}', 'success', True, 2)
             # POUR CHAQUE LIGUE RÉCUPÉRÉE
             for bet_ligue in bet_list_ligue:
                 if matches_ok:
+                    print('matches_ok break')
                     break
                 # ON RÉCUPÈRE LE NOM DE LA LIGUE
                 config.ligue_name = GetLigueName.main(bet_ligue)
+                print('ligue_name', config.ligue_name)
                 # EN CAS D'ERREUR
                 if not config.ligue_name:
                     # config.log('nom ligues introuvalbe!', 'warning', False, 2)
@@ -115,6 +124,7 @@ def all_script(driver):
                     # s'il y une erreur on passe au suivant
                     continue
                 else:
+                    print('matchs trouvés : ' + str(len(bet_items)))
                     if len(bet_items) <= 0:
                         # config.log('Listes des matchs introuvables!', 'warning', False, 3)
                         # s'il y une erreur on passe au suivant
@@ -124,15 +134,19 @@ def all_script(driver):
                         if matches_ok:
                             break
                         # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
-                        newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
-                                                             'dashboard-game-block__link')[
-                            0].get_attribute(
-                            "href")
-                        config.newmatch = extract_match_slug_from_url(newmatchtxt)
+                        try:
+                            newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
+                                                                 'dashboard-game-block__link')[
+                                0].get_attribute(
+                                "href")
+                            config.newmatch = extract_match_slug_from_url(newmatchtxt)
+                        except Exception as e:
+                            print(f'Erreur lors de la récupération du match : {e}')
+                            continue
                         # config.log(config.newmatch, 'info', False, 4)
                         # Check if newmatch exists in JSON file
                         try:
-                            print('ok')
+                            print(config.newmatch)
                         except:
                             print('tet')
                         else:
@@ -161,13 +175,11 @@ def all_script(driver):
                                         continue
                                 for scriptType in config.scriptTypeList:
                                     config.switchScript(scriptType)
-                                    print('scriptType : ' + scriptType)
+                                    #print('scriptType : ' + scriptType)
 
-                                    if 'url' in match and config.newmatch in match[
-                                        'url'] and config.scriptType.lower() == \
-                                            match['scripttype'].lower():
-                                        print(config.newmatch, match['url'], match['scripttype'], config.scriptType)
-
+                                    # Extraire le slug de l'URL du JSON pour comparaison
+                                    if config.newmatch in match['url'] and config.scriptType.lower() == match['scripttype'].lower():
+                                        print(f"Match trouvé! newmatch: {config.newmatch}, url: {match['url']}, scripttype: {match['scripttype']}, config.scriptType: {config.scriptType}")
                                         div_bet_score = bet_item.find_elements(By.CLASS_NAME,
                                                                                'ui-game-scores')
                                         qt_section = div_bet_score[0].find_elements(By.CLASS_NAME,
@@ -190,10 +202,8 @@ def all_script(driver):
                                             period = period.split(' ')[0]
                                             period = int(''.join(char for char in period if char.isdigit()))
                                         print('period', period, 'qt_actuel', qt_actuel)
-                                        if (period == "Mi-temps" and int(qt_actuel) == int(match['qt']) and
-                                            qt_section[-1].text.strip().replace('\n', '') != "00") or (
-                                                period == "Mi-temps" and int(qt_actuel) > int(match['qt']) and
-                                                qt_section[-1].text.strip().replace('\n', '') == "00") or (
+                                        if (period == "Mi-temps" and int(qt_actuel) == int(match['qt']) ) or (
+                                                period == "Mi-temps" and int(qt_actuel) > int(match['qt']) )or (
                                                 period != "Mi-temps" and int(period) != int(match['qt'])):
                                             # print('MATCH NON TERMINÉ SELON SCORE')
                                             print('MATCH TROUVÉ')
@@ -204,7 +214,11 @@ def all_script(driver):
                                             0].get_attribute(
                                             "href")
                                         driver.get(newurl)
-                                        time.sleep(5)
+                                        # Attendre que la page soit complètement chargée
+                                        WebDriverWait(driver, 15).until(
+                                            lambda d: d.execute_script('return document.readyState') == 'complete'
+                                        )
+                                        time.sleep(2)  # Petite pause pour laisser le JavaScript s'exécuter
                                         config.validated_bet = {
                                             'montant': match['montant'],
                                             'scripttype': match['scripttype'],
@@ -243,16 +257,20 @@ def all_script(driver):
 
                                         matches_ok = True
                                         driver.get(config.site_url)
+                                        # Attendre que la page soit complètement chargée
+                                        WebDriverWait(driver, 15).until(
+                                            lambda d: d.execute_script('return document.readyState') == 'complete'
+                                        )
+                                        time.sleep(1)
                                         break
                                         ##PREPARATTION PREMIER PARIS
-
+                                    #print('no match')
                                     # RETOUR SUR LA SECTION TPS REGLEMENTAIRE
 
                                     # RetourTpsReg(driver)
 
                         # except Exception as e:
                         # print('ERR', e)
-            return True
     Functions_1XBET.del_running(config.script_num, config.running_file_name)
     DeleteBet(driver)
     return True

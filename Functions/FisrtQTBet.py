@@ -14,6 +14,7 @@ def FirstQTBet(driver):
     bet_qt = False
     tentative = 0
     nextBet = False
+    validate_bet = False
     while not bet_qt and not config.error and tentative < 3:
         if not AfficherParis(driver):
             current_frame = inspect.currentframe()

@@ -20,7 +20,7 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['QT', 'QTV2']
+scriptTypeList = ['QT']
 
 # Script configuration
 script_num = 0  # Numéro du Script

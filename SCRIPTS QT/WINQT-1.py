@@ -45,9 +45,8 @@ for i in config.scriptTypeList:
     config.ScriptConfig(i)
 while (config.win < 100):
     tour = 0
-    Functions_QT.all_script(driver)
     try:
-        pass
+        Functions_QT.all_script(driver)
     except Exception as e:
         # Récupérer les informations détaillées de l'erreur (fichier, ligne, fonction)
         tb = traceback.extract_tb(e.__traceback__)
