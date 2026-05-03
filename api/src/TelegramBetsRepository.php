@@ -27,7 +27,7 @@ class TelegramBetsRepository
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
-            ':selection' => $data['selection'] ?? null,
+            ':selection' => json_encode($data ?? null),
         ]);
 
         return (int)$this->pdo->lastInsertId();
