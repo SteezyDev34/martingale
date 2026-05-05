@@ -27,6 +27,7 @@ try {
         throw new Exception('Aucune donnée reçue ou format JSON invalide');
     }
 
+    // Validation des champs obligatoires
     $insertId = $repo->insert($input);
 
     echo json_encode([

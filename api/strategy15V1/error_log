@@ -1,0 +1,30 @@
+[04-Nov-2025 16:39:55 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'sc2vagr6376_auxobetbot.0_Strategy15V1' doesn't exist in /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php:10
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php(10): mysqli->query()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php on line 10
+[04-Nov-2025 16:44:32 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'sc2vagr6376_auxobetbot.0_Strategy15V1' doesn't exist in /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php:10
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php(10): mysqli->query()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php on line 10
+[04-Nov-2025 17:04:31 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'sc2vagr6376_auxobetbot.0_Strategy15V1' doesn't exist in /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php:10
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php(10): mysqli->query()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php on line 10
+[04-Nov-2025 17:22:38 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'sc2vagr6376_auxobetbot.0_Strategy15V1' doesn't exist in /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php:10
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php(10): mysqli->query()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php on line 10
+[04-Nov-2025 17:30:23 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'sc2vagr6376_auxobetbot.0_Strategy15V1' doesn't exist in /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php:10
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php(10): mysqli->query()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php on line 10
+[04-Nov-2025 17:37:19 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'sc2vagr6376_auxobetbot.0_Strategy15V1' doesn't exist in /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php:10
+Stack trace:
+#0 /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php(10): mysqli->query()
+#1 {main}
+  thrown in /home2/sc2vagr6376/auxobetbot/strategy15V1/index.php on line 10
