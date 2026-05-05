@@ -21,9 +21,12 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
         DeleteBet(driver)
     if nextBet:
         jeu = int(config.jeu_actuel) + 1
+        point = int(config.point_actuel) + 1
         # print('jeu next bet ', jeu)
     else:
         jeu = config.jeu_actuel
+        point = config.point_actuel
+    
     if_get_jeu = False
     clic = False
     tentative_clic = 0
@@ -31,6 +34,15 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
 
     # print('i '+str(i))
     while not clic and tentative_clic < 5:
+        if config.scriptType in ['15V1', '15V2']:
+            GetScoreActuel(driver)
+            if nextBet:
+                jeu = int(config.jeu_actuel)
+                point = int(config.point_actuel) + 1
+                # print('jeu next bet ', jeu)
+            else:
+                jeu = config.jeu_actuel
+                point = config.point_actuel
         if config.scriptType in config.allScriptType and config.scriptType != '1SET' and config.scriptType != 'QT' and config.scriptType != 'QTV2':
             scoreboard_player = driver.find_elements(By.CLASS_NAME,
                                                      config.classes['scoreboard_player_score'][config.site_type])
@@ -95,6 +107,18 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     first_player = 2
                     config.win_type = '0:15'  # inversé
                 sType = f"V{first_player} Point 1 Dans le Jeu {jeu}"
+                # print(sType)
+            if config.scriptType == '15V1':
+                if len(first_player) > 0:
+                    first_player = 1
+                    config.win_type = 1  # inversé
+                else:
+                    first_player = 2
+                    config.win_type = 2  # inversé
+                sType = f"V{first_player} Point {point} Dans le Jeu {config.jeu_actuel}"
+                config.looking_point = point
+                config.looking_game = config.jeu_actuel
+
                 # print(sType)
             if config.scriptType == '300':
                 sType = f"Jeu {jeu}, Serveur va mener 30-0"

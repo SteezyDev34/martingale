@@ -39,6 +39,7 @@ def PlacerMise(driver, constructor=False):
             l = cpn_setting.get_attribute("value")
             config.log("mise insérrer : " + str(l))
             if str(l) == str(config.mise):
+                config.log('mise insérée avec succès!', 'success', False)
                 sending_mise = True
 
             else:

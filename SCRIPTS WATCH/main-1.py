@@ -74,7 +74,7 @@ from ChromeDriver.SetDriver import get_script_driver
 command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
 
 print(command)
-num_fenetre = 1
+num_fenetre = 4
 driver = get_script_driver(num_fenetre)
 # First install telethon using: pip install telethon
 import ssl

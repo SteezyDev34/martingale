@@ -16,12 +16,15 @@ from Functions.GetScoreActuel import GetScoreActuel
 
 def ModalHandler(driver, close=True):
     validation = False
-    tentative = 1
+    tentative = 0
     config.log("GESTION DE MODAL", 'info', False, 2)
     print(config.site_type)
     logline = 1
     fenetre_validation = 0
-    while fenetre_validation == 0 and tentative <= 2:
+    atempts = 2
+    if config.scriptType in ['15V1', '15V2']:
+        atempts = 1
+    while fenetre_validation == 0 and tentative < atempts:
         if config.scriptType != 'LIVE':
             GetScoreActuel(driver)
         tentative = tentative + 1

@@ -41,7 +41,7 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
             key = '1X2'
         elif config.scriptType == 'BREAK':
             key = 'Gagne dans le jeu'
-        elif config.scriptType == '015' or config.scriptType == '150':
+        elif config.scriptType == '015' or config.scriptType == '150' or config.scriptType == '15V1' or config.scriptType == '15V2':
             key = 'Point. ' + theset + args
         else:
             key = 'Score de la partie. ' + theset + args
@@ -53,7 +53,8 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
     tentative = 1
 
     while not selection and tentative < 3:
-        RetourTpsReg(driver)
+        if config.scriptType not in ['15V1', '15V2']:
+            RetourTpsReg(driver)
         GetSetActuel(driver)
         if GetIfMatchPage(driver) != True:
             config.error = True
@@ -236,7 +237,7 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
             key = '1X2'
         elif config.scriptType == 'BREAK':
             key = 'Gagne dans le jeu'
-        elif config.scriptType == '015' or config.scriptType == '150':
+        elif config.scriptType == '015' or config.scriptType == '150' or config.scriptType == '15V1' or config.scriptType == '15V2':
             key = f'Point. {theset} {args}'
         else:
             key = 'Score du jeu. ' + theset + ' ' + args
@@ -377,7 +378,7 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver
 
-    config.scriptType = '030'
+    config.scriptType = '15V1'
     config.site_type = 'mobile_site'
     # GetIfNewSite(driver)
     print(config.site_type)

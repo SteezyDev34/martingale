@@ -119,8 +119,11 @@ def ValidationDuParis(driver, nexbet=False):
     validation = False
     tentative = 0
     already = False
+    attempt = 3
+    if config.scriptType in ['15V1', '15V2']:
+       attempt = 2
     #return True # Temporary bypass for testing purposes, remove this line to enable full validation logic
-    while not validation and tentative < 3:
+    while not validation and tentative < attempt:
         config.log('Vérification des paris validés')
         config.log('Tentative', str(tentative))
 
@@ -132,12 +135,22 @@ def ValidationDuParis(driver, nexbet=False):
                     config.validated_bet.get('jeu') == config.looking_game and
                     config.validated_bet.get('set') == current_set and config.validated_bet.get(
                         'url') == config.ligue_name):
-                config.log(f"Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.",
-                           'warning', False)
-                validation = True
-                print(config.validated_bet)
-                already = True
-                break  # Sortir de la boucle si le jeu et le set ont déjà été pariés
+                if config.scriptType in ['15V1', '15V2']:
+                    if config.validated_bet.get('numero_point') == config.looking_point:
+                        config.log(f"1 Ce point ({config.looking_point}) et ce jeu ({config.looking_game}) ont déjà été pariés. Annulation.",
+                                'warning', False)
+                        validation = True
+                        print(config.validated_bet)
+                        already = True
+                        break  # Sortir de la boucle si le jeu et le set ont déjà été pariés
+                else:
+                    config.log(f"2 Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.",
+                            'warning', False)
+                    validation = True
+                    print(config.validated_bet)
+                    already = True
+                    break
+        config.log('Aucun pari validé ne correspond au jeu actuel, on continue la validation', 'info', False)
         try:
             cpn_setting = driver.find_elements(By.CLASS_NAME, config.classes['cpn_amount_input'][config.site_type])[0]
             l = cpn_setting.get_attribute("value")
@@ -169,12 +182,11 @@ def ValidationDuParis(driver, nexbet=False):
                     validation = ModalHandler(driver)
                 else:
                     try:
-                        PlacerMise(driver)
                         cpn_setting = \
                             driver.find_elements(By.CLASS_NAME, config.classes['cpn_amount_input'][config.site_type])[0]
                         l = cpn_setting.get_attribute(
                             "value")
-                        config.log("mise insérrer : " + str(l))
+                        config.log("2 mise insérrer : " + str(l))
                     except Exception as e:
                         config.log(f"#E005689\nUne erreur est survenue : {e}")
                         tentative = tentative + 1
@@ -185,6 +197,7 @@ def ValidationDuParis(driver, nexbet=False):
                             getbtn = driver.find_element(By.CLASS_NAME,
                                                          config.classes['coupon_buttons'][config.site_type])
                             try:
+                                print('click sur placer le paris')
                                 getbtn.click()
                             except:
                                 tentative = tentative + 1
@@ -253,6 +266,7 @@ def ValidationDuParis(driver, nexbet=False):
                 'cote': config.cote,
                 'jeu': config.looking_game,
                 'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
+                'numero_point': config.looking_point if hasattr(config, 'looking_point') else None,
                 'winscore': config.win_type,
                 'timestamp': current_timestamp,
                 'url': url_to_store
@@ -324,6 +338,7 @@ if __name__ == "__main__":
 
     num_fenetre = 1
     driver = get_script_driver(num_fenetre)
+    config.site_type = 'mobile_site'
     # driver.switch_to.window(driver.window_handles[0])
     config.site_type = 'new_site'
     config.scriptType = 'LIVE'

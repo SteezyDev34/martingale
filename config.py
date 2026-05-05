@@ -24,12 +24,13 @@ system_description = systeme if systeme in SUPPORTED_SYSTEMS else f"Système inc
 
 # Project path initialization
 projectPath = os.path.dirname(os.path.abspath(__file__))
-scriptTypeList = ['150', '015', '300', '30A']
+scriptTypeList = ['15V1']
+#scriptTypeList = ['150', '015', '300', '30A']
 scriptTypeList1 = ['BREAK']
-scriptTypeList2 = ['6P','40A']
+scriptTypeList2 = ['015', '300', '15A', '30A']
 scriptTypeList3 = ['BREAK']
 scriptTypeList4 = ['BREAK', '4015', '4030']
-allScriptType = ['150', '015', '030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK',
+allScriptType = ['15V1','15V2','150', '015', '030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK',
                  '1SET']
 # Script configuration
 script_num = 0  # Numéro du Script
@@ -67,9 +68,12 @@ proba40A = 0
 saved_set = ""
 set_actuel = ""
 jeu_actuel = ""
+point_actuel = 1
+vainqueur_point_precedent = 0  # 1 = joueur 1, 2 = joueur 2, 0 = indéterminé
 running_game = 1
 score_actuel = False
 looking_game = False
+looking_point = False
 placed_game = False
 saved_score = False
 

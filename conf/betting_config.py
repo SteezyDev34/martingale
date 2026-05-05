@@ -8,6 +8,8 @@ types de scripts de paris automatisés.
 
 # Configuration des gains souhaités par type de script
 total_want_win_bpk = {
+    '15V1': 0.1,
+    '15V2': 0.1,
     '030': 0.1,
     '300': 0.1,
     '150': 0.5,
@@ -24,6 +26,8 @@ total_want_win_bpk = {
     '4030': 0.1,
 }
 total_want_win = {
+    '15V1': 2,
+    '15V2': 2,
     '030': 0.1,
     '300': 0.1,
     '150': 0.1,
@@ -41,6 +45,8 @@ total_want_win = {
 }
 # if lost
 total_want_win_recup = {
+    '15V1': 0.1,
+    '15V2': 0.1,
     '030': 0.1,
     '300': 0.3,
     '150': 1,

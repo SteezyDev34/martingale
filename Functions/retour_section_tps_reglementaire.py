@@ -89,7 +89,7 @@ def RetourTpsReg(driver, theset="Temps réglementaire"):
     return False
 
 def RetourTpsRegMobile(driver, theset="Temps réglementaire"):
-    config.log('recherche du champ déroulant mobile...', '', indent=2)
+    config.log('retour tps regl recherche du champ déroulant mobile...', '', indent=2)
     logline = 1
     selection = False
     tentative = 0

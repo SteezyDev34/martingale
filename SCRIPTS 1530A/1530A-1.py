@@ -55,7 +55,7 @@ print(command)
 
 from ChromeDriver.SetDriver import get_script_driver
 
-num_fenetre = 1
+num_fenetre = 2
 time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 
 driver = get_script_driver(num_fenetre)
@@ -81,7 +81,7 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
         newclassementeDeMatch(driver)
         classementeDeMatch(driver)
 config.in_stat = True
-config.scriptTypeList = config.scriptTypeList
+config.scriptTypeList = config.scriptTypeList2
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}

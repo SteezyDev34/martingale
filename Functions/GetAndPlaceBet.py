@@ -46,7 +46,10 @@ def GetAndPlaceBet(driver):
                 else:
                     print('BET OK')
         config.switchScript(actual_scryptType)
-        config.looking_game = int(config.jeu_actuel) + 1
+        if config.scriptType not in ['15V1', '15V2']:
+            config.looking_game = int(config.jeu_actuel) + 1
+        else: 
+            config.looking_game = int(config.jeu_actuel)
         config.log(f'jeu recherhcé : {config.looking_game}', 'info', True)
         if int(config.looking_game) == 0:
             config.looking_game = 1
@@ -54,17 +57,18 @@ def GetAndPlaceBet(driver):
             config.result = 'RUN'
             return
 
-        if config.jeu_actuel and int(config.jeu_actuel) > 6:
+        if (config.jeu_actuel and int(config.jeu_actuel) > 6) and config.scriptType not in ['15V1', '15V2']:
             RetourTpsReg(driver)
         # Affichage de la liste des paris
-        config.log('Affichage de la liste des paris', config.newmatch)
-        if not AfficherParis(driver):
-            tentative = tentative + 1
-            if tentative > 5:
-                config.log('error recup jeu #ERR345', config.newmatch)
-                config.error = True
-                tentative = 0
-            continue
+        if config.scriptType not in ['15V1', '15V2']:
+            config.log('Affichage de la liste des paris', config.newmatch)
+            if not AfficherParis(driver):
+                tentative = tentative + 1
+                if tentative > 5:
+                    config.log('error recup jeu #ERR345', config.newmatch)
+                    config.error = True
+                    tentative = 0
+                continue
         # On recherche le jeu actuel
         config.log('liste des paris affichée, On recherche le jeu actuel', config.newmatch)
         if not GetBet(driver, True):

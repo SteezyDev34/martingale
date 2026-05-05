@@ -118,9 +118,9 @@ def all_script(driver):
     firstjeu = True
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
-        if config.validated_bet and int(config.jeu_actuel) == int(config.validated_bet.get('jeu')) and int(
+        if (config.validated_bet and int(config.jeu_actuel) == int(config.validated_bet.get('jeu')) and int(
                 config.set_actuel) == int(
-            config.validated_bet.get('set')):
+            config.validated_bet.get('set'))) or config.scriptType == '15V1' or config.scriptType == '15V2':
             waitendgame = False
             break
 

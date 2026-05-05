@@ -8,7 +8,8 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 def GetResult(driver):
     ##ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
-    RetourTpsReg(driver)
+    if config.scriptType not in ['15V1', '15V2']:
+        RetourTpsReg(driver)
     txtlog = "ON ATTEND LE RESULTAT POUR VALIDER LE PARIS"
     print('validated_bet = ', config.validated_bet)
     config.log(txtlog, config.newmatch)
@@ -38,7 +39,7 @@ def GetResult(driver):
                 '15:15', '30:0', '0:30', '30:15', '15:30', '30:30', '40:15',
                 '15:40', '30:40', '40:30', '40:0', '0:40', '40:40', '40:A', 'A:40'
             ]
-        elif config.scriptType == "015" or config.scriptType == "150":
+        elif config.scriptType == "015" or config.scriptType == "150" or config.scriptType == '15V1' or config.scriptType == '15V2' :
             passed_score = [
                 '0:15', '15:0', '15:15', '30:0', '0:30', '30:15', '15:30', '30:30', '40:15',
                 '15:40', '30:40', '40:30', '40:0', '0:40', '40:40', '40:A', 'A:40'
@@ -94,6 +95,78 @@ def GetResult(driver):
                     config.log(result, 'error', False, 2)
                 config.validated_bet['result'] = result
                 return result
+        elif config.scriptType == "15V1" or config.scriptType == "15V2":
+            if int(config.set_actuel) != int(config.validated_bet.get('set')):
+                getresult = True
+            elif config.jeu_actuel != int(config.validated_bet.get('jeu')):
+                    # Check the last element in all_scores
+                # Filter scores for matching set and jeu, excluding 0:0 scores
+                matching_set_jeu_scores = {k: v for k, v in config.all_scores.items()
+                                           if v.get('set') is not None
+                                           and v.get('jeu') is not None
+                                           and config.validated_bet.get('set') is not None
+                                           and config.validated_bet.get('jeu') is not None
+                                           and int(v.get('set')) == int(config.validated_bet.get('set'))
+                                           and int(v.get('jeu')) == int(config.validated_bet.get('jeu'))
+                                           and v.get('score') != '0:0'}
+
+                if matching_set_jeu_scores:
+                    last_score_key = max(matching_set_jeu_scores.keys())
+                    last_score = matching_set_jeu_scores[last_score_key]
+                    config.log(f"Last score for set {config.validated_bet.get('set')} jeu {config.validated_bet.get('jeu')}: {last_score}", 'info', indent=3)
+
+                    # Déduction simple du vainqueur à partir du dernier score du jeu
+                    s = str(last_score.get('score', '')).upper()
+                    def _winner_from_score_simple(s):
+                        if s == 'A:40':
+                            return 1
+                        if s == '40:A':
+                            return 2
+                        if ':' not in s:
+                            return 0
+                        l, r = s.split(':')
+                        return 1 if int(l) > int(r) else (2 if int(r) > int(l) else 0)
+
+                    inferred = _winner_from_score_simple(s)
+                    # normaliser vainqueur_point attendu (peut être 'V1'/'V2' ou nombre)
+                    expected = config.validated_bet.get('vainqueur_point')
+
+                    if expected is not None and int(inferred) == int(expected):
+                        print("Matching score found:", last_score)
+                        result = 'WIN'
+                        config.log(f"Result: {result}", 'success', False, 2)
+                    else:
+                        result = 'LOSE'
+                        config.log(f"Result > : {result}", 'error', False, 2)
+                config.validated_bet['result'] = result
+                return result
+            elif config.point_actuel > int(config.validated_bet.get('numero_point')):
+                # Check if validated_bet['numero_point'] is greater than max numero_point recorded
+                getresult = True
+
+            if getresult:
+                config.log(f'Checking results for set {config.validated_bet.get("set")}, jeu {config.validated_bet.get("jeu")}, point {config.validated_bet.get("numero_point")}', 'info', indent=3)
+                print()
+                matching_scores = [score for score in config.all_scores.values()
+                                   if score.get('set') is not None
+                                   and config.validated_bet.get('set') is not None
+                                   and int(score.get('set')) == int(config.validated_bet.get('set'))
+                                   and score.get('jeu') is not None
+                                   and config.validated_bet.get('jeu') is not None
+                                   and config.validated_bet.get('vainqueur_point') != 0
+                                   and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
+                                   and int(score.get('numero_point')) == int(config.validated_bet.get('numero_point'))
+                                   and score.get('vainqueur_point') == config.validated_bet.get('winscore')]
+                if matching_scores:
+                    print("Matching score found:", matching_scores[0])
+                    result = 'WIN'
+                    config.log(f"Result: {result}", 'success', False, 2)
+                else:
+                    result = 'LOSE'
+                    config.log(result, 'error', False, 2)
+                config.validated_bet['result'] = result
+                return result
+                
 
         elif config.scriptType in ['4P', '6P', '5P', 'BREAK', '400', '4030', '4015']:
             if int(config.set_actuel) != int(config.validated_bet.get('set')):

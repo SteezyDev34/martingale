@@ -23,8 +23,11 @@ def FirstGameBet(driver):
     bet_40a = False
     tentative = 0
     nextBet = False
+    attempts = 3
     GetJeuActuel(driver)
-    while not bet_40a and not config.error and tentative < 3:
+    if config.scriptType in ['15V1', '15V2']:
+        attempts = 1
+    while not bet_40a and not config.error and tentative < attempts:
         GetScoreActuel(driver)
         config.looking_game = int(config.jeu_actuel)
 
@@ -33,11 +36,14 @@ def FirstGameBet(driver):
                 nextBet = True
                 config.log(f'Score : {config.score_actuel} nextBet : {nextBet}', 'warning', indent=3)
                 config.looking_game = int(config.jeu_actuel) + 1
-        elif config.scriptType == '150' or config.scriptType == '015' or config.scriptType == '15A' or config.scriptType == '400' or config.scriptType == '030' or config.scriptType == '300' or config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
+        elif config.scriptType == '150' or config.scriptType == '015' or config.scriptType == '15A' or config.scriptType == '400' or config.scriptType == '15V1' or config.scriptType == '15V2' or config.scriptType == '030' or config.scriptType == '300' or config.scriptType == '6P' or config.scriptType == '5P' or config.scriptType == '4P':
             if config.score_actuel != "0:0":
                 nextBet = True
                 config.log(f'Score : {config.score_actuel} nextBet : {nextBet}', 'warning', indent=3)
-                config.looking_game = int(config.jeu_actuel) + 1
+                if config.scriptType not in ['15V1', '15V2']:
+                    config.looking_game = int(config.jeu_actuel) + 1
+                else:
+                    config.looking_game = int(config.jeu_actuel)
         elif config.scriptType == '40A':
             if config.score_actuel == "40:40" or config.score_actuel == "A:40" or config.score_actuel == "40:A":
                 nextBet = True
@@ -56,7 +62,8 @@ def FirstGameBet(driver):
 
         if not GetBet(driver, nextBet):
             tentative = tentative + 1
-            time.sleep(5)
+            if config.scriptType not in ['15V1', '15V2']:
+                time.sleep(5)
             if tentative > 5:
                 config.error = True
                 config.log('error recup jeu #ERR345', 'error', False, 2)
@@ -76,17 +83,57 @@ def FirstGameBet(driver):
                 validate_bet = True
             else:
                 validate_bet = False'''
-        tentative = 0
         config.saved_score = ""
         config.log('On vérifie le score pour valider le paris', 'info', indent=2)
         ##VALIDATION DU PARIS SI SCORE OK
-        while not validate_bet and not config.error and tentative < 3:
+        attempts = 3
+        if config.scriptType in ['15V1', '15V2']:
+            attempts = 2
+        tentative_a = 0
+        while not validate_bet and not config.error and tentative_a < attempts:
             # VÉRIFICATION DU SCORE ACTUEL
-            tentative = tentative + 1
+            tentative_a = tentative_a + 1
             GetScoreActuel(driver)
             if ValidationDuParis(driver, nextBet):
                 validate_bet = True
                 bet_40a = True
+                if config.scriptType in ['15V1', '15V2']:
+                    def _last_numero_point():
+                        try:
+                            if not config.all_scores:
+                                return None
+                            # support list-like or dict-like structures
+                            if isinstance(config.all_scores, dict):
+                                vals = list(config.all_scores.values())
+                                if not vals:
+                                    return None
+                                last = vals[-1]
+                            else:
+                                last = config.all_scores[-1]
+                            return int(last['numero_point'])
+                        except Exception:
+                            return None
+
+                    target = None
+                    try:
+                        target = int(config.validated_bet['numero_point']) - 1
+                    except Exception:
+                        target = None
+
+                    # attendre que le dernier score enregistré corresponde au point attendu
+                    config.log(f'Attente du point {target} pour valider le pari', 'info', indent=3)
+                    while not config.error:
+                        last = _last_numero_point()
+                        config.log(f'Last point: {last}, Target point: {target}', 'debug', indent=4)
+                        if config.score_actuel == "0:0":
+                            break
+                        if last is None or target is None:
+                            break
+                        if last >= target:
+                            break
+                        
+                        GetScoreActuel(driver)
+                        time.sleep(0.1)
             else:
                 break
     return bet_40a
@@ -100,9 +147,8 @@ if __name__ == "__main__":
     driver = get_script_driver(num_fenetre)
     # driver.switch_to.window(driver.window_handles[0])
     config.site_type = 'mobile_site'
-    config.scriptType = '40A'
+    config.scriptType = '15V1'
     config.mise = 0.2
     GetSetActuel(driver)
-    config.scriptType = '40A'
 
     print(FirstGameBet(driver))
