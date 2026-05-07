@@ -50,6 +50,15 @@ def all_script(driver):
         ligue_info = GetLigueName.fromUrl(driver)
         config.ligue_name = ligue_info[0]
         config.match_Url = ligue_info[1]
+        # Récupérer le lien SofaScore stocké localement (table matches_todo.link)
+        try:
+            sofascore_link = match_manager.get_match_link(config.newmatch)
+            if sofascore_link:
+                config.log(f"Lien SofaScore trouvé localement: {sofascore_link}", 'info', False, 1)
+            else:
+                config.log('Aucun lien SofaScore trouvé localement.', 'warning', False, 1)
+        except Exception as e:
+            config.log(f"Erreur lors de la récupération du lien SofaScore: {e}", 'warning', True)
 
         # Récupère les noms des joueurs/équipes
         config.teams = GetPlayersName(driver)

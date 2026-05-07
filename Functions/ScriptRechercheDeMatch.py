@@ -8,6 +8,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+from urllib.parse import quote_plus
+import requests
+
 import config
 from Functions import GetMatchScore, GetLigueName, Functions_stats
 from Functions import OuverturePageMatch
@@ -84,8 +87,37 @@ def traiter_matchlist(matchlist):
         else:
             config.proba40A = Functions_stats.get_wta_proba_40A_sofascore(players_name[0], players_name[1])
         if float(config.proba40A) >= float(config.probamini):
-            matchItem.append(config.proba40A)
-            goodmatch.append(matchItem)
+            try:
+                # Construire l'URL de l'API auxotracker avec encodage des noms et date du jour
+                date_str = datetime.now().strftime("%Y-%m-%d")
+                player1 = players_name[0]
+                player2 = players_name[1]
+                p1_enc = quote_plus(player1)
+                p2_enc = quote_plus(player2)
+                base_api = "https://api.auxotracker.p-com.studio/api/matches/tennis/link"
+                api_url = f"{base_api}?team1={p1_enc}&team2={p2_enc}&date={date_str}"
+
+                # Appel de l'API
+                sofascore_link = None
+                try:
+                    resp = requests.get(api_url, timeout=10)
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        if data.get('success'):
+                            sofascore_link = data.get('sofascore_link')
+                        else:
+                            config.log(f"API retourné success=false pour {api_url}", 'warning', True)
+                    else:
+                        config.log(f"Requête API échouée {resp.status_code} pour {api_url}", 'warning', True)
+                except Exception as e:
+                    config.log(f"Erreur lors de l'appel API auxotracker: {e}", 'warning', True)
+
+                # Ajouter les informations au matchItem
+                matchItem.append(config.proba40A)
+                matchItem.append(sofascore_link)
+                goodmatch.append(matchItem)
+            except Exception as e:
+                config.log(f"Erreur lors de la récupération du lien Sofascore: {e}", 'warning', True)
     return goodmatch
 
 
@@ -849,12 +881,14 @@ def classementeDeMatch(driver, use_json_cache=True):
                 match_id = match[2]
                 date_str = match[3]
                 prob = match[4]
+                link = match[5]
                 match_info = "|".join([
                     players_str,
                     str(league),
                     str(match_id),
                     str(date_str),
-                    str(prob)
+                    str(prob),
+                    str(link)
                 ])
 
                 success = match_manager.add_match_todo(match_info)

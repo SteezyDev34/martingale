@@ -268,6 +268,7 @@ class MatchManager:
                     league TEXT,
                     match_date TIMESTAMP,
                     probability FLOAT,
+                    link TEXT,
                     created_at TIMESTAMP
                 )
             ''')
@@ -306,6 +307,26 @@ class MatchManager:
         except Exception as e:
             config.log(f"Exception lors de la récupération des matchs : {str(e)}", 'error', True)
             return []
+    def get_match_link(self, match_id: str) -> Optional[str]:
+        """
+        Récupère le lien Sofascore d'un match à partir de son `match_id` (local uniquement).
+
+        Args:
+            match_id (str): Identifiant du match à rechercher
+
+        Returns:
+            Optional[str]: URL Sofascore trouvée, ou `None` si non trouvée
+        """
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cur = conn.execute("SELECT link FROM matches_todo WHERE match_id = ?", (match_id,))
+                row = cur.fetchone()
+                if row and row[0]:
+                    return row[0]
+        except Exception as e:
+            config.log(f"Erreur DB lors de la recherche du link local: {e}", 'warning', True)
+
+        return None
 
     def is_match_todo(self, match_id: str) -> bool:
         """
@@ -336,13 +357,13 @@ class MatchManager:
         
         Args:
             match_info (str): Information du match au format:
-                "[player1, player2]|league|match-id|date|probability"
+                "[player1, player2]|league|match-id|date|probability|link"
             
         Returns:
             bool: True si ajouté avec succès (local ou distant), False sinon
         """
         try:
-            players, league, match_id, date_str, prob = match_info.split('|')
+            players, league, match_id, date_str, prob, link = match_info.split('|')
             # Ajout local
             added_locally = False
             with sqlite3.connect(self.db_path) as conn:
@@ -350,10 +371,10 @@ class MatchManager:
                     conn.execute(
                         """
                         INSERT INTO matches_todo 
-                        (match_id, players, league, match_date, probability, created_at)
-                        VALUES (?, ?, ?, ?, ?, ?)
+                        (match_id, players, league, match_date, probability, link, created_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
                         """,
-                        (match_id, players, league, date_str, float(prob), datetime.now())
+                        (match_id, players, league, date_str, float(prob), link, datetime.now())
                     )
                     added_locally = True
                 except sqlite3.IntegrityError:
