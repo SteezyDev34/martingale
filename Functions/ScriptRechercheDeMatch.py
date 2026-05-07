@@ -661,6 +661,7 @@ def classementeDeMatch(driver, use_json_cache=True):
                                                           config.classes['dashboard_champ_name'][config.site_type])[
                     0].get_attribute(
                     "href"), config.ligue_name])
+                break
 
             for link in liguelist:
                 if link[0]:
