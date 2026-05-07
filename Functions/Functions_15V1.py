@@ -63,7 +63,9 @@ def all_script(driver):
 
         # Récupérer le lien SofaScore stocké localement (table matches_todo.link)
         try:
+            print(config.newmatch)
             sofascore_link = match_manager.get_match_link(config.newmatch)
+            print(f"lien SofaScore récupéré localement: {sofascore_link}")
             config.sofascore_link = sofascore_link or ''
             if sofascore_link and isinstance(sofascore_link, str) and sofascore_link.startswith('http'):
                 config.log(f"Lien SofaScore trouvé localement: {sofascore_link}", 'info', False, 1)
