@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import re
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -14,7 +15,58 @@ from Functions.GetSetActuel import GetSetActuel
 
 
 # from ChromeDriver.SetDriver1 import driver
-
+def GetSofaScoreActuel(driver):
+    # Premièrement, tenter de récupérer le score depuis un onglet SofaScore déjà ouvert.
+    if hasattr(config, 'sofascore_tab_handle') and config.sofascore_tab_handle:
+        print(f"Vérification de l'onglet SofaScore déjà ouvert: {config.sofascore_link}")
+        try:
+            try:
+                driver.switch_to.window(config.sofascore_tab_handle)
+            except Exception:
+                driver.switch_to.window(config.original_tab_handle)
+                return False
+            # Détecter un onglet SofaScore par l'URL ou le contenu (préférer le nœud sofascore_xpath)
+            try:
+                cur_url = driver.current_url or ''
+                if 'sofascore.com' in cur_url:
+                    print("Onglet SofaScore détecté via URL.")
+                else:
+                    return False
+            except Exception as e:
+                print(f"Impossible de récupérer l'URL de l'onglet: {e}")
+                driver.switch_to.window(config.original_tab_handle)
+                return False
+            root = None
+            root_text = ''
+            try:
+                # Tentative : attendre la présence du nœud exact (court timeout)
+                sofascore_xpath = '//*[@id="__next"]/main/div/div[2]/div/div[1]/div[3]/div[1]/div/div[2]/div/div/div[2]/div'
+                try:
+                    root = WebDriverWait(driver, 5).until(
+                        EC.presence_of_element_located((By.XPATH, sofascore_xpath))
+                    )
+                    root_text = root.text
+                    root_texts = re.findall(r'\d+', root_text)
+                    if len(root_texts) >= 2:
+                        score_actuel = root_texts[-2] + ':' + root_texts[-1]
+                        print(f"Score actuel récupéré depuis SofaScore: {score_actuel}")
+                        exit()
+                        return score_actuel
+                except Exception:
+                    # nœud exact introuvable : rechercher des conteneurs candidats contenant des spans 'score'
+                    root = None
+                    root_text = ''
+            except Exception as e:
+                print(f"Erreur lors de la recherche du nœud SofaScore: {e}")
+                driver.switch_to.window(config.original_tab_handle)
+                return False
+        except Exception as e:
+            config.log(f"Erreur lors de la recherche d'onglet SofaScore: {e}", 'warning', False, 1)
+            try:
+                if original_handle:
+                    driver.switch_to.window(original_handle)
+            except Exception:
+                pass
 
 def GetScoreActuel(driver):
     config.score_actuel = False
@@ -22,7 +74,16 @@ def GetScoreActuel(driver):
     tentative = 0
     first = True
     while not get_score:
+        config.score_actuel = GetSofaScoreActuel(driver)
+        # Si on a déjà obtenu le score depuis SofaScore, on continue la boucle
+        if get_score:
+            if config.saved_score != config.score_actuel:
+                record_scores(driver)
+            config.saved_score = config.score_actuel
+            return True
+
         try:
+            
             score_teams = WebDriverWait(driver, 5).until(
                 EC.visibility_of_element_located((By.CLASS_NAME,
                                                   config.classes['score_container'][config.site_type]))
@@ -55,18 +116,18 @@ def GetScoreActuel(driver):
             except Exception as e:
                 print(f"#E0021\nUne erreur est survenue lors de la récupération du score : {e}")
                 continue
+
+        if config.saved_score != config.score_actuel:
+            if not first:
+                first = False
+                record_scores(driver)
             else:
-                if config.saved_score != config.score_actuel:
-                    if not first:
-                        first = False
-                        record_scores(driver)
-                    else:
-                        first = False
-                        time.sleep(2)
-                        continue
-                else:
-                    get_score = True
-                config.saved_score = config.score_actuel
+                first = False
+                time.sleep(2)
+                continue
+        else:
+            get_score = True
+        config.saved_score = config.score_actuel
     return True
 
 
@@ -268,7 +329,9 @@ def GetQTScoreActuel(driver):
 if __name__ == "__main__":
     config.localhost = 43151
     from ChromeDriver.SetDriver import get_script_driver
-
+    config.sofascore_tab_handle = 1
+    config.original_tab_handle = 1
+    config.sofascore_link = 'https://www.sofascore.com/fr/tennis/atp-miami-open-2024/568422'
     num_fenetre = 1
     driver = get_script_driver(num_fenetre)
     # driver.switch_to.window(driver.window_handles[0])

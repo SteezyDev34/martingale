@@ -41,6 +41,7 @@ cote = 3
 tipster = 'AuxoBetting'
 scriptType = ""
 localhost = ''
+sofascore_link = ''
 api_url = "http://auxobetbot.sc2vagr6376.universe.wf"
 # Configuration pour la nouvelle API AuxoTracker
 AUXOTRACK_API_URL = os.getenv('AUXOTRACK_API_URL', "https://api.auxotracker.lan/api/auxobot/bets")

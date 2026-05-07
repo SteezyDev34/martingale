@@ -50,18 +50,54 @@ def all_script(driver):
         ligue_info = GetLigueName.fromUrl(driver)
         config.ligue_name = ligue_info[0]
         config.match_Url = ligue_info[1]
-        # Récupérer le lien SofaScore stocké localement (table matches_todo.link)
-        try:
-            sofascore_link = match_manager.get_match_link(config.newmatch)
-            if sofascore_link:
-                config.log(f"Lien SofaScore trouvé localement: {sofascore_link}", 'info', False, 1)
-            else:
-                config.log('Aucun lien SofaScore trouvé localement.', 'warning', False, 1)
-        except Exception as e:
-            config.log(f"Erreur lors de la récupération du lien SofaScore: {e}", 'warning', True)
 
         # Récupère les noms des joueurs/équipes
         config.teams = GetPlayersName(driver)
+
+
+        # Déterminer l'identifiant du match depuis l'URL
+        try:
+            newmatchFromUrl(driver)
+        except Exception as e:
+            config.log(f"Impossible de déterminer newmatch depuis l'URL: {e}", 'warning', False, 1)
+
+        # Récupérer le lien SofaScore stocké localement (table matches_todo.link)
+        try:
+            sofascore_link = match_manager.get_match_link(config.newmatch)
+            config.sofascore_link = sofascore_link or ''
+            if sofascore_link and isinstance(sofascore_link, str) and sofascore_link.startswith('http'):
+                config.log(f"Lien SofaScore trouvé localement: {sofascore_link}", 'info', False, 1)
+                # Ouvrir le lien dans un nouvel onglet et revenir à l'onglet original
+                try:
+                    original_handle = driver.current_window_handle
+                    old_handles = set(driver.window_handles)
+                    driver.execute_script("window.open(arguments[0], '_blank');", sofascore_link)
+                    time.sleep(0.5)
+                    new_handles = set(driver.window_handles)
+                    new_tab_handles = list(new_handles - old_handles)
+                    if new_tab_handles:
+                        new_handle = new_tab_handles[0]
+                        driver.switch_to.window(new_handle)
+                        time.sleep(1)
+                        driver.switch_to.window(original_handle)
+                        setattr(config, 'sofascore_tab_handle', new_handle)
+                        setattr(config, 'original_tab_handle', original_handle)
+                        config.log("Onglet SofaScore ouvert.", 'info', False, 1)
+                    else:
+                        config.log("Impossible de détecter le nouvel onglet SofaScore.", 'warning', False, 1)
+                except Exception as e:
+                    config.log(f"Erreur lors de l'ouverture de l'onglet SofaScore: {e}", 'warning', True)
+            else:
+                # Construire l'URL de l'API auxotracker avec encodage des noms et date du jour
+                date_str = time.strftime("%Y-%m-%d")
+                p1_enc = config.teams[0].replace(' ', '%20')
+                p2_enc = config.teams[1].replace(' ', '%20')
+                base_api = "https://api.auxotracker.p-com.studio/api/matches/tennis/link"
+                api_url = f"{base_api}?team1={p1_enc}&team2={p2_enc}&date={date_str}"
+        except Exception as e:
+            config.log(f"Erreur lors de la récupération du lien SofaScore: {e}", 'warning', True)
+
+        
 
         # Vérifie si c'est un nouveau match depuis l'URL
         newmatchFromUrl(driver)
