@@ -635,6 +635,11 @@ def all_script(driver):
         config.init_variable()
         config.global_match_win[i] = 0.0  # Initialize win counter for script type (float)
         config.winmatch[i] = 0  # Initialize match counter for script type
+        if hasattr(config, 'sofascore_tab_handle'):
+            driver.switch_to.window(config.sofascore_tab_handle)
+            driver.close()
+            delattr(config, 'sofascore_tab_handle')
+            driver.switch_to.window(config.original_tab_handle)
     config.all_scores = {}
     # Supprimer le match de la base de données
     match_manager.remove_match(config.newmatch)
