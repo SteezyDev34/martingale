@@ -540,6 +540,7 @@ def list_running(exclude_script_types: Optional[Iterable[str]] = None, matchname
    
 
     # Fallback SQLite
+    import config
     try:
         conn = _get_sqlite_conn()
         cur = conn.cursor()
@@ -556,7 +557,7 @@ def list_running(exclude_script_types: Optional[Iterable[str]] = None, matchname
         return [(r[0], r[1] or '') for r in rows]
     except Exception:
         config.log(f"[RedisIPC] sqlite list_running error with exclude={excludes} matchname='{matchname}'", 'error')
-        return []   
+        return False
 
 
 def count_running(exclude_script_types: Optional[Iterable[str]] = None) -> int:
