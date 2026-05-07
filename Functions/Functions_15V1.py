@@ -72,21 +72,37 @@ def all_script(driver):
                 # Ouvrir le lien dans un nouvel onglet et revenir à l'onglet original
                 try:
                     original_handle = driver.current_window_handle
-                    old_handles = set(driver.window_handles)
-                    driver.execute_script("window.open(arguments[0], '_blank');", sofascore_link)
-                    time.sleep(0.5)
-                    new_handles = set(driver.window_handles)
-                    new_tab_handles = list(new_handles - old_handles)
-                    if new_tab_handles:
-                        new_handle = new_tab_handles[0]
-                        driver.switch_to.window(new_handle)
-                        time.sleep(1)
-                        driver.switch_to.window(original_handle)
+                    new_handle = None
+                    try:
+                        # Selenium 4 : ouvrir un nouvel onglet de façon fiable
+                        driver.switch_to.new_window('tab')
+                        driver.get(sofascore_link)
+                        new_handle = driver.current_window_handle
+                    except Exception:
+                        # fallback : utiliser execute_script si new_window n'est pas supporté
+                        old_handles = set(driver.window_handles)
+                        driver.execute_script("window.open(arguments[0], '_blank');", sofascore_link)
+                        time.sleep(0.5)
+                        new_handles = set(driver.window_handles)
+                        new_tab_handles = list(new_handles - old_handles)
+                        if new_tab_handles:
+                            new_handle = new_tab_handles[0]
+                            try:
+                                driver.switch_to.window(new_handle)
+                            except Exception:
+                                pass
+
+                    if new_handle:
+                        # revenir à l'onglet original
+                        try:
+                            driver.switch_to.window(original_handle)
+                        except Exception:
+                            pass
                         setattr(config, 'sofascore_tab_handle', new_handle)
                         setattr(config, 'original_tab_handle', original_handle)
                         config.log("Onglet SofaScore ouvert.", 'info', False, 1)
                     else:
-                        config.log("Impossible de détecter le nouvel onglet SofaScore.", 'warning', False, 1)
+                        config.log("Impossible d'ouvrir le nouvel onglet SofaScore.", 'warning', False, 1)
                 except Exception as e:
                     config.log(f"Erreur lors de l'ouverture de l'onglet SofaScore: {e}", 'warning', True)
             else:
