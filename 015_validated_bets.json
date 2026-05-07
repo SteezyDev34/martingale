@@ -799,5 +799,25 @@
         "winscore": "15:0",
         "timestamp": "2026-04-06 07:16:17",
         "url": "challenger wuning qualification"
+    },
+    {
+        "montant": 0.37,
+        "cote": "2.09",
+        "jeu": 8,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "0:15",
+        "timestamp": "2026-05-05 21:52:24",
+        "url": "challenger francavilla al mare"
+    },
+    {
+        "montant": 0.79,
+        "cote": "1.85",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "0:15",
+        "timestamp": "2026-05-05 22:14:53",
+        "url": "challenger santos"
     }
 ]

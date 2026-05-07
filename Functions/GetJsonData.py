@@ -2,6 +2,7 @@ import json
 
 import requests
 
+from Functions import RedisIPC
 import config
 
 
@@ -76,6 +77,9 @@ def get1setGlobalPerte():
         if float(pertes["perte"]) > 0:
             config.rattrape_perte = 1
             config.perte = float(pertes['perte'])
+            # Enregistrer la perte via RedisIPC si disponible, sinon fallback vers l'API distante
+            if RedisIPC:
+                RedisIPC.set_loss(getattr(config, 'scriptType', 'UNKNOWN'), float(config.perte), publish=True)
             config.log(f'Perte : {str(config.perte)}', 'info', True, 1)
         config.rattrape_perte = 1
         return pertes
@@ -141,7 +145,11 @@ def getGlobalPerte():
             config.perte = float(pertes['perte'])
             m = 0 - config.perte
             SendGlobalPerte(config.scriptType, m)
+            
         config.rattrape_perte = 1
+        # Enregistrer la perte via RedisIPC si disponible, sinon fallback vers l'API distante
+        if RedisIPC:
+            RedisIPC.set_loss(getattr(config, 'scriptType', 'UNKNOWN'), float(config.perte), publish=True)
         return pertes
 
 
@@ -347,6 +355,8 @@ def SendPerte(scriptType, perte):
             config.log(str(perte) + "> Perte insert in strategy" + str(scriptType))
             config.log_clear_line()
             config.perte -= perte
+            if RedisIPC:
+                RedisIPC.set_loss(config.scriptType, config.perte)
             return True
         else:
             print(result)
@@ -378,6 +388,8 @@ def SendPerte1set(scriptType, perte):
             config.log(str(perte) + "> Perte insert in strategy" + str(scriptType) + " ligue : " + config.ligue_name)
             config.log_clear_line()
             config.perte -= perte
+            if RedisIPC:
+                RedisIPC.set_loss(config.scriptType, config.perte)
             return True
         else:
             print(result)
@@ -463,6 +475,8 @@ def SendBetPlaced(scriptType, mise):
 def DispatchPerte():
     SendGlobalPerte(config.scriptType, config.perte)
     config.perte = 0
+    if RedisIPC:
+        RedisIPC.set_loss(config.scriptType, config.perte)
 
 
 def a_DispatchPerte():

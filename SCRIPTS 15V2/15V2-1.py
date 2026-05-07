@@ -55,40 +55,23 @@ print(command)
 
 from ChromeDriver.SetDriver import get_script_driver
 
-num_fenetre = 3
+num_fenetre = 2
 time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 
 driver = get_script_driver(num_fenetre)
-from Functions import Functions_431a
+from Functions import Functions_15V1
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
 
-confirmation = input(f"Classement ? (Y/N): ")
-config.log_clear_line()
-
-if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
-    confirmation = input(f"Type de Classement ? (1/2): ")
-    config.log_clear_line()
-    if confirmation == '1':
-        config.log("-" * 60, "info", False, False, False)
-        print("Classement simple en cours")
-        config.log("-" * 60, "info", False, False, False)
-        classementeDeMatch(driver)
-    else:
-        config.log("-" * 60, "info", False, False, False)
-        print("Classement complet en cours")
-        config.log("-" * 60, "info", False, False, False)
-        newclassementeDeMatch(driver)
-        classementeDeMatch(driver)
 config.in_stat = True
-config.scriptTypeList = config.scriptTypeList2
+config.scriptTypeList = config.scriptTypeList1
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}
 config.global_match_win = {script_type: 0 for script_type in config.scriptTypeList}
 while (config.win < 100):
     try:
-        Functions_431a.all_script(driver)
+        Functions_15V1.all_script(driver)
     except Exception as e:
         # Récupérer les informations détaillées de l'erreur (fichier, ligne, fonction)
         tb = traceback.extract_tb(e.__traceback__)

@@ -3,7 +3,7 @@ import time
 
 from Functions.PlacerMise import PlacerMise
 import config
-from Functions import GetLigueName
+from Functions import GetLigueName, RedisIPC
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.GetAndPlaceBet import GetAndPlaceBet
@@ -70,11 +70,22 @@ def all_script(driver):
 
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
+        RedisIPC.set_running(config.scriptType, True)
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
+        config.ScriptConfig(scriptType).reset()
+        config.init_variable()
+        if config.perte == 0:
+            getGlobalPerte()
         if config.perte == 0:
             get1setGlobalPerte()
         if config.perte == 0:
-            getGlobalPerte()
+            # Récupération de perte cross-script via Redis si disponible
+            if RedisIPC:
+                mtt_recup = getattr(config, 'mtt_recup', 0.0)
+                if mtt_recup > 0 and RedisIPC.deduct_amount_from_largest(mtt_recup):
+                    config.perte = mtt_recup
+                RedisIPC.set_loss(config.scriptType, config.perte)
+            
         config.log_clear_line()
 
         # END RECHERCHE INFOS DE MISE
@@ -104,6 +115,7 @@ def all_script(driver):
                 config.log(
                     f' {scriptType} Net profit: {config.global_match_win[scriptType]} /{config.total_want_win[scriptType]}')
                 config.log(f" {scriptType} FIN {config.scriptType}", 'success', False)
+                RedisIPC.set_running(config.scriptType, False)
                 continue
 
             ##PREPARATTION PREMIER PARIS
@@ -148,6 +160,7 @@ def all_script(driver):
                         config.log(
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                         config.log(f" {scriptType} FIN {config.scriptType}", 'success', False)
+                        RedisIPC.set_running(config.scriptType, False)
                         continue
                     config.result = GetResult(driver)
                     if config.result == 'WIN':
@@ -158,10 +171,20 @@ def all_script(driver):
                         if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                             print("#RECHERCHE INFOS DE MISE")
                             config.perte = 0
+                            if RedisIPC:
+                                RedisIPC.set_loss(config.scriptType, config.perte)
                             config.wantwin =0.2
-                            getGlobalPerte()
+                            # Récupération de perte cross-script via Redis si disponible
+                            if RedisIPC:
+                                mtt_recup = getattr(config, 'mtt_recup', 0.0)
+                                if mtt_recup > 0 and RedisIPC.deduct_amount_from_largest(mtt_recup):
+                                    config.perte = mtt_recup
+                            if config.perte == 0:
+                                getGlobalPerte()
                             if config.perte == 0:
                                 get1setGlobalPerte()
+                            if RedisIPC:
+                                RedisIPC.set_loss(config.scriptType, config.perte)
                             config.error = False
                             config.log(
                                 f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
@@ -174,6 +197,7 @@ def all_script(driver):
                             config.log(
                                 f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                             config.log(f"FIN {config.scriptType}", 'success', False)
+                            RedisIPC.set_running(config.scriptType, False)
                             continue
                     else:
                         firstjeu = True
@@ -207,6 +231,7 @@ def all_script(driver):
                             config.log(
                                 f' {scriptType} Net profit: {config.global_match_win[scriptType]} /{config.total_want_win[scriptType]}')
                             config.log(f" {scriptType} FIN {config.scriptType}", 'success', False)
+                            RedisIPC.set_running(config.scriptType, False)
                             continue
 
                         ##PREPARATTION PREMIER PARIS
@@ -256,6 +281,7 @@ def all_script(driver):
                     else:
                         config.log(f'Net profit: {config.global_match_win[scriptType]}')
                         config.log(f"FIN {config.scriptType}", 'success', False)
+                        RedisIPC.set_running(config.scriptType, False)
                         continue
         # JEU FINI ON PREPARE LE IPROCHAIN BET
 
@@ -336,12 +362,49 @@ def all_script(driver):
                     attempts = 3
                     if config.scriptType in ['15V1', '15V2']:
                         attempts = 2
-                    while not validate_bet and not config.error and tentative < attempts:
-                        # VÉRIFICATION DU SCORE ACTUEL
-                        tentative = tentative + 1
-                        print('tentative validation ' + str(tentative))
-                        if ValidationDuParis(driver, True):
-                            validate_bet = True
+                        while not validate_bet and not config.error and tentative < attempts:
+                            # VÉRIFICATION DU SCORE ACTUEL
+                            tentative = tentative + 1
+                            print('tentative validation ' + str(tentative))
+                            if ValidationDuParis(driver, True):
+                                validate_bet = True
+                                if config.scriptType in ['15V1', '15V2']:
+                                    def _last_numero_point():
+                                        try:
+                                            if not config.all_scores:
+                                                return None
+                                            # support list-like or dict-like structures
+                                            if isinstance(config.all_scores, dict):
+                                                vals = list(config.all_scores.values())
+                                                if not vals:
+                                                    return None
+                                                last = vals[-1]
+                                            else:
+                                                last = config.all_scores[-1]
+                                            return int(last['numero_point'])
+                                        except Exception:
+                                            return None
+
+                                    target = None
+                                    try:
+                                        target = int(config.validated_bet['numero_point']) - 1
+                                    except Exception:
+                                        target = None
+
+                                    # attendre que le dernier score enregistré corresponde au point attendu
+                                    config.log(f'Attente du point {target} pour valider le pari', 'info', indent=3)
+                                    while not config.error:
+                                        last = _last_numero_point()
+                                        config.log(f'Last point: {last}, Target point: {target}', 'debug', indent=4)
+                                        if config.score_actuel == "0:0":
+                                            break
+                                        if last is None or target is None:
+                                            break
+                                        if last >= target:
+                                            break
+                                        
+                                        GetScoreActuel(driver)
+                                        time.sleep(0.1)
                         else:
                             if config.scriptType in ['15V1', '15V2']:
                                 continue
@@ -377,6 +440,8 @@ def all_script(driver):
                             # marquer pour traitement extérieur (extraction des pertes)
                             config.log(f'pertes en cours de calcul pour annulation du pari, mise: {config.perte}', 'info', False, 2)
                             config.perte = config.perte + config.validated_bet['montant']
+                            if RedisIPC:
+                                RedisIPC.set_loss(config.scriptType, config.perte)
                             config.log(f"Marked loss for cancelled bet, perte: {config.perte}", 'info', False, 2)
                     FirstGameBet(driver)
                     firstjeu = True
@@ -385,14 +450,34 @@ def all_script(driver):
                 config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
                     config.netprofit)
                 config.winmatch[scriptType] = config.winmatch[scriptType] + 1
-                
-                if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
+                mtt_recup = getattr(config, 'mtt_recup', 0.0)
+                if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.is_match_running(config.newmatch, exclude_script_types=config.scriptType):
                     print("#RECHERCHE INFOS DE MISE")
                     config.perte = 0
                     config.wantwin =0.2
-                    getGlobalPerte()
+                    if RedisIPC:
+                        RedisIPC.set_loss(config.scriptType, config.perte)
+                    #
+                    # ---------------------------------------------------------------------------
+                    # Récupération de perte cross-script via Redis (priorité sur l'API)
+                    # Déduit mtt_recup de la perte Redis la plus élevée tous scripts confondus.
+                    # Si Redis est indisponible ou qu'il n'y a rien à déduire
+                    # ---------------------------------------------------------------------------
+                    if RedisIPC:
+                        mtt_recup = getattr(config, 'mtt_recup', 0.0)
+                        if mtt_recup > 0 and RedisIPC.deduct_amount_from_largest(mtt_recup):
+                            config.perte = mtt_recup
+                            RedisIPC.set_loss(config.scriptType, config.perte)
+                    # ---------------------------------------------------------------------------
+                    #
+                    if config.perte == 0:
+                        getGlobalPerte()
                     if config.perte == 0:
                         get1setGlobalPerte()
+                    '''if config.perte > 0:
+                        GetIfGameEnd(driver)'''
+                    if RedisIPC:
+                        RedisIPC.set_loss(config.scriptType, config.perte)
                     config.error = False
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
@@ -417,6 +502,43 @@ def all_script(driver):
                             PlacerMise(driver)
                             if ValidationDuParis(driver, True):
                                 validate_bet = True
+                                if config.scriptType in ['15V1', '15V2']:
+                                    def _last_numero_point():
+                                        try:
+                                            if not config.all_scores:
+                                                return None
+                                            # support list-like or dict-like structures
+                                            if isinstance(config.all_scores, dict):
+                                                vals = list(config.all_scores.values())
+                                                if not vals:
+                                                    return None
+                                                last = vals[-1]
+                                            else:
+                                                last = config.all_scores[-1]
+                                            return int(last['numero_point'])
+                                        except Exception:
+                                            return None
+
+                                    target = None
+                                    try:
+                                        target = int(config.validated_bet['numero_point']) - 1
+                                    except Exception:
+                                        target = None
+
+                                    # attendre que le dernier score enregistré corresponde au point attendu
+                                    config.log(f'Attente du point {target} pour valider le pari', 'info', indent=3)
+                                    while not config.error:
+                                        last = _last_numero_point()
+                                        config.log(f'Last point: {last}, Target point: {target}', 'debug', indent=4)
+                                        if config.score_actuel == "0:0":
+                                            break
+                                        if last is None or target is None:
+                                            break
+                                        if last >= target:
+                                            break
+                                        
+                                        GetScoreActuel(driver)
+                                        time.sleep(0.1)
                             else:
                                 if config.scriptType in ['15V1', '15V2']:
                                     continue
@@ -435,6 +557,7 @@ def all_script(driver):
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
+                    RedisIPC.set_running(config.scriptType, False)
         if not GetIfMatchPage(driver):
             config.error = True
             break
@@ -442,6 +565,7 @@ def all_script(driver):
     print("update : " + config.newmatch)
     for i in config.scriptTypeList:
         config.switchScript(i)
+        RedisIPC.set_running(config.scriptType, False)
         print('perte', config.perte)
         DispatchPerte()
         config.ScriptConfig(i).reset()

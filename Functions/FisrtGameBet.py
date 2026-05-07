@@ -5,6 +5,7 @@ import time
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from Functions.PlacerMise import PlacerMise
 import config
 from Functions.AfficherParis import AfficherParis
 from Functions.GetBet import GetBet
@@ -29,6 +30,7 @@ def FirstGameBet(driver):
         attempts = 1
     while not bet_40a and not config.error and tentative < attempts:
         GetScoreActuel(driver)
+        print(f'config.scriptTypepass ici: {config.scriptType}')
         config.looking_game = int(config.jeu_actuel)
 
         if config.scriptType == '30A' or config.scriptType == '4030' or config.scriptType == '4015':
@@ -77,12 +79,12 @@ def FirstGameBet(driver):
         tentative_placermise = 0
         validate_bet = False
         # config.log('On place la mise', 'infos', True, 2)
-        '''while not PlacerMise(driver) and not config.error and tentative_placermise < 3:
+        while not PlacerMise(driver) and not config.error and tentative_placermise < 1:
             tentative_placermise += 1
             if tentative_placermise == 2:
                 validate_bet = True
             else:
-                validate_bet = False'''
+                validate_bet = False
         config.saved_score = ""
         config.log('On vérifie le score pour valider le paris', 'info', indent=2)
         ##VALIDATION DU PARIS SI SCORE OK
@@ -92,6 +94,7 @@ def FirstGameBet(driver):
         tentative_a = 0
         while not validate_bet and not config.error and tentative_a < attempts:
             # VÉRIFICATION DU SCORE ACTUEL
+            print('pass ici')
             tentative_a = tentative_a + 1
             GetScoreActuel(driver)
             if ValidationDuParis(driver, nextBet):

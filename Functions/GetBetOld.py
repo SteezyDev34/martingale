@@ -119,6 +119,17 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                 config.looking_point = point
                 config.looking_game = config.jeu_actuel
 
+            if config.scriptType == '15V2':
+                if len(first_player) > 0:
+                    first_player = 2
+                    config.win_type = 2  # inversé
+                else:
+                    first_player = 1
+                    config.win_type = 1  # inversé
+                sType = f"V{first_player} Point {point} Dans le Jeu {config.jeu_actuel}"
+                config.looking_point = point
+                config.looking_game = config.jeu_actuel
+
                 # print(sType)
             if config.scriptType == '300':
                 sType = f"Jeu {jeu}, Serveur va mener 30-0"

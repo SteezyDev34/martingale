@@ -11,10 +11,16 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from Functions.GetMise import GetMise
 import config
 from Functions.ModalHandler import ModalHandler
 from Functions.PlacerMise import PlacerMise
 from Functions.GetCouponInfo import GetCouponInfo
+
+try:
+    from Functions import RedisIPC
+except Exception:
+    RedisIPC = None
 
 
 def SendBetData():
@@ -187,6 +193,7 @@ def ValidationDuParis(driver, nexbet=False):
                         l = cpn_setting.get_attribute(
                             "value")
                         config.log("2 mise insérrer : " + str(l))
+                        GetMise(driver)
                     except Exception as e:
                         config.log(f"#E005689\nUne erreur est survenue : {e}")
                         tentative = tentative + 1
@@ -321,7 +328,15 @@ def ValidationDuParis(driver, nexbet=False):
             config.log(f"Erreur lors de la sauvegarde du pari validé dans le JSON : {e}", 'error', False)
         config.placed_game = config.looking_game
         config.log(f'{config.validated_bet}', 'info', False, indent=3)
+
+        config.perte = RedisIPC.get_loss(config.scriptType)  # Just to log the current loss before updating it
+
         config.perte = float(config.perte) + float(config.mise)
+
+        # Enregistrer la perte via RedisIPC si disponible, sinon fallback vers l'API distante
+        if RedisIPC:
+            RedisIPC.set_loss(getattr(config, 'scriptType', 'UNKNOWN'), float(config.perte), publish=True)
+
         config.wantwin = float(config.wantwin) + float(config.increment)
         # Calculate net profit based on stake, odds and losses
         config.log('Perte ' + str(config.perte))

@@ -1024,5 +1024,55 @@
         "winscore": "30:30",
         "timestamp": "2026-04-06 01:17:30",
         "url": "challenger mexico qualification"
+    },
+    {
+        "montant": 0.28,
+        "cote": "2.45",
+        "jeu": 8,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "30:30",
+        "timestamp": "2026-05-05 21:53:57",
+        "url": "challenger francavilla al mare"
+    },
+    {
+        "montant": 0.47,
+        "cote": "2.45",
+        "jeu": 9,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "30:30",
+        "timestamp": "2026-05-05 21:57:12",
+        "url": "challenger francavilla al mare"
+    },
+    {
+        "montant": 0.83,
+        "cote": "2.45",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "30:30",
+        "timestamp": "2026-05-05 22:16:00",
+        "url": "challenger santos"
+    },
+    {
+        "montant": 0.31,
+        "cote": "2.6",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "30:30",
+        "timestamp": "2026-05-07 10:12:56",
+        "url": "itf reichstett women"
+    },
+    {
+        "montant": 0.56,
+        "cote": "2.45",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "30:30",
+        "timestamp": "2026-05-07 10:17:12",
+        "url": "itf reichstett women"
     }
 ]
