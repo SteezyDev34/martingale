@@ -50,7 +50,7 @@ def GetSofaScoreActuel(driver):
                     if len(root_texts) >= 2:
                         score_actuel = root_texts[-2] + ':' + root_texts[-1]
                         print(f"Score actuel récupéré depuis SofaScore: {score_actuel}")
-                        exit()
+                        driver.switch_to.window(config.original_tab_handle)
                         return score_actuel
                 except Exception:
                     # nœud exact introuvable : rechercher des conteneurs candidats contenant des spans 'score'
@@ -63,8 +63,8 @@ def GetSofaScoreActuel(driver):
         except Exception as e:
             config.log(f"Erreur lors de la recherche d'onglet SofaScore: {e}", 'warning', False, 1)
             try:
-                if original_handle:
-                    driver.switch_to.window(original_handle)
+                if config.original_tab_handle:
+                    driver.switch_to.window(config.original_tab_handle)
             except Exception:
                 pass
 
