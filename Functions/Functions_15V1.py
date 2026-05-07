@@ -144,9 +144,7 @@ def all_script(driver):
         if config.perte == 0:
             # Récupération de perte cross-script via Redis si disponible
             if RedisIPC:
-                mtt_recup = getattr(config, 'mtt_recup', 0.0)
-                if mtt_recup > 0 and RedisIPC.deduct_amount_from_largest(mtt_recup):
-                    config.perte = mtt_recup
+                config.perte = RedisIPC.deduct_amount_from_largest()
                 RedisIPC.set_loss(config.scriptType, config.perte)
             
         config.log_clear_line()
@@ -239,9 +237,7 @@ def all_script(driver):
                             config.wantwin =0.2
                             # Récupération de perte cross-script via Redis si disponible
                             if RedisIPC:
-                                mtt_recup = getattr(config, 'mtt_recup', 0.0)
-                                if mtt_recup > 0 and RedisIPC.deduct_amount_from_largest(mtt_recup):
-                                    config.perte = mtt_recup
+                                config.perte = RedisIPC.deduct_amount_from_largest()
                             if config.perte == 0:
                                 getGlobalPerte()
                             if config.perte == 0:
@@ -527,10 +523,8 @@ def all_script(driver):
                     # Si Redis est indisponible ou qu'il n'y a rien à déduire
                     # ---------------------------------------------------------------------------
                     if RedisIPC:
-                        mtt_recup = getattr(config, 'mtt_recup', 0.0)
-                        if mtt_recup > 0 and RedisIPC.deduct_amount_from_largest(mtt_recup):
-                            config.perte = mtt_recup
-                            RedisIPC.set_loss(config.scriptType, config.perte)
+                        config.perte = RedisIPC.deduct_amount_from_largest(mtt_recup)
+                        RedisIPC.set_loss(config.scriptType, config.perte)
                     # ---------------------------------------------------------------------------
                     #
                     if config.perte == 0:

@@ -459,62 +459,60 @@ def get_loss(script_type: str, default: float = 0.0) -> float:
         return float(row[0])
     except Exception:
         return float(default)
-
-
-def deduct_amount_from_largest(amount: float):
+    
+def any_loss_exists(script_type: str) -> bool:
     """
-    Déduit `amount` des pertes stockées dans SQLite, en commençant par la plus grande.
+    Vérifie si une perte existe sauf pour `script_type` dans SQLite.
 
-    Comportement identique à `bkp_deduct_amount_from_largest` mais opère sur la BDD
-    de secours. Si Redis est disponible, les nouvelles valeurs sont également
-    propagées via `bkp_set_loss`.
-    Retourne la même structure : liste de tuples `(script_type, nouvelle_perte)`.
+    Retourne True si une perte est trouvée (même 0.0), False si aucune entrée.
     """
     try:
-        remaining = float(amount)
-        if remaining <= 0:
-            return []
-
+        st = str(script_type).upper()
         conn = _get_sqlite_conn()
         cur = conn.cursor()
-        cur.execute("SELECT script_type, loss FROM perte ORDER BY loss DESC")
-        rows = cur.fetchall()
-        if not rows:
-            conn.close()
-            return []
-
-        modifications = []
-        for script_type, val in rows:
-            if remaining <= 0:
-                break
-            try:
-                valf = float(val)
-            except Exception:
-                valf = 0.0
-            if valf <= 0:
-                continue
-            if remaining >= valf:
-                new_val = 0.0
-                remaining -= valf
-            else:
-                new_val = round(valf - remaining, 8)
-                remaining = 0.0
-
-            cur.execute("REPLACE INTO perte (script_type, loss) VALUES (?, ?)", (script_type, float(new_val)))
-            modifications.append((script_type, float(new_val)))
-
-        if modifications:
-            conn.commit()
+        cur.execute("SELECT 1 FROM perte")
+        row = cur.fetchone()
         conn.close()
+        return bool(row)
+    except Exception:
+        return False
+
+
+def deduct_amount_from_largest() -> Optional[tuple]:
+    """
+    Retourne la perte la plus grande stockée dans SQLite sans la modifier.
+
+    Returns:
+        tuple: `(script_type, perte)` de l'entrée avec la plus grande perte,
+               ou None si aucune perte positive n'existe.
+    """
+    try:
+        conn = _get_sqlite_conn()
+        cur = conn.cursor()
+        cur.execute("SELECT script_type, loss FROM perte ORDER BY loss DESC LIMIT 1")
+        row = cur.fetchone()
+        conn.close()
+        if not row:
+            return 0
+
+        script_type, val = row
+        try:
+            valf = float(val)
+        except Exception:
+            valf = 0.0
+
+        if valf <= 0:
+            return 0
 
         try:
             import config
-            config.log(f"[RedisIPC] sqlite deduct_amount_from_largest modifications: {modifications}", 'debug')
+            config.log(f"[RedisIPC] sqlite deduct_amount_from_largest {script_type}={valf}", 'debug')
         except Exception:
             pass
-        return modifications
+        set_loss(script_type, 0.0)
+        return valf
     except Exception:
-        return []
+        return 0
 
 
 def list_running(exclude_script_types: Optional[Iterable[str]] = None, matchname: str = "") -> list:
