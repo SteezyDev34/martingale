@@ -852,7 +852,7 @@ def classementeDeMatch(driver, use_json_cache=True):
             for priority in sorted(priority_groups.keys()):
                 group = priority_groups[priority]
                 # Trier chaque groupe par probabilité décroissante
-                group_sorted = sorted(group, key=lambda x: x[-1], reverse=True)
+                group_sorted = sorted(group, key=lambda x: x[-2], reverse=True)
 
                 # Ajouter les matchs jusqu'à atteindre la limite
                 remaining_slots = max_matches - len(final_matches)
@@ -1153,7 +1153,7 @@ def newclassementeDeMatch(driver):
                 goodmatch.append(matchItem)
 
         # Tri en fonction de la dernière valeur (indice -1) en ordre décroissant
-        tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
+        tableau_trie = sorted(goodmatch, key=lambda x: x[-2], reverse=True)
 
         # Fonction de priorisation des matchs par ligue (même logique que classementeDeMatch)
         def prioritize_matches_by_league_new(matches, max_matches=30):
@@ -1204,7 +1204,7 @@ def newclassementeDeMatch(driver):
             for priority in sorted(priority_groups.keys()):
                 group = priority_groups[priority]
                 # Trier chaque groupe par probabilité décroissante
-                group_sorted = sorted(group, key=lambda x: x[-1], reverse=True)
+                group_sorted = sorted(group, key=lambda x: x[-2], reverse=True)
 
                 # Ajouter les matchs jusqu'à atteindre la limite
                 remaining_slots = max_matches - len(final_matches)
