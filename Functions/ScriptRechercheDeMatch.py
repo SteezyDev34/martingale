@@ -800,7 +800,7 @@ def classementeDeMatch(driver, use_json_cache=True):
         goodmatch = traiter_matchlist(matchlist)
 
         # Tri en fonction de la dernière valeur (indice -1) en ordre décroissant
-        tableau_trie = sorted(goodmatch, key=lambda x: x[-1], reverse=True)
+        tableau_trie = sorted(goodmatch, key=lambda x: x[-2], reverse=True)
 
         # Fonction de priorisation des matchs par ligue
         def prioritize_matches_by_league(matches, max_matches=30):
