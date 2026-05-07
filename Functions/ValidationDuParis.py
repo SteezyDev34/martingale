@@ -16,6 +16,7 @@ import config
 from Functions.ModalHandler import ModalHandler
 from Functions.PlacerMise import PlacerMise
 from Functions.GetCouponInfo import GetCouponInfo
+from Functions.DeleteBet import DeleteBet
 
 try:
     from Functions import RedisIPC
@@ -240,8 +241,12 @@ def ValidationDuParis(driver, nexbet=False):
                                     else:
                                         #info = GetCouponInfo(driver)
                                         close = True
-                                    if ModalHandler(driver, close):
+                                    if not ModalHandler(driver, close):
+                                        DeleteBet(driver)
+                                        return False
+                                    else:
                                         validation = True
+
                                 except Exception as e:
                                     config.log(f"Erreur lors de la validation du pari : {e}", 'error', False)
                                     validation = False

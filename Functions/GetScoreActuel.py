@@ -74,7 +74,7 @@ def GetScoreActuel(driver):
     tentative = 0
     first = True
     while not get_score:
-        config.score_actuel = GetSofaScoreActuel(driver)
+        config.score_actuel = False #GetSofaScoreActuel(driver)
         # Si on a déjà obtenu le score depuis SofaScore, on continue la boucle
         if get_score:
             if config.saved_score != config.score_actuel:
