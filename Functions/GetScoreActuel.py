@@ -123,7 +123,8 @@ def GetScoreActuel(driver):
                 record_scores(driver)
             else:
                 first = False
-                time.sleep(2)
+                if config.scriptType not in ['15V1', '15V2']:
+                    time.sleep(2)
                 continue
         else:
             get_score = True
