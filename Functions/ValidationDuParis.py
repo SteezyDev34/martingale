@@ -334,7 +334,7 @@ def ValidationDuParis(driver, nexbet=False):
         config.placed_game = config.looking_game
         config.log(f'{config.validated_bet}', 'info', False, indent=3)
 
-        config.perte = RedisIPC.get_loss(config.scriptType)  # Just to log the current loss before updating it
+        config.perte = RedisIPC.get_loss(config.scriptType, config.perte)  # Just to log the current loss before updating it
 
         config.perte = float(config.perte) + float(config.mise)
 

@@ -61,8 +61,8 @@ def GetMise(driver):
             config.mise = 0.2
         return True
     else:
-        if RedisIPC.get_loss(config.scriptType) is not None:
-            config.perte = RedisIPC.get_loss(config.scriptType)
+        if RedisIPC.get_loss(config.scriptType, config.perte) is not None:
+            config.perte = RedisIPC.get_loss(config.scriptType, config.perte)
         config.mise = (float(config.wantwin) + float(config.perte)) / (float(config.cote) - 1)
     config.mise = round(config.mise, 2)
     if config.mise < 0.2:
