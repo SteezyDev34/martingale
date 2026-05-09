@@ -570,57 +570,70 @@ def deduct_amount_from_largest(amount: float):
         return False
 
 
-def list_running(exclude_script_types: Optional[Iterable[str]] = None, matchname: str = "") -> list:
+def list_running(exclude_script_type: Optional[str] = None, matchname: str = "") -> bool:
     """
-    Retourne la liste des `script_type` actuellement marqués comme running (1).
+    Vérifie s'il existe au moins un script marqué comme running (1).
 
-    Args:
-        exclude_script_types (Optional[Iterable[str]]): script(s) à exclure (optionnel)
+    `exclude_script_type` ne peut être qu'une seule chaîne (ou None).
+    Si `exclude_script_type` est fourni, on exclut ce script et on applique
+    le filtre `matchname` (on ne compte que les enregistrements avec
+    `matchname == ''` ou `matchname == matchname`).
 
     Returns:
-        list: liste des script_type en cours
+        bool: True si au moins une entrée running est trouvée, False sinon.
     """
-    excludes = set()
-    if exclude_script_types is not None:
-        if isinstance(exclude_script_types, str):
-            excludes.add(exclude_script_types.upper())
-        else:
-            for s in exclude_script_types:
-                try:
-                    excludes.add(str(s).upper())
-                except Exception:
-                    continue
+    import config
 
-    results: list[Tuple[str, str]] = []
-   
+    exclude_upper = None
+    if exclude_script_type is not None:
+        try:
+            exclude_upper = str(exclude_script_type).upper()
+        except Exception:
+            exclude_upper = None
+            config.log(f"[RedisIPC] list_running invalid exclude_script_type: {exclude_script_type}", 'error')
 
     # Fallback SQLite
-    import config
     try:
         conn = _get_sqlite_conn()
         cur = conn.cursor()
-        if not excludes:
-            cur.execute("SELECT script_type, matchname FROM running WHERE is_running = 1")
-            rows = cur.fetchall()
+        if exclude_upper is None:
+            cur.execute("SELECT 1 FROM running WHERE is_running = 1 LIMIT 1")
+            row = cur.fetchone()
         else:
-            placeholders = ','.join('?' for _ in excludes)
-            sql = f"SELECT script_type, matchname FROM running WHERE is_running = 1 AND script_type NOT IN ({placeholders}) AND (matchname = '' OR matchname = ?)"
-            cur.execute(sql, tuple(excludes) + (matchname,))
-            rows = cur.fetchall()
+            sql = "SELECT 1 FROM running WHERE is_running = 1 AND script_type != ? AND (matchname = '' OR matchname = ?) LIMIT 1"
+            cur.execute(sql, (exclude_upper, matchname))
+            row = cur.fetchone()
         conn.close()
-        config.log(f"[RedisIPC] sqlite list_running exclude={excludes} matchname='{matchname}' results: {rows}", 'debug')
-        return [(r[0], r[1] or '') for r in rows]
+        found = bool(row)
+        config.log(f"[RedisIPC] sqlite list_running exclude={exclude_upper} matchname='{matchname}' found: {found}", 'debug')
+        return found
     except Exception:
-        config.log(f"[RedisIPC] sqlite list_running error with exclude={excludes} matchname='{matchname}'", 'error')
+        config.log(f"[RedisIPC] sqlite list_running error with exclude={exclude_upper} matchname='{matchname}'", 'error')
         return False
 
 
-def count_running(exclude_script_types: Optional[Iterable[str]] = None) -> int:
+def count_running(exclude_script_type: Optional[str] = None) -> int:
     """
-    Retourne le nombre de scripts en cours, optionnellement en excluant un ou plusieurs scripts donnés.
+    Retourne le nombre de scripts en cours, optionnellement en excluant un script donné.
     """
     try:
-        return len(list_running(exclude_script_types))
+        exclude_upper = None
+        if exclude_script_type is not None:
+            try:
+                exclude_upper = str(exclude_script_type).upper()
+            except Exception:
+                exclude_upper = None
+
+        conn = _get_sqlite_conn()
+        cur = conn.cursor()
+        if exclude_upper is None:
+            cur.execute("SELECT COUNT(*) FROM running WHERE is_running = 1")
+            row = cur.fetchone()
+        else:
+            cur.execute("SELECT COUNT(*) FROM running WHERE is_running = 1 AND script_type != ?", (exclude_upper,))
+            row = cur.fetchone()
+        conn.close()
+        return int(row[0]) if row and row[0] is not None else 0
     except Exception:
         return 0
 

@@ -557,12 +557,13 @@ def all_script(driver):
                     config.netprofit)
                 config.winmatch[scriptType] = config.winmatch[scriptType] + 1
                 mtt_recup = getattr(config, 'mtt_recup', 0.0)
-                if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_types=config.scriptType, matchname=config.newmatch):
-                    print("#RECHERCHE INFOS DE MISE")
-                    config.perte = 0
-                    config.wantwin =0.2
-                    if RedisIPC:
-                        RedisIPC.set_loss(config.scriptType, config.perte)
+                print("#RECHERCHE INFOS DE MISE")
+                config.perte = 0
+                config.wantwin =0.2
+                if RedisIPC:
+                    RedisIPC.set_loss(config.scriptType, config.perte)
+                if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+                    
                     GetIfGameEnd(driver)
 
                     #
