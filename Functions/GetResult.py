@@ -128,8 +128,7 @@ def GetResult(driver):
                         return 1 if int(l) > int(r) else (2 if int(r) > int(l) else 0)
 
                     inferred = _winner_from_score_simple(s)
-                    # normaliser vainqueur_point attendu (peut être 'V1'/'V2' ou nombre)
-                    expected = config.validated_bet.get('vainqueur_point')
+                    expected = config.validated_bet.get('winscore')
 
                     if expected is not None and int(inferred) == int(expected):
                         print("Matching score found:", last_score)
