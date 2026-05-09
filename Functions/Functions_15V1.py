@@ -343,7 +343,7 @@ def all_script(driver):
                 ok = True
                 for scriptType in config.scriptTypeList:
                     config.switchScript(scriptType)
-                    if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
+                    if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
                         config.log(f'Net profit: {config.global_match_win[scriptType]}')
 
                     else:
@@ -366,7 +366,9 @@ def all_script(driver):
                     config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                'success', False)
                 return True
-            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
+            print('is running for ',config.newmatch)
+            print(RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch))
+            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
                 config.log(
                     f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
             else:
@@ -522,33 +524,6 @@ def all_script(driver):
                 else:
                     config.log('on est pas sur le meme jeu', config.newmatch)
                     # Vérifier que le point parié existe dans l'historique du jeu
-                    matching_set_jeu = [v for v in config.all_scores.values()
-                                        if v.get('set') is not None
-                                        and v.get('jeu') is not None
-                                        and config.validated_bet.get('set') is not None
-                                        and config.validated_bet.get('jeu') is not None
-                                        and int(v.get('set')) == int(config.validated_bet.get('set'))
-                                        and int(v.get('jeu')) == int(config.validated_bet.get('jeu'))]
-                    if matching_set_jeu:
-                        try:
-                            max_point = max(int(x.get('numero_point', 0)) for x in matching_set_jeu)+1
-                        except Exception:
-                            max_point = None
-                        try:
-                            bet_point = int(config.validated_bet.get('numero_point'))
-                        except Exception:
-                            bet_point = None
-                        if bet_point is not None and max_point is not None and bet_point > max_point:
-                            # Le jeu s'est terminé avant le point parié — annuler ce pari validé
-                            result = 'CANCEL'
-                            config.log(f"Bet cancelled: bet point {bet_point} > max point {max_point} in game", 'warning', False, 2)
-                            config.validated_bet['result'] = result
-                            # marquer pour traitement extérieur (extraction des pertes)
-                            config.log(f'pertes en cours de calcul pour annulation du pari, mise: {config.perte}', 'info', False, 2)
-                            config.perte = config.perte + config.validated_bet['montant']
-                            if RedisIPC:
-                                RedisIPC.set_loss(config.scriptType, config.perte)
-                            config.log(f"Marked loss for cancelled bet, perte: {config.perte}", 'info', False, 2)
                     FirstGameBet(driver)
                     firstjeu = True
             
