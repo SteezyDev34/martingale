@@ -562,7 +562,7 @@ def all_script(driver):
                 config.wantwin =0.2
                 if RedisIPC:
                     RedisIPC.set_loss(config.scriptType, config.perte)
-                print('is running for ',matchname=config.newmatch)
+                print('is running for ',config.newmatch)
                 print(RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch))
                 if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
                     
