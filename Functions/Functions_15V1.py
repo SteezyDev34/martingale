@@ -225,6 +225,7 @@ def all_script(driver):
                         continue
                     config.result = GetResult(driver)
                     if config.result == 'WIN':
+                        GetIfGameEnd(driver)
                         config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
                             config.netprofit)
                         config.winmatch[scriptType] = config.winmatch[scriptType] + 1
