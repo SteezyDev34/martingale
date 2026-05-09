@@ -523,7 +523,7 @@ def all_script(driver):
                     # Si Redis est indisponible ou qu'il n'y a rien à déduire
                     # ---------------------------------------------------------------------------
                     if RedisIPC:
-                        config.perte = RedisIPC.deduct_amount_from_largest(mtt_recup)
+                        config.perte = RedisIPC.deduct_amount_from_largest()
                         RedisIPC.set_loss(config.scriptType, config.perte)
                     # ---------------------------------------------------------------------------
                     #

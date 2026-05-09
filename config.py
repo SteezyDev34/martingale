@@ -30,8 +30,8 @@ scriptTypeList = ['15V1']
 scriptTypeList1 = ['15V2']
 #scriptTypeList2 = ['015', '300', '15A', '30A']
 scriptTypeList2 = ['030', '300', '15A', '30A']
-scriptTypeList3 = ['30A']
-scriptTypeList4 = ['BREAK', '4015', '4030']
+scriptTypeList3 = ['6P', '4P', '40A']
+scriptTypeList4 = ['5P','BREAK']
 allScriptType = ['15V1','15V2','150', '015', '030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK',
                  '1SET']
 # Script configuration
