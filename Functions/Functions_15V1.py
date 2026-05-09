@@ -405,6 +405,44 @@ def all_script(driver):
                 passageset = False
                 break
             else:
+                if config.scriptType in ['15V1', '15V2']:
+                    def _last_numero_point():
+                        try:
+                            if not config.all_scores:
+                                return None
+                            # support list-like or dict-like structures
+                            if isinstance(config.all_scores, dict):
+                                vals = list(config.all_scores.values())
+                                if not vals:
+                                    return None
+                                last = vals[-1]
+                            else:
+                                last = config.all_scores[-1]
+                            return int(last['numero_point'])
+                        except Exception:
+                            return None
+
+                    target = None
+                    try:
+                        target = int(config.validated_bet['numero_point']) - 1
+                    except Exception:
+                        target = None
+
+                    # attendre que le dernier score enregistré corresponde au point attendu
+                    config.log(f'Attente du point {target} pour valider le pari', 'info', indent=3)
+                    while not config.error:
+                        last = _last_numero_point()
+                        config.log(f'Last point: {last}, Target point: {target}', 'debug', indent=4)
+                        if config.score_actuel == "0:0":
+                            break
+                        if last is None or target is None:
+                            break
+                        if last >= target:
+                            break
+                        
+                        GetScoreActuel(driver)
+                        time.sleep(0.1)
+                
                 GetAndPlaceBet(driver)
                 print('GetAndPlaceBet')
                 print(config.global_match_win)
