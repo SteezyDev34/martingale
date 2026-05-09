@@ -507,6 +507,7 @@ def all_script(driver):
                     firstjeu = True
             
             elif config.validated_bet.get('result') == 'WIN':
+                GetIfGameEnd(driver)
                 config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
                     config.netprofit)
                 config.winmatch[scriptType] = config.winmatch[scriptType] + 1
