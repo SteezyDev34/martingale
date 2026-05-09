@@ -478,7 +478,7 @@ def any_loss_exists(script_type: str) -> bool:
         return False
 
 
-def deduct_amount_from_largest() -> Optional[tuple]:
+def deduct_largest() -> Optional[tuple]:
     """
     Retourne la perte la plus grande stockée dans SQLite sans la modifier.
 
@@ -513,6 +513,61 @@ def deduct_amount_from_largest() -> Optional[tuple]:
         return valf
     except Exception:
         return 0
+    
+def deduct_amount_from_largest(amount: float):
+    """
+    Déduit `amount` des pertes stockées dans SQLite, en commençant par la plus grande.
+
+    Comportement identique à `bkp_deduct_amount_from_largest` mais opère sur la BDD
+    de secours. Si Redis est disponible, les nouvelles valeurs sont également
+    propagées via `bkp_set_loss`.
+    Retourne la même structure : liste de tuples `(script_type, nouvelle_perte)`.
+    """
+    try:
+        remaining = float(amount)
+        if remaining <= 0:
+            return False
+
+        conn = _get_sqlite_conn()
+        cur = conn.cursor()
+        cur.execute("SELECT script_type, loss FROM perte ORDER BY loss DESC")
+        rows = cur.fetchall()
+        if not rows:
+            conn.close()
+            return False
+
+        modifications = []
+        for script_type, val in rows:
+            if remaining <= 0:
+                break
+            try:
+                valf = float(val)
+            except Exception:
+                valf = 0.0
+            if valf <= 0:
+                continue
+            if remaining >= valf:
+                new_val = 0.0
+                remaining -= valf
+            else:
+                new_val = round(valf - remaining, 8)
+                remaining = 0.0
+
+            cur.execute("REPLACE INTO perte (script_type, loss) VALUES (?, ?)", (script_type, float(new_val)))
+            modifications.append((script_type, float(new_val)))
+
+        if modifications:
+            conn.commit()
+        conn.close()
+
+        try:
+            import config
+            config.log(f"[RedisIPC] sqlite deduct_amount_from_largest modifications: {modifications}", 'debug')
+        except Exception:
+            pass
+        return modifications
+    except Exception:
+        return False
 
 
 def list_running(exclude_script_types: Optional[Iterable[str]] = None, matchname: str = "") -> list:

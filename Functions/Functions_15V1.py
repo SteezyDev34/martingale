@@ -143,9 +143,12 @@ def all_script(driver):
             get1setGlobalPerte()
         if config.perte == 0:
             # Récupération de perte cross-script via Redis si disponible
-            if RedisIPC:
+            '''if RedisIPC:
                 config.perte = RedisIPC.deduct_amount_from_largest()
-                RedisIPC.set_loss(config.scriptType, config.perte)
+                RedisIPC.set_loss(config.scriptType, config.perte)'''
+            if RedisIPC.deduct_amount_from_largest(config.mtt_recup):
+                config.perte = config.mtt_recup
+        RedisIPC.set_loss(config.scriptType, config.perte)
             
         config.log_clear_line()
 
@@ -237,8 +240,13 @@ def all_script(driver):
                                 RedisIPC.set_loss(config.scriptType, config.perte)
                             config.wantwin =0.2
                             # Récupération de perte cross-script via Redis si disponible
-                            if RedisIPC:
-                                config.perte = RedisIPC.deduct_amount_from_largest()
+                            if config.perte == 0:
+                                # Récupération de perte cross-script via Redis si disponible
+                                '''if RedisIPC:
+                                    config.perte = RedisIPC.deduct_amount_from_largest()
+                                    RedisIPC.set_loss(config.scriptType, config.perte)'''
+                                if RedisIPC.deduct_amount_from_largest(config.mtt_recup):
+                                    config.perte = config.mtt_recup
                             if config.perte == 0:
                                 getGlobalPerte()
                             if config.perte == 0:
@@ -525,15 +533,19 @@ def all_script(driver):
                     # Déduit mtt_recup de la perte Redis la plus élevée tous scripts confondus.
                     # Si Redis est indisponible ou qu'il n'y a rien à déduire
                     # ---------------------------------------------------------------------------
-                    if RedisIPC:
-                        config.perte = RedisIPC.deduct_amount_from_largest()
-                        RedisIPC.set_loss(config.scriptType, config.perte)
+                    if config.perte == 0:
+                        # Récupération de perte cross-script via Redis si disponible
+                        '''if RedisIPC:
+                            config.perte = RedisIPC.deduct_amount_from_largest()
+                            RedisIPC.set_loss(config.scriptType, config.perte)'''
+                        if RedisIPC.deduct_amount_from_largest(config.mtt_recup):
+                            config.perte = config.mtt_recup
                     # ---------------------------------------------------------------------------
                     #
-                    if config.perte == 0:
+                    '''if config.perte == 0:
                         getGlobalPerte()
                     if config.perte == 0:
-                        get1setGlobalPerte()
+                        get1setGlobalPerte()'''
                     '''if config.perte > 0:
                         GetIfGameEnd(driver)'''
                     if RedisIPC:
