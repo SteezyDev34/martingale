@@ -1,5 +1,6 @@
 # get_ligue_name
 from selenium.webdriver.common.by import By
+from urllib.parse import unquote
 
 import config
 
@@ -24,16 +25,43 @@ def main(bet_ligue):
 
 # GetLigueNameFromUrl
 def fromUrl(driver):
-    get_url = driver.current_url
-    get_url = get_url.split('tennis/')
-    get_url = get_url[1].split('/')
-    get_url = get_url[0]
-    get_url = get_url.replace('?platform_type=mobile', '')
-    get_url = get_url.split('-')
-    del get_url[0]
-    get_url = (' ').join(get_url)
-    config.ligue_name = get_url
-    return [config.ligue_name, driver.current_url]
+    """
+    Extrait le nom de la ligue depuis l'URL du driver.
+
+    Retourne une liste [ligue_name|False, url_courante].
+    La fonction gère les URL qui ne contiennent pas le segment attendu.
+    """
+    url = driver.current_url or ""
+
+    # Si l'URL ne contient pas le segment attendu, on renvoie False
+    if 'tennis/' not in url:
+        config.ligue_name = False
+        return [config.ligue_name, url]
+
+    try:
+        path_after = url.split('tennis/', 1)[1]
+    except Exception:
+        config.ligue_name = False
+        return [config.ligue_name, url]
+
+    # Récupère la première portion avant le slash
+    first_segment = path_after.split('/', 1)[0]
+    first_segment = first_segment.replace('?platform_type=mobile', '')
+    first_segment = unquote(first_segment)
+
+    parts = first_segment.split('-') if first_segment else []
+
+    # Si la découpe ne donne rien d'utile
+    if len(parts) <= 1:
+        ligue = ' '.join(parts).strip() if parts else False
+        config.ligue_name = ligue or False
+        return [config.ligue_name, url]
+
+    # Supprime le premier élément s'il s'agit d'un préfixe
+    parts = parts[1:]
+    ligue = ' '.join([p for p in parts if p]).strip()
+    config.ligue_name = ligue or False
+    return [config.ligue_name, url]
 
 
 if __name__ == "__main__":
