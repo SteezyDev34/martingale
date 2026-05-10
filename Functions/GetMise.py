@@ -47,15 +47,15 @@ def GetMise(driver):
             if config.cote == '' or str(config.cote) == '0' or str(config.cote) == '1' or config.cote == 0:
                 config.cote = config.cotebase
     if config.scriptType == 'LIVE':
-        api_url = f'https://bettracker.sc2vagr6376.universe.wf/backend/api.php?action=recommended_stake&tipster={config.tipster}&odds={config.cote}&target_percentage=1&recover_losses=1'
-        req = requests.get(api_url, verify=False)
-        resp_json = req.json()
         try:
+            resp_json = get_recommended_stake()
             config.mise = round(float(resp_json.get('recommended_stake', 0)), 2)
-        except Exception:
+            # Si 'last_lost_bet_id' existe, le récupérer sinon mettre une chaîne vide
+            config.bet_to_recover_id = resp_json.get('last_lost_bet_id') or ''
+        except Exception as e:
+            config.log(f"Impossible de récupérer la mise recommandée: {e}", 'warning', False)
             config.mise = round(float(getattr(config, 'mise', 0)), 2)
-        # Si 'last_lost_bet_id' existe, le récupérer sinon mettre une chaîne vide
-        config.bet_to_recover_id = resp_json.get('last_lost_bet_id') or ''
+            config.bet_to_recover_id = ''
         config.log_clear_line(logline)
         if config.mise < 0.2:
             config.mise = 0.2
@@ -119,6 +119,45 @@ def GetMise(driver):
     config.log_clear_line(logline)
     return True
 
+def get_recommended_stake(cote=None, tipster=None, bankroll_id=4, target_percentage=1, recover_losses=1):
+    """
+    Récupère la mise recommandée depuis l'API AuxoTracker.
+
+    Lève une exception en cas d'erreur HTTP ou de connexion. Le caller doit gérer
+    l'exception (voir appel dans `GetMise`).
+    """
+    cote = cote or config.cote
+    tipster = tipster or config.tipster
+
+    base = getattr(config, 'AUXOTRACK_API_URL', 'https://api.auxotracker.p-com.studio')
+    url = f"{base.rstrip('/')}/api/bankrolls/recommended-stake"
+
+    headers = {'Accept': 'application/json'}
+    token = getattr(config, 'AUXOBOT_TOKEN', None)
+    if token:
+        headers['Authorization'] = f'Bearer {token}'
+
+    params = {
+        'bankroll_id': bankroll_id,
+        'tipster': tipster,
+        'target_percentage': target_percentage,
+        'recover_losses': recover_losses,
+        'odds': cote,
+    }
+
+    config.log("-" * 50, "info", False)
+    config.log("Récupération de la mise recommandée depuis l'API", "info", False)
+    try:
+        req = requests.get(url, headers=headers, params=params, timeout=10, verify=False)
+        req.raise_for_status()
+        data = req.json()
+        config.log(f"Requête envoyée à l'API: {req.url}", "info", False)
+        config.log(f"Réponse de l'API: {data}", "info", False)
+        return data
+    except requests.RequestException as e:
+        config.log(f"Erreur API recommended-stake: {e}", 'error', False)
+        raise
+
 
 if __name__ == "__main__":
     config.localhost = 43151
@@ -131,3 +170,4 @@ if __name__ == "__main__":
     config.perte = 2
     print(config.perte)
     GetMise(driver)
+
