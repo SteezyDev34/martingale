@@ -591,7 +591,7 @@ def list_running(exclude_script_type: Optional[str] = None, matchname: str = "")
         except Exception:
             exclude_upper = None
             config.log(f"[RedisIPC] list_running invalid exclude_script_type: {exclude_script_type}", 'error')
-
+    exclude_upper = None #temporaire pour forcer le fallback SQLite pendant dépannage de Redis
     # Fallback SQLite
     try:
         conn = _get_sqlite_conn()
