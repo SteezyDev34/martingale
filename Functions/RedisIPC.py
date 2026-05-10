@@ -570,45 +570,55 @@ def deduct_amount_from_largest(amount: float):
         return False
 
 
-def list_running(exclude_script_type: Optional[str] = None, matchname: str = "") -> bool:
+def list_running(exclude_script_type: Optional[Iterable[str]] = None, matchname: str = "") -> bool:
     """
     Vérifie s'il existe au moins un script marqué comme running (1).
 
-    `exclude_script_type` ne peut être qu'une seule chaîne (ou None).
-    Si `exclude_script_type` est fourni, on exclut ce script et on applique
-    le filtre `matchname` (on ne compte que les enregistrements avec
-    `matchname == ''` ou `matchname == matchname`).
+    `exclude_script_type` peut être une chaîne, un itérable de chaînes, ou None.
+    Si fourni, on exclut ces scripts et on applique le filtre `matchname`
+    (on ne compte que les enregistrements avec `matchname == ''` ou `matchname == matchname`).
 
     Returns:
         bool: True si au moins une entrée running est trouvée, False sinon.
     """
     import config
-
-    exclude_upper = None
+    exclude_script_type = ['15V1', '15V2']  # Forcer exclusion des scripts 15V1 et 15V2 pour éviter les conflits avec les scripts 15A
+    excludes = set()
     if exclude_script_type is not None:
-        try:
-            exclude_upper = str(exclude_script_type).upper()
-        except Exception:
-            exclude_upper = None
-            config.log(f"[RedisIPC] list_running invalid exclude_script_type: {exclude_script_type}", 'error')
-    exclude_upper = None #temporaire pour forcer le fallback SQLite pendant dépannage de Redis
+        # accepter une chaîne unique ou un itérable
+        if isinstance(exclude_script_type, str):
+            try:
+                excludes.add(str(exclude_script_type).upper())
+            except Exception:
+                config.log(f"[RedisIPC] list_running invalid exclude_script_type: {exclude_script_type}", 'error')
+        else:
+            try:
+                for s in exclude_script_type:
+                    try:
+                        excludes.add(str(s).upper())
+                    except Exception:
+                        continue
+            except Exception:
+                config.log(f"[RedisIPC] list_running invalid exclude_script_type iterable: {exclude_script_type}", 'error')
+
     # Fallback SQLite
     try:
         conn = _get_sqlite_conn()
         cur = conn.cursor()
-        if exclude_upper is None:
+        if not excludes:
             cur.execute("SELECT 1 FROM running WHERE is_running = 1 LIMIT 1")
             row = cur.fetchone()
         else:
-            sql = "SELECT 1 FROM running WHERE is_running = 1 AND script_type != ? AND (matchname = '' OR matchname = ?) LIMIT 1"
-            cur.execute(sql, (exclude_upper, matchname))
+            placeholders = ','.join('?' for _ in excludes)
+            sql = f"SELECT 1 FROM running WHERE is_running = 1 AND script_type NOT IN ({placeholders}) AND (matchname = '' OR matchname = ?) LIMIT 1"
+            cur.execute(sql, tuple(excludes) + (matchname,))
             row = cur.fetchone()
         conn.close()
         found = bool(row)
-        config.log(f"[RedisIPC] sqlite list_running exclude={exclude_upper} matchname='{matchname}' found: {found}", 'debug')
+        config.log(f"[RedisIPC] sqlite list_running exclude={sorted(list(excludes))} matchname='{matchname}' found: {found}", 'debug')
         return found
     except Exception:
-        config.log(f"[RedisIPC] sqlite list_running error with exclude={exclude_upper} matchname='{matchname}'", 'error')
+        config.log(f"[RedisIPC] sqlite list_running error with exclude={sorted(list(excludes))} matchname='{matchname}'", 'error')
         return False
 
 
