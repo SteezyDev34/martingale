@@ -361,7 +361,7 @@ def all_script(driver):
             all_below_one = all(
                 float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                 config.scriptTypeList)
-            if all_below_one:
+            if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
                 for st in config.scriptTypeList:
                     config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                'success', False)
