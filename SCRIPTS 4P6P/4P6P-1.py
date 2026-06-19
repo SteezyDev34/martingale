@@ -52,7 +52,7 @@ else:
 # Chargement des functions
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
-num_fenetre = 3
+num_fenetre = 4
 time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 driver = get_script_driver(num_fenetre)
 
@@ -60,7 +60,7 @@ from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
 config.in_stat = True
-config.scriptTypeList = config.scriptTypeList2
+config.scriptTypeList = config.scriptTypeList3
 for i in config.scriptTypeList:
     config.ScriptConfig(i)
 config.winmatch = {script_type: 0 for script_type in config.scriptTypeList}

@@ -87,7 +87,7 @@ if confirmation.strip().upper() in ('Y', 'O'):
         print("Classement complet en cours")
         config.log("-" * 60, 'info', False, False, False)
         newclassementeDeMatch(driver)
-        classementeDeMatch(driver)
+        #classementeDeMatch(driver)
 
 # ------------------------------------------------------------------
 # Configuration des stratégies actives

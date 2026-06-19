@@ -300,14 +300,14 @@ def getCompet():
         config.log(f'Pas de données de compet : {e}', 'warning', True, 3)
     else:
         compet_ok_list = compets["compet_ok"]
-        # config.log(compet_ok_list,0)
+        config.log(compet_ok_list,0)
         compet_not_ok_list = compets["compet_not_ok"]
-        # config.log(compet_not_ok_list,0)
+        config.log(compet_not_ok_list,0)
 
-        try:
-            if any(compet_ok in config.ligue_name for compet_ok in
+        try:    
+            if any(compet_ok.lower() in config.ligue_name.lower() for compet_ok in
                    compet_ok_list) and not any(
-                compet_not_ok in config.ligue_name for
+                compet_not_ok.lower() in config.ligue_name.lower() for
                 compet_not_ok in compet_not_ok_list):
                 # config.log(f'Ligue OK!', 'info', True, 3)
                 # config.log_clear_line()

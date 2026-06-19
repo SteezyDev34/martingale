@@ -932,11 +932,14 @@ def classementeDeMatch(driver, use_json_cache=True):
 
 
 def newclassementeDeMatch(driver):
-    driver.get(site_url)
+    driver.get(config.site_line_url)
     config.error = False
     print('RECHERCHE DE MATCH')
     config.match_found = False
+    save_site_type = config.site_type
+    config.site_type = 'new_site'
     while not config.match_found and not config.error:
+        line = 0
         config.init_variable()
         """On vérifie si c'est la page d'un match """
         config.match_found = GetIfMatchPage(driver)
@@ -947,7 +950,7 @@ def newclassementeDeMatch(driver):
         if not VerificationListeMatchLive(driver):
             config.error = True
             print("PAGE VIDE")
-            driver.get(config.site_url)
+            driver.get(config.site_line_url)
             return False
         # VÉRIFICATION S'IL EXISTE UN FICHIER JSON DE MATCHLIST
         matchlist_from_json = charger_matchlist_depuis_json()
@@ -979,6 +982,8 @@ def newclassementeDeMatch(driver):
             # print('find countries')
             countrybutton = country.find_elements(By.CLASS_NAME, 'sports-menu-group-by-champ')
             links = []
+            liguelist = []
+
             for cntrybtn in countrybutton:
                 # print('country', cntrybtn.text.lower())
                 if ('double' in cntrybtn.text.lower()
@@ -994,10 +999,13 @@ def newclassementeDeMatch(driver):
                 linkcontent = cntrybtn.find_element(By.CLASS_NAME, 'ui-nav-link__content')
                 link = linkcontent.get_attribute(
                     "href")
+                ligue_name = linkcontent.get_attribute("title")
+                print('ligue_name1', ligue_name)
                 # Vérifier si 'nav_link' est absent
                 if "sports-menu-app-champ-with-sub-champs-group__item" not in classes.split() and link:
                     print('link', link)
                     links.append(link)
+                    liguelist.append([link, ligue_name])
                     continue
                 elif linkcontent:
                     linkcontent.click()
@@ -1007,8 +1015,17 @@ def newclassementeDeMatch(driver):
 
                 liguebtn = driver.find_elements(By.CLASS_NAME, 'sports-menu-app-champ-with-sub-champs-group__item')
                 for lbtn in liguebtn:
-                    link = lbtn.find_element(By.CLASS_NAME, 'ui-nav-link__content').get_attribute(
-                        "href")
+                    # ON RÉCUPÈRE LE NOM DE LA LIGUE (plus robuste : fallback sur .text / aria-label)
+                    try:
+                        ligue_elem = lbtn.find_element(By.CLASS_NAME, 'ui-nav-link__content')
+                        ligue_name = ligue_elem.get_attribute("title") or ligue_elem.text or ligue_elem.get_attribute("aria-label") or ""
+                        ligue_name = ligue_name.strip()
+                        ligue_name = ligue_name.replace('.', '')  # Nettoyage de caractères indésirables
+                        link = ligue_elem.get_attribute("href") or ""
+                        print('ligue_name2', ligue_name)
+                    except Exception as e:
+                        config.log(f"Erreur récupération ligue: {e}", 'warning', True)
+                        continue
                     if ('double' in link.lower()
                             or 'spéciaux' in link.lower()
                             or 'mixte' in link.lower()
@@ -1019,53 +1036,114 @@ def newclassementeDeMatch(driver):
                         continue
                     print('link', link)
                     links.append(link)
+                    liguelist.append([link, ligue_name])
+
                 linkcontent.click()
                 time.sleep(2)
                 print('fermeture')
             matchlist = []
-            liguelist = []
-            for link in links:
-                driver.get(link)
-                time.sleep(5)
-                bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                                      'dashboard-champ')
-                print('bet_list_ligue', bet_list_ligue)
-
-                for bet_ligue in bet_list_ligue:
-                    # ON RÉCUPÈRE LE NOM DE LA LIGUE
-                    config.ligue_name = GetLigueName.main(bet_ligue)
-                    print('config.ligue_nam', config.ligue_name)
-                    # EN CAS D'ERREUR
-                    if not config.ligue_name:
-                        config.error = False
+            print('liguelist', liguelist)
+            for link in liguelist:
+                if link[0]:
+                    config.ligue_name = link[1]
+                    print('ligue_name', config.ligue_name)
+                    if not getCompet():
+                        config.log('Compétition non autorisé', 'warning', True)
                         continue
-                    liguelist.append([bet_ligue.find_elements(By.CLASS_NAME,
-                                                              'dashboard-champ__more')[
-                        0].get_attribute(
-                        "href"), config.ligue_name])
+                    if config.site_type == 'new_site':
+                        link[0] = link[0].replace('?platform_type=mobile', '')
+                        link[0] = f'{link[0]}?platform_type=desktop'
+                    config.log(f'Accès à : {link[0]}', 'info', True)
+                    driver.get(link[0])
+                else:
+                    continue
+
+                if not WaitWhileTimeAppear(driver):
+                    config.log('Wait time appear', 'warning', True)
+                    continue
+
                 bet_list_ligue = driver.find_elements(By.CLASS_NAME,
-                                                      'dashboard-champ-body__games')
+                                                      config.classes['dashboard_champ_body_games'][config.site_type])
                 # POUR CHAQUE LIGUE RÉCUPÉRÉE
                 for bet_ligue in bet_list_ligue:
+
                     # ON VÉRIFIE QUE LA COMPET EST JOUABLE
-                    if getCompet():
-                        # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
-                        try:
-                            bet_items = driver.find_elements(By.CLASS_NAME,
-                                                             'dashboard-game-block__row')
-                        except:
-                            print(' c-events-scoreboard__item')
-                            # s'il y une erreur on passe au suivant
-                            continue
-                        else:
-                            if len(bet_items) <= 0:
-                                continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
+                    line += 1
+                    # ON RÉCUPÈRE LES MATCHS DE LA LIGUE
+                    try:
+                        bet_items = driver.find_elements(By.CLASS_NAME,
+                                                         config.classes['dashboard_game_block_row'][
+                                                             config.site_type])
+                    except:
+                        # s'il y une erreur on passe au suivant
+                        continue
+                    else:
+                        if len(bet_items) <= 0:
+                            config.log('AUCUN MATCHS RÉCUPÉ', 'warning', True)
+                            continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
                         i = 0
                         for bet_item in bet_items:
+                            # Initialiser les variables de date pour éviter des références non définies
+                            day_month = None
+                            hour = None
+                            current_year = None
+                            try:
+                                print('try time')
+                                # Attendre jusqu'à 10 secondes que l'élément s'affiche dans bet_item
+                                time_element = WebDriverWait(bet_item, 10).until(EC.visibility_of_element_located(
+                                    (By.CLASS_NAME, 'dashboard-game-info__date')))
+                                
+                                time_element = bet_item.find_element(By.CLASS_NAME,
+                                                                            config.classes['events_time'][
+                                                                                config.site_type])
+
+                                if config.site_type == 'old_site':
+                                    print('old site time')
+                                    start_time_text = bet_item.find_element(By.CLASS_NAME,
+                                                                            config.classes['events_time'][
+                                                                                config.site_type]).text
+                                elif config.site_type == 'new_site':
+                                    print('new site time')
+                                    start_date_text = time_element.find_element(By.CLASS_NAME,
+                                                                                'dashboard-game-info__date').text
+                                    start_date_text = time_element.find_element(By.CLASS_NAME,
+                                                                                'dashboard-game-info__date').text
+                                    start_time_text = time_element.find_element(By.CLASS_NAME,
+                                                                                'dashboard-game-info__time').text
+                                    start_time_text = start_date_text + ' ' + start_time_text
+                            except Exception as e:
+                                events_time_selector = config.classes['events_time'][config.site_type]
+                                config.log(
+                                    f'heure de debut non trouvé {events_time_selector} {e} ',
+                                    'warning', True)
+                            else:
+                                try:
+                                    parts = start_time_text.split()
+                                    if len(parts) >= 2:
+                                        day_month = parts[0]  # '09/09'
+                                        hour = parts[1].split()[0]
+                                        # Ajouter l'année actuelle
+                                        current_year = datetime.now().year
+                                        match_date_only = datetime.strptime(f"{day_month}/{current_year}",
+                                                                            "%d/%m/%Y").date()
+
+                                        # Date actuelle sans l'heure
+                                        today = datetime.now().date()
+
+                                        if match_date_only > today:
+                                            config.log('Match date later', 'warning', True)
+                                            # Match prévu dans le futur, on passe
+                                            continue
+                                        else:
+                                            config.log(match_date_only, 'info', True)
+                                except ValueError:
+                                    config.log("Erreur de parsing de la date", 'warning', True)
+
                             try:
                                 teams_name = bet_item.find_element(By.CLASS_NAME,
-                                                                   'dashboard-game-block__teams')
-                                players = teams_name.find_elements(By.CLASS_NAME, 'dashboard-game-team-info')
+                                                                   config.classes['team_wrap'][config.site_type])
+                                players = teams_name.find_elements(By.CLASS_NAME,
+                                                                   config.classes['team_name'][config.site_type])
                                 players_name = []
                                 match = []
                                 if len(players) <= 1:
@@ -1078,84 +1156,45 @@ def newclassementeDeMatch(driver):
                                 match.append(players_name)
                                 match.append(config.ligue_name)
                                 newmatchtxt = bet_item.find_elements(By.CLASS_NAME,
-                                                                     'dashboard-game-block-link')[
+                                                                     config.classes['match_link'][
+                                                                         config.site_type])[
                                     0].get_attribute(
                                     "href")
                                 newmatch = newmatchtxt.split(
                                     '-')
                                 config.newmatch = newmatch[-3] + '-' + newmatch[-2] + '-' + newmatch[-1]
                                 match.append(config.newmatch)
+                                # N'ajouter la date que si toutes les composantes sont définies
+                                if day_month and current_year and hour:
+                                    match_date = datetime.strptime(
+                                        f"{day_month}/{current_year} {hour}:00",
+                                        "%d/%m/%Y %H:%M:%S"
+                                    ).strftime("%Y-%m-%d %H:%M:%S")
+                                    match.append(match_date)
+                                else:
+                                    # Si l'heure ou la date n'est pas disponible, ignorer ce match
+                                    continue
                                 matchlist.append(match)
 
                             except Exception as e:
                                 continue
-                            else:
-                                print('ok')
-                else:
-                    print('not comp')
+                    config.log_clear_line(line)
+                    line = 0
 
         print(len(matchlist))
         print('matchlist', matchlist)
 
-        # Enregistrement de matchlist dans un fichier JSON
-        try:
-            # Créer un nom de fichier avec timestamp
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            json_filename = f"matchlist_{timestamp}.json"
-            json_filepath = os.path.join(config.projectPath, "DataFiles", json_filename)
+             # Sauvegarder la matchlist dans un fichier JSON avant traitement
+        sauvegarder_matchlist_json(matchlist)
 
-            # Créer le dossier DataFiles s'il n'existe pas
-            os.makedirs(os.path.dirname(json_filepath), exist_ok=True)
-
-            # Préparer les données à enregistrer
-            data_to_save = {
-                "timestamp": datetime.now().isoformat(),
-                "total_matches": len(matchlist),
-                "matches": matchlist
-            }
-
-            # Enregistrer dans le fichier JSON
-            with open(json_filepath, 'w', encoding='utf-8') as json_file:
-                json.dump(data_to_save, json_file, ensure_ascii=False, indent=2)
-
-            config.log(f"Matchlist enregistrée dans: {json_filepath}", 'info', True)
-            print(f"Matchlist enregistrée dans: {json_filepath}")
-
-        except Exception as e:
-            config.log(f"Erreur lors de l'enregistrement de matchlist: {str(e)}", 'error', True)
-            print(f"Erreur lors de l'enregistrement de matchlist: {str(e)}")
-        goodmatch = []
-        for matchItem in matchlist:
-            players_name = matchItem[0]
-            ligue_name = matchItem[1]
-            print('matchitem', matchItem)
-            # goodmatch.append(matchItem)#ajout dasn tou sles cas pour faire tous ls match
-            if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
-                print('wta get proba')
-                config.proba40A = Functions_stats.get_wta_proba_40A(players_name[0], players_name[1])
-                print('tentative proba 1 : ', config.proba40A)
-                # config.proba40A = 0.5
-                time.sleep(1)
-                if config.proba40A == 0:
-                    config.proba40A = Functions_stats.get_wta_proba_40A_other(players_name[0], players_name[1], driver)
-                    print('tentative proba 2 : ', config.proba40A)
-            else:
-                config.proba40A = Functions_stats.get_proba_40A(players_name[0], players_name[1])
-                # config.proba40A = 0.5
-                time.sleep(1)
-                if config.proba40A == 0:
-                    config.proba40A = Functions_stats.get_proba_40A_other(players_name[0], players_name[1], driver)
-            print('proba ' + str(config.proba40A))
-            if float(config.proba40A) >= float(config.probamini):
-                matchItem.append(config.proba40A)
-                print(matchItem)
-                goodmatch.append(matchItem)
+        # Traiter les matchs pour obtenir les probabilités
+        goodmatch = traiter_matchlist(matchlist)
 
         # Tri en fonction de la dernière valeur (indice -1) en ordre décroissant
         tableau_trie = sorted(goodmatch, key=lambda x: x[-2], reverse=True)
 
-        # Fonction de priorisation des matchs par ligue (même logique que classementeDeMatch)
-        def prioritize_matches_by_league_new(matches, max_matches=30):
+        # Fonction de priorisation des matchs par ligue
+        def prioritize_matches_by_league(matches, max_matches=100):
             """
             Priorise les matchs selon la hiérarchie des ligues :
             1. ATP sans "qualification"
@@ -1193,8 +1232,8 @@ def newclassementeDeMatch(driver):
                 elif 'itf' in ligue_name:
                     priority = 8 if has_qualification else 7
                 else:
-                    # Autres ligues, priorité moyenne
-                    priority = 4 if has_qualification else 2
+                    # Autres ligues, priorité basse
+                    priority = 8
 
                 priority_groups[priority].append(match)
 
@@ -1214,16 +1253,70 @@ def newclassementeDeMatch(driver):
 
             return final_matches
 
-        # Appliquer la priorisation pour retenir les 30 meilleurs matchs (ou 10 si souhaité)
-        top_matches = prioritize_matches_by_league_new(tableau_trie, 30)
-        for m in top_matches:
-            # Join array elements with pipe separator before adding to todo
-            try:
-                todo("add", "|".join(str(x) for x in m), config.matchlisttodo_file_name)
-            except:
-                pass
-        break
+        # Appliquer la priorisation pour retenir les 30 meilleurs matchs
+        top_matches = prioritize_matches_by_league(tableau_trie, 30)
+        
 
+        for match in top_matches:
+            try:
+                # Assurer un format propre pour les joueurs: "Joueur A - Joueur B"
+                players = match[0]
+                if isinstance(players, (list, tuple)):
+                    players_str = " - ".join(str(p).strip().strip("[]'\"") for p in players)
+                else:
+                    # Nettoyer les éventuels crochets/quotes provenant d'une conversion liste->str
+                    players_str = str(players).strip().strip("[]'\"")
+
+                # Recomposer la ligne au format attendu
+                league = match[1]
+                match_id = match[2]
+                date_str = match[3]
+                prob = match[4]
+                link = match[5]
+                match_info = "|".join([
+                    players_str,
+                    str(league),
+                    str(match_id),
+                    str(date_str),
+                    str(prob),
+                    str(link)
+                ])
+
+                success = match_manager.add_match_todo(match_info)
+                if success:
+                    config.log(f"Match ajouté à la liste: {match[0]} vs {match[1]}", 'success', True)
+                else:
+                    config.log(f"Match déjà dans la liste: {match[0]} vs {match[1]}", 'warning', True)
+            except Exception as e:
+                config.log(f"Erreur lors de l'ajout du match: {str(e)}", 'error', True)
+
+        # Sauvegarde de la date dans un fichier
+        last_classement_file = os.path.join(config.projectPath, "DataFiles", "last_classement.txt")
+        try:
+            with open(last_classement_file, 'w') as f:
+                f.write(datetime.now().strftime("%Y-%m-%d"))
+                config.last_classement = datetime.now().strftime("%Y-%m-%d")
+                config.log(f"Date du dernier classement sauvegardée: {datetime.now().strftime('%Y-%m-%d')}", 'info',
+                           True)
+        except Exception as e:
+            config.log(f"Erreur lors de la sauvegarde de la date: {str(e)}", 'error', True)
+        # Créer le dossier DataFiles/done s'il n'existe pas
+        done_dir = os.path.join(config.projectPath, "DataFiles", "done")
+        os.makedirs(done_dir, exist_ok=True)
+
+        # Déplacer les anciens fichiers matchlist_*.json dans le dossier done
+        datafiles_path = os.path.join(config.projectPath, "DataFiles")
+        for filename in os.listdir(datafiles_path):
+            if filename.startswith('matchlist_') and filename.endswith('.json'):
+                src_path = os.path.join(datafiles_path, filename)
+                dst_path = os.path.join(done_dir, filename)
+                try:
+                    os.rename(src_path, dst_path)
+                except Exception as e:
+                    config.log(f"Erreur lors du déplacement de {filename} vers done: {str(e)}", 'warning', True)
+        config.log_clear_line(line)
+        break
+    config.site_type = save_site_type
 
 if __name__ == "__main__":
     from ChromeDriver.SetDriver1 import driver

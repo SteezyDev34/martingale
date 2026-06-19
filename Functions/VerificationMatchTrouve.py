@@ -52,6 +52,7 @@ def main(driver, bet_item, matchlist_file_name):
             config.log('Le match  n\'est pas autorisé!', 'warning', True, 4, False)
             #blocage des autres match en atente d'un plus gros BK
             config.log_clear_line()
+            driver.get(newmatchtxt)
             return [True, config.newmatch]
             print('vérif si perte')
             p = config.perte

@@ -5,7 +5,7 @@ from Functions.GetBet import GetBet
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.PlacerMise import PlacerMise
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
-
+from Functions import RedisIPC
 
 def GetAndPlaceBet(driver):
     bet_40a = False
@@ -15,14 +15,16 @@ def GetAndPlaceBet(driver):
     while not bet_40a and not config.error:
         GetScoreActuel(driver)
         config.log('verification du jeu actuel dans tous les script')
+
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
-            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
+            total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss()
+            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or total_gain < float(config.total_gain_wanted):
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
 
             else:
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
-                config.log(f"FIN {config.scriptType}", 'success', False)
+                config.log(f"FIN X# {config.scriptType}", 'success', False)
                 continue
             if scriptType == actual_scryptType:
                 continue

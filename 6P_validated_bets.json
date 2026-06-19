@@ -6778,5 +6778,252 @@
         ],
         "timestamp": "2026-03-09 08:37:11",
         "url": "itf kolkata qualification"
+    },
+    {
+        "montant": 0.22,
+        "cote": "3.25",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-20 21:07:03",
+        "url": "itf hurghada women"
+    },
+    {
+        "montant": 0.22,
+        "cote": "3.25",
+        "jeu": 7,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-20 21:13:11",
+        "url": "itf hurghada women"
+    },
+    {
+        "montant": 0.32,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-20 21:19:23",
+        "url": "itf hurghada women"
+    },
+    {
+        "montant": 0.25,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-20 21:32:23",
+        "url": "itf hurghada"
+    },
+    {
+        "montant": 0.38,
+        "cote": "3",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-20 21:48:24",
+        "url": "itf hurghada"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 08:03:34",
+        "url": "itf kutaisi"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 08:11:13",
+        "url": "itf kutaisi"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.4",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 08:15:50",
+        "url": "itf kutaisi"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 08:20:59",
+        "url": "itf kutaisi"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 09:14:39",
+        "url": "itf gimcheon"
+    },
+    {
+        "montant": 0.24,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 09:21:15",
+        "url": "itf gimcheon"
+    },
+    {
+        "montant": 0.39,
+        "cote": "3",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 09:24:22",
+        "url": "itf gimcheon"
+    },
+    {
+        "montant": 0.52,
+        "cote": "3.25",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 09:27:48",
+        "url": "itf gimcheon"
+    },
+    {
+        "montant": 0.84,
+        "cote": "3",
+        "jeu": 6,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 09:29:53",
+        "url": "itf gimcheon"
+    },
+    {
+        "montant": 0.25,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 10:34:48",
+        "url": "wta strasbourg"
+    },
+    {
+        "montant": 0.38,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 10:41:15",
+        "url": "wta strasbourg"
+    },
+    {
+        "montant": 0.25,
+        "cote": "3",
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 13:05:08",
+        "url": "atp geneva"
+    },
+    {
+        "montant": 0.25,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 13:39:38",
+        "url": "atp roland garros qualification"
+    },
+    {
+        "montant": 0.22,
+        "cote": "3.25",
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-05-21 17:13:25",
+        "url": "atp hamburg"
     }
 ]

@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 
 import Functions.GetJsonData
 import config
-from Functions import GetLigueName
+from Functions import GetLigueName, RedisIPC
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.Functions_1XBET import remove_match_from_json_file
@@ -75,7 +75,7 @@ def all_script(driver):
             ##PREPARATTION PREMIER PARIS
             FirstGameBet(driver)
             config.perte = 0
-            # Met à jour le statut du match dans le gestionnaire de matchs
+            RedisIPC.set_loss(config.scriptType, 0)  # Met à jour le statut du match dans le gestionnaire de matchs
             match_manager.add_match(config.newmatch)
     print('START CHEKING LIST')
     time.sleep(5)

@@ -2,7 +2,7 @@ import inspect
 import time
 
 import config
-from Functions import GetLigueName
+from Functions import GetLigueName, RedisIPC
 from Functions.DeleteBet import DeleteBet
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.GetIfGameStart import GetIfGameEnd, GetIfGameStart
@@ -64,8 +64,7 @@ def all_script(driver):
         return False
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
-        
-
+        RedisIPC.set_running(scriptType, True, config.newmatch)
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
         if config.perte == 0:
             getGlobalPerte()
@@ -98,6 +97,7 @@ def all_script(driver):
             config.log(
                 f' {scriptType} Net profit: {config.global_match_win[scriptType]} /{config.total_want_win[scriptType]}')
             config.log(f" {scriptType} FIN {config.scriptType}", 'success', False)
+            RedisIPC.set_running(config.scriptType, False, config.newmatch)
             continue
         ##PREPARATTION PREMIER PARIS
         FirstGameBet(driver)
@@ -157,6 +157,7 @@ def all_script(driver):
                         config.log(
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                         config.log(f" {scriptType} FIN {config.scriptType}", 'success', False)
+                        RedisIPC.set_running(config.scriptType, False, config.newmatch)
                         continue
                     config.result = GetResult(driver)
                     if config.result == 'WIN':
@@ -179,6 +180,7 @@ def all_script(driver):
                             config.log(
                                 f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                             config.log(f"FIN {config.scriptType}", 'success', False)
+                            RedisIPC.set_running(config.scriptType, False, config.newmatch)
                             continue
                     else:
                         firstjeu = True
@@ -245,6 +247,7 @@ def all_script(driver):
                 config.log(
                     f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                 config.log(f"FIN {config.scriptType}", 'success', False)
+                RedisIPC.set_running(config.scriptType, False, config.newmatch)
                 if config.scriptType == config.scriptTypeList[-1]:
                     print(' last waitendgame')
                     GetIfGameEnd(driver)
@@ -374,6 +377,7 @@ def all_script(driver):
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
+                    RedisIPC.set_running(config.scriptType, False, config.newmatch)
             else:
                 config.log(f"PAS DE RESULT", 'success', False)
         actual_scryptType = config.scriptType
@@ -386,6 +390,7 @@ def all_script(driver):
             else:
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
                 config.log(f"FIN {config.scriptType}", 'success', False)
+                RedisIPC.set_running(config.scriptType, False, config.newmatch)
                 continue
 
             if config.scriptType == '015' or config.scriptType == '15A' or config.scriptType == '300' or config.scriptType == '030':

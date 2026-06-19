@@ -613,6 +613,7 @@ def compare_player_name(player_name1, player_name2):
 
 
 def compare_selection(match, selection, selection_list):
+    return 'false'
     print(f"pour le match {match} Compare ces deux selections :  {selection} et {selection_list}")
     try:
         response = client.chat.completions.create(

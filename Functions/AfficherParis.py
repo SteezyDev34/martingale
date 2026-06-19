@@ -186,6 +186,8 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
                                                             key = 'Game Score. ' + theset + args
                                                         elif key == 'Game Score. ' + theset + args:
                                                             key = 'Score de la partie'
+                                                        elif key == 'Score de la partie':
+                                                            key = 'Score du jeu. ' + theset + args
                                                         else:
                                                             key = 'Paris'
                                                     else:
@@ -344,6 +346,8 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
                                                     key = 'Game Score. ' + theset + args
                                                 elif key == 'Game Score. ' + theset + args:
                                                     key = 'Score de la partie'
+                                                elif key == 'Score de la partie':
+                                                            key = 'Score du jeu. ' + theset + args
                                                 else:
                                                     key = 'Paris'
                                             else:

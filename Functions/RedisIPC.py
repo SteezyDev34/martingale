@@ -405,6 +405,10 @@ def _get_sqlite_conn() -> sqlite3.Connection:
             conn.execute("ALTER TABLE running ADD COLUMN matchname TEXT DEFAULT ''")
     except Exception:
         pass
+    # Table pour les gains globaux par script type
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS gain (script_type TEXT PRIMARY KEY, gain REAL NOT NULL DEFAULT 0.0)"
+    )
     return conn
 
 
@@ -504,13 +508,20 @@ def deduct_largest() -> Optional[tuple]:
         if valf <= 0:
             return 0
 
+        if valf > 1.0:
+            deducted = round(valf * 0.30, 8)
+            new_val = round(valf - deducted, 8)
+        else:
+            deducted = valf
+            new_val = 0.0
+
         try:
             import config
-            config.log(f"[RedisIPC] sqlite deduct_amount_from_largest {script_type}={valf}", 'debug')
+            config.log(f"[RedisIPC] sqlite deduct_largest {script_type}: perte={valf} déduit={deducted} reste={new_val}", 'debug')
         except Exception:
             pass
-        set_loss(script_type, 0.0)
-        return valf
+        set_loss(script_type, new_val)
+        return deducted
     except Exception:
         return 0
     
@@ -783,6 +794,128 @@ def any_other_running(exclude_script_types: Optional[Iterable[str]] = None) -> b
         return bool(row)
     except Exception:
         return False
+def add_gain_to_all(gain_value: float, matchname: str = 'GLOBAL') -> bool:
+    """
+    Ajoute `gain_value` au gain cumulé pour le match donné (un seul enregistrement par match).
+
+    Args:
+        gain_value (float): montant du gain à ajouter
+        matchname (str): identifiant du match (ex: config.newmatch). Défaut 'GLOBAL'.
+
+    Returns:
+        bool: True si succès
+    """
+    try:
+        gv = float(gain_value)
+        key = str(matchname) if matchname else 'GLOBAL'
+        conn = _get_sqlite_conn()
+        conn.execute(
+            "INSERT INTO gain (script_type, gain) VALUES (?, ?)"
+            " ON CONFLICT(script_type) DO UPDATE SET gain = gain + excluded.gain",
+            (key, gv),
+        )
+        conn.commit()
+        conn.close()
+        try:
+            import config
+            config.log(f"[RedisIPC] add_gain_to_all {key} += {gv}", 'debug')
+        except Exception:
+            pass
+        return True
+    except Exception:
+        return False
+
+
+def get_total_loss(default: float = 0.0) -> float:
+    """
+    Retourne la somme des pertes cumulées de tous les script types confondus.
+
+    Returns:
+        float: total des pertes, ou `default` si la table est vide ou en cas d'erreur
+    """
+    try:
+        conn = _get_sqlite_conn()
+        cur = conn.cursor()
+        cur.execute("SELECT SUM(loss) FROM perte")
+        row = cur.fetchone()
+        conn.close()
+        if not row or row[0] is None:
+            return float(default)
+        return float(row[0])
+    except Exception:
+        return float(default)
+
+
+def get_gain(script_type: str, default: float = 0.0) -> float:
+    """
+    Lit le gain cumulé pour `script_type` depuis SQLite.
+
+    Args:
+        script_type (str): identifiant du script
+        default (float): valeur retournée si aucune entrée n'existe
+
+    Returns:
+        float: gain cumulé, ou `default`
+    """
+    try:
+        st = str(script_type).upper()
+        conn = _get_sqlite_conn()
+        cur = conn.cursor()
+        cur.execute("SELECT gain FROM gain WHERE script_type = ?", (st,))
+        row = cur.fetchone()
+        conn.close()
+        return float(row[0]) if row else float(default)
+    except Exception:
+        return float(default)
+
+
+def get_total_gain(matchname: str = 'GLOBAL', default: float = 0.0) -> float:
+    """
+    Retourne le gain cumulé pour le match donné.
+
+    Args:
+        matchname (str): identifiant du match (ex: config.newmatch). Défaut 'GLOBAL'.
+        default (float): valeur retournée si absent ou erreur
+
+    Returns:
+        float: gain cumulé du match, ou `default`
+    """
+    try:
+        key = str(matchname) if matchname else 'GLOBAL'
+        conn = _get_sqlite_conn()
+        cur = conn.cursor()
+        cur.execute("SELECT gain FROM gain WHERE script_type = ?", (key,))
+        row = cur.fetchone()
+        conn.close()
+        if not row or row[0] is None:
+            return float(default)
+        return float(row[0])
+    except Exception:
+        return float(default)
+
+
+def reset_gain(script_type: str) -> bool:
+    """
+    Remet à zéro le gain cumulé pour `script_type` dans SQLite.
+
+    Args:
+        script_type (str): identifiant du script
+
+    Returns:
+        bool: True si succès
+    """
+    try:
+        st = str(script_type).upper()
+        conn = _get_sqlite_conn()
+        cur = conn.cursor()
+        cur.execute("REPLACE INTO gain (script_type, gain) VALUES (?, 0.0)", (st,))
+        conn.commit()
+        conn.close()
+        return True
+    except Exception:
+        return False
+
+
 def bkp_deduct_amount_from_largest(amount: float):
     """
     Déduit un montant donné des clés PERTE_<SCRIPT> en commençant par la perte la plus élevée.

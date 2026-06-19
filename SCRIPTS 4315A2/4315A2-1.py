@@ -72,7 +72,7 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
         print("Classement complet en cours")
         config.log("-" * 60, "info", False, False, False)
         newclassementeDeMatch(driver)
-        classementeDeMatch(driver)
+        #classementeDeMatch(driver)
 
 is_in = input("Voulez-vous trier les matchs ? (Y/N): ")
 config.log_clear_line()

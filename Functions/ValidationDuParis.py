@@ -346,8 +346,172 @@ def ValidationDuParis(driver, nexbet=False):
         # Calculate net profit based on stake, odds and losses
         config.log('Perte ' + str(config.perte))
         config.netprofit = round(
-            (float(config.mise) * float(config.cote)) - float(config.perte), 2)
+            (float(config.mise) * float(config.cote)) - float(config.perte) - float(config.mise), 2)
         config.log(f'Potential Net profit: {config.netprofit}', 'title', clear=False, indent=3)
+    return validation
+
+
+def QuickValidationDuParis(driver, nexbet=False):
+    """
+    Version optimisée de ValidationDuParis : supprime les requêtes DOM redondantes
+    entre la vérification de la mise et le clic sur le bouton de validation.
+    """
+    validation = False
+    tentative = 0
+    already = False
+    attempt = 3
+    if config.scriptType in ['15V1', '15V2']:
+        attempt = 2
+
+    while not validation and tentative < attempt:
+        config.log('Vérification des paris validés')
+        config.log('Tentative', str(tentative))
+        # 1er et unique DOM query pour la mise
+        try:
+            cpn_setting = driver.find_elements(By.CLASS_NAME, config.classes['cpn_amount_input'][config.site_type])[0]
+            l = cpn_setting.get_attribute("value")
+            config.log("mise insérée : " + str(l), 'info', indent=2)
+        except Exception:
+            tentative += 1
+            config.log('erreur verification mise')
+            if tentative > 2:
+                break
+            continue
+
+        if str(l) != str(config.mise):
+            PlacerMise(driver)
+            tentative += 1
+            continue
+
+        try:
+            if config.scriptType == 'LIVE' and config.site_type == 'mobile_site':
+                info = GetCouponInfo(driver)
+        except Exception as e:
+            config.log(f"Erreur GetCouponInfo: {e}", 'error', False)
+            info = {}
+
+        config.log('RECHERCHE DU BOUTON PLACER UN PARIS', 'info', False, 2)
+
+        # 2e et unique DOM query pour le bouton — réutilisé directement pour le clic
+        try:
+            getbtn = WebDriverWait(driver, 3).until(
+                EC.presence_of_element_located((By.CLASS_NAME, config.classes['coupon_buttons'][config.site_type]))
+            )
+        except Exception:
+            config.log('zone de bouton non trouvé!', 'error', False)
+            tentative += 1
+            validation = ModalHandler(driver)
+            continue
+
+        # Clic direct sans re-vérifier la mise ni re-chercher le bouton
+        try:
+            print('click sur placer le paris')
+            getbtn.click()
+        except Exception:
+            tentative += 1
+            if ModalHandler(driver):
+                validation = True
+            continue
+
+        tentative += 1
+        preloader = 1
+        printtext = 0
+        line = 0
+        while preloader == 1:
+            try:
+                waiting_time = 1  # réduit de 5s à 1s : le loader est instantané ou absent
+                WebDriverWait(driver, waiting_time).until(
+                    EC.visibility_of_element_located((By.CLASS_NAME, config.classes['preloader'][config.site_type]))
+                )
+            except Exception:
+                config.log('pas de loader', 'infos', False, indent=3)
+                line += 1
+                preloader = 0
+            else:
+                if printtext == 0:
+                    config.log('loading...', 'infos', False, indent=3)
+                    line += 1
+                    printtext = 1
+        config.log_clear_line(line)
+
+        try:
+            close = config.scriptType != 'LIVE' or config.site_type != 'mobile_site'
+            if not ModalHandler(driver, close):
+                DeleteBet(driver)
+                return False
+            else:
+                validation = True
+        except Exception as e:
+            config.log(f"Erreur lors de la validation du pari : {e}", 'error', False)
+            validation = False
+
+    if validation and not already:
+        from datetime import datetime
+        current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        try:
+            url_to_store = driver.current_url if getattr(config, 'scriptType', None) == '1SET' else config.ligue_name
+        except Exception:
+            url_to_store = getattr(config, 'ligue_name', None)
+
+        if config.scriptType != 'LIVE':
+            config.validated_bet = {
+                'montant': config.mise,
+                'cote': config.cote,
+                'jeu': config.looking_game,
+                'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
+                'numero_point': config.looking_point if hasattr(config, 'looking_point') else None,
+                'winscore': config.win_type,
+                'timestamp': current_timestamp,
+                'url': url_to_store,
+            }
+        else:
+            if info:
+                config.validated_bet = {
+                    'montant': info.get('montant', config.mise),
+                    'cote': info.get('cote', config.cote),
+                    'match': info.get('match'),
+                    'equipe_1': info.get('equipe_1'),
+                    'equipe_2': info.get('equipe_2'),
+                    'type_de_pari': info.get('type_de_pari'),
+                    'bet': info.get('bet'),
+                    'coupon': info.get('coupon'),
+                    'timestamp': info.get('timestamp'),
+                    'tipster': info.get('tipster'),
+                    'bet_to_recover_id': config.bet_to_recover_id if hasattr(config, 'bet_to_recover_id') else '',
+                }
+            try:
+                SendBetData()
+            except Exception as e:
+                config.log(f"Erreur lors de l'envoi des données du pari : {e}", 'error', False)
+
+        json_filename = f"{config.scriptType}_validated_bets.json"
+        try:
+            try:
+                with open(json_filename, 'r') as f:
+                    existing_bets = json.load(f)
+            except FileNotFoundError:
+                existing_bets = []
+            except json.JSONDecodeError:
+                backup_name = json_filename.replace('.json', f'_corrupted_{int(time.time())}.json')
+                os.rename(json_filename, backup_name)
+                existing_bets = []
+            existing_bets.append(config.validated_bet)
+            with open(json_filename, 'w') as f:
+                json.dump(existing_bets, f, indent=4)
+        except Exception as e:
+            config.log(f"Erreur sauvegarde JSON : {e}", 'error', False)
+
+        config.placed_game = config.looking_game
+        config.log(f'{config.validated_bet}', 'info', False, indent=3)
+        config.perte = RedisIPC.get_loss(config.scriptType, config.perte)
+        config.perte = float(config.perte) + float(config.mise)
+        if RedisIPC:
+            RedisIPC.set_loss(getattr(config, 'scriptType', 'UNKNOWN'), float(config.perte), publish=True)
+        config.wantwin = float(config.wantwin) + float(config.increment)
+        config.log('Perte ' + str(config.perte))
+        config.netprofit = round((float(config.mise) * float(config.cote)) - float(config.perte), 2)
+        config.log(f'Potential Net profit: {config.netprofit}', 'title', clear=False, indent=3)
+
     return validation
 
 

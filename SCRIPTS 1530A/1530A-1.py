@@ -79,7 +79,7 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
         print("Classement complet en cours")
         config.log("-" * 60, "info", False, False, False)
         newclassementeDeMatch(driver)
-        classementeDeMatch(driver)
+        #classementeDeMatch(driver)
 config.in_stat = True
 config.scriptTypeList = config.scriptTypeList2
 for i in config.scriptTypeList:
