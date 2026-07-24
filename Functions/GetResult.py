@@ -117,7 +117,15 @@ def GetResult(driver):
 
                     # Déduction simple du vainqueur à partir du dernier score du jeu
                     s = str(last_score.get('score', '')).upper()
-                    def _winner_from_score_simple(s):
+                    def _winner_from_score_simple(s, entry, target_numero_point):
+                        # Le point utilisé pour la déduction doit être le point recherché
+                        # (numero_point du pari), ET le dernier point joué de ce jeu.
+                        if entry.get('numero_point') is None or target_numero_point is None:
+                            print('none int inferrre')
+                            return 0
+                        if int(entry.get('numero_point')) != int(target_numero_point):
+                            print('last score get score', str(entry.get('numero_point')))
+                            return 0
                         if s == 'A:40':
                             return 1
                         if s == '40:A':
@@ -125,9 +133,10 @@ def GetResult(driver):
                         if ':' not in s:
                             return 0
                         l, r = s.split(':')
+                        print('get_score ', [l,r])
                         return 1 if int(l) > int(r) else (2 if int(r) > int(l) else 0)
 
-                    inferred = _winner_from_score_simple(s)
+                    inferred = _winner_from_score_simple(s, last_score, config.validated_bet.get('numero_point'))
                     expected = config.validated_bet.get('winscore')
 
                     if expected is not None and int(inferred) == int(expected):

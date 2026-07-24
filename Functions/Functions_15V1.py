@@ -417,25 +417,6 @@ def all_script(driver):
                 GetIfGameEnd(driver)
                 passageset = False
                 break
-            elif config.jeu_actuel == 12:
-                GetJeuActuel(driver)
-                GetIfGameStart(driver)
-                while config.score_actuel != "0:0":
-                    print('possible tie break, attente debut ...')
-                    GetIfGameEnd(driver)
-                    GetScoreActuel(driver)
-                GetJeuActuel(driver)
-                if config.jeu_actuel == 13:
-                    print('Tie break en cours attente début')
-                    while config.score_actuel != "0:1" and config.score_actuel != "1:0" and config.score_actuel != "1:1" and config.score_actuel != "2:0" and config.score_actuel != "0:2":
-                        GetScoreActuel(driver)
-                        if not GetIfMatchPage(driver):
-                            config.error = True
-                            break
-                    print('tie break commencé... attente fin')
-                    GetIfGameEnd(driver)
-                passageset = False
-                break
             else:
                 if config.scriptType in ['15V1', '15V2']:
                     def _last_numero_point():

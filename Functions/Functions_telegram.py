@@ -73,7 +73,10 @@ def set_commands(cmd):
 
 
 global bot
-set_commands(cmd)
+try:
+    set_commands(cmd)
+except Exception as _e:
+    print(f'set_commands ignoré (réseau): {_e}')
 
 # Token du bot
 BOT_TOKEN = '1910869556:AAGy6Xdbf0Uvk-tz8WFzdnPvo14fu4SOLvc'

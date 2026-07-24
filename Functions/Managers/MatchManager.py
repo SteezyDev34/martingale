@@ -272,6 +272,10 @@ class MatchManager:
                     created_at TIMESTAMP
                 )
             ''')
+            # Migration : ajouter la colonne link si elle n'existe pas (tables créées avant cette version)
+            existing_cols = [row[1] for row in conn.execute("PRAGMA table_info(matches_todo)")]
+            if 'link' not in existing_cols:
+                conn.execute("ALTER TABLE matches_todo ADD COLUMN link TEXT")
 
     def get_remote_matches_todo(self) -> List[dict]:
         """

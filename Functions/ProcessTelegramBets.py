@@ -14,7 +14,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 from Functions.TelegramBetsAPI import telegram_bets_api
 from Functions.PlacerPari import placer_pari
+from Functions.Bookmakers.router import place_best_bet, refresh_all_challenges, place_combined_bet
 from Functions.Logs.Logger import log, log_clear_line
+from Functions.GetMise import get_recommended_stake
 
 def process_api_bets(driver, limit: int = 10) -> int:
     """
@@ -35,56 +37,84 @@ def process_api_bets(driver, limit: int = 10) -> int:
         if not unprocessed_bets:
             #log("Aucun pari non traité trouvé dans l'API", "info")
             return 0
-        
+
         log(f"Trouvé {len(unprocessed_bets)} paris non traités", "info")
         processed_count = 0
-        
+
         for bet in unprocessed_bets:
-            #try:
-            if bet:
-                bet = dict(bet)  # Convertir en dictionnaire standard si nécessaire
-                
-                # Récupérer les données du pari
-                bet_data = None
-                
-                if not bet_data and bet.get('selection'):
-                    try:
-                        selection_data = json.loads(bet['selection'])
-                        print('traitement depuis selection', selection_data)
-                        
-                        # Si c'est le nouveau format avec matches
-                        if isinstance(selection_data, dict) and 'matches' in selection_data:
-                            bet_data = selection_data
-                    except (json.JSONDecodeError, TypeError):
-                        log(f"Erreur parsing selection pour pari ID {bet.get('id')}", "error")
-                        continue
-                
-                # Si on n'arrive pas à récupérer les données, passer au suivant
-                if not bet_data:
-                    log(f"Impossible de récupérer les données pour pari ID {bet.get('id')}", "error")
+            if not bet:
+                continue
+            bet = dict(bet)
+
+            # Parser la sélection
+            bet_data = None
+            if bet.get('selection'):
+                try:
+                    sel = json.loads(bet['selection'])
+                    if isinstance(sel, dict) and 'matches' in sel:
+                        bet_data = sel
+                except (json.JSONDecodeError, TypeError):
+                    log(f"Erreur parsing selection pour pari ID {bet.get('id')}", "error")
                     continue
-                    
-                # Placer le pari avec les données structurées
-                success = placer_pari(driver, bet_data)
-                
-                if success:
-                    # Marquer le pari comme traité dans l'API
-                    if telegram_bets_api.mark_bet_as_processed(bet['id']):
-                        processed_count += 1
-                        log(f"Pari ID {bet['id']} traité avec succès", "info", clear=False)
-                    else:
-                        log(f"Erreur lors du marquage du pari ID {bet['id']} comme traité", "error", clear=False)
+
+            if not bet_data:
+                log(f"Impossible de récupérer les données pour pari ID {bet.get('id')}", "error")
+                continue
+
+            tipster = bet_data.get("tipster", "")
+            all_matches = bet_data.get("matches", [])
+
+            # ── Récupérer la mise ────────────────────────────────────────────
+            ref_odds = all_matches[0].get("odds") if all_matches else bet_data.get("odds")
+            try:
+                stake_data = get_recommended_stake(cote=ref_odds, tipster=tipster)
+                _rs = stake_data.get("recommended_stake")
+                mise = float(_rs if _rs is not None else 1.0)
+                log(f"💰 Mise: {mise}€ (tipster={tipster}, cote={ref_odds})", "info", clear=False)
+            except Exception as e:
+                mise = 1.0
+                log(f"⚠️ Mise par défaut 1€ ({e})", "warning", clear=False)
+            # ────────────────────────────────────────────────────────────────
+
+            # ── Combiné : plusieurs matches → un seul ticket accumulateur ───
+            if len(all_matches) > 1:
+                log(f"🎯 Pari combiné ID {bet['id']}: {len(all_matches)} legs", "info", clear=False)
+                for m in all_matches:
+                    log(f"   · {m.get('equipe_1')} vs {m.get('equipe_2')} | {m.get('selection')}", "info", clear=False)
+                result = place_combined_bet(all_matches, mise, xbet_driver=driver)
+            else:
+                # ── Simple : 1 match ─────────────────────────────────────────
+                if all_matches:
+                    match = all_matches[0]
                 else:
-                    telegram_bets_api.mark_bet_as_processed(bet['id'], processed=2)
-                    
-                    log(f"Échec du placement du pari ID {bet['id']}", "error", clear=False)
-                
-                # Attendre un peu entre chaque pari pour éviter de surcharger le système
-                time.sleep(2)
-                
-            #except Exception as e:
-                #log(f"Erreur lors du traitement du pari ID {bet.get('id', 'unknown')}: {e}", "error", clear=False)
-        
+                    # Fallback champs root
+                    match = {
+                        "equipe_1": bet_data.get("equipe_1", ""),
+                        "equipe_2": bet_data.get("equipe_2", ""),
+                        "selection": bet_data.get("selection", ""),
+                        "odds": bet_data.get("odds"),
+                        "date": bet_data.get("date", ""),
+                        "sport": bet_data.get("sport", "1"),
+                        "intitule": bet_data.get("intitule", ""),
+                        "categorie": bet_data.get("categorie", "Temps réglementaire"),
+                        "combined_events": bet_data.get("combined_events", []),
+                    }
+                match["tipster"] = tipster
+                match["mise"] = mise
+                log(f"Pari simple ID {bet['id']}: {match.get('equipe_1')} vs {match.get('equipe_2')} | {match.get('selection')}", "info", clear=False)
+                result = place_best_bet(match, xbet_driver=driver)
+
+            if result.get("success"):
+                log(f"✅ Pari placé sur {result.get('bookmaker')} @ {result.get('odds','?')} (mise={mise}€)", "info", clear=False)
+                if telegram_bets_api.mark_bet_as_processed(bet['id']):
+                    processed_count += 1
+                    log(f"Pari ID {bet['id']} marqué traité", "info", clear=False)
+            else:
+                log(f"❌ Échec placement ID {bet['id']}: {result.get('error','')}", "error", clear=False)
+                telegram_bets_api.mark_bet_as_processed(bet['id'], processed=2)
+
+            time.sleep(2)
+
         return processed_count
         
     #except Exception as e:

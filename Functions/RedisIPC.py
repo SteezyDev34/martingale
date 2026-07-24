@@ -509,7 +509,7 @@ def deduct_largest() -> Optional[tuple]:
             return 0
 
         if valf > 1.0:
-            deducted = round(valf * 0.30, 8)
+            deducted = round(valf * 0.50, 8)
             new_val = round(valf - deducted, 8)
         else:
             deducted = valf

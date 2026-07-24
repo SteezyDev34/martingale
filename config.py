@@ -44,8 +44,9 @@ localhost = ''
 sofascore_link = ''
 api_url = "http://auxobetbot.sc2vagr6376.universe.wf"
 # Configuration pour la nouvelle API AuxoTracker
-AUXOTRACK_API_URL = os.getenv('AUXOTRACK_API_URL', "https://api.auxotracker.lan/api/auxobot/bets")
+AUXOTRACK_API_URL = os.getenv('AUXOTRACK_API_URL', "https://api.auxotracker.lan")
 AUXOBOT_TOKEN = os.getenv('AUXOBOT_TOKEN')  # Token chargé depuis le fichier .env
+AUXOBOT_USER_ID = int(os.getenv('AUXOBOT_USER_ID', 3))
 site_url = "https://ca.1xbet.com/fr/live/tennis?platform_type=desktop"
 site_line_url = "https://ca.1xbet.com/fr/line/tennis?platform_type=desktop"
 site_type = 'mobile_site'  # new_site, mobile_site, old_site
@@ -107,7 +108,7 @@ wantwin = 0.2
 nb_tour = 1
 increment = 0
 mtt_recup = 0.54
-total_gain_wanted = 3
+total_gain_wanted = 50
 
 recup30 = 0
 rattrape_perte = 1  # ne pas changer
