@@ -178,6 +178,23 @@ def GetBetNew(driver, nextBet=False, selection=''):
                 first_player = 2
                 config.win_type = ['40:0', '40:15', '40:30', 'A:40']
                 win_texte = 'W1'
+        if config.scriptType == 'HOLD':
+            # Inverse exact de BREAK : même détection du serveur via l'icône
+            # (scoreboard-periods-inning__ico), mais on parie sur le SERVEUR qui
+            # tient sa mise en jeu au lieu du receveur qui la casse — les deux
+            # tableaux win_type sont donc simplement échangés par rapport à BREAK.
+            scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
+            scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
+            first_player = scoreboard_player1.find_elements(By.CLASS_NAME, 'scoreboard-periods-inning__ico')
+            sType = "gne dans le jeu"
+            if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
+                first_player = 1
+                config.win_type = ['40:0', '40:15', '40:30', 'A:40']
+                win_texte = 'W1'
+            else:
+                first_player = 2
+                config.win_type = ['0:40', '15:40', '30:40', '40:A']
+                win_texte = 'W2'
         if config.scriptType == '6P':
             sType = ", 6"
             config.win_type = ['40:30', '30:40']  # inversé
@@ -267,7 +284,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
                                                       'ui-coupon-bet-market__name'))
                 )
             except Exception as e:
-                if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400' or config.scriptType == 'BREAK':
+                if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400' or config.scriptType == 'BREAK' or config.scriptType == 'HOLD':
 
                     if config.systeme == 'Darwin':
                         if i % 2 != 0:
@@ -327,7 +344,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
                                 sautDeLigne = sautDeLigne + 30
                                 decalageX = -50
                         ligne = ligne + 1
-                elif config.scriptType == 'BREAK':
+                elif config.scriptType == 'BREAK' or config.scriptType == 'HOLD':
                     list_of_newbet_type_text = list_of_newbet_type
                     list_of_newbet_type = list_of_newbet_type_text.split(' - ' + win_texte)
                     if len(list_of_newbet_type) > 1:

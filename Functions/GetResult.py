@@ -176,7 +176,7 @@ def GetResult(driver):
                 return result
                 
 
-        elif config.scriptType in ['4P', '6P', '5P', 'BREAK', '400', '4030', '4015']:
+        elif config.scriptType in ['4P', '6P', '5P', 'BREAK', 'HOLD', '400', '4030', '4015']:
             if int(config.set_actuel) != int(config.validated_bet.get('set')):
                 getresult = True
                 print('get result set diff')
