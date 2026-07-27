@@ -356,7 +356,7 @@ def SendPerte(scriptType, perte):
             config.log_clear_line()
             config.perte -= perte
             if RedisIPC:
-                RedisIPC.set_loss(config.scriptType, config.perte)
+                RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
             return True
         else:
             print(result)
@@ -389,7 +389,7 @@ def SendPerte1set(scriptType, perte):
             config.log_clear_line()
             config.perte -= perte
             if RedisIPC:
-                RedisIPC.set_loss(config.scriptType, config.perte)
+                RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
             return True
         else:
             print(result)
@@ -476,7 +476,7 @@ def DispatchPerte():
     SendGlobalPerte(config.scriptType, config.perte)
     config.perte = 0
     if RedisIPC:
-        RedisIPC.set_loss(config.scriptType, config.perte)
+        RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
 
 
 def a_DispatchPerte():

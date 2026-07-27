@@ -18,7 +18,7 @@ def GetAndPlaceBet(driver):
 
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
-            total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss()
+            total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
             if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or total_gain < float(config.total_gain_wanted):
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
 
