@@ -3,7 +3,7 @@ def max_gain_pour_16_tours(solde_initial, cote=2.4, tours_max=16):
     Calcule le gain net maximum atteignable par victoire
     pour pouvoir tenir jusqu'au nombre de tours défini (ex: 16).
     """
-    print(f"Avec un capital de {capital}€ et une cote de {cote},")
+    print(f"Avec un capital de {solde_initial}€ et une cote de {cote},")
 
     # On cherche par dichotomie (recherche binaire)
     bas, haut = 0.01, solde_initial  # encadrement du gain visé
