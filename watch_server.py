@@ -95,19 +95,25 @@ def _tempete_filter_originals(image_links):
     return list(originals)
 
 
-def _tempete_store_new(image_urls):
+def _tempete_filter_new(image_urls):
+    """Retourne les URLs pas encore en base, SANS les y insérer — l'insertion
+    n'a lieu qu'après un traitement réussi (cf. _tempete_mark_seen), pour
+    qu'une image dont le traitement échoue/bloque soit retentée au prochain
+    cycle au lieu d'être perdue silencieusement."""
     conn = sqlite3.connect(TEMPETE_DB_PATH)
-    cursor = conn.cursor()
-    new = []
-    for url in image_urls:
-        try:
-            cursor.execute("INSERT INTO images (image_url) VALUES (?)", (url,))
-            new.append(url)
-        except sqlite3.IntegrityError:
-            pass
-    conn.commit()
+    seen = {row[0] for row in conn.execute("SELECT image_url FROM images")}
     conn.close()
-    return new
+    return [u for u in image_urls if u not in seen]
+
+
+def _tempete_mark_seen(url):
+    conn = sqlite3.connect(TEMPETE_DB_PATH)
+    try:
+        conn.execute("INSERT INTO images (image_url) VALUES (?)", (url,))
+        conn.commit()
+    except sqlite3.IntegrityError:
+        pass
+    conn.close()
 
 
 def check_tempete_images():
@@ -119,7 +125,7 @@ def check_tempete_images():
             url = TEMPETE_BASE_URL.format(year=now.year, month=now.month)
             links = _tempete_get_image_links(url)
             originals = _tempete_filter_originals(links)
-            new_images = _tempete_store_new(originals)
+            new_images = _tempete_filter_new(originals)
             if new_images:
                 log(f"[Tempête] {len(new_images)} nouvelle(s) image(s)", "info", clear=False)
                 for i, img_name in enumerate(new_images):
@@ -136,8 +142,8 @@ def check_tempete_images():
                         img_path = os.path.join(temp_dir, f"tempete_{timestamp}.jpg")
                         with open(img_path, 'wb') as f:
                             f.write(r.content)
-                        result = extraire_pari_depuis_image(img_path, "Tempête Betting")
                         try:
+                            result = extraire_pari_depuis_image(img_path, "Tempête Betting")
                             pari_dict = json.loads(result)
                             pari_dict["tipster"] = "TEMPÊTE BETTING ®️"
                             matches = pari_dict.get("matches", [])
@@ -145,6 +151,11 @@ def check_tempete_images():
                                 api_success = send_bet_data_to_api(pari_dict, message_original=full_url, sender_username="TEMPÊTE BETTING ®️")
                                 status = "✅" if api_success else "❌"
                                 log(f"[Tempête] {status} {len(matches)} match(s) envoyé(s)", "info", clear=False)
+                            # Traitement réussi (avec ou sans match détecté) : marquer vue
+                            # seulement maintenant, pour qu'un échec plus haut (timeout OCR,
+                            # JSON invalide) soit retenté au prochain cycle au lieu d'être
+                            # perdu silencieusement pour toujours.
+                            _tempete_mark_seen(img_name)
                         except json.JSONDecodeError as e:
                             log(f"[Tempête] Erreur JSON OCR: {e}", "error", clear=False)
                         finally:
@@ -152,6 +163,8 @@ def check_tempete_images():
                                 os.remove(img_path)
                     except Exception as e:
                         log(f"[Tempête] Erreur image {img_name}: {e}", "error", clear=False)
+            else:
+                log("[Tempête] Aucune nouvelle image depuis tempetebetting", "info", clear=False)
         except Exception as e:
             log(f"[Tempête] Erreur boucle: {e}", "error", clear=False)
         time.sleep(600)  # toutes les 10 minutes
