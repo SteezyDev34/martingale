@@ -74,7 +74,7 @@ mark_telegram_bet_processed(123)
 
 ## Intégration dans le script WATCH
 
-Le script `SCRIPTS WATCH/main.py` a été modifié pour :
+Le script `SCRIPTS_WATCH/main.py` a été modifié pour :
 
 1. **Envoyer automatiquement** les paris détectés vers l'API
 2. **Traiter périodiquement** les paris stockés dans l'API (toutes les 5 minutes)

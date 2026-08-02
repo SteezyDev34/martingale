@@ -57,7 +57,7 @@ import aiohttp
 # ─── Tempête Betting ─────────────────────────────────────────────────────────
 
 TEMPETE_BASE_URL = "https://tempetebetting.com/wp-content/uploads/{year}/{month:02d}/"
-TEMPETE_DB_PATH = os.path.join(project_directory, "SCRIPTS WATCH", "tempete_images.db")
+TEMPETE_DB_PATH = os.path.join(project_directory, "SCRIPTS_WATCH", "tempete_images.db")
 TEMPETE_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
 }
@@ -130,7 +130,7 @@ def check_tempete_images():
                         r = requests.get(full_url, headers=TEMPETE_HEADERS, timeout=15, verify=False)
                         if r.status_code != 200:
                             continue
-                        temp_dir = os.path.join(project_directory, 'SCRIPTS WATCH', 'media')
+                        temp_dir = os.path.join(project_directory, 'SCRIPTS_WATCH', 'media')
                         os.makedirs(temp_dir, exist_ok=True)
                         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
                         img_path = os.path.join(temp_dir, f"tempete_{timestamp}.jpg")
@@ -297,7 +297,7 @@ async def my_event_handler(event):
             if any(str(type(attr).__name__) == 'DocumentAttributeAnimated' for attr in (doc.attributes or [])):
                 return
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        temp_dir = os.path.join(project_directory, 'SCRIPTS WATCH', 'media')
+        temp_dir = os.path.join(project_directory, 'SCRIPTS_WATCH', 'media')
         os.makedirs(temp_dir, exist_ok=True)
         image_path = os.path.join(temp_dir, f"media_{timestamp}.jpg")
         await event.message.download_media(file=image_path)

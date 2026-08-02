@@ -22,7 +22,7 @@
 ## Architecture
 
 ```
-SCRIPTS WATCH/main-1.py
+SCRIPTS_WATCH/main-1.py
     └── init_bookmaker_sessions()        ← ouvre Chrome pour login manuel
             ├── Winamax   (Playwright)
             ├── Betclic   (Chrome subprocess)
@@ -180,4 +180,4 @@ Ouvrir `https://stake.bet` dans Chrome (profil `stake_profile`) et inspecter :
 | `Functions/Bookmakers/LollybetScraper.py` | ⚠️ Sélecteurs à remplir |
 | `Functions/Bookmakers/StakeScraper.py` | ⚠️ Cloudflare + sélecteurs à remplir |
 | `Functions/Bookmakers/_test_winamax_bet.py` | Test Winamax |
-| `SCRIPTS WATCH/main-1.py` | Script principal |
+| `SCRIPTS_WATCH/main-1.py` | Script principal |
