@@ -63,7 +63,7 @@ Le script **tempeteBetting.py** est maintenant **100% fonctionnel** et prêt pou
 
 ### Pour démarrer en production :
 ```bash
-cd "c:\Users\Administrator\Projets\martingale\SCRIPTS TEMPETE"
+cd "c:\Users\Administrator\Projets\martingale\SCRIPTS_TEMPETE"
 ..\venv\Scripts\Activate.ps1
 python tempeteBetting.py
 ```
