@@ -129,6 +129,9 @@ def FirstGameBet(driver):
                         last = _last_numero_point()
                         config.log(f'Last point: {last}, Target point: {target}', 'debug', indent=4)
                         if config.score_actuel == "0:0":
+                            target=1
+                            break
+                        if int(config.set_actuel ) != int(config.validated_bet['set']):
                             break
                         if last is None or target is None:
                             break

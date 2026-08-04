@@ -135,7 +135,7 @@ def connect_to_1xbet(driver):
 ##END
 ##FUNCTION RELOAD 1XBET
 def load_lolly(driver):
-    driver.get('https://lolly-bet.com/fr/sportsbook')
+    driver.get('https://lolly-bet99.com/fr/sportsbook')
     tentative = 0
     pageload = False
     while pageload == False:
@@ -153,7 +153,7 @@ def load_lolly(driver):
                 pageload = 0  # STOP LOOP
                 return False
             else:
-                driver.get("https://lolly-bet.com/fr")
+                driver.get("https://lolly-bet99.com/fr")
                 print("nouvelle tentative")
         else:
             return True

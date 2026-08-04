@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from typing import Any, Optional, Iterable, Tuple
 import sqlite3
 
@@ -392,8 +393,17 @@ def _get_sqlite_conn() -> sqlite3.Connection:
     conn.execute("PRAGMA foreign_keys = ON")
     # Créer la table si nécessaire
     conn.execute(
-        "CREATE TABLE IF NOT EXISTS perte (script_type TEXT PRIMARY KEY, loss REAL NOT NULL DEFAULT 0.0)"
+        "CREATE TABLE IF NOT EXISTS perte (script_type TEXT PRIMARY KEY, loss REAL NOT NULL DEFAULT 0.0, matchname TEXT DEFAULT '')"
     )
+    # S'assurer que la colonne matchname existe (ALTER si base existante plus ancienne) —
+    # nécessaire pour filtrer get_total_loss/deduct_largest par match et éviter de
+    # comparer/rattraper des pertes entre matchs différents tournant en parallèle.
+    try:
+        cols = [r[1] for r in conn.execute("PRAGMA table_info(perte)").fetchall()]
+        if 'matchname' not in cols:
+            conn.execute("ALTER TABLE perte ADD COLUMN matchname TEXT DEFAULT ''")
+    except Exception:
+        pass
     # Table pour état de running (1 = running, 0 = stopped) avec matchname
     conn.execute(
         "CREATE TABLE IF NOT EXISTS running (script_type TEXT PRIMARY KEY, is_running INTEGER NOT NULL DEFAULT 0, matchname TEXT DEFAULT '')"
@@ -409,12 +419,167 @@ def _get_sqlite_conn() -> sqlite3.Connection:
     conn.execute(
         "CREATE TABLE IF NOT EXISTS gain (script_type TEXT PRIMARY KEY, gain REAL NOT NULL DEFAULT 0.0)"
     )
+    # Score partagé du match courant (une ligne par match), pour que les différents
+    # process (15V1, 15V2, 1530A_V2...) qui suivent le même match s'accordent sur un
+    # seul historique de points au lieu de chacun tenir sa propre copie en mémoire —
+    # cf. AUDIT_MARTINGALE_TENNIS.md §4/§7 (risque de désynchronisation inter-process).
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS match_score ("
+        "matchname TEXT PRIMARY KEY, score TEXT NOT NULL, set_actuel TEXT DEFAULT '', "
+        "jeu_actuel TEXT DEFAULT '', numero_point INTEGER NOT NULL DEFAULT 0, "
+        "vainqueur_point INTEGER DEFAULT 0, source TEXT DEFAULT '', updated_at REAL DEFAULT 0.0"
+        ")"
+    )
     return conn
 
 
-def set_loss(script_type: str, loss_value: float, publish: bool = True) -> bool:
+def _est_transition_evolutive(ancien_set, ancien_jeu, ancien_numero_point, nouveau_set, nouveau_jeu, nouveau_numero_point) -> bool:
+    """
+    Détermine si une nouvelle observation de score représente une réelle progression
+    du match plutôt qu'une régression/duplication (score corrigé, lecture erronée).
+
+    Un changement de set ou de jeu est toujours considéré comme une progression (le
+    numéro de point interne repart de 0 dans un nouveau jeu, donc il ne peut pas être
+    comparé directement). Dans le même jeu, seul un numero_point strictement croissant
+    est accepté.
+    """
+    if str(nouveau_set) != str(ancien_set) or str(nouveau_jeu) != str(ancien_jeu):
+        return True
+    try:
+        return int(nouveau_numero_point) > int(ancien_numero_point)
+    except Exception:
+        return False
+
+
+def try_claim_score_update(
+    matchname: str,
+    score: str,
+    numero_point: int = 0,
+    set_actuel: str = '',
+    jeu_actuel: str = '',
+    vainqueur_point: int = 0,
+    source: str = 'dom',
+) -> Tuple[bool, Optional[dict]]:
+    """
+    Tente d'enregistrer une transition de score pour `matchname` dans la table
+    partagée `match_score`, en ne l'acceptant que si elle est évolutive (nouveau jeu/
+    set, ou numero_point strictement croissant dans le même jeu).
+
+    Plusieurs process (un par script_type ou groupe de script_types) peuvent appeler
+    cette fonction pour le même match en parallèle, que le changement ait été détecté
+    via le DOM du bookmaker ou via le hint Sofascore. Le premier appel dont la
+    transition est évolutive "gagne" : son écriture devient la référence partagée que
+    tous les autres process adopteront ensuite (au lieu de chacun tenir sa propre copie
+    divergente en mémoire).
+
+    Returns:
+        (gagné, etat_courant) où `gagné` est True si CET appel a effectivement écrit
+        la nouvelle valeur (c'est donc lui qui doit poursuivre son traitement normal :
+        enregistrement local + logique de pari), et `etat_courant` est un dict
+        {score, set_actuel, jeu_actuel, numero_point, vainqueur_point, source} reflétant
+        l'état faisant foi après l'appel (que celui-ci ait gagné ou non) — à utiliser
+        pour resynchroniser l'état local en cas de défaite (transition déjà traitée
+        par un autre process, ou par ce même process lors d'un tour précédent).
+    """
+    try:
+        key = str(matchname) if matchname else 'GLOBAL'
+        conn = _get_sqlite_conn()
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT score, set_actuel, jeu_actuel, numero_point, vainqueur_point, source "
+            "FROM match_score WHERE matchname = ?",
+            (key,),
+        )
+        row = cur.fetchone()
+
+        if row is None:
+            # Premier enregistrement pour ce match : personne n'est encore passé, on gagne.
+            cur.execute(
+                "INSERT OR IGNORE INTO match_score "
+                "(matchname, score, set_actuel, jeu_actuel, numero_point, vainqueur_point, source, updated_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                (key, str(score), str(set_actuel), str(jeu_actuel), int(numero_point), int(vainqueur_point),
+                 str(source), time.time()),
+            )
+            gagne = cur.rowcount == 1
+            conn.commit()
+        else:
+            ancien_score, ancien_set, ancien_jeu, ancien_numero_point, _, _ = row
+            evolutif = _est_transition_evolutive(
+                ancien_set, ancien_jeu, ancien_numero_point, set_actuel, jeu_actuel, numero_point
+            )
+            if not evolutif:
+                gagne = False
+            else:
+                # CAS : n'écrase que si personne n'a modifié la ligne depuis notre lecture.
+                cur.execute(
+                    "UPDATE match_score SET score=?, set_actuel=?, jeu_actuel=?, numero_point=?, "
+                    "vainqueur_point=?, source=?, updated_at=? "
+                    "WHERE matchname=? AND set_actuel=? AND jeu_actuel=? AND numero_point=?",
+                    (str(score), str(set_actuel), str(jeu_actuel), int(numero_point), int(vainqueur_point),
+                     str(source), time.time(), key, ancien_set, ancien_jeu, ancien_numero_point),
+                )
+                gagne = cur.rowcount == 1
+                conn.commit()
+
+        cur.execute(
+            "SELECT score, set_actuel, jeu_actuel, numero_point, vainqueur_point, source "
+            "FROM match_score WHERE matchname = ?",
+            (key,),
+        )
+        etat = cur.fetchone()
+        conn.close()
+
+        etat_courant = None
+        if etat:
+            etat_courant = {
+                'score': etat[0], 'set_actuel': etat[1], 'jeu_actuel': etat[2],
+                'numero_point': etat[3], 'vainqueur_point': etat[4], 'source': etat[5],
+            }
+        return gagne, etat_courant
+    except Exception as e:
+        try:
+            import config
+            config.log(f"[RedisIPC] try_claim_score_update error for {matchname}: {e}", 'error')
+        except Exception:
+            pass
+        # En cas d'erreur, ne pas bloquer le bot : laisser le process traiter la
+        # transition localement comme s'il avait gagné (comportement historique
+        # avant l'introduction de cette table partagée).
+        return True, None
+
+
+def get_match_score(matchname: str) -> Optional[dict]:
+    """Lit l'état de score partagé (sans le modifier) pour `matchname`, ou None si absent."""
+    try:
+        key = str(matchname) if matchname else 'GLOBAL'
+        conn = _get_sqlite_conn()
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT score, set_actuel, jeu_actuel, numero_point, vainqueur_point, source "
+            "FROM match_score WHERE matchname = ?",
+            (key,),
+        )
+        row = cur.fetchone()
+        conn.close()
+        if not row:
+            return None
+        return {
+            'score': row[0], 'set_actuel': row[1], 'jeu_actuel': row[2],
+            'numero_point': row[3], 'vainqueur_point': row[4], 'source': row[5],
+        }
+    except Exception:
+        return None
+
+
+def set_loss(script_type: str, loss_value: float, matchname: str = None, publish: bool = True) -> bool:
     """
     Sauvegarde la perte pour `script_type` dans la BDD SQLite de secours.
+
+    Args:
+        matchname (str): identifiant du match courant (ex: config.newmatch), utilisé
+            pour permettre à `get_total_loss`/`deduct_largest` de filtrer par match.
+            Si omis, le matchname déjà enregistré pour ce script_type est conservé.
 
     Si Redis est disponible, la valeur est également propagée via `bkp_set_loss`.
     """
@@ -427,7 +592,14 @@ def set_loss(script_type: str, loss_value: float, publish: bool = True) -> bool:
         st = str(script_type).upper()
         conn = _get_sqlite_conn()
         cur = conn.cursor()
-        cur.execute("REPLACE INTO perte (script_type, loss) VALUES (?, ?)", (st, float(loss_value)))
+        if matchname is None:
+            cur.execute("SELECT matchname FROM perte WHERE script_type = ?", (st,))
+            row = cur.fetchone()
+            matchname = row[0] if row and row[0] is not None else ''
+        cur.execute(
+            "REPLACE INTO perte (script_type, loss, matchname) VALUES (?, ?, ?)",
+            (st, float(loss_value), str(matchname)),
+        )
         conn.commit()
         conn.close()
 
@@ -461,9 +633,18 @@ def get_loss(script_type: str, default: float = 0.0) -> float:
             return float(default)
         config.log(f"[RedisIPC] sqlite get_loss {st}={row[0]}", 'debug')
         return float(row[0])
-    except Exception:
+    except Exception as e:
+        # Ne pas masquer silencieusement une vraie panne SQLite (fichier corrompu,
+        # verrou...) derrière un simple retour par défaut : le moteur martingale
+        # pourrait repartir de perte=0 alors que la perte réelle existe toujours en
+        # base mais n'a pas pu être lue (cf. AUDIT_MARTINGALE_TENNIS.md §6).
+        try:
+            config.log(f"[RedisIPC] sqlite get_loss error for {script_type}: {e}", 'error')
+        except Exception:
+            pass
         return float(default)
-    
+
+
 def any_loss_exists(script_type: str) -> bool:
     """
     Vérifie si une perte existe sauf pour `script_type` dans SQLite.
@@ -478,13 +659,24 @@ def any_loss_exists(script_type: str) -> bool:
         row = cur.fetchone()
         conn.close()
         return bool(row)
-    except Exception:
+    except Exception as e:
+        try:
+            import config
+            config.log(f"[RedisIPC] sqlite any_loss_exists error for {script_type}: {e}", 'error')
+        except Exception:
+            pass
         return False
 
 
-def deduct_largest() -> Optional[tuple]:
+def deduct_largest(matchname: str = None) -> Optional[tuple]:
     """
     Retourne la perte la plus grande stockée dans SQLite sans la modifier.
+
+    Args:
+        matchname (str): si fourni, restreint la recherche aux script_types associés
+            à ce match (évite de rattraper la perte d'un match différent tournant
+            en parallèle dans un autre process). Si omis, comportement historique :
+            recherche tous matchs confondus.
 
     Returns:
         tuple: `(script_type, perte)` de l'entrée avec la plus grande perte,
@@ -493,7 +685,13 @@ def deduct_largest() -> Optional[tuple]:
     try:
         conn = _get_sqlite_conn()
         cur = conn.cursor()
-        cur.execute("SELECT script_type, loss FROM perte ORDER BY loss DESC LIMIT 1")
+        if matchname is not None:
+            cur.execute(
+                "SELECT script_type, loss FROM perte WHERE matchname = ? ORDER BY loss DESC LIMIT 1",
+                (str(matchname),),
+            )
+        else:
+            cur.execute("SELECT script_type, loss FROM perte ORDER BY loss DESC LIMIT 1")
         row = cur.fetchone()
         conn.close()
         if not row:
@@ -509,7 +707,7 @@ def deduct_largest() -> Optional[tuple]:
             return 0
 
         if valf > 1.0:
-            deducted = round(valf * 0.30, 8)
+            deducted = round(valf * 0.50, 8)
             new_val = round(valf - deducted, 8)
         else:
             deducted = valf
@@ -522,12 +720,22 @@ def deduct_largest() -> Optional[tuple]:
             pass
         set_loss(script_type, new_val)
         return deducted
-    except Exception:
+    except Exception as e:
+        try:
+            import config
+            config.log(f"[RedisIPC] sqlite deduct_largest error: {e}", 'error')
+        except Exception:
+            pass
         return 0
-    
-def deduct_amount_from_largest(amount: float):
+
+def deduct_amount_from_largest(amount: float, matchname: str = None):
     """
     Déduit `amount` des pertes stockées dans SQLite, en commençant par la plus grande.
+
+    Args:
+        matchname (str): si fourni, restreint la déduction aux script_types associés
+            à ce match (évite de rattraper la perte d'un match différent tournant
+            en parallèle dans un autre process). Si omis, comportement historique.
 
     Comportement identique à `bkp_deduct_amount_from_largest` mais opère sur la BDD
     de secours. Si Redis est disponible, les nouvelles valeurs sont également
@@ -541,7 +749,13 @@ def deduct_amount_from_largest(amount: float):
 
         conn = _get_sqlite_conn()
         cur = conn.cursor()
-        cur.execute("SELECT script_type, loss FROM perte ORDER BY loss DESC")
+        if matchname is not None:
+            cur.execute(
+                "SELECT script_type, loss FROM perte WHERE matchname = ? ORDER BY loss DESC",
+                (str(matchname),),
+            )
+        else:
+            cur.execute("SELECT script_type, loss FROM perte ORDER BY loss DESC")
         rows = cur.fetchall()
         if not rows:
             conn.close()
@@ -564,7 +778,7 @@ def deduct_amount_from_largest(amount: float):
                 new_val = round(valf - remaining, 8)
                 remaining = 0.0
 
-            cur.execute("REPLACE INTO perte (script_type, loss) VALUES (?, ?)", (script_type, float(new_val)))
+            cur.execute("UPDATE perte SET loss = ? WHERE script_type = ?", (float(new_val), script_type))
             modifications.append((script_type, float(new_val)))
 
         if modifications:
@@ -577,7 +791,12 @@ def deduct_amount_from_largest(amount: float):
         except Exception:
             pass
         return modifications
-    except Exception:
+    except Exception as e:
+        try:
+            import config
+            config.log(f"[RedisIPC] sqlite deduct_amount_from_largest error: {e}", 'error')
+        except Exception:
+            pass
         return False
 
 
@@ -822,13 +1041,24 @@ def add_gain_to_all(gain_value: float, matchname: str = 'GLOBAL') -> bool:
         except Exception:
             pass
         return True
-    except Exception:
+    except Exception as e:
+        try:
+            import config
+            config.log(f"[RedisIPC] add_gain_to_all error for {matchname}: {e}", 'error')
+        except Exception:
+            pass
         return False
 
 
-def get_total_loss(default: float = 0.0) -> float:
+def get_total_loss(matchname: str = None, default: float = 0.0) -> float:
     """
     Retourne la somme des pertes cumulées de tous les script types confondus.
+
+    Args:
+        matchname (str): si fourni, restreint la somme aux pertes enregistrées pour
+            ce match uniquement (évite de comparer un gain par match à une perte
+            globale tous matchs confondus lorsque plusieurs matchs tournent en
+            parallèle). Si omis, comportement historique : somme de tout.
 
     Returns:
         float: total des pertes, ou `default` si la table est vide ou en cas d'erreur
@@ -836,13 +1066,21 @@ def get_total_loss(default: float = 0.0) -> float:
     try:
         conn = _get_sqlite_conn()
         cur = conn.cursor()
-        cur.execute("SELECT SUM(loss) FROM perte")
+        if matchname is not None:
+            cur.execute("SELECT SUM(loss) FROM perte WHERE matchname = ?", (str(matchname),))
+        else:
+            cur.execute("SELECT SUM(loss) FROM perte")
         row = cur.fetchone()
         conn.close()
         if not row or row[0] is None:
             return float(default)
         return float(row[0])
-    except Exception:
+    except Exception as e:
+        try:
+            import config
+            config.log(f"[RedisIPC] sqlite get_total_loss error: {e}", 'error')
+        except Exception:
+            pass
         return float(default)
 
 

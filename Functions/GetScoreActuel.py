@@ -14,76 +14,19 @@ from Functions.GetJeuActuel import GetJeuActuel
 from Functions.GetSetActuel import GetSetActuel
 
 
-# from ChromeDriver.SetDriver1 import driver
-def GetSofaScoreActuel(driver):
-    # Premièrement, tenter de récupérer le score depuis un onglet SofaScore déjà ouvert.
-    if hasattr(config, 'sofascore_tab_handle') and config.sofascore_tab_handle:
-        print(f"Vérification de l'onglet SofaScore déjà ouvert: {config.sofascore_link}")
-        try:
-            try:
-                driver.switch_to.window(config.sofascore_tab_handle)
-            except Exception:
-                driver.switch_to.window(config.original_tab_handle)
-                return False
-            # Détecter un onglet SofaScore par l'URL ou le contenu (préférer le nœud sofascore_xpath)
-            try:
-                cur_url = driver.current_url or ''
-                if 'sofascore.com' in cur_url:
-                    print("Onglet SofaScore détecté via URL.")
-                else:
-                    return False
-            except Exception as e:
-                print(f"Impossible de récupérer l'URL de l'onglet: {e}")
-                driver.switch_to.window(config.original_tab_handle)
-                return False
-            root = None
-            root_text = ''
-            try:
-                # Tentative : attendre la présence du nœud exact (court timeout)
-                sofascore_xpath = '//*[@id="__next"]/main/div/div[2]/div/div[1]/div[3]/div[1]/div/div[2]/div/div/div[2]/div'
-                try:
-                    root = WebDriverWait(driver, 5).until(
-                        EC.presence_of_element_located((By.XPATH, sofascore_xpath))
-                    )
-                    root_text = root.text
-                    root_texts = re.findall(r'\d+', root_text)
-                    if len(root_texts) >= 2:
-                        score_actuel = root_texts[-2] + ':' + root_texts[-1]
-                        print(f"Score actuel récupéré depuis SofaScore: {score_actuel}")
-                        driver.switch_to.window(config.original_tab_handle)
-                        return score_actuel
-                except Exception:
-                    # nœud exact introuvable : rechercher des conteneurs candidats contenant des spans 'score'
-                    root = None
-                    root_text = ''
-            except Exception as e:
-                print(f"Erreur lors de la recherche du nœud SofaScore: {e}")
-                driver.switch_to.window(config.original_tab_handle)
-                return False
-        except Exception as e:
-            config.log(f"Erreur lors de la recherche d'onglet SofaScore: {e}", 'warning', False, 1)
-            try:
-                if config.original_tab_handle:
-                    driver.switch_to.window(config.original_tab_handle)
-            except Exception:
-                pass
+# Remplacée par Functions/SofascoreWatcher.py : lire l'onglet SofaScore depuis le
+# MÊME driver que celui qui place les paris (comme le faisait cette fonction) risquait
+# une collision de fenêtre pendant un clic de pari en cours. Le watcher utilise un
+# driver Selenium dédié, complètement indépendant.
+
 
 def GetScoreActuel(driver):
     config.score_actuel = False
     get_score = False
     tentative = 0
-    first = True
     while not get_score:
-        config.score_actuel = False #GetSofaScoreActuel(driver)
-        # Si on a déjà obtenu le score depuis SofaScore, on continue la boucle
-        if get_score:
-            if config.saved_score != config.score_actuel:
-                record_scores(driver)
-            config.saved_score = config.score_actuel
-            return True
-
         try:
-            
+
             score_teams = WebDriverWait(driver, 5).until(
                 EC.visibility_of_element_located((By.CLASS_NAME,
                                                   config.classes['score_container'][config.site_type]))
@@ -118,18 +61,122 @@ def GetScoreActuel(driver):
                 continue
 
         if config.saved_score != config.score_actuel:
-            if not first:
-                first = False
-                record_scores(driver)
-            else:
-                first = False
-                if config.scriptType not in ['15V1', '15V2']:
-                    time.sleep(2)
-                continue
+            # Enregistrer immédiatement le changement détecté (auparavant retardé
+            # d'un cycle + sleep(2) par une logique de confirmation bugguée qui
+            # ajoutait une latence de réaction inutile à chaque appel), en passant
+            # par la table partagée match_score pour rester cohérent avec les autres
+            # process qui suivent le même match (cf. _appliquer_transition).
+            _appliquer_transition(driver, config.score_actuel, source='dom')
         else:
-            get_score = True
+            # 1xBet n'a montré aucun changement, mais Sofascore a peut-être déjà le
+            # nouveau point : basculer immédiatement dessus pour ne pas rester bloqué
+            # à attendre un site qui peut mettre jusqu'à 10s à afficher un point déjà
+            # joué (cf. AUDIT_MARTINGALE_TENNIS.md §7). Choix explicite de l'utilisateur :
+            # aucun délai d'attente avant de basculer (risque assumé qu'un hint Sofascore
+            # se révèle erroné/à corriger).
+            try:
+                from Functions.SofascoreWatcher import get_score_hint
+                hint_score, hint_age = get_score_hint()
+            except Exception:
+                hint_score, hint_age = None, None
+            if hint_score is not None and hint_score != config.saved_score:
+                config.log(
+                    f"[Sofascore] 1xBet bloqué à {config.score_actuel}, "
+                    f"hint Sofascore={hint_score} (âge {hint_age:.1f}s) — tentative de bascule immédiate",
+                    'warning', False,
+                )
+                _appliquer_transition(driver, hint_score, source='sofascore_hint')
+                config.saved_score = config.score_actuel
+                return True
+            else:
+                get_score = True
         config.saved_score = config.score_actuel
     return True
+
+
+def _appliquer_transition(driver, candidat_score, source):
+    """
+    Calcule le numéro de point associé à `candidat_score` et tente de le faire
+    valider comme LA transition faisant foi via `RedisIPC.try_claim_score_update`,
+    partagée entre tous les process qui suivent ce match (15V1, 15V2, 1530A_V2...).
+
+    - Si cet appel gagne la course (premier à voir cette transition évolutive,
+      qu'elle vienne du DOM 1xBet ou du hint Sofascore) : elle est enregistrée dans
+      `config.all_scores` et le traitement (mise, etc.) peut se poursuivre normalement.
+    - Si cet appel perd (transition déjà actée par un autre process/tour précédent,
+      ou régression/duplication) : l'état local est resynchronisé sur l'état partagé
+      faisant foi, SANS dupliquer l'enregistrement ni le pari.
+    """
+    if source == 'dom':
+        GetSetActuel(driver)
+        GetJeuActuel(driver)
+    # En mode hint Sofascore, 1xBet n'a pas bougé : on réutilise le set/jeu actuel déjà
+    # connus (ils n'ont aucune raison d'avoir changé puisque le bookmaker est en retard).
+
+    numero_point = get_numero_point(candidat_score)
+    vainqueur = get_vainqueur_point_precedent(config.saved_score, candidat_score)
+
+    from Functions import RedisIPC
+    gagne, etat = RedisIPC.try_claim_score_update(
+        getattr(config, 'newmatch', ''), candidat_score, numero_point,
+        config.set_actuel, config.jeu_actuel, vainqueur, source=source,
+    )
+
+    if gagne:
+        nouveau_score = {
+            'set': config.set_actuel,
+            'jeu': config.jeu_actuel,
+            'score': candidat_score,
+            'numero_point': numero_point,
+            'vainqueur_point': vainqueur,
+        }
+        config.vainqueur_point_precedent = vainqueur
+        config.point_actuel = numero_point + 1  # +1 car le point actuel vient d'être joué
+        config.log(nouveau_score, clear=False, indent=2)
+        config.log_clear_line()
+        config.all_scores.update({len(config.all_scores): nouveau_score})
+        config.score_actuel = candidat_score
+
+        if source == 'dom':
+            # Diagnostic de latence uniquement (jamais utilisé pour décider d'un pari) :
+            # comparer le score bookmaker qu'on vient de confirmer avec le dernier score
+            # connu de Sofascore, pour objectiver le délai réel entre les deux sources.
+            try:
+                from Functions.SofascoreWatcher import get_score_hint
+                hint_score, hint_age = get_score_hint()
+                if hint_score is not None:
+                    statut = "identique" if hint_score == candidat_score else "différent"
+                    config.log(
+                        f"[Sofascore] hint={hint_score} (âge {hint_age:.1f}s) vs bookmaker={candidat_score} ({statut})",
+                        'debug', False,
+                    )
+            except Exception:
+                pass
+        else:
+            config.log(
+                f"[Sofascore] transition {candidat_score} actée en premier via hint Sofascore "
+                f"(bookmaker encore en retard)", 'warning', False,
+            )
+    elif etat is not None:
+        # Un autre process (ou ce process à un tour précédent) a déjà acté cette
+        # transition, ou celle-ci est une régression/duplication : on adopte l'état
+        # partagé faisant foi sans rien ré-enregistrer ni re-parier.
+        config.log(
+            f"[Sofascore] transition {candidat_score} déjà actée ailleurs "
+            f"(état partagé={etat['score']}), resynchronisation locale", 'debug', False,
+        )
+        config.score_actuel = etat['score']
+        config.set_actuel = etat['set_actuel']
+        config.jeu_actuel = etat['jeu_actuel']
+        config.vainqueur_point_precedent = etat['vainqueur_point']
+        config.point_actuel = int(etat['numero_point']) + 1
+    else:
+        # etat est None uniquement en cas d'erreur RedisIPC (voir try_claim_score_update) :
+        # comportement de repli identique à l'ancien fonctionnement local, sans table
+        # partagée, pour ne jamais bloquer le bot sur une panne de la BDD de secours.
+        config.score_actuel = candidat_score
+
+    return gagne
 
 
 # Correspondance score tennis → nombre de points marqués
@@ -269,6 +316,21 @@ def record_scores(driver):
     config.log_clear_line()
     # Si le dictionnaire n'existe pas encore, l'ajouter
     config.all_scores.update({len(config.all_scores): nouveau_score})
+
+    # Diagnostic de latence uniquement (jamais utilisé pour décider d'un pari) :
+    # comparer le score bookmaker qu'on vient de confirmer avec le dernier score connu
+    # de Sofascore, pour objectiver le délai réel entre les deux sources.
+    try:
+        from Functions.SofascoreWatcher import get_score_hint
+        hint_score, hint_age = get_score_hint()
+        if hint_score is not None:
+            statut = "identique" if hint_score == config.score_actuel else "différent"
+            config.log(
+                f"[Sofascore] hint={hint_score} (âge {hint_age:.1f}s) vs bookmaker={config.score_actuel} ({statut})",
+                'debug', False,
+            )
+    except Exception:
+        pass
 
 
 def GetQTScoreActuel(driver):

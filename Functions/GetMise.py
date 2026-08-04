@@ -119,18 +119,17 @@ def GetMise(driver):
     config.log_clear_line(logline)
     return True
 
-def get_recommended_stake(cote=None, tipster=None, bankroll_id=4, target_percentage=1, recover_losses=1):
+def get_recommended_stake(cote=None, tipster=None, bankroll_id=2, target_percentage=1, recover_losses=1):
     """
-    Récupère la mise recommandée depuis l'API AuxoTracker.
-
-    Lève une exception en cas d'erreur HTTP ou de connexion. Le caller doit gérer
-    l'exception (voir appel dans `GetMise`).
+    Récupère la mise recommandée depuis l'API AuxoTracker via la route bot (/auxobot/recommended-stake).
+    Authentification par AUXOBOT_TOKEN (middleware auxobot), pas Sanctum.
+    Lève une exception en cas d'erreur. Le caller doit gérer l'exception.
     """
     cote = cote or config.cote
     tipster = tipster or config.tipster
 
     base = getattr(config, 'AUXOTRACK_API_URL', 'https://api.auxotracker.p-com.studio')
-    url = f"{base.rstrip('/')}/api/bankrolls/recommended-stake"
+    url = f"{base.rstrip('/')}/api/auxobot/recommended-stake"
 
     headers = {'Accept': 'application/json'}
     token = getattr(config, 'AUXOBOT_TOKEN', None)
@@ -138,12 +137,14 @@ def get_recommended_stake(cote=None, tipster=None, bankroll_id=4, target_percent
         headers['Authorization'] = f'Bearer {token}'
 
     params = {
-        'bankroll_id': bankroll_id,
+        'user_id': getattr(config, 'AUXOBOT_USER_ID', 3),
         'tipster': tipster,
         'target_percentage': target_percentage,
         'recover_losses': recover_losses,
         'odds': cote,
     }
+    if bankroll_id is not None:
+        params['bankroll_id'] = bankroll_id
 
     config.log("-" * 50, "info", False)
     config.log("Récupération de la mise recommandée depuis l'API", "info", False)

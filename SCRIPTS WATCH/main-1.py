@@ -76,9 +76,27 @@ command = f'open -na "Google Chrome" --args --remote-debugging-port={config.loca
 print(command)
 num_fenetre = 8
 driver = get_script_driver(num_fenetre)
+# Vérification instance unique — tuer toute instance précédente du même script
+import psutil as _psutil
+_current_pid = os.getpid()
+_script_name = os.path.basename(__file__)
+for _proc in _psutil.process_iter(['pid', 'cmdline']):
+    try:
+        if _proc.pid == _current_pid:
+            continue
+        cmdline = ' '.join(_proc.info['cmdline'] or [])
+        if _script_name in cmdline and 'python' in cmdline.lower():
+            log(f"Instance précédente détectée (PID {_proc.pid}), arrêt...", "warning", clear=False)
+            _proc.terminate()
+            try:
+                _proc.wait(timeout=5)
+            except Exception:
+                _proc.kill()
+    except Exception:
+        pass
+
 # First install telethon using: pip install telethon
 import ssl
-import os
 import urllib3
 from telethon import TelegramClient, events
 
@@ -101,12 +119,20 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Configuration globale pour requests
 import requests.adapters
+import sqlite3
+from bs4 import BeautifulSoup
 
 requests.adapters.DEFAULT_RETRIES = 3
 
 from Functions import Functions_telegram
-from Functions.getTextFromImageGPT import extraire_pari_depuis_image
+from Functions.getTextFromImageGPT import extraire_pari_depuis_image, extraire_pari_depuis_texte
 from Functions.TelegramBetsAPI import send_bet_data_to_api, is_ignored_sender
+from Functions.AdrBettingScraper import scrape_adrbetting_coupons
+from Functions.FrancePronosScraper import scrape_francepronos
+from Functions.Bookmakers.session_init import init_bookmaker_sessions
+
+# Connexion manuelle aux bookmakers au démarrage
+init_bookmaker_sessions()
 
 # Declaration d'une variable globale qui va stocker les codes de paris
 global codeList, betList
@@ -148,7 +174,6 @@ def bot_msg_handler(txt):
         Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id, "Mot a supprimer?")
     elif len(re.findall("/instapronos", txt)) == 1:
         Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id, "team1 - team2\npick\nCOTE :\nMISE :")
-        success = 1
 
 
 def add_word_to_replace(word):
@@ -215,6 +240,120 @@ def extract_code_1XBET(txt):
         return False
 
 
+# --- Vérification périodique des images publiées sur tempetebetting.com ---
+TEMPETE_BASE_URL = "https://tempetebetting.com/wp-content/uploads/{year}/{month:02d}/"
+TEMPETE_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tempete_images.db")
+TEMPETE_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+}
+
+
+def _tempete_create_db():
+    conn = sqlite3.connect(TEMPETE_DB_PATH)
+    conn.execute('''CREATE TABLE IF NOT EXISTS images (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        image_url TEXT UNIQUE,
+        added_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )''')
+    conn.commit()
+    conn.close()
+
+
+def _tempete_get_image_links(url):
+    try:
+        r = requests.get(url, headers=TEMPETE_HEADERS, timeout=15, verify=False)
+        if r.status_code != 200:
+            log(f"[Tempête] Accès échoué {url} ({r.status_code})", "warning", clear=False)
+            return []
+        soup = BeautifulSoup(r.text, 'html.parser')
+        links = [a.get('href') for a in soup.find_all('a') if a.get('href')]
+        return [l for l in links if re.match(r'.*\.(jpg|jpeg|png)$', l, re.IGNORECASE)]
+    except Exception as e:
+        log(f"[Tempête] Erreur récupération liens: {e}", "error", clear=False)
+        return []
+
+
+def _tempete_filter_originals(image_links):
+    pattern = re.compile(r'(-\d+x\d+)?\.(jpg|jpeg|png)$', re.IGNORECASE)
+    originals = set()
+    for link in image_links:
+        originals.add(pattern.sub(r'.\2', link))
+    return list(originals)
+
+
+def _tempete_store_new(image_urls):
+    conn = sqlite3.connect(TEMPETE_DB_PATH)
+    cursor = conn.cursor()
+    new = []
+    for url in image_urls:
+        try:
+            cursor.execute("INSERT INTO images (image_url) VALUES (?)", (url,))
+            new.append(url)
+        except sqlite3.IntegrityError:
+            pass
+    conn.commit()
+    conn.close()
+    return new
+
+
+def check_tempete_images():
+    import time
+    _tempete_create_db()
+    log("[Tempête] Thread de vérification des images démarré", "info", clear=False)
+    while True:
+        try:
+            now = datetime.datetime.now()
+            url = TEMPETE_BASE_URL.format(year=now.year, month=now.month)
+            links = _tempete_get_image_links(url)
+            originals = _tempete_filter_originals(links)
+            new_images = _tempete_store_new(originals)
+            if new_images:
+                log(f"[Tempête] {len(new_images)} nouvelle(s) image(s) détectée(s)", "info", clear=False)
+                for i, img_name in enumerate(new_images):
+                    if i > 0:
+                        time.sleep(3)
+                    full_url = img_name if img_name.startswith('http') else url + img_name
+                    try:
+                        r = requests.get(full_url, headers=TEMPETE_HEADERS, timeout=15, verify=False)
+                        if r.status_code != 200:
+                            log(f"[Tempête] Téléchargement échoué: {img_name} ({r.status_code})", "warning", clear=False)
+                            continue
+                        script_dir = os.path.dirname(os.path.abspath(__file__))
+                        temp_dir = os.path.join(script_dir, 'media')
+                        os.makedirs(temp_dir, exist_ok=True)
+                        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                        img_path = os.path.join(temp_dir, f"tempete_{timestamp}.jpg")
+                        with open(img_path, 'wb') as f:
+                            f.write(r.content)
+                        log(f"[Tempête] Image téléchargée: {img_name}", "info", clear=False)
+                        result = extraire_pari_depuis_image(img_path, "Tempête Betting")
+                        try:
+                            pari_dict = json.loads(result)
+                            pari_dict["tipster"] = "TEMPÊTE BETTING ®️"
+                            matches = pari_dict.get("matches", [])
+                            if matches:
+                                api_success = send_bet_data_to_api(pari_dict, message_original=full_url, sender_username="TEMPÊTE BETTING ®️")
+                                if api_success:
+                                    for match in matches:
+                                        log(f"[Tempête] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
+                                else:
+                                    log(f"[Tempête] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
+                            else:
+                                log(f"[Tempête] Aucun match extrait de {img_name}", "warning", clear=False)
+                        except json.JSONDecodeError as e:
+                            log(f"[Tempête] Erreur JSON OCR: {e}", "error", clear=False)
+                        finally:
+                            if os.path.exists(img_path):
+                                os.remove(img_path)
+                    except Exception as e:
+                        log(f"[Tempête] Erreur traitement image {img_name}: {e}", "error", clear=False)
+            else:
+                log("[Tempête] Aucune nouvelle image", "info", clear=False)
+        except Exception as e:
+            log(f"[Tempête] Erreur boucle principale: {e}", "error", clear=False)
+        time.sleep(600)  # Vérification toutes les 10 minutes
+
+
 # Patch pour aiohttp afin de desactiver la verification SSL
 original_create_connection = aiohttp.TCPConnector._create_connection
 
@@ -261,6 +400,7 @@ async def my_event_handler(event):
     success = 0  # Indicateur pour contrôler le succès du traitement
     if success == 0:
         while success == 0:
+            print('test')
             success = 1  # Passe a 1 une fois que le traitement est reussi
             # Recuperation et affichage du pseudo de l'expediteur
             sender = await event.get_sender()
@@ -304,16 +444,100 @@ async def my_event_handler(event):
                                 Functions_telegram.send_telegram(auxo_bot_id, txt + ' Supprime!')
                         except Exception as e:
                             log(f"Erreur : {e}", "error", clear=False)
+            if event.chat and hasattr(event.chat, 'title') and event.chat.title == 'AdrBetting VIP':
+                if "PRONOS EN LIGNE" not in txt.upper():
+                    log(f"[AdrBetting] Message ignoré (pas de 'PRONOS EN LIGNE')", "info", clear=False)
+                    return
+                log(f"[AdrBetting] Message reçu du canal VIP — lancement du scraping", "info", clear=False)
+                # Lancer le scraping dans un thread séparé pour ne pas bloquer l'event loop Telegram
+                def _run_adrbetting_scrape():
+                    try:
+                        coupons = scrape_adrbetting_coupons()  # List[tuple(filepath, tipster)]
+                        if not coupons:
+                            log("[AdrBetting] Aucun coupon récupéré", "warning", clear=False)
+                            return
+                        log(f"[AdrBetting] {len(coupons)} coupon(s) récupéré(s), lancement OCR...", "info", clear=False)
+                        for img_path, tipster in coupons:
+                            try:
+                                log(f"[AdrBetting] OCR [{tipster}]: {os.path.basename(img_path)}", "info", clear=False)
+                                result = extraire_pari_depuis_image(img_path, txt)
+                                pari_dict = json.loads(result)
+                                pari_dict["tipster"] = tipster
+                                matches = pari_dict.get("matches", [])
+                                if matches:
+                                    api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=tipster)
+                                    if api_success:
+                                        for match in matches:
+                                            log(f"[AdrBetting] ✅ [{tipster}] Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
+                                    else:
+                                        log(f"[AdrBetting] ❌ [{tipster}] Échec envoi pari ({len(matches)} match(s))", "error", clear=False)
+                                if os.path.exists(img_path):
+                                    os.remove(img_path)
+                            except json.JSONDecodeError as e:
+                                log(f"[AdrBetting] Erreur JSON OCR [{tipster}]: {e}", "error", clear=False)
+                            except Exception as e:
+                                log(f"[AdrBetting] Erreur traitement coupon {img_path}: {e}", "error", clear=False)
+                    except Exception as e:
+                        log(f"[AdrBetting] Erreur scraping: {e}", "error", clear=False)
+
+                scrape_thread = threading.Thread(target=_run_adrbetting_scrape, daemon=True)
+                scrape_thread.start()
+                return  # Ne pas traiter le message Telegram normalement
+
+            if event.chat and hasattr(event.chat, 'title') and event.chat.title == 'France Pronos':
+                if "www.france-pronos.com/?source=telegram" not in txt.lower():
+                    log("[FrancePronos] Message ignoré (pas de lien france-pronos.com)", "info", clear=False)
+                    return
+                log("[FrancePronos] Message reçu — lancement du scraping", "info", clear=False)
+                def _run_francepronos_scrape():
+                    try:
+                        pronos = scrape_francepronos()
+                        if not pronos:
+                            log("[FrancePronos] Aucun pronostic récupéré", "warning", clear=False)
+                            return
+                        log(f"[FrancePronos] {len(pronos)} pronostic(s) récupéré(s), passage à l'IA...", "info", clear=False)
+                        for raw in pronos:
+                            try:
+                                # Formatter le texte brut pour l'IA
+                                texte = (
+                                    f"Sport: {raw.get('sport', '')}\n"
+                                    f"Date: {raw.get('date', '')}\n"
+                                    f"Match: {raw.get('intitule', raw.get('equipe_1','') + ' vs ' + raw.get('equipe_2',''))}\n"
+                                    f"Équipe 1: {raw.get('equipe_1', '')}\n"
+                                    f"Équipe 2: {raw.get('equipe_2', '')}\n"
+                                    f"Sélection: {raw.get('selection', '')}\n"
+                                    f"Cote: {raw.get('odds', '')}\n"
+                                    f"Tipster: FrancePronos"
+                                )
+                                result = extraire_pari_depuis_texte(texte, txt)
+                                pari_dict = json.loads(result)
+                                pari_dict["tipster"] = "FrancePronos"
+                                matches = pari_dict.get("matches", [])
+                                if matches:
+                                    api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username="FrancePronos")
+                                    if api_success:
+                                        for match in matches:
+                                            log(f"[FrancePronos] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
+                                    else:
+                                        log(f"[FrancePronos] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
+                            except json.JSONDecodeError as e:
+                                log(f"[FrancePronos] Erreur JSON IA: {e}", "error", clear=False)
+                            except Exception as e:
+                                log(f"[FrancePronos] Erreur traitement prono: {e}", "error", clear=False)
+                    except Exception as e:
+                        log(f"[FrancePronos] Erreur scraping: {e}", "error", clear=False)
+                scrape_thread = threading.Thread(target=_run_francepronos_scrape, daemon=True)
+                scrape_thread.start()
+                return  # Ne pas traiter le message Telegram normalement
             if sender or event.chat_id:
-                sender_username = sender.username if sender and sender.username else None
-                if is_ignored_sender(sender.username, event.chat_id):
+                if is_ignored_sender(sender.username if sender else None, event.chat_id):
                     log("Expediteur ignore, message ignore", "warning", clear=True)
                     return  # Ignorer le message si l'expediteur est dans la liste d'ignorés
                 # Affiche le nom d'utilisateur s'il existe, sinon le nom complet
                 if sender.username:
                     log(f'Pseudo de l\'expediteur: {sender.username}', "info", clear=False)
                 else:
-                    log(f'Channel ID: {event.chat_id} - {event.chat.title if hasattr(event.chat, "title") else "N/A"}',
+                    log(f'Channel ID: {event.chat_id} - {event.chat.title if event.chat and hasattr(event.chat, "title") else "N/A"}',
                         "info", clear=False)
                 # Chaque fois qu'un nouveau message est reçu, cette fonction est declenchee
                 log('Nouvel evenement detecte')
@@ -322,13 +546,42 @@ async def my_event_handler(event):
                 # Check if message contains media/image
                 has_media = event.message.media is not None
                 log(f'Message contains media: {has_media}', "info", clear=False)
+
+                # Canaux autorisés à envoyer des images de pronos + condition textuelle éventuelle
+                # None = pas de condition (toute image est traitée sauf GIF)
+                IMAGE_CHANNELS = {
+                    "AdrBetting":        "TICKET SAFE PUBLIC",
+                    "Tennistiquer":      "CONFIANCE DU JOUR",
+                    "TEMPÊTE BETTING ®️":   None,
+                    "France Pronos Live": None,
+                    "Auxo1XBOT": None
+                }
+
+                chat_title = event.chat.title if event.chat and hasattr(event.chat, "title") else ""
+
                 codes = extract_code_1XBET(event.raw_text)
                 if codes and isinstance(codes, list):
                     for code in codes:
                         codeList.append(code)
-                # Download media if present
+                # Download media if present and canal autorisé
                 elif has_media:
-                    # try:
+                    # Vérifier si le canal est dans la whitelist
+                    required_text = IMAGE_CHANNELS.get(chat_title, "NOT_ALLOWED")
+                    if required_text == "NOT_ALLOWED":
+                        log(f"[Image] Canal '{chat_title}' non autorisé, image ignorée", "info", clear=False)
+                        return
+                    # Vérifier la condition textuelle si elle existe
+                    if required_text is not None and required_text.upper() not in txt.upper():
+                        log(f"[Image] [{chat_title}] Image ignorée (condition '{required_text}' absente du message)", "info", clear=False)
+                        return
+                    # Ignorer les GIFs
+                    from telethon.tl.types import MessageMediaDocument
+                    if isinstance(event.message.media, MessageMediaDocument):
+                        doc = event.message.media.document
+                        if any(getattr(attr, 'mime_type', '') == 'image/gif' or str(type(attr).__name__) == 'DocumentAttributeAnimated' for attr in (doc.attributes or [])):
+                            log(f"[Image] [{chat_title}] GIF ignoré", "info", clear=False)
+                            return
+                    log(f"[Image] [{chat_title}] Traitement image autorisé", "info", clear=False)
                     if has_media:
                         # Create unique filename using timestamp
                         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -345,7 +598,15 @@ async def my_event_handler(event):
                         await event.message.download_media(file=image_path)
                         log(f"Media downloaded successfully as {image_path}", "info", clear=False)
                         # Process the image
-                        result = extraire_pari_depuis_image(image_path, '')
+                        result = extraire_pari_depuis_image(image_path, txt)
+                        try:
+                            pari_dict = json.loads(result)
+                            pari_dict["tipster"] = chat_title
+                            matches = pari_dict.get("matches", [])
+                            if matches:
+                                send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title)
+                        except Exception as _e:
+                            log(f"[Image] [{chat_title}] Erreur traitement OCR: {_e}", "error", clear=False)
                         # Delete the downloaded image file
                         print("Attempting to delete the image file...")
                         # try:
@@ -384,49 +645,6 @@ async def my_event_handler(event):
                             log(f"Impossible de supprimer le repertoire temporaire: {e}", "error", clear=False)
                         # Revenir au repertoire original
                         os.chdir(original_cwd)
-                        # Convertir le resultat JSON en dictionnaire et l'ajouter a codeList
-                        try:
-                            pari_dict = json.loads(result)
-                            pari_dict["tipster"] = sender.username if sender and sender.username else event.chat.title
-                            #betList.append(pari_dict)
-                            #log(f"Pari ajoute a betList: {pari_dict}", "info", clear=False)
-
-                            # Envoyer le pari a l'API
-                            try:
-                                sender_username = sender.username if sender and sender.username else None
-                                api_success = False
-                                # Support pour deux formats de pari :
-                                # 1) dictionnaire plat avec 'equipe_1','equipe_2','selection'
-                                # 2) dictionnaire contenant 'matches' : [ { ... } ]
-                                send_dict = pari_dict.copy()
-                                # Si le format plat manque des clés, tenter d'extraire depuis 'matches'
-                                if not (send_dict.get("equipe_1") and send_dict.get("equipe_2") and send_dict.get("selection")):
-                                    matches = pari_dict.get("matches")
-                                    if isinstance(matches, list) and len(matches) > 0 and isinstance(matches[0], dict):
-                                        first = matches[0]
-                                        # Promouvoir quelques champs courants du premier match
-                                        for k in ("equipe_1", "equipe_2", "selection", "odds", "date", "sport", "intitule"):
-                                            if k in first and not send_dict.get(k):
-                                                send_dict[k] = first[k]
-
-                                if send_dict.get("equipe_1") and send_dict.get("equipe_2") and send_dict.get("selection"):
-                                    api_success = send_bet_data_to_api(
-                                        send_dict,
-                                        message_original=event.raw_text,
-                                        sender_username=sender_username
-                                    )
-                                else:
-                                    log(f"Conditions non remplies pour l'envoi du pari: {pari_dict}", "info", clear=False)
-                                if api_success:
-                                    log(f"Pari envoye avec succès a l'API", "info", clear=False)
-                                else:
-                                    log(f"echec de l'envoi du pari a l'API", "error", clear=False)
-                            except Exception as api_error:
-                                log(f"Erreur lors de l'envoi a l'API: {api_error}", "error", clear=False)
-
-                        except json.JSONDecodeError as e:
-                            log(f"Erreur lors de la conversion JSON: {e}", "error", clear=False)
-                            log(f"Resultat brut: {result}", "info", clear=False)
                     # except Exception as e:
                     # log(f"Error downloading media: {e}", "error", clear=False)
 
@@ -437,14 +655,23 @@ async def my_event_handler(event):
 
 
 # Demarrage du client Telegram
-client.start()
+import time as _time
+for _attempt in range(5):
+    try:
+        client.start()
+        break
+    except Exception as _e:
+        if "database is locked" in str(_e).lower() and _attempt < 4:
+            log(f"Session SQLite verrouillée, attente... ({_attempt+1}/5)", "warning", clear=False)
+            _time.sleep(3)
+        else:
+            raise
 
 config.scriptType = 'LIVE'
 
 
 # Fonction de verification des nouveaux codes et envoi
 def check():
-    from Functions.ProcessTelegramBets import process_api_bets
     import time
 
     last_api_check = 0
@@ -479,23 +706,26 @@ def check():
             #try:
             if current_time:
                 #log("Verification des paris non traites dans l'API...", "info", clear=False)
-                processed_count = process_api_bets(driver, limit=5)
-                if processed_count > 0:
-                    log(f"Traite {processed_count} paris depuis l'API", "info", clear=False)
-                else:
-                    log_clear_line()
+                #processed_count = process_api_bets(driver, limit=5)
+                #if processed_count > 0:
+                    #log(f"Traite {processed_count} paris depuis l'API", "info", clear=False)
+                #else:
+                    #log_clear_line()
                 last_api_check = current_time
             #except Exception as e:
             #    log(f"Erreur lors du traitement des paris API: {e}", "error", clear=False)
 
         # Petite pause pour eviter une boucle trop intensive
         time.sleep(10)
-        print("...")  # Affiche des points pour indiquer que le bot est actif et en attente de nouveaux messages/paris
 
 
 # Lancement d'un thread pour verifier les messages en continu
 confirmThread = threading.Thread(target=check)
 confirmThread.start()
+
+# Thread de vérification des images publiées sur tempetebetting.com
+tempeteThread = threading.Thread(target=check_tempete_images, daemon=True)
+tempeteThread.start()
 
 # Indique que le bot est demarre
 Functions_telegram.send_telegram(auxo_bot_id, "Bot 1XBET Demarre")
