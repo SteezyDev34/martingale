@@ -1,3 +1,8 @@
+# PROTOTYPE ABANDONNÉ — jamais importé par aucun code actif (le gestionnaire
+# de matchs réellement utilisé est Functions/Managers/MatchManager.py, un
+# module distinct). Conservé pour référence uniquement, cf. base.py du même
+# dossier pour le contexte complet.
+
 import os
 import json
 from typing import Optional, List

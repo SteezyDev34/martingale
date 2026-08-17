@@ -3,6 +3,23 @@
 
 """
 Module de base pour les stratégies de martingale
+
+PROTOTYPE ABANDONNÉ — jamais importé par aucun code actif (vérifié via
+AUDIT_MARTINGALE_TENNIS.md). Conservé volontairement comme référence/
+inspiration pour deux chantiers en cours sur le code procédural réel
+(Functions_431a.py/Functions_15V1.py) :
+  - ScriptConfig/Martingale unifient déjà la config par script_type — piste
+    pour la fusion de la logique dupliquée entre scripts.
+  - get_mise()/_get_mise_max() récupèrent déjà `misemax` dans etat_jeu, sans
+    jamais l'utiliser comme plafond — piste pour le plafond dur de mise, mais
+    la lacune (misemax jamais appliqué) existe ici aussi, pas juste ailleurs.
+
+Ne PAS tenter de terminer/utiliser cette classe telle quelle : get_bet()
+délègue à _get_bet_new(), qui est un stub non implémenté (`return False`,
+"Méthode get_bet en cours d'implémentation") — c'est la partie la plus
+complexe et la plus fragile du bot (sélection du bon marché sur la page),
+déjà résolue et fonctionnelle dans le code procédural en prod. La terminer
+ici reviendrait à dupliquer ce travail sans gain fonctionnel.
 """
 
 import sys

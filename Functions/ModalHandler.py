@@ -3,6 +3,7 @@ import re
 import sys
 import time
 
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -35,10 +36,13 @@ def ModalHandler(driver, close=True):
                     (By.CLASS_NAME,
                      config.classes['modal_header'][config.site_type]))
             )  ###vérifaction d'affichage pop up validation
-        except:
+        except TimeoutException:
             modal_class = config.classes['modal_header'][config.site_type]
             config.log(f'pas de fenetre de validation {modal_class}', 'warning',
                        False, indent=3)
+            logline += 1
+        except Exception as e:
+            config.log(f'Erreur inattendue en attendant la fenêtre de validation: {e}', 'error', False, indent=3)
             logline += 1
 
         else:
@@ -59,8 +63,11 @@ def ModalHandler(driver, close=True):
                     )
                     modal_wrapper = \
                         driver.find_elements(By.CLASS_NAME, config.classes['close_modal_btn'][config.site_type])[0]
-                except:
+                except TimeoutException:
                     config.log(f'            Impossible de cliquer sur Ok', 'warning', False)
+                    logline += 1
+                except Exception as e:
+                    config.log(f'Erreur inattendue en cherchant le bouton Ok: {e}', 'error', False)
                     logline += 1
                 else:
                     time.sleep(2)
@@ -74,8 +81,11 @@ def ModalHandler(driver, close=True):
         try:
             element = WebDriverWait(driver, 1).until(EC.visibility_of_element_located(
                 (By.CLASS_NAME, config.classes['notification_question'][config.site_type])))
-        except:
+        except TimeoutException:
             config.log('pas de fenetre de question', 'warning', False, indent=3)
+            logline += 1
+        except Exception as e:
+            config.log(f'Erreur inattendue en attendant la fenêtre de question: {e}', 'error', False, indent=3)
             logline += 1
         else:
             if len(re.findall("Maximum",
@@ -115,8 +125,11 @@ def ModalHandler(driver, close=True):
         try:
             element = WebDriverWait(driver, 1).until(EC.visibility_of_element_located(
                 (By.CLASS_NAME, config.classes['notification_alert'][config.site_type])))
-        except:
+        except TimeoutException:
             config.log('pas de fenetre de notif', 'warning', False, indent=3)
+            logline += 1
+        except Exception as e:
+            config.log(f'Erreur inattendue en attendant la fenêtre de notif: {e}', 'error', False, indent=3)
             logline += 1
         else:
             if len(re.findall("Maximum",
@@ -165,8 +178,11 @@ def ModalHandler(driver, close=True):
                     (By.CLASS_NAME,
                      config.classes['modal_header'][config.site_type]))
             )  ###vérifaction d'affichage pop up validation
-        except:
+        except TimeoutException:
             config.log('pas de fenetre de validation', 'warning', False, indent=3)
+            logline += 1
+        except Exception as e:
+            config.log(f'Erreur inattendue en attendant la fenêtre de validation: {e}', 'error', False, indent=3)
             logline += 1
 
         else:
@@ -187,8 +203,11 @@ def ModalHandler(driver, close=True):
                     )
                     modal_wrapper = \
                         driver.find_elements(By.CLASS_NAME, config.classes['close_modal_btn'][config.site_type])[0]
-                except:
+                except TimeoutException:
                     config.log(f'Impossible de cliquer sur Ok', 'warning', False, indent=3)
+                    logline += 1
+                except Exception as e:
+                    config.log(f'Erreur inattendue en cherchant le bouton Ok: {e}', 'error', False, indent=3)
                     logline += 1
                 else:
 

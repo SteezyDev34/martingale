@@ -28,7 +28,7 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
             theset = "1er"
         else:
             theset = str(config.set_actuel) + "ème"
-        if config.scriptType == '1SET' or config.scriptType == 'BREAK':
+        if config.scriptType == '1SET' or config.scriptType == 'BREAK' or config.scriptType == 'HOLD':
             args = ' set'
         else:
             args = ' set Evénements rapides'
@@ -39,7 +39,7 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
             key = 'Nombre exact de points dans un jeu'
         elif config.scriptType == '1SET':
             key = '1X2'
-        elif config.scriptType == 'BREAK':
+        elif config.scriptType == 'BREAK' or config.scriptType == 'HOLD':
             key = 'Gagne dans le jeu'
         elif config.scriptType == '015' or config.scriptType == '150' or config.scriptType == '15V1' or config.scriptType == '15V2':
             key = 'Point. ' + theset + args
@@ -227,7 +227,7 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
             theset = "1er set"
         else:
             theset = str(config.set_actuel) + "ème set"
-        if config.scriptType == '1SET' or config.scriptType == 'BREAK':
+        if config.scriptType == '1SET' or config.scriptType == 'BREAK' or config.scriptType == 'HOLD':
             args = ''
         else:
             args = 'Evénements rapides'
@@ -237,7 +237,7 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
             key = 'Nombre exact de points dans un jeu'
         elif config.scriptType == '1SET':
             key = '1X2'
-        elif config.scriptType == 'BREAK':
+        elif config.scriptType == 'BREAK' or config.scriptType == 'HOLD':
             key = 'Gagne dans le jeu'
         elif config.scriptType == '015' or config.scriptType == '150' or config.scriptType == '15V1' or config.scriptType == '15V2':
             key = f'Point. {theset} {args}'
@@ -279,7 +279,7 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
 
                     else:
                         if config.site_type == 'mobile_site':
-                            if config.scriptType in ['1SET', 'BREAK']:
+                            if config.scriptType in ['1SET', 'BREAK', 'HOLD']:
                                 the_text = f'{theset}'.lower()
                                 matching_text = select_option_text.strip().lower() == the_text
                             elif config.scriptType in ['LIVE']:

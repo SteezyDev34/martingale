@@ -7,7 +7,7 @@ L'architecture V2 remplace les fonctions monolithiques `Functions_15V1.py` et
 en trois couches :
 
 ```
-SCRIPTS 1530A_V2/1530A_V2-1.py     ← script de lancement
+SCRIPTS_1530A_V2/1530A_V2-1.py     ← script de lancement
         │
         └── core/martingale/all_script_v2.py   ← boucle principale découpée
                 │
@@ -43,7 +43,7 @@ core/
     ├── script_types.py     ← BaseScript, 10 sous-classes, ScriptFactory
     └── all_script_v2.py    ← boucle principale refactorisée
 
-SCRIPTS 1530A_V2/
+SCRIPTS_1530A_V2/
 └── 1530A_V2-1.py           ← script de lancement (15A + 30A + 300)
 
 Functions/
@@ -424,7 +424,7 @@ def _log_tous_objectifs(scripts):
 
 ---
 
-## `SCRIPTS 1530A_V2/1530A_V2-1.py` — Script de lancement
+## `SCRIPTS_1530A_V2/1530A_V2-1.py` — Script de lancement
 
 ### Détection automatique du type et numéro
 
@@ -570,8 +570,8 @@ L'architecture V2 est **100% additive** :
 - `Functions_431a.py` → non modifié
 - `Functions_456P.py` → non modifié
 
-Les anciens scripts (`SCRIPTS 15V1/`, `SCRIPTS 31A/`, etc.) continuent de
-fonctionner exactement comme avant. Seuls les scripts dans `SCRIPTS 1530A_V2/`
+Les anciens scripts (`SCRIPTS_15V1/`, `SCRIPTS 31A/`, etc.) continuent de
+fonctionner exactement comme avant. Seuls les scripts dans `SCRIPTS_1530A_V2/`
 utilisent la nouvelle architecture.
 
 Les clés Redis `PERTE_<SCRIPT>` sont maintenues en synchronisation dans

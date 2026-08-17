@@ -8,7 +8,7 @@ Utilise la nouvelle boucle all_script_v2() avec BaseScript / ScriptFactory.
 Aucun fichier existant n'a été modifié.
 
 Lancement :
-    python "SCRIPTS 1530A_V2/1530A_V2-1.py"
+    python "SCRIPTS_1530A_V2/1530A_V2-1.py"
 """
 
 import os

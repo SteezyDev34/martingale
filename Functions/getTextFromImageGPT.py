@@ -93,7 +93,10 @@ else:
             f"La clé API Claude n'est pas définie.\n"
             f"Ajoute ANTHROPIC_API_KEY=sk-ant-... dans {project_root}/.env"
         )
-    client = _anthropic.Anthropic(api_key=api_key)
+    # timeout explicite : sans ça, un appel bloqué peut geler tout un thread
+    # appelant (ex: le thread Tempête Betting de watch_server.py) pendant la
+    # durée par défaut du SDK (plusieurs minutes), sans jamais lever d'erreur.
+    client = _anthropic.Anthropic(api_key=api_key, timeout=60.0)
     MODEL_NAME = CLAUDE_DEFAULT_MODEL
     PROVIDER = 'claude'
 

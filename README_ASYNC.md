@@ -12,7 +12,7 @@ Version asynchrone de la fonction `GetScoreActuel` qui permet :
 - Exécution non-bloquante
 - Contrôle de démarrage/arrêt de la surveillance
 
-### 2. `SCRIPTS 4315A/4315A-1-async.py`
+### 2. `SCRIPTS_4315A/4315A-1-async.py`
 Version modifiée du script principal `4315A-1.py` avec intégration asynchrone :
 - Exécution parallèle de la surveillance et du script principal
 - Gestion asynchrone des tâches
@@ -52,7 +52,7 @@ asyncio.run(main())
 
 ```python
 # Utiliser directement le script modifié
-python3 "SCRIPTS 4315A/4315A-1-async.py"
+python3 "SCRIPTS_4315A/4315A-1-async.py"
 ```
 
 ### Fonctions principales

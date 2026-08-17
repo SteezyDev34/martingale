@@ -7,7 +7,7 @@ Date de l'audit : 2026-07-27
 Le dépôt contient **deux implémentations parallèles et non connectées** de la même stratégie :
 
 1. **L'architecture OOP moderne** (`main.py`, `core/engine.py`, `core/martingale/base.py`, `core/surveillance/surveillance_matchs.py`, `core/file_paris/file_paris.py`, `core/config/config_manager.py`, `core/martingale/martingale_300.py`, etc.) — orientée objet, avec docstrings soignées, gestion async, abstraction `Martingale(ABC)`.
-2. **L'architecture procédurale historique**, pilotée par un module d'état global unique `config.py` (689 lignes de variables globales mutables) et une boucle `Functions_431a.all_script(driver)` / `Functions_15V1.all_script(driver)` appelée depuis les scripts `SCRIPTS 15V1/15V1-1.py`, `SCRIPTS 15V2/15V2-1.py`, `SCRIPTS 1530A_V2/1530A_V2-1.py`.
+2. **L'architecture procédurale historique**, pilotée par un module d'état global unique `config.py` (689 lignes de variables globales mutables) et une boucle `Functions_431a.all_script(driver)` / `Functions_15V1.all_script(driver)` appelée depuis les scripts `SCRIPTS_15V1/15V1-1.py`, `SCRIPTS_15V2/15V2-1.py`, `SCRIPTS_1530A_V2/1530A_V2-1.py`.
 
 **Preuve que l'architecture OOP est morte/non fonctionnelle** :
 - `main.py:13-21` importe `core.config.config_manager`, `core.martingale.martingale_300`, `core.martingale.martingale_15a`, `core.martingale.martingale_30a`, `core.notification.notification_manager`, `core.interface.interface_utilisateur` — mais `core/martingale/` ne contient **aucun** fichier `martingale_300.py`, `martingale_15a.py`, ni `martingale_30a.py` (seulement `all_script_v2.py`, `base.py`, `match_manager.py`, `script_types.py`). `main.py` est donc **cassé et n'a jamais tourné dans cet état** (`ImportError` garanti dès le premier import).
@@ -25,7 +25,7 @@ Il existe en plus un **troisième sous-système** indépendant : `Functions/Book
 ## 1. Architecture générale (flux réellement actif)
 
 ```
-SCRIPTS 15V1/15V1-1.py (point d'entrée process)
+SCRIPTS_15V1/15V1-1.py (point d'entrée process)
   └─ config.scriptType/script_num déduits du nom de fichier
   └─ ChromeDriver/SetDriver.get_script_driver()  → attache Selenium à Chrome (remote debugging)
   └─ boucle "while config.win < 100":

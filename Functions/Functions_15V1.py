@@ -24,6 +24,55 @@ from Functions.VerificationMatchTrouve import newmatchFromUrl
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
+def _dernier_numero_point() -> int | None:
+    """
+    Lit le numéro du dernier point enregistré dans config.all_scores (dict ou
+    liste selon le contexte d'appel). Retourne None si aucun score enregistré
+    ou en cas d'erreur.
+    """
+    try:
+        if not config.all_scores:
+            return None
+        if isinstance(config.all_scores, dict):
+            vals = list(config.all_scores.values())
+            if not vals:
+                return None
+            last = vals[-1]
+        else:
+            last = config.all_scores[-1]
+        return int(last['numero_point'])
+    except Exception:
+        return None
+
+
+def _attendre_point_valide_15v(driver):
+    """
+    Pour 15V1/15V2 : attend que le dernier point enregistré (config.all_scores)
+    corresponde au point sur lequel le pari a été validé (numero_point - 1),
+    avant de laisser la boucle principale continuer. Factorisée : cette même
+    logique était copiée-collée 4 fois à l'identique dans ce fichier
+    (cf. AUDIT_MARTINGALE_TENNIS.md §2 sur la duplication de code).
+    """
+    target = None
+    try:
+        target = int(config.validated_bet['numero_point']) - 1
+    except Exception:
+        target = None
+
+    config.log(f'Attente du point {target} pour valider le pari', 'info', indent=3)
+    while not config.error:
+        last = _dernier_numero_point()
+        config.log(f'Last point: {last}, Target point: {target}', 'debug', indent=4)
+        if config.score_actuel == "0:0":
+            break
+        if last is None or target is None:
+            break
+        if last >= target:
+            break
+        GetScoreActuel(driver)
+        time.sleep(0.1)
+
+
 def all_script(driver):
     GetIfNewSite(driver)
     # Nettoyer le script inactif
@@ -188,6 +237,11 @@ def all_script(driver):
             all_below_one = all(
                 float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
                 config.scriptTypeList)
+            # Calcul manquant à cet endroit avant ce fix : total_gain était référencé
+            # ligne suivante sans jamais être défini dans ce bloc (NameError garanti
+            # si la branche était atteinte) — cf. AUDIT_MARTINGALE_TENNIS.md, calcul
+            # identique à celui déjà fait plus loin dans ce même fichier.
+            total_gain = RedisIPC.get_total_gain(config.newmatch) - RedisIPC.get_total_loss(config.newmatch)
             if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
                 for st in config.scriptTypeList:
                     config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
@@ -211,7 +265,11 @@ def all_script(driver):
             ##PREPARATTION PREMIER PARIS
             FirstGameBet(driver)
             if not config.validated_bet:
-                allfirstgamebet: False
+                # Bug corrigé : "allfirstgamebet: False" était une annotation de type
+                # (aucun effet), pas une affectation — il manquait le "=". Sans ce fix,
+                # la boucle "while not allfirstgamebet" pouvait sortir prématurément
+                # alors qu'un pari restait à valider.
+                allfirstgamebet = False
     passageset = False
     while not config.error:
         GetJeuActuel(driver)
@@ -277,10 +335,15 @@ def all_script(driver):
                                 RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
                             config.wantwin =0.2
                             # Récupération de perte cross-script via Redis si disponible
-                            
-                            if config.perte == 0 and loss == 0:
+                            # Bug corrigé : "loss" n'était défini nulle part dans ce fichier
+                            # (NameError garanti dès cette branche atteinte). config.perte
+                            # vient d'être forcé à 0 juste au-dessus, donc la condition
+                            # "config.perte == 0" est ici toujours vraie de toute façon —
+                            # aligné sur le même bloc de Functions_431a.py qui appelle ces
+                            # deux fonctions sans condition supplémentaire.
+                            if config.perte == 0:
                                 getGlobalPerte()
-                            if config.perte == 0 and loss == 0:
+                            if config.perte == 0:
                                 get1setGlobalPerte()
                             if config.perte == 0:
                                 # Récupération de perte cross-script via Redis si disponible
@@ -439,50 +502,7 @@ def all_script(driver):
                 break
             else:
                 if config.scriptType in ['15V1', '15V2']:
-                    def _last_numero_point():
-                        try:
-                            local = None
-                            if config.all_scores:
-                                if isinstance(config.all_scores, dict):
-                                    vals = list(config.all_scores.values())
-                                    if vals:
-                                        local = int(vals[-1]['numero_point'])
-                                else:
-                                    local = int(config.all_scores[-1]['numero_point'])
-                            # Lire aussi l'état partagé Redis pour avoir le vrai dernier point
-                            try:
-                                from Functions import RedisIPC
-                                shared = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
-                                if shared and shared.get('numero_point') is not None:
-                                    shared_val = int(shared['numero_point'])
-                                    return max(local, shared_val) if local is not None else shared_val
-                            except Exception:
-                                pass
-                            return local
-                        except Exception:
-                            return None
-
-                    target = None
-                    try:
-                        target = int(config.validated_bet['numero_point']) - 1
-                    except Exception:
-                        target = None
-
-                    # attendre que le dernier score enregistré corresponde au point attendu
-                    config.log(f'Attente du point {target} pour valider le pari', 'info', indent=3)
-                    while not config.error:
-                        last = _last_numero_point()
-                        config.log(f'Last point: {last}, Target point: {target}', 'debug', indent=4)
-                        if config.score_actuel == "0:0":
-                            break
-                        if last is None or target is None:
-                            break
-                        if last >= target:
-                            break
-                        
-                        GetScoreActuel(driver)
-                        time.sleep(0.1)
-                
+                    _attendre_point_valide_15v(driver)
                 GetAndPlaceBet(driver)
                 print('GetAndPlaceBet')
                 print(config.global_match_win)
@@ -527,47 +547,7 @@ def all_script(driver):
                             if ValidationDuParis(driver, True):                           # essayer de valider le pari sur le site
                                 validate_bet = True                                       # pari validé, on sortira de la boucle while
                                 if config.scriptType in ['15V1', '15V2']:
-                                    def _last_numero_point():
-                                        try:
-                                            local = None
-                                            if config.all_scores:
-                                                if isinstance(config.all_scores, dict):
-                                                    vals = list(config.all_scores.values())
-                                                    if vals:
-                                                        local = int(vals[-1]['numero_point'])
-                                                else:
-                                                    local = int(config.all_scores[-1]['numero_point'])
-                                            try:
-                                                from Functions import RedisIPC
-                                                shared = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
-                                                if shared and shared.get('numero_point') is not None:
-                                                    shared_val = int(shared['numero_point'])
-                                                    return max(local, shared_val) if local is not None else shared_val
-                                            except Exception:
-                                                pass
-                                            return local
-                                        except Exception:
-                                            return None
-
-                                    target = None
-                                    try:
-                                        target = int(config.validated_bet['numero_point']) - 1  # le point cible = point parié - 1 (le point juste avant)
-                                    except Exception:
-                                        target = None                                    # si le champ est absent, pas de cible définie
-
-                                    config.log(f'Attente du point {target} pour valider le pari', 'info', indent=3)
-                                    while not config.error:                              # boucle d'attente : on tourne jusqu'à ce que le point cible soit atteint
-                                        last = _last_numero_point()                      # lire le dernier point enregistré
-                                        config.log(f'Last point: {last}, Target point: {target}', 'debug', indent=4)
-                                        if config.score_actuel == "0:0":                # nouveau jeu commencé (score remis à 0) → inutile d'attendre
-                                            break
-                                        if last is None or target is None:              # données manquantes → impossible d'attendre, on sort
-                                            break
-                                        if last >= target:                              # le point cible est atteint ou dépassé → on peut continuer
-                                            break
-                                        GetScoreActuel(driver)                          # mettre à jour le score en direct
-                                        time.sleep(0.1)                                 # courte pause pour ne pas surcharger le driver
-                        else:
+                                    _attendre_point_valide_15v(driver)                        else:
                             if config.scriptType in ['15V1', '15V2']:
                                 continue
                             config.log('validation du paris impossible, tentative firstgamebet ' + str(tentative), config.newmatch)
@@ -661,49 +641,7 @@ def all_script(driver):
                             if ValidationDuParis(driver, True):
                                 validate_bet = True
                                 if config.scriptType in ['15V1', '15V2']:
-                                    def _last_numero_point():
-                                        try:
-                                            local = None
-                                            if config.all_scores:
-                                                if isinstance(config.all_scores, dict):
-                                                    vals = list(config.all_scores.values())
-                                                    if vals:
-                                                        local = int(vals[-1]['numero_point'])
-                                                else:
-                                                    local = int(config.all_scores[-1]['numero_point'])
-                                            try:
-                                                from Functions import RedisIPC
-                                                shared = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
-                                                if shared and shared.get('numero_point') is not None:
-                                                    shared_val = int(shared['numero_point'])
-                                                    return max(local, shared_val) if local is not None else shared_val
-                                            except Exception:
-                                                pass
-                                            return local
-                                        except Exception:
-                                            return None
-
-                                    target = None
-                                    try:
-                                        target = int(config.validated_bet['numero_point']) - 1
-                                    except Exception:
-                                        target = None
-
-                                    # attendre que le dernier score enregistré corresponde au point attendu
-                                    config.log(f'Attente du point {target} pour valider le pari', 'info', indent=3)
-                                    while not config.error:
-                                        last = _last_numero_point()
-                                        config.log(f'Last point: {last}, Target point: {target}', 'debug', indent=4)
-                                        if config.score_actuel == "0:0":
-                                            break
-                                        if last is None or target is None:
-                                            break
-                                        if last >= target:
-                                            break
-                                        
-                                        GetScoreActuel(driver)
-                                        time.sleep(0.1)
-                            else:
+                                    _attendre_point_valide_15v(driver)                            else:
                                 if config.scriptType in ['15V1', '15V2']:
                                     continue
                                 config.log('after win validation du paris impossible, tentative firstgamebet ' + str(tentative), config.newmatch)
@@ -742,47 +680,7 @@ def all_script(driver):
                             if ValidationDuParis(driver, True):                           # essayer de valider le pari sur le site
                                 validate_bet = True                                       # pari validé, on sortira de la boucle while
                                 if config.scriptType in ['15V1', '15V2']:
-                                    def _last_numero_point():
-                                        try:
-                                            local = None
-                                            if config.all_scores:
-                                                if isinstance(config.all_scores, dict):
-                                                    vals = list(config.all_scores.values())
-                                                    if vals:
-                                                        local = int(vals[-1]['numero_point'])
-                                                else:
-                                                    local = int(config.all_scores[-1]['numero_point'])
-                                            try:
-                                                from Functions import RedisIPC
-                                                shared = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
-                                                if shared and shared.get('numero_point') is not None:
-                                                    shared_val = int(shared['numero_point'])
-                                                    return max(local, shared_val) if local is not None else shared_val
-                                            except Exception:
-                                                pass
-                                            return local
-                                        except Exception:
-                                            return None
-
-                                    target = None
-                                    try:
-                                        target = int(config.validated_bet['numero_point']) - 1  # le point cible = point parié - 1 (le point juste avant)
-                                    except Exception:
-                                        target = None                                    # si le champ est absent, pas de cible définie
-
-                                    config.log(f'Attente du point {target} pour valider le pari', 'info', indent=3)
-                                    while not config.error:                              # boucle d'attente : on tourne jusqu'à ce que le point cible soit atteint
-                                        last = _last_numero_point()                      # lire le dernier point enregistré
-                                        config.log(f'Last point: {last}, Target point: {target}', 'debug', indent=4)
-                                        if config.score_actuel == "0:0":                # nouveau jeu commencé (score remis à 0) → inutile d'attendre
-                                            break
-                                        if last is None or target is None:              # données manquantes → impossible d'attendre, on sort
-                                            break
-                                        if last >= target:                              # le point cible est atteint ou dépassé → on peut continuer
-                                            break
-                                        GetScoreActuel(driver)                          # mettre à jour le score en direct
-                                        time.sleep(0.1)                                 # courte pause pour ne pas surcharger le driver
-                        else:
+                                    _attendre_point_valide_15v(driver)                        else:
                             if config.scriptType in ['15V1', '15V2']:
                                 continue
                             config.log('validation du paris impossible, tentative firstgamebet ' + str(tentative), config.newmatch)

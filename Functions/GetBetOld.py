@@ -149,6 +149,16 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     config.win_type = ['40:0', '40:15', '40:30', 'A:40']
                 sType = f"Game {jeu} - W{first_player}"
                 sType = f"Jeu {jeu} - V{first_player}"
+            if config.scriptType == 'HOLD':
+
+                if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
+                    first_player = 1
+                    config.win_type = ['40:0', '40:15', '40:30', 'A:40']
+                else:
+                    first_player = 2
+                    config.win_type = ['0:40', '15:40', '30:40', '40:A']
+                sType = f"Game {jeu} - W{first_player}"
+                sType = f"Jeu {jeu} - V{first_player}"
             if config.scriptType == "40A":
                 sType = f"Jeu {jeu}: 40-40 - Oui"  # signe : collé au num du jeu
                 config.win_type = '40:40'

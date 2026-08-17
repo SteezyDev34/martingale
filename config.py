@@ -32,21 +32,48 @@ scriptTypeList1 = ['15V2']
 scriptTypeList2 = ['300', '15A', '30A']
 scriptTypeList3 = ['6P', '5P', '40A']
 scriptTypeList4 = ['5P','BREAK']
+scriptTypeList5 = ['HOLD']  # Hold du serveur (jeu remporté sur son service) — inverse de BREAK
 allScriptType = ['15V1','15V2','150', '015', '030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK',
-                 '1SET']
+                 'HOLD', '1SET']
 # Script configuration
 script_num = 0  # Numéro du Script
 win = 0  # Nombre de victoire
 cote = 3
 tipster = 'AuxoBetting'
 scriptType = ""
-localhost = ''
+localhost = int(os.getenv('CHROME_DEBUG_PORT', 43151))
 sofascore_link = ''
 api_url = "http://auxobetbot.sc2vagr6376.universe.wf"
 # Configuration pour la nouvelle API AuxoTracker
 AUXOTRACK_API_URL = os.getenv('AUXOTRACK_API_URL', "https://api.auxotracker.lan")
 AUXOBOT_TOKEN = os.getenv('AUXOBOT_TOKEN')  # Token chargé depuis le fichier .env
 AUXOBOT_USER_ID = int(os.getenv('AUXOBOT_USER_ID', 3))
+# Proxy pour contourner le géo-blocage, routé PAR DOMAINE (Lollybet/Stake vs 1xBet
+# n'ont pas les mêmes besoins : le datacenter est rapide mais 1xBet le fait challenger
+# par Cloudflare, le résidentiel est fiable pour 1xBet mais bien plus lent). Chaque
+# upstream est injecté dans Chrome via un forwarder local (Functions/ProxyForwarder.py)
+# car Chrome ne gère pas l'auth proxy en mode automatisé. Voir .env pour les identifiants
+# et ChromeDriver/proxy_pac.py pour la règle de routage.
+PROXY_HOST = os.getenv('PROXY_HOST', '')
+PROXY_PORT = int(os.getenv('PROXY_PORT', 0) or 0)
+PROXY_USER = os.getenv('PROXY_USER', '')
+PROXY_PASS = os.getenv('PROXY_PASS', '')
+PROXY_LOCAL_PORT = int(os.getenv('PROXY_LOCAL_PORT', 18080))
+PROXY_ENABLED = bool(PROXY_HOST and PROXY_PORT)
+
+PROXY2_HOST = os.getenv('PROXY2_HOST', '')
+PROXY2_PORT = int(os.getenv('PROXY2_PORT', 0) or 0)
+PROXY2_USER = os.getenv('PROXY2_USER', '')
+PROXY2_PASS = os.getenv('PROXY2_PASS', '')
+PROXY2_LOCAL_PORT = int(os.getenv('PROXY2_LOCAL_PORT', 18081))
+PROXY2_ENABLED = bool(PROXY2_HOST and PROXY2_PORT)
+
+# Domaines routés en connexion DIRECTE (jamais via le proxy) ; TOUT le reste passe par
+# PROXY par défaut (datacenter), y compris les scripts tiers de vérification géo type
+# GeoComply que Lollybet embarque — un défaut DIRECT avec seulement le domaine principal
+# proxifié laisse fuiter ces vérifications tierces et déclenche quand même le blocage.
+# Stake ne doit PAS passer par ce proxy (redirections erronées type stake.us observées).
+PROXY_DIRECT_DOMAINS = ['stake.bet']
 site_url = "https://ca.1xbet.com/fr/live/tennis?platform_type=desktop"
 site_line_url = "https://ca.1xbet.com/fr/line/tennis?platform_type=desktop"
 site_type = 'mobile_site'  # new_site, mobile_site, old_site
@@ -559,7 +586,8 @@ def log(message, type="", clear=True, indent=0, show_script_type=True):
     s = ''
     if show_script_type:
         s = scriptType
-    sys.stdout.write(f"{color}{s} {indent}{message}{RESET}\n")
+    horodatage = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    sys.stdout.write(f"{color}[{horodatage}] {s} {indent}{message}{RESET}\n")
 
     if clear:
         # Effacement de la ligne précédente
