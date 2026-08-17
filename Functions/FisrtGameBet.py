@@ -64,7 +64,9 @@ def FirstGameBet(driver):
 
         if not GetBet(driver, nextBet):
             tentative = tentative + 1
-            if config.scriptType not in ['15V1', '15V2']:
+            if config.scriptType in ['15V1', '15V2']:
+                time.sleep(2)  # laisser 1xBet charger le panneau du nouveau jeu
+            else:
                 time.sleep(5)
             if tentative > 5:
                 config.error = True
@@ -103,17 +105,23 @@ def FirstGameBet(driver):
                 if config.scriptType in ['15V1', '15V2']:
                     def _last_numero_point():
                         try:
-                            if not config.all_scores:
-                                return None
-                            # support list-like or dict-like structures
-                            if isinstance(config.all_scores, dict):
-                                vals = list(config.all_scores.values())
-                                if not vals:
-                                    return None
-                                last = vals[-1]
-                            else:
-                                last = config.all_scores[-1]
-                            return int(last['numero_point'])
+                            local = None
+                            if config.all_scores:
+                                if isinstance(config.all_scores, dict):
+                                    vals = list(config.all_scores.values())
+                                    if vals:
+                                        local = int(vals[-1]['numero_point'])
+                                else:
+                                    local = int(config.all_scores[-1]['numero_point'])
+                            try:
+                                from Functions import RedisIPC
+                                shared = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
+                                if shared and shared.get('numero_point') is not None:
+                                    shared_val = int(shared['numero_point'])
+                                    return max(local, shared_val) if local is not None else shared_val
+                            except Exception:
+                                pass
+                            return local
                         except Exception:
                             return None
 

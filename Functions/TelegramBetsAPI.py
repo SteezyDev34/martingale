@@ -2,6 +2,7 @@
 Module de gestion de l'API Telegram Bets.
 Envoie et récupère les paris détectés via Telegram et GPT.
 """
+import base64
 import json
 import os
 from typing import Dict, List, Optional
@@ -233,18 +234,25 @@ class TelegramBetsAPI:
 telegram_bets_api = TelegramBetsAPI()
 
 
-def send_bet_data_to_api(bet_data: Dict, message_original: str = None, sender_username: str = None) -> bool:
+def send_bet_data_to_api(bet_data: Dict, message_original: str = None, sender_username: str = None, image_path: str = None) -> bool:
     """
     Fonction utilitaire pour envoyer des données de pari à l'API.
-    
+
     Args:
         bet_data (Dict): Données du pari extraites par GPT
         message_original (str, optional): Message Telegram original
         sender_username (str, optional): Username de l'expéditeur
-        
+        image_path (str, optional): Chemin vers l'image source — encodée en base64 et ajoutée sous la clé 'image_base64'
+
     Returns:
         bool: True si l'envoi est réussi, False sinon
     """
+    if image_path:
+        try:
+            with open(image_path, 'rb') as f:
+                bet_data['image_base64'] = base64.b64encode(f.read()).decode('utf-8')
+        except Exception as e:
+            config.log(f"Impossible d'encoder l'image en base64 ({image_path}): {e}", 'warning')
     return telegram_bets_api.send_bet_to_api(bet_data, message_original, sender_username)
 
 

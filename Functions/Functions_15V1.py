@@ -69,38 +69,56 @@ def all_script(driver):
             config.sofascore_link = sofascore_link or ''
             if sofascore_link and isinstance(sofascore_link, str) and sofascore_link.startswith('http'):
                 config.log(f"Lien SofaScore trouvé localement: {sofascore_link}", 'info', False, 1)
-                # Ouvrir le lien dans un nouvel onglet et revenir à l'onglet original
                 try:
                     original_handle = driver.current_window_handle
                     new_handle = None
+
+                    # Chercher si un onglet Sofascore pour ce match est déjà ouvert
+                    # (un autre script l'a peut-être déjà ouvert dans le même Chrome).
                     try:
-                        # Selenium 4 : ouvrir un nouvel onglet de façon fiable
-                        driver.switch_to.new_window('tab')
-                        driver.get(sofascore_link)
-                        new_handle = driver.current_window_handle
-                    except Exception:
-                        # fallback : utiliser execute_script si new_window n'est pas supporté
-                        old_handles = set(driver.window_handles)
-                        driver.execute_script("window.open(arguments[0], '_blank');", sofascore_link)
-                        time.sleep(0.5)
-                        new_handles = set(driver.window_handles)
-                        new_tab_handles = list(new_handles - old_handles)
-                        if new_tab_handles:
-                            new_handle = new_tab_handles[0]
+                        for handle in driver.window_handles:
+                            if handle == original_handle:
+                                continue
                             try:
-                                driver.switch_to.window(new_handle)
+                                driver.switch_to.window(handle)
+                                current_url = driver.current_url or ''
+                                if sofascore_link.split('?')[0].rstrip('/') in current_url.split('?')[0].rstrip('/'):
+                                    new_handle = handle
+                                    config.log(f"Onglet SofaScore déjà ouvert, réutilisation ({handle})", 'info', False, 1)
+                                    break
                             except Exception:
-                                pass
+                                continue
+                        driver.switch_to.window(original_handle)
+                    except Exception:
+                        pass
+
+                    if not new_handle:
+                        # Aucune fenêtre Sofascore existante : en ouvrir une nouvelle
+                        try:
+                            driver.switch_to.new_window('window')
+                            driver.get(sofascore_link)
+                            new_handle = driver.current_window_handle
+                        except Exception:
+                            old_handles = set(driver.window_handles)
+                            driver.execute_script("window.open(arguments[0], '_blank', 'width=800,height=600');", sofascore_link)
+                            time.sleep(0.5)
+                            new_handles = set(driver.window_handles)
+                            new_win_handles = list(new_handles - old_handles)
+                            if new_win_handles:
+                                new_handle = new_win_handles[0]
+                                try:
+                                    driver.switch_to.window(new_handle)
+                                except Exception:
+                                    pass
 
                     if new_handle:
-                        # revenir à l'onglet original
                         try:
                             driver.switch_to.window(original_handle)
                         except Exception:
                             pass
                         setattr(config, 'sofascore_tab_handle', new_handle)
                         setattr(config, 'original_tab_handle', original_handle)
-                        config.log("Onglet SofaScore ouvert.", 'info', False, 1)
+                        config.log("Onglet SofaScore prêt.", 'info', False, 1)
                         from Functions.SofascoreWatcher import start_sofascore_watcher
                         start_sofascore_watcher()
                     else:
@@ -423,17 +441,24 @@ def all_script(driver):
                 if config.scriptType in ['15V1', '15V2']:
                     def _last_numero_point():
                         try:
-                            if not config.all_scores:
-                                return None
-                            # support list-like or dict-like structures
-                            if isinstance(config.all_scores, dict):
-                                vals = list(config.all_scores.values())
-                                if not vals:
-                                    return None
-                                last = vals[-1]
-                            else:
-                                last = config.all_scores[-1]
-                            return int(last['numero_point'])
+                            local = None
+                            if config.all_scores:
+                                if isinstance(config.all_scores, dict):
+                                    vals = list(config.all_scores.values())
+                                    if vals:
+                                        local = int(vals[-1]['numero_point'])
+                                else:
+                                    local = int(config.all_scores[-1]['numero_point'])
+                            # Lire aussi l'état partagé Redis pour avoir le vrai dernier point
+                            try:
+                                from Functions import RedisIPC
+                                shared = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
+                                if shared and shared.get('numero_point') is not None:
+                                    shared_val = int(shared['numero_point'])
+                                    return max(local, shared_val) if local is not None else shared_val
+                            except Exception:
+                                pass
+                            return local
                         except Exception:
                             return None
 
@@ -502,20 +527,27 @@ def all_script(driver):
                             if ValidationDuParis(driver, True):                           # essayer de valider le pari sur le site
                                 validate_bet = True                                       # pari validé, on sortira de la boucle while
                                 if config.scriptType in ['15V1', '15V2']:
-                                    def _last_numero_point():                             # helper : lit le numéro du dernier point enregistré dans all_scores
+                                    def _last_numero_point():
                                         try:
-                                            if not config.all_scores:                     # aucun score enregistré → retourner None
-                                                return None
-                                            if isinstance(config.all_scores, dict):      # all_scores est un dict → prendre la dernière valeur
-                                                vals = list(config.all_scores.values())
-                                                if not vals:
-                                                    return None
-                                                last = vals[-1]
-                                            else:                                         # all_scores est une liste → prendre le dernier élément
-                                                last = config.all_scores[-1]
-                                            return int(last['numero_point'])             # retourner le numéro de point sous forme d'entier
+                                            local = None
+                                            if config.all_scores:
+                                                if isinstance(config.all_scores, dict):
+                                                    vals = list(config.all_scores.values())
+                                                    if vals:
+                                                        local = int(vals[-1]['numero_point'])
+                                                else:
+                                                    local = int(config.all_scores[-1]['numero_point'])
+                                            try:
+                                                from Functions import RedisIPC
+                                                shared = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
+                                                if shared and shared.get('numero_point') is not None:
+                                                    shared_val = int(shared['numero_point'])
+                                                    return max(local, shared_val) if local is not None else shared_val
+                                            except Exception:
+                                                pass
+                                            return local
                                         except Exception:
-                                            return None                                  # en cas d'erreur, retourner None sans planter
+                                            return None
 
                                     target = None
                                     try:
@@ -568,7 +600,7 @@ def all_script(driver):
                     RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
                 total_gain = RedisIPC.get_total_gain(config.newmatch) - RedisIPC.get_total_loss(config.newmatch)
                 config.log(f"Gain total match {config.newmatch}: {total_gain} (net gain ajouté: {config.netprofit})", 'success', False)
-                if RedisIPC.get_total_loss(config.newmatch) < 1:
+                if RedisIPC.get_total_loss(config.newmatch) < 30:
                     GetIfGameEnd(driver)
                 print('is running for ',config.newmatch)
                 config.netprofit = 0
@@ -631,17 +663,23 @@ def all_script(driver):
                                 if config.scriptType in ['15V1', '15V2']:
                                     def _last_numero_point():
                                         try:
-                                            if not config.all_scores:
-                                                return None
-                                            # support list-like or dict-like structures
-                                            if isinstance(config.all_scores, dict):
-                                                vals = list(config.all_scores.values())
-                                                if not vals:
-                                                    return None
-                                                last = vals[-1]
-                                            else:
-                                                last = config.all_scores[-1]
-                                            return int(last['numero_point'])
+                                            local = None
+                                            if config.all_scores:
+                                                if isinstance(config.all_scores, dict):
+                                                    vals = list(config.all_scores.values())
+                                                    if vals:
+                                                        local = int(vals[-1]['numero_point'])
+                                                else:
+                                                    local = int(config.all_scores[-1]['numero_point'])
+                                            try:
+                                                from Functions import RedisIPC
+                                                shared = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
+                                                if shared and shared.get('numero_point') is not None:
+                                                    shared_val = int(shared['numero_point'])
+                                                    return max(local, shared_val) if local is not None else shared_val
+                                            except Exception:
+                                                pass
+                                            return local
                                         except Exception:
                                             return None
 
@@ -704,20 +742,27 @@ def all_script(driver):
                             if ValidationDuParis(driver, True):                           # essayer de valider le pari sur le site
                                 validate_bet = True                                       # pari validé, on sortira de la boucle while
                                 if config.scriptType in ['15V1', '15V2']:
-                                    def _last_numero_point():                             # helper : lit le numéro du dernier point enregistré dans all_scores
+                                    def _last_numero_point():
                                         try:
-                                            if not config.all_scores:                     # aucun score enregistré → retourner None
-                                                return None
-                                            if isinstance(config.all_scores, dict):      # all_scores est un dict → prendre la dernière valeur
-                                                vals = list(config.all_scores.values())
-                                                if not vals:
-                                                    return None
-                                                last = vals[-1]
-                                            else:                                         # all_scores est une liste → prendre le dernier élément
-                                                last = config.all_scores[-1]
-                                            return int(last['numero_point'])             # retourner le numéro de point sous forme d'entier
+                                            local = None
+                                            if config.all_scores:
+                                                if isinstance(config.all_scores, dict):
+                                                    vals = list(config.all_scores.values())
+                                                    if vals:
+                                                        local = int(vals[-1]['numero_point'])
+                                                else:
+                                                    local = int(config.all_scores[-1]['numero_point'])
+                                            try:
+                                                from Functions import RedisIPC
+                                                shared = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
+                                                if shared and shared.get('numero_point') is not None:
+                                                    shared_val = int(shared['numero_point'])
+                                                    return max(local, shared_val) if local is not None else shared_val
+                                            except Exception:
+                                                pass
+                                            return local
                                         except Exception:
-                                            return None                                  # en cas d'erreur, retourner None sans planter
+                                            return None
 
                                     target = None
                                     try:

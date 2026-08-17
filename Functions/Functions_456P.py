@@ -252,7 +252,7 @@ def all_script(driver):
                     print(' last waitendgame')
                     GetIfGameEnd(driver)
                 continue
-            if config.jeu_actuel == 13:
+            if int(config.jeu_actuel) == 13:
                 config.log('Tie break en cours attente début')
                 while config.score_actuel != "0:1" and config.score_actuel != "1:0" and config.score_actuel != "1:1" and config.score_actuel != "2:0" and config.score_actuel != "0:2":
                     GetScoreActuel(driver)
@@ -263,7 +263,7 @@ def all_script(driver):
                 GetIfGameEnd(driver)
                 passageset = True
                 break
-            elif config.jeu_actuel == 12:
+            elif int(config.jeu_actuel) == 12:
                 GetJeuActuel(driver)
                 GetIfGameStart(driver)
                 while config.score_actuel != "0:0":
@@ -271,7 +271,7 @@ def all_script(driver):
                     GetIfGameEnd(driver)
                     GetScoreActuel(driver)
                 GetJeuActuel(driver)
-                if config.jeu_actuel == 13:
+                if int(config.jeu_actuel) == 13:
                     print('Tie break en cours attente début')
                     while config.score_actuel != "0:1" and config.score_actuel != "1:0" and config.score_actuel != "1:1" and config.score_actuel != "2:0" and config.score_actuel != "0:2":
                         GetScoreActuel(driver)
@@ -306,6 +306,13 @@ def all_script(driver):
                 GetResult(driver)
 
             if config.validated_bet.get('result') == 'LOSE':
+                config.perte = RedisIPC.get_loss(config.scriptType)
+                if config.perte == 0:
+                    get1setGlobalPerte()
+                    RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
+                if config.perte == 0:
+                    getGlobalPerte()
+                    RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
                 # VÉRIFCATION DU SET ACTUEL
                 GetScoreActuel(driver)
                 if not config.set_actuel:
@@ -325,6 +332,13 @@ def all_script(driver):
                     txtlog = " ON EST SUR LE PROCHAIN SET"
                     passageset = True
                     config.newset = int(config.set_actuel) + 1
+                    for st in config.scriptTypeList:
+                        config.switchScript(st)
+                        if config.validated_bet and config.validated_bet.get('montant'):
+                            config.perte -= float(config.validated_bet.get('montant'))
+                            if RedisIPC:
+                                RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
+                    config.switchScript(scriptType)
                     config.log(txtlog, config.newmatch)
                     DeleteBet(driver)
                     txtlog = 'Wait 30 sec'
@@ -334,15 +348,26 @@ def all_script(driver):
                     print("ERROR : ecup set " + str(config.set_actuel))
                     config.error = True
             elif config.validated_bet.get('result') == 'WIN':
+                config.perte = RedisIPC.get_loss(config.scriptType)
+                config.netprofit = round((float(config.validated_bet.get('montant', 0)) * float(config.validated_bet.get('cote', 0))) - float(config.perte), 2)
                 config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
                     config.netprofit)
                 config.winmatch[scriptType] = config.winmatch[scriptType] + 1
+                config.log(f"netprofit : {config.netprofit}")
+                RedisIPC.add_gain_to_all(float(config.netprofit), config.newmatch)
+                config.perte = 0
+                if RedisIPC:
+                    RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
+                total_gain = RedisIPC.get_total_gain(config.newmatch) - RedisIPC.get_total_loss(config.newmatch)
+                config.log(f"Gain total match {config.newmatch}: {total_gain}", 'success', False)
                 config.ScriptConfig(scriptType).reset()
                 config.init_variable()
                 DeleteBet(driver)
                 if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                     print("#RECHERCHE INFOS DE MISE")
                     getGlobalPerte()
+                    if config.perte == 0:
+                        get1setGlobalPerte()
                     config.error = False
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
@@ -373,6 +398,7 @@ def all_script(driver):
                     else:
                         print("ERROR : ecup set " + str(config.set_actuel))
                         config.error = True
+                    current_game = int(config.jeu_actuel)
                 else:
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
@@ -415,12 +441,14 @@ def all_script(driver):
     print("update : " + config.newmatch)
     for i in config.scriptTypeList:
         config.switchScript(i)
+        RedisIPC.set_running(config.scriptType, False, config.newmatch)
         print('perte', config.perte)
         DispatchPerte()
         config.ScriptConfig(i).reset()
         config.init_variable()
         config.global_match_win[i] = 0.0  # Initialize win counter for script type (float)
         config.winmatch[i] = 0  # Initialize match counter for script type
+    RedisIPC.reset_gain(config.newmatch)
     config.all_scores = {}
     # Supprimer le match de la base de données
     match_manager.remove_match(config.newmatch)

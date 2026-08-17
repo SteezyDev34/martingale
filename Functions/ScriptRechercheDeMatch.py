@@ -932,7 +932,12 @@ def classementeDeMatch(driver, use_json_cache=True):
 
 
 def newclassementeDeMatch(driver):
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
     driver.get(config.site_line_url)
+    WebDriverWait(driver, 15).until(
+        EC.presence_of_element_located((By.CLASS_NAME, 'sports-menu-app-sport'))
+    )
     config.error = False
     print('RECHERCHE DE MATCH')
     config.match_found = False
@@ -967,17 +972,6 @@ def newclassementeDeMatch(driver):
             tennis_menu = driver.find_elements(By.CLASS_NAME,
                                                'sports-menu-app-sport')
 
-            for menu in tennis_menu:
-                sport_link = menu.find_element(By.CLASS_NAME, 'sports-menu-app-sport__link')
-                sport = sport_link.find_element(By.CLASS_NAME, 'ui-nav-link-caption__label').text
-                if 'tennis de table' in sport.lower():
-                    continue
-                elif 'tennis' not in sport.lower():
-                    continue
-                else:
-                    # print('tennis trouvé')
-                    # print('click ok')
-                    break
             country = driver.find_element(By.CLASS_NAME, 'sports-menu-group-by-country')
             # print('find countries')
             countrybutton = country.find_elements(By.CLASS_NAME, 'sports-menu-group-by-champ')

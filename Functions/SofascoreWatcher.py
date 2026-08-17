@@ -35,6 +35,13 @@ sofascore_hint_lock = threading.Lock()
 # l'ancienne fonction GetSofaScoreActuel dans GetScoreActuel.py.
 _SOFASCORE_SCORE_XPATH = '//*[@id="__next"]/main/div/div[2]/div/div[1]/div[3]/div[1]/div/div[2]/div/div/div[2]/div'
 
+_VALID_TENNIS_TOKENS = {'0', '15', '30', '40', 'A', 'AD', 'ADV'}
+_VALID_TENNIS_SCORES = {
+    f"{a}:{b}"
+    for a in _VALID_TENNIS_TOKENS
+    for b in _VALID_TENNIS_TOKENS
+}
+
 
 def _poll_loop(stop_event, interval):
     watcher_driver = None
@@ -53,9 +60,20 @@ def _poll_loop(stop_event, interval):
     while not stop_event.is_set():
         try:
             root = watcher_driver.find_element(By.XPATH, _SOFASCORE_SCORE_XPATH)
-            chiffres = re.findall(r'\d+', root.text)
-            if len(chiffres) >= 2:
-                score = chiffres[-2] + ':' + chiffres[-1]
+            # Chercher un score tennis valide directement dans le texte (ex: "40:A", "15:30").
+            # re.findall(r'\d+') attraperait aussi les scores de set (ex: "3"), produisant
+            # des scores parasites comme "3:40". On cherche d'abord un pattern score tennis.
+            text = root.text.upper().replace(' ', '')
+            score = None
+            # Pattern : token tennis : token tennis (ex: 40:A, 15:30, 0:0)
+            m = re.search(r'((?:AD?V?|A|\d+)):((?:AD?V?|A|\d+))', text)
+            if m:
+                candidate = m.group(1).rstrip('V').rstrip('D') + ':' + m.group(2).rstrip('V').rstrip('D')
+                # Normaliser ADV/AD → A
+                candidate = candidate.replace('ADV', 'A').replace('AD', 'A')
+                if candidate in _VALID_TENNIS_SCORES:
+                    score = candidate
+            if score:
                 with sofascore_hint_lock:
                     config.sofascore_score_hint = score
                     config.sofascore_score_hint_ts = time.time()

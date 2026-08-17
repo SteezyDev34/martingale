@@ -60,36 +60,12 @@ def GetScoreActuel(driver):
                 print(f"#E0021\nUne erreur est survenue lors de la récupération du score : {e}")
                 continue
 
-        if config.saved_score != config.score_actuel:
-            # Enregistrer immédiatement le changement détecté (auparavant retardé
-            # d'un cycle + sleep(2) par une logique de confirmation bugguée qui
-            # ajoutait une latence de réaction inutile à chaque appel), en passant
-            # par la table partagée match_score pour rester cohérent avec les autres
-            # process qui suivent le même match (cf. _appliquer_transition).
+        dom_debounce = getattr(config, '_dom_debounce', None)
+        if config.saved_score != config.score_actuel and config.score_actuel != dom_debounce:
+            config._dom_debounce = None
             _appliquer_transition(driver, config.score_actuel, source='dom')
         else:
-            # 1xBet n'a montré aucun changement, mais Sofascore a peut-être déjà le
-            # nouveau point : basculer immédiatement dessus pour ne pas rester bloqué
-            # à attendre un site qui peut mettre jusqu'à 10s à afficher un point déjà
-            # joué (cf. AUDIT_MARTINGALE_TENNIS.md §7). Choix explicite de l'utilisateur :
-            # aucun délai d'attente avant de basculer (risque assumé qu'un hint Sofascore
-            # se révèle erroné/à corriger).
-            try:
-                from Functions.SofascoreWatcher import get_score_hint
-                hint_score, hint_age = get_score_hint()
-            except Exception:
-                hint_score, hint_age = None, None
-            if hint_score is not None and hint_score != config.saved_score:
-                config.log(
-                    f"[Sofascore] 1xBet bloqué à {config.score_actuel}, "
-                    f"hint Sofascore={hint_score} (âge {hint_age:.1f}s) — tentative de bascule immédiate",
-                    'warning', False,
-                )
-                _appliquer_transition(driver, hint_score, source='sofascore_hint')
-                config.saved_score = config.score_actuel
-                return True
-            else:
-                get_score = True
+            get_score = True
         config.saved_score = config.score_actuel
     return True
 
@@ -132,6 +108,8 @@ def _appliquer_transition(driver, candidat_score, source):
         }
         config.vainqueur_point_precedent = vainqueur
         config.point_actuel = numero_point + 1  # +1 car le point actuel vient d'être joué
+        config._dom_debounce = None  # transition actée → débloquer le prochain DOM
+        config._dom_debounce = None
         config.log(nouveau_score, clear=False, indent=2)
         config.log_clear_line()
         config.all_scores.update({len(config.all_scores): nouveau_score})
@@ -166,10 +144,72 @@ def _appliquer_transition(driver, candidat_score, source):
             f"(état partagé={etat['score']}), resynchronisation locale", 'debug', False,
         )
         config.score_actuel = etat['score']
-        config.set_actuel = etat['set_actuel']
-        config.jeu_actuel = etat['jeu_actuel']
+        # Ne pas rétrograder jeu/set locaux si Redis a des données plus anciennes :
+        # évite que 1530A (déjà à jeu 7) recule à jeu 6 à cause d'une entrée Redis périmée,
+        # ce qui déclencherait "set du paris supérieur!" et un DeleteBet incorrect.
+        try:
+            etat_set = int(etat['set_actuel'])
+            etat_jeu = int(etat['jeu_actuel'])
+            local_set = int(config.set_actuel) if config.set_actuel else 0
+            local_jeu = int(config.jeu_actuel) if config.jeu_actuel else 0
+            redis_plus_avance = (etat_set > local_set) or (etat_set == local_set and etat_jeu >= local_jeu)
+        except Exception:
+            redis_plus_avance = True
+        if redis_plus_avance:
+            config.set_actuel = etat['set_actuel']
+            config.jeu_actuel = etat['jeu_actuel']
         config.vainqueur_point_precedent = etat['vainqueur_point']
         config.point_actuel = int(etat['numero_point']) + 1
+        # Enregistrer dans all_scores local même si c'est un autre process qui a gagné
+        # la course : nécessaire pour que GetResult puisse retrouver l'historique du jeu
+        # et éviter un LOSE incorrect quand les transitions sont actées par 15V2/1530A.
+        # Ne sync que si le jeu/set de Redis est au moins aussi avancé que le local.
+        if redis_plus_avance:
+            already_recorded = any(
+                str(v.get('set')) == str(etat['set_actuel'])
+                and str(v.get('jeu')) == str(etat['jeu_actuel'])
+                and str(v.get('numero_point')) == str(etat['numero_point'])
+                for v in config.all_scores.values()
+            )
+            if not already_recorded:
+                synced_score = {
+                    'set': etat['set_actuel'],
+                    'jeu': etat['jeu_actuel'],
+                    'score': etat['score'],
+                    'numero_point': int(etat['numero_point']),
+                    'vainqueur_point': etat['vainqueur_point'],
+                }
+                config.all_scores.update({len(config.all_scores): synced_score})
+        # Si l'état partagé est en retard sur le hint (ex: Redis=40:40, hint=A:40),
+        # on pose un debounce dédié pour ne pas re-tenter le même hint en boucle
+        # jusqu'à ce que Redis avance ou que 1xBet affiche le score.
+        if etat['score'] != candidat_score:
+            # Redis en retard sur candidat_score : enregistrer quand même l'état observé localement
+            # pour que GetResult retrouve l'entrée (ex: A:40 réclamé par 1530A mais 15V1 l'avait vu en premier).
+            np_candidat = get_numero_point(candidat_score)
+            already_local = any(
+                str(v.get('set')) == str(config.set_actuel)
+                and str(v.get('jeu')) == str(config.jeu_actuel)
+                and str(v.get('numero_point')) == str(np_candidat)
+                for v in config.all_scores.values()
+            )
+            if not already_local:
+                config.all_scores.update({len(config.all_scores): {
+                    'set': config.set_actuel,
+                    'jeu': config.jeu_actuel,
+                    'score': candidat_score,
+                    'numero_point': np_candidat,
+                    'vainqueur_point': vainqueur,
+                }})
+            # Avancer saved_score pour éviter que la prochaine transition calcule
+            # get_vainqueur_point_precedent depuis un score trop vieux ET pour arrêter
+            # la boucle DOM (saved_score == score_actuel après la prochaine lecture).
+            config.saved_score = candidat_score
+            config._dom_debounce = candidat_score
+        else:
+            # Redis a maintenant ce score (gagné par un autre process entre-temps) : débloquer.
+            config.saved_score = candidat_score
+            config._dom_debounce = None
     else:
         # etat est None uniquement en cas d'erreur RedisIPC (voir try_claim_score_update) :
         # comportement de repli identique à l'ancien fonctionnement local, sans table
@@ -188,12 +228,8 @@ def _compter_deuces_jeu(set_actuel: str, jeu_actuel: str) -> int:
     Compte le nombre de deuces (scores '40:40') dans l'historique du jeu en cours,
     en incluant le score actuel s'il est également un déuce.
 
-    Args:
-        set_actuel (str): Identifiant du set en cours.
-        jeu_actuel (str): Identifiant du jeu en cours.
-
-    Returns:
-        int: Nombre total de deuces dans le jeu (historique + courant si applicable).
+    Quand all_scores est vide ou incomplet (script démarré en cours de jeu),
+    utilise le numero_point Redis pour rétro-calculer le nombre de deuces réels.
     """
     nb = sum(
         1 for entry in config.all_scores.values()
@@ -203,6 +239,33 @@ def _compter_deuces_jeu(set_actuel: str, jeu_actuel: str) -> int:
     )
     if str(config.score_actuel).upper() == '40:40':
         nb += 1
+
+    # Si l'historique local est vide ou incomplet, vérifier Redis pour éviter
+    # de sous-compter les deuces quand le script a démarré en cours de jeu.
+    if nb <= 1:
+        try:
+            from Functions import RedisIPC
+            shared = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
+            if (shared
+                    and str(shared.get('set_actuel', '')) == str(set_actuel)
+                    and str(shared.get('jeu_actuel', '')) == str(jeu_actuel)
+                    and shared.get('numero_point') is not None):
+                redis_np = int(shared['numero_point'])
+                redis_score = str(shared.get('score', '')).upper()
+                # Rétro-calcul depuis numero_point Redis :
+                #   40:40 Nème déuce  → numero_point = 6 + (N-1)*2  → N = (np-4)//2
+                #   A:40 / 40:A       → numero_point = 7 + (N-1)*2  → N = (np-5)//2
+                if redis_score == '40:40' and redis_np >= 6:
+                    nb_redis = (redis_np - 4) // 2
+                elif redis_score in ('A:40', '40:A') and redis_np >= 7:
+                    nb_redis = (redis_np - 5) // 2
+                else:
+                    nb_redis = 0
+                if nb_redis > nb:
+                    nb = nb_redis
+        except Exception:
+            pass
+
     return nb
 
 

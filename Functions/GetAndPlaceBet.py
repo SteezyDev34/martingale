@@ -30,15 +30,15 @@ def GetAndPlaceBet(driver):
                 continue
             if config.scriptType == '150' or config.scriptType == '015' or config.scriptType == '15A' or config.scriptType == '300' or config.scriptType == '030':
                 if config.score_actuel == '0:0':
-                    if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu', -1)):
+                    if not config.validated_bet or int(config.jeu_actuel) > int(config.validated_bet.get('jeu', -1)):
                         FirstGameBet(driver)
             if config.scriptType == '30A':
                 if config.score_actuel == '0:0' or config.score_actuel == '15:15' or config.score_actuel == '15:0' or config.score_actuel == '0:15':
-                    if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu')):
+                    if not config.validated_bet or int(config.jeu_actuel) > int(config.validated_bet.get('jeu', -1)):
                         FirstGameBet(driver)
             if config.scriptType == '40A':
                 if config.score_actuel != "40:40" and config.score_actuel != "A:40" and config.score_actuel != "40:A":
-                    if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu')):
+                    if not config.validated_bet or int(config.jeu_actuel) > int(config.validated_bet.get('jeu', -1)):
                         FirstGameBet(driver)
                     else:
                         print('BET OK')

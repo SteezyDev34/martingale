@@ -80,6 +80,7 @@ looking_game = False
 looking_point = False
 placed_game = False
 saved_score = False
+_dom_debounce = None
 
 numset = ""
 game_end = False
@@ -108,7 +109,7 @@ wantwin = 0.2
 nb_tour = 1
 increment = 0
 mtt_recup = 0.54
-total_gain_wanted = 50
+total_gain_wanted = 3
 
 recup30 = 0
 rattrape_perte = 1  # ne pas changer

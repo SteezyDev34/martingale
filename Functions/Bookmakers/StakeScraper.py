@@ -853,10 +853,18 @@ class StakeScraper:
                 log(f"[Stake] Recherche SGM: {search_variants}", "info")
 
                 def _fetch_sgm_buttons():
-                    btns = driver.find_elements(By.CSS_SELECTOR, ".market button.outcome")
-                    if not btns:
-                        btns = driver.find_elements(By.CSS_SELECTOR, "button[class*='outcome']")
-                    return btns
+                    # Attendre que les boutons soient présents (jusqu'à 4s)
+                    for _w in range(8):
+                        btns = driver.find_elements(By.CSS_SELECTOR, '[data-testid="fixture-outcome"]')
+                        if not btns:
+                            btns = driver.find_elements(By.CSS_SELECTOR, ".market button.outcome")
+                        if not btns:
+                            btns = driver.find_elements(By.CSS_SELECTOR, "button[class*='outcome']")
+                        if btns:
+                            return btns
+                        time.sleep(0.5)
+                    log(f"[Stake] ⚠️ _fetch_sgm_buttons: 0 boutons trouvés après 4s", "warning")
+                    return []
 
                 clicked = False
                 # Re-fetch avant chaque tentative (DOM Stake rechargé après tab click ou scroll)
@@ -961,33 +969,54 @@ class StakeScraper:
             # ── 4. Saisir la mise dans le betslip de droite ───────────────
             # Polling 8s — betslip Stake se charge de façon async
             mise_input = None
-            for _ in range(16):
+            for _ in range(20):
                 time.sleep(0.5)
-                for sel in ['[data-testid="input-bet-amount"]',
-                            'input[type="number"][class*="spacing"]',
-                            'input[type="number"]']:
-                    els = driver.find_elements(By.CSS_SELECTOR, sel)
-                    if els and els[0].is_displayed():
-                        mise_input = els[0]
-                        break
-                if mise_input:
+                # Chercher via JS sans contrainte is_displayed (betslip peut être hors viewport)
+                el = driver.execute_script("""
+                    // Chercher l'input de mise (placeholder="0.00") et exclure la recherche
+                    var sels = [
+                        '[data-testid="input-bet-amount"]',
+                        'input[type="number"][placeholder="0.00"]',
+                        'input[type="number"]'
+                    ];
+                    for (var s of sels) {
+                        var all = Array.from(document.querySelectorAll(s));
+                        // Exclure les inputs avec placeholder contenant "recherch" ou "search"
+                        var filtered = all.filter(function(el) {
+                            var ph = (el.placeholder || '').toLowerCase();
+                            return ph.indexOf('recherch') === -1 && ph.indexOf('search') === -1;
+                        });
+                        if (filtered.length > 0) return filtered[0];
+                    }
+                    return null;
+                """)
+                if el:
+                    mise_input = el
                     break
 
             if not mise_input:
-                log("[Stake] ❌ Input de mise SGM non trouvé après 8s", "error")
+                log("[Stake] ❌ Input de mise SGM non trouvé après 10s", "error")
                 return False
 
             driver.execute_script("arguments[0].scrollIntoView({behavior:'instant',block:'center'});", mise_input)
             _human_wait(0.3, 0.5)
-            mise_input.click()
-            time.sleep(0.3)
-            # Sélectionner tout + taper la mise
+            # Triple-clic pour sélectionner tout le contenu
+            from selenium.webdriver.common.action_chains import ActionChains
             from selenium.webdriver.common.keys import Keys
-            mise_input.send_keys(Keys.CONTROL + "a")
-            mise_input.send_keys(str(mise))
+            ActionChains(driver).triple_click(mise_input).perform()
+            time.sleep(0.2)
+            mise_input.send_keys(Keys.DELETE)
+            time.sleep(0.1)
+            # Typer chaque caractère individuellement pour déclencher le binding Svelte
+            mise_str = str(mise)
+            for ch in mise_str:
+                mise_input.send_keys(ch)
+                time.sleep(0.05)
+            # Forcer les events Svelte au cas où
             driver.execute_script("""
                 arguments[0].dispatchEvent(new Event('input', {bubbles: true}));
                 arguments[0].dispatchEvent(new Event('change', {bubbles: true}));
+                arguments[0].dispatchEvent(new KeyboardEvent('keyup', {bubbles: true}));
             """, mise_input)
             log(f"[Stake] ✅ Mise saisie: {mise}€", "info")
             _human_wait(0.5, 1.0)
@@ -995,22 +1024,27 @@ class StakeScraper:
             # ── 5. Cliquer "Parier" — re-chercher après saisie (DOM mis à jour) ──
             _human_wait(0.8, 1.2)
             parier_clicked = False
-            for _ in range(3):
+            for attempt in range(5):
                 try:
                     parier_btns = driver.find_elements(By.CSS_SELECTOR, "button")
                     for btn in parier_btns:
                         try:
                             txt = (btn.text or "").strip().lower()
-                            if txt == "parier" and btn.is_displayed():
+                            if txt == "parier":
                                 driver.execute_script("arguments[0].scrollIntoView({behavior:'instant',block:'center'});", btn)
                                 _human_wait(0.3, 0.5)
-                                btn.click()
+                                is_disabled = driver.execute_script("return arguments[0].disabled;", btn)
+                                if is_disabled:
+                                    log(f"[Stake] Bouton 'Parier' désactivé (tentative {attempt+1}/5), attente...", "warning")
+                                    break
+                                driver.execute_script("arguments[0].click();", btn)
                                 parier_clicked = True
                                 break
                         except Exception:
                             continue
                     if parier_clicked:
                         break
+                    _human_wait(0.8, 1.2)
                 except Exception:
                     _human_wait(0.5, 0.8)
 

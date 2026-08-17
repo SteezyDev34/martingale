@@ -334,7 +334,7 @@ def all_script(driver):
                         config.log(f"1 FIN {config.scriptType}", 'success', False)
                         RedisIPC.set_running(config.scriptType, False, config.newmatch)
                         continue
-                    if not config.validated_bet or config.jeu_actuel > int(config.validated_bet.get('jeu', -1)):
+                    if not config.validated_bet or int(config.jeu_actuel) > int(config.validated_bet.get('jeu', -1)):
                         ok=False
                         config.log(f"jeu actuel {config.jeu_actuel} non validé par le paris {config.validated_bet}", 'error', False)
                     else:
@@ -374,11 +374,11 @@ def all_script(driver):
                 config.log(f"FIN 5 {config.scriptType}", 'success', False)
                 RedisIPC.set_running(config.scriptType, False, config.newmatch)
                 continue
-            if config.jeu_actuel == 13:
+            if int(config.jeu_actuel) == 13:
                 _attendre_debut_tie_break(driver)
                 passageset = True
                 break
-            elif config.jeu_actuel == 12:
+            elif int(config.jeu_actuel) == 12:
                 GetJeuActuel(driver)
                 GetIfGameStart(driver)
                 while config.score_actuel != "0:0":

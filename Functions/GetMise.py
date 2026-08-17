@@ -20,32 +20,50 @@ def GetMise(driver):
         logline += 1
         config.cote = config.cotebase
     else:
-        config.log("Rattrapage, recuperation de la cote", 'info', False)
-        logline += 1
+        # Si la cote a déjà été stockée dans validated_bet (même jeu/pari),
+        # la réutiliser directement — elle ne change pas entre le pré-chargement
+        # et le placement. Seule la perte varie (deduct_largest inter-scripts).
+        # Cela évite un aller-retour DOM inutile de ~200ms.
+        cote_vb = None
         try:
-            config.log(f"tentative de recup cote avec class {config.classes['coef_value'][config.site_type]}", 'info', False)
-            config.cote = ''.join(filter(lambda x: x.isdigit() or x in ',.',
-                                        driver.find_elements(By.CLASS_NAME,
-                                                            config.classes['coef_value'][config.site_type])[0].text))
-        except Exception as e:
-            try:
-                if config.scriptType == 'LIVE' and config.site_type == 'mobile_site':
-                    config.cote = ''.join(filter(lambda x: x.isdigit() or x in ',.',
-                                                    driver.find_elements(By.CLASS_NAME,
-                                                                        config.classes['coef_value'][config.site_type])[0].text))
-                else:
-                    config.log(f"tentative de recup cote avec class {config.classes['cpn_action_coef'][config.site_type]}", 'info', False)
-                    
-            except Exception as e:
-                print(e)
-                config.log('erreur recup cote', 'info', False)
-                logline += 1
-                config.cote = config.cotebase
-        else:
-            config.log(f'cote recupéré {str(config.cote)}', 'info', False)
+            vb = getattr(config, 'validated_bet', None)
+            if vb and vb.get('cote'):
+                _c = str(vb['cote']).replace(',', '.')
+                if float(_c) > 1.0:
+                    cote_vb = _c
+        except Exception:
+            pass
+        if cote_vb:
+            config.cote = cote_vb
+            config.log(f'cote recupéré (validated_bet) {str(config.cote)}', 'info', False)
             logline += 1
-            if config.cote == '' or str(config.cote) == '0' or str(config.cote) == '1' or config.cote == 0:
-                config.cote = config.cotebase
+        else:
+            config.log("Rattrapage, recuperation de la cote", 'info', False)
+            logline += 1
+            try:
+                config.log(f"tentative de recup cote avec class {config.classes['coef_value'][config.site_type]}", 'info', False)
+                config.cote = ''.join(filter(lambda x: x.isdigit() or x in ',.',
+                                            driver.find_elements(By.CLASS_NAME,
+                                                                config.classes['coef_value'][config.site_type])[0].text))
+            except Exception as e:
+                try:
+                    if config.scriptType == 'LIVE' and config.site_type == 'mobile_site':
+                        config.cote = ''.join(filter(lambda x: x.isdigit() or x in ',.',
+                                                        driver.find_elements(By.CLASS_NAME,
+                                                                            config.classes['coef_value'][config.site_type])[0].text))
+                    else:
+                        config.log(f"tentative de recup cote avec class {config.classes['cpn_action_coef'][config.site_type]}", 'info', False)
+
+                except Exception as e:
+                    print(e)
+                    config.log('erreur recup cote', 'info', False)
+                    logline += 1
+                    config.cote = config.cotebase
+            else:
+                config.log(f'cote recupéré {str(config.cote)}', 'info', False)
+                logline += 1
+                if config.cote == '' or str(config.cote) == '0' or str(config.cote) == '1' or config.cote == 0:
+                    config.cote = config.cotebase
     if config.scriptType == 'LIVE':
         try:
             resp_json = get_recommended_stake()

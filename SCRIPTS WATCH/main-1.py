@@ -332,10 +332,12 @@ def check_tempete_images():
                             pari_dict["tipster"] = "TEMPÊTE BETTING ®️"
                             matches = pari_dict.get("matches", [])
                             if matches:
-                                api_success = send_bet_data_to_api(pari_dict, message_original=full_url, sender_username="TEMPÊTE BETTING ®️")
+                                api_success = send_bet_data_to_api(pari_dict, message_original=full_url, sender_username="TEMPÊTE BETTING ®️", image_path=img_path)
                                 if api_success:
                                     for match in matches:
                                         log(f"[Tempête] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
+                                        msg = f"🌪️ TEMPÊTE BETTING\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"
+                                        send_telegram(Functions_telegram.alertGroup, msg)
                                 else:
                                     log(f"[Tempête] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
                             else:
@@ -465,10 +467,12 @@ async def my_event_handler(event):
                                 pari_dict["tipster"] = tipster
                                 matches = pari_dict.get("matches", [])
                                 if matches:
-                                    api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=tipster)
+                                    api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=tipster, image_path=img_path)
                                     if api_success:
                                         for match in matches:
                                             log(f"[AdrBetting] ✅ [{tipster}] Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
+                                            msg = f"🎰 {tipster}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"
+                                            send_telegram(Functions_telegram.alertGroup, msg)
                                     else:
                                         log(f"[AdrBetting] ❌ [{tipster}] Échec envoi pari ({len(matches)} match(s))", "error", clear=False)
                                 if os.path.exists(img_path):
@@ -518,6 +522,8 @@ async def my_event_handler(event):
                                     if api_success:
                                         for match in matches:
                                             log(f"[FrancePronos] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
+                                            msg = f"🇫🇷 France Pronos\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"
+                                            send_telegram(Functions_telegram.alertGroup, msg)
                                     else:
                                         log(f"[FrancePronos] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
                             except json.JSONDecodeError as e:
@@ -604,7 +610,11 @@ async def my_event_handler(event):
                             pari_dict["tipster"] = chat_title
                             matches = pari_dict.get("matches", [])
                             if matches:
-                                send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title)
+                                api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title, image_path=image_path)
+                                if api_success:
+                                    for match in matches:
+                                        msg = f"📩 {chat_title}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"
+                                        send_telegram(Functions_telegram.alertGroup, msg)
                         except Exception as _e:
                             log(f"[Image] [{chat_title}] Erreur traitement OCR: {_e}", "error", clear=False)
                         # Delete the downloaded image file

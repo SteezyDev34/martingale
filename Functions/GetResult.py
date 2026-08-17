@@ -16,8 +16,10 @@ def GetResult(driver):
     config.saved_set = ""
     timesleep = 1  # TEMPS D'ATTENTE AVANT DE RECUPERER LE SCORE PASSE À 1 SI 40 DANS LE SCORE
     result = False
+    _getresult_iterations = 0
     while not result and not config.error:
         getresult = False
+        _getresult_iterations += 1
         time.sleep(timesleep)
         GetScoreActuel(driver)
         if not config.validated_bet:
@@ -72,7 +74,7 @@ def GetResult(driver):
         if config.scriptType == "40A" or config.scriptType == "30A" or config.scriptType == "150" or config.scriptType == "015" or config.scriptType == "15A" or config.scriptType == '030' or config.scriptType == '300':
             if int(config.set_actuel) != int(config.validated_bet.get('set')):
                 getresult = True
-            elif config.jeu_actuel != int(config.validated_bet.get('jeu')):
+            elif int(config.jeu_actuel) != int(config.validated_bet.get('jeu')):
                 getresult = True
             elif config.score_actuel in passed_score:
                 getresult = True
@@ -96,82 +98,106 @@ def GetResult(driver):
                 config.validated_bet['result'] = result
                 return result
         elif config.scriptType == "15V1" or config.scriptType == "15V2":
-            if int(config.set_actuel) != int(config.validated_bet.get('set')):
+            if _getresult_iterations > 300:
+                # Timeout long (5 min) : forcer uniquement si on a dépassé le jeu du pari
+                _past_bet = (
+                    int(config.set_actuel) != int(config.validated_bet.get('set'))
+                    or int(config.jeu_actuel) != int(config.validated_bet.get('jeu'))
+                    or config.point_actuel > int(config.validated_bet.get('numero_point'))
+                )
+                if _past_bet:
+                    config.log(f"GetResult timeout (300 iter) — forçage getresult", 'warning', False)
+                    getresult = True
+                else:
+                    config.log(f"GetResult timeout (300 iter) — encore sur le même jeu, on continue", 'warning', False)
+            elif int(config.set_actuel) != int(config.validated_bet.get('set')):
                 getresult = True
-            elif config.jeu_actuel != int(config.validated_bet.get('jeu')):
-                    # Check the last element in all_scores
-                # Filter scores for matching set and jeu, excluding 0:0 scores
-                matching_set_jeu_scores = {k: v for k, v in config.all_scores.items()
-                                           if v.get('set') is not None
-                                           and v.get('jeu') is not None
-                                           and config.validated_bet.get('set') is not None
-                                           and config.validated_bet.get('jeu') is not None
-                                           and int(v.get('set')) == int(config.validated_bet.get('set'))
-                                           and int(v.get('jeu')) == int(config.validated_bet.get('jeu'))
-                                           and v.get('score') != '0:0'}
-
-                if matching_set_jeu_scores:
-                    last_score_key = max(matching_set_jeu_scores.keys())
-                    last_score = matching_set_jeu_scores[last_score_key]
-                    config.log(f"Last score for set {config.validated_bet.get('set')} jeu {config.validated_bet.get('jeu')}: {last_score}", 'info', indent=3)
-
-                    # Déduction simple du vainqueur à partir du dernier score du jeu
-                    s = str(last_score.get('score', '')).upper()
-                    def _winner_from_score_simple(s, entry, target_numero_point):
-                        # Le point utilisé pour la déduction doit être le point recherché
-                        # (numero_point du pari), ET le dernier point joué de ce jeu.
-                        if entry.get('numero_point') is None or target_numero_point is None:
-                            print('none int inferrre')
-                            return 0
-                        if int(entry.get('numero_point')) != int(target_numero_point):
-                            print('last score get score', str(entry.get('numero_point')))
-                            return 0
-                        if s == 'A:40':
-                            return 1
-                        if s == '40:A':
-                            return 2
-                        if ':' not in s:
-                            return 0
-                        l, r = s.split(':')
-                        print('get_score ', [l,r])
-                        return 1 if int(l) > int(r) else (2 if int(r) > int(l) else 0)
-
-                    inferred = _winner_from_score_simple(s, last_score, config.validated_bet.get('numero_point'))
-                    expected = config.validated_bet.get('winscore')
-
-                    if expected is not None and int(inferred) == int(expected):
-                        print("Matching score found:", last_score)
-                        result = 'WIN'
-                        config.log(f"Result: {result}", 'success', False, 2)
-                    else:
-                        result = 'LOSE'
-                        config.log(f"Result > : {result}", 'error', False, 2)
-                config.validated_bet['result'] = result
-                return result
+            elif int(config.jeu_actuel) != int(config.validated_bet.get('jeu')):
+                getresult = True
             elif config.point_actuel > int(config.validated_bet.get('numero_point')):
-                # Check if validated_bet['numero_point'] is greater than max numero_point recorded
                 getresult = True
 
             if getresult:
-                config.log(f'Checking results for set {config.validated_bet.get("set")}, jeu {config.validated_bet.get("jeu")}, point {config.validated_bet.get("numero_point")}', 'info', indent=3)
-                print()
-                matching_scores = [score for score in config.all_scores.values()
-                                   if score.get('set') is not None
-                                   and config.validated_bet.get('set') is not None
-                                   and int(score.get('set')) == int(config.validated_bet.get('set'))
-                                   and score.get('jeu') is not None
-                                   and config.validated_bet.get('jeu') is not None
-                                   and config.validated_bet.get('vainqueur_point') != 0
-                                   and int(score.get('jeu')) == int(config.validated_bet.get('jeu'))
-                                   and int(score.get('numero_point')) == int(config.validated_bet.get('numero_point'))
-                                   and score.get('vainqueur_point') == config.validated_bet.get('winscore')]
-                if matching_scores:
-                    print("Matching score found:", matching_scores[0])
-                    result = 'WIN'
-                    config.log(f"Result: {result}", 'success', False, 2)
+                # Chercher l'entrée exacte dans all_scores pour le set+jeu+numero_point du pari.
+                # On utilise vainqueur_point (enregistré lors de la transition) et non une
+                # comparaison de score brut — ex: 0:30→15:30 donne vainqueur=1 même si 15<30.
+                vb_set = config.validated_bet.get('set')
+                vb_jeu = config.validated_bet.get('jeu')
+                vb_np  = config.validated_bet.get('numero_point')
+                vb_ws  = config.validated_bet.get('winscore')
+
+                target_entry = None
+                for v in config.all_scores.values():
+                    try:
+                        if (v.get('set') is not None and vb_set is not None
+                                and int(v.get('set')) == int(vb_set)
+                                and v.get('jeu') is not None and vb_jeu is not None
+                                and int(v.get('jeu')) == int(vb_jeu)
+                                and v.get('numero_point') is not None and vb_np is not None
+                                and int(v.get('numero_point')) == int(vb_np)):
+                            target_entry = v
+                            break
+                    except Exception:
+                        continue
+
+                config.log(f'Checking results for set {vb_set} jeu {vb_jeu} point {vb_np}', 'info', indent=3)
+
+                if target_entry is None:
+                    # Fallback 1 : chercher le vainqueur_point dans l'entrée 0:0 du jeu suivant
+                    # (même set). Quand un autre process a réclamé le punto final du jeu, le 0:0
+                    # (début jeu+1) enregistre qui a remporté ce dernier punto via vainqueur_point.
+                    try:
+                        next_jeu = int(vb_jeu) + 1
+                        for v in config.all_scores.values():
+                            try:
+                                if (int(v.get('set', -1)) == int(vb_set)
+                                        and int(v.get('jeu', -1)) >= next_jeu
+                                        and int(v.get('numero_point', -1)) == 0):
+                                    target_entry = v
+                                    config.log(f"Fallback via jeu suivant (0:0): {target_entry}", 'warning', indent=3)
+                                    break
+                            except Exception:
+                                continue
+                    except Exception:
+                        pass
+
+                if target_entry is None:
+                    # Fallback 2 : le punto était le dernier du set — le set a changé avant que
+                    # le score intermédiaire (A:40 / 40:A) soit capturé. Le 0:0 de début du
+                    # set suivant (set+1, jeu=1, punto=0) a vainqueur_point = qui a gagné la
+                    # transition finale, c'est-à-dire le punto du pari.
+                    try:
+                        next_set = int(vb_set) + 1
+                        for v in config.all_scores.values():
+                            try:
+                                if (int(v.get('set', -1)) == next_set
+                                        and int(v.get('jeu', -1)) == 1
+                                        and int(v.get('numero_point', -1)) == 0):
+                                    target_entry = v
+                                    config.log(f"Fallback via début set suivant (0:0 set {next_set}): {target_entry}", 'warning', indent=3)
+                                    break
+                            except Exception:
+                                continue
+                    except Exception:
+                        pass
+
+                if target_entry is not None:
+                    vp = target_entry.get('vainqueur_point')
+                    config.log(f"Entry trouvée: {target_entry}", 'info', indent=3)
+                    try:
+                        if vp is not None and vb_ws is not None and int(vp) == int(vb_ws):
+                            result = 'WIN'
+                            config.log(f"Result: {result}", 'success', False, 2)
+                        else:
+                            result = 'LOSE'
+                            config.log(f"Result > : {result} (vainqueur={vp}, attendu={vb_ws})", 'error', False, 2)
+                    except Exception:
+                        result = 'LOSE'
+                        config.log(f"Result > : {result} (erreur comparaison)", 'error', False, 2)
                 else:
                     result = 'LOSE'
-                    config.log(result, 'error', False, 2)
+                    config.log(f"Result > : LOSE (aucune entrée set={vb_set} jeu={vb_jeu} point={vb_np} dans all_scores)", 'error', False, 2)
+
                 config.validated_bet['result'] = result
                 return result
                 

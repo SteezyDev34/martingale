@@ -671,6 +671,7 @@ def any_loss_exists(script_type: str) -> bool:
 def deduct_largest(matchname: str = None) -> Optional[tuple]:
     """
     Retourne la perte la plus grande stockée dans SQLite sans la modifier.
+    Exclut les script_types 15V1 et 15V2 (jamais rattrapés par ce mécanisme).
 
     Args:
         matchname (str): si fourni, restreint la recherche aux script_types associés
@@ -687,14 +688,24 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
         cur = conn.cursor()
         if matchname is not None:
             cur.execute(
-                "SELECT script_type, loss FROM perte WHERE matchname = ? ORDER BY loss DESC LIMIT 1",
+                "SELECT script_type, loss FROM perte WHERE matchname = ? AND script_type NOT IN ('15V1', '15V2') ORDER BY loss DESC LIMIT 1",
                 (str(matchname),),
             )
         else:
-            cur.execute("SELECT script_type, loss FROM perte ORDER BY loss DESC LIMIT 1")
+            cur.execute("SELECT script_type, loss FROM perte WHERE script_type NOT IN ('15V1', '15V2') ORDER BY loss DESC LIMIT 1")
         row = cur.fetchone()
         conn.close()
         if not row:
+            try:
+                import config
+                config.log(f"[RedisIPC] deduct_largest: aucune perte trouvée (matchname={matchname})", 'warning')
+                # log ce qui est réellement dans la table pour diagnostic
+                conn2 = _get_sqlite_conn()
+                rows_all = conn2.execute("SELECT script_type, loss, matchname FROM perte").fetchall()
+                conn2.close()
+                config.log(f"[RedisIPC] perte table: {rows_all}", 'warning')
+            except Exception:
+                pass
             return 0
 
         script_type, val = row
@@ -704,6 +715,11 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
             valf = 0.0
 
         if valf <= 0:
+            try:
+                import config
+                config.log(f"[RedisIPC] deduct_largest: {script_type} loss={valf} (≤0, ignoré, matchname={matchname})", 'warning')
+            except Exception:
+                pass
             return 0
 
         if valf > 1.0:
@@ -715,7 +731,7 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
 
         try:
             import config
-            config.log(f"[RedisIPC] sqlite deduct_largest {script_type}: perte={valf} déduit={deducted} reste={new_val}", 'debug')
+            config.log(f"[RedisIPC] sqlite deduct_largest {script_type}: perte={valf} déduit={deducted} reste={new_val}", 'info')
         except Exception:
             pass
         set_loss(script_type, new_val)
