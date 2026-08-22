@@ -172,6 +172,19 @@ def all_script(driver):
                         config.ScriptConfig(scriptType).reset()
                         config.init_variable()
                         DeleteBet(driver)
+                        total_gain = RedisIPC.get_total_gain(config.newmatch) - RedisIPC.get_total_loss(config.newmatch)
+                        config.log(f"Gain total match {config.newmatch}: {total_gain}", 'success', False)
+                        if total_gain >= float(config.total_gain_wanted):
+                            for st in config.scriptTypeList:
+                                config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}', 'success', False)
+                            config.log(f"FIN {config.scriptType} — objectif global atteint", 'success', False)
+                            RedisIPC.set_running(config.scriptType, False, config.newmatch)
+                            try:
+                                from Functions.TelegramBetsAPI import flush_api_result_queue
+                                flush_api_result_queue()
+                            except Exception:
+                                pass
+                            return True
                         if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                             print("#RECHERCHE INFOS DE MISE")
 
@@ -373,6 +386,17 @@ def all_script(driver):
                 config.ScriptConfig(scriptType).reset()
                 config.init_variable()
                 DeleteBet(driver)
+                if total_gain >= float(config.total_gain_wanted):
+                    for st in config.scriptTypeList:
+                        config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}', 'success', False)
+                    config.log(f"FIN {config.scriptType} — objectif global atteint", 'success', False)
+                    RedisIPC.set_running(config.scriptType, False, config.newmatch)
+                    try:
+                        from Functions.TelegramBetsAPI import flush_api_result_queue
+                        flush_api_result_queue()
+                    except Exception:
+                        pass
+                    return True
                 if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                     print("#RECHERCHE INFOS DE MISE")
                     getGlobalPerte()
