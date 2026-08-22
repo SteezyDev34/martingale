@@ -307,8 +307,9 @@ def all_script(driver):
                         config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
                             config.netprofit)
                         config.winmatch[scriptType] = config.winmatch[scriptType] + 1
+                        RedisIPC.add_gain_to_all(float(config.netprofit), config.newmatch)
                         config.init_variable()
-                        
+
                         total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
                         if (float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) and total_gain < float(config.total_gain_wanted)) or total_gain < float(config.total_gain_wanted):
                             print("#RECHERCHE INFOS DE MISE")
@@ -564,7 +565,7 @@ def all_script(driver):
                     RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
                 total_gain = RedisIPC.get_total_gain(config.newmatch) - RedisIPC.get_total_loss(config.newmatch)
                 config.log(f"Gain total match {config.newmatch}: {total_gain} (net gain ajouté: {config.netprofit})", 'success', False)
-                if RedisIPC.get_total_loss(config.newmatch) < 1:
+                if RedisIPC.get_total_loss(config.newmatch) < 10:
                     GetIfGameEnd(driver)
                 print('is running for ',config.newmatch)
                 config.netprofit = 0

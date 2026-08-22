@@ -164,6 +164,7 @@ def all_script(driver):
                         config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
                             config.netprofit)
                         config.winmatch[scriptType] = config.winmatch[scriptType] + 1
+                        RedisIPC.add_gain_to_all(float(config.netprofit), config.newmatch)
                         config.ScriptConfig(scriptType).reset()
                         config.init_variable()
                         DeleteBet(driver)

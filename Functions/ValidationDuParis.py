@@ -219,10 +219,7 @@ def ValidationDuParis(driver, nexbet=False):
                                 while preloader == 1:
 
                                     try:
-                                        if printtext == 0:
-                                            waiting_time = 5
-                                        else:
-                                            waiting_time = 1
+                                        waiting_time = 1
                                         WebDriverWait(driver, waiting_time).until(EC.visibility_of_element_located(
                                             (By.CLASS_NAME, config.classes['preloader'][config.site_type])))
                                     except:
@@ -334,13 +331,13 @@ def ValidationDuParis(driver, nexbet=False):
         config.placed_game = config.looking_game
         config.log(f'{config.validated_bet}', 'info', False, indent=3)
 
-        config.perte = RedisIPC.get_loss(config.scriptType, config.perte)  # Just to log the current loss before updating it
+        config.perte = RedisIPC.get_loss(config.scriptType, config.perte)
 
         config.perte = float(config.perte) + float(config.mise)
 
-        # Enregistrer la perte via RedisIPC si disponible, sinon fallback vers l'API distante
         if RedisIPC:
-            RedisIPC.set_loss(getattr(config, 'scriptType', 'UNKNOWN'), float(config.perte), publish=True)
+            _matchname = getattr(config, 'newmatch', None) or ''
+            RedisIPC.set_loss(getattr(config, 'scriptType', 'UNKNOWN'), float(config.perte), matchname=_matchname, publish=True)
 
         config.wantwin = float(config.wantwin) + float(config.increment)
         # Calculate net profit based on stake, odds and losses
@@ -506,7 +503,8 @@ def QuickValidationDuParis(driver, nexbet=False):
         config.perte = RedisIPC.get_loss(config.scriptType, config.perte)
         config.perte = float(config.perte) + float(config.mise)
         if RedisIPC:
-            RedisIPC.set_loss(getattr(config, 'scriptType', 'UNKNOWN'), float(config.perte), publish=True)
+            _matchname = getattr(config, 'newmatch', None) or ''
+            RedisIPC.set_loss(getattr(config, 'scriptType', 'UNKNOWN'), float(config.perte), matchname=_matchname, publish=True)
         config.wantwin = float(config.wantwin) + float(config.increment)
         config.log('Perte ' + str(config.perte))
         config.netprofit = round((float(config.mise) * float(config.cote)) - float(config.perte), 2)
