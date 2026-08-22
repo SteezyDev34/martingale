@@ -339,7 +339,7 @@ def ValidationDuParis(driver, nexbet=False):
             _eq1 = _parts[0].strip() if len(_parts) >= 1 else _newmatch
             _eq2 = _parts[1].strip() if len(_parts) >= 2 else ''
             _bet_dict = {
-                "tipster": getattr(config, 'scriptType', 'BOT'),
+                "tipster": "AutoBot",
                 "matches": [{
                     "equipe_1": _eq1,
                     "equipe_2": _eq2,
@@ -348,7 +348,7 @@ def ValidationDuParis(driver, nexbet=False):
                     "sport_id": 2
                 }]
             }
-            send_bet_data_to_api(_bet_dict, sender_username=getattr(config, 'scriptType', 'BOT'))
+            send_bet_data_to_api(_bet_dict, sender_username="AutoBot")
         except Exception as _e:
             config.log(f"Erreur envoi pari API AuxoTracker: {_e}", 'warning', False)
 
