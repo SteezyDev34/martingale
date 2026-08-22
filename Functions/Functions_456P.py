@@ -160,13 +160,11 @@ def all_script(driver):
                         RedisIPC.set_running(config.scriptType, False, config.newmatch)
                         continue
                     config.result = GetResult(driver)
-                    try:
-                        from Functions.TelegramBetsAPI import update_bet_result_auxotracker
-                        _api_id = (config.validated_bet or {}).get('api_bet_id')
-                        if _api_id:
-                            update_bet_result_auxotracker(_api_id, 'win' if config.result == 'WIN' else 'lost')
-                    except Exception:
-                        pass
+                    _api_id = (config.validated_bet or {}).get('api_bet_id')
+                    if _api_id:
+                        if not hasattr(config, '_api_result_queue'):
+                            config._api_result_queue = []
+                        config._api_result_queue.append({'id': _api_id, 'result': 'win' if config.result == 'WIN' else 'lost'})
                     if config.result == 'WIN':
                         config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
                             config.netprofit)
@@ -312,14 +310,12 @@ def all_script(driver):
             if config.validated_bet.get('result') is None:
                 print('result', config.validated_bet.get('result'))
                 GetResult(driver)
-                try:
-                    from Functions.TelegramBetsAPI import update_bet_result_auxotracker
-                    _api_id = (config.validated_bet or {}).get('api_bet_id')
-                    _res = (config.validated_bet or {}).get('result')
-                    if _api_id and _res in ('WIN', 'LOSE'):
-                        update_bet_result_auxotracker(_api_id, 'win' if _res == 'WIN' else 'lost')
-                except Exception:
-                    pass
+                _api_id = (config.validated_bet or {}).get('api_bet_id')
+                _res = (config.validated_bet or {}).get('result')
+                if _api_id and _res in ('WIN', 'LOSE'):
+                    if not hasattr(config, '_api_result_queue'):
+                        config._api_result_queue = []
+                    config._api_result_queue.append({'id': _api_id, 'result': 'win' if _res == 'WIN' else 'lost'})
 
             if config.validated_bet.get('result') == 'LOSE':
                 config.perte = RedisIPC.get_loss(config.scriptType)
@@ -464,6 +460,11 @@ def all_script(driver):
         config.init_variable()
         config.global_match_win[i] = 0.0  # Initialize win counter for script type (float)
         config.winmatch[i] = 0  # Initialize match counter for script type
+    try:
+        from Functions.TelegramBetsAPI import flush_api_result_queue
+        flush_api_result_queue()
+    except Exception:
+        pass
     RedisIPC.reset_gain(config.newmatch)
     config.all_scores = {}
     # Supprimer le match de la base de données

@@ -306,6 +306,24 @@ def update_bet_result_auxotracker(bet_id: int, result: str) -> bool:
         return False
 
 
+def flush_api_result_queue() -> None:
+    """
+    Envoie en batch tous les résultats en attente dans config._api_result_queue.
+    Appelé en fin de match pour ne pas bloquer la boucle critique.
+    """
+    queue = getattr(config, '_api_result_queue', [])
+    if not queue:
+        return
+    sent = []
+    for entry in queue:
+        try:
+            if update_bet_result_auxotracker(entry['id'], entry['result']):
+                sent.append(entry['id'])
+        except Exception:
+            pass
+    config._api_result_queue = [e for e in queue if e['id'] not in sent]
+
+
 def get_unprocessed_telegram_bets(limit: int = 50) -> List[Dict]:
     """
     Fonction utilitaire pour récupérer les paris non traités.
