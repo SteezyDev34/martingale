@@ -334,10 +334,14 @@ def ValidationDuParis(driver, nexbet=False):
         # Envoi du pari validé à l'API AuxoTracker (même format que le watcher)
         try:
             from Functions.TelegramBetsAPI import send_bet_data_to_api
-            _newmatch = getattr(config, 'newmatch', '') or ''
-            _parts = _newmatch.split(' - ', 1)
-            _eq1 = _parts[0].strip() if len(_parts) >= 1 else _newmatch
-            _eq2 = _parts[1].strip() if len(_parts) >= 2 else ''
+            _teams = getattr(config, 'teams', None) or []
+            _eq1 = _teams[0] if len(_teams) >= 1 else ''
+            _eq2 = _teams[1] if len(_teams) >= 2 else ''
+            if not _eq1:
+                _newmatch = getattr(config, 'newmatch', '') or ''
+                _parts = _newmatch.split(' - ', 1)
+                _eq1 = _parts[0].strip() if len(_parts) >= 1 else _newmatch
+                _eq2 = _parts[1].strip() if len(_parts) >= 2 else ''
             _bet_dict = {
                 "tipster": "AutoBot",
                 "matches": [{
