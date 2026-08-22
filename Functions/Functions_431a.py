@@ -185,6 +185,7 @@ def all_script(driver):
                     total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
                     if (all_below_one and total_gain >= float(config.total_gain_wanted)) or total_gain >= float(config.total_gain_wanted):
                         for st in config.scriptTypeList:
+                            config.switchScript(st)
                             config.log(
                                 f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                 'success', False)
@@ -204,6 +205,10 @@ def all_script(driver):
                         RedisIPC.set_running(config.scriptType, False, config.newmatch)
                         continue
                     config.result = GetResult(driver)
+                    _api_id = (config.validated_bet or {}).get('api_bet_id')
+                    if _api_id:
+                        from Functions.TelegramBetsAPI import queue_bet_result
+                        queue_bet_result(_api_id, 'win' if config.result == 'WIN' else 'lost')
                     if config.result == 'WIN':
                         config.perte = RedisIPC.get_loss(config.scriptType)
                         config.netprofit = round((float(config.validated_bet.get('montant', 0)) * float(config.validated_bet.get('cote', 0))) - float(config.perte), 2)
@@ -264,6 +269,8 @@ def all_script(driver):
                                 config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                         'success', False)
                                 RedisIPC.set_running(st, False, config.newmatch)
+                                config.switchScript(st)
+                                config.perte = 0
                             return True
                         if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) and total_gain < float(config.total_gain_wanted):
                             config.log(
@@ -358,12 +365,14 @@ def all_script(driver):
                 for st in config.scriptTypeList:
                     config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                'success', False)
+                    
                     RedisIPC.set_running(st, False, config.newmatch)
 
                 return True
             if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) and total_gain < float(config.total_gain_wanted):
                 config.log(
                     f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
+                config.perte = 0
             elif total_gain < float(config.total_gain_wanted):
                         config.log(
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
@@ -519,6 +528,7 @@ def all_script(driver):
                 else:
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
+                    config.perte = 0
                     config.log(f"FIN 7 {config.scriptType}", 'success', False)
                     RedisIPC.set_running(config.scriptType, False, config.newmatch)
 
@@ -537,6 +547,11 @@ def all_script(driver):
         config.init_variable()
         config.global_match_win[i] = 0.0  # Initialize win counter for script type (float)
         config.winmatch[i] = 0  # Initialize match counter for script type
+    try:
+        from Functions.TelegramBetsAPI import flush_api_result_queue
+        flush_api_result_queue()
+    except Exception:
+        pass
     RedisIPC.reset_gain(config.newmatch)
     config.all_scores = {}
     # Supprimer le match de la base de données

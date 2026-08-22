@@ -302,9 +302,8 @@ def all_script(driver):
                     config.result = GetResult(driver)
                     _api_id = (config.validated_bet or {}).get('api_bet_id')
                     if _api_id:
-                        if not hasattr(config, '_api_result_queue'):
-                            config._api_result_queue = []
-                        config._api_result_queue.append({'id': _api_id, 'result': 'win' if config.result == 'WIN' else 'lost'})
+                        from Functions.TelegramBetsAPI import queue_bet_result
+                        queue_bet_result(_api_id, 'win' if config.result == 'WIN' else 'lost')
                     if config.result == 'WIN':
                         #GetIfGameEnd(driver)
                         config.perte = RedisIPC.get_loss(config.scriptType)
@@ -505,9 +504,8 @@ def all_script(driver):
                 _api_id = (config.validated_bet or {}).get('api_bet_id')
                 _res = (config.validated_bet or {}).get('result')
                 if _api_id and _res in ('WIN', 'LOSE'):
-                    if not hasattr(config, '_api_result_queue'):
-                        config._api_result_queue = []
-                    config._api_result_queue.append({'id': _api_id, 'result': 'win' if _res == 'WIN' else 'lost'})
+                    from Functions.TelegramBetsAPI import queue_bet_result
+                    queue_bet_result(_api_id, 'win' if _res == 'WIN' else 'lost')
 
             total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
             config.log(f"Gain total match {config.newmatch}: {total_gain}", 'success', False)

@@ -306,22 +306,54 @@ def update_bet_result_auxotracker(bet_id: int, result: str) -> bool:
         return False
 
 
+_RESULT_QUEUE_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'api_result_queue.json')
+
+
+def _load_result_queue() -> list:
+    try:
+        with open(_RESULT_QUEUE_PATH, 'r') as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+
+def _save_result_queue(queue: list) -> None:
+    try:
+        with open(_RESULT_QUEUE_PATH, 'w') as f:
+            json.dump(queue, f)
+    except Exception:
+        pass
+
+
+def queue_bet_result(api_bet_id: int, result: str) -> None:
+    """Ajoute un résultat en attente dans la queue persistante (JSON + mémoire)."""
+    entry = {'id': api_bet_id, 'result': result}
+    if not hasattr(config, '_api_result_queue'):
+        config._api_result_queue = _load_result_queue()
+    if not any(e['id'] == api_bet_id for e in config._api_result_queue):
+        config._api_result_queue.append(entry)
+        _save_result_queue(config._api_result_queue)
+
+
 def flush_api_result_queue() -> None:
     """
-    Envoie en batch tous les résultats en attente dans config._api_result_queue.
-    Appelé en fin de match pour ne pas bloquer la boucle critique.
+    Envoie en batch tous les résultats en attente (queue JSON persistante).
+    Appelé en fin de match — 0 latence pendant la boucle critique.
     """
-    queue = getattr(config, '_api_result_queue', [])
+    if not hasattr(config, '_api_result_queue'):
+        config._api_result_queue = _load_result_queue()
+    queue = config._api_result_queue
     if not queue:
         return
-    sent = []
+    sent_ids = []
     for entry in queue:
         try:
             if update_bet_result_auxotracker(entry['id'], entry['result']):
-                sent.append(entry['id'])
+                sent_ids.append(entry['id'])
         except Exception:
             pass
-    config._api_result_queue = [e for e in queue if e['id'] not in sent]
+    config._api_result_queue = [e for e in queue if e['id'] not in sent_ids]
+    _save_result_queue(config._api_result_queue)
 
 
 def get_unprocessed_telegram_bets(limit: int = 50) -> List[Dict]:
