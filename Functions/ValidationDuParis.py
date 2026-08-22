@@ -331,6 +331,27 @@ def ValidationDuParis(driver, nexbet=False):
         config.placed_game = config.looking_game
         config.log(f'{config.validated_bet}', 'info', False, indent=3)
 
+        # Envoi du pari validé à l'API AuxoTracker (même format que le watcher)
+        try:
+            from Functions.TelegramBetsAPI import send_bet_data_to_api
+            _newmatch = getattr(config, 'newmatch', '') or ''
+            _parts = _newmatch.split(' - ', 1)
+            _eq1 = _parts[0].strip() if len(_parts) >= 1 else _newmatch
+            _eq2 = _parts[1].strip() if len(_parts) >= 2 else ''
+            _bet_dict = {
+                "tipster": getattr(config, 'scriptType', 'BOT'),
+                "matches": [{
+                    "equipe_1": _eq1,
+                    "equipe_2": _eq2,
+                    "selection": str(getattr(config, 'win_type', '')),
+                    "cote": str(getattr(config, 'cote', '')),
+                    "sport_id": 2
+                }]
+            }
+            send_bet_data_to_api(_bet_dict, sender_username=getattr(config, 'scriptType', 'BOT'))
+        except Exception as _e:
+            config.log(f"Erreur envoi pari API AuxoTracker: {_e}", 'warning', False)
+
         config.perte = RedisIPC.get_loss(config.scriptType, config.perte)
 
         config.perte = float(config.perte) + float(config.mise)
