@@ -300,6 +300,13 @@ def all_script(driver):
                     
                         continue
                     config.result = GetResult(driver)
+                    try:
+                        from Functions.TelegramBetsAPI import update_bet_result_auxotracker
+                        _api_id = (config.validated_bet or {}).get('api_bet_id')
+                        if _api_id:
+                            update_bet_result_auxotracker(_api_id, 'win' if config.result == 'WIN' else 'lost')
+                    except Exception:
+                        pass
                     if config.result == 'WIN':
                         #GetIfGameEnd(driver)
                         config.perte = RedisIPC.get_loss(config.scriptType)
@@ -497,6 +504,14 @@ def all_script(driver):
             if not config.validated_bet or config.validated_bet.get('result') is None:
                 print('result', config.validated_bet.get('result'))
                 GetResult(driver)
+                try:
+                    from Functions.TelegramBetsAPI import update_bet_result_auxotracker
+                    _api_id = (config.validated_bet or {}).get('api_bet_id')
+                    _res = (config.validated_bet or {}).get('result')
+                    if _api_id and _res in ('WIN', 'LOSE'):
+                        update_bet_result_auxotracker(_api_id, 'win' if _res == 'WIN' else 'lost')
+                except Exception:
+                    pass
 
             total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
             config.log(f"Gain total match {config.newmatch}: {total_gain}", 'success', False)

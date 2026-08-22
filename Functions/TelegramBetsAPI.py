@@ -256,6 +256,56 @@ def send_bet_data_to_api(bet_data: Dict, message_original: str = None, sender_us
     return telegram_bets_api.send_bet_to_api(bet_data, message_original, sender_username)
 
 
+def _auxotracker_headers() -> Dict:
+    token = getattr(config, 'AUXOBOT_TOKEN', None)
+    return {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json',
+    }
+
+
+def send_bet_to_auxotracker(bet_dict: Dict) -> Optional[int]:
+    """
+    Envoie un pari à POST /api/auxobot/bets sur AuxoTracker.
+    Retourne l'ID du pari créé, ou None en cas d'erreur.
+    """
+    try:
+        base = getattr(config, 'AUXOTRACK_API_URL', 'https://api.auxotracker.p-com.studio')
+        url = f"{base}/api/auxobot/bets"
+        response = requests.post(url, headers=_auxotracker_headers(), json=bet_dict, timeout=15, verify=False)
+        if response.ok:
+            data = response.json()
+            bet_id = data.get('data', {}).get('id') if isinstance(data.get('data'), dict) else data.get('id')
+            config.log(f"Pari envoyé AuxoTracker ID={bet_id}", 'info', False)
+            return bet_id
+        else:
+            config.log(f"Erreur AuxoTracker POST: {response.status_code} {response.text[:200]}", 'warning', False)
+            return None
+    except Exception as e:
+        config.log(f"Exception send_bet_to_auxotracker: {e}", 'warning', False)
+        return None
+
+
+def update_bet_result_auxotracker(bet_id: int, result: str) -> bool:
+    """
+    Met à jour le résultat d'un pari via PATCH /api/auxobot/bets/{id}.
+    result doit être 'win' ou 'lost'.
+    """
+    try:
+        base = getattr(config, 'AUXOTRACK_API_URL', 'https://api.auxotracker.p-com.studio')
+        url = f"{base}/api/auxobot/bets/{bet_id}"
+        response = requests.patch(url, headers=_auxotracker_headers(), json={'result': result}, timeout=15, verify=False)
+        if response.ok:
+            config.log(f"Résultat AuxoTracker mis à jour: ID={bet_id} result={result}", 'info', False)
+            return True
+        else:
+            config.log(f"Erreur AuxoTracker PATCH: {response.status_code} {response.text[:200]}", 'warning', False)
+            return False
+    except Exception as e:
+        config.log(f"Exception update_bet_result_auxotracker: {e}", 'warning', False)
+        return False
+
+
 def get_unprocessed_telegram_bets(limit: int = 50) -> List[Dict]:
     """
     Fonction utilitaire pour récupérer les paris non traités.
