@@ -54,11 +54,13 @@ command = f'open -na "Google Chrome" --args --remote-debugging-port={config.loca
 print(command)
 
 from ChromeDriver.SetDriver import get_script_driver
+from websocket_server import start_bridge
 
 num_fenetre = 3
 time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 
 driver = get_script_driver(num_fenetre)
+start_bridge(wait_timeout=0)  # démarre WS, fallback Selenium si extension absente
 from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch

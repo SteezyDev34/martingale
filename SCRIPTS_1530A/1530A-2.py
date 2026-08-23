@@ -50,10 +50,12 @@ else:
 # Chargement de Chrome driver
 config.localhost = 43151
 from ChromeDriver.SetDriver import get_script_driver
+from websocket_server import start_bridge
 num_fenetre = 4
 time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
 
 driver = get_script_driver(num_fenetre)
+start_bridge(wait_timeout=0)
 from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
