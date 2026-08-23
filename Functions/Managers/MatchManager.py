@@ -272,10 +272,14 @@ class MatchManager:
                     created_at TIMESTAMP
                 )
             ''')
-            # Migration : ajouter la colonne link si elle n'existe pas (tables créées avant cette version)
+            # Migration : ajouter les colonnes manquantes (rétrocompatibilité)
             existing_cols = [row[1] for row in conn.execute("PRAGMA table_info(matches_todo)")]
             if 'link' not in existing_cols:
                 conn.execute("ALTER TABLE matches_todo ADD COLUMN link TEXT")
+            if 'script_types' not in existing_cols:
+                conn.execute("ALTER TABLE matches_todo ADD COLUMN script_types TEXT")
+            if 'total_gain_wanted' not in existing_cols:
+                conn.execute("ALTER TABLE matches_todo ADD COLUMN total_gain_wanted FLOAT")
 
     def get_remote_matches_todo(self) -> List[dict]:
         """
@@ -332,6 +336,27 @@ class MatchManager:
 
         return None
 
+    def get_match_script_config(self, match_id: str) -> dict:
+        """
+        Retourne {'script_types': list, 'total_gain_wanted': float} pour un match.
+        Retourne un dict vide si non trouvé.
+        """
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cur = conn.execute(
+                    "SELECT script_types, total_gain_wanted FROM matches_todo WHERE match_id = ?",
+                    (match_id,)
+                )
+                row = cur.fetchone()
+                if row:
+                    import json as _json
+                    script_types = _json.loads(row[0]) if row[0] else []
+                    total_gain_wanted = float(row[1]) if row[1] else 0.0
+                    return {'script_types': script_types, 'total_gain_wanted': total_gain_wanted}
+        except Exception as e:
+            config.log(f"Erreur DB get_match_script_config: {e}", 'warning', True)
+        return {}
+
     def is_match_todo(self, match_id: str) -> bool:
         """
         Vérifie si un match est dans la liste des matchs à faire (locale ou distante).
@@ -367,18 +392,22 @@ class MatchManager:
             bool: True si ajouté avec succès (local ou distant), False sinon
         """
         try:
-            players, league, match_id, date_str, prob, link = match_info.split('|')
+            parts = match_info.split('|')
+            players, league, match_id, date_str, prob = parts[0], parts[1], parts[2], parts[3], parts[4]
+            link = parts[5] if len(parts) > 5 else ''
+            script_types_json = parts[6] if len(parts) > 6 else '[]'
+            total_gain_wanted = float(parts[7]) if len(parts) > 7 else 0.0
             # Ajout local
             added_locally = False
             with sqlite3.connect(self.db_path) as conn:
                 try:
                     conn.execute(
                         """
-                        INSERT INTO matches_todo 
-                        (match_id, players, league, match_date, probability, link, created_at)
-                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                        INSERT INTO matches_todo
+                        (match_id, players, league, match_date, probability, link, script_types, total_gain_wanted, created_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """,
-                        (match_id, players, league, date_str, float(prob), link, datetime.now())
+                        (match_id, players, league, date_str, float(prob), link, script_types_json, total_gain_wanted, datetime.now())
                     )
                     added_locally = True
                 except sqlite3.IntegrityError:

@@ -1007,3 +1007,62 @@ def get_player_nickname(name, nickname_file="nicknames.json"):
             if nick.strip().lower() == lower_name:
                 return [real] + nicks
     return None
+
+
+def get_match_stats_extended(playerName1, playerName2):
+    """
+    Retourne les stats détaillées des deux joueurs pour décider des scriptTypes.
+    Clés : proba40A, svc1, ret1, svc2, ret2 (valeurs 0.0–1.0).
+    """
+    cache_key = f"match_stats_{unidecode(playerName1).strip().lower()}_{unidecode(playerName2).strip().lower()}"
+    cache = load_cache()
+    if cache_key in cache:
+        return cache[cache_key]
+
+    empty = {'proba40A': 0.0, 'svc1': 0.0, 'ret1': 0.0, 'svc2': 0.0, 'ret2': 0.0}
+
+    def _search_player(name):
+        url = f"https://api.auxotracker.p-com.studio/api/sports/2/teams/search?search={name.replace(' ', '+')}"
+        try:
+            resp = requests.get(url, headers=headers, verify=False, timeout=10)
+            data = resp.json().get('data', [])
+            for p in data:
+                if '/' not in p.get('name', ''):
+                    return p.get('id')
+            return data[0]['id'] if data else None
+        except Exception:
+            return None
+
+    def _get_player_stats(pid):
+        try:
+            url = f"https://api.auxotracker.p-com.studio/api/stats/tennis/player/{pid}"
+            d = requests.get(url, headers=headers, verify=False, timeout=10).json().get('data', {})
+            fsps, fspt, bps, bpt = 0, 0, 0, 0
+            for stat in d.get('statistics', []):
+                fsps += stat.get('firstServePointsScored', 0)
+                fspt += stat.get('firstServePointsTotal', 0)
+                bps += stat.get('breakPointsScored', 0)
+                bpt += stat.get('breakPointsTotal', 0)
+            svc = fsps / fspt if fspt > 0 else 0.0
+            ret = bps / bpt if bpt > 0 else 0.0
+            return svc, ret
+        except Exception:
+            return 0.0, 0.0
+
+    pid1 = _search_player(playerName1)
+    pid2 = _search_player(playerName2)
+    if not pid1 and not pid2:
+        return empty
+
+    svc1, ret1 = _get_player_stats(pid1) if pid1 else (0.0, 0.0)
+    svc2, ret2 = _get_player_stats(pid2) if pid2 else (0.0, 0.0)
+    prob1 = svc1 * ret1
+    prob2 = svc2 * ret2
+    result = {
+        'proba40A': prob1 + prob2,
+        'svc1': svc1, 'ret1': ret1,
+        'svc2': svc2, 'ret2': ret2,
+    }
+    cache[cache_key] = result
+    save_cache(cache)
+    return result

@@ -4,6 +4,61 @@ import os
 import time
 from datetime import datetime
 
+
+# ---------------------------------------------------------------------------
+# Seuils de sélection des scriptTypes (tunable)
+# svc = % 1er service gagné  |  ret = % balles de break converties
+# proba40A = svc1*ret1 + svc2*ret2
+# ---------------------------------------------------------------------------
+_THRESHOLDS = {
+    # Base — activés si stats OK
+    '300':   lambda s: s['svc_avg'] >= 0.58,
+    '15A':   lambda s: s['svc_avg'] >= 0.62,
+    '30A':   lambda s: s['svc_avg'] >= 0.60,
+    'BREAK': lambda s: s['ret_avg'] >= 0.38,
+    '40A':   lambda s: s['proba40A'] >= 0.04,
+    # Risqués — seuils plus exigeants
+    '150':   lambda s: s['svc_avg'] >= 0.68,
+    '015':   lambda s: s['ret_avg'] >= 0.42,
+    '030':   lambda s: s['ret_avg'] >= 0.42,
+    '6P':    lambda s: s['proba40A'] <= 0.10 and s['svc_avg'] >= 0.58,
+    '4P':    lambda s: s['proba40A'] <= 0.05 and s['svc_avg'] >= 0.60,
+    '5P':    lambda s: s['proba40A'] <= 0.05 and s['svc_avg'] >= 0.60,
+    'HOLD':  lambda s: s['svc_avg'] >= 0.65,
+}
+
+_BASE_SCRIPTS  = ['300', '15A', '30A', 'BREAK', '40A']
+_RISKY_SCRIPTS = ['150', '015', '030', '6P', '4P', '5P', 'HOLD']
+
+
+def compute_script_types(stats):
+    """
+    Retourne (scriptTypeList, total_gain_wanted) selon les stats du match.
+    stats = dict avec proba40A, svc1, ret1, svc2, ret2.
+    """
+    svc_avg = (stats.get('svc1', 0) + stats.get('svc2', 0)) / 2
+    ret_avg = (stats.get('ret1', 0) + stats.get('ret2', 0)) / 2
+    s = {
+        'proba40A': stats.get('proba40A', 0),
+        'svc_avg': svc_avg,
+        'ret_avg': ret_avg,
+        'svc1': stats.get('svc1', 0),
+        'svc2': stats.get('svc2', 0),
+        'ret1': stats.get('ret1', 0),
+        'ret2': stats.get('ret2', 0),
+    }
+    script_types = []
+    for st in _BASE_SCRIPTS + _RISKY_SCRIPTS:
+        if _THRESHOLDS[st](s):
+            script_types.append(st)
+    total_gain_wanted = len(script_types) * 3.0
+    config.log(
+        f"ScriptTypes sélectionnés ({len(script_types)}): {script_types} → objectif {total_gain_wanted}€ "
+        f"[svc={svc_avg:.2f} ret={ret_avg:.2f} p40A={s['proba40A']:.4f}]",
+        'info', True
+    )
+    return script_types, total_gain_wanted
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -81,11 +136,15 @@ def traiter_matchlist(matchlist):
     for matchItem in matchlist:
         players_name = matchItem[0]
         ligue_name = matchItem[1]
-        # Vérifier si c'est un match WTA
-        if 'wta' in ligue_name.lower() or 'féminin' in ligue_name.lower() or 'femmes' in ligue_name.lower() or 'women' in ligue_name.lower():
-            config.proba40A = Functions_stats.get_wta_proba_40A_sofascore(players_name[0], players_name[1])
-        else:
-            config.proba40A = Functions_stats.get_wta_proba_40A_sofascore(players_name[0], players_name[1])
+        # Récupération des stats étendues (svc, ret, proba40A)
+        stats = Functions_stats.get_match_stats_extended(players_name[0], players_name[1])
+        config.proba40A = stats['proba40A']
+        # Sélection des scriptTypes selon les stats
+        script_types, total_gain_wanted = compute_script_types(stats)
+        # On n'inclut le match que si au moins un scriptType est activé
+        if not script_types:
+            config.log(f"Aucun scriptType activé pour {players_name[0]} vs {players_name[1]}, match ignoré", 'warning', True)
+            continue
         if float(config.proba40A) >= float(config.probamini):
             try:
                 # Construire l'URL de l'API auxotracker avec encodage des noms et date du jour
@@ -115,6 +174,8 @@ def traiter_matchlist(matchlist):
                 # Ajouter les informations au matchItem
                 matchItem.append(config.proba40A)
                 matchItem.append(sofascore_link)
+                matchItem.append(script_types)
+                matchItem.append(total_gain_wanted)
                 goodmatch.append(matchItem)
             except Exception as e:
                 config.log(f"Erreur lors de la récupération du lien Sofascore: {e}", 'warning', True)
@@ -316,6 +377,16 @@ def rechercheDeMatch(driver):
             driver.get(get_url)
             print(get_url)
             print('MATCH TROUVE!')
+            # Charger les scriptTypes calculés au classement pour ce match
+            _script_cfg = match_manager.get_match_script_config(config.newmatch)
+            if _script_cfg and _script_cfg.get('script_types'):
+                config.scriptTypeList = _script_cfg['script_types']
+                config.total_gain_wanted = _script_cfg['total_gain_wanted']
+                config.log(
+                    f"ScriptTypes chargés pour {config.newmatch}: {config.scriptTypeList} "
+                    f"→ objectif {config.total_gain_wanted}€",
+                    'success', True
+                )
             logline += 3
             config.log_clear_line(logline)
             time.sleep(3)
@@ -882,13 +953,17 @@ def classementeDeMatch(driver, use_json_cache=True):
                 date_str = match[3]
                 prob = match[4]
                 link = match[5]
+                script_types_json = json.dumps(match[6]) if len(match) > 6 else json.dumps([])
+                total_gain = str(match[7]) if len(match) > 7 else '0'
                 match_info = "|".join([
                     players_str,
                     str(league),
                     str(match_id),
                     str(date_str),
                     str(prob),
-                    str(link)
+                    str(link),
+                    script_types_json,
+                    total_gain
                 ])
 
                 success = match_manager.add_match_todo(match_info)
@@ -1267,13 +1342,17 @@ def newclassementeDeMatch(driver):
                 date_str = match[3]
                 prob = match[4]
                 link = match[5]
+                script_types_json = json.dumps(match[6]) if len(match) > 6 else json.dumps([])
+                total_gain = str(match[7]) if len(match) > 7 else '0'
                 match_info = "|".join([
                     players_str,
                     str(league),
                     str(match_id),
                     str(date_str),
                     str(prob),
-                    str(link)
+                    str(link),
+                    script_types_json,
+                    total_gain
                 ])
 
                 success = match_manager.add_match_todo(match_info)
