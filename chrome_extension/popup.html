@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: monospace; width: 220px; padding: 10px; background: #1a1a2e; color: #eee; }
+    h3 { margin: 0 0 8px; color: #00d4ff; font-size: 13px; }
+    #status { font-size: 12px; padding: 4px 8px; border-radius: 4px; background: #333; }
+    #status.connected { background: #1a4a1a; color: #4caf50; }
+    #status.disconnected { background: #4a1a1a; color: #f44336; }
+    #log { margin-top: 8px; font-size: 10px; color: #aaa; max-height: 100px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <h3>🎾 Martingale Bridge</h3>
+  <div id="status" class="disconnected">⚫ Python déconnecté</div>
+  <div id="log"></div>
+  <script src="popup.js"></script>
+</body>
+</html>

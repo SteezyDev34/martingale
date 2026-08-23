@@ -38,3 +38,4 @@ ac
 redis>=4.8.0
 hiredis>=2.0.0
 anthropic
+websockets>=12.0
