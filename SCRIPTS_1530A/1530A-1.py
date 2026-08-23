@@ -102,12 +102,12 @@ while (config.win < 100):
         else:
             config.log(f"ERROR SCRIPT : {e}", 'error', False)
     else:
-        if config.perte > 0:
-            DispatchPerte()
+        #if config.perte > 0:
+            #DispatchPerte()
         for i in config.scriptTypeList:
             config.switchScript(i)
             config.ScriptConfig(i).reset()
-            DispatchPerte()
+            #DispatchPerte()
             config.init_variable()
             config.global_match_win[i] = 0  # Initialize win counter for script type
             config.winmatch[i] = 0  # Initialize match counter for script type

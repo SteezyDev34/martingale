@@ -579,7 +579,7 @@ def all_script(driver):
                     RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
                 total_gain = RedisIPC.get_total_gain(config.newmatch) - RedisIPC.get_total_loss(config.newmatch)
                 config.log(f"Gain total match {config.newmatch}: {total_gain} (net gain ajouté: {config.netprofit})", 'success', False)
-                if RedisIPC.get_total_loss(config.newmatch) < 10:
+                if RedisIPC.get_total_loss(config.newmatch) < 20:
                     GetIfGameEnd(driver)
                 print('is running for ',config.newmatch)
                 config.netprofit = 0

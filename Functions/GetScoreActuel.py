@@ -65,6 +65,17 @@ def GetScoreActuel(driver):
             config._dom_debounce = None
             _appliquer_transition(driver, config.score_actuel, source='dom')
         else:
+            # DOM inchangé : vérifier si Redis/hint a déjà acté une transition plus récente
+            try:
+                from Functions import RedisIPC
+                etat_redis = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
+                if etat_redis and etat_redis['score'] != str(config.saved_score):
+                    redis_np = int(etat_redis.get('numero_point', -1))
+                    local_np = get_numero_point(config.saved_score) if config.saved_score else -1
+                    if redis_np > local_np:
+                        _appliquer_transition(driver, etat_redis['score'], source='redis_hint')
+            except Exception:
+                pass
             get_score = True
         config.saved_score = config.score_actuel
     return True
@@ -86,6 +97,13 @@ def _appliquer_transition(driver, candidat_score, source):
     if source == 'dom':
         GetSetActuel(driver)
         GetJeuActuel(driver)
+    elif source == 'redis_hint':
+        # Score déjà acté dans Redis par le hint Sofascore : adopter set/jeu depuis Redis
+        from Functions import RedisIPC
+        etat = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
+        if etat:
+            config.set_actuel = etat['set_actuel']
+            config.jeu_actuel = etat['jeu_actuel']
     # En mode hint Sofascore, 1xBet n'a pas bougé : on réutilise le set/jeu actuel déjà
     # connus (ils n'ont aucune raison d'avoir changé puisque le bookmaker est en retard).
 

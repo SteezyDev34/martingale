@@ -29,9 +29,10 @@ scriptTypeList = ['15V1']
 #scriptTypeList1 = ['BREAK']
 scriptTypeList1 = ['15V2']
 #scriptTypeList2 = ['015', '300', '15A', '30A']
-scriptTypeList2 = ['300', '15A', '30A']
-scriptTypeList3 = ['6P', '5P', '40A']
-scriptTypeList4 = ['5P','BREAK']
+scriptTypeList2 = ['150','300', '15A', '30A']
+scriptTypeList6 = ['150', '015', '030']
+scriptTypeList3 = ['BREAK', '6P', '40A']
+scriptTypeList4 = ['4P','5P','HOLD']
 scriptTypeList5 = ['HOLD']  # Hold du serveur (jeu remporté sur son service) — inverse de BREAK
 allScriptType = ['15V1','15V2','150', '015', '030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK',
                  'HOLD', '1SET']
@@ -136,7 +137,7 @@ wantwin = 0.2
 nb_tour = 1
 increment = 0
 mtt_recup = 0.54
-total_gain_wanted = 3
+total_gain_wanted = 1
 
 recup30 = 0
 rattrape_perte = 1  # ne pas changer

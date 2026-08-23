@@ -97,6 +97,9 @@ def all_script(driver):
             get1setGlobalPerte()
         if config.perte == 0:
             getGlobalPerte()
+        if config.perte == 0:
+            config.perte = RedisIPC.deduct_largest(config.newmatch)
+        RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
         config.log_clear_line()
 
         # END RECHERCHE INFOS DE MISE
@@ -206,10 +209,10 @@ def all_script(driver):
                         continue
                     config.result = GetResult(driver)
                     _api_id = (config.validated_bet or {}).get('api_bet_id')
-                    if _api_id:
-                        from Functions.TelegramBetsAPI import queue_bet_result
-                        queue_bet_result(_api_id, 'win' if config.result == 'WIN' else 'lost')
                     if config.result == 'WIN':
+                        if _api_id:
+                            from Functions.TelegramBetsAPI import queue_bet_result
+                            queue_bet_result(_api_id, 'win')
                         config.perte = RedisIPC.get_loss(config.scriptType)
                         config.netprofit = round((float(config.validated_bet.get('montant', 0)) * float(config.validated_bet.get('cote', 0))) - float(config.perte), 2)
                         config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
@@ -218,20 +221,21 @@ def all_script(driver):
                         config.log(f"netprofit : {config.netprofit}")
                         RedisIPC.add_gain_to_all(float(config.netprofit), config.newmatch)
                         config.perte = 0
-                        if RedisIPC:
-                            RedisIPC.set_loss(config.scriptType, 0, matchname=config.newmatch)
+                        RedisIPC.set_loss(config.scriptType, 0, matchname=config.newmatch)
                         total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
                         config.log(f"Gain total match {config.newmatch}: {total_gain}", 'success', False)
-                        
+
                         config.ScriptConfig(scriptType).reset()
                         config.init_variable()
                         DeleteBet(driver)
                         if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or total_gain < float(config.total_gain_wanted):
                             print("#RECHERCHE INFOS DE MISE")
-
                             getGlobalPerte()
                             if config.perte == 0:
                                 get1setGlobalPerte()
+                            if config.perte == 0:
+                                config.perte = RedisIPC.deduct_largest(config.newmatch)
+                            RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
                             config.error = False
                             config.log(
                                 f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
@@ -428,6 +432,10 @@ def all_script(driver):
                 break
 
             if config.validated_bet.get('result') == 'LOSE':
+                _api_id = (config.validated_bet or {}).get('api_bet_id')
+                if _api_id:
+                    from Functions.TelegramBetsAPI import queue_bet_result
+                    queue_bet_result(_api_id, 'lost')
                 config.perte = RedisIPC.get_loss(config.scriptType)
                 if config.perte == 0:
                     get1setGlobalPerte()
@@ -476,6 +484,10 @@ def all_script(driver):
                     print("ERROR : ecup set " + str(config.set_actuel))
                     config.error = True
             elif config.validated_bet.get('result') == 'WIN':
+                _api_id = (config.validated_bet or {}).get('api_bet_id')
+                if _api_id:
+                    from Functions.TelegramBetsAPI import queue_bet_result
+                    queue_bet_result(_api_id, 'win')
                 config.perte = RedisIPC.get_loss(config.scriptType)
                 config.netprofit = round((float(config.validated_bet.get('montant', 0)) * float(config.validated_bet.get('cote', 0))) - float(config.perte), 2)
                 config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
@@ -485,20 +497,22 @@ def all_script(driver):
 
                 RedisIPC.add_gain_to_all(float(config.netprofit), config.newmatch)
                 config.perte = 0
-                if RedisIPC:
-                    RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
+                RedisIPC.set_loss(config.scriptType, 0, matchname=config.newmatch)
                 total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
                 config.log(f"Gain total match {config.newmatch}: {total_gain}", 'success', False)
-                
+
                 config.ScriptConfig(scriptType).reset()
                 config.init_variable()
                 DeleteBet(driver)
                 if (float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) and total_gain < float(config.total_gain_wanted)) or total_gain < float(config.total_gain_wanted):
-                    
+
                     print("#RECHERCHE INFOS DE MISE")
                     getGlobalPerte()
                     if config.perte == 0:
                         get1setGlobalPerte()
+                    if config.perte == 0:
+                        config.perte = RedisIPC.deduct_largest(config.newmatch)
+                    RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
                     config.error = False
                     config.log(
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
