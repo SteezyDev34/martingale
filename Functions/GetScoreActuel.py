@@ -12,6 +12,7 @@ import config
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetJeuActuel import GetJeuActuel
 from Functions.GetSetActuel import GetSetActuel
+from Functions.BridgeAdapter import bridge_active, bridge_get_score_actuel, bridge_wait_score_change
 
 
 # Remplacée par Functions/SofascoreWatcher.py : lire l'onglet SofaScore depuis le
@@ -21,6 +22,22 @@ from Functions.GetSetActuel import GetSetActuel
 
 
 def GetScoreActuel(driver):
+    # ── Bridge Chrome Extension (sans Selenium) ──
+    if bridge_active():
+        ok = bridge_get_score_actuel()
+        if ok:
+            dom_debounce = getattr(config, '_dom_debounce', None)
+            if config.saved_score != config.score_actuel and config.score_actuel != dom_debounce:
+                config._dom_debounce = None
+                _appliquer_transition(driver, config.score_actuel, source='bridge')
+            else:
+                # Attendre un vrai changement de score
+                bridge_wait_score_change()
+                if config.score_actuel and config.score_actuel != config.saved_score:
+                    _appliquer_transition(driver, config.score_actuel, source='bridge')
+            config.saved_score = config.score_actuel
+        return ok
+    # ── Selenium fallback ──────────────────────────────────────────────────────
     config.score_actuel = False
     get_score = False
     tentative = 0
@@ -97,13 +114,18 @@ def _appliquer_transition(driver, candidat_score, source):
     if source == 'dom':
         GetSetActuel(driver)
         GetJeuActuel(driver)
-    elif source == 'redis_hint':
-        # Score déjà acté dans Redis par le hint Sofascore : adopter set/jeu depuis Redis
-        from Functions import RedisIPC
-        etat = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
-        if etat:
-            config.set_actuel = etat['set_actuel']
-            config.jeu_actuel = etat['jeu_actuel']
+    elif source in ('redis_hint', 'bridge'):
+        # Score depuis Redis hint ou Extension Chrome : adopter set/jeu depuis Redis ou bridge
+        if source == 'redis_hint':
+            from Functions import RedisIPC
+            etat = RedisIPC.get_match_score(getattr(config, 'newmatch', ''))
+            if etat:
+                config.set_actuel = etat['set_actuel']
+                config.jeu_actuel = etat['jeu_actuel']
+        else:
+            from Functions.BridgeAdapter import bridge_get_jeu_actuel, bridge_get_set_actuel
+            bridge_get_set_actuel()
+            bridge_get_jeu_actuel()
     # En mode hint Sofascore, 1xBet n'a pas bougé : on réutilise le set/jeu actuel déjà
     # connus (ils n'ont aucune raison d'avoir changé puisque le bookmaker est en retard).
 

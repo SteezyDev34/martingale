@@ -123,6 +123,13 @@ def SendBetData():
 
 
 def ValidationDuParis(driver, nexbet=False):
+    from Functions.BridgeAdapter import bridge_active, bridge_place_and_validate_bet
+    if bridge_active():
+        mise = float(getattr(config, 'mise', 1.0))
+        market = getattr(config, 'scriptType', '')
+        ok = bridge_place_and_validate_bet(market=market, mise=mise)
+        config.validated_bet = config.validated_bet or {}
+        return ok
     validation = False
     tentative = 0
     already = False

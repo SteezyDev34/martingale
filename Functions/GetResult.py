@@ -7,6 +7,14 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def GetResult(driver):
+    from Functions.BridgeAdapter import bridge_active, bridge_get_result, bridge_wait_score_change
+    if bridge_active():
+        # Attendre que le score change (fin du point) puis lire le résultat
+        bridge_wait_score_change()
+        result = bridge_get_result()
+        if result:
+            return result
+        # Si result=None, on continue en boucle ci-dessous via GetScoreActuel bridge
     ##ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
     if config.scriptType not in ['15V1', '15V2']:
         RetourTpsReg(driver)

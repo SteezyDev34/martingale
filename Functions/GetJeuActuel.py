@@ -8,6 +8,9 @@ from Functions.GetSetActuel import GetSetActuel
 
 
 def GetJeuActuel(driver):
+    from Functions.BridgeAdapter import bridge_active, bridge_get_jeu_actuel
+    if bridge_active():
+        return bridge_get_jeu_actuel()
     savedjeu = config.jeu_actuel
     config.jeu_actuel = False
     tentative = 0

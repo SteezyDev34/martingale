@@ -188,8 +188,37 @@ class ExtensionBridge:
 
 bridge = ExtensionBridge()
 
+_bridge_started = False
+
+
+def start_bridge(wait_timeout: int = 0):
+    """
+    Démarre le serveur WebSocket et branche les callbacks score.
+    À appeler au début du script principal (avant all_script).
+
+    Args:
+        wait_timeout: si > 0, bloque jusqu'à ce que l'extension se connecte (secondes).
+                      0 = démarrage sans attente (l'extension peut se connecter plus tard).
+    """
+    global _bridge_started
+    if _bridge_started:
+        return
+    bridge.start()
+    _bridge_started = True
+    # Brancher les callbacks score du BridgeAdapter
+    try:
+        from Functions.BridgeAdapter import setup_score_callbacks
+        setup_score_callbacks()
+    except Exception:
+        pass
+    if wait_timeout > 0:
+        print(f'[WS] Attente connexion extension Chrome ({wait_timeout}s max)...')
+        bridge.wait_connected(timeout=wait_timeout)
+        print('[WS] Extension connectée ✓')
+    else:
+        print('[WS] Serveur WebSocket démarré — en attente de l\'extension Chrome...')
+
 
 if __name__ == '__main__':
-    bridge.start()
-    bridge.wait_connected()
+    start_bridge(wait_timeout=30)
     print('Extension connectée, état:', bridge.get_state())

@@ -9,6 +9,9 @@ import config
 
 
 def GetSetActuel(driver):
+    from Functions.BridgeAdapter import bridge_active, bridge_get_set_actuel
+    if bridge_active():
+        return bridge_get_set_actuel()
     # config.log('Récupératon du set actuel', '', False, 3)
     # config.log_clear_line()
     try:

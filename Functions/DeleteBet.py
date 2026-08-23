@@ -10,6 +10,9 @@ from Functions.GetIfNewSite import GetIfNewSite
 
 
 def DeleteBet(driver):
+    from Functions.BridgeAdapter import bridge_active, bridge_delete_bet
+    if bridge_active():
+        return bridge_delete_bet()
     # driver.switch_to.window(driver.window_handles[0])
     if config.site_type == 'mobile_site':
         try:

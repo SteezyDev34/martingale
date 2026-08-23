@@ -7,6 +7,11 @@ from Functions.GetIfNewSite import GetIfNewSite
 
 
 def GetPlayersName(driver):
+    from Functions.BridgeAdapter import bridge_active, bridge_get_players
+    if bridge_active():
+        p1, p2 = bridge_get_players()
+        if p1 and p2:
+            return [p1, p2]
     try:
         element = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CLASS_NAME,
