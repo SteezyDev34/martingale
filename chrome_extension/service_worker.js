@@ -78,12 +78,11 @@ async function handlePythonMessage(msg) {
       if (tab) {
         await chrome.tabs.update(tab.id, { url: msg.url, active: true });
         pending1xbetTabId = tab.id;
-        sendToPython({ action: 'navigate_ack', tab_id: tab.id });
+        sendToPython({ action: 'navigate_ack', req_id: msg.req_id, tab_id: tab.id });
       } else {
-        // Ouvrir un nouvel onglet
         const newTab = await chrome.tabs.create({ url: msg.url, active: true });
         pending1xbetTabId = newTab.id;
-        sendToPython({ action: 'navigate_ack', tab_id: newTab.id });
+        sendToPython({ action: 'navigate_ack', req_id: msg.req_id, tab_id: newTab.id });
       }
       break;
     }
@@ -91,54 +90,54 @@ async function handlePythonMessage(msg) {
     // Python demande l'état actuel du DOM (score, jeu, set)
     case 'get_state': {
       const tabId = msg.tab_id || pending1xbetTabId;
-      if (!tabId) { sendToPython({ action: 'error', error: 'no_tab', req: msg }); break; }
+      if (!tabId) { sendToPython({ action: 'error', req_id: msg.req_id, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.getState?.() || null);
-      sendToPython({ action: 'state_response', data: result, tab_id: tabId });
+      sendToPython({ action: 'state_response', req_id: msg.req_id, data: result, tab_id: tabId });
       break;
     }
 
     // Python demande de placer un pari
     case 'place_bet': {
       const tabId = msg.tab_id || pending1xbetTabId;
-      if (!tabId) { sendToPython({ action: 'bet_result', success: false, error: 'no_tab' }); break; }
+      if (!tabId) { sendToPython({ action: 'bet_result', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.placeBet?.(args), msg);
-      sendToPython({ action: 'bet_result', ...result, tab_id: tabId });
+      sendToPython({ action: 'bet_result', req_id: msg.req_id, ...result, tab_id: tabId });
       break;
     }
 
     // Python demande de supprimer le pari dans le betslip
     case 'delete_bet': {
       const tabId = msg.tab_id || pending1xbetTabId;
-      if (!tabId) break;
+      if (!tabId) { sendToPython({ action: 'delete_bet_ack', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.deleteBet?.() || {});
-      sendToPython({ action: 'delete_bet_ack', ...result, tab_id: tabId });
+      sendToPython({ action: 'delete_bet_ack', req_id: msg.req_id, ...result, tab_id: tabId });
       break;
     }
 
     // Python demande de valider (confirmer) le pari
     case 'validate_bet': {
       const tabId = msg.tab_id || pending1xbetTabId;
-      if (!tabId) break;
+      if (!tabId) { sendToPython({ action: 'validate_bet_ack', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.validateBet?.(args), msg);
-      sendToPython({ action: 'validate_bet_ack', ...result, tab_id: tabId });
+      sendToPython({ action: 'validate_bet_ack', req_id: msg.req_id, ...result, tab_id: tabId });
       break;
     }
 
     // Python demande le résultat du dernier pari (WIN/LOSE)
     case 'get_result': {
       const tabId = msg.tab_id || pending1xbetTabId;
-      if (!tabId) break;
+      if (!tabId) { sendToPython({ action: 'result_response', req_id: msg.req_id, result: null, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.getResult?.() || {});
-      sendToPython({ action: 'result_response', ...result, tab_id: tabId });
+      sendToPython({ action: 'result_response', req_id: msg.req_id, ...result, tab_id: tabId });
       break;
     }
 
     // Python demande les noms des joueurs
     case 'get_players': {
       const tabId = msg.tab_id || pending1xbetTabId;
-      if (!tabId) break;
+      if (!tabId) { sendToPython({ action: 'players_response', req_id: msg.req_id, p1: null, p2: null, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.getPlayers?.() || {});
-      sendToPython({ action: 'players_response', ...result, tab_id: tabId });
+      sendToPython({ action: 'players_response', req_id: msg.req_id, ...result, tab_id: tabId });
       break;
     }
 
