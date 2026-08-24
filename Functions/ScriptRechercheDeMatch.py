@@ -290,6 +290,18 @@ def rechercheDeMatch(driver):
                     not config.last_classement or config.last_classement != datetime.now().strftime("%Y-%m-%d")):
                 classementeDeMatch(driver, False)
             script_manager.check_previous_scripts(config.script_num)
+            # Déjà sur une page de match ? (match ouvert avant le démarrage du script)
+            if GetIfMatchPage(driver):
+                result = VerificationMatchTrouve.newmatchFromUrl(driver)
+                if result[0]:
+                    config.newmatch = result[1]
+                    config.match_found = True
+                    try:
+                        from Functions._to_remove import AddRunning
+                        AddRunning.main(config.script_num, config.running_file_name)
+                    except Exception:
+                        pass
+                    return
             DeleteBet(driver)
             if not _bridge_recherche_match():
                 import time as _t; _t.sleep(5)
