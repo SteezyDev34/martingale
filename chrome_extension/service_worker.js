@@ -169,9 +169,13 @@ async function execInTab(tabId, fn, args = null) {
   }
 }
 
-// ─── Messages depuis content scripts ─────────────────────────────────────────
+// ─── Messages depuis content scripts / popup ─────────────────────────────────
 
-chrome.runtime.onMessage.addListener((msg, sender) => {
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg?.action === 'get_ws_status') {
+    sendResponse({ connected: wsConnected });
+    return true;
+  }
   if (!msg || !msg.action) return;
 
   // Enrichir avec tab_id
