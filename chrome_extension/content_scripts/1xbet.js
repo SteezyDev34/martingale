@@ -180,10 +180,16 @@
       return { result: null };
     },
 
-    getMatchList() {
+    async getMatchList() {
+      // Attendre que les blocs de ligue apparaissent (site lent — jusqu'à 15s)
+      const firstChamp = await waitFor('.dashboard-champ, .dashboard-champ-content', 15000);
+      if (!firstChamp) return null;
+      // Petit délai pour laisser les scores se charger
+      await sleep(800);
+
       // Retourne [{leagueName, matches:[{p1,p2,score,url,hasBall}]}]
       const champEls = qsa('.dashboard-champ, .dashboard-champ-content');
-      if (!champEls.length) return null; // page pas encore chargée
+      if (!champEls.length) return null;
 
       const leagues = [];
       for (const champ of champEls) {
