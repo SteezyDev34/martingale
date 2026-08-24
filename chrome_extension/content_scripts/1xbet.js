@@ -197,22 +197,18 @@
           const p1 = teams[0] || null;
           const p2 = teams[1] || null;
 
-          // Score jeu courant : les 2 derniers chiffres de la liste de scores
-          // .ui-game-scores contient sets + jeu : [0,0,4,3,30,15] → on veut "30:15"
+          // Score jeu courant — debug : affiche toutes les classes/valeurs
           const scoreItems = matchEl.querySelectorAll('.ui-game-scores__item, .c-events-scoreboard__score');
+          const _dbg = Array.from(scoreItems).map(el => ({ cls: el.className, val: el.textContent.trim() }));
+          if (_dbg.length) console.log('[getMatchList] score items:', JSON.stringify(_dbg));
+
           let score = null;
-          if (scoreItems.length >= 2) {
+          const active = matchEl.querySelectorAll('.ui-game-scores__item--current, .ui-game-scores__item--active, .ui-game-scores__item--inning');
+          if (active.length >= 2) {
+            score = active[0].textContent.trim() + ':' + active[1].textContent.trim();
+          } else if (scoreItems.length >= 2) {
             const vals = Array.from(scoreItems).map(el => el.textContent.trim());
-            // Le score jeu courant est le dernier couple (2 valeurs : joueur1 / joueur2)
-            // Chercher la ligne active ou prendre les 2 dernières valeurs impaires/paires
-            // Heuristique : si dernier(s) elements ont classe "active" ou "inning", les prendre
-            const active = matchEl.querySelectorAll('.ui-game-scores__item--current, .ui-game-scores__item--active, .ui-game-scores__item--inning');
-            if (active.length >= 2) {
-              score = active[0].textContent.trim() + ':' + active[1].textContent.trim();
-            } else if (vals.length >= 2) {
-              // fallback : les 2 derniers
-              score = vals[vals.length - 2] + ':' + vals[vals.length - 1];
-            }
+            score = vals[vals.length - 2] + ':' + vals[vals.length - 1];
           }
 
           const linkEl = matchEl.querySelector('.dashboard-game-block__link, .c-events__name');
