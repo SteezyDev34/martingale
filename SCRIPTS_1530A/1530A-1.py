@@ -47,20 +47,10 @@ else:
     exit()
 
 # Chargement des functions
-# Chargement de Chrome driver
-config.localhost = 43151
-command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
-
-print(command)
-
-from ChromeDriver.SetDriver import get_script_driver
 from websocket_server import start_bridge
 
-num_fenetre = 3
-time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
-
-driver = get_script_driver(num_fenetre)
-start_bridge(wait_timeout=0)  # démarre WS, fallback Selenium si extension absente
+start_bridge(wait_timeout=0)
+driver = None
 from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
@@ -116,7 +106,11 @@ while (config.win < 100):
             sucess = False
         while not sucess:
             try:
-                driver.get(config.site_url)
+                from websocket_server import bridge
+                if bridge.connected:
+                    bridge.navigate(config.site_url)
+                elif driver:
+                    driver.get(config.site_url)
             except:
                 continue
             else:
