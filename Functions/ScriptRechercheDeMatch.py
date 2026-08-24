@@ -301,11 +301,11 @@ def rechercheDeMatch(driver):
                         AddRunning.main(config.script_num, config.running_file_name)
                     except Exception:
                         pass
-                    return
+                    return True
             DeleteBet(driver)
             if not _bridge_recherche_match():
                 import time as _t; _t.sleep(5)
-        return
+        return config.match_found
 
     while not config.match_found and not config.error:
         if config.in_stat and (
