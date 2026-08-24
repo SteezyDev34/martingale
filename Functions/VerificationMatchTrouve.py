@@ -11,6 +11,20 @@ from Functions.Managers.MatchManager import MatchManager
 match_manager = MatchManager.get_instance()
 
 
+def _navigate(driver, url):
+    """Navigate via bridge si actif, sinon Selenium."""
+    try:
+        from Functions.BridgeAdapter import bridge_active
+        if bridge_active():
+            from websocket_server import bridge as _bridge
+            _bridge.navigate(url)
+            return
+    except Exception:
+        pass
+    if driver:
+        driver.get(url)
+
+
 def main(driver, bet_item, matchlist_file_name):
     try:
         # config.log('Vérification si match déjà parié', 'info', True, 4)
@@ -37,7 +51,7 @@ def main(driver, bet_item, matchlist_file_name):
             if config.site_type == 'mobile_site':
                 newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
                 newmatchtxt = f'{newmatchtxt}?platform_type=mobile'
-            driver.get(newmatchtxt)
+            _navigate(driver, newmatchtxt)
             config.log_clear_line()
             return [True, config.newmatch]
         elif config.in_stat and match_is_todo and not match_is_done:
@@ -45,32 +59,14 @@ def main(driver, bet_item, matchlist_file_name):
             if config.site_type == 'mobile_site':
                 newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
                 newmatchtxt = f'{newmatchtxt}?platform_type=mobile'
-            driver.get(newmatchtxt)
+            _navigate(driver, newmatchtxt)
             config.log_clear_line()
             return [True, config.newmatch]
         elif config.in_stat and not match_is_todo and not match_is_done:
             config.log('Le match  n\'est pas autorisé!', 'warning', True, 4, False)
-            #blocage des autres match en atente d'un plus gros BK
             config.log_clear_line()
-            driver.get(newmatchtxt)
+            _navigate(driver, newmatchtxt)
             return [True, config.newmatch]
-            print('vérif si perte')
-            p = config.perte
-            if not p or p == 0:
-                p = getIfGlobalPerte()
-            if not p or p == 0:
-                p = getIf1setGlobalPerte()
-            if not p or p == 0:
-                config.log('Le match  n\'est pas autorisé! pas de perte', 'warning', True, 4, False)
-                return [False, config.newmatch]
-            else:
-                config.log('Le match  non autorisé mais perte en cours', 'success', False, 4, False)
-                if config.site_type == 'mobile_site':
-                    newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
-                    newmatchtxt = f'{newmatchtxt}?platform_type=mobile'
-                driver.get(newmatchtxt)
-                config.log_clear_line()
-                return [True, config.newmatch]
         else:
             
             config.log('Le match  n\'est pas autorisé!', 'warning', True, 4, False)
@@ -113,7 +109,7 @@ def getstats(driver, bet_item, matchlist_file_name):
 def fromUrl(driver, matchlist_file_name):
     try:
         config.log('            Vérification si match déjà parié', 'info', True)
-        newmatchtxt = driver.current_url
+        newmatchtxt = _get_current_url(driver)
 
         newmatch = newmatchtxt.split(
             '-')
@@ -133,9 +129,22 @@ def fromUrl(driver, matchlist_file_name):
 
 
 # VERRIFICATION DU MATCH TROUVÉ PAR URL
+def _get_current_url(driver):
+    """Retourne l'URL courante via bridge ou Selenium."""
+    try:
+        from Functions.BridgeAdapter import bridge_active
+        if bridge_active():
+            from websocket_server import bridge
+            state = bridge.get_state()
+            return (state or {}).get('url', '') or ''
+    except Exception:
+        pass
+    return driver.current_url if driver else ''
+
+
 def newmatchFromUrl(driver):
     try:
-        newmatchtxt = driver.current_url
+        newmatchtxt = _get_current_url(driver)
         newmatchtxt = newmatchtxt.replace('?platform_type=desktop', '')
         newmatchtxt = newmatchtxt.replace('?platform_type=mobile', '')
         newmatch = newmatchtxt.split(

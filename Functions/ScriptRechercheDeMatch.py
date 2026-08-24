@@ -209,12 +209,94 @@ def sauvegarder_matchlist_json(matchlist):
         config.log(f"Erreur lors de l'enregistrement de matchlist: {str(e)}", 'error', True)
 
 
+def _bridge_recherche_match():
+    """Version bridge de rechercheDeMatch — pas de Selenium."""
+    from websocket_server import bridge
+    from Functions.Managers.MatchManager import match_manager
+    from Functions._to_remove import AddRunning
+
+    bridge.navigate(config.site_url)
+    import time as _t; _t.sleep(2)
+
+    leagues = bridge.get_match_list()
+    if not leagues:
+        config.log('ligues introuvables!', 'warning', True, 2, False)
+        return False
+
+    config.log(f'ligues trouvées! ({len(leagues)})', 'success', True, 2, False)
+
+    for league in leagues:
+        ligue_name = league.get('leagueName', '')
+        config.ligue_name = ligue_name
+        if not ligue_name:
+            continue
+        config.log(ligue_name, 'info', False, 2, False)
+
+        if not getCompet():
+            continue
+
+        for match in league.get('matches', []):
+            url = match.get('url', '')
+            score = (match.get('score') or '').replace('\n', '').strip()
+            has_ball = match.get('hasBall', False)
+            p1 = match.get('p1') or ''
+            p2 = match.get('p2') or ''
+
+            config.log(f'{p1} vs {p2} — {score}', 'info', False, 3, False)
+
+            # Vérifier que le score correspond et qu'il y a un service en cours
+            score_ok = any(s == score for s in config.score_to_start) and has_ball
+            if not score_ok:
+                config.log('Score NOT OK', 'warning', False, 4, False)
+                continue
+
+            # Extraire l'ID du match depuis l'URL
+            try:
+                url_clean = url.replace('?platform_type=desktop', '').replace('?platform_type=mobile', '')
+                parts = url_clean.split('-')
+                newmatch_id = parts[-3] + '-' + parts[-2] + '-' + parts[-1]
+            except Exception:
+                config.log('Impossible de lire ID match!', 'warning', False, 4)
+                continue
+
+            if match_manager.match_exists(newmatch_id):
+                config.log('Match déjà parié!', 'warning', False, 4, False)
+                continue
+
+            config.log('Match OK — navigation', 'success', False, 4, False)
+            config.newmatch = newmatch_id
+            bridge.navigate(url)
+            _t.sleep(1)
+            try:
+                AddRunning.main(config.script_num, config.running_file_name)
+            except Exception:
+                pass
+            config.match_found = True
+            return True
+
+    config.log('PAS DE MATCH TROUVE!', 'warning', False, 2, False)
+    return False
+
+
 def rechercheDeMatch(driver):
     config.error = False
     config.log("-" * 60, "title", False, False, False)
     config.log(' RECHERCHE DE MATCH', 'title', False, False, False)
     config.log("-" * 60, "title", False, False, False)
     config.match_found = False
+
+    from Functions.BridgeAdapter import bridge_active
+    if bridge_active():
+        while not config.match_found and not config.error:
+            if config.in_stat and (
+                    not config.last_classement or config.last_classement != datetime.now().strftime("%Y-%m-%d")):
+                classementeDeMatch(driver, False)
+            script_manager.check_previous_scripts(config.script_num)
+            DeleteBet(driver)
+            if not _bridge_recherche_match():
+                import time as _t; _t.sleep(5)
+        return
+
     while not config.match_found and not config.error:
         if config.in_stat and (
                 not config.last_classement or config.last_classement != datetime.now().strftime("%Y-%m-%d")):

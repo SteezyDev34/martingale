@@ -171,6 +171,11 @@ class ExtensionBridge:
         """Lit WIN/LOSE dans le betslip. Retourne {result: 'WIN'|'LOSE'|None}."""
         return self._send_and_wait({'action': 'get_result'})
 
+    def get_match_list(self):
+        """Retourne [{leagueName, matches:[{p1,p2,score,url,hasBall}]}]."""
+        resp = self._send_and_wait({'action': 'get_match_list'})
+        return resp.get('leagues', [])
+
     def on_score(self, callback):
         """callback(score_str, raw_msg) appelé à chaque changement de score."""
         self._score_callback = callback

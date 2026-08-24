@@ -7,6 +7,9 @@ import config
 
 
 def VerificationListeMatchLive(driver):
+    from Functions.BridgeAdapter import bridge_active
+    if bridge_active():
+        return True
     try:
         config.log('         Recherche tableau des scores', 'info')
         driver.find_element(By.CLASS_NAME, config.classes['live_content'][config.site_type])

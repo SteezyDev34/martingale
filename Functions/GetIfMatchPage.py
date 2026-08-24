@@ -9,6 +9,18 @@ import config
 
 # VÉRIFIERR SI PAGE DE MATCH
 def GetIfMatchPage(driver):
+    from Functions.BridgeAdapter import bridge_active
+    if bridge_active():
+        try:
+            from websocket_server import bridge
+            state = bridge.get_state()
+            if state and state.get('score'):
+                return True
+        except Exception:
+            pass
+        config.log('Tableau des scores introuvable!', 'warning', False, show_script_type=False)
+        config.log_clear_line()
+        return False
     # driver.switch_to.window(driver.window_handles[0])
     '''Recherche du container de match live'''
     try:

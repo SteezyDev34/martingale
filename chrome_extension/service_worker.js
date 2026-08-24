@@ -141,6 +141,15 @@ async function handlePythonMessage(msg) {
       break;
     }
 
+    // Python demande la liste des ligues/matchs (page live tennis)
+    case 'get_match_list': {
+      const tabId = msg.tab_id || pending1xbetTabId;
+      if (!tabId) { sendToPython({ action: 'match_list_response', req_id: msg.req_id, leagues: [] }); break; }
+      const result = await execInTab(tabId, () => window._martingale?.getMatchList?.() || []);
+      sendToPython({ action: 'match_list_response', req_id: msg.req_id, leagues: result, tab_id: tabId });
+      break;
+    }
+
     default:
       console.warn('[WS] Action inconnue:', msg.action);
   }

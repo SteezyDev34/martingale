@@ -6,6 +6,9 @@ import config
 
 
 def WaitWhileTimeAppear(driver):
+    from Functions.BridgeAdapter import bridge_active
+    if bridge_active():
+        return True
     tentative = 0
     time_show = False
 

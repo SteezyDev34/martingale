@@ -25,6 +25,31 @@ def main(bet_ligue):
 
 # GetLigueNameFromUrl
 def fromUrl(driver):
+    from Functions.BridgeAdapter import bridge_active
+    if bridge_active():
+        try:
+            from websocket_server import bridge
+            state = bridge.get_state()
+            url = (state or {}).get('url', '') or ''
+        except Exception:
+            url = ''
+        if 'tennis/' in url:
+            try:
+                path_after = url.split('tennis/', 1)[1]
+                first_segment = path_after.split('/', 1)[0]
+                first_segment = first_segment.replace('?platform_type=mobile', '')
+                from urllib.parse import unquote
+                first_segment = unquote(first_segment)
+                parts = first_segment.split('-') if first_segment else []
+                if len(parts) > 1:
+                    parts = parts[1:]
+                ligue = ' '.join([p for p in parts if p]).strip()
+                config.ligue_name = ligue or False
+            except Exception:
+                config.ligue_name = False
+        else:
+            config.ligue_name = False
+        return [config.ligue_name, url]
     """
     Extrait le nom de la ligue depuis l'URL du driver.
 

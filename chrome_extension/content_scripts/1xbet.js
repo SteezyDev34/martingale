@@ -173,12 +173,37 @@
     },
 
     getResult() {
-      // Lire le résultat du dernier pari dans le betslip ou l'historique
       const win = qs(SEL.betslip_result_win);
       const lose = qs(SEL.betslip_result_lose);
       if (win) return { result: 'WIN' };
       if (lose) return { result: 'LOSE' };
       return { result: null };
+    },
+
+    getMatchList() {
+      // Retourne [{leagueName, matches:[{p1,p2,score,url,hasBall}]}]
+      const leagues = [];
+      const champEls = qsa('.dashboard-champ, .dashboard-champ-content');
+      for (const champ of champEls) {
+        const nameEl = champ.querySelector('.dashboard-champ-name__label--is-link, .c-events__liga');
+        const leagueName = nameEl ? nameEl.textContent.trim().toLowerCase() : '';
+        const matchEls = champ.querySelectorAll('.dashboard-game-block, .c-events-scoreboard__item');
+        const matches = [];
+        for (const matchEl of matchEls) {
+          const teamsEl = matchEl.querySelector('.ui-team-scores__teams, .c-events__teams');
+          const teams = teamsEl ? teamsEl.textContent.trim().split('\n').map(t => t.trim()).filter(Boolean) : [];
+          const p1 = teams[0] || null;
+          const p2 = teams[1] || null;
+          const scoreEl = matchEl.querySelector('.ui-game-scores, .c-events-scoreboard__lines');
+          const score = scoreEl ? scoreEl.textContent.trim().replace(/\s+/g, '') : null;
+          const linkEl = matchEl.querySelector('.dashboard-game-block__link, .c-events__name');
+          const url = linkEl ? linkEl.href : null;
+          const hasBall = matchEl.querySelectorAll('.ui-game-scores__item--inning, .c-events-scoreboard__icon').length > 0;
+          if (url) matches.push({ p1, p2, score, url, hasBall });
+        }
+        leagues.push({ leagueName, matches });
+      }
+      return leagues;
     },
   };
 
