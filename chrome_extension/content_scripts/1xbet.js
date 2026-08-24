@@ -99,7 +99,11 @@
       const set = readSet();
       const jeu = readJeu();
       const players = window._martingale.getPlayers();
-      return { score, set_actuel: set, jeu_actuel: jeu, players, url: location.href };
+      // isMatchPage : présence du scoreboard (même logique que Selenium GetIfMatchPage)
+      const isMatchPage = !!(document.querySelector(
+        '.scoreboard-status, .scoreboard-scores, .c-scoreboard-score__period, .c-scoreboard-score, .c-scoreboard-score__heading'
+      ));
+      return { score, set_actuel: set, jeu_actuel: jeu, players, url: location.href, isMatchPage };
     },
 
     getPlayers() {

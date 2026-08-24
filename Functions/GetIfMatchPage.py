@@ -14,7 +14,7 @@ def GetIfMatchPage(driver):
         try:
             from websocket_server import bridge
             state = bridge.get_state()
-            if state and state.get('score'):
+            if state and (state.get('score') or state.get('isMatchPage')):
                 return True
         except Exception:
             pass
