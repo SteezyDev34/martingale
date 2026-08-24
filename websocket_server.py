@@ -173,8 +173,8 @@ class ExtensionBridge:
 
     def get_match_list(self):
         """Retourne [{leagueName, matches:[{p1,p2,score,url,hasBall}]}]."""
-        resp = self._send_and_wait({'action': 'get_match_list'})
-        return resp.get('leagues', [])
+        resp = self._send_and_wait({'action': 'get_match_list'}, timeout=30)
+        return resp.get('leagues', []) or []
 
     def on_score(self, callback):
         """callback(score_str, raw_msg) appelé à chaque changement de score."""

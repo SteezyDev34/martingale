@@ -182,8 +182,10 @@
 
     getMatchList() {
       // Retourne [{leagueName, matches:[{p1,p2,score,url,hasBall}]}]
-      const leagues = [];
       const champEls = qsa('.dashboard-champ, .dashboard-champ-content');
+      if (!champEls.length) return null; // page pas encore chargée
+
+      const leagues = [];
       for (const champ of champEls) {
         const nameEl = champ.querySelector('.dashboard-champ-name__label--is-link, .c-events__liga');
         const leagueName = nameEl ? nameEl.textContent.trim().toLowerCase() : '';
@@ -194,8 +196,25 @@
           const teams = teamsEl ? teamsEl.textContent.trim().split('\n').map(t => t.trim()).filter(Boolean) : [];
           const p1 = teams[0] || null;
           const p2 = teams[1] || null;
-          const scoreEl = matchEl.querySelector('.ui-game-scores, .c-events-scoreboard__lines');
-          const score = scoreEl ? scoreEl.textContent.trim().replace(/\s+/g, '') : null;
+
+          // Score jeu courant : les 2 derniers chiffres de la liste de scores
+          // .ui-game-scores contient sets + jeu : [0,0,4,3,30,15] → on veut "30:15"
+          const scoreItems = matchEl.querySelectorAll('.ui-game-scores__item, .c-events-scoreboard__score');
+          let score = null;
+          if (scoreItems.length >= 2) {
+            const vals = Array.from(scoreItems).map(el => el.textContent.trim());
+            // Le score jeu courant est le dernier couple (2 valeurs : joueur1 / joueur2)
+            // Chercher la ligne active ou prendre les 2 dernières valeurs impaires/paires
+            // Heuristique : si dernier(s) elements ont classe "active" ou "inning", les prendre
+            const active = matchEl.querySelectorAll('.ui-game-scores__item--current, .ui-game-scores__item--active, .ui-game-scores__item--inning');
+            if (active.length >= 2) {
+              score = active[0].textContent.trim() + ':' + active[1].textContent.trim();
+            } else if (vals.length >= 2) {
+              // fallback : les 2 derniers
+              score = vals[vals.length - 2] + ':' + vals[vals.length - 1];
+            }
+          }
+
           const linkEl = matchEl.querySelector('.dashboard-game-block__link, .c-events__name');
           const url = linkEl ? linkEl.href : null;
           const hasBall = matchEl.querySelectorAll('.ui-game-scores__item--inning, .c-events-scoreboard__icon').length > 0;

@@ -216,9 +216,7 @@ def _bridge_recherche_match():
     from Functions._to_remove import AddRunning
 
     bridge.navigate(config.site_url)
-    import time as _t; _t.sleep(2)
-
-    leagues = bridge.get_match_list()
+    leagues = bridge.get_match_list()  # service worker attend que la page soit chargée
     if not leagues:
         config.log('ligues introuvables!', 'warning', True, 2, False)
         return False

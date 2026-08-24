@@ -145,8 +145,14 @@ async function handlePythonMessage(msg) {
     case 'get_match_list': {
       const tabId = msg.tab_id || pending1xbetTabId;
       if (!tabId) { sendToPython({ action: 'match_list_response', req_id: msg.req_id, leagues: [] }); break; }
-      const result = await execInTab(tabId, () => window._martingale?.getMatchList?.() || []);
-      sendToPython({ action: 'match_list_response', req_id: msg.req_id, leagues: result, tab_id: tabId });
+      // Réessayer jusqu'à 5x si la page est encore en chargement (null = pas prête)
+      let result = null;
+      for (let i = 0; i < 5; i++) {
+        result = await execInTab(tabId, () => window._martingale?.getMatchList?.() ?? null);
+        if (result !== null) break;
+        await new Promise(r => setTimeout(r, 2000));
+      }
+      sendToPython({ action: 'match_list_response', req_id: msg.req_id, leagues: result || [], tab_id: tabId });
       break;
     }
 
