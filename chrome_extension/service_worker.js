@@ -11,7 +11,7 @@ let pending1xbetTabId = null; // onglet 1xBet actif
 
 // ─── Keepalive via chrome.alarms (empêche le service worker de s'endormir) ───
 
-chrome.alarms.create('keepalive', { periodInMinutes: 0.4 });
+chrome.alarms.get('keepalive', (a) => { if (!a) chrome.alarms.create('keepalive', { periodInMinutes: 0.4 }); });
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === 'keepalive') {
     if (!wsConnected) connectWS();
@@ -40,7 +40,7 @@ function connectWS() {
   ws.onmessage = (event) => {
     let msg;
     try { msg = JSON.parse(event.data); } catch { return; }
-    handlePythonMessage(msg);
+    handlePythonMessage(msg).catch(e => console.error('[WS] handlePythonMessage erreur:', e));
   };
 
   ws.onclose = () => {
@@ -101,7 +101,7 @@ async function handlePythonMessage(msg) {
       const tabId = msg.tab_id || pending1xbetTabId;
       if (!tabId) { sendToPython({ action: 'bet_result', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.placeBet?.(args), msg);
-      sendToPython({ action: 'bet_result', req_id: msg.req_id, ...result, tab_id: tabId });
+      sendToPython({ action: 'bet_result', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
@@ -110,7 +110,7 @@ async function handlePythonMessage(msg) {
       const tabId = msg.tab_id || pending1xbetTabId;
       if (!tabId) { sendToPython({ action: 'delete_bet_ack', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.deleteBet?.() || {});
-      sendToPython({ action: 'delete_bet_ack', req_id: msg.req_id, ...result, tab_id: tabId });
+      sendToPython({ action: 'delete_bet_ack', req_id: msg.req_id, ...(result || {}), tab_id: tabId });
       break;
     }
 
@@ -119,7 +119,7 @@ async function handlePythonMessage(msg) {
       const tabId = msg.tab_id || pending1xbetTabId;
       if (!tabId) { sendToPython({ action: 'validate_bet_ack', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.validateBet?.(args), msg);
-      sendToPython({ action: 'validate_bet_ack', req_id: msg.req_id, ...result, tab_id: tabId });
+      sendToPython({ action: 'validate_bet_ack', req_id: msg.req_id, ...(result || { validated: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
@@ -128,7 +128,7 @@ async function handlePythonMessage(msg) {
       const tabId = msg.tab_id || pending1xbetTabId;
       if (!tabId) { sendToPython({ action: 'result_response', req_id: msg.req_id, result: null, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.getResult?.() || {});
-      sendToPython({ action: 'result_response', req_id: msg.req_id, ...result, tab_id: tabId });
+      sendToPython({ action: 'result_response', req_id: msg.req_id, ...(result || { result: null }), tab_id: tabId });
       break;
     }
 
@@ -137,7 +137,7 @@ async function handlePythonMessage(msg) {
       const tabId = msg.tab_id || pending1xbetTabId;
       if (!tabId) { sendToPython({ action: 'players_response', req_id: msg.req_id, p1: null, p2: null, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.getPlayers?.() || {});
-      sendToPython({ action: 'players_response', req_id: msg.req_id, ...result, tab_id: tabId });
+      sendToPython({ action: 'players_response', req_id: msg.req_id, ...(result || { p1: null, p2: null }), tab_id: tabId });
       break;
     }
 
