@@ -1,5 +1,5 @@
 # --- Configuration ---
-$Project = "C:\Users\Administrator\Projets\martingale\scripts_startup"
+$Project = "C:\Users\Administrator\Projets\MARTINGAL\scripts_startup"
 $Tabs = @(
     @{Title = "1530A-1"; Script = "$Project\1530A-1.ps1"},
     @{Title = "5P40A-1"; Script = "$Project\5P40A-1.ps1"},
@@ -8,7 +8,7 @@ $Tabs = @(
 )
 
 # --- Créer dossier logs s'il n'existe pas ---
-$LogsFolder = "C:\Users\Administrator\Projets\martingale\logs"
+$LogsFolder = "C:\Users\Administrator\Projets\MARTINGAL\logs"
 if (-not (Test-Path $LogsFolder)) { 
     New-Item -ItemType Directory -Path $LogsFolder | Out-Null
 }

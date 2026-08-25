@@ -255,6 +255,37 @@ def _human_wait(a: float = 0.8, b: float = 1.5):
     time.sleep(a + random.random() * (b - a))
 
 
+def _dismiss_overlays(driver):
+    """
+    Ferme les overlays qui bloquent la page (modal 'Welcome to Stake' / promo,
+    bannière cookies) avant toute interaction avec la barre de recherche ou le betslip.
+    """
+    try:
+        # Modal promo/welcome : bouton close (icône X en haut à droite du dialog)
+        for sel in ['[data-testid="modal-close"]', 'button[aria-label="Close"]',
+                    '[class*="modal"] button[class*="close"]']:
+            btns = driver.find_elements(By.CSS_SELECTOR, sel)
+            for btn in btns:
+                if btn.is_displayed():
+                    driver.execute_script(
+                        "arguments[0].dispatchEvent(new MouseEvent('click', {bubbles:true}))", btn)
+                    log("[Stake] Modal overlay fermé", "info")
+                    _human_wait(0.4, 0.7)
+                    break
+
+        # Bannière cookies
+        for btn in driver.find_elements(By.CSS_SELECTOR, "button"):
+            txt = (btn.text or "").strip().lower()
+            if txt in ("accepter", "accept", "accept all", "tout accepter") and btn.is_displayed():
+                driver.execute_script(
+                    "arguments[0].dispatchEvent(new MouseEvent('click', {bubbles:true}))", btn)
+                log("[Stake] Bannière cookies acceptée", "info")
+                _human_wait(0.4, 0.7)
+                break
+    except Exception as e:
+        log(f"[Stake] _dismiss_overlays: {e}", "warning")
+
+
 _CDP_STEALTH = """
 Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
 Object.defineProperty(navigator, 'plugins', {get: () => [1,2,3,4,5]});
@@ -289,6 +320,7 @@ class StakeScraper:
         try:
             driver.get(STAKE_URL)
             _human_wait(2.5, 3.5)
+            _dismiss_overlays(driver)
             for sel in SEL_SESSION:
                 try:
                     els = driver.find_elements(By.CSS_SELECTOR, sel)
@@ -355,6 +387,7 @@ class StakeScraper:
     def _attempt_login(self, driver, email: str, password: str) -> bool:
         driver.get(STAKE_URL)
         _human_wait(3.0, 4.5)
+        _dismiss_overlays(driver)
 
         # Clic bouton "Se Connecter"
         se_connecter = None
@@ -429,6 +462,7 @@ class StakeScraper:
             log(f"[Stake] Navigation sport: {sport_url}", "info")
             driver.get(sport_url)
             _human_wait(4.0, 5.0)
+            _dismiss_overlays(driver)
 
             e1, e2 = equipe_1.lower(), equipe_2.lower()
 
@@ -608,6 +642,7 @@ class StakeScraper:
         try:
             driver.get(match_url)
             _human_wait(1.5, 2.5)
+            _dismiss_overlays(driver)
 
             # Handicap X (0) = Draw No Bet pour l'équipe X
             import re as _re
@@ -681,6 +716,7 @@ class StakeScraper:
         try:
             driver.get(match_url)
             _human_wait(1.5, 2.5)
+            _dismiss_overlays(driver)
 
             # Handicap X (0) = Draw No Bet pour l'équipe X
             import re as _re
@@ -802,6 +838,7 @@ class StakeScraper:
         try:
             driver.get(match_url)
             _human_wait(2.0, 3.0)
+            _dismiss_overlays(driver)
 
             # ── 1. Cliquer sur le tab SGM (data-testid validé) ───────────
             sgm_clicked = False
