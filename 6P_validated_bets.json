@@ -7025,5 +7025,122 @@
         ],
         "timestamp": "2026-05-21 17:13:25",
         "url": "atp hamburg"
+    },
+    {
+        "montant": 0.5,
+        "cote": "3",
+        "jeu": 4,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-08-22 15:23:41",
+        "url": "world tennis krakow"
+    },
+    {
+        "montant": 0.6,
+        "cote": "3",
+        "jeu": 9,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-08-22 23:29:57",
+        "url": "wta monterrey qualification"
+    },
+    {
+        "montant": 0.9,
+        "cote": "3",
+        "jeu": 10,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-08-22 23:43:33",
+        "url": "wta monterrey qualification"
+    },
+    {
+        "montant": 0.53,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-08-23 02:23:43",
+        "url": "atp cincinnati"
+    },
+    {
+        "montant": 0.77,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-08-23 02:29:02",
+        "url": "atp cincinnati"
+    },
+    {
+        "montant": 1.11,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-08-23 02:31:15",
+        "url": "atp cincinnati"
+    },
+    {
+        "montant": 1.6,
+        "cote": "3.25",
+        "jeu": 5,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-08-23 02:34:43",
+        "url": "atp cincinnati"
+    },
+    {
+        "montant": 1.38,
+        "cote": "3.25",
+        "jeu": 6,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-08-23 02:38:57",
+        "url": "atp cincinnati"
+    },
+    {
+        "montant": 1.22,
+        "cote": "3.25",
+        "jeu": 7,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-08-23 02:48:21",
+        "url": "atp cincinnati"
     }
 ]

@@ -4,6 +4,8 @@
 
 (function () {
   'use strict';
+  console.log('[1xBet] Début script');
+  try {
 
   // ─── Sélecteurs DOM 1xBet (mobile_site / new_site) ──────────────────────────
 
@@ -94,15 +96,31 @@
 
   window._martingale = {
 
-    getState() {
+    async getState() {
+      // Chercher le scoreboard dans l'iframe si présent
+      let scoreDiv = document.querySelector(
+        '.scoreboard-status, .scoreboard-scores, .c-scoreboard-score__period, .c-scoreboard-score, .c-scoreboard-score__heading'
+      );
+
+      if (!scoreDiv) {
+        try {
+          const iframe = document.querySelector('iframe');
+          if (iframe && iframe.contentDocument) {
+            scoreDiv = iframe.contentDocument.querySelector(
+              '.scoreboard-status, .scoreboard-scores, .c-scoreboard-score__period, .c-scoreboard-score, .c-scoreboard-score__heading'
+            );
+          }
+        } catch (e) {
+          // silence
+        }
+      }
+
       const score = readScore();
       const set = readSet();
       const jeu = readJeu();
       const players = window._martingale.getPlayers();
-      // isMatchPage : présence du scoreboard (même logique que Selenium GetIfMatchPage)
-      const isMatchPage = !!(document.querySelector(
-        '.scoreboard-status, .scoreboard-scores, .c-scoreboard-score__period, .c-scoreboard-score, .c-scoreboard-score__heading'
-      ));
+      const isMatchPage = !!scoreDiv;
+      console.log('[getState] isMatchPage:', isMatchPage);
       return { score, set_actuel: set, jeu_actuel: jeu, players, url: location.href, isMatchPage };
     },
 
@@ -257,5 +275,30 @@
   // Lecture initiale
   setTimeout(pushScoreIfChanged, 1000);
 
-  console.log('[Martingale] Content script 1xBet chargé');
+  // Injecter aussi dans l'iframe si elle existe (retry toutes les 500ms pendant 5s)
+  function injectIntoIframe() {
+    try {
+      const iframe = document.querySelector('iframe');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow._martingale = window._martingale;
+        console.log('[1xBet] API injectée dans iframe ✓');
+        return true;
+      }
+    } catch (e) {
+      // silence on cross-origin errors
+    }
+    return false;
+  }
+
+  let attempts = 0;
+  const iframeInterval = setInterval(() => {
+    if (injectIntoIframe() || ++attempts > 10) {
+      clearInterval(iframeInterval);
+    }
+  }, 500);
+
+  console.log('[1xBet] window._martingale créé ✓');
+  } catch (e) {
+    console.error('[1xBet] ERREUR:', e);
+  }
 })();
