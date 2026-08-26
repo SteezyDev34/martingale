@@ -1,5 +1,9 @@
 import inspect
+import os
+import sys
 import time
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.GetIfMatchPage import GetIfMatchPage
@@ -164,7 +168,8 @@ def GetIfQTEnd(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    from websocket_server import start_bridge
 
-    # driver.switch_to.window(driver.window_handles[0])
-    GetIfGameStart(driver)
+    start_bridge(wait_timeout=15)
+    config.site_type = 'mobile_site'
+    print("GetIfGameStart:", GetIfGameStart(None))

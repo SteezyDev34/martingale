@@ -16,6 +16,7 @@ from Functions.Bookmakers.WinamaxScraper import WinamaxScraper
 from Functions.Bookmakers.BetclicScraper import BetclicScraper
 from Functions.Bookmakers.LollybetScraper import LollybetScraper
 from Functions.Bookmakers.StakeScraper import StakeScraper
+from Functions.Bookmakers.XBetScraper import XBetScraper
 from Functions.BetLabelsDB import get_all_challenges_for_prompt
 from Functions.Logs.Logger import log
 
@@ -25,7 +26,8 @@ NO_VPN_SCRAPERS = [WinamaxScraper, BetclicScraper, LollybetScraper]
 # Bookmakers nécessitant le VPN Toronto — lancés séquentiellement après le groupe sans VPN
 VPN_SCRAPERS = [StakeScraper]
 
-# Liste complète pour les autres usages (refresh challenges, etc.)
+# Liste complète pour les autres usages (refresh challenges, etc.) — hors 1xBet
+# qui n'a pas de "challenges" et ne passe pas par Playwright.
 PLAYWRIGHT_SCRAPERS = NO_VPN_SCRAPERS + VPN_SCRAPERS
 
 # État des bookmakers : enabled (actif) + balance (solde connu)
@@ -35,6 +37,7 @@ BOOKMAKER_STATE: Dict[str, Dict] = {
     "Betclic":  {"enabled": False,  "balance": None},
     "Lollybet": {"enabled": True,  "balance": None},
     "Stake":    {"enabled": True,  "balance": None},
+    "1xBet":    {"enabled": True,  "balance": None},
 }
 
 
@@ -77,7 +80,7 @@ def _place_bet_sync(scraper_class, bet: Dict) -> Dict:
         loop.close()
 
 
-ALL_SCRAPERS = [WinamaxScraper, BetclicScraper, LollybetScraper, StakeScraper]
+ALL_SCRAPERS = [WinamaxScraper, BetclicScraper, LollybetScraper, StakeScraper, XBetScraper]
 
 
 def get_best_odds(bet: Dict) -> Optional[Dict]:
@@ -195,7 +198,7 @@ def enrich_bet_with_challenges(bet: Dict, openai_client=None) -> Dict:
     return bet
 
 
-def place_combined_bet(matches_list: List[Dict], mise: float, xbet_driver=None) -> Dict:
+def place_combined_bet(matches_list: List[Dict], mise: float) -> Dict:
     """
     Place un pari combiné (accumulateur) sur Lollybet.
     matches_list : liste de dicts match (equipe_1, equipe_2, selection, sport, date, intitule, categorie)
@@ -209,17 +212,14 @@ def place_combined_bet(matches_list: List[Dict], mise: float, xbet_driver=None) 
     return _place_bet_sync(LollybetScraper, bet)
 
 
-def place_best_bet(bet: Dict, xbet_driver=None) -> Dict:
+def place_best_bet(bet: Dict) -> Dict:
     """
     Point d'entrée principal appelé depuis process_api_bets.
     1. Enrichit le pari avec les défis actifs (IA)
-    2. Lance la comparaison sur tous les bookmakers Playwright
-    3. Compare avec 1xBet (Selenium, driver existant)
-    4. Place le pari sur le meilleur bookmaker
+    2. Lance la comparaison sur tous les bookmakers actifs (Playwright + 1xBet via l'extension Chrome)
+    3. Place le pari sur le meilleur bookmaker
     Retourne un dict résultat.
     """
-    from Functions.PlacerPari import placer_pari
-
     # Pari combiné sur le même match → Stake uniquement (MyMatch)
     if bet.get("combined_events"):
         log(f"[Router] 🎯 Pari Same Game Multi détecté → Stake uniquement: {bet.get('combined_label', '')}", "info")
@@ -264,6 +264,7 @@ def place_best_bet(bet: Dict, xbet_driver=None) -> Dict:
         "Betclic":  BetclicScraper,
         "Lollybet": LollybetScraper,
         "Stake":    StakeScraper,
+        "1xBet":    XBetScraper,
     }
     target_cls = scraper_map.get(best["bookmaker"])
     if not target_cls:

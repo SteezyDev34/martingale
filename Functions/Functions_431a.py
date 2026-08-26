@@ -106,6 +106,9 @@ def all_script(driver):
     GetScoreActuel(driver)
     if not config.set_actuel:
         config.error = True
+    GetJeuActuel(driver)
+    if not config.jeu_actuel:
+        config.jeu_actuel = 1
     firstjeu = True
     current_game = int(config.jeu_actuel)
     allfirstgamebet = False

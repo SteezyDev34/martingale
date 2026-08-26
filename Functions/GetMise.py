@@ -40,30 +40,43 @@ def GetMise(driver):
         else:
             config.log("Rattrapage, recuperation de la cote", 'info', False)
             logline += 1
-            try:
-                config.log(f"tentative de recup cote avec class {config.classes['coef_value'][config.site_type]}", 'info', False)
-                config.cote = ''.join(filter(lambda x: x.isdigit() or x in ',.',
-                                            driver.find_elements(By.CLASS_NAME,
-                                                                config.classes['coef_value'][config.site_type])[0].text))
-            except Exception as e:
-                try:
-                    if config.scriptType == 'LIVE' and config.site_type == 'mobile_site':
-                        config.cote = ''.join(filter(lambda x: x.isdigit() or x in ',.',
-                                                        driver.find_elements(By.CLASS_NAME,
-                                                                            config.classes['coef_value'][config.site_type])[0].text))
-                    else:
-                        config.log(f"tentative de recup cote avec class {config.classes['cpn_action_coef'][config.site_type]}", 'info', False)
-
-                except Exception as e:
-                    print(e)
-                    config.log('erreur recup cote', 'info', False)
-                    logline += 1
+            from Functions.BridgeAdapter import bridge_active
+            if bridge_active():
+                # Cote déjà lue lors de la sélection du marché (bridge.select_market_by_text),
+                # évite un aller-retour DOM supplémentaire — même sémantique que le fallback
+                # `config.cotebase` ci-dessous si elle n'est pas disponible.
+                bridge_cote = getattr(config, '_bridge_last_cote', None)
+                if bridge_cote:
+                    config.cote = bridge_cote
+                    config.log(f'cote recupéré (bridge) {str(config.cote)}', 'info', False)
+                else:
                     config.cote = config.cotebase
-            else:
-                config.log(f'cote recupéré {str(config.cote)}', 'info', False)
                 logline += 1
-                if config.cote == '' or str(config.cote) == '0' or str(config.cote) == '1' or config.cote == 0:
-                    config.cote = config.cotebase
+            else:
+                try:
+                    config.log(f"tentative de recup cote avec class {config.classes['coef_value'][config.site_type]}", 'info', False)
+                    config.cote = ''.join(filter(lambda x: x.isdigit() or x in ',.',
+                                                driver.find_elements(By.CLASS_NAME,
+                                                                    config.classes['coef_value'][config.site_type])[0].text))
+                except Exception as e:
+                    try:
+                        if config.scriptType == 'LIVE' and config.site_type == 'mobile_site':
+                            config.cote = ''.join(filter(lambda x: x.isdigit() or x in ',.',
+                                                            driver.find_elements(By.CLASS_NAME,
+                                                                                config.classes['coef_value'][config.site_type])[0].text))
+                        else:
+                            config.log(f"tentative de recup cote avec class {config.classes['cpn_action_coef'][config.site_type]}", 'info', False)
+
+                    except Exception as e:
+                        print(e)
+                        config.log('erreur recup cote', 'info', False)
+                        logline += 1
+                        config.cote = config.cotebase
+                else:
+                    config.log(f'cote recupéré {str(config.cote)}', 'info', False)
+                    logline += 1
+                    if config.cote == '' or str(config.cote) == '0' or str(config.cote) == '1' or config.cote == 0:
+                        config.cote = config.cotebase
     if config.scriptType == 'LIVE':
         try:
             resp_json = get_recommended_stake()
@@ -179,14 +192,26 @@ def get_recommended_stake(cote=None, tipster=None, bankroll_id=2, target_percent
 
 
 if __name__ == "__main__":
-    config.localhost = 43151
-    from ChromeDriver.SetDriver import get_script_driver
+    from websocket_server import start_bridge
+    from Functions.GetSetActuel import GetSetActuel
+    from Functions.GetJeuActuel import GetJeuActuel
+    from Functions.GetScoreActuel import GetScoreActuel
+    from Functions.AfficherParis import AfficherParis
+    from Functions.GetBetOld import GetBetOld
 
-    num_fenetre = 0
-    driver = get_script_driver(num_fenetre)
-    # driver.switch_to.window(driver.window_handles[0])
+    start_bridge(wait_timeout=15)
     config.site_type = 'mobile_site'
+    config.scriptType = '30A'
     config.perte = 2
-    print(config.perte)
-    GetMise(driver)
+
+    GetSetActuel(None)
+    GetScoreActuel(None)
+    GetJeuActuel(None)
+    config.looking_game = int(config.jeu_actuel)
+    print("AfficherParis:", AfficherParis(None))
+    print("GetBetOld:", GetBetOld(None))
+    print("cote captée:", getattr(config, '_bridge_last_cote', None))
+
+    print("GetMise:", GetMise(None))
+    print("config.mise:", config.mise, "config.cote:", config.cote)
 

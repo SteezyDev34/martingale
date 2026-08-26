@@ -1,4 +1,8 @@
+import os
+import sys
 import time
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.GetJeuActuel import GetSetScoreActuel
@@ -268,13 +272,20 @@ def GetResult(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    from websocket_server import start_bridge
+    from Functions.GetSetActuel import GetSetActuel
+    from Functions.GetJeuActuel import GetJeuActuel
 
-    config.scriptType = '1SET'
+    start_bridge(wait_timeout=15)
+    config.site_type = 'mobile_site'
+    config.scriptType = '30A'
+    GetSetActuel(None)
+    GetJeuActuel(None)
+    GetScoreActuel(None)
     config.validated_bet = {
-        'set': 1,
-        'win': 'V2'
+        'set': config.set_actuel,
+        'jeu': config.jeu_actuel,
+        'winscore': '30:30',
     }
-    # GetBet(driver, True)
-    # driver.switch_to.window(driver.window_handles[0])
-    GetResult(driver)
+    print(f"Attente du résultat pour set={config.set_actuel} jeu={config.jeu_actuel}...")
+    print("GetResult:", GetResult(None))

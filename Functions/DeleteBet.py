@@ -58,12 +58,9 @@ def DeleteBet(driver):
 
 
 if __name__ == "__main__":
-    config.localhost = 43151
-    from ChromeDriver.SetDriver import get_script_driver
-    num_fenetre = 1
-    driver = get_script_driver(num_fenetre)
-    # driver.switch_to.window(driver.window_handles[0])
+    from websocket_server import start_bridge
+
+    start_bridge(wait_timeout=15)
     config.site_type = 'mobile_site'
     config.scriptType = '40A'
-
-    DeleteBet(driver)
+    print("DeleteBet:", DeleteBet(None))

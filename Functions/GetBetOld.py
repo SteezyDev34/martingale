@@ -44,12 +44,20 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                 jeu = config.jeu_actuel
                 point = config.point_actuel
         if config.scriptType in config.allScriptType and config.scriptType != '1SET' and config.scriptType != 'QT' and config.scriptType != 'QTV2':
-            scoreboard_player = driver.find_elements(By.CLASS_NAME,
-                                                     config.classes['scoreboard_player_score'][config.site_type])
-            scoreboard_player1 = \
-                scoreboard_player[0].find_elements(By.CLASS_NAME, config.classes['ball_container'][config.site_type])[0]
-            first_player = scoreboard_player1.find_elements(By.CLASS_NAME,
-                                                            config.classes['score_ball'][config.site_type])
+            from Functions.BridgeAdapter import bridge_active
+            if bridge_active():
+                from websocket_server import bridge
+                ball_result = bridge.read_ball_indicator()
+                # Shim liste pour rester compatible avec les `len(first_player) > 0` ci-dessous,
+                # sans toucher à la logique de décision par scriptType (inchangée).
+                first_player = [True] if ball_result.get('hasBall') else []
+            else:
+                scoreboard_player = driver.find_elements(By.CLASS_NAME,
+                                                         config.classes['scoreboard_player_score'][config.site_type])
+                scoreboard_player1 = \
+                    scoreboard_player[0].find_elements(By.CLASS_NAME, config.classes['ball_container'][config.site_type])[0]
+                first_player = scoreboard_player1.find_elements(By.CLASS_NAME,
+                                                                config.classes['score_ball'][config.site_type])
             if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                     first_player = 1
@@ -180,6 +188,27 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                 config.win_type = ['40:0', '0:40']  # inversé
             if config.scriptType == "1SET":
                 sType = config.win_type
+
+            from Functions.BridgeAdapter import bridge_active
+            if bridge_active():
+                from websocket_server import bridge
+                bridge_result = bridge.select_market_by_text(sType)
+                if not bridge_result.get('success'):
+                    candidates = bridge_result.get('candidates') or []
+                    if candidates:
+                        bet_list = '[' + ','.join(candidates) + ']'
+                        matched = compare_selection(config.match_name, sType, bet_list)
+                        if matched and matched != 'false':
+                            sType = matched
+                            bridge_result = bridge.select_market_by_text(sType)
+                if bridge_result.get('success'):
+                    if bridge_result.get('cote'):
+                        config._bridge_last_cote = bridge_result.get('cote')
+                    clic = True
+                    return clic
+                tentative_clic += 1
+                continue
+
             if config.site_type == 'mobile_site':
                 x_path = (
                         '//ul[contains(@class, "game-markets-group__list")]'
@@ -302,12 +331,17 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
 
 
 if __name__ == "__main__":
-    config.localhost = 43151
-    from ChromeDriver.SetDriver import get_script_driver
+    import sys
+    from websocket_server import start_bridge
+    from Functions.GetSetActuel import GetSetActuel
+    from Functions.GetJeuActuel import GetJeuActuel
 
-    num_fenetre = 1
-    driver = get_script_driver(num_fenetre)
-    # driver.switch_to.window(driver.window_handles[0])
+    start_bridge(wait_timeout=15)
     config.site_type = 'mobile_site'
-    print(config.site_type)
-    print(GetBetOld(driver))
+    config.scriptType = sys.argv[1] if len(sys.argv) > 1 else '30A'
+    GetSetActuel(None)
+    GetJeuActuel(None)
+    config.looking_game = int(config.jeu_actuel)
+    print("scriptType:", config.scriptType, "set_actuel:", config.set_actuel, "jeu_actuel:", config.jeu_actuel)
+    print("GetBetOld:", GetBetOld(None))
+    print("cote:", getattr(config, '_bridge_last_cote', None))

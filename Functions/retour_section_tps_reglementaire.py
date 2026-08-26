@@ -90,6 +90,13 @@ def RetourTpsReg(driver, theset="Temps réglementaire"):
 
 def RetourTpsRegMobile(driver, theset="Temps réglementaire"):
     config.log('retour tps regl recherche du champ déroulant mobile...', '', indent=2)
+
+    from Functions.BridgeAdapter import bridge_active
+    if bridge_active():
+        from websocket_server import bridge
+        result = bridge.click_category_option(theset)
+        return bool(result.get('success'))
+
     logline = 1
     selection = False
     tentative = 0

@@ -123,13 +123,64 @@ def SendBetData():
 
 
 def ValidationDuParis(driver, nexbet=False):
-    from Functions.BridgeAdapter import bridge_active, bridge_place_and_validate_bet
+    from Functions.BridgeAdapter import bridge_active
     if bridge_active():
-        mise = float(getattr(config, 'mise', 1.0))
-        market = getattr(config, 'scriptType', '')
-        ok = bridge_place_and_validate_bet(market=market, mise=mise)
-        config.validated_bet = config.validated_bet or {}
-        return ok
+        # Marché + mise déjà sélectionnés par AfficherParis/GetBetOld/PlacerMise (bridge) —
+        # ici on ne fait que confirmer et interpréter la réponse, comme ModalHandler.py
+        # le ferait après le clic sur "Placer le pari" (texte "effectué" = succès,
+        # "déjà"/"peut être accepté" = pari déjà placé, sinon échec).
+        from websocket_server import bridge
+        result = bridge.validate_bet(confirm=True)
+        message = (result.get('message') or '').lower()
+        already_placed = 'déjà' in message or 'peut être accepté' in message
+        accepted = bool(result.get('accepted')) or already_placed
+        if not result.get('validated') or not accepted:
+            return False
+
+        current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        config.validated_bet = {
+            'montant': config.mise,
+            'cote': config.cote,
+            'jeu': config.looking_game,
+            'set': config.set_actuel if hasattr(config, 'set_actuel') else None,
+            'numero_point': config.looking_point if hasattr(config, 'looking_point') else None,
+            'winscore': config.win_type,
+            'timestamp': current_timestamp,
+            'url': config.ligue_name,
+        }
+        config.placed_game = config.looking_game
+        config.log(f'{config.validated_bet}', 'info', False, indent=3)
+
+        json_filename = f"{config.scriptType}_validated_bets.json"
+        try:
+            try:
+                with open(json_filename, 'r') as f:
+                    existing_bets = json.load(f)
+            except FileNotFoundError:
+                existing_bets = []
+            except json.JSONDecodeError:
+                backup_name = json_filename.replace('.json', f'_corrupted_{int(time.time())}.json')
+                os.rename(json_filename, backup_name)
+                existing_bets = []
+            existing_bets.append(config.validated_bet)
+            with open(json_filename, 'w') as f:
+                json.dump(existing_bets, f, indent=4)
+        except Exception as e:
+            config.log(f"Erreur lors de la sauvegarde du pari validé dans le JSON : {e}", 'error', False)
+
+        if not already_placed:
+            config.perte = RedisIPC.get_loss(config.scriptType, config.perte)
+            config.perte = float(config.perte) + float(config.mise)
+            if RedisIPC:
+                _matchname = getattr(config, 'newmatch', None) or ''
+                RedisIPC.set_loss(getattr(config, 'scriptType', 'UNKNOWN'), float(config.perte), matchname=_matchname, publish=True)
+            config.wantwin = float(config.wantwin) + float(config.increment)
+            config.log('Perte ' + str(config.perte))
+            config.netprofit = round(
+                (float(config.mise) * float(config.cote)) - float(config.perte) - float(config.mise), 2)
+            config.log(f'Potential Net profit: {config.netprofit}', 'title', clear=False, indent=3)
+        return True
+
     validation = False
     tentative = 0
     already = False

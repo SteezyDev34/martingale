@@ -29,7 +29,7 @@ scriptTypeList = ['15V1']
 #scriptTypeList1 = ['BREAK']
 scriptTypeList1 = ['15V2']
 #scriptTypeList2 = ['015', '300', '15A', '30A']
-scriptTypeList2 = ['150','300', '15A', '30A']
+scriptTypeList2 = ['30A']
 scriptTypeList6 = ['150', '015', '030']
 scriptTypeList3 = ['BREAK', '6P', '40A']
 scriptTypeList4 = ['4P','5P','HOLD']
@@ -137,7 +137,7 @@ wantwin = 0.2
 nb_tour = 1
 increment = 0
 mtt_recup = 0.54
-total_gain_wanted = 1
+total_gain_wanted = 0.2
 
 recup30 = 0
 rattrape_perte = 1  # ne pas changer

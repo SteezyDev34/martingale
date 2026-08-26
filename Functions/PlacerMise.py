@@ -19,7 +19,25 @@ def PlacerMise(driver, constructor=False):
     if config.scriptType == 'LIVE' and config.site_type == 'mobile_site' and constructor:
         saved_class_cpn_amount = config.classes['cpn_amount']
         config.classes['cpn_amount'] = config.classes['cpn_action_amount']
-        
+
+    from Functions.BridgeAdapter import bridge_active
+    if bridge_active():
+        from websocket_server import bridge
+        tentative = 0
+        while not sending_mise and tentative < 10:
+            GetMise(driver)
+            result = bridge.set_stake(config.mise)
+            if result.get('success'):
+                config.log('mise insérée avec succès!', 'success', False)
+                sending_mise = True
+            else:
+                tentative = tentative + 1
+                config.log('mauvaise mise insérée!', 'warning', False)
+                time.sleep(1)
+        if config.scriptType == 'LIVE' and config.site_type == 'mobile_site' and constructor:
+            config.classes['cpn_amount'] = saved_class_cpn_amount
+        return sending_mise
+
     try:
 
         element = WebDriverWait(driver, 10).until(
@@ -52,13 +70,9 @@ def PlacerMise(driver, constructor=False):
 
 
 if __name__ == "__main__":
+    from websocket_server import start_bridge
 
-    config.localhost = 43151
-    from ChromeDriver.SetDriver import get_script_driver
-    num_fenetre = 1
-    driver = get_script_driver(num_fenetre)
-    # driver.switch_to.window(driver.window_handles[0])
+    start_bridge(wait_timeout=15)
     config.site_type = 'mobile_site'
-    config.scriptType = '40A'
-    config.perte = 21.34
-    PlacerMise(driver)
+    config.scriptType = '30A'
+    print("PlacerMise:", PlacerMise(None))

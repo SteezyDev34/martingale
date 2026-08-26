@@ -1,6 +1,11 @@
+import os
+import sys
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from Functions.GetIfMatchPage import GetIfMatchPage
@@ -201,7 +206,9 @@ def GetSetScoreActuel(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    from websocket_server import start_bridge
 
-    config.site_type = 'new_site'
-    GetJeuActuel(driver)
+    start_bridge(wait_timeout=15)
+    config.site_type = 'mobile_site'
+    print("GetJeuActuel:", GetJeuActuel(None))
+    print("config.jeu_actuel:", config.jeu_actuel)

@@ -8,18 +8,11 @@ import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import requests
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 import Functions.Functions_telegram
 import config
-from Functions.AfficherParis import AfficherParis
 from Functions.Functions_telegram import send_telegram
-from Functions.GetBetOld import GetBetOld
-from Functions.PlacerMise import PlacerMise
-from Functions.ValidationDuParis import ValidationDuParis
-from Functions.getTextFromImageGPT import compare_match_name
+from Functions.OneXBetBridge import find_and_prepare_bet
 
 
 def log_message(message, level="INFO", flush_output=True):
@@ -33,36 +26,10 @@ def log_message(message, level="INFO", flush_output=True):
     return formatted_message
 
 
-def optimized_wait(driver, condition, timeout=10, poll_frequency=0.5):
+def placer_pari(codeList):
     """
-    Attente optimisée avec des messages de progression pour éviter l'impression de freeze
-    """
-    start_time = time.time()
-    elapsed_dots = 0
-    
-    while time.time() - start_time < timeout:
-        try:
-            if condition(driver):
-                return True
-            
-            # Afficher des points de progression toutes les 2 secondes
-            if int(time.time() - start_time) > elapsed_dots * 2:
-                log_message(".", level="", flush_output=True)
-                elapsed_dots += 1
-                
-        except Exception:
-            pass
-        
-        time.sleep(poll_frequency)
-    
-    return False
+    Fonction pour placer un pari sur 1xBet via l'extension Chrome (bridge WebSocket)
 
-
-def placer_pari(driver, codeList):
-    """
-    Fonction pour placer un pari sur 1xBet
-    
-    :param driver: Instance du driver Selenium
     :param codeList: Données du pari au format {'matches': [...], 'tipster': '...'}
     :return: Dictionnaire avec le résultat de l'opération
     """
@@ -143,237 +110,51 @@ def placer_pari(driver, codeList):
                 
             config.tipster = global_tipster
             config.match_name = equipe1 + ' - ' + equipe2
-            find_match = False
-            log_message(f"🌐 Accès à 1xBet pour {equipe1} vs {equipe2}...")
-            driver.get('https://ca.1xbet.com/fr?platform_type=mobile')
-            # BOUTON DE RECHERCHE
-            try:
-                WebDriverWait(driver, 20).until(
-                    EC.presence_of_element_located((By.CLASS_NAME, 'home-navigation__link--search')))
-            except Exception as e:
-                log_message(f'❌ Erreur lors de la recherche du bouton de recherche: {str(e)}', "ERROR")
+            log_message(f"🌐 Recherche du match {equipe1} vs {equipe2} sur 1xBet (extension)...")
+
+            prepared = find_and_prepare_bet(combined_paris)
+            if not prepared.get('success'):
+                log_message(f"❌ Erreur lors de la préparation du pari: {prepared.get('error')}", "ERROR")
+                if prepared.get('error') == 'match_not_found':
+                    send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de la recherche du match : {formatted_telegram_msg}")
+                    success = False
+                    break
                 tentative = tentative + 1
                 continue
-            else:
-                log_message("🔍 Bouton de recherche trouvé, clic en cours...")
-                search_button = driver.find_element(By.CLASS_NAME, 'home-navigation__link--search')
-                search_button.click()
-            # POPUP DE RECHERCHE
-            # Attendre que la page soit complètement chargée (document.readyState == 'complete')
-            try:
-                log_message("⏳ Attente du chargement de la page...")
-                time.sleep(2)
-                WebDriverWait(driver, 15).until(
-                    lambda d: d.execute_script("return document.readyState") == 'complete'
-                )
-                log_message("✅ Page chargée")
-            except Exception:
-                log_message("⚠️ Timeout du chargement, poursuite...", "WARNING")
-                time.sleep(2)
-            try:
-                time.sleep(3)
-                log_message("🔍 Recherche du champ de saisie...")
-                WebDriverWait(driver, 15).until(
-                    EC.presence_of_element_located((By.CLASS_NAME, 'search-app__content')))
-                WebDriverWait(driver, 15).until(
-                    EC.element_to_be_clickable((By.CLASS_NAME, 'ui-search-default')))
-                modal__content = driver.find_element(By.CLASS_NAME, 'search-app__content')
-            except Exception as e:
-                log_message(f'❌ Erreur lors de la recherche du champ de recherche: {str(e)}', "ERROR")
-                tentative = tentative + 1
-                continue
-            else:
-                # Chercher l'input de recherche avec plusieurs sélecteurs possibles
-                search_input = None
-                selectors = ['input.ui-field__input', 'input.ui-search-default', 'input.search-app-head__search',
-                            'input.ui-field__input.search-app-head__search']
-                for sel in selectors:
+
+            # Cote globale : celle lue en direct pour un pari simple, sinon le produit
+            # des cotes fournies par le tipster pour chaque leg d'un combiné
+            if len(combined_paris) > 1:
+                global_odds = 1.0
+                for pari in combined_paris:
                     try:
-                        search_input = modal__content.find_element(By.CSS_SELECTOR, sel)
-                        break
+                        global_odds *= float(pari.get('odds') or 1)
                     except Exception:
-                        continue
-
-                if not search_input:
-                    log_message('❌ Champ de recherche introuvable avec les sélecteurs habituels', "ERROR")
-                else:
-                    # Remplissage robuste : scroll, ajouter id/name, injecter valeur via JS + dispatch d'événements
-                    try:
-                        search_term = f"{equipe1} - {equipe2}"
-                        log_message(f"⌨️ Saisie du terme de recherche: {search_term}")
-                        search_input.send_keys(search_term)
-
-                    except Exception as e:
-                        # Dernier recours : send_keys simple
-                        time.sleep(2)
-                        try:
-                            print(e)
-                            search_input.send_keys(f"{equipe1} - {equipe2}")
-                        except Exception as e2:
-                            log_message(f"❌ Impossible d'envoyer le texte dans le champ de recherche: {e2} | original: {e}", "ERROR")
-            try:
-                # Rechercher et cliquer sur le span "Avant-match"
-                """try:
-                    WebDriverWait(driver, 10).until(
-                        EC.element_to_be_clickable(
-                            (By.XPATH, "//span[contains(@class, 'ui-caption') and text()='Avant-match']"))
-                    )
-                    avant_match_span = driver.find_element(By.XPATH,
-                                                        "//span[contains(@class, 'ui-caption') and text()='Avant-match']")
-                    avant_match_span.click()
-                    print("✅ Cliqué sur 'Avant-match'")
-                except Exception as e:
-                    print(f"⚠️ Impossible de cliquer sur 'Avant-match': {e}")"""
-
-                log_message("🔍 Lancement de la recherche du match...")
-                WebDriverWait(driver, 15).until(
-                    EC.presence_of_element_located((By.CLASS_NAME, 'ui-game-card__content')))
-                time.sleep(2)
-            except Exception as e:
-                log_message(f'❌ Erreur lors de la recherche du match: {equipe1} vs {equipe2} : {str(e)}', "ERROR")
-                tentative = tentative + 1
-                continue
-
+                        pass
             else:
-                print('✅ Cartes de matches trouvées, recherche en cours...', flush=True)
-                # try:
-                matches = driver.find_elements(By.CLASS_NAME, 'search-game-card')
-                team1 = ''
-                team2 = ''
+                global_odds = prepared.get('cote') or float(combined_paris[0].get('odds') or 0)
+            config.cote = global_odds
 
-                for match in matches:
-                    try:
-                        # Nouvelle structure HTML - récupérer les noms d'équipes depuis les spans
-                        team_names = match.find_elements(By.CLASS_NAME, 'ui-game-card-scoreboard-teams-name__caption')
+        from Functions.GetMise import get_recommended_stake
+        try:
+            stake_data = get_recommended_stake(cote=config.cote, tipster=global_tipster)
+            config.mise = round(float(stake_data.get('recommended_stake') or 0), 2) or 0.2
+        except Exception as e:
+            log_message(f"⚠️ Mise recommandée indisponible ({e}), fallback 0.2€", "WARNING")
+            config.mise = 0.2
 
-                        if len(team_names) >= 2:
-                            team1 = team_names[0].text.strip()
-                            team2 = team_names[1].text.strip()
-
-                            log_message(f"🏆 Équipes trouvées: '{team1}' vs '{team2}'")
-                            log_message(f"🔍 Comparaison avec: '{equipe1}' vs '{equipe2}'")
-
-                            # Comparaison flexible des noms d'équipes
-                            if (equipe1.lower() in team1.lower() or team1.lower() in equipe1.lower()) and \
-                                    (equipe2.lower() in team2.lower() or team2.lower() in equipe2.lower()):
-                                print('✅ Match trouvé! Accès à la page du match...', flush=True)
-                                link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
-                                driver.get(link)
-                                find_match = True
-                                break
-                        else:
-                            # Fallback vers l'ancienne méthode si la nouvelle structure n'est pas trouvée
-                            scoreboard = match.find_element(By.CLASS_NAME, 'ui-game-card-scoreboard')
-                            teams_text = scoreboard.text
-                            if ' - ' in teams_text:
-                                team1, team2 = teams_text.split(' - ')
-                                if (equipe1 in team1 or team1 in equipe1) and (equipe2 in team2 or team2 in equipe2):
-                                    print('✅ Match trouvé (méthode alternative)!', flush=True)
-                                    link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
-                                    driver.get(link)
-                                    find_match = True
-                                    break
-
-                    except Exception as e:
-                        log_message(f"⚠️ Erreur lors de l'extraction des équipes: {e}", "WARNING")
-                        continue
-                if not find_match:
-                    for match in matches:
-                        # Nouvelle structure HTML - récupérer les noms d'équipes depuis les spans
-                        team_names = match.find_elements(By.CLASS_NAME, 'ui-game-card-scoreboard__name')
-
-                        if len(team_names) >= 2:
-                            team1 = team_names[0].text.strip()
-                            team2 = team_names[1].text.strip()
-                        log_message(f'Tentative de comparaison: {team1} - {team2} avec {equipe1} vs {equipe2}')
-                        try:
-                            if (equipe1 in team1 or team1 in equipe1) and (equipe2 in team2 or team2 in equipe2):
-                                log_message('✅ Match trouvé (méthode alternative 2)!')
-                                link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
-                                driver.get(link)
-                                find_match = True
-                                break
-                            if compare_match_name(f"{team1} - {team2}", f'{equipe1} vs {equipe2}', sport_id):
-                                log_message('✅ Match trouvé via comparaison IA!')
-                                link = match.find_element(By.TAG_NAME, 'a').get_attribute('href')
-                                driver.get(link)
-                                find_match = True
-                                break
-                        except Exception as e:
-                            log_message(f'Erreur lors de la comparaison: {e}', "WARNING")
-
-                # except Exception as e:
-                # print(f'Erreur lors de la selection du match: {equipe1} vs {equipe2} : {str(e)}')
-                # exit()
-            if not find_match:
-                send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de la recherche du match : {formatted_telegram_msg}")
-                success = False
-                break
-            # Afficher la categorie de paris
-            tentative = 0
-            try:
-                time.sleep(2)
-                WebDriverWait(driver, 30).until(
-                    lambda d: d.execute_script("return document.readyState") == 'complete'
-                )
-            except Exception:
-                # fallback court si l'attente échoue
-                time.sleep(3)
-            if len(combined_paris)>1:
-                print(combined_paris)
-                try:
-                    WebDriverWait(driver, 20).until(
-                        EC.presence_of_element_located((By.CLASS_NAME, 'ico--constructor-bet')))
-                except Exception as e:
-                    print(f'Erreur lors de la recherche de la section de paris combinés: {str(e)}')
-                    send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de la recherche de la section de paris combinés : {formatted_telegram_msg}")
-                    return False
-                else:
-                    constructor_bet = driver.find_element(By.CLASS_NAME, 'ico--constructor-bet')
-                    constructor_bet.click()
-                    time.sleep(2)
-            for pari in combined_paris:
-                print(pari)
-                while not AfficherParis(driver, pari['categorie'], pari['type_de_pari']):
-                    tentative += 1
-                    if tentative > 3:
-                        send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de l'affichage du pari : {formatted_telegram_msg}")
-                        return False
-
-                tentative = 0
-                time.sleep(2)
-                while not GetBetOld(driver, selection=pari['selection']):
-                    tentative += 1
-                    if tentative > 3:
-                        send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de la récupération du pari : {formatted_telegram_msg}")
-                        return False
-            if len(combined_paris)>1:
-                try:
-                    WebDriverWait(driver, 20).until(
-                        EC.presence_of_element_located((By.CLASS_NAME, 'quick-coupon-header__redirect')))
-                except Exception as e:
-                    print(f'Erreur lors de la recherche du bouton de validation des paris combinés: {str(e)}')
-                    send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de la recherche du bouton de validation des paris combinés : {formatted_telegram_msg}")
-                    return False
-                else:
-                    combobet_footer = driver.find_element(By.CLASS_NAME, 'quick-coupon-header__redirect')
-                    combobet_footer.click()
-                    time.sleep(2)
-
-        while not PlacerMise(driver, constructor=(len(combined_paris)>1)):
+        from websocket_server import bridge
+        stake_result = bridge.set_stake(config.mise)
+        if not stake_result.get('success'):
+            send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de la mise du pari : {formatted_telegram_msg}")
             tentative += 1
-            if tentative > 3:
-                send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de la mise du pari : {formatted_telegram_msg}")
-                return False
-        validation = False
-        while not validation:
-            validation = ValidationDuParis(driver)
-            tentative += 1
-            if tentative > 3:
-                return False
-        if not validation:
+            continue
+
+        validation = bridge.validate_bet(confirm=True)
+        if not validation.get('validated'):
             send_telegram(Functions.Functions_telegram.alertGroup, f"Erreur lors de la validation du pari : {formatted_telegram_msg}")
-            return False
+            tentative += 1
+            continue
         try:
             # Formatage des événements selon le nouveau format API
             formatted_events = []
@@ -498,11 +279,11 @@ def placer_pari(driver, codeList):
 
 def avec_donnees_exemple():
     """
-    Fonction de test utilisant les données d'exemple fournies
+    Fonction de test utilisant les données d'exemple fournies (nécessite le bridge
+    WebSocket démarré et l'extension Chrome connectée sur une page 1xBet).
     """
-    from ChromeDriver.SetDriver1 import driver
+    from websocket_server import start_bridge
 
-    # Données d'exemple pour les tests
     donnees_test = {
         "date": "05/09/2025",
         "equipe_1": "Earthquakes",
@@ -514,27 +295,13 @@ def avec_donnees_exemple():
         "tipster": 'TEST'
     }
 
-    # try:
-    # Test en mode simulation sans driver réel
-    print("=== MODE TEST SANS DRIVER ===")
-    print("Test des données d'exemple uniquement...")
-
-    # Test avec les données d'exemple
-    resultat = placer_pari(
-        driver, [donnees_test]
-    )
+    start_bridge(wait_timeout=30)
+    resultat = placer_pari({'matches': [donnees_test], 'tipster': 'TEST'})
 
     print("RÉSULTAT DU TEST:")
     print(json.dumps(resultat, indent=2, ensure_ascii=False))
 
     return resultat
-
-    # except ImportError:
-    # print("Erreur: Impossible d'importer le driver Chrome")
-    # return None
-    # except Exception as e:
-    # print(f"Erreur lors du test: {str(e)}")
-    # return None
 
 
 if __name__ == "__main__":

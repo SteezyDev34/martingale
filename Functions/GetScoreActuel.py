@@ -170,10 +170,15 @@ def _appliquer_transition(driver, candidat_score, source):
                     )
             except Exception:
                 pass
-        else:
+        elif source == 'redis_hint':
             config.log(
                 f"[Sofascore] transition {candidat_score} actée en premier via hint Sofascore "
                 f"(bookmaker encore en retard)", 'warning', False,
+            )
+        elif source == 'bridge':
+            config.log(
+                f"[Bridge] transition {candidat_score} actée (score lu directement sur 1xBet)",
+                'debug', False,
             )
     elif etat is not None:
         # Un autre process (ou ce process à un tour précédent) a déjà acté cette
@@ -493,14 +498,10 @@ def GetQTScoreActuel(driver):
 
 
 if __name__ == "__main__":
-    config.localhost = 43151
-    from ChromeDriver.SetDriver import get_script_driver
-    config.sofascore_tab_handle = 1
-    config.original_tab_handle = 1
-    config.sofascore_link = 'https://www.sofascore.com/fr/tennis/atp-miami-open-2024/568422'
-    num_fenetre = 1
-    driver = get_script_driver(num_fenetre)
-    # driver.switch_to.window(driver.window_handles[0])
+    from websocket_server import start_bridge
+
+    start_bridge(wait_timeout=15)
     config.site_type = 'mobile_site'
     print("Démarrage de la récupération du score actuel...")
-    GetScoreActuel(driver)
+    print("GetScoreActuel:", GetScoreActuel(None))
+    print("config.score_actuel:", config.score_actuel)

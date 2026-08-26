@@ -209,6 +209,14 @@ def sauvegarder_matchlist_json(matchlist):
         config.log(f"Erreur lors de l'enregistrement de matchlist: {str(e)}", 'error', True)
 
 
+# NB (2026-08-26) : getMatchList() en JS remonte maintenant `rawScore`, le texte brut
+# complet du conteneur `.ui-game-scores` (jeux + points, ex "00(0)00(0)") — exactement
+# ce que lisait l'ancien Selenium (bet_item.find_elements(By.CLASS_NAME, 'ui-game-scores').text)
+# et comparait à config.score_to_start. On réutilise donc directement config.score_to_start
+# ici, pas de whitelist bridge séparée : un match n'est éligible que si les JEUX sont à 0-0
+# (début de set), pas seulement si le point en cours est dans les tout premiers.
+
+
 def _bridge_recherche_match():
     """Version bridge de rechercheDeMatch — pas de Selenium."""
     from websocket_server import bridge
@@ -216,6 +224,7 @@ def _bridge_recherche_match():
     from Functions._to_remove import AddRunning
 
     bridge.navigate(config.site_url)
+    time.sleep(2)
     leagues = bridge.get_match_list()  # service worker attend que la page soit chargée
     if not leagues:
         config.log('ligues introuvables!', 'warning', True, 2, False)
@@ -236,14 +245,17 @@ def _bridge_recherche_match():
         for match in league.get('matches', []):
             url = match.get('url', '')
             score = (match.get('score') or '').replace('\n', '').strip()
+            raw_score = (match.get('rawScore') or '').replace('\n', '').strip()
             has_ball = match.get('hasBall', False)
             p1 = match.get('p1') or ''
             p2 = match.get('p2') or ''
 
             config.log(f'{p1} vs {p2} — {score}', 'info', False, 3, False)
 
-            # Vérifier que le score correspond et qu'il y a un service en cours
-            score_ok = any(s == score for s in config.score_to_start) and has_ball
+            # Même vérification que l'ancien Selenium : le texte brut du conteneur
+            # ui-game-scores (jeux+points) doit correspondre à une entrée de
+            # config.score_to_start (donc jeux à 0-0), et un service doit être en cours.
+            score_ok = raw_score in config.score_to_start and has_ball
             if not score_ok:
                 config.log('Score NOT OK', 'warning', False, 4, False)
                 continue
@@ -263,8 +275,27 @@ def _bridge_recherche_match():
 
             config.log('Match OK — navigation', 'success', False, 4, False)
             config.newmatch = newmatch_id
-            bridge.navigate(url)
-            _t.sleep(1)
+            # Le lien vient de la page desktop — reconstruire l'URL mobile avant de naviguer
+            # (comportement déjà présent dans le code Selenium d'origine, cf. VerificationMatchTrouve.py).
+            mobile_url = url.replace('?platform_type=desktop', '').replace('?platform_type=mobile', '')
+            mobile_url += '?platform_type=mobile'
+            bridge.navigate(mobile_url)
+            time.sleep(3)
+
+            # Vérifier que le score est bien lisible (confirme le layout mobile) avant de
+            # s'engager sur ce match — sinon abandonner plutôt que de boucler indéfiniment
+            # sur une page où le score ne se lit jamais (observé le 2026-08-25).
+            score_readable = False
+            for _ in range(5):
+                state = bridge.get_state()
+                if state.get('score'):
+                    score_readable = True
+                    break
+                time.sleep(1)
+            if not score_readable:
+                config.log('Score toujours illisible après recherche, match ignoré', 'warning', False, 4, False)
+                continue
+
             try:
                 AddRunning.main(config.script_num, config.running_file_name)
             except Exception:
@@ -288,7 +319,13 @@ def rechercheDeMatch(driver):
         while not config.match_found and not config.error:
             if config.in_stat and (
                     not config.last_classement or config.last_classement != datetime.now().strftime("%Y-%m-%d")):
-                classementeDeMatch(driver, False)
+                try:
+                    classementeDeMatch(driver, False)
+                except Exception as e:
+                    # Le classement est une optimisation (priorisation des matchs), pas un
+                    # prérequis — un échec ne doit pas empêcher la recherche de match en direct.
+                    config.log(f'[Bridge] classementeDeMatch échoué, ignoré: {e}', 'warning', False)
+                    config.last_classement = datetime.now().strftime("%Y-%m-%d")
             script_manager.check_previous_scripts(config.script_num)
             # Déjà sur une page de match ? (match ouvert avant le démarrage du script)
             if GetIfMatchPage(driver):
@@ -781,7 +818,160 @@ def rechercheDeMatchNBA(driver):
     return config.match_found
 
 
+def _finaliser_classement(matchlist):
+    """
+    Traitement commun (Selenium et bridge) après collecte de la matchlist brute :
+    sauvegarde JSON, calcul des probabilités, tri/priorisation par ligue, ajout au
+    match_manager, sauvegarde de la date de classement, rotation des fichiers matchlist_*.json.
+    Extrait de classementeDeMatch pour être partagé entre les deux chemins.
+    """
+    sauvegarder_matchlist_json(matchlist)
+    goodmatch = traiter_matchlist(matchlist)
+    tableau_trie = sorted(goodmatch, key=lambda x: x[-2], reverse=True)
+
+    def prioritize_matches_by_league(matches, max_matches=30):
+        priority_groups = {i: [] for i in range(1, 9)}
+        for match in matches:
+            ligue_name = match[1].lower()
+            has_qualification = 'qualification' in ligue_name
+            if 'atp' in ligue_name:
+                priority = 4 if has_qualification else 1
+            elif 'challenger' in ligue_name:
+                priority = 5 if has_qualification else 2
+            elif any(wta_term in ligue_name for wta_term in ['wta', 'féminin', 'femmes', 'women']):
+                priority = 6 if has_qualification else 3
+            elif 'itf' in ligue_name:
+                priority = 8 if has_qualification else 7
+            else:
+                priority = 8
+            priority_groups[priority].append(match)
+
+        final_matches = []
+        for priority in sorted(priority_groups.keys()):
+            group_sorted = sorted(priority_groups[priority], key=lambda x: x[-2], reverse=True)
+            remaining_slots = max_matches - len(final_matches)
+            if remaining_slots <= 0:
+                break
+            final_matches.extend(group_sorted[:remaining_slots])
+        return final_matches
+
+    top_matches = prioritize_matches_by_league(tableau_trie, 30)
+
+    for match in top_matches:
+        try:
+            players = match[0]
+            if isinstance(players, (list, tuple)):
+                players_str = " - ".join(str(p).strip().strip("[]'\"") for p in players)
+            else:
+                players_str = str(players).strip().strip("[]'\"")
+
+            league = match[1]
+            match_id = match[2]
+            date_str = match[3]
+            prob = match[4]
+            link = match[5]
+            script_types_json = json.dumps(match[6]) if len(match) > 6 else json.dumps([])
+            total_gain = str(match[7]) if len(match) > 7 else '0'
+            match_info = "|".join([
+                players_str, str(league), str(match_id), str(date_str),
+                str(prob), str(link), script_types_json, total_gain
+            ])
+
+            success = match_manager.add_match_todo(match_info)
+            if success:
+                config.log(f"Match ajouté à la liste: {match[0]} vs {match[1]}", 'success', True)
+            else:
+                config.log(f"Match déjà dans la liste: {match[0]} vs {match[1]}", 'warning', True)
+        except Exception as e:
+            config.log(f"Erreur lors de l'ajout du match: {str(e)}", 'error', True)
+
+    last_classement_file = os.path.join(config.projectPath, "DataFiles", "last_classement.txt")
+    try:
+        with open(last_classement_file, 'w') as f:
+            f.write(datetime.now().strftime("%Y-%m-%d"))
+            config.last_classement = datetime.now().strftime("%Y-%m-%d")
+            config.log(f"Date du dernier classement sauvegardée: {datetime.now().strftime('%Y-%m-%d')}", 'info', True)
+    except Exception as e:
+        config.log(f"Erreur lors de la sauvegarde de la date: {str(e)}", 'error', True)
+
+    done_dir = os.path.join(config.projectPath, "DataFiles", "done")
+    os.makedirs(done_dir, exist_ok=True)
+    datafiles_path = os.path.join(config.projectPath, "DataFiles")
+    for filename in os.listdir(datafiles_path):
+        if filename.startswith('matchlist_') and filename.endswith('.json'):
+            src_path = os.path.join(datafiles_path, filename)
+            dst_path = os.path.join(done_dir, filename)
+            try:
+                os.rename(src_path, dst_path)
+            except Exception as e:
+                config.log(f"Erreur lors du déplacement de {filename} vers done: {str(e)}", 'warning', True)
+
+
+def _bridge_scan_matchlist():
+    """
+    Port bridge de la boucle de scraping Selenium de classementeDeMatch (lignes ~805-955) :
+    parcourt les ligues (page desktop 'à venir') puis les matchs de chaque ligue, avec le
+    même filtrage (getCompet) et le même parsing de date que le code Selenium d'origine.
+    Retourne une matchlist au même format : [[players_name, ligue_name, newmatch_id, match_date], ...]
+    """
+    from websocket_server import bridge
+
+    bridge.navigate(config.site_line_url)
+    leagues_resp = bridge.scan_league_list()
+    leagues = leagues_resp.get('leagues') or []
+    matchlist = []
+    today = datetime.now().date()
+    current_year = datetime.now().year
+
+    for lg in leagues:
+        config.ligue_name = lg.get('name')
+        if not config.ligue_name or not getCompet():
+            continue
+        config.log(f'Accès à : {lg.get("href")}', 'info', True)
+        bridge.navigate(lg['href'])
+        matches_resp = bridge.scan_league_matches()
+        for m in matches_resp.get('matches') or []:
+            try:
+                day_month = (m.get('date') or '').strip()
+                hour = (m.get('time') or '').strip().split(' ')[0] if m.get('time') else None
+                if not day_month or not hour:
+                    continue
+                match_date_only = datetime.strptime(f"{day_month}/{current_year}", "%d/%m/%Y").date()
+                if match_date_only > today:
+                    continue
+                match_date = datetime.strptime(
+                    f"{day_month}/{current_year} {hour}:00", "%d/%m/%Y %H:%M:%S"
+                ).strftime("%Y-%m-%d %H:%M:%S")
+
+                players_name = m.get('players') or []
+                if len(players_name) <= 1:
+                    continue
+
+                newmatch_parts = m['href'].split('-')
+                newmatch_id = newmatch_parts[-3] + '-' + newmatch_parts[-2] + '-' + newmatch_parts[-1]
+
+                matchlist.append([players_name, config.ligue_name, newmatch_id, match_date])
+            except Exception:
+                continue
+
+    return matchlist
+
+
 def classementeDeMatch(driver, use_json_cache=True):
+    from Functions.BridgeAdapter import bridge_active
+    if bridge_active():
+        config.error = False
+        config.match_found = False
+        save_site_type = config.site_type
+        config.site_type = 'new_site'
+        try:
+            matchlist = charger_matchlist_depuis_json() if use_json_cache else None
+            if matchlist is None:
+                matchlist = _bridge_scan_matchlist()
+            _finaliser_classement(matchlist)
+        finally:
+            config.site_type = save_site_type
+        return
     driver.get(config.site_line_url)
     config.error = False
     config.match_found = False
@@ -956,140 +1146,9 @@ def classementeDeMatch(driver, use_json_cache=True):
                     config.log_clear_line(line)
                     line = 0
 
-        # Sauvegarder la matchlist dans un fichier JSON avant traitement
-        sauvegarder_matchlist_json(matchlist)
-
-        # Traiter les matchs pour obtenir les probabilités
-        goodmatch = traiter_matchlist(matchlist)
-
-        # Tri en fonction de la dernière valeur (indice -1) en ordre décroissant
-        tableau_trie = sorted(goodmatch, key=lambda x: x[-2], reverse=True)
-
-        # Fonction de priorisation des matchs par ligue
-        def prioritize_matches_by_league(matches, max_matches=30):
-            """
-            Priorise les matchs selon la hiérarchie des ligues :
-            1. ATP sans "qualification"
-            2. Challenger sans "qualification"  
-            3. WTA sans "qualification"
-            4. ATP avec "qualification"
-            5. Challenger avec "qualification"
-            6. WTA avec "qualification"
-            7. ITF sans "qualification"
-            8. ITF avec "qualification"
-            """
-            # Catégoriser les matchs par priorité
-            priority_groups = {
-                1: [],  # ATP sans qualification
-                2: [],  # Challenger sans qualification
-                3: [],  # WTA sans qualification
-                4: [],  # ATP avec qualification
-                5: [],  # Challenger avec qualification
-                6: [],  # WTA avec qualification
-                7: [],  # ITF sans qualification
-                8: []  # ITF avec qualification
-            }
-
-            for match in matches:
-                ligue_name = match[1].lower()
-                has_qualification = 'qualification' in ligue_name
-
-                # Déterminer la priorité basée sur le nom de la ligue
-                if 'atp' in ligue_name:
-                    priority = 4 if has_qualification else 1
-                elif 'challenger' in ligue_name:
-                    priority = 5 if has_qualification else 2
-                elif any(wta_term in ligue_name for wta_term in ['wta', 'féminin', 'femmes', 'women']):
-                    priority = 6 if has_qualification else 3
-                elif 'itf' in ligue_name:
-                    priority = 8 if has_qualification else 7
-                else:
-                    # Autres ligues, priorité basse
-                    priority = 8
-
-                priority_groups[priority].append(match)
-
-            # Construire la liste finale en respectant les priorités
-            final_matches = []
-            for priority in sorted(priority_groups.keys()):
-                group = priority_groups[priority]
-                # Trier chaque groupe par probabilité décroissante
-                group_sorted = sorted(group, key=lambda x: x[-2], reverse=True)
-
-                # Ajouter les matchs jusqu'à atteindre la limite
-                remaining_slots = max_matches - len(final_matches)
-                if remaining_slots <= 0:
-                    break
-
-                final_matches.extend(group_sorted[:remaining_slots])
-
-            return final_matches
-
-        # Appliquer la priorisation pour retenir les 30 meilleurs matchs
-        top_matches = prioritize_matches_by_league(tableau_trie, 30)
-        
-
-        for match in top_matches:
-            try:
-                # Assurer un format propre pour les joueurs: "Joueur A - Joueur B"
-                players = match[0]
-                if isinstance(players, (list, tuple)):
-                    players_str = " - ".join(str(p).strip().strip("[]'\"") for p in players)
-                else:
-                    # Nettoyer les éventuels crochets/quotes provenant d'une conversion liste->str
-                    players_str = str(players).strip().strip("[]'\"")
-
-                # Recomposer la ligne au format attendu
-                league = match[1]
-                match_id = match[2]
-                date_str = match[3]
-                prob = match[4]
-                link = match[5]
-                script_types_json = json.dumps(match[6]) if len(match) > 6 else json.dumps([])
-                total_gain = str(match[7]) if len(match) > 7 else '0'
-                match_info = "|".join([
-                    players_str,
-                    str(league),
-                    str(match_id),
-                    str(date_str),
-                    str(prob),
-                    str(link),
-                    script_types_json,
-                    total_gain
-                ])
-
-                success = match_manager.add_match_todo(match_info)
-                if success:
-                    config.log(f"Match ajouté à la liste: {match[0]} vs {match[1]}", 'success', True)
-                else:
-                    config.log(f"Match déjà dans la liste: {match[0]} vs {match[1]}", 'warning', True)
-            except Exception as e:
-                config.log(f"Erreur lors de l'ajout du match: {str(e)}", 'error', True)
-
-        # Sauvegarde de la date dans un fichier
-        last_classement_file = os.path.join(config.projectPath, "DataFiles", "last_classement.txt")
-        try:
-            with open(last_classement_file, 'w') as f:
-                f.write(datetime.now().strftime("%Y-%m-%d"))
-                config.last_classement = datetime.now().strftime("%Y-%m-%d")
-                config.log(f"Date du dernier classement sauvegardée: {datetime.now().strftime('%Y-%m-%d')}", 'info',
-                           True)
-        except Exception as e:
-            config.log(f"Erreur lors de la sauvegarde de la date: {str(e)}", 'error', True)
-        # Créer le dossier DataFiles/done s'il n'existe pas
-        done_dir = os.path.join(config.projectPath, "DataFiles", "done")
-        os.makedirs(done_dir, exist_ok=True)
-
-        # Déplacer les anciens fichiers matchlist_*.json dans le dossier done
-        datafiles_path = os.path.join(config.projectPath, "DataFiles")
-        for filename in os.listdir(datafiles_path):
-            if filename.startswith('matchlist_') and filename.endswith('.json'):
-                src_path = os.path.join(datafiles_path, filename)
-                dst_path = os.path.join(done_dir, filename)
-                try:
-                    os.rename(src_path, dst_path)
-                except Exception as e:
-                    config.log(f"Erreur lors du déplacement de {filename} vers done: {str(e)}", 'warning', True)
+        # Traitement commun (sauvegarde JSON, probabilités, tri/priorisation, match_manager,
+        # date de classement, rotation des fichiers) — partagé avec le chemin bridge, cf. _finaliser_classement.
+        _finaliser_classement(matchlist)
         config.log_clear_line(line)
         break
     config.site_type = save_site_type

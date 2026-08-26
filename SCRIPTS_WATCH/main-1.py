@@ -67,15 +67,12 @@ else:
     exit()
 
 # Chargement des functions
-# Chargement de Chrome driver
 config.localhost = 43151
 config.site_type = 'new_site'
-from ChromeDriver.SetDriver import get_script_driver
-command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
 
-print(command)
-num_fenetre = 8
-driver = get_script_driver(num_fenetre)
+from websocket_server import start_bridge, bridge
+start_bridge()
+
 # Vérification instance unique — tuer toute instance précédente du même script
 import psutil as _psutil
 _current_pid = os.getpid()
@@ -690,9 +687,9 @@ def check():
     while True:
         # Traitement des codes directs
         if codeList != []:
-            driver.get(config.site_line_url)
+            bridge.navigate(config.site_line_url)
             try:
-                PlacerCode(driver, codeList[0])
+                PlacerCode(codeList[0])
             except Exception as e:
                 log(f"Erreur lors du placement du code: {e}", "error", clear=False)
             else:
@@ -703,7 +700,7 @@ def check():
         if betList != []:
             try:
                 log('Gestion du pari en temps reel', "info", clear=False)
-                placer_pari(driver, betList)
+                placer_pari(betList)
             except Exception as e:
                 log(f"Erreur lors du placement du pari: {e}", "error", clear=False)
             else:
@@ -716,7 +713,7 @@ def check():
             #try:
             if current_time:
                 #log("Verification des paris non traites dans l'API...", "info", clear=False)
-                #processed_count = process_api_bets(driver, limit=5)
+                #processed_count = process_api_bets(limit=5)
                 #if processed_count > 0:
                     #log(f"Traite {processed_count} paris depuis l'API", "info", clear=False)
                 #else:

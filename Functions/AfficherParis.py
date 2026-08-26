@@ -247,6 +247,32 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
         theset = ''
         args = categorie
         key = type_de_pari
+
+    from Functions.BridgeAdapter import bridge_active
+    if bridge_active():
+        if config.scriptType in ['1SET', 'BREAK', 'HOLD']:
+            categorie_text = f'{theset}'
+        elif config.scriptType == 'LIVE':
+            categorie_text = f'{args}'
+        else:
+            categorie_text = f'{args}. {theset}'
+
+        from websocket_server import bridge
+        fallback_chain = {
+            'Paris': f'Score du jeu. {theset} {args}',
+            f'Score du jeu. {theset} {args}': 'Score de la partie',
+            'Score de la partie': 'Paris',
+        }
+        tentative_key = key
+        for _ in range(4):
+            result = bridge.open_category_and_search(categorie_text=categorie_text, key=tentative_key)
+            if result.get('success'):
+                config.log_clear_line(logline)
+                return True
+            tentative_key = fallback_chain.get(tentative_key, key)
+        config.log_clear_line(logline)
+        return False
+
     selection = False
     tentative = 1
 
@@ -380,10 +406,11 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    import sys
+    from websocket_server import start_bridge
 
-    config.scriptType = '15V1'
+    start_bridge(wait_timeout=15)
+    config.scriptType = sys.argv[1] if len(sys.argv) > 1 else '30A'
     config.site_type = 'mobile_site'
-    # GetIfNewSite(driver)
-    print(config.site_type)
-    AfficherParis(driver)
+    print("scriptType:", config.scriptType)
+    print("AfficherParis:", AfficherParis(None))

@@ -154,3 +154,5 @@ def newmatchFromUrl(driver):
         config.log('        Impossible de lire le lien du match!', 'warning', False)
         config.log_clear_line()
         return [False, config.newmatch]
+    else:
+        return [True, config.newmatch]

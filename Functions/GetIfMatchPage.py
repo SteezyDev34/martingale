@@ -1,8 +1,13 @@
 # Function_GetIfMatchPage
 
+import os
+import sys
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 
@@ -70,7 +75,8 @@ def GetIfMatchPage(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    from websocket_server import start_bridge
 
-    config.site_type = 'new_site'
-    print(GetIfMatchPage(driver))
+    start_bridge(wait_timeout=15)
+    config.site_type = 'mobile_site'
+    print("GetIfMatchPage:", GetIfMatchPage(None))

@@ -1,6 +1,11 @@
 # get_ligue_name
+import os
+import sys
+
 from selenium.webdriver.common.by import By
 from urllib.parse import unquote
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 
@@ -90,6 +95,7 @@ def fromUrl(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    from websocket_server import start_bridge
 
-    print(fromUrl(driver))
+    start_bridge(wait_timeout=15)
+    print("fromUrl:", fromUrl(None))

@@ -1,9 +1,14 @@
 # GetSetActuel.py
 # OBTENIR LE SET ACTUEL
 
+import os
+import sys
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 
@@ -82,8 +87,10 @@ def GetQTtActuel(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    from websocket_server import start_bridge
 
+    start_bridge(wait_timeout=15)
     config.saved_set = 1
-    config.site_type = 'old_site'
-    print(GetSetActuel(driver))
+    config.site_type = 'mobile_site'
+    print("GetSetActuel:", GetSetActuel(None))
+    print("config.set_actuel:", config.set_actuel)

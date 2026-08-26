@@ -1,3 +1,8 @@
+import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -12,6 +17,7 @@ def GetPlayersName(driver):
         p1, p2 = bridge_get_players()
         if p1 and p2:
             return [p1, p2]
+        return []
     try:
         element = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CLASS_NAME,
@@ -31,7 +37,8 @@ def GetPlayersName(driver):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    from websocket_server import start_bridge
 
-    GetIfNewSite(driver)
-    print(GetPlayersName(driver))
+    start_bridge(wait_timeout=15)
+    config.site_type = 'mobile_site'
+    print("GetPlayersName:", GetPlayersName(None))

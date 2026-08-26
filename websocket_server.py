@@ -138,8 +138,9 @@ class ExtensionBridge:
             time.sleep(0.5)
 
     def get_state(self):
-        """Retourne {score, set_actuel, jeu_actuel, players, url}."""
-        return self._send_and_wait({'action': 'get_state'})
+        """Retourne {score, set_actuel, jeu_actuel, players, url, isMatchPage}."""
+        resp = self._send_and_wait({'action': 'get_state'})
+        return resp.get('data') or {}
 
     def get_players(self):
         """Retourne {p1, p2}."""
@@ -159,6 +160,10 @@ class ExtensionBridge:
             'tab_index': tab_index,
         })
 
+    def set_stake(self, mise):
+        """Remplit la mise sur un marché déjà sélectionné (via select_market/select_combined_markets)."""
+        return self._send_and_wait({'action': 'set_stake', 'mise': mise})
+
     def validate_bet(self, confirm=True):
         """Confirme (ou annule) le pari. Retourne {validated, accepted}."""
         return self._send_and_wait({'action': 'validate_bet', 'confirm': confirm})
@@ -171,9 +176,78 @@ class ExtensionBridge:
         """Lit WIN/LOSE dans le betslip. Retourne {result: 'WIN'|'LOSE'|None}."""
         return self._send_and_wait({'action': 'get_result'})
 
+    def search_match(self, equipe1, equipe2):
+        """Recherche un match par noms d'équipes. Retourne {found, url, team1, team2} ou {found:False, candidates:[...]}."""
+        return self._send_and_wait({'action': 'search_match', 'equipe1': equipe1, 'equipe2': equipe2}, timeout=60)
+
+    def click_search_button(self):
+        """Étape 1/2 de la recherche : clique le bouton recherche (navigue vers /search-events)."""
+        return self._send_and_wait({'action': 'click_search_button'}, timeout=20)
+
+    def search_on_results_page(self, equipe1, equipe2):
+        """Étape 2/2 : tape le texte et lit les résultats, une fois sur /search-events."""
+        return self._send_and_wait({'action': 'search_on_results_page', 'equipe1': equipe1, 'equipe2': equipe2}, timeout=25)
+
+    def select_market(self, categorie, type_de_pari, selection):
+        """Sélectionne un marché/pari simple. Retourne {success, cote} ou {success:False, candidates:[...]}."""
+        return self._send_and_wait({
+            'action': 'select_market',
+            'categorie': categorie,
+            'type_de_pari': type_de_pari,
+            'selection': selection,
+        }, timeout=15)
+
+    def select_combined_markets(self, legs):
+        """Sélectionne plusieurs marchés (pari combiné / constructor bet). legs: [{categorie, type_de_pari, selection}, ...]."""
+        return self._send_and_wait({'action': 'select_combined_markets', 'legs': legs}, timeout=30)
+
+    def load_coupon_code(self, code):
+        """Charge un code coupon 1xBet dans le panneau dédié."""
+        return self._send_and_wait({'action': 'load_coupon_code', 'code': code}, timeout=15)
+
+    def debug_list_tabs(self):
+        """DEBUG uniquement : liste tous les onglets 1xBet détectés par l'extension."""
+        return self._send_and_wait({'action': 'debug_list_tabs'}, timeout=10)
+
+    def debug_list_category_options(self):
+        """DEBUG uniquement : ouvre le dropdown de catégorie, liste les options sans cliquer, referme."""
+        return self._send_and_wait({'action': 'debug_list_category_options'}, timeout=10)
+
+    def click_category_option(self, text):
+        """Port de RetourTpsRegMobile : clique une option déjà visible du dropdown de catégorie."""
+        return self._send_and_wait({'action': 'click_category_option', 'text': text}, timeout=10)
+
+    def scan_league_list(self):
+        """Port de classementeDeMatch (page desktop 'à venir') : liste des ligues [{name, href}]."""
+        return self._send_and_wait({'action': 'scan_league_list'}, timeout=45)
+
+    def scan_league_matches(self):
+        """Port de classementeDeMatch : matchs de la page de ligue desktop courante."""
+        return self._send_and_wait({'action': 'scan_league_matches'}, timeout=15)
+
+    def open_category_and_search(self, categorie_text, key):
+        """Port d'AfficherParisMobile : ouvre le dropdown de catégorie puis filtre par recherche."""
+        return self._send_and_wait({
+            'action': 'open_category_and_search',
+            'categorie_text': categorie_text,
+            'key': key,
+        }, timeout=25)
+
+    def read_ball_indicator(self):
+        """Port de la lecture 'balle' de GetBetOld.py. Retourne {success, hasBall}."""
+        return self._send_and_wait({'action': 'read_ball_indicator'}, timeout=10)
+
+    def select_market_by_text(self, text):
+        """Port de GetBetOld.py : sélectionne le marché dont le nom contient `text`."""
+        return self._send_and_wait({'action': 'select_market_by_text', 'text': text}, timeout=25)
+
+    def debug_scan_classes(self, keywords):
+        """DEBUG uniquement : scanne les classNames de l'onglet 1xBet contenant un des mots-clés donnés."""
+        return self._send_and_wait({'action': 'debug_scan_classes', 'keywords': keywords}, timeout=15)
+
     def get_match_list(self):
         """Retourne [{leagueName, matches:[{p1,p2,score,url,hasBall}]}]."""
-        resp = self._send_and_wait({'action': 'get_match_list'}, timeout=30)
+        resp = self._send_and_wait({'action': 'get_match_list'}, timeout=40)
         return resp.get('leagues', []) or []
 
     def on_score(self, callback):
