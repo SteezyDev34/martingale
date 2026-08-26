@@ -313,7 +313,6 @@ def ValidationDuParis(driver, nexbet=False):
                 tentative = tentative + 1
     if validation and not already:
         # Store bet information in validated_bet variable
-        from datetime import datetime
         # SendBetData()
         current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         # Create validated bet data
