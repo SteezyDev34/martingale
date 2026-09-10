@@ -233,6 +233,20 @@ class ExtensionBridge:
             'key': key,
         }, timeout=25)
 
+    def select_category_option(self, categorie_text):
+        """Sélectionne l'option du dropdown de catégorie (une seule fois, sans recherche)."""
+        return self._send_and_wait({
+            'action': 'select_category_option',
+            'categorie_text': categorie_text,
+        }, timeout=10)
+
+    def search_market_key(self, key):
+        """Retape la recherche (key) sans rouvrir le dropdown — pour le fallback de clés."""
+        return self._send_and_wait({
+            'action': 'search_market_key',
+            'key': key,
+        }, timeout=10)
+
     def read_ball_indicator(self):
         """Port de la lecture 'balle' de GetBetOld.py. Retourne {success, hasBall}."""
         return self._send_and_wait({'action': 'read_ball_indicator'}, timeout=10)

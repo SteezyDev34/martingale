@@ -16,13 +16,20 @@ import config
 def GetIfMatchPage(driver):
     from Functions.BridgeAdapter import bridge_active
     if bridge_active():
-        try:
-            from websocket_server import bridge
-            state = bridge.get_state()
-            if state and (state.get('score') or state.get('isMatchPage')):
-                return True
-        except Exception:
-            pass
+        import time
+        from websocket_server import bridge
+        # Au changement de set, si l'onglet "Temps réglementaire" n'est pas actif, la page
+        # se régénère et l'URL du match change d'ID — le score devient brièvement illisible
+        # le temps que la page se stabilise sur le nouveau set du même match. Tolérer ça
+        # avant d'abandonner le suivi (sinon un pari en cours perd son suivi pour de bon).
+        for _ in range(5):
+            try:
+                state = bridge.get_state()
+                if state and (state.get('score') or state.get('isMatchPage')):
+                    return True
+            except Exception:
+                pass
+            time.sleep(1)
         config.log('Tableau des scores introuvable!', 'warning', False, show_script_type=False)
         config.log_clear_line()
         return False

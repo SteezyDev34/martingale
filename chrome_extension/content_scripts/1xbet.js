@@ -478,7 +478,11 @@
     //
     // Garde de sécurité (incident du 2026-08-25 : un clic ambigu a navigué vers un autre match) :
     // on vérifie l'URL avant/après chaque clic et on annule si elle change de façon inattendue.
-    async openCategoryAndSearch({ categorie_text, key }) {
+    // Port fidèle d'AfficherParisMobile (Selenium) : la sélection de catégorie dans le
+    // dropdown ne se fait qu'UNE fois (select_option.click()), puis la recherche de texte
+    // (key) est retentée en boucle par l'appelant sans rouvrir/re-cliquer le dropdown à
+    // chaque tentative — cf. selectCategoryOption + searchMarketKey ci-dessous.
+    async selectCategoryOption(categorie_text) {
       const urlBefore = location.href;
 
       const listWrapper = await waitFor('.game-sub-games__list', 5000);
@@ -496,6 +500,11 @@
       await sleep(500);
       if (matchSlug(location.href) !== matchSlug(urlBefore)) return { success: false, error: 'unexpected_navigation', step: 'category_option' };
 
+      return { success: true };
+    },
+
+    async searchMarketKey(key) {
+      const urlBefore = location.href;
       const toolbar = qs('.game-search');
       const searchInput = toolbar ? qs('input.game-search__input', toolbar) : qs('input.game-search__input');
       if (!searchInput) return { success: false, error: 'search_input_not_found' };
@@ -513,6 +522,14 @@
       if (!container) return { success: false, error: 'bet_list_container_not_found', key };
 
       return { success: true };
+    },
+
+    // Alias conservé (compat) : fait les deux étapes d'un coup, pour du code appelant qui
+    // n'a pas besoin du fallback sur plusieurs clés.
+    async openCategoryAndSearch({ categorie_text, key }) {
+      const catResult = await window._martingale.selectCategoryOption(categorie_text);
+      if (!catResult.success) return catResult;
+      return window._martingale.searchMarketKey(key);
     },
 
     async selectCombinedMarkets(legs) {

@@ -316,6 +316,8 @@ def rechercheDeMatch(driver):
 
     from Functions.BridgeAdapter import bridge_active
     if bridge_active():
+        from websocket_server import bridge
+        from Functions.Managers.MatchManager import match_manager
         while not config.match_found and not config.error:
             if config.in_stat and (
                     not config.last_classement or config.last_classement != datetime.now().strftime("%Y-%m-%d")):
@@ -329,7 +331,24 @@ def rechercheDeMatch(driver):
             script_manager.check_previous_scripts(config.script_num)
             # Déjà sur une page de match ? (match ouvert avant le démarrage du script)
             if GetIfMatchPage(driver):
+                # Forcer le mode mobile avant de continuer, comme le fait déjà
+                # _bridge_recherche_match() une fois un match trouvé — sinon les lectures
+                # DOM mobile_site (score, jeu, mise, etc.) échouent si le match a été
+                # ouvert manuellement en desktop.
+                current_url = (bridge.get_state() or {}).get('url', '') or ''
+                if current_url and '?platform_type=mobile' not in current_url:
+                    mobile_url = current_url.replace('?platform_type=desktop', '').replace('?platform_type=mobile', '')
+                    mobile_url += '?platform_type=mobile'
+                    bridge.navigate(mobile_url)
+                    time.sleep(3)
                 result = VerificationMatchTrouve.newmatchFromUrl(driver)
+                # Le match déjà ouvert peut être celui qu'on vient tout juste de terminer
+                # (objectif atteint) — le navigateur reste sur sa page tant qu'on ne navigue
+                # pas ailleurs. Sans cette vérification, la boucle ré-accepte indéfiniment
+                # ce même match terminé au lieu de repartir sur une vraie recherche.
+                if result[0] and match_manager.match_exists(result[1]):
+                    config.log('Match (déjà ouvert) déjà parié, nouvelle recherche', 'warning', False)
+                    result = [False, result[1]]
                 if result[0]:
                     config.newmatch = result[1]
                     config.match_found = True

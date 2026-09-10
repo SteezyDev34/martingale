@@ -258,18 +258,27 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
             categorie_text = f'{args}. {theset}'
 
         from websocket_server import bridge
-        fallback_chain = {
-            'Paris': f'Score du jeu. {theset} {args}',
-            f'Score du jeu. {theset} {args}': 'Score de la partie',
-            'Score de la partie': 'Paris',
-        }
+        # Port fidèle d'AfficherParisMobile : le dropdown de catégorie n'est cliqué qu'UNE
+        # fois (select_option.click()) — seule la recherche de texte (key) est retentée en
+        # boucle, sans rouvrir/re-cliquer le dropdown à chaque essai (c'est ce qui rendait
+        # la version précédente ~4x plus lente : elle refaisait tout à chaque tentative).
+        cat_result = bridge.select_category_option(categorie_text)
+        if not cat_result.get('success'):
+            config.log_clear_line(logline)
+            return False
+
+        # Même chaîne de fallback que l'ancien Selenium : Paris -> Game Score. {theset}{args}
+        # -> Score de la partie -> Score du jeu. {theset}{args} -> Paris -> ... (cyclique,
+        # sans espace entre theset et args pour ces 3 libellés, comme côté Selenium).
+        cycle = ['Paris', f'Game Score. {theset}{args}', 'Score de la partie', f'Score du jeu. {theset}{args}']
         tentative_key = key
-        for _ in range(4):
-            result = bridge.open_category_and_search(categorie_text=categorie_text, key=tentative_key)
+        for _ in range(6):
+            result = bridge.search_market_key(tentative_key)
             if result.get('success'):
                 config.log_clear_line(logline)
                 return True
-            tentative_key = fallback_chain.get(tentative_key, key)
+            idx = cycle.index(tentative_key) if tentative_key in cycle else -1
+            tentative_key = cycle[(idx + 1) % len(cycle)]
         config.log_clear_line(logline)
         return False
 

@@ -261,6 +261,24 @@ async function handlePythonMessage(msg) {
       break;
     }
 
+    // Sélectionne l'option du dropdown de catégorie une seule fois (sans rechercher)
+    case 'select_category_option': {
+      const tabId = await resolveTabId(msg);
+      if (!tabId) { sendToPython({ action: 'select_category_option_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const result = await execInTab(tabId, (args) => window._martingale?.selectCategoryOption?.(args.categorie_text), msg);
+      sendToPython({ action: 'select_category_option_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      break;
+    }
+
+    // Retape la recherche (key) sans re-cliquer le dropdown — pour le fallback de clés
+    case 'search_market_key': {
+      const tabId = await resolveTabId(msg);
+      if (!tabId) { sendToPython({ action: 'search_market_key_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const result = await execInTab(tabId, (args) => window._martingale?.searchMarketKey?.(args.key), msg);
+      sendToPython({ action: 'search_market_key_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      break;
+    }
+
     // Python demande de lire l'indicateur "balle" (quel joueur a le point)
     case 'read_ball_indicator': {
       const tabId = await resolveTabId(msg);

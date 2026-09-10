@@ -12,16 +12,18 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 def GetResult(driver):
     from Functions.BridgeAdapter import bridge_active, bridge_get_result, bridge_wait_score_change
+    ##ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
+    if config.scriptType not in ['15V1', '15V2']:
+        RetourTpsReg(driver)
     if bridge_active():
-        # Attendre que le score change (fin du point) puis lire le résultat
+        # Attendre que le score change (fin du point) puis lire le résultat — après être
+        # revenu sur "Temps réglementaire" (sinon le changement de set n'est pas reflété
+        # correctement tant qu'on reste sur un autre onglet de catégorie).
         bridge_wait_score_change()
         result = bridge_get_result()
         if result:
             return result
         # Si result=None, on continue en boucle ci-dessous via GetScoreActuel bridge
-    ##ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
-    if config.scriptType not in ['15V1', '15V2']:
-        RetourTpsReg(driver)
     txtlog = "ON ATTEND LE RESULTAT POUR VALIDER LE PARIS"
     print('validated_bet = ', config.validated_bet)
     config.log(txtlog, config.newmatch)

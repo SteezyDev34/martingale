@@ -125,6 +125,21 @@ def SendBetData():
 def ValidationDuParis(driver, nexbet=False):
     from Functions.BridgeAdapter import bridge_active
     if bridge_active():
+        # Même garde-fou anti-double-validation que l'original (lignes ci-dessous, chemin
+        # Selenium) : si ce jeu/set/ligue a déjà été validé, ne pas re-cliquer "Placer le
+        # pari" — les boucles de retry (Functions_431a.py) rappellent cette fonction
+        # plusieurs fois pour le même pari déjà passé.
+        if hasattr(config, 'validated_bet') and config.validated_bet is not None:
+            current_set = getattr(config, 'set_actuel', None)
+            if (config.looking_game is not None and current_set is not None and
+                    config.validated_bet.get('jeu') == config.looking_game and
+                    config.validated_bet.get('set') == current_set and
+                    config.validated_bet.get('url') == config.ligue_name):
+                config.log(
+                    f"Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.",
+                    'warning', False)
+                return True
+
         # Marché + mise déjà sélectionnés par AfficherParis/GetBetOld/PlacerMise (bridge) —
         # ici on ne fait que confirmer et interpréter la réponse, comme ModalHandler.py
         # le ferait après le clic sur "Placer le pari" (texte "effectué" = succès,
@@ -176,8 +191,7 @@ def ValidationDuParis(driver, nexbet=False):
                 RedisIPC.set_loss(getattr(config, 'scriptType', 'UNKNOWN'), float(config.perte), matchname=_matchname, publish=True)
             config.wantwin = float(config.wantwin) + float(config.increment)
             config.log('Perte ' + str(config.perte))
-            config.netprofit = round(
-                (float(config.mise) * float(config.cote)) - float(config.perte) - float(config.mise), 2)
+            config.netprofit = round((float(config.mise) * float(config.cote)) - float(config.perte), 2)
             config.log(f'Potential Net profit: {config.netprofit}', 'title', clear=False, indent=3)
         return True
 
