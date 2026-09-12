@@ -25,3 +25,10 @@ session_data.json
 # Fichiers de gestion des fenêtres Chrome
 ChromeDriver/window_handles.json
 ChromeDebug*
+ChromeDriver/*_profile/
+
+# Données générées / logs
+bet_labels.db
+watcher_err.log
+watcher_out.log
+telegram_media/
