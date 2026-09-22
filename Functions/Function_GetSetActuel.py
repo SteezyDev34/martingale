@@ -15,7 +15,6 @@ def GetQTActuel(driver):
         return False
     else:
         try:
-            # config.log("Vérification si numéro de QT bien récupéré", 0, config.newmatch)
             numset = config.qt_actuel.split(' ')[0]
             numset = int(''.join(char for char in numset if char.isdigit()))
         except Exception as e:
@@ -24,10 +23,6 @@ def GetQTActuel(driver):
             return False
         else:
             config.qt_actuel = int(numset)
-            # config.log(str(numset) + ' QT', 0, config.newmatch)
-            if config.saved_set != config.qt_actuel:
-                print('QT actuel : ', config.qt_actuel)
-                # config.log('Récupération du QT actuel : ' + str(config.qt_actuel), 0, config.newmatch)
 
     return True
 

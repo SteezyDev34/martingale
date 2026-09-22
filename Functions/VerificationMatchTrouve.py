@@ -25,6 +25,23 @@ def _navigate(driver, url):
         driver.get(url)
 
 
+def _has_scripttype_for_bot_family(match_id):
+    """
+    Vérifie que le match a au moins un scriptType compatible avec le bot_family en
+    cours (1530A ou 456P), pour ne pas ouvrir un match dont les scriptTypes calculés
+    au classement (cf. traiter_matchlist) ne concernent que l'autre famille de bots.
+    """
+    bot_family = getattr(config, 'bot_family', None)
+    if bot_family not in ('1530A', '456P'):
+        return True
+    script_cfg = match_manager.get_match_script_config(match_id)
+    script_types = script_cfg.get('script_types', []) if script_cfg else []
+    if not script_types:
+        return True  # laisse la vérification distante/legacy décider
+    valid = config.VALID_SCRIPTTYPES_1530A if bot_family == '1530A' else config.VALID_SCRIPTTYPES_456P
+    return any(st in valid for st in script_types)
+
+
 def main(driver, bet_item, matchlist_file_name):
     try:
         # config.log('Vérification si match déjà parié', 'info', True, 4)
@@ -42,7 +59,13 @@ def main(driver, bet_item, matchlist_file_name):
     else:
         # Vérification si le match est déjà traité ou en attente
         match_is_done = match_manager.match_exists(config.newmatch)
-        match_is_todo = match_manager.is_match_todo(config.newmatch)
+        match_is_todo_raw = match_manager.is_match_todo(config.newmatch)
+        # Si le match est dans matches_todo mais qu'aucun de ses scriptTypes calculés au
+        # classement ne concerne le bot_family en cours (1530A vs 456P), il ne faut pas
+        # l'accepter — sinon on retombe dans la branche "match inconnu" ci-dessous qui
+        # accepte quand même (elle est faite pour les VRAIS matchs jamais classés).
+        match_has_valid_scripttype = _has_scripttype_for_bot_family(config.newmatch) if match_is_todo_raw else True
+        match_is_todo = match_is_todo_raw and match_has_valid_scripttype
         print('match_is_done', match_is_done)
         print('match_is_todo', match_is_todo)
         print('config.site_type ', config.site_type)
@@ -62,7 +85,14 @@ def main(driver, bet_item, matchlist_file_name):
             _navigate(driver, newmatchtxt)
             config.log_clear_line()
             return [True, config.newmatch]
-        elif config.in_stat and not match_is_todo and not match_is_done:
+        elif config.in_stat and match_is_todo_raw and not match_has_valid_scripttype and not match_is_done:
+            # Match connu (classé) mais aucun scriptType compatible avec ce bot_family
+            # (ex: match calculé pour 456P uniquement, scanné par un bot 1530A) → rejeté
+            # explicitement, sans navigation (contrairement au cas "match inconnu" ci-dessous).
+            config.log('Le match n\'est pas autorisé (scriptType non compatible avec ce bot)!', 'warning', True, 4, False)
+            config.log_clear_line()
+            return [False, config.newmatch]
+        elif config.in_stat and not match_is_todo_raw and not match_is_done:
             config.log('Le match  n\'est pas autorisé!', 'warning', True, 4, False)
             config.log_clear_line()
             _navigate(driver, newmatchtxt)

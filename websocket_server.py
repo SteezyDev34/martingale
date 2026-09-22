@@ -240,12 +240,15 @@ class ExtensionBridge:
             'categorie_text': categorie_text,
         }, timeout=10)
 
-    def search_market_key(self, key):
-        """Retape la recherche (key) sans rouvrir le dropdown — pour le fallback de clés."""
+    def search_market_key(self, key, categorie_text=None):
+        """Retape la recherche (key) sans rouvrir le dropdown — pour le fallback de clés.
+        categorie_text permet de re-sélectionner la bonne catégorie si le site a besoin
+        d'un rechargement (liste de marchés vide) qui bascule d'onglet."""
         return self._send_and_wait({
             'action': 'search_market_key',
             'key': key,
-        }, timeout=10)
+            'categorie_text': categorie_text,
+        }, timeout=15)
 
     def read_ball_indicator(self):
         """Port de la lecture 'balle' de GetBetOld.py. Retourne {success, hasBall}."""

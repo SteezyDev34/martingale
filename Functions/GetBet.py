@@ -448,8 +448,25 @@ def GetBetNew(driver, nextBet=False, selection=''):
 
 
 if __name__ == "__main__":
-    from ChromeDriver.SetDriver1 import driver
+    from websocket_server import start_bridge
+    from Functions.GetSetActuel import GetSetActuel
+    from Functions.GetJeuActuel import GetJeuActuel
+    from Functions.AfficherParis import AfficherParis
 
-    config.scriptType = '40A'
-    GetIfNewSite(driver)
-    GetBet(driver, True)
+    start_bridge(wait_timeout=15)
+    config.site_type = 'mobile_site'
+    config.scriptType = '30A'
+    GetSetActuel(None)
+    GetScoreActuel(None)
+    GetJeuActuel(None)
+
+    nextBet = False
+    config.looking_game = int(config.jeu_actuel)
+    if config.score_actuel not in ('0:0', '0:15', '15:0', '15:15'):
+        nextBet = True
+        config.looking_game = int(config.jeu_actuel) + 1
+
+    print(f"score={config.score_actuel} jeu={config.jeu_actuel} nextBet={nextBet}")
+    print("AfficherParis:", AfficherParis(None))
+    print("GetBet:", GetBet(None, nextBet))
+    print("cote captée:", getattr(config, '_bridge_last_cote', None))

@@ -36,6 +36,22 @@ scriptTypeList4 = ['4P','5P','HOLD']
 scriptTypeList5 = ['HOLD']  # Hold du serveur (jeu remporté sur son service) — inverse de BREAK
 allScriptType = ['15V1','15V2','150', '015', '030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK',
                  'HOLD', '1SET']
+
+# Famille de bot en cours (défini par le script de lancement, ex. SCRIPTS_1530A/1530A-1.py).
+# Sert à filtrer les scriptTypes chargés dynamiquement pour un match (cf. rechercheDeMatch)
+# afin qu'un bot ne reçoive que les scriptTypes qu'il sait gérer.
+bot_family = None
+
+# ScriptTypes gérés par GetAndPlaceBet.py / FirstGameBet.py (bot 1530A) — les autres
+# (40A, 4015, 4030, 400, 4P, 5P, 6P, BREAK, HOLD) appartiennent à la famille 456P
+# (scripts Selenium séparés : SCRIPTS_BREAK, SCRIPTS_HOLD, SCRIPTS_4P6P, SCRIPTS_5P40A).
+VALID_SCRIPTTYPES_1530A = {'150', '015', '030', '300', '15A', '30A'}
+VALID_SCRIPTTYPES_456P = {'40A', '4015', '4030', '400', '4P', '5P', '6P', 'BREAK', 'HOLD'}
+
+# Mode de sélection des scriptTypes à partir des stats API auxotracker (/tension) :
+# 'strict' = n'active un scriptType que si edge > 0 vs la cote de référence 1xBet
+# 'loose'  = active dès qu'un seuil de proba brute est dépassé, sans exiger d'edge positif
+SCRIPT_SELECTION_MODE = 'strict'
 # Script configuration
 script_num = 0  # Numéro du Script
 win = 0  # Nombre de victoire
@@ -137,7 +153,7 @@ wantwin = 0.2
 nb_tour = 1
 increment = 0
 mtt_recup = 0.54
-total_gain_wanted = 0.2
+total_gain_wanted = 0.1  # Aligné sur l'objectif individuel total_want_win['30A'] (une seule stratégie active)
 
 recup30 = 0
 rattrape_perte = 1  # ne pas changer

@@ -272,11 +272,13 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
         # sans espace entre theset et args pour ces 3 libellés, comme côté Selenium).
         cycle = ['Paris', f'Game Score. {theset}{args}', 'Score de la partie', f'Score du jeu. {theset}{args}']
         tentative_key = key
-        for _ in range(6):
-            result = bridge.search_market_key(tentative_key)
+        for i in range(6):
+            config.log(f'recherche marché, clé {i+1}/6 : {tentative_key}', 'info', False, 3)
+            result = bridge.search_market_key(tentative_key, categorie_text)
             if result.get('success'):
                 config.log_clear_line(logline)
                 return True
+            config.log(f'clé "{tentative_key}" non trouvée ({result.get("error")})', 'warning', False, 3)
             idx = cycle.index(tentative_key) if tentative_key in cycle else -1
             tentative_key = cycle[(idx + 1) % len(cycle)]
         config.log_clear_line(logline)

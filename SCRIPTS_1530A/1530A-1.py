@@ -73,6 +73,7 @@ if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.up
         newclassementeDeMatch(driver)
         #classementeDeMatch(driver)
 config.in_stat = True
+config.bot_family = '1530A'
 config.scriptTypeList = config.scriptTypeList2
 for i in config.scriptTypeList:
     config.ScriptConfig(i)

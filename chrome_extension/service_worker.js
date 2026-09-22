@@ -274,7 +274,7 @@ async function handlePythonMessage(msg) {
     case 'search_market_key': {
       const tabId = await resolveTabId(msg);
       if (!tabId) { sendToPython({ action: 'search_market_key_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
-      const result = await execInTab(tabId, (args) => window._martingale?.searchMarketKey?.(args.key), msg);
+      const result = await execInTab(tabId, (args) => window._martingale?.searchMarketKey?.(args.key, args.categorie_text || null), msg);
       sendToPython({ action: 'search_market_key_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }

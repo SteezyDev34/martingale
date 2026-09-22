@@ -58,6 +58,7 @@ from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
 config.in_stat = False
+config.bot_family = '456P'
 config.scriptTypeList = config.scriptTypeList1
 for i in config.scriptTypeList:
     config.ScriptConfig(i)

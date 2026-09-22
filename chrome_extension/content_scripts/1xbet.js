@@ -145,7 +145,6 @@
 
       const players = window._martingale.getPlayers();
       const isMatchPage = !!scoreDiv;
-      console.log('[getState] isMatchPage:', isMatchPage);
       return { score, set_actuel: set, jeu_actuel: jeu, players, url: location.href, isMatchPage };
     },
 
@@ -503,7 +502,7 @@
       return { success: true };
     },
 
-    async searchMarketKey(key) {
+    async searchMarketKey(key, categorie_text = null, _retried = false) {
       const urlBefore = location.href;
       const toolbar = qs('.game-search');
       const searchInput = toolbar ? qs('input.game-search__input', toolbar) : qs('input.game-search__input');
@@ -519,7 +518,24 @@
       if (matchSlug(location.href) !== matchSlug(urlBefore)) return { success: false, error: 'unexpected_navigation', step: 'search_input' };
 
       const container = await waitFor('.game-markets-content', 2000);
+      // Bug connu du site : la liste des marchés reste parfois vide après une recherche,
+      // même quand le conteneur existe. Correctif observé manuellement : basculer sur un
+      // autre onglet de catégorie puis revenir sur "Temps réglementaire" force le rechargement
+      // — mais ça change d'onglet, donc si on cherchait dans une catégorie précise
+      // (categorie_text), il faut la re-sélectionner avant de rechercher à nouveau.
+      const hasMarkets = container && qsa('.game-markets-group__market', container).length > 0;
+      if (!hasMarkets && !_retried) {
+        const recovered = await window._martingale._reloadMarketsViaCategoryToggle();
+        if (recovered) {
+          if (categorie_text) {
+            const catResult = await window._martingale.selectCategoryOption(categorie_text);
+            if (!catResult.success) return catResult;
+          }
+          return window._martingale.searchMarketKey(key, categorie_text, true);
+        }
+      }
       if (!container) return { success: false, error: 'bet_list_container_not_found', key };
+      if (!hasMarkets) return { success: false, error: 'empty_market_list', key };
 
       return { success: true };
     },
@@ -529,7 +545,7 @@
     async openCategoryAndSearch({ categorie_text, key }) {
       const catResult = await window._martingale.selectCategoryOption(categorie_text);
       if (!catResult.success) return catResult;
-      return window._martingale.searchMarketKey(key);
+      return window._martingale.searchMarketKey(key, categorie_text);
     },
 
     async selectCombinedMarkets(legs) {

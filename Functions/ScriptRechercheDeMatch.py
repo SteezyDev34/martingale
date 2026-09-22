@@ -6,34 +6,28 @@ from datetime import datetime
 
 
 # ---------------------------------------------------------------------------
-# Seuils de sélection des scriptTypes (tunable)
+# Seuils de sélection des scriptTypes encore sans correspondance directe dans
+# l'API auxotracker (/tension n'expose pas de taux de hold/break) — le reste
+# des scriptTypes (15A/30A/40A/150/015/300/400/4015/4030/4P/5P/6P) est décidé
+# par Functions_stats.compute_script_types_from_api à partir des stats déjà
+# calculées par l'API, voir traiter_matchlist().
 # svc = % 1er service gagné  |  ret = % balles de break converties
 # proba40A = svc1*ret1 + svc2*ret2
 # ---------------------------------------------------------------------------
 _THRESHOLDS = {
-    # Base — activés si stats OK
-    '300':   lambda s: s['svc_avg'] >= 0.58,
-    '15A':   lambda s: s['svc_avg'] >= 0.62,
-    '30A':   lambda s: s['svc_avg'] >= 0.60,
     'BREAK': lambda s: s['ret_avg'] >= 0.38,
-    '40A':   lambda s: s['proba40A'] >= 0.04,
-    # Risqués — seuils plus exigeants
-    '150':   lambda s: s['svc_avg'] >= 0.68,
-    '015':   lambda s: s['ret_avg'] >= 0.42,
     '030':   lambda s: s['ret_avg'] >= 0.42,
-    '6P':    lambda s: s['proba40A'] <= 0.10 and s['svc_avg'] >= 0.58,
-    '4P':    lambda s: s['proba40A'] <= 0.05 and s['svc_avg'] >= 0.60,
-    '5P':    lambda s: s['proba40A'] <= 0.05 and s['svc_avg'] >= 0.60,
     'HOLD':  lambda s: s['svc_avg'] >= 0.65,
 }
 
-_BASE_SCRIPTS  = ['300', '15A', '30A', 'BREAK', '40A']
-_RISKY_SCRIPTS = ['150', '015', '030', '6P', '4P', '5P', 'HOLD']
+_BASE_SCRIPTS  = ['BREAK']
+_RISKY_SCRIPTS = ['030', 'HOLD']
 
 
 def compute_script_types(stats):
     """
-    Retourne (scriptTypeList, total_gain_wanted) selon les stats du match.
+    Retourne (scriptTypeList, total_gain_wanted) pour les scriptTypes BREAK/030/HOLD
+    (pas de correspondance directe dans l'API auxotracker, cf. commentaire ci-dessus).
     stats = dict avec proba40A, svc1, ret1, svc2, ret2.
     """
     svc_avg = (stats.get('svc1', 0) + stats.get('svc2', 0)) / 2
@@ -53,7 +47,7 @@ def compute_script_types(stats):
             script_types.append(st)
     total_gain_wanted = len(script_types) * 3.0
     config.log(
-        f"ScriptTypes sélectionnés ({len(script_types)}): {script_types} → objectif {total_gain_wanted}€ "
+        f"ScriptTypes BREAK/030/HOLD sélectionnés ({len(script_types)}): {script_types} "
         f"[svc={svc_avg:.2f} ret={ret_avg:.2f} p40A={s['proba40A']:.4f}]",
         'info', True
     )
@@ -136,11 +130,25 @@ def traiter_matchlist(matchlist):
     for matchItem in matchlist:
         players_name = matchItem[0]
         ligue_name = matchItem[1]
-        # Récupération des stats étendues (svc, ret, proba40A)
+        # Récupération des stats étendues (svc, ret, proba40A) — sert au filtre
+        # global config.probamini et aux scriptTypes BREAK/030/HOLD (pas de
+        # correspondance directe dans l'API auxotracker, cf. compute_script_types).
         stats = Functions_stats.get_match_stats_extended(players_name[0], players_name[1])
         config.proba40A = stats['proba40A']
-        # Sélection des scriptTypes selon les stats
-        script_types, total_gain_wanted = compute_script_types(stats)
+        script_types_legacy, _ = compute_script_types(stats)
+        # Reste des scriptTypes (15A/30A/40A/150/015/300/400/4015/4030/4P/5P/6P)
+        # décidés directement à partir des stats déjà calculées par l'API auxotracker.
+        script_types_api, api_details = Functions_stats.compute_script_types_from_api(
+            players_name[0], players_name[1]
+        )
+        if api_details:
+            config.log(
+                f"ScriptTypes API ({getattr(config, 'SCRIPT_SELECTION_MODE', 'strict')}) "
+                f"pour {players_name[0]} vs {players_name[1]}: {script_types_api} — {api_details}",
+                'info', True
+            )
+        script_types = list(dict.fromkeys(script_types_api + script_types_legacy))
+        total_gain_wanted = len(script_types) * 3.0
         # On n'inclut le match que si au moins un scriptType est activé
         if not script_types:
             config.log(f"Aucun scriptType activé pour {players_name[0]} vs {players_name[1]}, match ignoré", 'warning', True)
@@ -525,15 +533,35 @@ def rechercheDeMatch(driver):
             driver.get(get_url)
             print(get_url)
             print('MATCH TROUVE!')
-            # Charger les scriptTypes calculés au classement pour ce match
+            # Charger les scriptTypes calculés au classement pour ce match — priment
+            # toujours sur la liste statique (config.scriptTypeListX), pas de fallback :
+            # si aucun scriptType dynamique n'est disponible/valide pour ce bot, on ne
+            # parie pas sur ce match plutôt que de retomber sur un défaut arbitraire.
             _script_cfg = match_manager.get_match_script_config(config.newmatch)
-            if _script_cfg and _script_cfg.get('script_types'):
-                config.scriptTypeList = _script_cfg['script_types']
-                config.total_gain_wanted = _script_cfg['total_gain_wanted']
+            _new_list = _script_cfg.get('script_types', []) if _script_cfg else []
+            if config.bot_family == '1530A':
+                _new_list = [st for st in _new_list if st in config.VALID_SCRIPTTYPES_1530A]
+            elif config.bot_family == '456P':
+                _new_list = [st for st in _new_list if st in config.VALID_SCRIPTTYPES_456P]
+            config.scriptTypeList = _new_list
+            for st in _new_list:
+                if st not in config.winmatch:
+                    config.winmatch[st] = 0
+                if st not in config.global_match_win:
+                    config.global_match_win[st] = 0.0
+                config.ScriptConfig(st)
+            if _new_list:
+                config.total_gain_wanted = len(_new_list) * 3.0
                 config.log(
                     f"ScriptTypes chargés pour {config.newmatch}: {config.scriptTypeList} "
                     f"→ objectif {config.total_gain_wanted}€",
                     'success', True
+                )
+            else:
+                config.log(
+                    f"Aucun scriptType dynamique valide pour {config.newmatch} "
+                    f"(bot_family={config.bot_family}) — pas de pari sur ce match",
+                    'warning', True
                 )
             logline += 3
             config.log_clear_line(logline)

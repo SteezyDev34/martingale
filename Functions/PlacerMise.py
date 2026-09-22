@@ -71,8 +71,44 @@ def PlacerMise(driver, constructor=False):
 
 if __name__ == "__main__":
     from websocket_server import start_bridge
+    from Functions.GetSetActuel import GetSetActuel
+    from Functions.GetScoreActuel import GetScoreActuel
+    from Functions.GetJeuActuel import GetJeuActuel
+    from Functions.AfficherParis import AfficherParis
+    from Functions.GetBet import GetBet
 
     start_bridge(wait_timeout=15)
     config.site_type = 'mobile_site'
     config.scriptType = '30A'
-    print("PlacerMise:", PlacerMise(None))
+    GetSetActuel(None)
+    GetJeuActuel(None)
+
+    # Boucle comme FirstGameBet.py : recalcule nextBet/looking_game à chaque tentative,
+    # car la recherche (AfficherParis + GetBet) prend du temps et le score réel peut
+    # dépasser la fenêtre autorisée pendant l'exécution d'une tentative précédente.
+    bet_ok = False
+    for tentative in range(1, 4):
+        GetScoreActuel(None)
+        nextBet = False
+        config.looking_game = int(config.jeu_actuel)
+        if config.score_actuel not in ('0:0', '0:15', '15:0', '15:15'):
+            nextBet = True
+            config.looking_game = int(config.jeu_actuel) + 1
+        print(f"--- tentative {tentative} : score={config.score_actuel} jeu={config.jeu_actuel} nextBet={nextBet} ---")
+
+        if not AfficherParis(None):
+            print("AfficherParis: False, on retente")
+            continue
+        if not GetBet(None, nextBet):
+            print("GetBet: False, on retente")
+            continue
+        print("cote captée:", getattr(config, '_bridge_last_cote', None))
+        bet_ok = True
+        break
+
+    if bet_ok:
+        print("PlacerMise:", PlacerMise(None))
+        print("config.mise:", config.mise)
+    else:
+        print("Échec après 3 tentatives, marché jamais trouvé à temps")
+    print("config.mise:", config.mise)

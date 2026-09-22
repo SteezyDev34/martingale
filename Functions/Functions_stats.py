@@ -5,6 +5,7 @@ import time
 from datetime import date, datetime
 
 import requests
+from urllib.parse import quote_plus
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -1066,3 +1067,128 @@ def get_match_stats_extended(playerName1, playerName2):
     cache[cache_key] = result
     save_cache(cache)
     return result
+
+
+# ---------------------------------------------------------------------------
+# Sélection des scriptTypes à partir des stats déjà calculées par l'API
+# auxotracker (endpoint /tension) — remplace le recalcul svc/ret maison pour
+# les scriptTypes qui ont une correspondance directe avec un champ de l'API.
+# ---------------------------------------------------------------------------
+
+# Cote de référence 1xBet par marché (seuil de rentabilité en mode strict).
+_REFERENCE_ODDS = {
+    '15A': 1.85, '30A': 2.40, '40A': 3.00,
+    '150': 1.85, '015': 1.85,
+    '300': 2.40,
+    '400': 3.00, '4015': 3.00, '4030': 3.00,
+    '4P': 3.00, '5P': 3.00, '6P': 3.00,
+}
+
+# Seuil de proba brute en mode loose (indépendant de la cote).
+_LOOSE_THRESHOLDS = {
+    '15A': 0.40, '30A': 0.25, '40A': 0.20,
+    '150': 0.35, '015': 0.35,
+    '300': 0.30,
+    '400': 0.08, '4015': 0.20, '4030': 0.20,
+    '4P': 0.08, '5P': 0.20, '6P': 0.20,
+}
+
+# scriptType -> champ correspondant dans stats['stats'] de l'endpoint /tension.
+_TENSION_FIELD = {
+    '15A': 'reach_15a',
+    '30A': 'reach_30a',
+    '40A': 'reach_40a',
+    '300': 'reach_30love',
+    '150': 'leads_15_0',
+    '015': 'lost_first_point_on_serve',
+    '400': 'game_40_0', '4P': 'game_40_0',
+    '4015': 'game_40_15', '5P': 'game_40_15',
+    '4030': 'game_40_30', '6P': 'game_40_30',
+}
+
+
+def _search_team_id(name):
+    """Cherche l'id auxotracker d'un joueur par son nom (sport tennis=2)."""
+    try:
+        url = f"https://api.auxotracker.p-com.studio/api/sports/2/teams/search?search={quote_plus(name)}"
+        resp = requests.get(url, timeout=10)
+        data = resp.json().get('data', [])
+        return data[0]['id'] if data else None
+    except Exception:
+        return None
+
+
+def get_match_tension_stats(playerName1, playerName2):
+    """
+    Récupère les stats 'tension de jeu' déjà calculées par l'API auxotracker
+    (/api/stats/tennis/player/{id}/tension) pour les deux joueurs.
+
+    Retourne {'player1': {...}, 'player2': {...}} ou None si un joueur est
+    introuvable ou si les stats de l'un des deux ne sont pas fiables.
+    """
+    pid1 = _search_team_id(playerName1)
+    pid2 = _search_team_id(playerName2)
+    if not pid1 or not pid2:
+        return None
+
+    def _fetch(pid):
+        try:
+            url = f"https://api.auxotracker.p-com.studio/api/stats/tennis/player/{pid}/tension"
+            data = requests.get(url, timeout=10).json()
+            if not data.get('success') or not data.get('reliable'):
+                return None
+            return {
+                'sample_n': data.get('sample', {}).get('matches', 0),
+                'stats': data.get('stats', {}),
+            }
+        except Exception:
+            return None
+
+    p1 = _fetch(pid1)
+    p2 = _fetch(pid2)
+    if p1 is None or p2 is None:
+        return None
+    return {'player1': p1, 'player2': p2}
+
+
+def compute_script_types_from_api(playerName1, playerName2, mode=None):
+    """
+    Détermine les scriptTypes activables à partir des stats déjà calculées par
+    l'API auxotracker (/tension), sans recalcul svc/ret maison.
+
+    mode: 'strict' (edge > 0 vs cote de référence 1xBet) ou 'loose' (seuil de
+    proba brute, indépendant de la cote). Par défaut config.SCRIPT_SELECTION_MODE.
+
+    Retourne (script_types: list[str], details: dict) — details garde, pour
+    chaque scriptType évalué, la proba moyenne utilisée (et l'edge en strict).
+    """
+    mode = mode or getattr(config, 'SCRIPT_SELECTION_MODE', 'strict')
+    tension = get_match_tension_stats(playerName1, playerName2)
+    if tension is None:
+        return [], {}
+
+    script_types = []
+    details = {}
+    for st, field in _TENSION_FIELD.items():
+        v1 = tension['player1']['stats'].get(field)
+        v2 = tension['player2']['stats'].get(field)
+        if v1 is None or v2 is None:
+            continue
+        proba = ((v1 + v2) / 2) / 100.0
+
+        if mode == 'strict':
+            odds = _REFERENCE_ODDS.get(st)
+            if odds is None:
+                continue
+            edge = proba - (1.0 / odds)
+            activable = edge > 0
+            details[st] = {'proba': proba, 'edge': edge}
+        else:
+            threshold = _LOOSE_THRESHOLDS.get(st, 1.0)
+            activable = proba >= threshold
+            details[st] = {'proba': proba, 'threshold': threshold}
+
+        if activable:
+            script_types.append(st)
+
+    return script_types, details

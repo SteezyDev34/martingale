@@ -12,7 +12,7 @@ import config
 from Functions.GetIfMatchPage import GetIfMatchPage
 from Functions.GetJeuActuel import GetJeuActuel
 from Functions.GetSetActuel import GetSetActuel
-from Functions.BridgeAdapter import bridge_active, bridge_get_score_actuel, bridge_wait_score_change
+from Functions.BridgeAdapter import bridge_active, bridge_get_score_actuel
 
 
 # Remplacée par Functions/SofascoreWatcher.py : lire l'onglet SofaScore depuis le
@@ -24,17 +24,16 @@ from Functions.BridgeAdapter import bridge_active, bridge_get_score_actuel, brid
 def GetScoreActuel(driver):
     # ── Bridge Chrome Extension (sans Selenium) ──
     if bridge_active():
+        # Lecture instantanée du score courant, comme l'original Selenium (qui lit le DOM
+        # une seule fois par appel et retourne aussitôt) — pas d'attente d'un changement
+        # ici : c'est à l'appelant de rappeler GetScoreActuel en boucle pour ça (invention
+        # d'une attente bloquante ici causait des délais de plusieurs secondes injustifiés).
         ok = bridge_get_score_actuel()
         if ok:
             dom_debounce = getattr(config, '_dom_debounce', None)
             if config.saved_score != config.score_actuel and config.score_actuel != dom_debounce:
                 config._dom_debounce = None
                 _appliquer_transition(driver, config.score_actuel, source='bridge')
-            else:
-                # Attendre un vrai changement de score
-                bridge_wait_score_change()
-                if config.score_actuel and config.score_actuel != config.saved_score:
-                    _appliquer_transition(driver, config.score_actuel, source='bridge')
             config.saved_score = config.score_actuel
         return ok
     # ── Selenium fallback ──────────────────────────────────────────────────────

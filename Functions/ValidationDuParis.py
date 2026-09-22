@@ -619,16 +619,32 @@ def QuickValidationDuParis(driver, nexbet=False):
 
 
 if __name__ == "__main__":
-    # driver.switch_to.window(driver.window_handles[0])
-    config.localhost = 43151
-    from ChromeDriver.SetDriver import get_script_driver
+    from websocket_server import start_bridge
+    from Functions.GetSetActuel import GetSetActuel
+    from Functions.GetScoreActuel import GetScoreActuel
+    from Functions.GetJeuActuel import GetJeuActuel
+    from Functions.AfficherParis import AfficherParis
+    from Functions.GetBet import GetBet
 
-    num_fenetre = 1
-    driver = get_script_driver(num_fenetre)
+    start_bridge(wait_timeout=15)
     config.site_type = 'mobile_site'
-    # driver.switch_to.window(driver.window_handles[0])
-    config.site_type = 'new_site'
-    config.scriptType = 'LIVE'
-    config.tipster = 'ADR'
-    config.mise = 0.2
-    ValidationDuParis(driver)
+    config.scriptType = '30A'
+    GetSetActuel(None)
+    GetScoreActuel(None)
+    GetJeuActuel(None)
+
+    nextBet = False
+    config.looking_game = int(config.jeu_actuel)
+    if config.score_actuel not in ('0:0', '0:15', '15:0', '15:15'):
+        nextBet = True
+        config.looking_game = int(config.jeu_actuel) + 1
+    print(f"score={config.score_actuel} jeu={config.jeu_actuel} nextBet={nextBet}")
+
+    print("AfficherParis:", AfficherParis(None))
+    print("GetBet:", GetBet(None, nextBet))
+    print("cote captée:", getattr(config, '_bridge_last_cote', None))
+    print("PlacerMise:", PlacerMise(None))
+    print("config.mise:", config.mise)
+
+    print("ValidationDuParis:", ValidationDuParis(None, nextBet))
+    print("config.validated_bet:", getattr(config, 'validated_bet', None))
