@@ -614,11 +614,16 @@
     // dashboard_champ='dashboard-champ', dashboard_champ_name='dashboard-champ-name__label--is-link'.
     async scanLeagueList() {
       console.log('[scanLeagueList] début');
+      // La page charge les ligues progressivement (scroll infini/rendu asynchrone) : on
+      // n'arrête pas dès la première lecture non-vide (capturerait une liste partielle),
+      // on attend que le nombre d'éléments soit stable sur 2 lectures consécutives.
       let champEls = [];
+      let previousCount = -1;
       for (let i = 0; i < 20; i++) {
         champEls = qsa('.dashboard-champ');
         console.log(`[scanLeagueList] tentative ${i}: ${champEls.length} .dashboard-champ`);
-        if (champEls.length) break;
+        if (champEls.length && champEls.length === previousCount) break;
+        previousCount = champEls.length;
         await sleep(500);
       }
 
@@ -642,7 +647,14 @@
     async scanLeagueMatches() {
       const gamesContainer = await waitFor('.dashboard-champ-body__games', 8000);
       if (!gamesContainer) return { success: true, matches: [] };
-      await sleep(500);
+      // Les lignes de match (équipes + lien) apparaissent avant que la date/heure ne soit
+      // hydratée (chargement secondaire) — on attend qu'au moins une date soit non-vide
+      // avant de scanner, sinon toutes les lignes ressortent avec date/time vides.
+      for (let i = 0; i < 16; i++) {
+        const firstDate = qs('.dashboard-game-info__date');
+        if (firstDate && firstDate.textContent.trim()) break;
+        await sleep(300);
+      }
 
       const rows = qsa('.dashboard-game-block');
       const matches = [];

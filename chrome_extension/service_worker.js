@@ -72,18 +72,20 @@ async function handlePythonMessage(msg) {
 
   switch (msg.action) {
 
-    // Python demande à naviguer vers une URL 1xBet
+    // Python demande à naviguer vers une URL 1xBet — on attend que la page ait
+    // fini de charger avant de répondre, sinon un scan lancé juste après (ex.
+    // scan_league_list) peut lire le DOM de l'ancienne page (navigation pas
+    // encore effective), ce qui a causé des liens de ligue vers /live/ au lieu
+    // de /line/ lors du classement.
     case 'navigate': {
       const tab = await find1xbetTab();
+      const targetTabId = tab ? tab.id : (await chrome.tabs.create({ url: msg.url, active: true })).id;
+      pending1xbetTabId = targetTabId;
       if (tab) {
         await chrome.tabs.update(tab.id, { url: msg.url, active: true });
-        pending1xbetTabId = tab.id;
-        sendToPython({ action: 'navigate_ack', req_id: msg.req_id, tab_id: tab.id });
-      } else {
-        const newTab = await chrome.tabs.create({ url: msg.url, active: true });
-        pending1xbetTabId = newTab.id;
-        sendToPython({ action: 'navigate_ack', req_id: msg.req_id, tab_id: newTab.id });
       }
+      await waitForTabLoad(targetTabId);
+      sendToPython({ action: 'navigate_ack', req_id: msg.req_id, tab_id: targetTabId });
       break;
     }
 
@@ -361,6 +363,32 @@ async function find1xbetTab() {
   const chosen = activeOne || xbetTabs[0];
   console.log(`[find1xbetTab] onglet choisi: id=${chosen.id} active=${chosen.active} url=${chosen.url}`);
   return chosen;
+}
+
+// Attend que l'onglet ait fini de charger (status 'complete') après une navigation,
+// avec un timeout de sécurité pour ne jamais bloquer indéfiniment le bridge.
+function waitForTabLoad(tabId, timeoutMs = 15000) {
+  return new Promise((resolve) => {
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      chrome.tabs.onUpdated.removeListener(listener);
+      clearTimeout(timer);
+      resolve();
+    };
+    const listener = (updatedTabId, changeInfo) => {
+      // Le content script s'injecte en 'document_idle' (manifest.json), qui peut se
+      // déclencher juste APRÈS que l'onglet passe à 'complete' — sans ce délai, un
+      // scan lancé immédiatement après navigate_ack tombe en race condition
+      // (window._martingale pas encore attaché → exec_failed).
+      if (updatedTabId === tabId && changeInfo.status === 'complete') {
+        setTimeout(finish, 400);
+      }
+    };
+    chrome.tabs.onUpdated.addListener(listener);
+    const timer = setTimeout(finish, timeoutMs);
+  });
 }
 
 // Résout l'onglet cible : tab_id explicite > dernier onglet navigué > recherche live

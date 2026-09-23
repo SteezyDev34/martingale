@@ -153,40 +153,42 @@ def traiter_matchlist(matchlist):
         if not script_types:
             config.log(f"Aucun scriptType activé pour {players_name[0]} vs {players_name[1]}, match ignoré", 'warning', True)
             continue
-        if float(config.proba40A) >= float(config.probamini):
+        # Note : plus de garde-fou sur config.proba40A/config.probamini ici — ce sont les
+        # scriptTypes calculés à partir des stats API (script_types non vide, déjà vérifié
+        # ci-dessus) qui priment, pas le proba40A svc/ret hérité de l'ancien calcul.
+        try:
+            # Construire l'URL de l'API auxotracker avec encodage des noms et date du jour
+            date_str = datetime.now().strftime("%Y-%m-%d")
+            player1 = players_name[0]
+            player2 = players_name[1]
+            p1_enc = quote_plus(player1)
+            p2_enc = quote_plus(player2)
+            base_api = "https://api.auxotracker.p-com.studio/api/matches/tennis/link"
+            api_url = f"{base_api}?team1={p1_enc}&team2={p2_enc}&date={date_str}"
+
+            # Appel de l'API
+            sofascore_link = None
             try:
-                # Construire l'URL de l'API auxotracker avec encodage des noms et date du jour
-                date_str = datetime.now().strftime("%Y-%m-%d")
-                player1 = players_name[0]
-                player2 = players_name[1]
-                p1_enc = quote_plus(player1)
-                p2_enc = quote_plus(player2)
-                base_api = "https://api.auxotracker.p-com.studio/api/matches/tennis/link"
-                api_url = f"{base_api}?team1={p1_enc}&team2={p2_enc}&date={date_str}"
-
-                # Appel de l'API
-                sofascore_link = None
-                try:
-                    resp = requests.get(api_url, timeout=10)
-                    if resp.status_code == 200:
-                        data = resp.json()
-                        if data.get('success'):
-                            sofascore_link = data.get('sofascore_link')
-                        else:
-                            config.log(f"API retourné success=false pour {api_url}", 'warning', True)
+                resp = requests.get(api_url, timeout=10)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    if data.get('success'):
+                        sofascore_link = data.get('sofascore_link')
                     else:
-                        config.log(f"Requête API échouée {resp.status_code} pour {api_url}", 'warning', True)
-                except Exception as e:
-                    config.log(f"Erreur lors de l'appel API auxotracker: {e}", 'warning', True)
-
-                # Ajouter les informations au matchItem
-                matchItem.append(config.proba40A)
-                matchItem.append(sofascore_link)
-                matchItem.append(script_types)
-                matchItem.append(total_gain_wanted)
-                goodmatch.append(matchItem)
+                        config.log(f"API retourné success=false pour {api_url}", 'warning', True)
+                else:
+                    config.log(f"Requête API échouée {resp.status_code} pour {api_url}", 'warning', True)
             except Exception as e:
-                config.log(f"Erreur lors de la récupération du lien Sofascore: {e}", 'warning', True)
+                config.log(f"Erreur lors de l'appel API auxotracker: {e}", 'warning', True)
+
+            # Ajouter les informations au matchItem
+            matchItem.append(config.proba40A)
+            matchItem.append(sofascore_link)
+            matchItem.append(script_types)
+            matchItem.append(total_gain_wanted)
+            goodmatch.append(matchItem)
+        except Exception as e:
+            config.log(f"Erreur lors de la récupération du lien Sofascore: {e}", 'warning', True)
     return goodmatch
 
 
