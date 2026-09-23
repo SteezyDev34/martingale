@@ -338,6 +338,23 @@ async function handlePythonMessage(msg) {
       break;
     }
 
+    // DEBUG uniquement — compte les éléments correspondant à un sélecteur CSS exact
+    // (contrairement à debug_scan_classes qui dédoublonne par nom de classe).
+    case 'debug_count_selector': {
+      const tabId = await resolveTabId(msg);
+      if (!tabId) { sendToPython({ action: 'debug_count_selector_response', req_id: msg.req_id, error: 'no_tab' }); break; }
+      const result = await execInTab(tabId, (selector) => {
+        return {
+          count: document.querySelectorAll(selector).length,
+          scrollHeight: document.body.scrollHeight,
+          innerHeight: window.innerHeight,
+          scrollY: window.scrollY,
+        };
+      }, msg.selector);
+      sendToPython({ action: 'debug_count_selector_response', req_id: msg.req_id, result, tab_id: tabId });
+      break;
+    }
+
     default:
       console.warn('[WS] Action inconnue:', msg.action);
   }

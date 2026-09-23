@@ -148,7 +148,6 @@ def traiter_matchlist(matchlist):
                 'info', True
             )
         script_types = list(dict.fromkeys(script_types_api + script_types_legacy))
-        total_gain_wanted = len(script_types) * 3.0
         # On n'inclut le match que si au moins un scriptType est activé
         if not script_types:
             config.log(f"Aucun scriptType activé pour {players_name[0]} vs {players_name[1]}, match ignoré", 'warning', True)
@@ -185,7 +184,6 @@ def traiter_matchlist(matchlist):
             matchItem.append(config.proba40A)
             matchItem.append(sofascore_link)
             matchItem.append(script_types)
-            matchItem.append(total_gain_wanted)
             goodmatch.append(matchItem)
         except Exception as e:
             config.log(f"Erreur lors de la récupération du lien Sofascore: {e}", 'warning', True)
@@ -553,7 +551,12 @@ def rechercheDeMatch(driver):
                     config.global_match_win[st] = 0.0
                 config.ScriptConfig(st)
             if _new_list:
-                config.total_gain_wanted = len(_new_list) * 3.0
+                # config.total_gain_wanted (objectif global) n'est plus utilisé par le bot
+                # 1530A (arrêt purement individuel par scriptType, cf. Functions_431a.py) —
+                # il reste recalculé ici uniquement pour la famille 456P, qui s'en sert
+                # encore (Functions_456P.py/Functions_15V1.py).
+                if config.bot_family == '456P':
+                    config.total_gain_wanted = len(_new_list) * 3.0
                 config.log(
                     f"ScriptTypes chargés pour {config.newmatch}: {config.scriptTypeList} "
                     f"→ objectif {config.total_gain_wanted}€",
@@ -876,7 +879,10 @@ def _finaliser_classement(matchlist):
     """
     sauvegarder_matchlist_json(matchlist)
     goodmatch = traiter_matchlist(matchlist)
-    tableau_trie = sorted(goodmatch, key=lambda x: x[-2], reverse=True)
+    # Tri par proba40A (index 4 du matchItem : [players, league, match_id, date, proba40A,
+    # sofascore_link, script_types]) — un index relatif (x[-2]) est fragile ici, il a déjà
+    # pointé silencieusement vers le mauvais champ après l'ajout de script_types/link.
+    tableau_trie = sorted(goodmatch, key=lambda x: x[4], reverse=True)
 
     def prioritize_matches_by_league(matches, max_matches=30):
         priority_groups = {i: [] for i in range(1, 9)}
@@ -897,7 +903,7 @@ def _finaliser_classement(matchlist):
 
         final_matches = []
         for priority in sorted(priority_groups.keys()):
-            group_sorted = sorted(priority_groups[priority], key=lambda x: x[-2], reverse=True)
+            group_sorted = sorted(priority_groups[priority], key=lambda x: x[4], reverse=True)
             remaining_slots = max_matches - len(final_matches)
             if remaining_slots <= 0:
                 break
@@ -1459,8 +1465,9 @@ def newclassementeDeMatch(driver):
         # Traiter les matchs pour obtenir les probabilités
         goodmatch = traiter_matchlist(matchlist)
 
-        # Tri en fonction de la dernière valeur (indice -1) en ordre décroissant
-        tableau_trie = sorted(goodmatch, key=lambda x: x[-2], reverse=True)
+        # Tri par proba40A (index 4 du matchItem) — cf. commentaire équivalent dans
+        # _finaliser_classement, un index relatif (x[-2]) est fragile ici.
+        tableau_trie = sorted(goodmatch, key=lambda x: x[4], reverse=True)
 
         # Fonction de priorisation des matchs par ligue
         def prioritize_matches_by_league(matches, max_matches=100):
@@ -1511,7 +1518,7 @@ def newclassementeDeMatch(driver):
             for priority in sorted(priority_groups.keys()):
                 group = priority_groups[priority]
                 # Trier chaque groupe par probabilité décroissante
-                group_sorted = sorted(group, key=lambda x: x[-2], reverse=True)
+                group_sorted = sorted(group, key=lambda x: x[4], reverse=True)
 
                 # Ajouter les matchs jusqu'à atteindre la limite
                 remaining_slots = max_matches - len(final_matches)

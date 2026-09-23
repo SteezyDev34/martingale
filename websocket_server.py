@@ -262,6 +262,10 @@ class ExtensionBridge:
         """DEBUG uniquement : scanne les classNames de l'onglet 1xBet contenant un des mots-clés donnés."""
         return self._send_and_wait({'action': 'debug_scan_classes', 'keywords': keywords}, timeout=15)
 
+    def debug_count_selector(self, selector):
+        """DEBUG uniquement : compte les éléments correspondant à un sélecteur CSS exact."""
+        return self._send_and_wait({'action': 'debug_count_selector', 'selector': selector}, timeout=15)
+
     def get_match_list(self):
         """Retourne [{leagueName, matches:[{p1,p2,score,url,hasBall}]}]."""
         resp = self._send_and_wait({'action': 'get_match_list'}, timeout=40)

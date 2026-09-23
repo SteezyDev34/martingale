@@ -614,16 +614,25 @@
     // dashboard_champ='dashboard-champ', dashboard_champ_name='dashboard-champ-name__label--is-link'.
     async scanLeagueList() {
       console.log('[scanLeagueList] début');
-      // La page charge les ligues progressivement (scroll infini/rendu asynchrone) : on
-      // n'arrête pas dès la première lecture non-vide (capturerait une liste partielle),
-      // on attend que le nombre d'éléments soit stable sur 2 lectures consécutives.
+      // La page charge les ligues en plusieurs vagues asynchrones, avec des paliers
+      // trompeurs (ex: se stabilise à 4 pendant ~1s avant de sauter à 16) — 2 lectures
+      // consécutives identiques ne suffisent pas à garantir que le chargement est
+      // terminé. On exige 3 lectures consécutives identiques ET un temps d'observation
+      // minimum avant d'accepter le compte comme définitif.
       let champEls = [];
+      let stableCount = 0;
       let previousCount = -1;
-      for (let i = 0; i < 20; i++) {
+      const minAttemptsBeforeAccept = 5; // ~2.5s à 500ms/tentative
+      for (let i = 0; i < 30; i++) {
         champEls = qsa('.dashboard-champ');
         console.log(`[scanLeagueList] tentative ${i}: ${champEls.length} .dashboard-champ`);
-        if (champEls.length && champEls.length === previousCount) break;
+        if (champEls.length && champEls.length === previousCount) {
+          stableCount++;
+        } else {
+          stableCount = 1;
+        }
         previousCount = champEls.length;
+        if (stableCount >= 3 && i >= minAttemptsBeforeAccept) break;
         await sleep(500);
       }
 

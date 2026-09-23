@@ -5,7 +5,6 @@ from Functions.GetBet import GetBet
 from Functions.GetScoreActuel import GetScoreActuel
 from Functions.PlacerMise import PlacerMise
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
-from Functions import RedisIPC
 
 def GetAndPlaceBet(driver):
     bet_40a = False
@@ -18,8 +17,7 @@ def GetAndPlaceBet(driver):
 
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
-            total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
-            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or total_gain < float(config.total_gain_wanted):
+            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
 
             else:
