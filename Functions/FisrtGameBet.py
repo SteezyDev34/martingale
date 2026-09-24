@@ -145,11 +145,44 @@ def FirstGameBet(driver):
                             break
                         if last >= target:
                             break
-                        
+
                         GetScoreActuel(driver)
                         time.sleep(0.1)
             else:
                 break
+
+    if not bet_40a and not config.error:
+        # Cet appel a épuisé toutes ses tentatives sans jamais trouver le marché (ex:
+        # 1xBet n'affiche pas toujours 15A/30A/300 une fois le match commencé — seul
+        # 40A par exemple reste visible). Les marchés peuvent apparaître un peu après
+        # le tout début du match — au jeu 1 on se contente donc de passer au scriptType
+        # suivant (rotation naturelle) sans blacklister. Ce n'est qu'à partir du jeu 3
+        # (match "bien commencé") qu'après plusieurs échecs consécutifs on retire ce
+        # scriptType de la liste active pour ce match, pour ne pas retenter à l'infini
+        # un marché qui ne s'affichera plus.
+        if not hasattr(config, 'market_fail_count'):
+            config.market_fail_count = {}
+        st = config.scriptType
+        try:
+            match_bien_commence = int(config.jeu_actuel) >= 3
+        except (TypeError, ValueError):
+            match_bien_commence = False
+        # Un marché trouvé mais verrouillé (cote suspendue temporairement) n'est pas un
+        # marché absent — ne doit pas compter vers le retrait définitif du scriptType.
+        market_locked = getattr(config, '_bridge_market_locked', False)
+        if match_bien_commence and not market_locked:
+            config.market_fail_count[st] = config.market_fail_count.get(st, 0) + 1
+            if config.market_fail_count[st] >= 3 and st in config.scriptTypeList:
+                config.scriptTypeList = [s for s in config.scriptTypeList if s != st]
+                config.log(
+                    f"Marché introuvable pour {st} après {config.market_fail_count[st]} tentatives "
+                    f"(jeu {config.jeu_actuel}, match bien commencé) — retiré de scriptTypeList pour ce match",
+                    'warning', False
+                )
+    else:
+        if hasattr(config, 'market_fail_count'):
+            config.market_fail_count[config.scriptType] = 0
+
     return bet_40a
 
 

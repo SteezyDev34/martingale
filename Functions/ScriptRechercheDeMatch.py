@@ -162,7 +162,7 @@ def traiter_matchlist(matchlist):
             player2 = players_name[1]
             p1_enc = quote_plus(player1)
             p2_enc = quote_plus(player2)
-            base_api = "https://api.auxotracker.p-com.studio/api/matches/tennis/link"
+            base_api = "https://api.auxotracker.astcavex.fr/api/matches/tennis/link"
             api_url = f"{base_api}?team1={p1_enc}&team2={p2_enc}&date={date_str}"
 
             # Appel de l'API
@@ -217,6 +217,84 @@ def sauvegarder_matchlist_json(matchlist):
         config.log(f"Erreur lors de l'enregistrement de matchlist: {str(e)}", 'error', True)
 
 
+def _within_first_n_games(raw_score, max_games):
+    """
+    Estime le numéro de jeu en cours à partir de raw_score (ex: "00(0)00(0)" ou
+    "0000(0)(0)") : les jeux sont les chiffres hors parenthèses (2 chiffres par
+    joueur). Retourne True si jeu_estimé <= max_games (ou si illisible, par
+    prudence on refuse plutôt que d'accepter un match trop avancé).
+    """
+    import re
+    try:
+        games_str = re.sub(r'\([^)]*\)', '', raw_score or '')
+        if len(games_str) < 4:
+            return False
+        games_p1 = int(games_str[0:2])
+        games_p2 = int(games_str[2:4])
+        jeu_estime = games_p1 + games_p2 + 1
+        return jeu_estime <= max_games
+    except Exception:
+        return False
+
+
+def _get_valid_scripttypes_for_match(match_id):
+    """
+    Lecture pure (pas d'effet de bord) : renvoie les scriptTypes calculés au classement
+    (API auxotracker) pour ce match, filtrés selon config.bot_family. Utilisée pour
+    décider AVANT de naviguer si un match vaut la peine d'être ouvert (éviter une
+    navigation + attente pour un match qu'on rejettera de toute façon).
+    """
+    from Functions.Managers.MatchManager import match_manager
+    _script_cfg = match_manager.get_match_script_config(match_id)
+    _new_list = _script_cfg.get('script_types', []) if _script_cfg else []
+    if config.bot_family == '1530A':
+        _new_list = [st for st in _new_list if st in config.VALID_SCRIPTTYPES_1530A]
+    elif config.bot_family == '456P':
+        _new_list = [st for st in _new_list if st in config.VALID_SCRIPTTYPES_456P]
+    return _new_list
+
+
+def _load_dynamic_scripttypes(match_id):
+    """
+    Charge config.scriptTypeList depuis les scriptTypes calculés au classement (API
+    auxotracker) pour ce match, filtrés selon config.bot_family — priment toujours sur
+    la liste statique (config.scriptTypeListX), pas de fallback : si aucun scriptType
+    dynamique n'est disponible/valide pour ce bot, on ne parie pas sur ce match plutôt
+    que de retomber sur un défaut arbitraire.
+    """
+    _new_list = _get_valid_scripttypes_for_match(match_id)
+    # 15A doit toujours être traité après 300/030 (30-0/0-30) s'ils sont présents.
+    if '15A' in _new_list:
+        _new_list = [st for st in _new_list if st != '15A']
+        insert_at = max(
+            (i + 1 for i, st in enumerate(_new_list) if st in ('300', '030')),
+            default=0
+        )
+        _new_list.insert(insert_at, '15A')
+    config.scriptTypeList = _new_list
+    for st in _new_list:
+        if st not in config.winmatch:
+            config.winmatch[st] = 0
+        if st not in config.global_match_win:
+            config.global_match_win[st] = 0.0
+        config.ScriptConfig(st)
+    if _new_list:
+        if config.bot_family == '456P':
+            config.total_gain_wanted = len(_new_list) * 3.0
+        config.log(
+            f"ScriptTypes chargés pour {match_id}: {config.scriptTypeList} "
+            f"→ objectif {config.total_gain_wanted}€",
+            'success', True
+        )
+    else:
+        config.log(
+            f"Aucun scriptType dynamique valide pour {match_id} "
+            f"(bot_family={config.bot_family}) — pas de pari sur ce match",
+            'warning', True
+        )
+    return bool(_new_list)
+
+
 # NB (2026-08-26) : getMatchList() en JS remonte maintenant `rawScore`, le texte brut
 # complet du conteneur `.ui-game-scores` (jeux + points, ex "00(0)00(0)") — exactement
 # ce que lisait l'ancien Selenium (bet_item.find_elements(By.CLASS_NAME, 'ui-game-scores').text)
@@ -260,15 +338,8 @@ def _bridge_recherche_match():
 
             config.log(f'{p1} vs {p2} — {score}', 'info', False, 3, False)
 
-            # Même vérification que l'ancien Selenium : le texte brut du conteneur
-            # ui-game-scores (jeux+points) doit correspondre à une entrée de
-            # config.score_to_start (donc jeux à 0-0), et un service doit être en cours.
-            score_ok = raw_score in config.score_to_start and has_ball
-            if not score_ok:
-                config.log('Score NOT OK', 'warning', False, 4, False)
-                continue
-
-            # Extraire l'ID du match depuis l'URL
+            # Extraire l'ID du match depuis l'URL (fait avant le filtre score_to_start pour
+            # pouvoir vérifier si ce match est déjà dans matches_todo, cf. ci-dessous).
             try:
                 url_clean = url.replace('?platform_type=desktop', '').replace('?platform_type=mobile', '')
                 parts = url_clean.split('-')
@@ -280,6 +351,29 @@ def _bridge_recherche_match():
             if match_manager.match_exists(newmatch_id):
                 config.log('Match déjà parié!', 'warning', False, 4, False)
                 continue
+
+            # Vérifier AVANT de naviguer qu'un scriptType exploitable existe pour ce
+            # match (calculé au classement via l'API auxotracker, filtré par
+            # bot_family) — sinon inutile d'ouvrir la page pour le rejeter juste après
+            # (perte de temps observée : navigation + attente puis rejet systématique).
+            if not _get_valid_scripttypes_for_match(newmatch_id):
+                config.log(f'{newmatch_id} sans scriptType exploitable, ignoré (pas de navigation)', 'warning', False, 4, False)
+                continue
+
+            # Même vérification que l'ancien Selenium : le texte brut du conteneur
+            # ui-game-scores (jeux+points) doit correspondre à une entrée de
+            # config.score_to_start (donc jeux à 0-0), et un service doit être en cours —
+            # SAUF si ce match est dans ses 5 premiers jeux (la logique nextBet/
+            # looking_game de FirstGameBet.py sait déjà viser le jeu suivant si on n'est
+            # pas pile à 0-0, mais au-delà de 5 jeux on a trop raté le début pour cibler
+            # correctement le bon jeu).
+            within_first_5 = _within_first_n_games(raw_score, 5)
+            score_ok = (raw_score in config.score_to_start and has_ball) or within_first_5
+            if not score_ok:
+                config.log('Score NOT OK', 'warning', False, 4, False)
+                continue
+            if within_first_5 and not (raw_score in config.score_to_start and has_ball):
+                config.log(f'Match déjà en cours (5 premiers jeux) mais scriptType exploitable, accepté ({raw_score})', 'success', False, 4, False)
 
             config.log('Match OK — navigation', 'success', False, 4, False)
             config.newmatch = newmatch_id
@@ -308,6 +402,13 @@ def _bridge_recherche_match():
                 AddRunning.main(config.script_num, config.running_file_name)
             except Exception:
                 pass
+            if not _load_dynamic_scripttypes(config.newmatch):
+                # Aucun scriptType exploitable pour ce match (jamais classé, ou classé
+                # mais sans scriptType valide pour ce bot) — ne pas s'y engager, sinon le
+                # bot reste bloqué dessus indéfiniment (scriptTypeList vide = boucle à
+                # vide dans Functions_431a.all_script, jamais de sortie).
+                config.log(f'{config.newmatch} sans scriptType exploitable, match ignoré', 'warning', False, 4, False)
+                continue
             config.match_found = True
             return True
 
@@ -359,13 +460,17 @@ def rechercheDeMatch(driver):
                     result = [False, result[1]]
                 if result[0]:
                     config.newmatch = result[1]
-                    config.match_found = True
-                    try:
-                        from Functions._to_remove import AddRunning
-                        AddRunning.main(config.script_num, config.running_file_name)
-                    except Exception:
-                        pass
-                    return True
+                    if _load_dynamic_scripttypes(config.newmatch):
+                        config.match_found = True
+                        try:
+                            from Functions._to_remove import AddRunning
+                            AddRunning.main(config.script_num, config.running_file_name)
+                        except Exception:
+                            pass
+                        return True
+                    # Aucun scriptType exploitable pour ce match (déjà ouvert) — ne pas
+                    # s'y engager, on retombe sur la recherche normale ci-dessous.
+                    config.log(f'{config.newmatch} (déjà ouvert) sans scriptType exploitable, nouvelle recherche', 'warning', False)
             DeleteBet(driver)
             if not _bridge_recherche_match():
                 import time as _t; _t.sleep(5)

@@ -11,15 +11,17 @@ from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
 def GetResult(driver):
-    from Functions.BridgeAdapter import bridge_active, bridge_get_result, bridge_wait_score_change
+    from Functions.BridgeAdapter import bridge_active, bridge_get_result
     ##ON ATTEND LE RESULTAT POUR VALIDER LE PARIS
     if config.scriptType not in ['15V1', '15V2']:
         RetourTpsReg(driver)
     if bridge_active():
-        # Attendre que le score change (fin du point) puis lire le résultat — après être
-        # revenu sur "Temps réglementaire" (sinon le changement de set n'est pas reflété
-        # correctement tant qu'on reste sur un autre onglet de catégorie).
-        bridge_wait_score_change()
+        # Lecture immédiate du résultat déjà réglé côté UI (pari accepté/gagné/perdu) —
+        # pas d'attente d'un changement de score ici : un score déjà connu (ex: 15:15 pour
+        # un pari 30-0) peut suffire à déterminer une défaite immédiatement via l'historique
+        # config.all_scores (boucle passed_score ci-dessous), sans attendre le point suivant
+        # (invention d'une attente bloquante ici causait exactement le même genre de délai
+        # injustifié que celui déjà corrigé dans GetScoreActuel.bridge_wait_score_change).
         result = bridge_get_result()
         if result:
             return result

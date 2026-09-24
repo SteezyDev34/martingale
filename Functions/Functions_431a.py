@@ -532,6 +532,8 @@ def all_script(driver):
         config.init_variable()
         config.global_match_win[i] = 0.0  # Initialize win counter for script type (float)
         config.winmatch[i] = 0  # Initialize match counter for script type
+    if hasattr(config, 'market_fail_count'):
+        config.market_fail_count = {}
     try:
         from Functions.TelegramBetsAPI import flush_api_result_queue
         flush_api_result_queue()

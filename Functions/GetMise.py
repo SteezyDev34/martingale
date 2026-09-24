@@ -159,7 +159,7 @@ def get_recommended_stake(cote=None, tipster=None, bankroll_id=2, target_percent
     cote = cote or config.cote
     tipster = tipster or config.tipster
 
-    base = getattr(config, 'AUXOTRACK_API_URL', 'https://api.auxotracker.p-com.studio')
+    base = getattr(config, 'AUXOTRACK_API_URL', 'https://api.auxotracker.astcavex.fr')
     url = f"{base.rstrip('/')}/api/auxobot/recommended-stake"
 
     headers = {'Accept': 'application/json'}

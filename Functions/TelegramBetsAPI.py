@@ -270,7 +270,7 @@ def send_bet_to_auxotracker(bet_dict: Dict) -> Optional[int]:
     Retourne l'ID du pari créé, ou None en cas d'erreur.
     """
     try:
-        base = getattr(config, 'AUXOTRACK_API_URL', 'https://api.auxotracker.p-com.studio')
+        base = getattr(config, 'AUXOTRACK_API_URL', 'https://api.auxotracker.astcavex.fr')
         url = f"{base}/api/auxobot/bets"
         response = requests.post(url, headers=_auxotracker_headers(), json=bet_dict, timeout=15, verify=False)
         if response.ok:
@@ -292,7 +292,7 @@ def update_bet_result_auxotracker(bet_id: int, result: str) -> bool:
     result doit être 'win' ou 'lost'.
     """
     try:
-        base = getattr(config, 'AUXOTRACK_API_URL', 'https://api.auxotracker.p-com.studio')
+        base = getattr(config, 'AUXOTRACK_API_URL', 'https://api.auxotracker.astcavex.fr')
         url = f"{base}/api/auxobot/bets/{bet_id}"
         response = requests.patch(url, headers=_auxotracker_headers(), json={'result': result}, timeout=15, verify=False)
         if response.ok:

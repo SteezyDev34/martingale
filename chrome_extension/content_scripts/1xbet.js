@@ -374,12 +374,20 @@
       }
 
       const candidates = [];
+      let foundLocked = false;
       for (const btn of betButtons) {
-        if (btn.className.includes('locked') || btn.disabled) continue;
         const nameEl = qs('.ui-market__name', btn);
         const name = nameEl ? nameEl.textContent.trim() : '';
         if (!name) continue;
-        if (!norm(name).includes(norm(selection))) { candidates.push(name); continue; }
+        const isLocked = btn.className.includes('locked') || btn.disabled;
+        if (!norm(name).includes(norm(selection))) {
+          if (!isLocked) candidates.push(name);
+          continue;
+        }
+        // Le marché ciblé existe mais est temporairement verrouillé (cote suspendue) —
+        // différent d'un marché absent : ne doit pas compter comme "jamais affiché"
+        // côté Python (cf. FisrtGameBet.py, retrait définitif du scriptType).
+        if (isLocked) { foundLocked = true; continue; }
 
         btn.click();
         await sleep(800);
@@ -396,6 +404,10 @@
         const oddEl = qs('.ui-market__value', btn);
         const cote = oddEl ? parseFloat(oddEl.textContent.replace(',', '.')) : null;
         return { success: true, cote };
+      }
+
+      if (foundLocked) {
+        return { success: false, error: 'market_locked', candidates };
       }
 
       if (candidates.length === 0 && !_retried) {

@@ -820,7 +820,7 @@ class Martingale(ABC):
                 print(f"[{level.upper()}] {message}")
         
         try:
-            url = "https://p-com.studio/api/insert_paris.php"
+            url = "https://astcavex.fr/api/insert_paris.php"
             
             # Préparation des données à envoyer
             data = {

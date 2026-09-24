@@ -161,7 +161,7 @@ def all_script(driver):
                 date_str = time.strftime("%Y-%m-%d")
                 p1_enc = config.teams[0].replace(' ', '%20')
                 p2_enc = config.teams[1].replace(' ', '%20')
-                base_api = "https://api.auxotracker.p-com.studio/api/matches/tennis/link"
+                base_api = "https://api.auxotracker.astcavex.fr/api/matches/tennis/link"
                 api_url = f"{base_api}?team1={p1_enc}&team2={p2_enc}&date={date_str}"
         except Exception as e:
             config.log(f"Erreur lors de la récupération du lien SofaScore: {e}", 'warning', True)

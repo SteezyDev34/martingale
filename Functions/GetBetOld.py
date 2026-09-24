@@ -205,7 +205,12 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     if bridge_result.get('cote'):
                         config._bridge_last_cote = bridge_result.get('cote')
                     clic = True
+                    config._bridge_market_locked = False
                     return clic
+                # Marché présent mais temporairement verrouillé (cote suspendue) : à
+                # distinguer d'un marché absent — ne doit pas compter comme "jamais
+                # affiché" pour le retrait définitif du scriptType (cf. FisrtGameBet.py).
+                config._bridge_market_locked = (bridge_result.get('error') == 'market_locked')
                 tentative_clic += 1
                 continue
 
