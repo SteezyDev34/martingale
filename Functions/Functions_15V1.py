@@ -173,6 +173,9 @@ def all_script(driver):
         print('error 4', config.error)
         # Met à jour le statut du match dans le gestionnaire de matchs
         match_manager.add_match(config.newmatch)
+        # Le match est engagé : il ne doit plus apparaître comme "à faire" dans
+        # matches_todo, sinon il y reste indéfiniment même une fois traité.
+        match_manager.remove_match_todo(config.newmatch)
         print('error 5', config.error)
         config.log("-" * 60, "success", False, False, False)
         config.log(f'MATCH OK : {str(config.teams)} | {config.ligue_name}', 'success', False, 0, False)

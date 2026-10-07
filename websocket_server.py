@@ -221,9 +221,14 @@ class ExtensionBridge:
         """Port de classementeDeMatch (page desktop 'à venir') : liste des ligues [{name, href}]."""
         return self._send_and_wait({'action': 'scan_league_list'}, timeout=45)
 
+    def scan_full_league_menu(self):
+        """Port de newclassementeDeMatch (classement complet) : menu latéral complet des compétitions [{name, href}]."""
+        # Dépliage/repliage de chaque groupe (~2s chacun, comme le Selenium d'origine).
+        return self._send_and_wait({'action': 'scan_full_league_menu'}, timeout=300)
+
     def scan_league_matches(self):
         """Port de classementeDeMatch : matchs de la page de ligue desktop courante."""
-        return self._send_and_wait({'action': 'scan_league_matches'}, timeout=15)
+        return self._send_and_wait({'action': 'scan_league_matches'}, timeout=30)
 
     def open_category_and_search(self, categorie_text, key):
         """Port d'AfficherParisMobile : ouvre le dropdown de catégorie puis filtre par recherche."""

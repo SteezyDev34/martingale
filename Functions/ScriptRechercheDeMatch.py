@@ -24,6 +24,32 @@ _BASE_SCRIPTS  = ['BREAK']
 _RISKY_SCRIPTS = ['030', 'HOLD']
 
 
+def _to_24h_time(time_value, ampm=None):
+    """
+    Convertit une heure affichée par 1xbet en 'HH:MM' 24h. 1xbet affiche parfois
+    l'heure au format 12h avec un suffixe AM/PM (ex: '1:33 PM') qui était auparavant
+    ignoré (seul le premier token était gardé), faisant lire '13:33' comme '01:33'.
+    Le fuseau horaire de 1xbet correspond à celui de la machine locale (vérifié en
+    direct) — aucun décalage à appliquer, seulement la conversion 12h -> 24h.
+    """
+    time_value = (time_value or '').strip()
+    if not time_value or ':' not in time_value:
+        return None
+    h, _, m = time_value.partition(':')
+    try:
+        h = int(h)
+    except ValueError:
+        return None
+    m = m.strip()
+    if ampm:
+        ampm = ampm.strip().upper()
+    if ampm in ('AM', 'PM'):
+        h = h % 12
+        if ampm == 'PM':
+            h += 12
+    return f"{h:02d}:{m.zfill(2)}"
+
+
 def compute_script_types(stats):
     """
     Retourne (scriptTypeList, total_gain_wanted) pour les scriptTypes BREAK/030/HOLD
@@ -94,13 +120,13 @@ def charger_matchlist_depuis_json():
         json_files = [f for f in os.listdir(datafiles_path) if f.startswith('matchlist_') and f.endswith('.json')]
 
         if not json_files:
-            config.log("Aucun fichier JSON de matchlist trouvé", 'info', True)
+            config.log("Aucun fichier JSON de matchlist trouvé", 'info', False)
             return None
 
         use = input('Voulez vous utiliser le json récupéré? (Y/N): ')
         config.log_clear_line()
         if use.upper() not in ['Y', 'y', 'O', 'o']:
-            config.log("Utilisation de la matchlist récupérée", 'info', True)
+            config.log("Utilisation de la matchlist récupérée", 'info', False)
             return None
 
         # Trier par date de modification (le plus récent en premier)
@@ -114,14 +140,14 @@ def charger_matchlist_depuis_json():
         matchlist = data.get('matches', [])
 
         if matchlist and len(matchlist) > 0:
-            config.log(f"Matchlist chargée depuis {latest_file} - {len(matchlist)} matchs trouvés", 'info', True)
+            config.log(f"Matchlist chargée depuis {latest_file} - {len(matchlist)} matchs trouvés", 'info', False)
             return matchlist
         else:
-            config.log(f"Fichier JSON {latest_file} existe mais est vide", 'info', True)
+            config.log(f"Fichier JSON {latest_file} existe mais est vide", 'info', False)
             return None
 
     except Exception as e:
-        config.log(f"Erreur lors du chargement du fichier JSON: {str(e)}", 'error', True)
+        config.log(f"Erreur lors du chargement du fichier JSON: {str(e)}", 'error', False)
         return None
 
 
@@ -145,12 +171,12 @@ def traiter_matchlist(matchlist):
             config.log(
                 f"ScriptTypes API ({getattr(config, 'SCRIPT_SELECTION_MODE', 'strict')}) "
                 f"pour {players_name[0]} vs {players_name[1]}: {script_types_api} — {api_details}",
-                'info', True
+                'info', False
             )
         script_types = list(dict.fromkeys(script_types_api + script_types_legacy))
         # On n'inclut le match que si au moins un scriptType est activé
         if not script_types:
-            config.log(f"Aucun scriptType activé pour {players_name[0]} vs {players_name[1]}, match ignoré", 'warning', True)
+            config.log(f"Aucun scriptType activé pour {players_name[0]} vs {players_name[1]}, match ignoré", 'warning', False)
             continue
         # Note : plus de garde-fou sur config.proba40A/config.probamini ici — ce sont les
         # scriptTypes calculés à partir des stats API (script_types non vide, déjà vérifié
@@ -174,11 +200,11 @@ def traiter_matchlist(matchlist):
                     if data.get('success'):
                         sofascore_link = data.get('sofascore_link')
                     else:
-                        config.log(f"API retourné success=false pour {api_url}", 'warning', True)
+                        config.log(f"API retourné success=false pour {api_url}", 'warning', False)
                 else:
-                    config.log(f"Requête API échouée {resp.status_code} pour {api_url}", 'warning', True)
+                    config.log(f"Requête API échouée {resp.status_code} pour {api_url}", 'warning', False)
             except Exception as e:
-                config.log(f"Erreur lors de l'appel API auxotracker: {e}", 'warning', True)
+                config.log(f"Erreur lors de l'appel API auxotracker: {e}", 'warning', False)
 
             # Ajouter les informations au matchItem
             matchItem.append(config.proba40A)
@@ -186,7 +212,7 @@ def traiter_matchlist(matchlist):
             matchItem.append(script_types)
             goodmatch.append(matchItem)
         except Exception as e:
-            config.log(f"Erreur lors de la récupération du lien Sofascore: {e}", 'warning', True)
+            config.log(f"Erreur lors de la récupération du lien Sofascore: {e}", 'warning', False)
     return goodmatch
 
 
@@ -211,10 +237,10 @@ def sauvegarder_matchlist_json(matchlist):
         with open(json_filepath, 'w', encoding='utf-8') as json_file:
             json.dump(data_to_save, json_file, ensure_ascii=False, indent=2)
 
-        config.log(f"Matchlist enregistrée dans: {json_filepath}", 'info', True)
+        config.log(f"Matchlist enregistrée dans: {json_filepath}", 'info', False)
 
     except Exception as e:
-        config.log(f"Erreur lors de l'enregistrement de matchlist: {str(e)}", 'error', True)
+        config.log(f"Erreur lors de l'enregistrement de matchlist: {str(e)}", 'error', False)
 
 
 def _within_first_n_games(raw_score, max_games):
@@ -254,15 +280,38 @@ def _get_valid_scripttypes_for_match(match_id):
     return _new_list
 
 
-def _load_dynamic_scripttypes(match_id):
+# Matchs interrompus dont la reprise a déjà été tentée dans ce process (cf. rechercheDeMatch).
+_resume_attempted = set()
+
+
+def _family_scripttypes():
+    """ScriptTypes gérés par le bot en cours (config.bot_family)."""
+    if config.bot_family == '1530A':
+        return config.VALID_SCRIPTTYPES_1530A
+    if config.bot_family == '456P':
+        return config.VALID_SCRIPTTYPES_456P
+    return set()
+
+
+def _load_dynamic_scripttypes(match_id, only=None):
     """
     Charge config.scriptTypeList depuis les scriptTypes calculés au classement (API
     auxotracker) pour ce match, filtrés selon config.bot_family — priment toujours sur
     la liste statique (config.scriptTypeListX), pas de fallback : si aucun scriptType
     dynamique n'est disponible/valide pour ce bot, on ne parie pas sur ce match plutôt
     que de retomber sur un défaut arbitraire.
+
+    `only` : reprise d'un match interrompu — on ne relance que les scriptTypes prévus
+    au départ (copiés dans matches à l'engagement) ET encore en cours dans la table
+    running (un scriptType y repasse à 0 dès qu'il atteint son objectif).
     """
-    _new_list = _get_valid_scripttypes_for_match(match_id)
+    if only is not None:
+        planned = _get_valid_scripttypes_for_match(match_id)
+        _new_list = [st for st in only if st in _family_scripttypes()]
+        if planned:
+            _new_list = [st for st in _new_list if st in planned]
+    else:
+        _new_list = _get_valid_scripttypes_for_match(match_id)
     # 15A doit toujours être traité après 300/030 (30-0/0-30) s'ils sont présents.
     if '15A' in _new_list:
         _new_list = [st for st in _new_list if st != '15A']
@@ -309,26 +358,36 @@ def _bridge_recherche_match():
     from Functions.Managers.MatchManager import match_manager
     from Functions._to_remove import AddRunning
 
+    # Affichage dynamique auto-nettoyant : chaque match rejeté efface ses propres
+    # lignes (logmatchline), chaque ligue entièrement parcourue sans match efface les
+    # siennes (logligueline), et l'ensemble du passage (toutes ligues) s'efface une
+    # fois terminé si rien n'a été trouvé (logline) — même principe que rechercheDeMatch.
+    logline = 0
     bridge.navigate(config.site_url)
     time.sleep(2)
     leagues = bridge.get_match_list()  # service worker attend que la page soit chargée
     if not leagues:
-        config.log('ligues introuvables!', 'warning', True, 2, False)
+        config.log('ligues introuvables!', 'warning', False, 2, False)
         return False
 
-    config.log(f'ligues trouvées! ({len(leagues)})', 'success', True, 2, False)
+    config.log(f'ligues trouvées! ({len(leagues)})', 'success', False, 2, False)
+    logline += 1
 
     for league in leagues:
+        logligueline = 0
         ligue_name = league.get('leagueName', '')
         config.ligue_name = ligue_name
         if not ligue_name:
             continue
         config.log(ligue_name, 'info', False, 2, False)
+        logligueline += 1
 
         if not getCompet():
+            config.log_clear_line(logligueline)
             continue
 
         for match in league.get('matches', []):
+            logmatchline = 0
             url = match.get('url', '')
             score = (match.get('score') or '').replace('\n', '').strip()
             raw_score = (match.get('rawScore') or '').replace('\n', '').strip()
@@ -337,6 +396,7 @@ def _bridge_recherche_match():
             p2 = match.get('p2') or ''
 
             config.log(f'{p1} vs {p2} — {score}', 'info', False, 3, False)
+            logmatchline += 1
 
             # Extraire l'ID du match depuis l'URL (fait avant le filtre score_to_start pour
             # pouvoir vérifier si ce match est déjà dans matches_todo, cf. ci-dessous).
@@ -346,19 +406,33 @@ def _bridge_recherche_match():
                 newmatch_id = parts[-3] + '-' + parts[-2] + '-' + parts[-1]
             except Exception:
                 config.log('Impossible de lire ID match!', 'warning', False, 4)
+                logmatchline += 1
+                config.log_clear_line(logmatchline)
                 continue
 
             if match_manager.match_exists(newmatch_id):
                 config.log('Match déjà parié!', 'warning', False, 4, False)
+                logmatchline += 1
+                config.log_clear_line(logmatchline)
                 continue
 
             # Vérifier AVANT de naviguer qu'un scriptType exploitable existe pour ce
             # match (calculé au classement via l'API auxotracker, filtré par
             # bot_family) — sinon inutile d'ouvrir la page pour le rejeter juste après
             # (perte de temps observée : navigation + attente puis rejet systématique).
+            # Score/balle évalués ici pour ne lancer le classement à la volée (appels
+            # API stats, plusieurs secondes) que sur un match réellement jouable.
+            within_first_5 = _within_first_n_games(raw_score, 5)
+            score_ok = has_ball and (raw_score in config.score_to_start or within_first_5)
             if not _get_valid_scripttypes_for_match(newmatch_id):
-                config.log(f'{newmatch_id} sans scriptType exploitable, ignoré (pas de navigation)', 'warning', False, 4, False)
-                continue
+                _lines_before = config.log_line_count
+                classe = score_ok and _classer_match_a_la_volee(p1, p2, ligue_name, newmatch_id)
+                logmatchline += config.log_line_count - _lines_before
+                if not classe:
+                    config.log(f'{newmatch_id} sans scriptType exploitable, ignoré (pas de navigation)', 'warning', False, 4, False)
+                    logmatchline += 1
+                    config.log_clear_line(logmatchline)
+                    continue
 
             # Même vérification que l'ancien Selenium : le texte brut du conteneur
             # ui-game-scores (jeux+points) doit correspondre à une entrée de
@@ -367,15 +441,20 @@ def _bridge_recherche_match():
             # looking_game de FirstGameBet.py sait déjà viser le jeu suivant si on n'est
             # pas pile à 0-0, mais au-delà de 5 jeux on a trop raté le début pour cibler
             # correctement le bon jeu).
-            within_first_5 = _within_first_n_games(raw_score, 5)
-            score_ok = (raw_score in config.score_to_start and has_ball) or within_first_5
+            # La balle de service est exigée dans les deux cas : un match pas encore
+            # commencé affiche aussi "00(0)00(0)" (0 jeu, donc "dans les 5 premiers")
+            # et était accepté sans balle, alors qu'il pouvait démarrer bien plus tard.
             if not score_ok:
                 config.log('Score NOT OK', 'warning', False, 4, False)
+                logmatchline += 1
+                config.log_clear_line(logmatchline)
                 continue
-            if within_first_5 and not (raw_score in config.score_to_start and has_ball):
+            if within_first_5 and raw_score not in config.score_to_start:
                 config.log(f'Match déjà en cours (5 premiers jeux) mais scriptType exploitable, accepté ({raw_score})', 'success', False, 4, False)
+                logmatchline += 1
 
             config.log('Match OK — navigation', 'success', False, 4, False)
+            logmatchline += 1
             config.newmatch = newmatch_id
             # Le lien vient de la page desktop — reconstruire l'URL mobile avant de naviguer
             # (comportement déjà présent dans le code Selenium d'origine, cf. VerificationMatchTrouve.py).
@@ -396,6 +475,8 @@ def _bridge_recherche_match():
                 time.sleep(1)
             if not score_readable:
                 config.log('Score toujours illisible après recherche, match ignoré', 'warning', False, 4, False)
+                logmatchline += 1
+                config.log_clear_line(logmatchline)
                 continue
 
             try:
@@ -408,11 +489,28 @@ def _bridge_recherche_match():
                 # bot reste bloqué dessus indéfiniment (scriptTypeList vide = boucle à
                 # vide dans Functions_431a.all_script, jamais de sortie).
                 config.log(f'{config.newmatch} sans scriptType exploitable, match ignoré', 'warning', False, 4, False)
+                logmatchline += 1
+                config.log_clear_line(logmatchline)
                 continue
             config.match_found = True
             return True
 
+        # Ligue entièrement parcourue sans match retenu : on efface son bloc (nom de
+        # ligue + tentatives déjà auto-effacées entre-temps ne laissent que le nom).
+        config.log_clear_line(logligueline)
+
+    # Toutes les ligues ont été parcourues sans succès : on efface tout le bloc de
+    # cette passe de recherche (ne laisse pas un historique de "PAS DE MATCH TROUVE!"
+    # s'accumuler à chaque nouvelle tentative). logline est remis à 0 juste après
+    # l'effacement : les lignes qu'il comptait ont déjà disparu, les recompter pour
+    # le prochain effacement mangerait des lignes qui n'ont jamais été réimprimées
+    # (ex: le titre "RECHERCHE DE MATCH" de l'appelant).
+    config.log_clear_line(logline)
+    logline = 0
     config.log('PAS DE MATCH TROUVE!', 'warning', False, 2, False)
+    logline += 1
+    time.sleep(2)
+    config.log_clear_line(logline)
     return False
 
 
@@ -438,6 +536,23 @@ def rechercheDeMatch(driver):
                     config.log(f'[Bridge] classementeDeMatch échoué, ignoré: {e}', 'warning', False)
                     config.last_classement = datetime.now().strftime("%Y-%m-%d")
             script_manager.check_previous_scripts(config.script_num)
+            # Match interrompu (bot crashé/tué en plein match : la table running est
+            # restée à 1) : on le rouvre pour le reprendre au lieu de l'abandonner avec
+            # ses pertes en cours. Le bouton "Vider running" du dashboard annule la reprise.
+            from Functions import RedisIPC
+            interrupted = RedisIPC.get_interrupted_match(_family_scripttypes())
+            if interrupted and interrupted[0] not in _resume_attempted and not GetIfMatchPage(driver):
+                # Une seule tentative par match et par process : si le match est fini
+                # côté 1xBet, sa page n'existe plus et on ne doit pas y renaviguer en boucle.
+                _resume_attempted.add(interrupted[0])
+                resume_url = match_manager.get_match_url(interrupted[0])
+                if resume_url:
+                    resume_url = resume_url.split('?')[0] + '?platform_type=mobile'
+                    config.log(f'Reprise du match interrompu {interrupted[0]} : {resume_url}', 'warning', False)
+                    bridge.navigate(resume_url)
+                    time.sleep(3)
+                else:
+                    config.log(f'Match interrompu {interrupted[0]} : URL inconnue, ouvrir sa page manuellement pour le reprendre', 'warning', False)
             # Déjà sur une page de match ? (match ouvert avant le démarrage du script)
             if GetIfMatchPage(driver):
                 # Forcer le mode mobile avant de continuer, comme le fait déjà
@@ -455,12 +570,16 @@ def rechercheDeMatch(driver):
                 # (objectif atteint) — le navigateur reste sur sa page tant qu'on ne navigue
                 # pas ailleurs. Sans cette vérification, la boucle ré-accepte indéfiniment
                 # ce même match terminé au lieu de repartir sur une vraie recherche.
-                if result[0] and match_manager.match_exists(result[1]):
+                resuming = bool(result[0] and interrupted and interrupted[0] == result[1])
+                if result[0] and not resuming and match_manager.match_exists(result[1]):
                     config.log('Match (déjà ouvert) déjà parié, nouvelle recherche', 'warning', False)
                     result = [False, result[1]]
                 if result[0]:
                     config.newmatch = result[1]
-                    if _load_dynamic_scripttypes(config.newmatch):
+                    if resuming:
+                        config.log(f'Reprise de {config.newmatch} (scriptTypes non terminés : {interrupted[1]})', 'success', False)
+                    config.resume_match = resuming
+                    if _load_dynamic_scripttypes(config.newmatch, interrupted[1] if resuming else None):
                         config.match_found = True
                         try:
                             from Functions._to_remove import AddRunning
@@ -554,21 +673,28 @@ def rechercheDeMatch(driver):
                             config.log_clear_line(logligueline)
                             continue  # SI AUCUN MATCHS RÉCUPÉRÉS ON PASSE AU SUIVANT
                         for bet_item in bet_items:
+                            # Compteur propre à CE match : les lignes qui décrivent son
+                            # traitement s'effacent dès qu'il est rejeté, sans polluer
+                            # logligueline (qui ne doit contenir que les lignes de la
+                            # ligue elle-même, effacées uniquement en fin de ligue).
+                            logmatchline = 0
                             try:
                                 config.log('On récupère le nom des joueurs', 'info', False, 3, False)
-                                logligueline += 1
+                                logmatchline += 1
 
                                 div_bet_player = bet_item.find_element(By.CLASS_NAME, config.classes[
                                     'dashboard_champ_match_teams_name'][
                                     config.site_type])
                             except:
                                 config.log('Impossible de récpérer les joueurs!', 'warning', True, 3, False)
+                                logmatchline += 1
+                                config.log_clear_line(logmatchline)
                                 continue
                             else:
                                 if div_bet_player:
                                     div_bet_player = div_bet_player.text.split('\n')
                                     config.log(str(div_bet_player), 'info', False, 3, False)
-                                    logligueline += 1
+                                    logmatchline += 1
 
                                 try:
                                     # on récupère le score
@@ -578,21 +704,25 @@ def rechercheDeMatch(driver):
                                 except:
 
                                     config.log('Impossible de récupérer le score!', 'warning', True, 4)
+                                    logmatchline += 1
+                                    config.log_clear_line(logmatchline)
                                     continue
                                 else:
                                     # si le score est récupéré
                                     if len(div_bet_score) <= 0:
                                         config.log('Pas de score!', 'warning', True, 4, False)
+                                        logmatchline += 1
+                                        config.log_clear_line(logmatchline)
                                         continue
                                     # on le vérifie
                                     config.log('Vérification du score!', 'info', False, 4, False)
-                                    logligueline += 1
+                                    logmatchline += 1
 
                                     bet_score = GetMatchScore.main(div_bet_score[0],
                                                                    config.score_to_start)
                                     if bet_score:  # SI LE MATCH EST PRET
                                         config.log('Score OK', 'info', False, 4, False)
-                                        logligueline += 1
+                                        logmatchline += 1
 
                                         # ON VERIFIE QU'IL N'A PAS DÉJA ÉTÉ PARIÉ
                                         config.newmatch = VerificationMatchTrouve.main(driver, bet_item,
@@ -612,12 +742,15 @@ def rechercheDeMatch(driver):
                                                 config.log_clear_line(logligueline)
                                                 break
                                             else:
+                                                config.log_clear_line(logmatchline)
                                                 continue
                                     else:
                                         config.log('Score NOT OK', 'warning', False, 4, False)
                                         #config.log('WIN MATCH', GetMatchResultFromDashboard(
                                         div_bet_score[0].get_attribute('innerHTML')
-                                        logligueline += 1
+                                        logmatchline += 1
+                                        config.log_clear_line(logmatchline)
+                                        continue
 
                 if config.match_found:
                     AddRunning.main(config.script_num, config.running_file_name)
@@ -975,6 +1108,67 @@ def rechercheDeMatchNBA(driver):
     return config.match_found
 
 
+def _ajouter_matchs_todo(matches):
+    """
+    Ajoute à matches_todo (local + distant) des matchItems issus de traiter_matchlist :
+    [players, league, match_id, date, proba40A, sofascore_link, script_types].
+    """
+    for match in matches:
+        try:
+            players = match[0]
+            if isinstance(players, (list, tuple)):
+                players_str = " - ".join(str(p).strip().strip("[]'\"") for p in players)
+            else:
+                players_str = str(players).strip().strip("[]'\"")
+
+            league = match[1]
+            match_id = match[2]
+            date_str = match[3]
+            prob = match[4]
+            link = match[5]
+            script_types_json = json.dumps(match[6]) if len(match) > 6 else json.dumps([])
+            total_gain = str(match[7]) if len(match) > 7 else '0'
+            match_info = "|".join([
+                players_str, str(league), str(match_id), str(date_str),
+                str(prob), str(link), script_types_json, total_gain
+            ])
+
+            success = match_manager.add_match_todo(match_info)
+            if success:
+                config.log(f"Match ajouté à la liste: {match[0]} vs {match[1]}", 'success', False)
+            else:
+                config.log(f"Match déjà dans la liste: {match[0]} vs {match[1]}", 'warning', False)
+        except Exception as e:
+            config.log(f"Erreur lors de l'ajout du match: {str(e)}", 'error', False)
+
+
+# Matchs déjà passés par le classement à la volée dans ce process (succès ou non) :
+# évite de réinterroger l'API stats à chaque passage de la recherche live.
+_classement_volee_fait = set()
+
+
+def _classer_match_a_la_volee(p1, p2, ligue_name, match_id):
+    """
+    Classement à la volée d'un match live absent de matches_todo (ex : match ITF
+    décalé, plus listé en pré-match au moment du classement du jour) : calcule ses
+    scriptTypes via l'API auxotracker exactement comme le classement (traiter_matchlist)
+    et l'ajoute à matches_todo s'il en a. Une seule tentative par match et par process.
+    Retourne True si le match a au moins un scriptType valide pour ce bot.
+    """
+    if match_id in _classement_volee_fait:
+        return False
+    _classement_volee_fait.add(match_id)
+    if match_manager.get_match_script_config(match_id):
+        return False  # déjà classé (scriptTypes d'une autre famille ou aucun)
+    config.log(f'{match_id} absent du classement : calcul des scriptTypes à la volée', 'info', False, 4, False)
+    match_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    goodmatch = traiter_matchlist([[[p1, p2], ligue_name, match_id, match_date]])
+    if not goodmatch:
+        return False
+    _ajouter_matchs_todo(goodmatch)
+    return bool(_get_valid_scripttypes_for_match(match_id))
+
+
 def _finaliser_classement(matchlist):
     """
     Traitement commun (Selenium et bridge) après collecte de la matchlist brute :
@@ -982,8 +1176,13 @@ def _finaliser_classement(matchlist):
     match_manager, sauvegarde de la date de classement, rotation des fichiers matchlist_*.json.
     Extrait de classementeDeMatch pour être partagé entre les deux chemins.
     """
+    purged = match_manager.purge_remote_past_matches()
+    if purged:
+        config.log(f"{purged} match(s) passé(s) supprimé(s) de la liste distante", 'info', False)
+    config.log(f"Matchlist brute : {len(matchlist)} matchs", 'info', False)
     sauvegarder_matchlist_json(matchlist)
     goodmatch = traiter_matchlist(matchlist)
+    config.log(f"{len(goodmatch)}/{len(matchlist)} matchs avec au moins un scriptType", 'info', False)
     # Tri par proba40A (index 4 du matchItem : [players, league, match_id, date, proba40A,
     # sofascore_link, script_types]) — un index relatif (x[-2]) est fragile ici, il a déjà
     # pointé silencieusement vers le mauvais champ après l'ajout de script_types/link.
@@ -1016,43 +1215,16 @@ def _finaliser_classement(matchlist):
         return final_matches
 
     top_matches = prioritize_matches_by_league(tableau_trie, 30)
-
-    for match in top_matches:
-        try:
-            players = match[0]
-            if isinstance(players, (list, tuple)):
-                players_str = " - ".join(str(p).strip().strip("[]'\"") for p in players)
-            else:
-                players_str = str(players).strip().strip("[]'\"")
-
-            league = match[1]
-            match_id = match[2]
-            date_str = match[3]
-            prob = match[4]
-            link = match[5]
-            script_types_json = json.dumps(match[6]) if len(match) > 6 else json.dumps([])
-            total_gain = str(match[7]) if len(match) > 7 else '0'
-            match_info = "|".join([
-                players_str, str(league), str(match_id), str(date_str),
-                str(prob), str(link), script_types_json, total_gain
-            ])
-
-            success = match_manager.add_match_todo(match_info)
-            if success:
-                config.log(f"Match ajouté à la liste: {match[0]} vs {match[1]}", 'success', True)
-            else:
-                config.log(f"Match déjà dans la liste: {match[0]} vs {match[1]}", 'warning', True)
-        except Exception as e:
-            config.log(f"Erreur lors de l'ajout du match: {str(e)}", 'error', True)
+    _ajouter_matchs_todo(top_matches)
 
     last_classement_file = os.path.join(config.projectPath, "DataFiles", "last_classement.txt")
     try:
         with open(last_classement_file, 'w') as f:
             f.write(datetime.now().strftime("%Y-%m-%d"))
             config.last_classement = datetime.now().strftime("%Y-%m-%d")
-            config.log(f"Date du dernier classement sauvegardée: {datetime.now().strftime('%Y-%m-%d')}", 'info', True)
+            config.log(f"Date du dernier classement sauvegardée: {datetime.now().strftime('%Y-%m-%d')}", 'info', False)
     except Exception as e:
-        config.log(f"Erreur lors de la sauvegarde de la date: {str(e)}", 'error', True)
+        config.log(f"Erreur lors de la sauvegarde de la date: {str(e)}", 'error', False)
 
     done_dir = os.path.join(config.projectPath, "DataFiles", "done")
     os.makedirs(done_dir, exist_ok=True)
@@ -1064,7 +1236,59 @@ def _finaliser_classement(matchlist):
             try:
                 os.rename(src_path, dst_path)
             except Exception as e:
-                config.log(f"Erreur lors du déplacement de {filename} vers done: {str(e)}", 'warning', True)
+                config.log(f"Erreur lors du déplacement de {filename} vers done: {str(e)}", 'warning', False)
+
+
+def _extract_matches_for_league(ligue_name, href, today, current_year):
+    """
+    Navigue vers la page d'une ligue et en extrait les matchs (mêmes règles que le
+    Selenium d'origine : date/heure valides, pas dans le futur, ≥2 joueurs).
+    Factorisée pour être partagée entre _bridge_scan_matchlist (ligues du dashboard,
+    classement "simple") et _bridge_scan_matchlist_full (menu complet des
+    compétitions, classement "complet").
+    """
+    from websocket_server import bridge
+
+    matches = []
+    config.log(f'Accès à : {href}', 'info', False)
+    # Une ligue qui ne répond pas (page lente, timeout du bridge) ne doit pas faire
+    # tomber tout le classement : l'exception remontait jusqu'au lanceur et arrêtait
+    # le bot. Une nouvelle tentative, puis on passe à la ligue suivante.
+    matches_resp = None
+    for tentative in (1, 2):
+        try:
+            bridge.navigate(href)
+            matches_resp = bridge.scan_league_matches()
+            break
+        except Exception as e:
+            config.log(f'Ligue {ligue_name} illisible (tentative {tentative}/2) : {e}', 'warning', False)
+    if not matches_resp:
+        return matches
+    for m in matches_resp.get('matches') or []:
+        try:
+            day_month = (m.get('date') or '').strip()
+            time_parts = (m.get('time') or '').strip().split()
+            hour = _to_24h_time(time_parts[0], time_parts[1] if len(time_parts) > 1 else None) if time_parts else None
+            if not day_month or not hour:
+                continue
+            match_date_only = datetime.strptime(f"{day_month}/{current_year}", "%d/%m/%Y").date()
+            if match_date_only > today:
+                continue
+            match_date = datetime.strptime(
+                f"{day_month}/{current_year} {hour}:00", "%d/%m/%Y %H:%M:%S"
+            ).strftime("%Y-%m-%d %H:%M:%S")
+
+            players_name = m.get('players') or []
+            if len(players_name) <= 1:
+                continue
+
+            newmatch_parts = m['href'].split('-')
+            newmatch_id = newmatch_parts[-3] + '-' + newmatch_parts[-2] + '-' + newmatch_parts[-1]
+
+            matches.append([players_name, ligue_name, newmatch_id, match_date])
+        except Exception:
+            continue
+    return matches
 
 
 def _bridge_scan_matchlist():
@@ -1079,6 +1303,7 @@ def _bridge_scan_matchlist():
     bridge.navigate(config.site_line_url)
     leagues_resp = bridge.scan_league_list()
     leagues = leagues_resp.get('leagues') or []
+    config.log(f"{len(leagues)} ligues mises en avant sur la page tennis", 'info', False)
     matchlist = []
     today = datetime.now().date()
     current_year = datetime.now().year
@@ -1087,32 +1312,53 @@ def _bridge_scan_matchlist():
         config.ligue_name = lg.get('name')
         if not config.ligue_name or not getCompet():
             continue
-        config.log(f'Accès à : {lg.get("href")}', 'info', True)
-        bridge.navigate(lg['href'])
-        matches_resp = bridge.scan_league_matches()
-        for m in matches_resp.get('matches') or []:
-            try:
-                day_month = (m.get('date') or '').strip()
-                hour = (m.get('time') or '').strip().split(' ')[0] if m.get('time') else None
-                if not day_month or not hour:
-                    continue
-                match_date_only = datetime.strptime(f"{day_month}/{current_year}", "%d/%m/%Y").date()
-                if match_date_only > today:
-                    continue
-                match_date = datetime.strptime(
-                    f"{day_month}/{current_year} {hour}:00", "%d/%m/%Y %H:%M:%S"
-                ).strftime("%Y-%m-%d %H:%M:%S")
+        matchlist.extend(_extract_matches_for_league(config.ligue_name, lg['href'], today, current_year))
 
-                players_name = m.get('players') or []
-                if len(players_name) <= 1:
-                    continue
+    return matchlist
 
-                newmatch_parts = m['href'].split('-')
-                newmatch_id = newmatch_parts[-3] + '-' + newmatch_parts[-2] + '-' + newmatch_parts[-1]
 
-                matchlist.append([players_name, config.ligue_name, newmatch_id, match_date])
-            except Exception:
-                continue
+def _bridge_scan_matchlist_full():
+    """
+    Port bridge de newclassementeDeMatch (classement "complet") : au lieu de se limiter
+    aux ligues déjà affichées sur le dashboard /line/tennis (celles avec de l'activité
+    récente), parcourt le menu latéral complet des compétitions (regroupées par pays,
+    avec des sous-groupes à déplier) pour récupérer la totalité des compétitions du
+    moment, pas seulement celles mises en avant. Réutilise ensuite exactement la même
+    extraction de matchs par ligue que _bridge_scan_matchlist.
+    """
+    from websocket_server import bridge
+
+    bridge.navigate(config.site_line_url)
+    config.log("Lecture du menu complet des compétitions (peut prendre 1 à 3 min)...", 'info', False)
+    try:
+        leagues_resp = bridge.scan_full_league_menu()
+    except Exception as e:
+        # Typiquement un TimeoutError quand l'extension n'a pas été rechargée dans Chrome
+        # (service worker sans la commande -> jamais de réponse) : sans ce repli,
+        # l'exception remontait jusqu'au lanceur et arrêtait le bot.
+        leagues_resp = {'success': False, 'error': str(e)}
+    leagues = leagues_resp.get('leagues') or []
+    if not leagues_resp.get('success') or not leagues:
+        config.log(
+            f"Menu complet des compétitions illisible ({leagues_resp.get('error')}) — "
+            f"repli sur le classement simple. Recharger l'extension dans chrome://extensions ?",
+            'warning', False
+        )
+        return _bridge_scan_matchlist()
+    config.log(f"{len(leagues)} compétitions dans le menu complet", 'info', False)
+    matchlist = []
+    today = datetime.now().date()
+    current_year = datetime.now().year
+
+    for i, lg in enumerate(leagues, 1):
+        config.ligue_name = lg.get('name')
+        if not config.ligue_name or not getCompet():
+            continue
+        config.log(f"[{i}/{len(leagues)}] {config.ligue_name}", 'info', False)
+        # Les liens du menu latéral pointent sur la version mobile : on force le desktop,
+        # comme le Selenium d'origine (seule version dont scan_league_matches lit le DOM).
+        href = lg['href'].split('?')[0] + '?platform_type=desktop'
+        matchlist.extend(_extract_matches_for_league(config.ligue_name, href, today, current_year))
 
     return matchlist
 
@@ -1124,6 +1370,11 @@ def classementeDeMatch(driver, use_json_cache=True):
         config.match_found = False
         save_site_type = config.site_type
         config.site_type = 'new_site'
+        # Le classement lui-même garde tous ses logs affichés (pas d'effacement ligne
+        # par ligne, cf. clear=False sur ses appels config.log) — on n'efface le bloc
+        # entier qu'une fois le classement terminé, via le nombre de lignes écrites
+        # entre-temps (config.log_line_count, incrémenté par chaque config.log()).
+        _log_start = config.log_line_count
         try:
             matchlist = charger_matchlist_depuis_json() if use_json_cache else None
             if matchlist is None:
@@ -1131,6 +1382,7 @@ def classementeDeMatch(driver, use_json_cache=True):
             _finaliser_classement(matchlist)
         finally:
             config.site_type = save_site_type
+            config.log_clear_line(config.log_line_count - _log_start)
         return
     driver.get(config.site_line_url)
     config.error = False
@@ -1246,7 +1498,7 @@ def classementeDeMatch(driver, use_json_cache=True):
                                     parts = start_time_text.split()
                                     if len(parts) >= 2:
                                         day_month = parts[0]  # '09/09'
-                                        hour = parts[1].split()[0]
+                                        hour = _to_24h_time(parts[1], parts[2] if len(parts) >= 3 else None)
                                         # Ajouter l'année actuelle
                                         current_year = datetime.now().year
                                         match_date_only = datetime.strptime(f"{day_month}/{current_year}",
@@ -1318,6 +1570,23 @@ def classementeDeMatch(driver, use_json_cache=True):
 
 
 def newclassementeDeMatch(driver):
+    from Functions.BridgeAdapter import bridge_active
+    if bridge_active():
+        # _bridge_scan_matchlist_full() est l'équivalent bridge de cette fonction
+        # (menu complet des compétitions) — jamais câblé jusqu'ici, ce qui faisait
+        # planter le bot en mode bridge (driver=None, driver.get(...) juste en dessous).
+        config.error = False
+        config.match_found = False
+        save_site_type = config.site_type
+        config.site_type = 'new_site'
+        _log_start = config.log_line_count
+        try:
+            matchlist = _bridge_scan_matchlist_full()
+            _finaliser_classement(matchlist)
+        finally:
+            config.site_type = save_site_type
+            config.log_clear_line(config.log_line_count - _log_start)
+        return
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
     driver.get(config.site_line_url)
@@ -1501,7 +1770,7 @@ def newclassementeDeMatch(driver):
                                     parts = start_time_text.split()
                                     if len(parts) >= 2:
                                         day_month = parts[0]  # '09/09'
-                                        hour = parts[1].split()[0]
+                                        hour = _to_24h_time(parts[1], parts[2] if len(parts) >= 3 else None)
                                         # Ajouter l'année actuelle
                                         current_year = datetime.now().year
                                         match_date_only = datetime.strptime(f"{day_month}/{current_year}",

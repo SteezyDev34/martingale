@@ -51,7 +51,11 @@ VALID_SCRIPTTYPES_456P = {'40A', '4015', '4030', '400', '4P', '5P', '6P', 'BREAK
 # Mode de sélection des scriptTypes à partir des stats API auxotracker (/tension) :
 # 'strict' = n'active un scriptType que si edge > 0 vs la cote de référence 1xBet
 # 'loose'  = active dès qu'un seuil de proba brute est dépassé, sans exiger d'edge positif
-SCRIPT_SELECTION_MODE = 'strict'
+# 'in_set' = nouveau système AuxoTracker du 2026-09-28 (cf. CLAUDE.md) : utilise
+#            stats_in_set (taux "au moins une fois dans les 10 premiers jeux du
+#            1er set", par match, pas par jeu isolé), seuil ≥85% validé par
+#            backtest leave-one-out côté AuxoTracker
+SCRIPT_SELECTION_MODE = 'in_set'
 # Script configuration
 script_num = 0  # Numéro du Script
 win = 0  # Nombre de victoire
@@ -161,6 +165,34 @@ print_running_text = False
 print_match_live_text = False
 error = False
 devMode = True
+resume_match = False  # True quand rechercheDeMatch reprend un match interrompu (pertes en cours conservées)
+_dev_mode_last_check = 0.0
+log_line_count = 0  # incrémenté à chaque ligne écrite par log() — sert à effacer un
+                    # bloc entier de lignes après coup (ex: tout le classement d'un
+                    # coup) sans avoir à faire remonter un compteur dédié à travers
+                    # toutes les fonctions intermédiaires : cf. classementeDeMatch.
+
+
+def refresh_dev_mode():
+    """
+    Relit devMode depuis redis_fallback.sqlite (table settings, écrite par le
+    dashboard) au plus une fois toutes les 2s — pour permettre au dashboard de
+    basculer devMode sur un bot déjà lancé sans avoir à le redémarrer. Appelé à
+    chaque config.log(), donc effectivement "live" dès le message suivant.
+    """
+    global devMode, _dev_mode_last_check
+    now = time.time()
+    if now - _dev_mode_last_check < 2.0:
+        return devMode
+    _dev_mode_last_check = now
+    try:
+        from Functions.RedisIPC import get_dev_mode
+        devMode = get_dev_mode(devMode)
+    except Exception:
+        pass
+    return devMode
+
+
 restart_set2 = 0
 log_message = ''
 newset = 2
@@ -574,6 +606,7 @@ def log(message, type="", clear=True, indent=0, show_script_type=True):
     :return: La longueur du message actuel, pour l'utiliser dans l'appel suivant.
     """
     global log_message
+    refresh_dev_mode()
     # Détermination de la couleur en fonction du type de message
     if type == "info":
         color = WHITE
@@ -605,6 +638,8 @@ def log(message, type="", clear=True, indent=0, show_script_type=True):
         s = scriptType
     horodatage = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     sys.stdout.write(f"{color}[{horodatage}] {s} {indent}{message}{RESET}\n")
+    global log_line_count
+    log_line_count += 1
 
     if clear:
         # Effacement de la ligne précédente
@@ -636,10 +671,13 @@ def log_clear_line(line_number=1):
             sys.stdout.write("clear\n")
             continue
     else:
-        # Délai pour éviter les problèmes d'affichage
+        # Effacement toujours actif, y compris en devMode : le système d'affichage
+        # dynamique de la recherche de match (ScriptRechercheDeMatch.py) en dépend
+        # pour ne pas laisser un historique de terminal illimité — devMode ne doit
+        # gater que le détail des messages de debug (cf. autres usages de devMode),
+        # pas l'effacement lui-même.
         for _ in range(line_number):
-            if not devMode:
-                sys.stdout.write("\x1b[1A\x1b[2K\r")
+            sys.stdout.write("\x1b[1A\x1b[2K\r")
             # Monte d’une ligne et efface-la entièrement
 
         sys.stdout.flush()

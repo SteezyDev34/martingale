@@ -1107,15 +1107,21 @@ _TENSION_FIELD = {
 }
 
 
-def _search_team_id(name):
+def _search_team_id(name, attempts=2):
     """Cherche l'id auxotracker d'un joueur par son nom (sport tennis=2)."""
-    try:
-        url = f"https://api.auxotracker.astcavex.fr/api/sports/2/teams/search?search={quote_plus(name)}"
-        resp = requests.get(url, timeout=10)
-        data = resp.json().get('data', [])
-        return data[0]['id'] if data else None
-    except Exception:
-        return None
+    url = f"https://api.auxotracker.astcavex.fr/api/sports/2/teams/search?search={quote_plus(name)}"
+    last_err = None
+    for i in range(attempts):
+        try:
+            resp = requests.get(url, timeout=10)
+            data = resp.json().get('data', [])
+            return data[0]['id'] if data else None
+        except Exception as e:
+            last_err = e
+            if i + 1 < attempts:
+                time.sleep(1)
+    config.log(f"[auxotracker] recherche joueur '{name}' échouée après {attempts} tentative(s): {last_err}", 'warning', True)
+    return None
 
 
 def get_match_tension_stats(playerName1, playerName2):
@@ -1131,18 +1137,35 @@ def get_match_tension_stats(playerName1, playerName2):
     if not pid1 or not pid2:
         return None
 
-    def _fetch(pid):
-        try:
-            url = f"https://api.auxotracker.astcavex.fr/api/stats/tennis/player/{pid}/tension"
-            data = requests.get(url, timeout=10).json()
-            if not data.get('success') or not data.get('reliable'):
-                return None
-            return {
-                'sample_n': data.get('sample', {}).get('matches', 0),
-                'stats': data.get('stats', {}),
-            }
-        except Exception:
-            return None
+    def _fetch(pid, attempts=2):
+        url = f"https://api.auxotracker.astcavex.fr/api/stats/tennis/player/{pid}/tension"
+        last_err = None
+        for i in range(attempts):
+            try:
+                data = requests.get(url, timeout=10).json()
+                if not data.get('success'):
+                    config.log(f"[auxotracker] stats tension pid={pid}: success=false ({data})", 'warning', True)
+                    return None
+                if not data.get('reliable'):
+                    config.log(f"[auxotracker] stats tension pid={pid}: reliable=false (échantillon insuffisant)", 'warning', True)
+                    return None
+                return {
+                    'sample_n': data.get('sample', {}).get('matches', 0),
+                    'stats': data.get('stats', {}),
+                    # Taux "au moins une fois dans les 10 premiers jeux du 1er set"
+                    # (par match, blendé par tier d'adversaire côté API) — c'est la
+                    # bonne unité pour une martingale jouée sur plusieurs jeux
+                    # successifs, contrairement à 'stats' qui est un taux par jeu
+                    # isolé. Cf. CLAUDE.md § "Nouveau système de calcul côté
+                    # AuxoTracker (2026-09-28)".
+                    'stats_in_set': data.get('stats_in_set', {}),
+                }
+            except Exception as e:
+                last_err = e
+                if i + 1 < attempts:
+                    time.sleep(1)
+        config.log(f"[auxotracker] stats tension pid={pid} échouées après {attempts} tentative(s): {last_err}", 'warning', True)
+        return None
 
     p1 = _fetch(pid1)
     p2 = _fetch(pid2)
@@ -1156,8 +1179,13 @@ def compute_script_types_from_api(playerName1, playerName2, mode=None):
     Détermine les scriptTypes activables à partir des stats déjà calculées par
     l'API auxotracker (/tension), sans recalcul svc/ret maison.
 
-    mode: 'strict' (edge > 0 vs cote de référence 1xBet) ou 'loose' (seuil de
-    proba brute, indépendant de la cote). Par défaut config.SCRIPT_SELECTION_MODE.
+    mode: 'strict' (edge > 0 vs cote de référence 1xBet), 'loose' (seuil de
+    proba brute, indépendant de la cote), ou 'in_set' (nouveau système
+    AuxoTracker du 2026-09-28, cf. CLAUDE.md : utilise `stats_in_set`, le taux
+    "au moins une fois dans les 10 premiers jeux du 1er set" — la bonne unité
+    pour une martingale jouée sur plusieurs jeux successifs, contrairement à
+    `stats` qui est un taux par jeu isolé. Seuil ≥85%, validé par backtest
+    leave-one-out côté AuxoTracker). Par défaut config.SCRIPT_SELECTION_MODE.
 
     Retourne (script_types: list[str], details: dict) — details garde, pour
     chaque scriptType évalué, la proba moyenne utilisée (et l'edge en strict).
@@ -1169,10 +1197,14 @@ def compute_script_types_from_api(playerName1, playerName2, mode=None):
 
     script_types = []
     details = {}
+    stats_key = 'stats_in_set' if mode == 'in_set' else 'stats'
     for st, field in _TENSION_FIELD.items():
-        v1 = tension['player1']['stats'].get(field)
-        v2 = tension['player2']['stats'].get(field)
+        v1 = tension['player1'].get(stats_key, {}).get(field)
+        v2 = tension['player2'].get(stats_key, {}).get(field)
         if v1 is None or v2 is None:
+            # 'stats_in_set' absent (API pas encore à jour) ou champ non couvert
+            # (cf. "Limite connue" du CLAUDE.md) — on ignore ce scriptType plutôt
+            # que de deviner, pas de repli silencieux sur 'stats' (unité différente).
             continue
         proba = ((v1 + v2) / 2) / 100.0
 
@@ -1183,6 +1215,9 @@ def compute_script_types_from_api(playerName1, playerName2, mode=None):
             edge = proba - (1.0 / odds)
             activable = edge > 0
             details[st] = {'proba': proba, 'edge': edge}
+        elif mode == 'in_set':
+            activable = proba >= 0.85
+            details[st] = {'proba': proba, 'threshold': 0.85}
         else:
             threshold = _LOOSE_THRESHOLDS.get(st, 1.0)
             activable = proba >= threshold

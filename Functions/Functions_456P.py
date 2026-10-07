@@ -21,6 +21,16 @@ from Functions.VerificationMatchTrouve import newmatchFromUrl
 from Functions.retour_section_tps_reglementaire import RetourTpsReg
 
 
+def _record_match_history():
+    """
+    Sauvegarde le gain final de chaque scriptType du match (onglet Historique du
+    dashboard) — à appeler avant chaque sortie de fin de match, puisque
+    config.global_match_win est remis à zéro juste après.
+    """
+    snapshot = {st: config.global_match_win.get(st, 0.0) for st in config.scriptTypeList}
+    match_manager.record_match_history(config.newmatch, snapshot)
+
+
 def all_script(driver):
     GetIfNewSite(driver)
     # Nettoyer le script inactif
@@ -54,7 +64,10 @@ def all_script(driver):
         newmatchFromUrl(driver)
 
         # Met à jour le statut du match dans le gestionnaire de matchs
-        match_manager.add_match(config.newmatch)
+        match_manager.add_match(config.newmatch, config.match_Url)
+        # Le match est engagé : il ne doit plus apparaître comme "à faire" dans
+        # matches_todo, sinon il y reste indéfiniment même une fois traité.
+        match_manager.remove_match_todo(config.newmatch)
 
         config.log("-" * 60, "success", False, False, False)
         config.log(f'MATCH OK : {str(config.teams)} | {config.ligue_name}', 'success', False, 0, False)
@@ -89,6 +102,7 @@ def all_script(driver):
             for st in config.scriptTypeList:
                 config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                            'success', False)
+            _record_match_history()
             return True
         if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
             config.log(
@@ -149,6 +163,7 @@ def all_script(driver):
                             config.log(
                                 f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                 'success', False)
+                        _record_match_history()
                         return True
                     if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                         config.log(
@@ -174,17 +189,8 @@ def all_script(driver):
                         DeleteBet(driver)
                         total_gain = RedisIPC.get_total_gain(config.newmatch) - RedisIPC.get_total_loss(config.newmatch)
                         config.log(f"Gain total match {config.newmatch}: {total_gain}", 'success', False)
-                        if total_gain >= float(config.total_gain_wanted):
-                            for st in config.scriptTypeList:
-                                config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}', 'success', False)
-                            config.log(f"FIN {config.scriptType} — objectif global atteint", 'success', False)
-                            RedisIPC.set_running(config.scriptType, False, config.newmatch)
-                            try:
-                                from Functions.TelegramBetsAPI import flush_api_result_queue
-                                flush_api_result_queue()
-                            except Exception:
-                                pass
-                            return True
+                        # Arrêt individuel par scriptType (objectif propre total_want_win[scriptType]) —
+                        # l'objectif global config.total_gain_wanted n'est plus utilisé (aligné sur 431a).
                         if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                             print("#RECHERCHE INFOS DE MISE")
 
@@ -257,6 +263,7 @@ def all_script(driver):
                 for st in config.scriptTypeList:
                     config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                'success', False)
+                _record_match_history()
                 return True
             if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                 config.log(
@@ -386,17 +393,7 @@ def all_script(driver):
                 config.ScriptConfig(scriptType).reset()
                 config.init_variable()
                 DeleteBet(driver)
-                if total_gain >= float(config.total_gain_wanted):
-                    for st in config.scriptTypeList:
-                        config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}', 'success', False)
-                    config.log(f"FIN {config.scriptType} — objectif global atteint", 'success', False)
-                    RedisIPC.set_running(config.scriptType, False, config.newmatch)
-                    try:
-                        from Functions.TelegramBetsAPI import flush_api_result_queue
-                        flush_api_result_queue()
-                    except Exception:
-                        pass
-                    return True
+                # Arrêt individuel par scriptType — objectif global retiré (aligné sur 431a).
                 if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                     print("#RECHERCHE INFOS DE MISE")
                     getGlobalPerte()
@@ -473,6 +470,8 @@ def all_script(driver):
         GetIfMatchPage(driver)
     config.switchScript('456P')
     print("update : " + config.newmatch)
+    # Sauvegarder les gains finaux par scriptType avant la remise à zéro ci-dessous.
+    _record_match_history()
     for i in config.scriptTypeList:
         config.switchScript(i)
         RedisIPC.set_running(config.scriptType, False, config.newmatch)

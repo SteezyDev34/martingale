@@ -36,7 +36,24 @@ def GetResult(driver):
     while not result and not config.error:
         getresult = False
         _getresult_iterations += 1
-        time.sleep(timesleep)
+        # Pas d'attente avant la toute première vérification : en mode bridge,
+        # GetScoreActuel lit le DOM instantanément (pas de blocage), donc le résultat
+        # peut déjà être déterminable immédiatement (score déjà avancé entre-temps).
+        # On n'attend qu'entre deux tentatives qui n'ont rien donné.
+        if _getresult_iterations > 1:
+            time.sleep(timesleep)
+        # Match terminé (abandon, fin de match...) pendant qu'un pari attend son
+        # résultat : le score final reste affiché et ne bougera plus, la boucle
+        # tournait indéfiniment. Le pari ne peut plus être gagné -> LOSE, ce qui
+        # l'ajoute à la perte du scriptType comme une défaite normale.
+        if bridge_active():
+            from Functions.BridgeAdapter import bridge_match_ended
+            if bridge_match_ended():
+                result = 'LOSE'
+                config.log('MATCH TERMINÉ pendant le pari -> LOSE', 'error', False, 2)
+                if config.validated_bet:
+                    config.validated_bet['result'] = result
+                return result
         GetScoreActuel(driver)
         if not config.validated_bet:
             result = 'LOSE'

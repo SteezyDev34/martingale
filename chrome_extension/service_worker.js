@@ -245,6 +245,15 @@ async function handlePythonMessage(msg) {
       break;
     }
 
+    // Python demande le menu complet des compétitions (newclassementeDeMatch, classement complet)
+    case 'scan_full_league_menu': {
+      const tabId = await resolveTabId(msg);
+      if (!tabId) { sendToPython({ action: 'scan_full_league_menu_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const result = await execInTab(tabId, () => window._martingale?.scanFullLeagueMenu?.());
+      sendToPython({ action: 'scan_full_league_menu_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      break;
+    }
+
     // Python demande les matchs de la page de ligue desktop courante (classementeDeMatch)
     case 'scan_league_matches': {
       const tabId = await resolveTabId(msg);

@@ -77,6 +77,9 @@ def all_script(driver):
             config.perte = 0
             RedisIPC.set_loss(config.scriptType, 0, matchname=config.newmatch)  # Met à jour le statut du match dans le gestionnaire de matchs
             match_manager.add_match(config.newmatch)
+            # Le match est engagé (paris en préparation) : il ne doit plus apparaître
+            # comme "à faire" dans matches_todo, sinon il y reste indéfiniment.
+            match_manager.remove_match_todo(config.newmatch)
     print('START CHEKING LIST')
     time.sleep(5)
 

@@ -25,6 +25,12 @@ def GetIfMatchPage(driver):
         for _ in range(5):
             try:
                 state = bridge.get_state()
+                if state and state.get('matchEnded'):
+                    # Même comportement que le Selenium (panneau end_match_stats) : le
+                    # scoreboard final reste affiché mais le match est fini.
+                    config.log('MATCH TERMINÉ!', 'info', show_script_type=False)
+                    bridge.navigate(config.site_url)
+                    return False
                 if state and (state.get('score') or state.get('isMatchPage')):
                     return True
             except Exception:

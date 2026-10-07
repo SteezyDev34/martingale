@@ -145,7 +145,11 @@
 
       const players = window._martingale.getPlayers();
       const isMatchPage = !!scoreDiv;
-      return { score, set_actuel: set, jeu_actuel: jeu, players, url: location.href, isMatchPage };
+      // Page de fin de match : le scoreboard (score final) reste affiché, seul ce panneau
+      // apparaît. Mêmes classes que le Selenium (conf/classes.py 'end_match_stats' :
+      // mobile/old_site 'after-game-info__text', new_site 'game-over-panel-banner').
+      const matchEnded = !!qs('.after-game-info__text, .game-over-panel-banner');
+      return { score, set_actuel: set, jeu_actuel: jeu, players, url: location.href, isMatchPage, matchEnded };
     },
 
     getPlayers() {
@@ -660,6 +664,64 @@
       return { success: true, leagues };
     },
 
+    // Port de newclassementeDeMatch (classement "complet", Selenium) : au lieu des seules
+    // ligues mises en avant sur /line/tennis, parcourt le menu latéral complet des
+    // compétitions. Mêmes classes et mêmes exclusions que le code Selenium d'origine
+    // (Functions/ScriptRechercheDeMatch.py::newclassementeDeMatch) : un groupe sans
+    // sous-compétitions est pris tel quel, sinon on le déplie, on lit ses sous-items,
+    // puis on le referme.
+    async scanFullLeagueMenu() {
+      console.log('[scanFullLeagueMenu] début');
+      if (!await waitFor('.sports-menu-app-sport', 15000)) {
+        return { success: false, error: 'menu_not_found', leagues: [] };
+      }
+      const country = qs('.sports-menu-group-by-country');
+      if (!country) return { success: false, error: 'country_group_not_found', leagues: [] };
+
+      const GROUP_EXCLUDED = ['double', 'spéciaux', 'special', 'mixte', 'gagnant', 'itf', 'winner', 'utr'];
+      const LINK_EXCLUDED = ['double', 'spéciaux', 'mixte', 'gagnant', 'winner', 'utr'];
+      const SUB_ITEM = 'sports-menu-app-champ-with-sub-champs-group__item';
+      const leagues = [];
+      const seen = new Set();
+      const add = (name, href) => {
+        if (!href || seen.has(href)) return;
+        seen.add(href);
+        leagues.push({ name, href });
+      };
+
+      for (const group of qsa('.sports-menu-group-by-champ', country)) {
+        const text = (group.innerText || '').toLowerCase();
+        if (GROUP_EXCLUDED.some(w => text.includes(w))) continue;
+        const linkContent = qs('.ui-nav-link__content', group);
+        if (!linkContent) continue;
+        const href = linkContent.href || linkContent.getAttribute('href') || '';
+        const title = linkContent.getAttribute('title') || '';
+        if (!group.classList.contains(SUB_ITEM) && href) {
+          add(title, href);
+          continue;
+        }
+
+        linkContent.click();
+        // Selenium lisait les sous-items juste après le clic : on attend leur apparition.
+        for (let i = 0; i < 20 && !qsa('.' + SUB_ITEM).length; i++) await sleep(150);
+        for (const sub of qsa('.' + SUB_ITEM)) {
+          const subLink = qs('.ui-nav-link__content', sub);
+          if (!subLink) continue;
+          const name = (subLink.getAttribute('title') || subLink.innerText || subLink.getAttribute('aria-label') || '')
+            .trim().replace(/\./g, '');
+          const subHref = subLink.href || subLink.getAttribute('href') || '';
+          if (LINK_EXCLUDED.some(w => subHref.toLowerCase().includes(w))) continue;
+          add(name, subHref);
+        }
+        linkContent.click();
+        // 2s dans le Selenium d'origine ; réduit pour que le parcours de tout le menu
+        // reste sous le timeout côté Python (300s).
+        await sleep(700);
+      }
+      console.log('[scanFullLeagueMenu] fin, leagues:', leagues.length);
+      return { success: true, leagues };
+    },
+
     // Étape 2 : matchs d'une page de ligue (desktop). Classes desktop (conf/classes.py) :
     // dashboard_champ_body_games='dashboard-champ-body__games', dashboard_game_block_row=
     // 'dashboard-game-block', team_wrap='dashboard-game-block__teams', team_name=
@@ -757,7 +819,14 @@
           }
           const linkEl = matchEl.querySelector('.dashboard-game-block__link, .c-events__name');
           const url = linkEl ? linkEl.href : null;
-          const hasBall = qsa('.ui-game-scores__item--inning', matchEl).length > 0;
+          // Scopé à gameScoresEl (équivalent du div_bet_score du Selenium d'origine,
+          // cf. GetMatchScore.main / config.classes['score_ball_search']) et non à tout
+          // matchEl : une recherche sur toute la ligne remontait parfois un indicateur
+          // "inning" appartenant à une autre partie du bloc, faisant croire à une balle
+          // au service alors qu'aucune n'était visible pour ce score.
+          const hasBall = gameScoresEl
+            ? qsa('.ui-game-scores__item--inning', gameScoresEl).length > 0
+            : false;
           if (url) matches.push({ p1, p2, score, rawScore, url, hasBall });
         }
         leagues.push({ leagueName, matches });

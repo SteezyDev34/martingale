@@ -262,7 +262,14 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
         # fois (select_option.click()) — seule la recherche de texte (key) est retentée en
         # boucle, sans rouvrir/re-cliquer le dropdown à chaque essai (c'est ce qui rendait
         # la version précédente ~4x plus lente : elle refaisait tout à chaque tentative).
-        cat_result = bridge.select_category_option(categorie_text)
+        # Un timeout du bridge (page 1xBet lente) remontait en exception jusqu'au lanceur
+        # et interrompait all_script alors qu'un pari attendait son résultat (suivi perdu,
+        # incident du 2026-10-02) : on le traite comme un échec d'affichage normal.
+        try:
+            cat_result = bridge.select_category_option(categorie_text)
+        except Exception as e:
+            config.log(f'Sélection catégorie échouée : {e}', 'warning', False, 3)
+            cat_result = {}
         if not cat_result.get('success'):
             config.log_clear_line(logline)
             return False
@@ -274,7 +281,10 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
         tentative_key = key
         for i in range(6):
             config.log(f'recherche marché, clé {i+1}/6 : {tentative_key}', 'info', False, 3)
-            result = bridge.search_market_key(tentative_key, categorie_text)
+            try:
+                result = bridge.search_market_key(tentative_key, categorie_text)
+            except Exception as e:
+                result = {'success': False, 'error': str(e)}
             if result.get('success'):
                 config.log_clear_line(logline)
                 return True

@@ -208,6 +208,15 @@ def bridge_delete_bet() -> bool:
         return False
 
 
+def bridge_match_ended() -> bool:
+    """True si l'onglet affiche la page de fin de match (cf. getState().matchEnded)."""
+    try:
+        state = _bridge().get_state()
+        return bool(state and state.get('matchEnded'))
+    except Exception:
+        return False
+
+
 def bridge_get_result() -> str | None:
     """
     Lit WIN/LOSE depuis l'extension.

@@ -430,7 +430,41 @@ def _get_sqlite_conn() -> sqlite3.Connection:
         "vainqueur_point INTEGER DEFAULT 0, source TEXT DEFAULT '', updated_at REAL DEFAULT 0.0"
         ")"
     )
+    # Réglages partagés entre process (ex: devMode, basculable depuis dashboard.py sans
+    # redémarrer un bot déjà lancé — cf. config.refresh_dev_mode).
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)"
+    )
     return conn
+
+
+def get_dev_mode(default: bool = True) -> bool:
+    """Lit config.devMode depuis la table settings (écrite par le dashboard)."""
+    try:
+        conn = _get_sqlite_conn()
+        row = conn.execute("SELECT value FROM settings WHERE key='devMode'").fetchone()
+        conn.close()
+        if row is None:
+            return default
+        return row[0] == '1'
+    except Exception:
+        return default
+
+
+def set_dev_mode(value: bool) -> bool:
+    """Écrit devMode dans la table settings ; les bots en cours le relisent sous 2s."""
+    try:
+        conn = _get_sqlite_conn()
+        conn.execute(
+            "INSERT INTO settings (key, value) VALUES ('devMode', ?) "
+            "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+            ('1' if value else '0',)
+        )
+        conn.commit()
+        conn.close()
+        return True
+    except Exception:
+        return False
 
 
 def _est_transition_evolutive(ancien_set, ancien_jeu, ancien_numero_point, nouveau_set, nouveau_jeu, nouveau_numero_point) -> bool:
@@ -930,6 +964,31 @@ def set_running(script_type: str, running: bool, matchname: str = "") -> bool:
     except Exception:
         config.log(f"[RedisIPC] set_running error for {script_type} with running={running} matchname='{matchname}'", 'error')
         return False
+
+
+def get_interrupted_match(script_types: Iterable[str]) -> Optional[tuple]:
+    """
+    Match resté "en cours" (is_running=1) pour l'un des scriptTypes donnés — typiquement
+    après un crash/kill du bot en plein match, la fin normale remettant tout à 0.
+    Retourne (matchname, [scriptTypes encore en cours sur ce match]) ou None.
+    """
+    wanted = {str(st).upper() for st in script_types}
+    try:
+        conn = _get_sqlite_conn()
+        rows = conn.execute(
+            "SELECT script_type, matchname FROM running WHERE is_running = 1 AND matchname != ''"
+        ).fetchall()
+        conn.close()
+    except Exception:
+        return None
+    by_match = {}
+    for st, matchname in rows:
+        if st in wanted:
+            by_match.setdefault(matchname, []).append(st)
+    if not by_match:
+        return None
+    matchname, sts = next(iter(by_match.items()))
+    return matchname, sts
 
 
 def get_running(script_type: str, default: int = 0) -> int:

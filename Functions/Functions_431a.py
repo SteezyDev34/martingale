@@ -43,6 +43,16 @@ def _attendre_debut_tie_break(driver):
     GetIfGameEnd(driver)
 
 
+def _record_match_history():
+    """
+    Sauvegarde le gain final de chaque scriptType du match (onglet Historique du
+    dashboard) — à appeler avant chaque sortie de fin de match, puisque
+    config.global_match_win est remis à zéro juste après.
+    """
+    snapshot = {st: config.global_match_win.get(st, 0.0) for st in config.scriptTypeList}
+    match_manager.record_match_history(config.newmatch, snapshot)
+
+
 def all_script(driver):
     GetIfNewSite(driver)
     # Nettoyer le script inactif
@@ -77,7 +87,10 @@ def all_script(driver):
         newmatchFromUrl(driver)
         print('error 4', config.error)
         # Met à jour le statut du match dans le gestionnaire de matchs
-        match_manager.add_match(config.newmatch)
+        match_manager.add_match(config.newmatch, config.match_Url)
+        # Le match est engagé : il ne doit plus apparaître comme "à faire" dans
+        # matches_todo, sinon il y reste indéfiniment même une fois traité.
+        match_manager.remove_match_todo(config.newmatch)
         print('error 5', config.error)
         config.log("-" * 60, "success", False, False, False)
         config.log(f'MATCH OK : {str(config.teams)} | {config.ligue_name}', 'success', False, 0, False)
@@ -87,12 +100,19 @@ def all_script(driver):
         print("❌ Une erreur est survenue, arrêt du script.")
         return False
 
+    # Reprise d'un match interrompu (cf. rechercheDeMatch) : on garde la perte en cours
+    # de chaque scriptType au lieu d'en reprendre une sur le pot global.
+    resuming = getattr(config, 'resume_match', False)
+    config.resume_match = False
     for scriptType in config.scriptTypeList:
         RedisIPC.set_running(scriptType, True, config.newmatch)
         config.switchScript(scriptType)
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
         config.ScriptConfig(scriptType).reset()
         config.init_variable()
+        if resuming:
+            config.perte = RedisIPC.get_loss(scriptType)
+            config.log(f'Reprise : perte en cours {scriptType} conservée ({config.perte})', 'info', False)
         if config.perte == 0:
             get1setGlobalPerte()
         if config.perte == 0:
@@ -125,6 +145,7 @@ def all_script(driver):
                 for st in config.scriptTypeList:
                     config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                'success', False)
+                _record_match_history()
                 return True
             if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                 config.log(
@@ -136,6 +157,12 @@ def all_script(driver):
                 RedisIPC.set_running(config.scriptType, False, config.newmatch)
                 continue
 
+            # Pari déjà placé pour ce scriptType lors d'un tour précédent de cette boucle
+            # (relancée parce qu'un AUTRE scriptType n'avait pas pu parier) : ne pas
+            # re-parier, sinon double mise sur le même jeu et le premier pari n'est plus
+            # suivi — gagné mais jamais compté (incident 15A du 2026-10-02).
+            if config.validated_bet:
+                continue
             ##PREPARATTION PREMIER PARIS
             FirstGameBet(driver)
             if not config.validated_bet:
@@ -192,6 +219,7 @@ def all_script(driver):
                                 f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                 'success', False)
                             RedisIPC.set_running(st, False, config.newmatch)
+                        _record_match_history()
                         return True
                     if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                         config.log(
@@ -269,6 +297,7 @@ def all_script(driver):
                                 RedisIPC.set_running(st, False, config.newmatch)
                                 config.switchScript(st)
                                 config.perte = 0
+                            _record_match_history()
                             return True
                         if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                             config.log(
@@ -356,6 +385,7 @@ def all_script(driver):
 
                     RedisIPC.set_running(st, False, config.newmatch)
 
+                _record_match_history()
                 return True
             if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                 config.log(
@@ -522,6 +552,9 @@ def all_script(driver):
             break
     config.switchScript('4315A')
     print("update : " + config.newmatch)
+    # Sauvegarder les gains finaux par scriptType avant la remise à zéro ci-dessous —
+    # sinon cette donnée est perdue définitivement (cf. dashboard.py, récap historique).
+    _record_match_history()
     for i in config.scriptTypeList:
         config.switchScript(i)
         RedisIPC.set_running(config.scriptType, False, config.newmatch)

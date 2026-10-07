@@ -25,3 +25,5 @@ session_data.json
 # Fichiers de gestion des fenêtres Chrome
 ChromeDriver/window_handles.json
 ChromeDebug*
+
+COMPTE-RENDU-IA.md

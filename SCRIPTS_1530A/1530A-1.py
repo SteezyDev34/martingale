@@ -61,17 +61,22 @@ config.log_clear_line()
 if confirmation.upper() == 'Y' or confirmation.upper() == 'y' or confirmation.upper() == 'O' or confirmation.upper() == 'o':
     confirmation = input(f"Type de Classement ? (1/2): ")
     config.log_clear_line()
-    if confirmation == '1':
-        config.log("-" * 60, "info", False, False, False)
-        print("Classement simple en cours")
-        config.log("-" * 60, "info", False, False, False)
-        classementeDeMatch(driver)
-    else:
-        config.log("-" * 60, "info", False, False, False)
-        print("Classement complet en cours")
-        config.log("-" * 60, "info", False, False, False)
-        newclassementeDeMatch(driver)
-        #classementeDeMatch(driver)
+    # Un échec du classement (timeout du bridge, page 1xBet lente...) ne doit pas
+    # arrêter le bot : on passe quand même à la recherche de match.
+    try:
+        if confirmation == '1':
+            config.log("-" * 60, "info", False, False, False)
+            print("Classement simple en cours")
+            config.log("-" * 60, "info", False, False, False)
+            classementeDeMatch(driver)
+        else:
+            config.log("-" * 60, "info", False, False, False)
+            print("Classement complet en cours")
+            config.log("-" * 60, "info", False, False, False)
+            newclassementeDeMatch(driver)
+            #classementeDeMatch(driver)
+    except Exception as e:
+        config.log(f"Classement interrompu par une erreur, on continue sans : {e}", 'error', False)
 config.in_stat = True
 config.bot_family = '1530A'
 config.scriptTypeList = config.scriptTypeList2

@@ -62,21 +62,44 @@ class MatchManager:
 
     # (supprimé: version dupliquée de _init_db)
 
-    def add_match(self, match_id: str) -> None:
+    def add_match(self, match_id: str, url: str = None) -> None:
         """
         Ajoute un nouveau match à la base de données.
-        
+
+        Copie au passage les scriptTypes calculés au classement (matches_todo) et l'URL
+        1xBet du match : le match est retiré de matches_todo juste après l'engagement,
+        et ces infos sont nécessaires pour le reprendre si le bot redémarre en plein
+        match (cf. get_match_script_config, get_match_url).
+
         Args:
             match_id (str): Identifiant unique du match
+            url (str): URL 1xBet de la page du match
         """
         with sqlite3.connect(self.db_path) as conn:
             try:
                 conn.execute(
-                    "INSERT INTO matches (match_id, strategy, created_at, status) VALUES (?, ?, ?, ?)",
-                    (match_id, self.strategy_name, datetime.now(), "active")
+                    "INSERT INTO matches (match_id, strategy, created_at, status, script_types, total_gain_wanted, url) "
+                    "VALUES (?, ?, ?, ?, "
+                    "(SELECT script_types FROM matches_todo WHERE match_id = ?), "
+                    "(SELECT total_gain_wanted FROM matches_todo WHERE match_id = ?), ?)",
+                    (match_id, self.strategy_name, datetime.now(), "active", match_id, match_id, url)
                 )
             except sqlite3.IntegrityError:
                 pass
+
+    def get_match_url(self, match_id: str) -> Optional[str]:
+        """URL 1xBet mémorisée à l'engagement du match (None si inconnue)."""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                row = conn.execute(
+                    "SELECT url FROM matches WHERE match_id = ? AND url IS NOT NULL AND url != '' "
+                    "ORDER BY created_at DESC LIMIT 1",
+                    (match_id,)
+                ).fetchone()
+                return row[0] if row else None
+        except Exception as e:
+            config.log(f"Erreur DB get_match_url: {e}", 'warning', True)
+            return None
 
     def send_matchlist_to_remote(self, match) -> bool:
         """
@@ -260,6 +283,15 @@ class MatchManager:
                 )
             ''')
 
+            # Migration : scriptTypes/objectif/URL conservés à l'engagement (cf. add_match)
+            match_cols = [row[1] for row in conn.execute("PRAGMA table_info(matches)")]
+            if 'script_types' not in match_cols:
+                conn.execute("ALTER TABLE matches ADD COLUMN script_types TEXT")
+            if 'total_gain_wanted' not in match_cols:
+                conn.execute("ALTER TABLE matches ADD COLUMN total_gain_wanted FLOAT")
+            if 'url' not in match_cols:
+                conn.execute("ALTER TABLE matches ADD COLUMN url TEXT")
+
             # Table pour les matchs à faire
             conn.execute('''
                 CREATE TABLE IF NOT EXISTS matches_todo (
@@ -280,6 +312,38 @@ class MatchManager:
                 conn.execute("ALTER TABLE matches_todo ADD COLUMN script_types TEXT")
             if 'total_gain_wanted' not in existing_cols:
                 conn.execute("ALTER TABLE matches_todo ADD COLUMN total_gain_wanted FLOAT")
+
+            # Historique des gains par scriptType une fois un match terminé (plus en
+            # cours de pari) — permet un récap après coup, ce que config.global_match_win
+            # (en mémoire, remis à 0 à la fin de chaque match) ne permettait pas.
+            conn.execute('''
+                CREATE TABLE IF NOT EXISTS matches_history (
+                    match_id TEXT,
+                    script_type TEXT,
+                    gain FLOAT,
+                    finished_at TIMESTAMP,
+                    PRIMARY KEY (match_id, script_type, finished_at)
+                )
+            ''')
+
+    def record_match_history(self, match_id: str, gains_by_scripttype: dict) -> None:
+        """
+        Enregistre le gain final de chaque scriptType pour ce match, juste avant que
+        Functions_431a.py ne remette config.global_match_win à zéro et supprime le
+        match — sinon cette donnée est perdue définitivement.
+        """
+        if not gains_by_scripttype:
+            return
+        try:
+            now = datetime.now()
+            with sqlite3.connect(self.db_path) as conn:
+                conn.executemany(
+                    "INSERT OR REPLACE INTO matches_history (match_id, script_type, gain, finished_at) "
+                    "VALUES (?, ?, ?, ?)",
+                    [(match_id, st, float(gain), now) for st, gain in gains_by_scripttype.items()]
+                )
+        except Exception as e:
+            config.log(f"Erreur lors de l'enregistrement de l'historique du match: {e}", 'warning', True)
 
     def get_remote_matches_todo(self) -> List[dict]:
         """
@@ -315,6 +379,36 @@ class MatchManager:
         except Exception as e:
             config.log(f"Exception lors de la récupération des matchs : {str(e)}", 'error', True)
             return []
+
+    def purge_remote_past_matches(self) -> int:
+        """
+        Supprime du serveur distant les matchs dont la date est passée (avant aujourd'hui).
+        Seule la suppression d'un match engagé (remove_match_todo) touchait jusqu'ici le
+        distant : les matchs classés mais jamais joués y restaient indéfiniment.
+        Retourne le nombre de match_id distincts supprimés.
+        """
+        import requests
+
+        today = datetime.now().strftime("%Y-%m-%d")
+        past_ids = {
+            m.get('match_id') for m in self.get_remote_matches_todo()
+            if m.get('match_id') and (m.get('match_date') or '')[:10] < today
+        }
+        url = f"{config.api_url}/matchlist/delete.php"
+        headers = {"User-Agent": "Mozilla/5.0"}
+        removed = 0
+        for match_id in past_ids:
+            try:
+                # delete.php renvoie toujours {"status":"error"} (warning PHP sur
+                # affected_rows) alors que la suppression a bien lieu : seul le code
+                # HTTP est fiable.
+                resp = requests.get(url, params={"match_id": match_id}, headers=headers, timeout=10)
+                if resp.status_code == 200:
+                    removed += 1
+            except Exception as e:
+                config.log(f"Erreur suppression distante de {match_id} : {e}", 'warning', False)
+        return removed
+
     def get_match_link(self, match_id: str) -> Optional[str]:
         """
         Récupère le lien Sofascore d'un match à partir de son `match_id` (local uniquement).
@@ -348,6 +442,15 @@ class MatchManager:
                     (match_id,)
                 )
                 row = cur.fetchone()
+                if not row:
+                    # Match déjà engagé (retiré de matches_todo) : scriptTypes copiés
+                    # dans matches par add_match.
+                    row = conn.execute(
+                        "SELECT script_types, total_gain_wanted FROM matches "
+                        "WHERE match_id = ? AND script_types IS NOT NULL "
+                        "ORDER BY created_at DESC LIMIT 1",
+                        (match_id,)
+                    ).fetchone()
                 if row:
                     import json as _json
                     script_types = _json.loads(row[0]) if row[0] else []

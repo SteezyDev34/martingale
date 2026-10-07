@@ -205,10 +205,10 @@ def log_clear_line(line_number=1):
             sys.stdout.write("clear\n")
             continue
     else:
-        # Délai pour éviter les problèmes d'affichage
+        # Effacement toujours actif, y compris en devMode (cf. config.log_clear_line,
+        # même correctif) — devMode ne doit gater que le détail des messages de debug.
         for _ in range(line_number):
-            if not config.devMode:
-                sys.stdout.write("\x1b[1A\x1b[2K\r")
+            sys.stdout.write("\x1b[1A\x1b[2K\r")
             # Monte d’une ligne et efface-la entièrement
 
         sys.stdout.flush()
