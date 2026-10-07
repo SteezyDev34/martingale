@@ -19,18 +19,14 @@ from Functions.Logs.Logger import log
 
 LOGIN_URLS = {
     "Stake":    "https://stake.bet/fr",
-    "Lollybet": "https://lolly-bet99.com/login",
 }
 
 HOME_URLS = {
     "Stake":    "https://stake.bet",
-    "Lollybet": "https://lolly-bet99.com",
 }
 
 LOGGED_IN_SELECTORS = {
     "Stake":    ["[class*='authenticated']"],
-    "Lollybet": ["[class*='balance']", "[class*='wallet']", "[class*='user-balance']",
-                 "a[href*='deposit']", "[class*='logged']"],
 }
 
 WINDOW_NUMBER = 8   # fenêtre unique utilisée pour toutes les vérifications

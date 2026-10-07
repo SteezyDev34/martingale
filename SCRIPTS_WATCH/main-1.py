@@ -76,10 +76,11 @@ start_bridge()
 # Vérification instance unique — tuer toute instance précédente du même script
 import psutil as _psutil
 _current_pid = os.getpid()
+_parent_pid = os.getppid()
 _script_name = os.path.basename(__file__)
 for _proc in _psutil.process_iter(['pid', 'cmdline']):
     try:
-        if _proc.pid == _current_pid:
+        if _proc.pid == _current_pid or _proc.pid == _parent_pid:
             continue
         cmdline = ' '.join(_proc.info['cmdline'] or [])
         if _script_name in cmdline and 'python' in cmdline.lower():

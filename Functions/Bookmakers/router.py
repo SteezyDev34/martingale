@@ -20,8 +20,8 @@ from Functions.Bookmakers.XBetScraper import XBetScraper
 from Functions.BetLabelsDB import get_all_challenges_for_prompt
 from Functions.Logs.Logger import log
 
-# Bookmakers sans VPN — lancés en parallèle
-NO_VPN_SCRAPERS = [WinamaxScraper, BetclicScraper, LollybetScraper]
+# Bookmakers sans VPN — lancés en parallèle (Lollybet mis de côté, désactivé via BOOKMAKER_STATE)
+NO_VPN_SCRAPERS = [WinamaxScraper, BetclicScraper]
 
 # Bookmakers nécessitant le VPN Toronto — lancés séquentiellement après le groupe sans VPN
 VPN_SCRAPERS = [StakeScraper]
@@ -35,7 +35,7 @@ PLAYWRIGHT_SCRAPERS = NO_VPN_SCRAPERS + VPN_SCRAPERS
 BOOKMAKER_STATE: Dict[str, Dict] = {
     "Winamax":  {"enabled": False,  "balance": None},
     "Betclic":  {"enabled": False,  "balance": None},
-    "Lollybet": {"enabled": True,  "balance": None},
+    "Lollybet": {"enabled": False, "balance": None},
     "Stake":    {"enabled": True,  "balance": None},
     "1xBet":    {"enabled": True,  "balance": None},
 }
