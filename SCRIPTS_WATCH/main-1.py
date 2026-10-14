@@ -562,12 +562,14 @@ async def my_event_handler(event):
                 has_media = event.message.media is not None
                 log(f'Message contains media: {has_media}', "info", clear=False)
 
-                # Canaux autorisés à envoyer des images de pronos + condition textuelle éventuelle
-                # None = pas de condition (toute image est traitée sauf GIF)
+                # Canaux autorisés à envoyer des images de pronos + condition textuelle éventuelle.
+                # None = pas de condition. Une condition peut être un tuple de plusieurs textes
+                # alternatifs (OR) — ex: TEMPÊTE BETTING poste soit un "PRONO DU JOUR" classique,
+                # soit une mise à jour de "PALIER X MONTANTE", les deux sont des paris valides.
                 IMAGE_CHANNELS = {
                     "AdrBetting":        "TICKET SAFE PUBLIC",
                     "Tennistiqueur":     "CONFIANCE DU JOUR",
-                    "TEMPÊTE BETTING":   None,
+                    "TEMPÊTE BETTING":   ("PRONO DU JOUR", "PALIER"),
                     "France Pronos Live": None,
                     "Auxo1XBOT": None
                 }
@@ -585,10 +587,12 @@ async def my_event_handler(event):
                     if required_text == "NOT_ALLOWED":
                         log(f"[Image] Canal '{chat_title}' non autorisé, image ignorée", "info", clear=False)
                         return
-                    # Vérifier la condition textuelle si elle existe
-                    if required_text is not None and required_text.upper() not in txt.upper():
-                        log(f"[Image] [{chat_title}] Image ignorée (condition '{required_text}' absente du message)", "info", clear=False)
-                        return
+                    # Vérifier la condition textuelle si elle existe (texte unique, ou tuple = OR)
+                    if required_text is not None:
+                        conditions = required_text if isinstance(required_text, (list, tuple)) else (required_text,)
+                        if not any(c.upper() in txt.upper() for c in conditions):
+                            log(f"[Image] [{chat_title}] Image ignorée (condition '{required_text}' absente du message)", "info", clear=False)
+                            return
                     # Ignorer les GIFs
                     from telethon.tl.types import MessageMediaDocument
                     if isinstance(event.message.media, MessageMediaDocument):
@@ -619,7 +623,20 @@ async def my_event_handler(event):
                             pari_dict["tipster"] = chat_title
                             matches = pari_dict.get("matches", [])
                             if matches:
-                                api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title, image_path=image_path)
+                                # TEMPÊTE BETTING combine souvent plusieurs picks dans un même
+                                # ticket/message (ex: "PALIER X MONTANTE" = plusieurs victoires
+                                # combinées). On envoie un pari séparé par match au lieu d'un seul
+                                # pari multi-matchs, pour que chacun soit évalué/parié
+                                # individuellement côté router (sinon len(matches)>1 le fait
+                                # traiter comme un seul pari combiné, cf. place_combined_bet).
+                                if chat_title == "TEMPÊTE BETTING" and len(matches) > 1:
+                                    api_success = True
+                                    for match in matches:
+                                        single_pari = {**pari_dict, "matches": [match]}
+                                        if not send_bet_data_to_api(single_pari, message_original=txt, sender_username=chat_title, image_path=image_path):
+                                            api_success = False
+                                else:
+                                    api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title, image_path=image_path)
                                 if api_success:
                                     for match in matches:
                                         msg = f"📩 {chat_title}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"

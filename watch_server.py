@@ -175,10 +175,13 @@ def check_tempete_images():
 api_id = 5493357
 api_hash = 'd4b28d840d67f37e8f98df2c9778bb74'
 
+# None = pas de condition. Une condition peut être un tuple de plusieurs textes
+# alternatifs (OR) — ex: TEMPÊTE BETTING poste soit un "PRONO DU JOUR" classique,
+# soit une mise à jour de "PALIER X MONTANTE", les deux sont des paris valides.
 IMAGE_CHANNELS = {
     "AdrBetting":          "TICKET SAFE PUBLIC",
     "Tennistiqueur":       "CONFIANCE DU JOUR",
-    "TEMPÊTE BETTING":  None,
+    "TEMPÊTE BETTING":  ("PRONO DU JOUR", "PALIER"),
     "France Pronos Live":  None,
     "Auxo1XBOT":           None,
 }
@@ -302,8 +305,10 @@ async def my_event_handler(event):
         required_text = IMAGE_CHANNELS.get(chat_title, "NOT_ALLOWED")
         if required_text == "NOT_ALLOWED":
             return
-        if required_text is not None and required_text.upper() not in txt.upper():
-            return
+        if required_text is not None:
+            conditions = required_text if isinstance(required_text, (list, tuple)) else (required_text,)
+            if not any(c.upper() in txt.upper() for c in conditions):
+                return
         from telethon.tl.types import MessageMediaDocument
         if isinstance(event.message.media, MessageMediaDocument):
             doc = event.message.media.document
@@ -320,7 +325,15 @@ async def my_event_handler(event):
             pari_dict["tipster"] = chat_title
             matches = pari_dict.get("matches", [])
             if matches:
-                send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title)
+                # TEMPÊTE BETTING combine souvent plusieurs picks dans un même message
+                # (ex: "PALIER X MONTANTE" = plusieurs victoires combinées) — un pari
+                # séparé par match pour que chacun soit parié individuellement, sinon
+                # len(matches)>1 le fait traiter comme un seul pari combiné côté router.
+                if chat_title == "TEMPÊTE BETTING" and len(matches) > 1:
+                    for match in matches:
+                        send_bet_data_to_api({**pari_dict, "matches": [match]}, message_original=txt, sender_username=chat_title)
+                else:
+                    send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title)
         except Exception as e:
             log(f"[Image] [{chat_title}] Erreur OCR: {e}", "error", clear=False)
         finally:
