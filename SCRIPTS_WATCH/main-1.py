@@ -456,8 +456,46 @@ async def my_event_handler(event):
                         except Exception as e:
                             log(f"Erreur : {e}", "error", clear=False)
             if event.chat and hasattr(event.chat, 'title') and event.chat.title == 'AdrBetting VIP':
-                if "PRONOS EN LIGNE" not in txt.upper():
-                    log(f"[AdrBetting] Message ignoré (pas de 'PRONOS EN LIGNE')", "info", clear=False)
+                txt_upper = txt.upper()
+
+                # Ticket Jackpot : pari combiné (parfois plusieurs événements sur le même
+                # match) posté directement en image dans le canal, hors du flux de
+                # scraping website "PRONOS EN LIGNE". On le garde comme UN SEUL pari
+                # combiné (pas de split par jambe comme pour Tempête/PALIER) — le JSON
+                # combined_events/matches multi-matchs existant route déjà correctement
+                # côté router (SGM Stake si même match, combiné Lollybet si multi-matchs).
+                if "TICKET JACKPOT" in txt_upper and event.message.media is not None:
+                    log("[AdrBetting] Ticket Jackpot détecté — OCR direct de l'image", "info", clear=False)
+                    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                    script_dir = os.path.dirname(os.path.abspath(__file__))
+                    temp_dir = os.path.join(script_dir, 'media')
+                    os.makedirs(temp_dir, exist_ok=True)
+                    image_path = os.path.join(temp_dir, f"jackpot_{timestamp}.jpg")
+                    await event.message.download_media(file=image_path)
+                    try:
+                        result = extraire_pari_depuis_image(image_path, txt)
+                        pari_dict = json.loads(result)
+                        pari_dict["tipster"] = "AdrBetting VIP"
+                        matches = pari_dict.get("matches", [])
+                        if matches:
+                            api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username="AdrBetting VIP", image_path=image_path)
+                            if api_success:
+                                for match in matches:
+                                    msg = f"🎰 AdrBetting VIP Jackpot\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
+                                    send_telegram(Functions_telegram.alertGroup, msg)
+                            else:
+                                log("[AdrBetting] ❌ Échec envoi pari Jackpot", "error", clear=False)
+                    except json.JSONDecodeError as e:
+                        log(f"[AdrBetting] Erreur JSON OCR Jackpot: {e}", "error", clear=False)
+                    except Exception as e:
+                        log(f"[AdrBetting] Erreur traitement Jackpot: {e}", "error", clear=False)
+                    finally:
+                        if os.path.exists(image_path):
+                            os.remove(image_path)
+                    return
+
+                if "PRONOS EN LIGNE" not in txt_upper:
+                    log(f"[AdrBetting] Message ignoré (pas de 'PRONOS EN LIGNE' ni 'TICKET JACKPOT')", "info", clear=False)
                     return
                 log(f"[AdrBetting] Message reçu du canal VIP — lancement du scraping", "info", clear=False)
                 # Lancer le scraping dans un thread séparé pour ne pas bloquer l'event loop Telegram
