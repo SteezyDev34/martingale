@@ -568,7 +568,7 @@ async def my_event_handler(event):
                 # soit une mise à jour de "PALIER X MONTANTE", les deux sont des paris valides.
                 IMAGE_CHANNELS = {
                     "AdrBetting":        "TICKET SAFE PUBLIC",
-                    "Tennistiqueur":     "CONFIANCE DU JOUR",
+                    "Tennistiqueur 🎾":  "CONFIANCE",
                     "TEMPÊTE BETTING":   ("PRONO DU JOUR", "PALIER"),
                     "France Pronos Live": None,
                     "Auxo1XBOT": None

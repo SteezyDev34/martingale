@@ -180,7 +180,7 @@ api_hash = 'd4b28d840d67f37e8f98df2c9778bb74'
 # soit une mise à jour de "PALIER X MONTANTE", les deux sont des paris valides.
 IMAGE_CHANNELS = {
     "AdrBetting":          "TICKET SAFE PUBLIC",
-    "Tennistiqueur":       "CONFIANCE DU JOUR",
+    "Tennistiqueur 🎾":    "CONFIANCE",
     "TEMPÊTE BETTING":  ("PRONO DU JOUR", "PALIER"),
     "France Pronos Live":  None,
     "Auxo1XBOT":           None,
