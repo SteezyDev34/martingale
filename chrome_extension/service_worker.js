@@ -29,6 +29,7 @@ const WS_PORTS = [
   9014, // SCRIPTS_BREAK2/BREAK2-1.py
   9015, // SCRIPTS_BREAK2/BREAK2-2.py
   9016, // SCRIPTS_HOLD/HOLD-1.py
+  9101, // Functions/Bookmakers/StakeBridge.py (router.py — placement Stake.bet)
   9999, // port historique — usage manuel/debug (python websocket_server.py)
 ];
 
@@ -411,6 +412,56 @@ async function handlePythonMessage(msg, port) {
         };
       }, msg.selector);
       sendToPython(port, { action: 'debug_count_selector_response', req_id: msg.req_id, result, tab_id: tabId });
+      break;
+    }
+
+    // ─── Stake.bet (Functions/Bookmakers/StakeBridge.py) ─────────────────────
+    // Même logique que les actions 1xBet ci-dessus (resolveTabId + exec sur
+    // window._martingale), juste un contenu de page différent (content_scripts/stake.js).
+
+    case 'stake_get_state': {
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'stake_state_response', req_id: msg.req_id, error: 'no_tab' }); break; }
+      const result = await activateThenExec(tabId, () => window._martingale?.getState?.() || null);
+      sendToPython(port, { action: 'stake_state_response', req_id: msg.req_id, data: result, tab_id: tabId });
+      break;
+    }
+
+    case 'stake_search_match': {
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'stake_search_match_response', req_id: msg.req_id, found: false, error: 'no_tab' }); break; }
+      const result = await execInTab(tabId, (equipe1) => window._martingale?.searchMatch?.(equipe1), msg.equipe1);
+      sendToPython(port, { action: 'stake_search_match_response', req_id: msg.req_id, ...(result || { found: false, error: 'exec_failed' }), tab_id: tabId });
+      break;
+    }
+
+    case 'stake_get_odds': {
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'stake_odds_response', req_id: msg.req_id, found: false, error: 'no_tab' }); break; }
+      const result = msg.dnb_team_idx
+        ? await execInTab(tabId, (idx) => window._martingale?.getDnbOdds?.(idx), msg.dnb_team_idx)
+        : await execInTab(tabId, (labels) => window._martingale?.getOddsByLabel?.(labels), msg.search_labels);
+      sendToPython(port, { action: 'stake_odds_response', req_id: msg.req_id, ...(result || { found: false, error: 'exec_failed' }), tab_id: tabId });
+      break;
+    }
+
+    case 'stake_place_bet': {
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'stake_place_bet_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const result = await execInTab(tabId, (args) => window._martingale?.placeBet?.(args), {
+        searchLabels: msg.search_labels, mise: msg.mise, dnbTeamIdx: msg.dnb_team_idx,
+      });
+      sendToPython(port, { action: 'stake_place_bet_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      break;
+    }
+
+    case 'stake_place_sgm': {
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'stake_place_sgm_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const result = await execInTab(tabId, (args) => window._martingale?.placeSameGameMulti?.(args), {
+        combinedLegs: msg.combined_legs, mise: msg.mise,
+      });
+      sendToPython(port, { action: 'stake_place_sgm_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 

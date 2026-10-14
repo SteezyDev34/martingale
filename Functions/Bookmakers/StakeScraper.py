@@ -1060,6 +1060,108 @@ class StakeScraper:
             log(f"[Stake] Erreur place_same_game_multi: {e}", "error")
             return False
 
+    # ── Bridge (extension Chrome) ────────────────────────────────────────
+    # Même principe que 1xBet/XBetScraper : si l'extension est connectée sur le
+    # port dédié Stake (StakeBridge, 9101), on pilote l'onglet via l'extension au
+    # lieu de Selenium. Résolution de labels/variantes de noms identique à la
+    # version Selenium (BetLabelsDB), seule la couche DOM change.
+    # Limite connue v1 : pas de fallback IA (_ai_resolve_outcome) si le premier
+    # essai de label échoue, contrairement à la version Selenium — à ajouter si
+    # le matching direct s'avère insuffisant en usage réel.
+
+    def _build_search_variants(self, selection: str, sport_id: str, intitule: str = "") -> List[str]:
+        label_bk = get_label("Stake", sport_id, selection)
+        base = (label_bk or selection).strip()
+        variants = [base.lower()]
+        parts = base.split()
+        if len(parts) == 2:
+            variants.append(f"{parts[1]}, {parts[0]}".lower())
+            variants.append(parts[1].lower())
+        if intitule:
+            words = intitule.split()
+            if len(words) >= 2:
+                variants.append(words[-1].lower())
+        return variants
+
+    def _bridge_search_match(self, equipe_1: str, equipe_2: str, sport: str) -> Optional[str]:
+        from Functions.Bookmakers.StakeBridge import stake_bridge
+        sport_slug = SPORTS_MAP.get(str(sport), "soccer")
+        stake_bridge.navigate(f"{STAKE_URL}/fr/sports/{sport_slug}/matches/all")
+
+        resp = stake_bridge.search_match(equipe_1)
+        candidates = resp.get("candidates") or []
+        if not candidates:
+            log(f"[Stake/bridge] Aucun candidat match trouvé pour: {equipe_1} vs {equipe_2}", "warning")
+            return None
+
+        e1, e2 = equipe_1.lower(), equipe_2.lower()
+        for c in candidates:
+            t = c["text"].lower()
+            href_lower = c["url"].lower()
+            e1_slug, e2_slug = e1.replace(" ", "-"), e2.replace(" ", "-")
+            if (e1 in t and e2 in t) or (e1_slug in href_lower and e2_slug in href_lower):
+                log(f"[Stake/bridge] ✅ Match exact: {c['text'][:60]}", "info")
+                return c["url"]
+
+        log(f"[Stake/bridge] Résolution IA pour: {equipe_1} vs {equipe_2} ({len(candidates)} candidats)", "info")
+        url = _ai_resolve_match(candidates, equipe_1, equipe_2)
+        if url:
+            return url
+        log(f"[Stake/bridge] Match non trouvé: {equipe_1} vs {equipe_2}", "warning")
+        return None
+
+    def _bridge_get_odds(self, match_url: str, selection: str, sport: str) -> Optional[float]:
+        from Functions.Bookmakers.StakeBridge import stake_bridge
+        stake_bridge.navigate(match_url)
+
+        import re as _re
+        m = _re.match(r'handicap\s*([12])\s*\(0\)', selection.lower().strip())
+        if m:
+            resp = stake_bridge.get_dnb_odds(int(m.group(1)))
+            return resp.get("odds") if resp.get("found") else None
+
+        sport_id = _detect_sport_from_url(match_url) or str(sport)
+        variants = self._build_search_variants(selection, sport_id)
+        resp = stake_bridge.get_odds(variants)
+        return resp.get("odds") if resp.get("found") else None
+
+    def _bridge_place_bet(self, match_url: str, selection: str, sport: str, mise: float) -> bool:
+        from Functions.Bookmakers.StakeBridge import stake_bridge
+        stake_bridge.navigate(match_url)
+
+        import re as _re
+        m = _re.match(r'handicap\s*([12])\s*\(0\)', selection.lower().strip())
+        if m:
+            resp = stake_bridge.place_bet(dnb_team_idx=int(m.group(1)), mise=mise)
+        else:
+            sport_id = _detect_sport_from_url(match_url) or str(sport)
+            variants = self._build_search_variants(selection, sport_id)
+            resp = stake_bridge.place_bet(search_labels=variants, mise=mise)
+
+        if resp.get("success"):
+            log("[Stake/bridge] ✅ Pari placé", "info")
+            return True
+        log(f"[Stake/bridge] ❌ Échec place_bet: {resp.get('error')}", "error")
+        return False
+
+    def _bridge_place_same_game_multi(self, match_url: str, combined_events: List[Dict], mise: float) -> bool:
+        from Functions.Bookmakers.StakeBridge import stake_bridge
+        stake_bridge.navigate(match_url)
+
+        sport_id = _detect_sport_from_url(match_url)
+        legs = []
+        for event in combined_events:
+            variants = self._build_search_variants(
+                event.get("selection", ""), sport_id, event.get("intitule", ""))
+            legs.append({"search_labels": variants})
+
+        resp = stake_bridge.place_same_game_multi(legs, mise)
+        if resp.get("success"):
+            log(f"[Stake/bridge] ✅ Pari SGM confirmé ({resp.get('selectionsClicked')} sélections @ {mise}€)", "info")
+            return True
+        log(f"[Stake/bridge] ❌ Échec SGM: {resp.get('error')} ({resp.get('selectionsClicked', 0)} sélection(s))", "error")
+        return False
+
     # ── Interface router ─────────────────────────────────────────────────
 
     async def run(self, bet: Dict) -> Dict:
@@ -1071,6 +1173,55 @@ class StakeScraper:
         return await asyncio.get_event_loop().run_in_executor(None, self._fetch_odds_sync, bet)
 
     def _run_sync(self, bet: Dict) -> Dict:
+        from Functions.Bookmakers.StakeBridge import is_connected as _stake_bridge_connected
+        if _stake_bridge_connected():
+            result = {"bookmaker": self.name, "odds": None, "success": False,
+                      "challenge_activated": False, "error": None}
+            try:
+                equipe_1, equipe_2 = bet.get("equipe_1", ""), bet.get("equipe_2", "")
+                sport = str(bet.get("sport", ""))
+                match_url = self._bridge_search_match(equipe_1, equipe_2, sport)
+                if not match_url:
+                    result["error"] = "match_not_found"
+                    return result
+
+                combined_events = bet.get("combined_events")
+                mise = float(bet.get("mise", 10))
+
+                if combined_events:
+                    log(f"[Stake/bridge] Mode MyMatch ({len(combined_events)} événements): {bet.get('combined_label', '')}", "info")
+                    result["odds"] = bet.get("odds")
+                    result["success"] = self._bridge_place_same_game_multi(match_url, combined_events, mise)
+                else:
+                    result["odds"] = self._bridge_get_odds(match_url, bet.get("selection", ""), sport)
+                    result["success"] = self._bridge_place_bet(match_url, bet.get("selection", ""), sport, mise)
+            except Exception as e:
+                result["error"] = str(e)
+                log(f"[Stake/bridge] Erreur run: {e}", "error")
+            return result
+        return self._run_sync_selenium(bet)
+
+    def _fetch_odds_sync(self, bet: Dict) -> Dict:
+        from Functions.Bookmakers.StakeBridge import is_connected as _stake_bridge_connected
+        if _stake_bridge_connected():
+            result = {"bookmaker": self.name, "odds": None, "match_url": None,
+                      "challenge_activated": False, "error": None}
+            try:
+                equipe_1, equipe_2 = bet.get("equipe_1", ""), bet.get("equipe_2", "")
+                sport = str(bet.get("sport", ""))
+                match_url = self._bridge_search_match(equipe_1, equipe_2, sport)
+                if not match_url:
+                    result["error"] = "match_not_found"
+                    return result
+                result["match_url"] = match_url
+                result["odds"] = self._bridge_get_odds(match_url, bet.get("selection", ""), sport)
+            except Exception as e:
+                result["error"] = str(e)
+                log(f"[Stake/bridge] Erreur fetch_odds: {e}", "error")
+            return result
+        return self._fetch_odds_sync_selenium(bet)
+
+    def _run_sync_selenium(self, bet: Dict) -> Dict:
         result = {"bookmaker": self.name, "odds": None, "success": False,
                   "challenge_activated": False, "error": None}
         try:
@@ -1111,7 +1262,7 @@ class StakeScraper:
             log(f"[Stake] Erreur run: {e}", "error")
         return result
 
-    def _fetch_odds_sync(self, bet: Dict) -> Dict:
+    def _fetch_odds_sync_selenium(self, bet: Dict) -> Dict:
         result = {"bookmaker": self.name, "odds": None, "match_url": None,
                   "challenge_activated": False, "error": None}
         try:

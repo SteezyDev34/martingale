@@ -15,7 +15,9 @@
   "host_permissions": [
     "*://*.1xbet.com/*",
     "*://*.1xbet.fr/*",
-    "*://*.1x-bet.mobi/*"
+    "*://*.1x-bet.mobi/*",
+    "*://stake.bet/*",
+    "*://*.stake.bet/*"
   ],
 
   "background": {
@@ -33,6 +35,15 @@
       "js": ["content_scripts/1xbet.js"],
       "run_at": "document_idle",
       "all_frames": true
+    },
+    {
+      "matches": [
+        "*://stake.bet/*",
+        "*://*.stake.bet/*"
+      ],
+      "js": ["content_scripts/stake.js"],
+      "run_at": "document_idle",
+      "all_frames": false
     }
   ],
 

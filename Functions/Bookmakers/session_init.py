@@ -116,6 +116,15 @@ def init_bookmaker_sessions() -> dict:
 
     from ChromeDriver.SetDriver import get_script_driver
 
+    # Démarre le bridge WebSocket dédié Stake (port 9101, cf. StakeBridge.py) —
+    # non bloquant, StakeScraper retombe sur Selenium tant que l'extension Chrome
+    # n'est pas connectée sur ce port (même pattern que le bridge 1xBet).
+    try:
+        from Functions.Bookmakers.StakeBridge import start_stake_bridge
+        start_stake_bridge(wait_timeout=0)
+    except Exception as e:
+        log(f"⚠️ Démarrage StakeBridge échoué (fallback Selenium): {e}", "warning")
+
     log("🔑 Initialisation des sessions bookmakers...", "info")
 
     driver = get_script_driver(WINDOW_NUMBER)
