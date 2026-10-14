@@ -5,4 +5,9 @@ chrome.runtime.sendMessage({ action: 'get_ws_status' }, (res) => {
   const connected = res?.connected || false;
   statusEl.textContent = connected ? '🟢 Python connecté' : '⚫ Python déconnecté';
   statusEl.className = connected ? 'connected' : 'disconnected';
+
+  const active = (res?.connections || []).filter(c => c.connected);
+  logEl.textContent = active.length
+    ? active.map(c => `port ${c.port} → tab ${c.tab_id ?? '?'}`).join('\n')
+    : 'Aucun script bridge-only actif';
 });
