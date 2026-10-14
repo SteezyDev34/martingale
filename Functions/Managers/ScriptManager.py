@@ -123,11 +123,15 @@ class ScriptManager:
             cursor = conn.execute("SELECT * FROM running_scripts")
             return cursor.fetchall()
 
-    def are_previous_scripts_running(self, current_script_num: int) -> bool:
+    def are_previous_scripts_running(self, script_type: str, current_script_num: int) -> bool:
         """
-        Vérifie si tous les scripts précédents sont en cours d'exécution.
+        Vérifie si tous les scripts précédents DE LA MÊME FAMILLE sont en cours d'exécution.
 
         Args:
+            script_type: Famille de script (ex: '1530A', '4P6P') — sans ça, "%-{num}"
+                matchait n'importe quelle famille ayant ce numéro (ex: '4P6P-1' validait
+                le script '1530A-2' par erreur dès que plusieurs familles tournent en
+                même temps, cf. migration multi-instance).
             current_script_num: Numéro du script actuel
 
         Returns:
@@ -136,19 +140,19 @@ class ScriptManager:
         with sqlite3.connect(self.db_path) as conn:
             # Nettoyer d'abord les scripts inactifs
             self._cleanup_inactive_scripts(conn)
-            
-            # Vérifier chaque script précédent
+
+            # Vérifier chaque script précédent de la même famille
             for script_num in range(1, current_script_num):
                 cursor = conn.execute(
-                    "SELECT pid FROM running_scripts WHERE script_id LIKE ?",
-                    (f"%-{script_num}",)
+                    "SELECT pid FROM running_scripts WHERE script_id = ?",
+                    (f"{script_type}-{script_num}",)
                 )
                 result = cursor.fetchone()
-                
+
                 # Si un script précédent n'est pas trouvé ou n'est plus en cours
                 if not result or not self._is_process_running(result[0]):
                     return False
-                    
+
             return True
 
     def _is_process_running(self, pid: int) -> bool:
@@ -159,13 +163,17 @@ class ScriptManager:
         except OSError:
             return False
 
-    def check_previous_scripts(self, script_num: int) -> bool:
+    def check_previous_scripts(self, script_type: str, script_num: int) -> bool:
         """
-        Vérifie si tous les scripts précédents sont en cours d'exécution.
-        
+        Vérifie si tous les scripts précédents DE LA MÊME FAMILLE sont en cours d'exécution.
+
         Args:
+            script_type: Famille de script (ex: '1530A', '4P6P') — la table running_scripts
+                est partagée par toutes les familles ; sans ce filtre, un '4P6P-1' en cours
+                validait à tort le "script précédent" d'un '1530A-2' (et inversement) dès que
+                plusieurs familles tournent en parallèle (cf. migration multi-instance bridge).
             script_num: Numéro du script actuel
-            
+
         Returns:
             bool: True si le script peut démarrer, False s'il doit attendre
         """
@@ -174,21 +182,19 @@ class ScriptManager:
 
         dot_count = 0
         while True:
-            # Récupérer tous les scripts en cours
+            # Récupérer tous les scripts en cours, filtrés sur la même famille
             running_scripts = self.get_running_scripts()
-            
-            # Convertir en dictionnaire pour un accès plus facile
-            running_dict = {
-                int(script_id.split("-")[1]): status 
-                for script_id, start, last_beat, status, pid in running_scripts
-            }
+            running_nums = set()
+            for script_id, start, last_beat, status, pid in running_scripts:
+                prefix, _, num = script_id.rpartition("-")
+                if prefix == script_type:
+                    try:
+                        running_nums.add(int(num))
+                    except ValueError:
+                        continue
 
-            # Vérifier que tous les scripts précédents sont en cours
-            all_previous_running = True
-            for prev_num in range(1, script_num):
-                if prev_num not in running_dict:
-                    all_previous_running = False
-                    break
+            # Vérifier que tous les scripts précédents de la même famille sont en cours
+            all_previous_running = all(prev_num in running_nums for prev_num in range(1, script_num))
 
             if all_previous_running:
                 return True
