@@ -142,7 +142,7 @@ async function handlePythonMessage(msg, port) {
     case 'get_state': {
       const tabId = await resolveTabId(msg, conn);
       if (!tabId) { sendToPython(port, { action: 'error', req_id: msg.req_id, error: 'no_tab' }); break; }
-      const result = await execInTab(tabId, () => window._martingale?.getState?.() || null);
+      const result = await activateThenExec(tabId, () => window._martingale?.getState?.() || null);
       sendToPython(port, { action: 'state_response', req_id: msg.req_id, data: result, tab_id: tabId });
       break;
     }
@@ -187,7 +187,7 @@ async function handlePythonMessage(msg, port) {
     case 'get_result': {
       const tabId = await resolveTabId(msg, conn);
       if (!tabId) { sendToPython(port, { action: 'result_response', req_id: msg.req_id, result: null, error: 'no_tab' }); break; }
-      const result = await execInTab(tabId, () => window._martingale?.getResult?.() || {});
+      const result = await activateThenExec(tabId, () => window._martingale?.getResult?.() || {});
       sendToPython(port, { action: 'result_response', req_id: msg.req_id, ...(result || { result: null }), tab_id: tabId });
       break;
     }
@@ -477,6 +477,40 @@ async function execInTab(tabId, fn, args = null) {
     console.error('[execInTab] Erreur:', e && e.message, e);
     return { error: 'exec_exception', message: String(e && e.message || e) };
   }
+}
+
+// Certains éléments de la page (score, résultat) ne se mettent pas forcément à jour de
+// façon fiable tant que l'onglet n'est pas au premier plan (confirmé en usage réel avec
+// plusieurs onglets en arrière-plan). Pour les lectures critiques où une donnée périmée
+// fausserait une décision de pari, on active brièvement l'onglet avant de lire, puis on
+// restaure l'onglet qui était actif avant — au prix d'un peu de changement d'onglet
+// visible si plusieurs scripts lisent en même temps.
+async function activateThenExec(tabId, fn, args = null) {
+  let previousActiveTabId = null;
+  try {
+    const tab = await chrome.tabs.get(tabId);
+    if (!tab.active) {
+      const [currentActive] = await chrome.tabs.query({ active: true, windowId: tab.windowId });
+      previousActiveTabId = currentActive ? currentActive.id : null;
+      await chrome.tabs.update(tabId, { active: true });
+      // Laisser le temps à Chrome de "réveiller" l'onglet et au DOM de se rafraîchir
+      await new Promise(r => setTimeout(r, 150));
+    }
+  } catch (e) {
+    console.warn('[activateThenExec] activation échouée, lecture quand même:', e && e.message);
+  }
+
+  const result = await execInTab(tabId, fn, args);
+
+  if (previousActiveTabId) {
+    try {
+      await chrome.tabs.update(previousActiveTabId, { active: true });
+    } catch (e) {
+      // L'onglet précédent a peut-être été fermé entre-temps — rien à faire
+    }
+  }
+
+  return result;
 }
 
 // Retrouve quelle connexion (port) possède cet onglet — utilisé pour router les
