@@ -279,19 +279,25 @@ def _tempete_filter_originals(image_links):
     return list(originals)
 
 
-def _tempete_store_new(image_urls):
+def _tempete_filter_new(image_urls):
+    """Retourne les URLs pas encore en base, SANS les y insérer — l'insertion
+    n'a lieu qu'après un traitement réussi (cf. _tempete_mark_seen), pour
+    qu'une image dont le traitement échoue/bloque soit retentée au prochain
+    cycle au lieu d'être perdue silencieusement."""
     conn = sqlite3.connect(TEMPETE_DB_PATH)
-    cursor = conn.cursor()
-    new = []
-    for url in image_urls:
-        try:
-            cursor.execute("INSERT INTO images (image_url) VALUES (?)", (url,))
-            new.append(url)
-        except sqlite3.IntegrityError:
-            pass
-    conn.commit()
+    seen = {row[0] for row in conn.execute("SELECT image_url FROM images")}
     conn.close()
-    return new
+    return [u for u in image_urls if u not in seen]
+
+
+def _tempete_mark_seen(url):
+    conn = sqlite3.connect(TEMPETE_DB_PATH)
+    try:
+        conn.execute("INSERT INTO images (image_url) VALUES (?)", (url,))
+        conn.commit()
+    except sqlite3.IntegrityError:
+        pass
+    conn.close()
 
 
 def check_tempete_images():
@@ -304,7 +310,7 @@ def check_tempete_images():
             url = TEMPETE_BASE_URL.format(year=now.year, month=now.month)
             links = _tempete_get_image_links(url)
             originals = _tempete_filter_originals(links)
-            new_images = _tempete_store_new(originals)
+            new_images = _tempete_filter_new(originals)
             if new_images:
                 log(f"[Tempête] {len(new_images)} nouvelle(s) image(s) détectée(s)", "info", clear=False)
                 for i, img_name in enumerate(new_images):
@@ -340,6 +346,11 @@ def check_tempete_images():
                                     log(f"[Tempête] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
                             else:
                                 log(f"[Tempête] Aucun match extrait de {img_name}", "warning", clear=False)
+                            # Traitement réussi (avec ou sans match détecté) : marquer vue
+                            # seulement maintenant, pour qu'un échec plus haut (timeout OCR,
+                            # JSON invalide) soit retenté au prochain cycle au lieu d'être
+                            # perdu silencieusement pour toujours.
+                            _tempete_mark_seen(img_name)
                         except json.JSONDecodeError as e:
                             log(f"[Tempête] Erreur JSON OCR: {e}", "error", clear=False)
                         finally:
