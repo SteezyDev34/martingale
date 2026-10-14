@@ -182,7 +182,7 @@ def bridge_place_and_validate_bet(market: str, mise: float) -> bool:
     config.validated_bet = {
         'jeu':        config.jeu_actuel,
         'set':        config.set_actuel,
-        'url':        getattr(config, 'ligue_name', ''),
+        'url':        getattr(config, 'match_Url', ''),
         'montant':    str(mise),
         'cote':       str(cote) if cote else str(getattr(config, 'cote', 0)),
         'match':      getattr(config, 'newmatch', ''),
