@@ -1,4 +1,5 @@
 import os
+import sys
 
 # Couleurs ANSI (texte)
 RESET = "\033[0m"  # Réinitialisation du style
@@ -11,8 +12,20 @@ RED = "\033[31m"  # Texte rouge
 
 
 def is_venv_activated():
-    """Vérifie si un environnement virtuel est activé."""
-    return os.getenv("VIRTUAL_ENV") is not None
+    """Vérifie si le process tourne dans un environnement virtuel.
+
+    On ne peut pas se fier uniquement à VIRTUAL_ENV : le dashboard lance les
+    scripts en appelant directement l'exécutable python du venv (sans passer
+    par activate), donc cette variable n'est jamais positionnée dans ce cas
+    bien que le bon interpréteur soit utilisé. sys.prefix != sys.base_prefix
+    (ou real_prefix sous les anciens virtualenv) détecte ça de façon fiable
+    sur Windows/Mac/Linux, quelle que soit la méthode de lancement.
+    """
+    return (
+        os.getenv("VIRTUAL_ENV") is not None
+        or sys.prefix != getattr(sys, "base_prefix", sys.prefix)
+        or hasattr(sys, "real_prefix")
+    )
 
 
 def create_venv(venv_path="venv"):
@@ -221,7 +234,7 @@ def main():
         activate_venv(venv_path)
         print("Veuillez activer l'environnement virtuel en exécutant :")
         print("  source venv/bin/activate (Linux/Mac)")
-        print("  venv\\Scripts\\activate (Windows)")
+        print("  venv\\Scripts\\Activate.ps1 (Windows PowerShell)")
         # Vérifier si un venv existe dans le répertoire courant
         if not os.path.isdir(venv_path):
             print(f"Aucun environnement virtuel trouvé dans {venv_path}.")
@@ -245,7 +258,7 @@ def main():
         activate_venv(venv_path)
         print("Veuillez activer l'environnement virtuel en exécutant :")
         print("  source venv/bin/activate (Linux/Mac)")
-        print("  venv\\Scripts\\activate (Windows)")
+        print("  venv\\Scripts\\Activate.ps1 (Windows PowerShell)")
         sys.exit(0)
 
     print(f"{GREEN}Tout est prêt !\n{RESET}")

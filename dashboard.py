@@ -38,6 +38,9 @@ MATCHES_DB = os.path.join(PROJECT_DIR, "DataFiles", "matches.db")
 REDIS_DB = os.path.join(PROJECT_DIR, "redis_fallback.sqlite")
 LOGS_DIR = os.path.join(PROJECT_DIR, "Logs")
 VENV_PYTHON = os.path.join(PROJECT_DIR, "venv", "bin", "python")
+if not os.path.exists(VENV_PYTHON):
+    # venv Windows (créé via Scripts/, sans bin/) : on bascule sur le venv WSL à côté
+    VENV_PYTHON = os.path.join(PROJECT_DIR, "venv_wsl", "bin", "python")
 
 # Pour l'instant on ne pilote que ces deux bots depuis le dashboard (pas les 36
 # scripts de lancement) : 1530A (bridge 1xBet) et 456P (représenté par 4P6P-1, cf.
