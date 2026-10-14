@@ -226,8 +226,8 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
 
     print("Recherche des IDs des joueurs via API...")
     line += 1
-    url1 = f"https://api.auxotracker.astcavex.fr/api/sports/2/teams/search?search={playerName1.replace(' ', '+')}"
-    url2 = f"https://api.auxotracker.astcavex.fr/api/sports/2/teams/search?search={playerName2.replace(' ', '+')}"
+    url1 = f"https://api.auxotracker.fr/api/sports/2/teams/search?search={playerName1.replace(' ', '+')}"
+    url2 = f"https://api.auxotracker.fr/api/sports/2/teams/search?search={playerName2.replace(' ', '+')}"
     try:
         print(f"Requête API pour {playerName1}: {url1}")
         line += 1
@@ -312,8 +312,8 @@ def get_wta_proba_40A_sofascore(playerName1, playerName2):
     else:
         # url1 = f"https://www.sofascore.com/api/v1/team/{pid1}/year-statistics/2025"
         # url2 = f"https://www.sofascore.com/api/v1/team/{pid2}/year-statistics/2025"
-        url1 = f"https://api.auxotracker.astcavex.fr/api/stats/tennis/player/{pid1}"
-        url2 = f"https://api.auxotracker.astcavex.fr/api/stats/tennis/player/{pid2}"
+        url1 = f"https://api.auxotracker.fr/api/stats/tennis/player/{pid1}"
+        url2 = f"https://api.auxotracker.fr/api/stats/tennis/player/{pid2}"
         try:
             json_data = requests.get(url1, headers=headers, verify=False).json()
             d1 = json_data.get('data', {})  # ou {} ou [] selon ce que tu attends
@@ -1023,7 +1023,7 @@ def get_match_stats_extended(playerName1, playerName2):
     empty = {'proba40A': 0.0, 'svc1': 0.0, 'ret1': 0.0, 'svc2': 0.0, 'ret2': 0.0}
 
     def _search_player(name):
-        url = f"https://api.auxotracker.astcavex.fr/api/sports/2/teams/search?search={name.replace(' ', '+')}"
+        url = f"https://api.auxotracker.fr/api/sports/2/teams/search?search={name.replace(' ', '+')}"
         try:
             resp = requests.get(url, headers=headers, verify=False, timeout=10)
             data = resp.json().get('data', [])
@@ -1036,7 +1036,7 @@ def get_match_stats_extended(playerName1, playerName2):
 
     def _get_player_stats(pid):
         try:
-            url = f"https://api.auxotracker.astcavex.fr/api/stats/tennis/player/{pid}"
+            url = f"https://api.auxotracker.fr/api/stats/tennis/player/{pid}"
             d = requests.get(url, headers=headers, verify=False, timeout=10).json().get('data', {})
             fsps, fspt, bps, bpt = 0, 0, 0, 0
             for stat in d.get('statistics', []):
@@ -1109,7 +1109,7 @@ _TENSION_FIELD = {
 
 def _search_team_id(name, attempts=2):
     """Cherche l'id auxotracker d'un joueur par son nom (sport tennis=2)."""
-    url = f"https://api.auxotracker.astcavex.fr/api/sports/2/teams/search?search={quote_plus(name)}"
+    url = f"https://api.auxotracker.fr/api/sports/2/teams/search?search={quote_plus(name)}"
     last_err = None
     for i in range(attempts):
         try:
@@ -1138,7 +1138,7 @@ def get_match_tension_stats(playerName1, playerName2):
         return None
 
     def _fetch(pid, attempts=2):
-        url = f"https://api.auxotracker.astcavex.fr/api/stats/tennis/player/{pid}/tension"
+        url = f"https://api.auxotracker.fr/api/stats/tennis/player/{pid}/tension"
         last_err = None
         for i in range(attempts):
             try:

@@ -188,7 +188,7 @@ def traiter_matchlist(matchlist):
             player2 = players_name[1]
             p1_enc = quote_plus(player1)
             p2_enc = quote_plus(player2)
-            base_api = "https://api.auxotracker.astcavex.fr/api/matches/tennis/link"
+            base_api = "https://api.auxotracker.fr/api/matches/tennis/link"
             api_url = f"{base_api}?team1={p1_enc}&team2={p2_enc}&date={date_str}"
 
             # Appel de l'API
