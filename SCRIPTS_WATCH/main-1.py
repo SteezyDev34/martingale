@@ -340,7 +340,7 @@ def check_tempete_images():
                                 if api_success:
                                     for match in matches:
                                         log(f"[Tempête] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
-                                        msg = f"🌪️ TEMPÊTE BETTING\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"
+                                        msg = f"🌪️ TEMPÊTE BETTING\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
                                         send_telegram(Functions_telegram.alertGroup, msg)
                                 else:
                                     log(f"[Tempête] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
@@ -480,7 +480,7 @@ async def my_event_handler(event):
                                     if api_success:
                                         for match in matches:
                                             log(f"[AdrBetting] ✅ [{tipster}] Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
-                                            msg = f"🎰 {tipster}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"
+                                            msg = f"🎰 {tipster}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
                                             send_telegram(Functions_telegram.alertGroup, msg)
                                     else:
                                         log(f"[AdrBetting] ❌ [{tipster}] Échec envoi pari ({len(matches)} match(s))", "error", clear=False)
@@ -531,7 +531,7 @@ async def my_event_handler(event):
                                     if api_success:
                                         for match in matches:
                                             log(f"[FrancePronos] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
-                                            msg = f"🇫🇷 France Pronos\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"
+                                            msg = f"🇫🇷 France Pronos\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
                                             send_telegram(Functions_telegram.alertGroup, msg)
                                     else:
                                         log(f"[FrancePronos] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
@@ -639,7 +639,7 @@ async def my_event_handler(event):
                                     api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title, image_path=image_path)
                                 if api_success:
                                     for match in matches:
-                                        msg = f"📩 {chat_title}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"
+                                        msg = f"📩 {chat_title}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
                                         send_telegram(Functions_telegram.alertGroup, msg)
                         except Exception as _e:
                             log(f"[Image] [{chat_title}] Erreur traitement OCR: {_e}", "error", clear=False)
