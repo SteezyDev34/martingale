@@ -134,7 +134,7 @@ def ValidationDuParis(driver, nexbet=False):
             if (config.looking_game is not None and current_set is not None and
                     config.validated_bet.get('jeu') == config.looking_game and
                     config.validated_bet.get('set') == current_set and
-                    config.validated_bet.get('url') == config.ligue_name):
+                    config.validated_bet.get('url') == config.match_Url):
                 config.log(
                     f"Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.",
                     'warning', False)
@@ -161,7 +161,7 @@ def ValidationDuParis(driver, nexbet=False):
             'numero_point': config.looking_point if hasattr(config, 'looking_point') else None,
             'winscore': config.win_type,
             'timestamp': current_timestamp,
-            'url': config.ligue_name,
+            'url': config.match_Url,
         }
         config.placed_game = config.looking_game
         config.log(f'{config.validated_bet}', 'info', False, indent=3)
@@ -213,7 +213,7 @@ def ValidationDuParis(driver, nexbet=False):
             if (config.looking_game is not None and current_set is not None and
                     config.validated_bet.get('jeu') == config.looking_game and
                     config.validated_bet.get('set') == current_set and config.validated_bet.get(
-                        'url') == config.ligue_name):
+                        'url') == config.match_Url):
                 if config.scriptType in ['15V1', '15V2']:
                     if config.validated_bet.get('numero_point') == config.looking_point:
                         config.log(f"1 Ce point ({config.looking_point}) et ce jeu ({config.looking_game}) ont déjà été pariés. Annulation.",
@@ -335,10 +335,10 @@ def ValidationDuParis(driver, nexbet=False):
             if getattr(config, 'scriptType', None) == '1SET':
                 url_to_store = driver.current_url
             else:
-                url_to_store = config.ligue_name
+                url_to_store = config.match_Url
         except Exception:
             # En cas de problème d'accès au driver, revenir à la valeur par défaut
-            url_to_store = getattr(config, 'ligue_name', None)
+            url_to_store = getattr(config, 'match_Url', None)
 
         if config.scriptType != 'LIVE':
             config.validated_bet = {
@@ -551,9 +551,9 @@ def QuickValidationDuParis(driver, nexbet=False):
         from datetime import datetime
         current_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         try:
-            url_to_store = driver.current_url if getattr(config, 'scriptType', None) == '1SET' else config.ligue_name
+            url_to_store = driver.current_url if getattr(config, 'scriptType', None) == '1SET' else config.match_Url
         except Exception:
-            url_to_store = getattr(config, 'ligue_name', None)
+            url_to_store = getattr(config, 'match_Url', None)
 
         if config.scriptType != 'LIVE':
             config.validated_bet = {

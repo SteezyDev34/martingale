@@ -535,7 +535,7 @@ def rechercheDeMatch(driver):
                     # prérequis — un échec ne doit pas empêcher la recherche de match en direct.
                     config.log(f'[Bridge] classementeDeMatch échoué, ignoré: {e}', 'warning', False)
                     config.last_classement = datetime.now().strftime("%Y-%m-%d")
-            script_manager.check_previous_scripts(config.script_num)
+            script_manager.check_previous_scripts(config.scriptType, config.script_num)
             # Match interrompu (bot crashé/tué en plein match : la table running est
             # restée à 1) : on le rouvre pour le reprendre au lieu de l'abandonner avec
             # ses pertes en cours. Le bouton "Vider running" du dashboard annule la reprise.
@@ -612,7 +612,7 @@ def rechercheDeMatch(driver):
                 DispatchPerte()
         # SCRIPT RECHERCHE DE MATCH
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-        script_manager.check_previous_scripts(config.script_num)
+        script_manager.check_previous_scripts(config.scriptType, config.script_num)
         # VERIFICATION SI PAGE DE LIST LIVE"""
         """if not VerificationListeMatchLive(driver):
             config.log("PAGE VIDE", 'error', True)
@@ -789,10 +789,10 @@ def rechercheDeMatch(driver):
                     config.global_match_win[st] = 0.0
                 config.ScriptConfig(st)
             if _new_list:
-                # config.total_gain_wanted (objectif global) n'est plus utilisé par le bot
-                # 1530A (arrêt purement individuel par scriptType, cf. Functions_431a.py) —
-                # il reste recalculé ici uniquement pour la famille 456P, qui s'en sert
-                # encore (Functions_456P.py/Functions_15V1.py).
+                # config.total_gain_wanted (objectif global) n'est plus utilisé pour l'arrêt
+                # par aucune famille de bot (1530A/431a et 456P/15V1 s'arrêtent désormais
+                # purement par scriptType individuel) — recalculé ici uniquement pour
+                # l'affichage du log ci-dessous.
                 if config.bot_family == '456P':
                     config.total_gain_wanted = len(_new_list) * 3.0
                 config.log(
@@ -827,7 +827,7 @@ def rechercheDeMatch1set(driver):
     # config.match_found = False
     # SCRIPT RECHERCHE DE MATCH
     # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-    script_manager.check_previous_scripts(config.script_num)
+    script_manager.check_previous_scripts(config.scriptType, config.script_num)
     # VERIFICATION SI PAGE DE LIST LIVE"""
     """if not VerificationListeMatchLive(driver):
         config.log("PAGE VIDE", 'error', True)
@@ -1019,7 +1019,7 @@ def rechercheDeMatchNBA(driver):
         config.match_found = GetIfMatchPage(driver)
         # SCRIPT RECHERCHE DE MATCH
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-        script_manager.check_previous_scripts(config.script_num)
+        script_manager.check_previous_scripts(config.scriptType, config.script_num)
         # VERIFICATION SI PAGE DE LIST LIVE"""
         if not VerificationListeMatchLive(driver):
             current_frame = inspect.currentframe()
@@ -1405,7 +1405,7 @@ def classementeDeMatch(driver, use_json_cache=True):
             config.match_found = GetIfMatchPage(driver)
             # SCRIPT RECHERCHE DE MATCH
             # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-            # script_manager.check_previous_scripts(config.script_num)
+            # script_manager.check_previous_scripts(config.scriptType, config.script_num)
             # VERIFICATION SI PAGE DE LIST LIVE"""
             if not VerificationListeMatchLive(driver):
                 config.error = True
@@ -1605,7 +1605,7 @@ def newclassementeDeMatch(driver):
         config.match_found = GetIfMatchPage(driver)
         # SCRIPT RECHERCHE DE MATCH
         # EST CE QUE LE SCRIPT PEUT DÉMARRER? (NUM SCRIPT PRECEDENT EN COURS)
-        script_manager.check_previous_scripts(config.script_num)
+        script_manager.check_previous_scripts(config.scriptType, config.script_num)
         # VERIFICATION SI PAGE DE LIST LIVE"""
         if not VerificationListeMatchLive(driver):
             config.error = True

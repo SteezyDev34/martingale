@@ -279,19 +279,25 @@ def _tempete_filter_originals(image_links):
     return list(originals)
 
 
-def _tempete_store_new(image_urls):
+def _tempete_filter_new(image_urls):
+    """Retourne les URLs pas encore en base, SANS les y insérer — l'insertion
+    n'a lieu qu'après un traitement réussi (cf. _tempete_mark_seen), pour
+    qu'une image dont le traitement échoue/bloque soit retentée au prochain
+    cycle au lieu d'être perdue silencieusement."""
     conn = sqlite3.connect(TEMPETE_DB_PATH)
-    cursor = conn.cursor()
-    new = []
-    for url in image_urls:
-        try:
-            cursor.execute("INSERT INTO images (image_url) VALUES (?)", (url,))
-            new.append(url)
-        except sqlite3.IntegrityError:
-            pass
-    conn.commit()
+    seen = {row[0] for row in conn.execute("SELECT image_url FROM images")}
     conn.close()
-    return new
+    return [u for u in image_urls if u not in seen]
+
+
+def _tempete_mark_seen(url):
+    conn = sqlite3.connect(TEMPETE_DB_PATH)
+    try:
+        conn.execute("INSERT INTO images (image_url) VALUES (?)", (url,))
+        conn.commit()
+    except sqlite3.IntegrityError:
+        pass
+    conn.close()
 
 
 def check_tempete_images():
@@ -304,7 +310,7 @@ def check_tempete_images():
             url = TEMPETE_BASE_URL.format(year=now.year, month=now.month)
             links = _tempete_get_image_links(url)
             originals = _tempete_filter_originals(links)
-            new_images = _tempete_store_new(originals)
+            new_images = _tempete_filter_new(originals)
             if new_images:
                 log(f"[Tempête] {len(new_images)} nouvelle(s) image(s) détectée(s)", "info", clear=False)
                 for i, img_name in enumerate(new_images):
@@ -327,19 +333,24 @@ def check_tempete_images():
                         result = extraire_pari_depuis_image(img_path, "Tempête Betting")
                         try:
                             pari_dict = json.loads(result)
-                            pari_dict["tipster"] = "TEMPÊTE BETTING ®️"
+                            pari_dict["tipster"] = "TEMPÊTE BETTING"
                             matches = pari_dict.get("matches", [])
                             if matches:
-                                api_success = send_bet_data_to_api(pari_dict, message_original=full_url, sender_username="TEMPÊTE BETTING ®️", image_path=img_path)
+                                api_success = send_bet_data_to_api(pari_dict, message_original=full_url, sender_username="TEMPÊTE BETTING", image_path=img_path)
                                 if api_success:
                                     for match in matches:
                                         log(f"[Tempête] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
-                                        msg = f"🌪️ TEMPÊTE BETTING\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"
+                                        msg = f"🌪️ TEMPÊTE BETTING\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
                                         send_telegram(Functions_telegram.alertGroup, msg)
                                 else:
                                     log(f"[Tempête] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
                             else:
                                 log(f"[Tempête] Aucun match extrait de {img_name}", "warning", clear=False)
+                            # Traitement réussi (avec ou sans match détecté) : marquer vue
+                            # seulement maintenant, pour qu'un échec plus haut (timeout OCR,
+                            # JSON invalide) soit retenté au prochain cycle au lieu d'être
+                            # perdu silencieusement pour toujours.
+                            _tempete_mark_seen(img_name)
                         except json.JSONDecodeError as e:
                             log(f"[Tempête] Erreur JSON OCR: {e}", "error", clear=False)
                         finally:
@@ -469,7 +480,7 @@ async def my_event_handler(event):
                                     if api_success:
                                         for match in matches:
                                             log(f"[AdrBetting] ✅ [{tipster}] Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
-                                            msg = f"🎰 {tipster}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"
+                                            msg = f"🎰 {tipster}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
                                             send_telegram(Functions_telegram.alertGroup, msg)
                                     else:
                                         log(f"[AdrBetting] ❌ [{tipster}] Échec envoi pari ({len(matches)} match(s))", "error", clear=False)
@@ -520,7 +531,7 @@ async def my_event_handler(event):
                                     if api_success:
                                         for match in matches:
                                             log(f"[FrancePronos] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
-                                            msg = f"🇫🇷 France Pronos\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"
+                                            msg = f"🇫🇷 France Pronos\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
                                             send_telegram(Functions_telegram.alertGroup, msg)
                                     else:
                                         log(f"[FrancePronos] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
@@ -551,12 +562,14 @@ async def my_event_handler(event):
                 has_media = event.message.media is not None
                 log(f'Message contains media: {has_media}', "info", clear=False)
 
-                # Canaux autorisés à envoyer des images de pronos + condition textuelle éventuelle
-                # None = pas de condition (toute image est traitée sauf GIF)
+                # Canaux autorisés à envoyer des images de pronos + condition textuelle éventuelle.
+                # None = pas de condition. Une condition peut être un tuple de plusieurs textes
+                # alternatifs (OR) — ex: TEMPÊTE BETTING poste soit un "PRONO DU JOUR" classique,
+                # soit une mise à jour de "PALIER X MONTANTE", les deux sont des paris valides.
                 IMAGE_CHANNELS = {
                     "AdrBetting":        "TICKET SAFE PUBLIC",
-                    "Tennistiquer":      "CONFIANCE DU JOUR",
-                    "TEMPÊTE BETTING ®️":   None,
+                    "Tennistiqueur 🎾":  "CONFIANCE",
+                    "TEMPÊTE BETTING":   ("PRONO DU JOUR", "PALIER"),
                     "France Pronos Live": None,
                     "Auxo1XBOT": None
                 }
@@ -574,10 +587,12 @@ async def my_event_handler(event):
                     if required_text == "NOT_ALLOWED":
                         log(f"[Image] Canal '{chat_title}' non autorisé, image ignorée", "info", clear=False)
                         return
-                    # Vérifier la condition textuelle si elle existe
-                    if required_text is not None and required_text.upper() not in txt.upper():
-                        log(f"[Image] [{chat_title}] Image ignorée (condition '{required_text}' absente du message)", "info", clear=False)
-                        return
+                    # Vérifier la condition textuelle si elle existe (texte unique, ou tuple = OR)
+                    if required_text is not None:
+                        conditions = required_text if isinstance(required_text, (list, tuple)) else (required_text,)
+                        if not any(c.upper() in txt.upper() for c in conditions):
+                            log(f"[Image] [{chat_title}] Image ignorée (condition '{required_text}' absente du message)", "info", clear=False)
+                            return
                     # Ignorer les GIFs
                     from telethon.tl.types import MessageMediaDocument
                     if isinstance(event.message.media, MessageMediaDocument):
@@ -608,10 +623,23 @@ async def my_event_handler(event):
                             pari_dict["tipster"] = chat_title
                             matches = pari_dict.get("matches", [])
                             if matches:
-                                api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title, image_path=image_path)
+                                # TEMPÊTE BETTING combine souvent plusieurs picks dans un même
+                                # ticket/message (ex: "PALIER X MONTANTE" = plusieurs victoires
+                                # combinées). On envoie un pari séparé par match au lieu d'un seul
+                                # pari multi-matchs, pour que chacun soit évalué/parié
+                                # individuellement côté router (sinon len(matches)>1 le fait
+                                # traiter comme un seul pari combiné, cf. place_combined_bet).
+                                if chat_title == "TEMPÊTE BETTING" and len(matches) > 1:
+                                    api_success = True
+                                    for match in matches:
+                                        single_pari = {**pari_dict, "matches": [match]}
+                                        if not send_bet_data_to_api(single_pari, message_original=txt, sender_username=chat_title, image_path=image_path):
+                                            api_success = False
+                                else:
+                                    api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title, image_path=image_path)
                                 if api_success:
                                     for match in matches:
-                                        msg = f"📩 {chat_title}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('cote')}"
+                                        msg = f"📩 {chat_title}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
                                         send_telegram(Functions_telegram.alertGroup, msg)
                         except Exception as _e:
                             log(f"[Image] [{chat_title}] Erreur traitement OCR: {_e}", "error", clear=False)

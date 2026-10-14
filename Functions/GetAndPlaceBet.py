@@ -1,4 +1,5 @@
 import config
+from Functions import RedisIPC
 from Functions.AfficherParis import AfficherParis
 from Functions.FisrtGameBet import FirstGameBet
 from Functions.GetBet import GetBet
@@ -22,7 +23,8 @@ def GetAndPlaceBet(driver):
 
             else:
                 config.log(f'Net profit: {config.global_match_win[scriptType]}')
-                config.log(f"FIN X# {config.scriptType}", 'success', False)
+                config.log(f"FIN {config.scriptType}", 'success', False)
+                RedisIPC.set_running(config.scriptType, False, config.newmatch)
                 continue
             if scriptType == actual_scryptType:
                 continue

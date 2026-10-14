@@ -48,11 +48,12 @@ else:
 # Chargement des functions
 # Chargement de Chrome driver
 # Chargement des functions
-config.localhost = 43151
-from ChromeDriver.SetDriver import get_script_driver
-num_fenetre = 8
-time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
-driver = get_script_driver(num_fenetre)
+from websocket_server import start_bridge
+
+WS_PORT = 9013  # port dedie a ce script - cf. WS_PORTS dans chrome_extension/service_worker.js
+
+start_bridge(wait_timeout=0, port=WS_PORT)
+driver = None
 
 from Functions import Functions_456P
 from Functions.GetJsonData import DispatchPerte
@@ -94,7 +95,11 @@ while (config.win < 100):
             sucess = False
         while not sucess:
             try:
-                driver.get(config.site_url)
+                from websocket_server import bridge
+                if bridge.connected:
+                    bridge.navigate(config.site_url)
+                elif driver:
+                    driver.get(config.site_url)
             except:
                 continue
             else:

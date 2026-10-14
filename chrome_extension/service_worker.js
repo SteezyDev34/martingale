@@ -1,331 +1,381 @@
-// Service Worker — maintient la connexion WebSocket avec Python
-// Python écoute sur ws://localhost:9999
+// Service Worker — maintient une connexion WebSocket PAR SCRIPT PYTHON (un port
+// dédié par scriptType, cf. WS_PORT dans chaque fichier SCRIPTS_*/*.py), chacune
+// liée à son propre onglet 1xBet. Ça permet à plusieurs bots de tourner en même
+// temps sans se marcher dessus : contrairement à l'ancienne version (un seul ws
+// global + find1xbetTab() qui prenait "l'onglet 1xBet actif"), chaque connexion
+// ne pilote jamais que l'onglet qu'elle a elle-même ouvert.
 
-const WS_URL = 'ws://localhost:9999';
 const RECONNECT_DELAY = 2000;
 const KEEPALIVE_INTERVAL = 20; // secondes (chrome.alarms, limite 1 min)
 
-let ws = null;
-let wsConnected = false;
-let pending1xbetTabId = null; // onglet 1xBet actif
+// Liste des ports à surveiller — un par script bridge-only. La plupart n'auront
+// personne à l'écoute la majeure partie du temps (le script correspondant n'est
+// pas lancé) : la connexion échoue et retente toutes les RECONNECT_DELAY ms sans
+// conséquence, exactement comme l'ancien connectWS() le faisait déjà pour 9999.
+const WS_PORTS = [
+  9001, // SCRIPTS_1530A/1530A-1.py
+  9002, // SCRIPTS_1530A/1530A-2.py
+  9003, // SCRIPTS_1530A/1530A-3.py
+  9004, // SCRIPTS_4P6P/4P6P-1.py
+  9005, // SCRIPTS_4P6P/4P6P-2.py
+  9006, // SCRIPTS_4P6P2/4P6P2-1.py
+  9007, // SCRIPTS_4P6P2/4P6P2-2.py
+  9008, // SCRIPTS_5P40A/5P40A-1.py
+  9009, // SCRIPTS_5P40A/5P40A-2.py
+  9010, // SCRIPTS_5P40A2/5P40A2-1.py
+  9011, // SCRIPTS_5P40A2/5P40A2-2.py
+  9012, // SCRIPTS_BREAK/BREAKP-1.py
+  9013, // SCRIPTS_BREAK/BREAKP-2.py
+  9014, // SCRIPTS_BREAK2/BREAK2-1.py
+  9015, // SCRIPTS_BREAK2/BREAK2-2.py
+  9016, // SCRIPTS_HOLD/HOLD-1.py
+  9999, // port historique — usage manuel/debug (python websocket_server.py)
+];
+
+// port → { ws, connected, tabId }
+const connections = new Map(WS_PORTS.map(p => [p, { ws: null, connected: false, tabId: null }]));
 
 // ─── Keepalive via chrome.alarms (empêche le service worker de s'endormir) ───
 
 chrome.alarms.get('keepalive', (a) => { if (!a) chrome.alarms.create('keepalive', { periodInMinutes: 0.4 }); });
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === 'keepalive') {
-    if (!wsConnected) connectWS();
+    for (const port of WS_PORTS) {
+      if (!connections.get(port).connected) connectWS(port);
+    }
+  }
+});
+
+// Si l'onglet d'un bot est fermé manuellement, oublier son tabId pour que le
+// prochain navigate() en recrée un neuf au lieu de cibler un onglet mort.
+chrome.tabs.onRemoved.addListener((tabId) => {
+  for (const conn of connections.values()) {
+    if (conn.tabId === tabId) conn.tabId = null;
   }
 });
 
 // ─── WebSocket ────────────────────────────────────────────────────────────────
 
-function connectWS() {
-  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
+function connectWS(port) {
+  const conn = connections.get(port);
+  if (conn.ws && (conn.ws.readyState === WebSocket.OPEN || conn.ws.readyState === WebSocket.CONNECTING)) return;
 
+  let ws;
   try {
-    ws = new WebSocket(WS_URL);
+    ws = new WebSocket(`ws://localhost:${port}`);
   } catch (e) {
-    console.warn('[WS] Impossible de créer WebSocket:', e);
-    setTimeout(connectWS, RECONNECT_DELAY);
+    console.warn(`[WS:${port}] Impossible de créer WebSocket:`, e);
+    setTimeout(() => connectWS(port), RECONNECT_DELAY);
     return;
   }
+  conn.ws = ws;
 
   ws.onopen = () => {
-    wsConnected = true;
-    console.log('[WS] Connecté à Python');
-    ws.send(JSON.stringify({ action: 'extension_ready', version: '1.0.0' }));
+    conn.connected = true;
+    console.log(`[WS:${port}] Connecté à Python`);
+    ws.send(JSON.stringify({ action: 'extension_ready', version: '2.0.0' }));
   };
 
   ws.onmessage = (event) => {
     let msg;
     try { msg = JSON.parse(event.data); } catch { return; }
-    handlePythonMessage(msg).catch(e => console.error('[WS] handlePythonMessage erreur:', e));
+    handlePythonMessage(msg, port).catch(e => console.error(`[WS:${port}] handlePythonMessage erreur:`, e));
   };
 
   ws.onclose = () => {
-    wsConnected = false;
-    console.warn('[WS] Déconnecté, reconnexion dans', RECONNECT_DELAY, 'ms');
-    setTimeout(connectWS, RECONNECT_DELAY);
+    conn.connected = false;
+    console.warn(`[WS:${port}] Déconnecté, reconnexion dans`, RECONNECT_DELAY, 'ms');
+    setTimeout(() => connectWS(port), RECONNECT_DELAY);
   };
 
-  ws.onerror = (err) => {
-    console.warn('[WS] Erreur WebSocket');
+  ws.onerror = () => {
+    console.warn(`[WS:${port}] Erreur WebSocket`);
     ws.close();
   };
 }
 
 // ─── Envoi vers Python ────────────────────────────────────────────────────────
 
-function sendToPython(msg) {
-  if (ws && ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify(msg));
+function sendToPython(port, msg) {
+  const conn = connections.get(port);
+  if (conn?.ws && conn.ws.readyState === WebSocket.OPEN) {
+    conn.ws.send(JSON.stringify(msg));
   } else {
-    console.warn('[WS] Message perdu (WS fermé):', msg);
+    console.warn(`[WS:${port}] Message perdu (WS fermé):`, msg);
   }
 }
 
 // ─── Dispatcher des messages Python → Extension ──────────────────────────────
 
-async function handlePythonMessage(msg) {
-  console.log('[Python→Ext]', msg);
+async function handlePythonMessage(msg, port) {
+  console.log(`[Python:${port}→Ext]`, msg);
+  const conn = connections.get(port);
 
   switch (msg.action) {
 
-    // Python demande à naviguer vers une URL 1xBet — on attend que la page ait
-    // fini de charger avant de répondre, sinon un scan lancé juste après (ex.
-    // scan_league_list) peut lire le DOM de l'ancienne page (navigation pas
-    // encore effective), ce qui a causé des liens de ligue vers /live/ au lieu
-    // de /line/ lors du classement.
+    // Python demande à naviguer vers une URL 1xBet. Onglet explicite pour cette
+    // connexion : si on en a déjà un (msg.tab_id ou conn.tabId mémorisé), on le
+    // réutilise ; sinon (premier appel de ce script) on en crée un NEUF — jamais
+    // "l'onglet 1xBet actif" comme avant, pour ne pas voler l'onglet d'un autre
+    // script déjà en cours.
     case 'navigate': {
-      const tab = await find1xbetTab();
-      const targetTabId = tab ? tab.id : (await chrome.tabs.create({ url: msg.url, active: true })).id;
-      pending1xbetTabId = targetTabId;
-      if (tab) {
-        await chrome.tabs.update(tab.id, { url: msg.url, active: true });
+      let targetTabId = msg.tab_id || conn.tabId;
+      if (targetTabId) {
+        try {
+          await chrome.tabs.update(targetTabId, { url: msg.url });
+        } catch (e) {
+          // Onglet fermé entre-temps (ex: fermé manuellement) → en recréer un.
+          targetTabId = null;
+        }
       }
+      if (!targetTabId) {
+        const tab = await chrome.tabs.create({ url: msg.url, active: false });
+        targetTabId = tab.id;
+      }
+      conn.tabId = targetTabId;
       await waitForTabLoad(targetTabId);
-      sendToPython({ action: 'navigate_ack', req_id: msg.req_id, tab_id: targetTabId });
+      sendToPython(port, { action: 'navigate_ack', req_id: msg.req_id, tab_id: targetTabId });
       break;
     }
 
     // Python demande l'état actuel du DOM (score, jeu, set)
     case 'get_state': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'error', req_id: msg.req_id, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'error', req_id: msg.req_id, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.getState?.() || null);
-      sendToPython({ action: 'state_response', req_id: msg.req_id, data: result, tab_id: tabId });
+      sendToPython(port, { action: 'state_response', req_id: msg.req_id, data: result, tab_id: tabId });
       break;
     }
 
     // Python demande de placer un pari
     case 'place_bet': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'bet_result', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'bet_result', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.placeBet?.(args), msg);
-      sendToPython({ action: 'bet_result', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'bet_result', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande de supprimer le pari dans le betslip
     case 'delete_bet': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'delete_bet_ack', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'delete_bet_ack', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.deleteBet?.() || {});
-      sendToPython({ action: 'delete_bet_ack', req_id: msg.req_id, ...(result || {}), tab_id: tabId });
+      sendToPython(port, { action: 'delete_bet_ack', req_id: msg.req_id, ...(result || {}), tab_id: tabId });
       break;
     }
 
     // Python demande de remplir uniquement la mise (marché déjà sélectionné)
     case 'set_stake': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'set_stake_ack', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'set_stake_ack', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (mise) => window._martingale?.setStake?.(mise), msg.mise);
-      sendToPython({ action: 'set_stake_ack', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'set_stake_ack', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande de valider (confirmer) le pari
     case 'validate_bet': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'validate_bet_ack', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'validate_bet_ack', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.validateBet?.(args), msg);
-      sendToPython({ action: 'validate_bet_ack', req_id: msg.req_id, ...(result || { validated: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'validate_bet_ack', req_id: msg.req_id, ...(result || { validated: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande le résultat du dernier pari (WIN/LOSE)
     case 'get_result': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'result_response', req_id: msg.req_id, result: null, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'result_response', req_id: msg.req_id, result: null, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.getResult?.() || {});
-      sendToPython({ action: 'result_response', req_id: msg.req_id, ...(result || { result: null }), tab_id: tabId });
+      sendToPython(port, { action: 'result_response', req_id: msg.req_id, ...(result || { result: null }), tab_id: tabId });
       break;
     }
 
     // Python demande les noms des joueurs
     case 'get_players': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'players_response', req_id: msg.req_id, p1: null, p2: null, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'players_response', req_id: msg.req_id, p1: null, p2: null, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.getPlayers?.() || {});
-      sendToPython({ action: 'players_response', req_id: msg.req_id, ...(result || { p1: null, p2: null }), tab_id: tabId });
+      sendToPython(port, { action: 'players_response', req_id: msg.req_id, ...(result || { p1: null, p2: null }), tab_id: tabId });
       break;
     }
 
     // Python demande la liste des ligues/matchs (page live tennis)
     case 'get_match_list': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'match_list_response', req_id: msg.req_id, leagues: [] }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'match_list_response', req_id: msg.req_id, leagues: [] }); break; }
       // getMatchList() est async — executeScript attend la Promise (Chrome 90+)
       const result = await execInTab(tabId, () => window._martingale?.getMatchList?.() ?? null);
-      sendToPython({ action: 'match_list_response', req_id: msg.req_id, leagues: result || [], tab_id: tabId });
+      sendToPython(port, { action: 'match_list_response', req_id: msg.req_id, leagues: result || [], tab_id: tabId });
       break;
     }
 
     // Python demande de rechercher un match par nom d'équipes
     case 'search_match': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'search_match_response', req_id: msg.req_id, found: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'search_match_response', req_id: msg.req_id, found: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.searchMatch?.(args), msg);
-      sendToPython({ action: 'search_match_response', req_id: msg.req_id, ...(result || { found: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'search_match_response', req_id: msg.req_id, ...(result || { found: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Étape 1 : clique le bouton recherche (provoque une navigation vers /search-events —
     // on ne fait QUE cliquer ici, sans rien attendre après, cf. searchOnResultsPage).
     case 'click_search_button': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'click_search_button_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'click_search_button_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.clickSearchButton?.());
-      sendToPython({ action: 'click_search_button_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'click_search_button_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Étape 2 : une fois sur la page /search-events (nouveau contexte JS réinjecté),
     // tape le texte de recherche et lit les résultats.
     case 'search_on_results_page': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'search_on_results_page_response', req_id: msg.req_id, found: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'search_on_results_page_response', req_id: msg.req_id, found: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.searchOnResultsPage?.(args), msg);
-      sendToPython({ action: 'search_on_results_page_response', req_id: msg.req_id, ...(result || { found: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'search_on_results_page_response', req_id: msg.req_id, ...(result || { found: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande de sélectionner un marché simple
     case 'select_market': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'select_market_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'select_market_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.selectMarket?.(args), msg);
-      sendToPython({ action: 'select_market_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'select_market_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande de sélectionner plusieurs marchés (pari combiné / constructor bet)
     case 'select_combined_markets': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'select_combined_markets_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'select_combined_markets_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (legs) => window._martingale?.selectCombinedMarkets?.(legs), msg.legs);
-      sendToPython({ action: 'select_combined_markets_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'select_combined_markets_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande de charger un code coupon
     case 'load_coupon_code': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'load_coupon_code_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'load_coupon_code_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (code) => window._martingale?.loadCouponCode?.(code), msg.code);
-      sendToPython({ action: 'load_coupon_code_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'load_coupon_code_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // DEBUG uniquement — liste les options du dropdown de catégorie sans en cliquer aucune
     case 'debug_list_category_options': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'debug_list_category_options_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'debug_list_category_options_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.debugListCategoryOptions?.());
-      sendToPython({ action: 'debug_list_category_options_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'debug_list_category_options_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande de cliquer une option déjà visible du dropdown de catégorie (RetourTpsRegMobile)
     case 'click_category_option': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'click_category_option_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'click_category_option_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (text) => window._martingale?.clickCategoryOption?.(text), msg.text);
-      sendToPython({ action: 'click_category_option_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'click_category_option_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande la liste des ligues sur la page desktop "à venir" (classementeDeMatch)
     case 'scan_league_list': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'scan_league_list_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'scan_league_list_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.scanLeagueList?.());
-      sendToPython({ action: 'scan_league_list_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'scan_league_list_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande le menu complet des compétitions (newclassementeDeMatch, classement complet)
     case 'scan_full_league_menu': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'scan_full_league_menu_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'scan_full_league_menu_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.scanFullLeagueMenu?.());
-      sendToPython({ action: 'scan_full_league_menu_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'scan_full_league_menu_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande les matchs de la page de ligue desktop courante (classementeDeMatch)
     case 'scan_league_matches': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'scan_league_matches_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'scan_league_matches_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.scanLeagueMatches?.());
-      sendToPython({ action: 'scan_league_matches_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'scan_league_matches_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande d'ouvrir le dropdown de catégorie + filtrer par recherche (AfficherParisMobile)
     case 'open_category_and_search': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'open_category_and_search_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'open_category_and_search_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.openCategoryAndSearch?.(args), msg);
-      sendToPython({ action: 'open_category_and_search_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'open_category_and_search_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Sélectionne l'option du dropdown de catégorie une seule fois (sans rechercher)
     case 'select_category_option': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'select_category_option_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'select_category_option_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.selectCategoryOption?.(args.categorie_text), msg);
-      sendToPython({ action: 'select_category_option_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'select_category_option_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Retape la recherche (key) sans re-cliquer le dropdown — pour le fallback de clés
     case 'search_market_key': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'search_market_key_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'search_market_key_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.searchMarketKey?.(args.key, args.categorie_text || null), msg);
-      sendToPython({ action: 'search_market_key_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'search_market_key_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande de lire l'indicateur "balle" (quel joueur a le point)
     case 'read_ball_indicator': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'read_ball_indicator_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'read_ball_indicator_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, () => window._martingale?.readBallIndicator?.());
-      sendToPython({ action: 'read_ball_indicator_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'read_ball_indicator_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
     // Python demande de sélectionner un marché par texte déjà calculé (GetBetOld)
     case 'select_market_by_text': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'select_market_by_text_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'select_market_by_text_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (text) => window._martingale?.selectMarketByText?.(text), msg.text);
-      sendToPython({ action: 'select_market_by_text_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      sendToPython(port, { action: 'select_market_by_text_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 
-    // DEBUG uniquement — liste tous les onglets 1xBet détectés (diagnostiquer un mauvais choix d'onglet)
+    // DEBUG uniquement — liste tous les onglets 1xBet détectés + la correspondance port→onglet
     case 'debug_list_tabs': {
       const allTabs = await chrome.tabs.query({});
       const xbetTabs = allTabs.filter(t => t.url && (t.url.includes('1xbet') || t.url.includes('1x-bet')));
       const info = xbetTabs.map(t => ({ id: t.id, url: t.url, active: t.active, windowId: t.windowId }));
-      sendToPython({
+      const byPort = [...connections.entries()].map(([p, c]) => ({ port: p, connected: c.connected, tab_id: c.tabId }));
+      sendToPython(port, {
         action: 'debug_list_tabs_response',
         req_id: msg.req_id,
         tabs: info,
-        pending1xbetTabId,
+        connections: byPort,
       });
       break;
     }
 
     // DEBUG uniquement — scanne les classNames contenant un des mots-clés donnés
     case 'debug_scan_classes': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'debug_scan_classes_response', req_id: msg.req_id, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'debug_scan_classes_response', req_id: msg.req_id, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (keywords) => {
         const els = Array.from(document.querySelectorAll('[class]'));
         const seen = new Set();
@@ -343,15 +393,15 @@ async function handlePythonMessage(msg) {
         }
         return out.slice(0, 300);
       }, msg.keywords);
-      sendToPython({ action: 'debug_scan_classes_response', req_id: msg.req_id, result, tab_id: tabId });
+      sendToPython(port, { action: 'debug_scan_classes_response', req_id: msg.req_id, result, tab_id: tabId });
       break;
     }
 
     // DEBUG uniquement — compte les éléments correspondant à un sélecteur CSS exact
     // (contrairement à debug_scan_classes qui dédoublonne par nom de classe).
     case 'debug_count_selector': {
-      const tabId = await resolveTabId(msg);
-      if (!tabId) { sendToPython({ action: 'debug_count_selector_response', req_id: msg.req_id, error: 'no_tab' }); break; }
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'debug_count_selector_response', req_id: msg.req_id, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (selector) => {
         return {
           count: document.querySelectorAll(selector).length,
@@ -360,35 +410,29 @@ async function handlePythonMessage(msg) {
           scrollY: window.scrollY,
         };
       }, msg.selector);
-      sendToPython({ action: 'debug_count_selector_response', req_id: msg.req_id, result, tab_id: tabId });
+      sendToPython(port, { action: 'debug_count_selector_response', req_id: msg.req_id, result, tab_id: tabId });
       break;
     }
 
     default:
-      console.warn('[WS] Action inconnue:', msg.action);
+      console.warn(`[WS:${port}] Action inconnue:`, msg.action);
   }
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function is1xbetUrl(url) {
-  return !!url && (url.includes('1xbet') || url.includes('1x-bet'));
-}
-
-async function find1xbetTab() {
-  const tabs = await chrome.tabs.query({});
-  const xbetTabs = tabs.filter(t => is1xbetUrl(t.url));
-  console.log(`[find1xbetTab] ${xbetTabs.length} onglet(s) 1xBet trouvé(s):`,
-    xbetTabs.map(t => ({ id: t.id, url: t.url, active: t.active, windowId: t.windowId })));
-
-  if (xbetTabs.length === 0) return null;
-
-  // Priorité à l'onglet 1xBet actif (au premier plan) — évite de cibler un onglet
-  // 1xBet oublié en arrière-plan quand plusieurs sont ouverts.
-  const activeOne = xbetTabs.find(t => t.active);
-  const chosen = activeOne || xbetTabs[0];
-  console.log(`[find1xbetTab] onglet choisi: id=${chosen.id} active=${chosen.active} url=${chosen.url}`);
-  return chosen;
+// Résout l'onglet cible : STRICTEMENT le tab_id envoyé par Python (celui que
+// cette connexion a ouvert via navigate), avec repli sur le tabId mémorisé côté
+// extension si Python ne l'a pas renvoyé. Plus de "deviner l'onglet 1xBet actif"
+// — c'est exactement ça qui faisait qu'un deuxième script pouvait piloter
+// l'onglet d'un autre. Si on n'a vraiment aucun tab_id, c'est que navigate()
+// n'a jamais été appelé pour cette connexion : erreur franche (no_tab) plutôt
+// que deviner.
+async function resolveTabId(msg, conn) {
+  if (msg.tab_id) return msg.tab_id;
+  if (conn?.tabId) return conn.tabId;
+  console.warn('[resolveTabId] aucun tab_id pour cette connexion — navigate() a-t-il été appelé ?');
+  return null;
 }
 
 // Attend que l'onglet ait fini de charger (status 'complete') après une navigation,
@@ -417,24 +461,6 @@ function waitForTabLoad(tabId, timeoutMs = 15000) {
   });
 }
 
-// Résout l'onglet cible : tab_id explicite > dernier onglet navigué > recherche live
-async function resolveTabId(msg) {
-  if (msg.tab_id) {
-    console.log(`[resolveTabId] tab_id explicite: ${msg.tab_id}`);
-    return msg.tab_id;
-  }
-  // Re-vérifie l'onglet 1xBet actif à chaque appel (pas seulement pending1xbetTabId,
-  // qui peut être obsolète si l'utilisateur a changé d'onglet depuis le dernier navigate()).
-  const tab = await find1xbetTab();
-  if (tab) return tab.id;
-  if (pending1xbetTabId) {
-    console.log(`[resolveTabId] fallback pending1xbetTabId: ${pending1xbetTabId}`);
-    return pending1xbetTabId;
-  }
-  console.warn('[resolveTabId] aucun onglet 1xBet trouvé');
-  return null;
-}
-
 async function execInTab(tabId, fn, args = null) {
   try {
     const results = await chrome.scripting.executeScript({
@@ -453,28 +479,37 @@ async function execInTab(tabId, fn, args = null) {
   }
 }
 
+// Retrouve quelle connexion (port) possède cet onglet — utilisé pour router les
+// messages poussés par le content script (score_update, etc.) vers le bon process.
+function portForTabId(tabId) {
+  for (const [port, conn] of connections) {
+    if (conn.tabId === tabId) return port;
+  }
+  return null;
+}
+
 // ─── Messages depuis content scripts / popup ─────────────────────────────────
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg?.action === 'get_ws_status') {
-    sendResponse({ connected: wsConnected });
+    const status = [...connections.entries()].map(([p, c]) => ({ port: p, connected: c.connected, tab_id: c.tabId }));
+    sendResponse({ connected: status.some(s => s.connected), connections: status });
     return true;
   }
   if (!msg || !msg.action) return;
 
-  // Enrichir avec tab_id
-  const enriched = { ...msg, tab_id: sender.tab?.id };
-
-  // Score push (MutationObserver déclenché par content script)
-  if (msg.action === 'score_update' || msg.action === 'game_update' || msg.action === 'set_update') {
-    sendToPython(enriched);
+  const tabId = sender.tab?.id;
+  const port = tabId != null ? portForTabId(tabId) : null;
+  if (port == null) {
+    // Onglet non rattaché à une connexion connue (ex: onglet 1xBet ouvert
+    // manuellement par l'utilisateur, pas par un bot) — rien à transmettre.
     return;
   }
 
-  // Tout autre message du content script → forward à Python
-  sendToPython(enriched);
+  const enriched = { ...msg, tab_id: tabId };
+  sendToPython(port, enriched);
 });
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
-connectWS();
+for (const port of WS_PORTS) connectWS(port);

@@ -50,7 +50,9 @@ else:
 # Chargement de Chrome driver
 from websocket_server import start_bridge
 
-start_bridge(wait_timeout=0)
+WS_PORT = 9002  # port dedie a ce script - cf. WS_PORTS dans chrome_extension/service_worker.js
+
+start_bridge(wait_timeout=0, port=WS_PORT)
 driver = None
 from Functions import Functions_431a
 from Functions.GetJsonData import DispatchPerte

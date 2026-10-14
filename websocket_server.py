@@ -1,12 +1,19 @@
 """
 Serveur WebSocket Python ↔ Extension Chrome 1xBet.
 
-Lance un serveur asyncio sur ws://localhost:9999.
+Lance un serveur asyncio sur ws://localhost:<port> (9999 par défaut).
 Les fonctions Selenium existantes (GetScoreActuel, GetAndPlaceBet, etc.)
 appellent les méthodes de ExtensionBridge au lieu de driver.find_element.
 
+Plusieurs scripts peuvent tourner en même temps : chaque script a SON PROPRE
+port (cf. WS_PORT en tête de chaque SCRIPTS_*/*.py, et la liste WS_PORTS dans
+chrome_extension/service_worker.js) et donc SON PROPRE onglet Chrome, ouvert
+une seule fois au premier navigate() puis réutilisé pour tous les appels
+suivants (self._tab_id, injecté automatiquement par _send_and_wait) — jamais
+"l'onglet 1xBet actif", qui aurait pu appartenir à un autre script.
+
 Usage :
-    bridge = ExtensionBridge()
+    bridge = ExtensionBridge(port=9001)
     bridge.start()          # lance le thread WS en arrière-plan
     # ... puis dans le code martingale :
     state  = bridge.get_state()
@@ -28,7 +35,8 @@ WS_HOST = 'localhost'
 # ─── Bridge singleton ─────────────────────────────────────────────────────────
 
 class ExtensionBridge:
-    def __init__(self):
+    def __init__(self, port=WS_PORT):
+        self._port = port
         self._loop = None
         self._thread = None
         self._ws_client = None          # connexion WebSocket active avec l'extension
@@ -38,6 +46,7 @@ class ExtensionBridge:
         self._connected = False
         self._lock = threading.Lock()
         self._req_counter = 0
+        self._tab_id = None             # onglet dédié à CE process, fixé au 1er navigate()
 
     # ─── Démarrage serveur ────────────────────────────────────────────────────
 
@@ -45,14 +54,14 @@ class ExtensionBridge:
         self._loop = asyncio.new_event_loop()
         self._thread = threading.Thread(target=self._run_loop, daemon=True)
         self._thread.start()
-        print(f'[WS] Serveur WebSocket démarré sur ws://{WS_HOST}:{WS_PORT}')
+        print(f'[WS] Serveur WebSocket démarré sur ws://{WS_HOST}:{self._port}')
 
     def _run_loop(self):
         asyncio.set_event_loop(self._loop)
         self._loop.run_until_complete(self._serve())
 
     async def _serve(self):
-        async with websockets.serve(self._handler, WS_HOST, WS_PORT):
+        async with websockets.serve(self._handler, WS_HOST, self._port):
             await asyncio.Future()  # tourne indéfiniment
 
     async def _handler(self, websocket):
@@ -109,6 +118,12 @@ class ExtensionBridge:
             req_id = f'req_{self._req_counter}'
 
         msg['req_id'] = req_id
+        # Cible toujours l'onglet dédié à ce process une fois connu (sauf si l'appelant
+        # a explicitement fourni le sien, ex: navigate() au tout premier appel) — c'est
+        # ce qui permet à plusieurs scripts de tourner en même temps sans se marcher
+        # sur les pieds (cf. docstring du module).
+        if self._tab_id is not None:
+            msg.setdefault('tab_id', self._tab_id)
         resp_queue = queue.Queue(1)
         self._response_queues[req_id] = resp_queue
 
@@ -148,8 +163,16 @@ class ExtensionBridge:
         return resp.get('p1'), resp.get('p2')
 
     def navigate(self, url):
-        """Navigue l'onglet 1xBet vers url."""
-        return self._send_and_wait({'action': 'navigate', 'url': url}, timeout=15)
+        """
+        Navigue vers url. Au tout premier appel (self._tab_id encore None), l'extension
+        ouvre un NOUVEL onglet rien que pour ce process — jamais un onglet existant qui
+        pourrait appartenir à un autre script. Les appels suivants réutilisent ce même
+        onglet (tab_id mémorisé, ré-injecté automatiquement par _send_and_wait).
+        """
+        resp = self._send_and_wait({'action': 'navigate', 'url': url}, timeout=15)
+        if resp.get('tab_id'):
+            self._tab_id = resp['tab_id']
+        return resp
 
     def place_bet(self, market, mise, tab_index=None):
         """Clique sur le marché et remplit la mise. Retourne {success, cote, error}."""
@@ -296,7 +319,7 @@ bridge = ExtensionBridge()
 _bridge_started = False
 
 
-def start_bridge(wait_timeout: int = 0):
+def start_bridge(wait_timeout: int = 0, port: int = WS_PORT):
     """
     Démarre le serveur WebSocket et branche les callbacks score.
     À appeler au début du script principal (avant all_script).
@@ -304,10 +327,16 @@ def start_bridge(wait_timeout: int = 0):
     Args:
         wait_timeout: si > 0, bloque jusqu'à ce que l'extension se connecte (secondes).
                       0 = démarrage sans attente (l'extension peut se connecter plus tard).
+        port: port WS dédié à CE script (cf. WS_PORT en tête de chaque SCRIPTS_*/*.py
+              et la liste WS_PORTS dans chrome_extension/service_worker.js). Chaque
+              script doit avoir le sien pour pouvoir tourner en parallèle des autres
+              sans se marcher dessus — ne pas réutiliser le même port pour deux
+              scripts lancés en même temps.
     """
     global _bridge_started
     if _bridge_started:
         return
+    bridge._port = port
     bridge.start()
     _bridge_started = True
     # Brancher les callbacks score du BridgeAdapter

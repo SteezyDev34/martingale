@@ -196,142 +196,82 @@ def all_script(driver):
             config.game_start = True
             passageset = False
             # if config.rattrape_perte == 1:
-            if passageset:
-                config.error = False
-                txtlog = f"passage set {config.newset}"
-                config.newset = int(config.set_actuel) + 1
-                print(txtlog)
-                config.log(txtlog, config.newmatch)
-                txtlog = "attente 30 sec"
-                print(txtlog)
-                config.log(txtlog, config.newmatch)
-                for scriptType in config.scriptTypeList:
-                    config.switchScript(scriptType)
-                    # Arrêt individuel par scriptType — objectif global retiré.
-                    all_below_one = all(
-                        float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
-                        config.scriptTypeList)
+            config.error = False
+            txtlog = f"passage set {config.newset}"
+            config.newset = int(config.set_actuel) + 1
+            print(txtlog)
+            config.log(txtlog, config.newmatch)
+            txtlog = "attente 30 sec"
+            print(txtlog)
+            config.log(txtlog, config.newmatch)
+            for scriptType in config.scriptTypeList:
+                config.switchScript(scriptType)
+                # Arrêt individuel par scriptType — objectif global retiré.
+                all_below_one = all(
+                    float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
+                    config.scriptTypeList)
+                total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
+                if all_below_one:
+                    for st in config.scriptTypeList:
+                        config.switchScript(st)
+                        config.log(
+                            f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
+                            'success', False)
+                        RedisIPC.set_running(st, False, config.newmatch)
+                    _record_match_history()
+                    return True
+                if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
+                    config.log(
+                        f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
+                else:
+                    config.log(
+                        f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
+                    config.log(f" {scriptType} FIN 2 {config.scriptType}", 'success', False)
+                    RedisIPC.set_running(config.scriptType, False, config.newmatch)
+                    continue
+                config.result = GetResult(driver)
+                _api_id = (config.validated_bet or {}).get('api_bet_id')
+                if config.result == 'WIN':
+                    if _api_id:
+                        from Functions.TelegramBetsAPI import queue_bet_result
+                        queue_bet_result(_api_id, 'win')
+                    config.perte = RedisIPC.get_loss(config.scriptType)
+                    config.netprofit = round((float(config.validated_bet.get('montant', 0)) * float(config.validated_bet.get('cote', 0))) - float(config.perte), 2)
+                    config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
+                        config.netprofit)
+                    config.winmatch[scriptType] = config.winmatch[scriptType] + 1
+                    config.log(f"netprofit : {config.netprofit}")
+                    RedisIPC.add_gain_to_all(float(config.netprofit), config.newmatch)
+                    config.perte = 0
+                    RedisIPC.set_loss(config.scriptType, 0, matchname=config.newmatch)
                     total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
-                    if all_below_one:
-                        for st in config.scriptTypeList:
-                            config.switchScript(st)
-                            config.log(
-                                f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
-                                'success', False)
-                            RedisIPC.set_running(st, False, config.newmatch)
-                        _record_match_history()
-                        return True
+                    config.log(f"Gain total match {config.newmatch}: {total_gain}", 'success', False)
+
+                    config.ScriptConfig(scriptType).reset()
+                    config.init_variable()
+                    DeleteBet(driver)
                     if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
+                        print("#RECHERCHE INFOS DE MISE")
+                        getGlobalPerte()
+                        if config.perte == 0:
+                            get1setGlobalPerte()
+                        if config.perte == 0:
+                            config.perte = RedisIPC.deduct_largest(config.newmatch)
+                        RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
+                        config.error = False
                         config.log(
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
+                        config.log(f"Restart {config.scriptType}", 'success', False)
+
                     else:
                         config.log(
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
-                        config.log(f" {scriptType} FIN 2 {config.scriptType}", 'success', False)
+                        config.log(f"FIN 6 {config.scriptType}", 'success', False)
                         RedisIPC.set_running(config.scriptType, False, config.newmatch)
                         continue
-                    config.result = GetResult(driver)
-                    _api_id = (config.validated_bet or {}).get('api_bet_id')
-                    if config.result == 'WIN':
-                        if _api_id:
-                            from Functions.TelegramBetsAPI import queue_bet_result
-                            queue_bet_result(_api_id, 'win')
-                        config.perte = RedisIPC.get_loss(config.scriptType)
-                        config.netprofit = round((float(config.validated_bet.get('montant', 0)) * float(config.validated_bet.get('cote', 0))) - float(config.perte), 2)
-                        config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
-                            config.netprofit)
-                        config.winmatch[scriptType] = config.winmatch[scriptType] + 1
-                        config.log(f"netprofit : {config.netprofit}")
-                        RedisIPC.add_gain_to_all(float(config.netprofit), config.newmatch)
-                        config.perte = 0
-                        RedisIPC.set_loss(config.scriptType, 0, matchname=config.newmatch)
-                        total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
-                        config.log(f"Gain total match {config.newmatch}: {total_gain}", 'success', False)
-
-                        config.ScriptConfig(scriptType).reset()
-                        config.init_variable()
-                        DeleteBet(driver)
-                        if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
-                            print("#RECHERCHE INFOS DE MISE")
-                            getGlobalPerte()
-                            if config.perte == 0:
-                                get1setGlobalPerte()
-                            if config.perte == 0:
-                                config.perte = RedisIPC.deduct_largest(config.newmatch)
-                            RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
-                            config.error = False
-                            config.log(
-                                f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
-                            config.log(f"Restart {config.scriptType}", 'success', False)
-
-                        else:
-                            config.log(
-                                f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
-                            config.log(f"FIN 6 {config.scriptType}", 'success', False)
-                            RedisIPC.set_running(config.scriptType, False, config.newmatch)
-                            continue
-                    else:
-                        firstjeu = True
-                        FirstGameBet(driver)
-            elif config.perte > 0:
-                for i in config.scriptTypeList:
-                    config.switchScript(i)
-                    config.ScriptConfig(i).reset()
-                    #DispatchPerte()
-                    config.init_variable()
-                    txtlog = "passage set 2 restart"
-                    config.log(txtlog, config.newmatch)
-                allfirstgamebet = False
-                while not allfirstgamebet:
-                    allfirstgamebet = True
-                    for scriptType in config.scriptTypeList:
-                        config.switchScript(scriptType)
-                        # Arrêt individuel par scriptType — objectif global retiré.
-                        all_below_one = all(
-                            float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
-                            config.scriptTypeList)
-                        if all_below_one:
-                            for st in config.scriptTypeList:
-                                config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
-                                        'success', False)
-                                RedisIPC.set_running(st, False, config.newmatch)
-                                config.switchScript(st)
-                                config.perte = 0
-                            _record_match_history()
-                            return True
-                        if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
-                            config.log(
-                                f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
-                        else:
-                            config.log(
-                                f' {scriptType} Net profit: {config.global_match_win[scriptType]} /{config.total_want_win[scriptType]}')
-                            config.log(f" {scriptType} FIN 1 {config.scriptType}", 'success', False)
-                            RedisIPC.set_running(config.scriptType, False, config.newmatch)
-                            continue
-
-                        ##PREPARATTION PREMIER PARIS
-                        FirstGameBet(driver)
-                        if not config.validated_bet:
- 
-                            allfirstgamebet = False
-
-                firstjeu = True
-            else:
-                frame = inspect.currentframe()
-                if frame is not None:
-                    info = inspect.getframeinfo(frame)
-                    filename = info.filename
-                    lineno = info.lineno
-                    funcname = info.function
                 else:
-                    filename = __file__
-                    lineno = -1
-                    funcname = 'unknown'
-                config.log(
-                    f'Error in file {filename} at line {lineno} in function {funcname}',
-                    'error', True)
-                print("erreur perte en 1 set")
-                DispatchPerte()
+                    firstjeu = True
+                    FirstGameBet(driver)
         else:
             if str(config.newset) == str(config.set_actuel):  ##SI ON EST SUR LE PROCHAIN SET
                 txtlog = " ON EST SUR LE PROCHAIN SET"
