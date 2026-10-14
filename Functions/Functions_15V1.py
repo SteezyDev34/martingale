@@ -218,15 +218,11 @@ def all_script(driver):
         allfirstgamebet = True
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
-            # Check if all script types have global_match_win > 1
+            # Arrêt individuel par scriptType (objectif propre total_want_win[scriptType]) —
+            # l'objectif global config.total_gain_wanted n'est plus utilisé (aligné sur 431a).
             all_below_one = all(
                 float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
                 config.scriptTypeList)
-            # Calcul manquant à cet endroit avant ce fix : total_gain était référencé
-            # ligne suivante sans jamais être défini dans ce bloc (NameError garanti
-            # si la branche était atteinte) — cf. AUDIT_MARTINGALE_TENNIS.md, calcul
-            # identique à celui déjà fait plus loin dans ce même fichier.
-            total_gain = RedisIPC.get_total_gain(config.newmatch) - RedisIPC.get_total_loss(config.newmatch)
             if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
                 for st in config.scriptTypeList:
                     config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
@@ -235,11 +231,6 @@ def all_script(driver):
             if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
                 config.log(
                     f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
-            elif total_gain < float(config.total_gain_wanted):
-                config.log(
-                    f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
-                config.log(f"Restart {config.scriptType}", 'success', False)
-
             else:
                 config.log(
                     f' {scriptType} Net profit: {config.global_match_win[scriptType]} /{config.total_want_win[scriptType]}')
@@ -276,11 +267,10 @@ def all_script(driver):
                 config.log(txtlog, config.newmatch)
                 for scriptType in config.scriptTypeList:
                     config.switchScript(scriptType)
-                    # Check if all script types have global_match_win > 1
+                    # Arrêt individuel par scriptType — objectif global retiré.
                     all_below_one = all(
                         float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                         config.scriptTypeList)
-                    total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
 
                     if all_below_one:
                         for st in config.scriptTypeList:
@@ -291,16 +281,12 @@ def all_script(driver):
                     if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                         config.log(
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
-                    elif total_gain < float(config.total_gain_wanted):
-                        config.log(
-                            f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
-                        config.log(f"Restart {config.scriptType}", 'success', False)
                     else:
                         config.log(
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                         config.log(f" {scriptType} FIN {config.scriptType}", 'success', False)
                         RedisIPC.set_running(config.scriptType, False)
-                    
+
                         continue
                     config.result = GetResult(driver)
                     _api_id = (config.validated_bet or {}).get('api_bet_id')
@@ -317,8 +303,7 @@ def all_script(driver):
                         RedisIPC.add_gain_to_all(float(config.netprofit), config.newmatch)
                         config.init_variable()
 
-                        total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
-                        if (float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) and total_gain < float(config.total_gain_wanted)) or total_gain < float(config.total_gain_wanted):
+                        if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                             print("#RECHERCHE INFOS DE MISE")
                             config.perte = 0
                             if RedisIPC:
@@ -375,11 +360,10 @@ def all_script(driver):
                     allfirstgamebet = True
                     for scriptType in config.scriptTypeList:
                         config.switchScript(scriptType)
-                        # Check if all script types have global_match_win > 1
+                        # Arrêt individuel par scriptType — objectif global retiré.
                         all_below_one = all(
                             float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
                             config.scriptTypeList)
-                        total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
 
                         if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
                             for st in config.scriptTypeList:
@@ -389,10 +373,6 @@ def all_script(driver):
                         if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
                             config.log(
                                 f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
-                        elif total_gain < float(config.total_gain_wanted):
-                            config.log(
-                                f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
-                            config.log(f"Restart {config.scriptType}", 'success', False)
                         else:
                             config.log(
                                 f' {scriptType} Net profit: {config.global_match_win[scriptType]} /{config.total_want_win[scriptType]}')
@@ -441,14 +421,8 @@ def all_script(driver):
                 ok = True
                 for scriptType in config.scriptTypeList:
                     config.switchScript(scriptType)
-                    total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
                     if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
                         config.log(f'Net profit: {config.global_match_win[scriptType]}')
-                    elif total_gain < float(config.total_gain_wanted):
-                        config.log(
-                            f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
-                        config.log(f"Restart {config.scriptType}", 'success', False)
-
                     else:
                         config.log(f'Net profit: {config.global_match_win[scriptType]}')
                         config.log(f"FIN {config.scriptType}", 'success', False)
@@ -512,21 +486,9 @@ def all_script(driver):
 
             total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
             config.log(f"Gain total match {config.newmatch}: {total_gain}", 'success', False)
-            if total_gain >= float(config.total_gain_wanted):
-                for st in config.scriptTypeList:
-                    config.global_match_win[st] = float(config.total_want_win[st])
-                    config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
-                               'success', False)
-                    config.perte = 0
-                    RedisIPC.set_loss(config.scriptType, 0, matchname=config.newmatch)
-                config.log(f"FIN {config.scriptType}", 'success', False)
-                RedisIPC.set_running(config.scriptType, False, config.newmatch)
-                try:
-                    from Functions.TelegramBetsAPI import flush_api_result_queue
-                    flush_api_result_queue()
-                except Exception:
-                    pass
-                return True
+            # Arrêt individuel par scriptType — l'arrêt global sur total_gain_wanted
+            # (qui stoppait tout le match dès qu'un seul autre scriptType avait fini
+            # de gagner, sans équivalent individuel) a été retiré, aligné sur 431a.
 
             if config.validated_bet.get('result') == 'LOSE':
                 # VÉRIFCATION DU SET ACTUEL
@@ -589,8 +551,8 @@ def all_script(driver):
                 config.validated_bet = {}
 
                 print(RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch))
-                if (float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch)) and total_gain < float(config.total_gain_wanted):
-                    
+                if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+
                     #GetIfGameEnd(driver)
 
                     #

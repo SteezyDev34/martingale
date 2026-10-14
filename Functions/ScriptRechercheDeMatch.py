@@ -789,10 +789,10 @@ def rechercheDeMatch(driver):
                     config.global_match_win[st] = 0.0
                 config.ScriptConfig(st)
             if _new_list:
-                # config.total_gain_wanted (objectif global) n'est plus utilisé par le bot
-                # 1530A (arrêt purement individuel par scriptType, cf. Functions_431a.py) —
-                # il reste recalculé ici uniquement pour la famille 456P, qui s'en sert
-                # encore (Functions_456P.py/Functions_15V1.py).
+                # config.total_gain_wanted (objectif global) n'est plus utilisé pour l'arrêt
+                # par aucune famille de bot (1530A/431a et 456P/15V1 s'arrêtent désormais
+                # purement par scriptType individuel) — recalculé ici uniquement pour
+                # l'affichage du log ci-dessous.
                 if config.bot_family == '456P':
                     config.total_gain_wanted = len(_new_list) * 3.0
                 config.log(
