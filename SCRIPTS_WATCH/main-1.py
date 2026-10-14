@@ -333,10 +333,10 @@ def check_tempete_images():
                         result = extraire_pari_depuis_image(img_path, "Tempête Betting")
                         try:
                             pari_dict = json.loads(result)
-                            pari_dict["tipster"] = "TEMPÊTE BETTING ®️"
+                            pari_dict["tipster"] = "TEMPÊTE BETTING"
                             matches = pari_dict.get("matches", [])
                             if matches:
-                                api_success = send_bet_data_to_api(pari_dict, message_original=full_url, sender_username="TEMPÊTE BETTING ®️", image_path=img_path)
+                                api_success = send_bet_data_to_api(pari_dict, message_original=full_url, sender_username="TEMPÊTE BETTING", image_path=img_path)
                                 if api_success:
                                     for match in matches:
                                         log(f"[Tempête] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
@@ -566,8 +566,8 @@ async def my_event_handler(event):
                 # None = pas de condition (toute image est traitée sauf GIF)
                 IMAGE_CHANNELS = {
                     "AdrBetting":        "TICKET SAFE PUBLIC",
-                    "Tennistiquer":      "CONFIANCE DU JOUR",
-                    "TEMPÊTE BETTING ®️":   None,
+                    "Tennistiqueur":     "CONFIANCE DU JOUR",
+                    "TEMPÊTE BETTING":   None,
                     "France Pronos Live": None,
                     "Auxo1XBOT": None
                 }
