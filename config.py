@@ -46,7 +46,14 @@ bot_family = None
 # (40A, 4015, 4030, 400, 4P, 5P, 6P, BREAK, HOLD) appartiennent à la famille 456P
 # (scripts Selenium séparés : SCRIPTS_BREAK, SCRIPTS_HOLD, SCRIPTS_4P6P, SCRIPTS_5P40A).
 VALID_SCRIPTTYPES_1530A = {'150', '015', '030', '300', '15A', '30A'}
-VALID_SCRIPTTYPES_456P = {'40A', '4015', '4030', '400', '4P', '5P', '6P', 'BREAK', 'HOLD'}
+# HOLD retiré temporairement : l'API de stratégie (api_url + "/strategyHOLD/") renvoie
+# un 404 (confirmé en direct, 2026-10-14) — aucune table 0_StrategyHOLD côté serveur,
+# contrairement à tous les autres scriptTypes de cette liste. Tant que ça n'existe pas,
+# un match qui se voit assigner HOLD dynamiquement hérite silencieusement des valeurs
+# opérationnelles (mise, proba_mini, wantwin...) laissées par le scriptType précédent
+# dans la boucle — risqué avec de l'argent réel. Remettre 'HOLD' ici une fois la table
+# et le dossier api/strategyHOLD/ créés et déployés sur o2switch.
+VALID_SCRIPTTYPES_456P = {'40A', '4015', '4030', '400', '4P', '5P', '6P', 'BREAK'}
 
 # Mode de sélection des scriptTypes à partir des stats API auxotracker (/tension) :
 # 'strict' = n'active un scriptType que si edge > 0 vs la cote de référence 1xBet
