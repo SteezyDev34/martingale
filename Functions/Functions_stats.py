@@ -1096,12 +1096,12 @@ _MATCH_DATA_FIELD = {'4P': '400', '5P': '4015', '6P': '4030'}
 # cette liste le 2026-10-15 : vraie proba (modèle théorique binomial avec
 # deuce, basé sur le % de points gagnés au service de chaque joueur) calculée
 # côté AuxoTracker, remplace l'ancien proxy local ret_avg/svc_avg (cf.
-# ScriptRechercheDeMatch._THRESHOLDS, retiré). 030 reste hors de cette liste
-# pour l'instant : l'API expose bien prob_030 (proba que le serveur soit mené
-# 0-30 sur son propre jeu) mais sans cote de référence confirmée ni seuil
-# d'activation validé — ScriptRechercheDeMatch garde donc encore temporairement
-# son ancien proxy (ret_avg >= 0.42) pour 030 en attendant.
-_ALL_SCRIPT_TYPES = ['15A', '30A', '40A', '150', '015', '300', '400', '4015', '4030', '4P', '5P', '6P', 'HOLD', 'BREAK']
+# ScriptRechercheDeMatch._THRESHOLDS, retiré). 030 a rejoint la liste le même
+# jour : utilise désormais prob_030 (proba, par JEU, que le serveur se
+# retrouve mené 0-30 sur son propre jeu) au lieu de l'ancien proxy local
+# ret_avg >= 0.42. Pas de cote de référence confirmée pour ce marché -> pas
+# d'edge, seul le mode 'in_set' (seuil >=100%) s'applique, comme le reste.
+_ALL_SCRIPT_TYPES = ['15A', '30A', '40A', '150', '015', '300', '030', '400', '4015', '4030', '4P', '5P', '6P', 'HOLD', 'BREAK']
 
 # Sous ce score de tension du match (0-100), un match est déséquilibré et les
 # probas moyennes 15A/30A/40A (in_set) ne sont pas représentatives — même
@@ -1180,7 +1180,14 @@ def compute_script_types_from_match_data(match_data, mode=None):
         if tightness_gated and st in _TIGHTNESS_GATED_SCRIPT_TYPES:
             continue
         field = _MATCH_DATA_FIELD.get(st, st)
-        if st in ('150', '015'):
+        if st == '030':
+            # prob_030 est un champ racine de match_data (pas dans probs_in_set/
+            # edges comme les autres — déjà moyenné entre les deux joueurs côté
+            # AuxoTracker), et n'a pas de cote de référence confirmée -> pas d'edge.
+            raw = match_data.get('prob_030')
+            proba_pct = float(raw) if raw is not None else None
+            edge = None
+        elif st in ('150', '015'):
             proba_pct = _avg(probs_in_set, field)
             edge = _avg(edges, field)
         else:
