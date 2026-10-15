@@ -74,7 +74,7 @@ class Database
         equipe_2 VARCHAR(255) NOT NULL,
         categorie VARCHAR(100) NOT NULL,
         type_de_pari VARCHAR(255) NOT NULL,
-        selection VARCHAR(500) NOT NULL,
+        selection MEDIUMTEXT NOT NULL,
         odds DECIMAL(10,3) NOT NULL,
         tipster VARCHAR(50) NOT NULL,
         message_original TEXT,
