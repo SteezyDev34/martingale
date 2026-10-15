@@ -20,6 +20,19 @@ from Functions.Bookmakers.XBetScraper import XBetScraper
 from Functions.BetLabelsDB import get_all_challenges_for_prompt
 from Functions.Logs.Logger import log
 
+# Demarre le bridge WebSocket dedie Stake (port 9101, cf. StakeBridge.py) des
+# l'import de ce module — sans ca, StakeScraper.is_connected() reste toujours
+# False dans ce process (celui qui place reellement les paris, via
+# ProcessTelegramBets.py) et retombe silencieusement sur l'ancien Selenium,
+# meme si le bridge tourne par ailleurs dans le process du watcher
+# (SCRIPTS_WATCH/main-1.py via session_init.py). Non bloquant : si l'extension
+# Chrome n'est pas connectee sur ce port, StakeScraper retombe sur Selenium.
+try:
+    from Functions.Bookmakers.StakeBridge import start_stake_bridge
+    start_stake_bridge(wait_timeout=0)
+except Exception as e:
+    log(f"⚠️ Démarrage StakeBridge échoué (fallback Selenium): {e}", "warning")
+
 # Bookmakers sans VPN — lancés en parallèle (Lollybet mis de côté, désactivé via BOOKMAKER_STATE)
 NO_VPN_SCRAPERS = [WinamaxScraper, BetclicScraper]
 
