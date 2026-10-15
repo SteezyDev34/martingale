@@ -111,30 +111,30 @@ def GetBetNew(driver, nextBet=False, selection=''):
                 if config.scriptType == '4030':
                     config.win_type = '40:30'
                     win_texte = '40+:30'
-                    sType = "Game " + str(config.looking_game) + " 40+:30, Player " + str(first_player)
+                    sType = "Jeu " + str(config.looking_game) + " 40+:30, Joueur " + str(first_player)
                 elif config.scriptType == '4015':
                     config.win_type = '40:15'  # inversé
                     win_texte = '40+:15'
-                    sType = "Game " + str(config.looking_game) + " 40+:15, Player " + str(first_player)
+                    sType = "Jeu " + str(config.looking_game) + " 40+:15, Joueur " + str(first_player)
                 elif config.scriptType == '400':
                     config.win_type = '40:0'  # inversé
                     win_texte = '40+:0'
-                    sType = "Game " + str(config.looking_game) + " 40+:0, Player " + str(first_player)
+                    sType = "Jeu " + str(config.looking_game) + " 40+:0, Joueur " + str(first_player)
 
             else:
                 first_player = 2
                 if config.scriptType == '4030':
                     config.win_type = '30:40'  # inversé
                     win_texte = '30:40+'
-                    sType = "Game " + str(config.looking_game) + " 30:40+, Player " + str(first_player)
+                    sType = "Jeu " + str(config.looking_game) + " 30:40+, Joueur " + str(first_player)
                 elif config.scriptType == '4015':
                     config.win_type = '15:40'  # inversé
                     win_texte = '15:40+'
-                    sType = "Game " + str(config.looking_game) + " 15:40+, Player " + str(first_player)
+                    sType = "Jeu " + str(config.looking_game) + " 15:40+, Joueur " + str(first_player)
                 elif config.scriptType == '400':
                     win_texte = '0:40+'
                     config.win_type = '0:40'  # inversé
-                    sType = "Game " + str(config.looking_game) + " 0:40+, Player " + str(first_player)
+                    sType = "Jeu " + str(config.looking_game) + " 0:40+, Joueur " + str(first_player)
         if config.scriptType == '030':
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
@@ -173,11 +173,11 @@ def GetBetNew(driver, nextBet=False, selection=''):
             if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                 first_player = 1
                 config.win_type = ['0:40', '15:40', '30:40', '40:A']
-                win_texte = 'W2'
+                win_texte = 'V2'
             else:
                 first_player = 2
                 config.win_type = ['40:0', '40:15', '40:30', 'A:40']
-                win_texte = 'W1'
+                win_texte = 'V1'
         if config.scriptType == 'HOLD':
             # Inverse exact de BREAK : même détection du serveur via l'icône
             # (scoreboard-periods-inning__ico), mais on parie sur le SERVEUR qui
@@ -190,11 +190,11 @@ def GetBetNew(driver, nextBet=False, selection=''):
             if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                 first_player = 1
                 config.win_type = ['40:0', '40:15', '40:30', 'A:40']
-                win_texte = 'W1'
+                win_texte = 'V1'
             else:
                 first_player = 2
                 config.win_type = ['0:40', '15:40', '30:40', '40:A']
-                win_texte = 'W2'
+                win_texte = 'V2'
         if config.scriptType == '6P':
             sType = ", 6"
             config.win_type = ['40:30', '30:40']  # inversé
@@ -310,7 +310,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
                     list_of_newbet_type = list_of_newbet_type_text.split(sType)
                     if len(list_of_newbet_type) > 1:
                         list_of_newbet_type_text = list_of_newbet_type_text.split(" " + win_texte)[0]
-                        getjeu_actuel = int(list_of_newbet_type_text.split("Game ")[1])
+                        getjeu_actuel = int(list_of_newbet_type_text.split("Jeu ")[1])
                         if str(config.looking_game) == str(getjeu_actuel):
                             clic = True
                             config.log_clear_line(logline)
@@ -349,7 +349,7 @@ def GetBetNew(driver, nextBet=False, selection=''):
                     list_of_newbet_type = list_of_newbet_type_text.split(' - ' + win_texte)
                     if len(list_of_newbet_type) > 1:
                         list_of_newbet_type_text = list_of_newbet_type[0]
-                        getjeu_actuel = int(list_of_newbet_type_text.split("Game ")[1])
+                        getjeu_actuel = int(list_of_newbet_type_text.split("Jeu ")[1])
                         if str(config.looking_game) == str(getjeu_actuel):
                             clic = True
                             config.log_clear_line(logline)
