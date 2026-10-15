@@ -1076,14 +1076,6 @@ def get_match_stats_extended(playerName1, playerName2):
 # ---------------------------------------------------------------------------
 
 # Cote de référence 1xBet par marché (seuil de rentabilité en mode strict).
-_REFERENCE_ODDS = {
-    '15A': 1.85, '30A': 2.40, '40A': 3.00,
-    '150': 1.85, '015': 1.85,
-    '300': 2.40,
-    '400': 3.00, '4015': 3.00, '4030': 3.00,
-    '4P': 3.00, '5P': 3.00, '6P': 3.00,
-}
-
 # Seuil de proba brute en mode loose (indépendant de la cote).
 _LOOSE_THRESHOLDS = {
     '15A': 0.40, '30A': 0.25, '40A': 0.20,
@@ -1093,126 +1085,107 @@ _LOOSE_THRESHOLDS = {
     '4P': 0.08, '5P': 0.20, '6P': 0.20,
 }
 
-# scriptType -> champ correspondant dans stats['stats'] de l'endpoint /tension.
-_TENSION_FIELD = {
-    '15A': 'reach_15a',
-    '30A': 'reach_30a',
-    '40A': 'reach_40a',
-    '300': 'reach_30love',
-    '150': 'leads_15_0',
-    '015': 'lost_first_point_on_serve',
-    '400': 'game_40_0', '4P': 'game_40_0',
-    '4015': 'game_40_15', '5P': 'game_40_15',
-    '4030': 'game_40_30', '6P': 'game_40_30',
-}
+# scriptType -> clé correspondante dans probs_in_set/edges de l'API (identité
+# sauf pour les alias 4P/5P/6P, qui partagent le champ de 400/4015/4030).
+_MATCH_DATA_FIELD = {'4P': '400', '5P': '4015', '6P': '4030'}
+
+# Tous les scriptTypes couverts par l'API auxotracker (hors BREAK/030/HOLD,
+# qui n'ont pas d'équivalent côté API et restent calculés localement, voir
+# compute_script_types).
+_ALL_SCRIPT_TYPES = ['15A', '30A', '40A', '150', '015', '300', '400', '4015', '4030', '4P', '5P', '6P']
+
+# Sous ce score de tension du match (0-100), un match est déséquilibré et les
+# probas moyennes 15A/30A/40A (in_set) ne sont pas représentatives — même
+# seuil et même portée que MIN_TIGHTNESS_FOR_SET_LEAD_PROBS côté frontend
+# (TodayMatches.vue) et tts.score >= 50 côté MatchController::today (demandé
+# le 2026-10-15). 30-0/G:40-0/15/30 restent représentatifs indépendamment de
+# l'équilibre du match, donc pas concernés par ce garde-fou.
+_MIN_TIGHTNESS_FOR_SET_LEAD_SCRIPT_TYPES = 50
+_TIGHTNESS_GATED_SCRIPT_TYPES = {'15A', '30A', '40A'}
 
 
-def _search_team_id(name, attempts=2):
-    """Cherche l'id auxotracker d'un joueur par son nom (sport tennis=2)."""
-    url = f"https://api.auxotracker.fr/api/sports/2/teams/search?search={quote_plus(name)}"
-    last_err = None
-    for i in range(attempts):
-        try:
-            resp = requests.get(url, timeout=10)
-            data = resp.json().get('data', [])
-            return data[0]['id'] if data else None
-        except Exception as e:
-            last_err = e
-            if i + 1 < attempts:
-                time.sleep(1)
-    config.log(f"[auxotracker] recherche joueur '{name}' échouée après {attempts} tentative(s): {last_err}", 'warning', True)
-    return None
-
-
-def get_match_tension_stats(playerName1, playerName2):
+def get_match_link_and_probs(playerName1, playerName2, date_str=None):
     """
-    Récupère les stats 'tension de jeu' déjà calculées par l'API auxotracker
-    (/api/stats/tennis/player/{id}/tension) pour les deux joueurs.
+    Récupère en un seul appel le lien Sofascore ET les probas/edges/tightness
+    déjà calculés côté AuxoTracker (table tennis_match_tightness_scores) pour
+    CE match précis — remplace l'ancien double appel (lien via
+    /matches/tennis/link + stats tension par joueur via /tension, recalculées
+    localement). Source unique de vérité, partagée avec le frontend
+    AuxoTracker (demandé le 2026-10-15).
 
-    Retourne {'player1': {...}, 'player2': {...}} ou None si un joueur est
-    introuvable ou si les stats de l'un des deux ne sont pas fiables.
+    Retourne le dict JSON de l'API (sofascore_link, tightness_score,
+    probs_in_set, edges, ...) ou None si le match est introuvable ou l'appel
+    a échoué.
     """
-    pid1 = _search_team_id(playerName1)
-    pid2 = _search_team_id(playerName2)
-    if not pid1 or not pid2:
+    date_str = date_str or datetime.now().strftime("%Y-%m-%d")
+    url = "https://api.auxotracker.fr/api/matches/tennis/link"
+    params = {"team1": playerName1, "team2": playerName2, "date": date_str}
+    try:
+        data = requests.get(url, params=params, timeout=10).json()
+        if not data.get('success'):
+            config.log(f"[auxotracker] lien+probas introuvables pour {playerName1} vs {playerName2}: {data.get('message')}", 'warning', True)
+            return None
+        return data
+    except Exception as e:
+        config.log(f"[auxotracker] appel lien+probas échoué pour {playerName1} vs {playerName2}: {e}", 'warning', True)
         return None
 
-    def _fetch(pid, attempts=2):
-        url = f"https://api.auxotracker.fr/api/stats/tennis/player/{pid}/tension"
-        last_err = None
-        for i in range(attempts):
-            try:
-                data = requests.get(url, timeout=10).json()
-                if not data.get('success'):
-                    config.log(f"[auxotracker] stats tension pid={pid}: success=false ({data})", 'warning', True)
-                    return None
-                if not data.get('reliable'):
-                    config.log(f"[auxotracker] stats tension pid={pid}: reliable=false (échantillon insuffisant)", 'warning', True)
-                    return None
-                return {
-                    'sample_n': data.get('sample', {}).get('matches', 0),
-                    'stats': data.get('stats', {}),
-                    # Taux "au moins une fois dans les 10 premiers jeux du 1er set"
-                    # (par match, blendé par tier d'adversaire côté API) — c'est la
-                    # bonne unité pour une martingale jouée sur plusieurs jeux
-                    # successifs, contrairement à 'stats' qui est un taux par jeu
-                    # isolé. Cf. CLAUDE.md § "Nouveau système de calcul côté
-                    # AuxoTracker (2026-09-28)".
-                    'stats_in_set': data.get('stats_in_set', {}),
-                }
-            except Exception as e:
-                last_err = e
-                if i + 1 < attempts:
-                    time.sleep(1)
-        config.log(f"[auxotracker] stats tension pid={pid} échouées après {attempts} tentative(s): {last_err}", 'warning', True)
-        return None
 
-    p1 = _fetch(pid1)
-    p2 = _fetch(pid2)
-    if p1 is None or p2 is None:
-        return None
-    return {'player1': p1, 'player2': p2}
-
-
-def compute_script_types_from_api(playerName1, playerName2, mode=None):
+def compute_script_types_from_match_data(match_data, mode=None):
     """
-    Détermine les scriptTypes activables à partir des stats déjà calculées par
-    l'API auxotracker (/tension), sans recalcul svc/ret maison.
+    Détermine les scriptTypes activables à partir des probas/edges/tightness
+    déjà calculés côté AuxoTracker pour CE match (match_data = réponse de
+    get_match_link_and_probs) — aucun recalcul local, remplace l'ancienne
+    compute_script_types_from_api qui refaisait le calcul à partir de stats
+    génériques par joueur via /tension.
 
-    mode: 'strict' (edge > 0 vs cote de référence 1xBet), 'loose' (seuil de
-    proba brute, indépendant de la cote), ou 'in_set' (nouveau système
-    AuxoTracker du 2026-09-28, cf. CLAUDE.md : utilise `stats_in_set`, le taux
-    "au moins une fois dans les 10 premiers jeux du 1er set" — la bonne unité
-    pour une martingale jouée sur plusieurs jeux successifs, contrairement à
-    `stats` qui est un taux par jeu isolé. Seuil ≥85%, validé par backtest
-    leave-one-out côté AuxoTracker). Par défaut config.SCRIPT_SELECTION_MODE.
+    mode: 'strict' (edge > 0, edge déjà calculé côté AuxoTracker vs sa propre
+    cote de référence), 'loose' (seuil de proba brute, indépendant de la
+    cote), ou 'in_set' (défaut, config.SCRIPT_SELECTION_MODE — seuil ≥85% sur
+    le taux "au moins une fois dans les 10 premiers jeux du 1er set", validé
+    par backtest leave-one-out côté AuxoTracker).
+
+    15A/30A/40A sont en plus invalidés si le match n'est pas serré (tightness
+    < 50), cf. _MIN_TIGHTNESS_FOR_SET_LEAD_SCRIPT_TYPES ci-dessus.
 
     Retourne (script_types: list[str], details: dict) — details garde, pour
-    chaque scriptType évalué, la proba moyenne utilisée (et l'edge en strict).
+    chaque scriptType évalué, la proba utilisée (et l'edge en strict).
     """
     mode = mode or getattr(config, 'SCRIPT_SELECTION_MODE', 'strict')
-    tension = get_match_tension_stats(playerName1, playerName2)
-    if tension is None:
-        return [], {}
+    probs_in_set = match_data.get('probs_in_set') or {}
+    edges = match_data.get('edges') or {}
+    tightness = match_data.get('tightness_score')
+    tightness_gated = tightness is not None and tightness < _MIN_TIGHTNESS_FOR_SET_LEAD_SCRIPT_TYPES
+
+    def _avg(d, key_base):
+        v1, v2 = d.get(f'{key_base}_1'), d.get(f'{key_base}_2')
+        if v1 is None or v2 is None:
+            return None
+        return (float(v1) + float(v2)) / 2
 
     script_types = []
     details = {}
-    stats_key = 'stats_in_set' if mode == 'in_set' else 'stats'
-    for st, field in _TENSION_FIELD.items():
-        v1 = tension['player1'].get(stats_key, {}).get(field)
-        v2 = tension['player2'].get(stats_key, {}).get(field)
-        if v1 is None or v2 is None:
-            # 'stats_in_set' absent (API pas encore à jour) ou champ non couvert
-            # (cf. "Limite connue" du CLAUDE.md) — on ignore ce scriptType plutôt
-            # que de deviner, pas de repli silencieux sur 'stats' (unité différente).
+    for st in _ALL_SCRIPT_TYPES:
+        if tightness_gated and st in _TIGHTNESS_GATED_SCRIPT_TYPES:
             continue
-        proba = ((v1 + v2) / 2) / 100.0
+        field = _MATCH_DATA_FIELD.get(st, st)
+        if st in ('150', '015'):
+            proba_pct = _avg(probs_in_set, field)
+            edge = _avg(edges, field)
+        else:
+            raw = probs_in_set.get(field)
+            proba_pct = float(raw) if raw is not None else None
+            raw_edge = edges.get(field)
+            edge = float(raw_edge) if raw_edge is not None else None
+        if proba_pct is None:
+            # Champ absent (API pas encore à jour pour ce match) — on ignore
+            # ce scriptType plutôt que de deviner.
+            continue
+        proba = proba_pct / 100.0
 
         if mode == 'strict':
-            odds = _REFERENCE_ODDS.get(st)
-            if odds is None:
+            if edge is None:
                 continue
-            edge = proba - (1.0 / odds)
             activable = edge > 0
             details[st] = {'proba': proba, 'edge': edge}
         elif mode == 'in_set':

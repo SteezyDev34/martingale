@@ -7,10 +7,11 @@ from datetime import datetime
 
 # ---------------------------------------------------------------------------
 # Seuils de sélection des scriptTypes encore sans correspondance directe dans
-# l'API auxotracker (/tension n'expose pas de taux de hold/break) — le reste
-# des scriptTypes (15A/30A/40A/150/015/300/400/4015/4030/4P/5P/6P) est décidé
-# par Functions_stats.compute_script_types_from_api à partir des stats déjà
-# calculées par l'API, voir traiter_matchlist().
+# l'API auxotracker (pas de taux de hold/break exposé) — le reste des
+# scriptTypes (15A/30A/40A/150/015/300/400/4015/4030/4P/5P/6P) est décidé par
+# Functions_stats.compute_script_types_from_match_data, à partir des
+# probas/edges/tightness déjà calculés par l'API pour ce match précis (aucun
+# recalcul local), voir traiter_matchlist().
 # svc = % 1er service gagné  |  ret = % balles de break converties
 # proba40A = svc1*ret1 + svc2*ret2
 # ---------------------------------------------------------------------------
@@ -82,9 +83,6 @@ def compute_script_types(stats):
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-
-from urllib.parse import quote_plus
-import requests
 
 import config
 from Functions import GetMatchScore, GetLigueName, Functions_stats
@@ -162,23 +160,32 @@ def traiter_matchlist(matchlist):
         stats = Functions_stats.get_match_stats_extended(players_name[0], players_name[1])
         config.proba40A = stats['proba40A']
         script_types_legacy, _ = compute_script_types(stats)
-        # Reste des scriptTypes (15A/30A/40A/150/015/300/400/4015/4030/4P/5P/6P)
-        # décidés directement à partir des stats déjà calculées par l'API auxotracker.
-        script_types_api, api_details = Functions_stats.compute_script_types_from_api(
-            players_name[0], players_name[1]
-        )
-        if api_details:
+
+        # Un seul appel API pour le lien Sofascore ET les scriptTypes
+        # (15A/30A/40A/150/015/300/400/4015/4030/4P/5P/6P) : plus de
+        # recalcul local à partir de stats génériques par joueur, tout vient
+        # déjà calculé pour ce match précis (probas, edges, tightness).
+        date_str = datetime.now().strftime("%Y-%m-%d")
+        match_data = Functions_stats.get_match_link_and_probs(players_name[0], players_name[1], date_str)
+        sofascore_link = match_data.get('sofascore_link') if match_data else None
+
+        if match_data:
+            script_types_api, api_details = Functions_stats.compute_script_types_from_match_data(match_data)
             config.log(
                 f"ScriptTypes API ({getattr(config, 'SCRIPT_SELECTION_MODE', 'strict')}) "
                 f"pour {players_name[0]} vs {players_name[1]}: {script_types_api} — {api_details}",
                 'info', False
             )
-        # Si l'API auxotracker n'a aucune stat pour ce match (api_details vide —
-        # tension introuvable/pas fiable), on désactive temporairement aussi le
-        # calcul maison (BREAK/030/HOLD via svc/ret) : on ne garde que ce qui a
-        # déjà été déterminé par l'API lors du classement, pas de recalcul local
-        # de secours qui activerait un scriptType sans aucune stat fiable derrière.
-        if api_details:
+        else:
+            script_types_api = []
+
+        # Si l'API auxotracker n'a trouvé aucun match/stat (match_data vide —
+        # introuvable ou pas de tightness fiable), on désactive temporairement
+        # aussi le calcul maison (BREAK/030/HOLD via svc/ret) : on ne garde que
+        # ce qui a déjà été déterminé par l'API lors du classement, pas de
+        # recalcul local de secours qui activerait un scriptType sans aucune
+        # stat fiable derrière.
+        if match_data:
             script_types = list(dict.fromkeys(script_types_api + script_types_legacy))
         else:
             script_types = []
@@ -190,37 +197,13 @@ def traiter_matchlist(matchlist):
         # scriptTypes calculés à partir des stats API (script_types non vide, déjà vérifié
         # ci-dessus) qui priment, pas le proba40A svc/ret hérité de l'ancien calcul.
         try:
-            # Construire l'URL de l'API auxotracker avec encodage des noms et date du jour
-            date_str = datetime.now().strftime("%Y-%m-%d")
-            player1 = players_name[0]
-            player2 = players_name[1]
-            p1_enc = quote_plus(player1)
-            p2_enc = quote_plus(player2)
-            base_api = "https://api.auxotracker.fr/api/matches/tennis/link"
-            api_url = f"{base_api}?team1={p1_enc}&team2={p2_enc}&date={date_str}"
-
-            # Appel de l'API
-            sofascore_link = None
-            try:
-                resp = requests.get(api_url, timeout=10)
-                if resp.status_code == 200:
-                    data = resp.json()
-                    if data.get('success'):
-                        sofascore_link = data.get('sofascore_link')
-                    else:
-                        config.log(f"API retourné success=false pour {api_url}", 'warning', False)
-                else:
-                    config.log(f"Requête API échouée {resp.status_code} pour {api_url}", 'warning', False)
-            except Exception as e:
-                config.log(f"Erreur lors de l'appel API auxotracker: {e}", 'warning', False)
-
             # Ajouter les informations au matchItem
             matchItem.append(config.proba40A)
             matchItem.append(sofascore_link)
             matchItem.append(script_types)
             goodmatch.append(matchItem)
         except Exception as e:
-            config.log(f"Erreur lors de la récupération du lien Sofascore: {e}", 'warning', False)
+            config.log(f"Erreur lors de la construction du matchItem: {e}", 'warning', False)
     return goodmatch
 
 
