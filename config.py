@@ -46,7 +46,7 @@ bot_family = None
 # (40A, 4015, 4030, 400, 4P, 5P, 6P, BREAK, HOLD) appartiennent à la famille 456P
 # (scripts Selenium séparés : SCRIPTS_BREAK, SCRIPTS_HOLD, SCRIPTS_4P6P, SCRIPTS_5P40A).
 VALID_SCRIPTTYPES_1530A = {'150', '015', '030', '300', '15A', '30A'}
-VALID_SCRIPTTYPES_456P = {'40A', '4P', '5P', '6P', 'BREAK', 'HOLD'}
+VALID_SCRIPTTYPES_456P = {'40A', '4015', '4030', '400', '4P', '5P', '6P', 'BREAK', 'HOLD'}
 
 # Ordre de référence ("tableau modèle") des scriptTypes 1530A — un set Python n'a pas
 # d'ordre garanti, donc l'ordre d'itération de VALID_SCRIPTTYPES_1530A ne reflète pas
