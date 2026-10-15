@@ -17,17 +17,15 @@ load_dotenv(os.path.join(project_root, ".env"))
 from selenium.webdriver.common.by import By
 from Functions.Logs.Logger import log
 
-LOGIN_URLS = {
-    "Stake":    "https://stake.bet/fr",
-}
+# Stake est passé sur le bridge extension Chrome (StakeBridge.py, port 9101) — plus
+# besoin de session Selenium/login manuel pour ce bookmaker. Ces dicts restent vides
+# en attendant qu'un futur bookmaker non-bridge en ait besoin ; tant qu'ils le sont,
+# init_bookmaker_sessions() ne lance aucun Chrome Selenium (voir plus bas).
+LOGIN_URLS = {}
 
-HOME_URLS = {
-    "Stake":    "https://stake.bet",
-}
+HOME_URLS = {}
 
-LOGGED_IN_SELECTORS = {
-    "Stake":    ["[class*='authenticated']"],
-}
+LOGGED_IN_SELECTORS = {}
 
 WINDOW_NUMBER = 8   # fenêtre unique utilisée pour toutes les vérifications
 
@@ -124,6 +122,11 @@ def init_bookmaker_sessions() -> dict:
         start_stake_bridge(wait_timeout=0)
     except Exception as e:
         log(f"⚠️ Démarrage StakeBridge échoué (fallback Selenium): {e}", "warning")
+
+    if not LOGIN_URLS:
+        # Plus aucun bookmaker ne dépend de ce check Selenium (tous migrés sur
+        # bridge extension ou gérés ailleurs) — inutile de lancer Chrome.
+        return {}
 
     log("🔑 Initialisation des sessions bookmakers...", "info")
 
