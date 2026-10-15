@@ -6,23 +6,25 @@ from datetime import datetime
 
 
 # ---------------------------------------------------------------------------
-# Seuils de sélection des scriptTypes encore sans correspondance directe dans
-# l'API auxotracker (pas de taux de hold/break exposé) — le reste des
-# scriptTypes (15A/30A/40A/150/015/300/400/4015/4030/4P/5P/6P) est décidé par
-# Functions_stats.compute_script_types_from_match_data, à partir des
-# probas/edges/tightness déjà calculés par l'API pour ce match précis (aucun
-# recalcul local), voir traiter_matchlist().
+# Seuil de sélection pour 030, en attendant une vraie proba côté API (l'API
+# expose déjà prob_030 depuis le 2026-10-15, mais sans cote de référence
+# confirmée ni seuil d'activation validé — voir _ALL_SCRIPT_TYPES dans
+# Functions_stats.py). BREAK et HOLD sont passés à la vraie proba API ce
+# même jour (remplace cet ancien proxy ret_avg/svc_avg, pas assez fiable :
+# juste une moyenne de stats de carrière, sans modèle de jeu de service).
+# Le reste des scriptTypes (15A/30A/40A/150/015/300/400/4015/4030/4P/5P/6P)
+# est décidé par Functions_stats.compute_script_types_from_match_data, à
+# partir des probas/edges/tightness déjà calculés par l'API pour ce match
+# précis (aucun recalcul local), voir traiter_matchlist().
 # svc = % 1er service gagné  |  ret = % balles de break converties
 # proba40A = svc1*ret1 + svc2*ret2
 # ---------------------------------------------------------------------------
 _THRESHOLDS = {
-    'BREAK': lambda s: s['ret_avg'] >= 0.38,
-    '030':   lambda s: s['ret_avg'] >= 0.42,
-    'HOLD':  lambda s: s['svc_avg'] >= 0.65,
+    '030': lambda s: s['ret_avg'] >= 0.42,
 }
 
-_BASE_SCRIPTS  = ['BREAK']
-_RISKY_SCRIPTS = ['030', 'HOLD']
+_BASE_SCRIPTS  = []
+_RISKY_SCRIPTS = ['030']
 
 
 def _to_24h_time(time_value, ampm=None):

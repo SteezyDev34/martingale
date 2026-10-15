@@ -1076,7 +1076,10 @@ def get_match_stats_extended(playerName1, playerName2):
 # ---------------------------------------------------------------------------
 
 # Cote de référence 1xBet par marché (seuil de rentabilité en mode strict).
-# Seuil de proba brute en mode loose (indépendant de la cote).
+# Seuil de proba brute en mode loose (indépendant de la cote). Pas d'entrée
+# HOLD/BREAK ici : seuils pas encore calibrés pour ce mode, retombent sur le
+# défaut (1.0, n'active jamais) — sans impact tant que le mode actif reste
+# 'in_set' (config.SCRIPT_SELECTION_MODE).
 _LOOSE_THRESHOLDS = {
     '15A': 0.40, '30A': 0.25, '40A': 0.20,
     '150': 0.35, '015': 0.35,
@@ -1089,10 +1092,16 @@ _LOOSE_THRESHOLDS = {
 # sauf pour les alias 4P/5P/6P, qui partagent le champ de 400/4015/4030).
 _MATCH_DATA_FIELD = {'4P': '400', '5P': '4015', '6P': '4030'}
 
-# Tous les scriptTypes couverts par l'API auxotracker (hors BREAK/030/HOLD,
-# qui n'ont pas d'équivalent côté API et restent calculés localement, voir
-# compute_script_types).
-_ALL_SCRIPT_TYPES = ['15A', '30A', '40A', '150', '015', '300', '400', '4015', '4030', '4P', '5P', '6P']
+# Tous les scriptTypes couverts par l'API auxotracker. HOLD/BREAK ont rejoint
+# cette liste le 2026-10-15 : vraie proba (modèle théorique binomial avec
+# deuce, basé sur le % de points gagnés au service de chaque joueur) calculée
+# côté AuxoTracker, remplace l'ancien proxy local ret_avg/svc_avg (cf.
+# ScriptRechercheDeMatch._THRESHOLDS, retiré). 030 reste hors de cette liste
+# pour l'instant : l'API expose bien prob_030 (proba que le serveur soit mené
+# 0-30 sur son propre jeu) mais sans cote de référence confirmée ni seuil
+# d'activation validé — ScriptRechercheDeMatch garde donc encore temporairement
+# son ancien proxy (ret_avg >= 0.42) pour 030 en attendant.
+_ALL_SCRIPT_TYPES = ['15A', '30A', '40A', '150', '015', '300', '400', '4015', '4030', '4P', '5P', '6P', 'HOLD', 'BREAK']
 
 # Sous ce score de tension du match (0-100), un match est déséquilibré et les
 # probas moyennes 15A/30A/40A (in_set) ne sont pas représentatives — même
