@@ -320,14 +320,12 @@ def _load_dynamic_scripttypes(match_id, only=None):
             _new_list = [st for st in _new_list if st in planned]
     else:
         _new_list = _get_valid_scripttypes_for_match(match_id)
-    # 15A doit toujours être traité après 300/030 (30-0/0-30) s'ils sont présents.
-    if '15A' in _new_list:
-        _new_list = [st for st in _new_list if st != '15A']
-        insert_at = max(
-            (i + 1 for i, st in enumerate(_new_list) if st in ('300', '030')),
-            default=0
-        )
-        _new_list.insert(insert_at, '15A')
+    # Respecte l'ordre du tableau modèle (config.SCRIPTTYPE_ORDER_1530A) au lieu de
+    # l'ordre arbitraire renvoyé par l'API/DB lors du classement — couvre aussi la
+    # règle "15A toujours après 300/030" (déjà respectée par cet ordre modèle).
+    if config.bot_family == '1530A':
+        order = config.SCRIPTTYPE_ORDER_1530A
+        _new_list = sorted(_new_list, key=lambda st: order.index(st) if st in order else len(order))
     config.scriptTypeList = _new_list
     for st in _new_list:
         if st not in config.winmatch:

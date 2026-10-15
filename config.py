@@ -48,6 +48,13 @@ bot_family = None
 VALID_SCRIPTTYPES_1530A = {'150', '015', '030', '300', '15A', '30A'}
 VALID_SCRIPTTYPES_456P = {'40A', '4P', '5P', '6P', 'BREAK', 'HOLD'}
 
+# Ordre de référence ("tableau modèle") des scriptTypes 1530A — un set Python n'a pas
+# d'ordre garanti, donc l'ordre d'itération de VALID_SCRIPTTYPES_1530A ne reflète pas
+# forcément celui-ci. Utilisé par _load_dynamic_scripttypes (ScriptRechercheDeMatch.py)
+# pour trier config.scriptTypeList dans cet ordre, peu importe l'ordre renvoyé par
+# l'API/DB lors du classement du match.
+SCRIPTTYPE_ORDER_1530A = ['150', '015', '030', '300', '15A', '30A']
+
 # Mode de sélection des scriptTypes à partir des stats API auxotracker (/tension) :
 # 'strict' = n'active un scriptType que si edge > 0 vs la cote de référence 1xBet
 # 'loose'  = active dès qu'un seuil de proba brute est dépassé, sans exiger d'edge positif
