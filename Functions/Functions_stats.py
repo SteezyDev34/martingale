@@ -1129,15 +1129,28 @@ def get_match_link_and_probs(playerName1, playerName2, date_str=None):
     date_str = date_str or datetime.now().strftime("%Y-%m-%d")
     url = "https://api.auxotracker.fr/api/matches/tennis/link"
     params = {"team1": playerName1, "team2": playerName2, "date": date_str}
-    try:
-        data = requests.get(url, params=params, timeout=10).json()
-        if not data.get('success'):
-            config.log(f"[auxotracker] lien+probas introuvables pour {playerName1} vs {playerName2}: {data.get('message')}", 'warning', True)
-            return None
-        return data
-    except Exception as e:
-        config.log(f"[auxotracker] appel lien+probas échoué pour {playerName1} vs {playerName2}: {e}", 'warning', True)
-        return None
+    # Retentatives sur échec RÉSEAU/PARSING uniquement (timeout, réponse vide —
+    # "Expecting value: line 1 column 1" — probable surcharge momentanée sous le
+    # volume d'appels séquentiels d'un classement complet, ~100+ matchs en 9min,
+    # cf. 16 matchs perdus ainsi lors d'un classement du 2026-10-15, certains
+    # visiblement présents et valides côté frontend AuxoTracker juste après).
+    # PAS de retry sur un {"success": false} propre : ça, c'est une vraie
+    # réponse "match introuvable", pas une panne transitoire.
+    last_exc = None
+    for attempt in range(3):
+        try:
+            data = requests.get(url, params=params, timeout=10).json()
+            if not data.get('success'):
+                config.log(f"[auxotracker] lien+probas introuvables pour {playerName1} vs {playerName2}: {data.get('message')}", 'warning', True)
+                return None
+            return data
+        except Exception as e:
+            last_exc = e
+            if attempt < 2:
+                time.sleep(1 + attempt)
+                continue
+    config.log(f"[auxotracker] appel lien+probas échoué pour {playerName1} vs {playerName2} (3 tentatives): {last_exc}", 'warning', True)
+    return None
 
 
 def compute_script_types_from_match_data(match_data, mode=None):
