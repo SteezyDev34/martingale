@@ -1150,9 +1150,11 @@ def compute_script_types_from_match_data(match_data, mode=None):
 
     mode: 'strict' (edge > 0, edge déjà calculé côté AuxoTracker vs sa propre
     cote de référence), 'loose' (seuil de proba brute, indépendant de la
-    cote), ou 'in_set' (défaut, config.SCRIPT_SELECTION_MODE — seuil ≥85% sur
-    le taux "au moins une fois dans les 10 premiers jeux du 1er set", validé
-    par backtest leave-one-out côté AuxoTracker).
+    cote), ou 'in_set' (défaut, config.SCRIPT_SELECTION_MODE — seuil ≥100% sur
+    le taux "au moins une fois dans les 10 premiers jeux du 1er set" : le
+    backtest leave-one-out valide déjà ≥85%, mais l'utilisateur veut rester
+    sur les cas sans la moindre exception historique, quitte à activer
+    beaucoup moins de scriptTypes).
 
     15A/30A/40A sont en plus invalidés si le match n'est pas serré (tightness
     < 50), cf. _MIN_TIGHTNESS_FOR_SET_LEAD_SCRIPT_TYPES ci-dessus.
@@ -1198,8 +1200,8 @@ def compute_script_types_from_match_data(match_data, mode=None):
             activable = edge > 0
             details[st] = {'proba': proba, 'edge': edge}
         elif mode == 'in_set':
-            activable = proba >= 0.85
-            details[st] = {'proba': proba, 'threshold': 0.85}
+            activable = proba >= 1.0
+            details[st] = {'proba': proba, 'threshold': 1.0}
         else:
             threshold = _LOOSE_THRESHOLDS.get(st, 1.0)
             activable = proba >= threshold
