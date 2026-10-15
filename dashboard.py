@@ -360,6 +360,40 @@ def clear_running_table():
         return False
 
 
+def get_running_matchnames():
+    """
+    Liste les matchs distincts actuellement marqués 'en cours' (is_running=1) dans la
+    table running, tous scriptTypes/familles confondus — sert à cibler l'annulation
+    d'une reprise sur UN match précis plutôt que de vider toute la table.
+    """
+    try:
+        conn = sqlite3.connect(REDIS_DB)
+        rows = conn.execute(
+            "SELECT DISTINCT matchname FROM running WHERE is_running = 1 AND matchname != '' ORDER BY matchname"
+        ).fetchall()
+        conn.close()
+        return [r[0] for r in rows]
+    except Exception:
+        return []
+
+
+def clear_running_match(matchname):
+    """
+    Remet à 0 'is_running' uniquement pour les lignes de la table running portant ce
+    matchname précis — au prochain cycle de recherche, RedisIPC.get_interrupted_match()
+    ne trouve plus ce match et le script repart sur une recherche normale au lieu de
+    le reprendre, sans affecter les autres matchs/familles éventuellement en cours.
+    """
+    try:
+        conn = sqlite3.connect(REDIS_DB)
+        conn.execute("UPDATE running SET is_running = 0 WHERE matchname = ?", (matchname,))
+        conn.commit()
+        conn.close()
+        return True
+    except Exception:
+        return False
+
+
 
 
 # Process lancés PAR ce dashboard : path -> {"proc": Popen, "queue": Queue, "name": str}.
@@ -620,6 +654,56 @@ class ConfirmScreen(ModalScreen[bool]):
         self.dismiss(event.button.id == "confirm_yes")
 
 
+class SelectMatchScreen(ModalScreen):
+    """Liste les matchs actuellement 'en cours' pour en choisir un à annuler (reprise)."""
+
+    CSS = """
+    SelectMatchScreen {
+        align: center middle;
+    }
+    #dialog {
+        width: 70;
+        height: auto;
+        max-height: 20;
+        border: thick $warning 80%;
+        background: $surface;
+        padding: 1 2;
+    }
+    #dialog Static {
+        width: 100%;
+        content-align: center middle;
+        margin-bottom: 1;
+    }
+    #dialog Button {
+        width: 100%;
+        margin-bottom: 1;
+    }
+    """
+
+    def __init__(self, matchnames):
+        super().__init__()
+        self._matchnames = matchnames
+
+    def compose(self) -> ComposeResult:
+        with Vertical(id="dialog"):
+            yield Static("Annuler la reprise de quel match ?")
+            for matchname in self._matchnames:
+                yield Button(matchname, id=f"pick_{self._matchnames.index(matchname)}", variant="warning")
+            yield Button("Annuler", id="pick_cancel", variant="primary")
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        button_id = event.button.id or ""
+        if button_id == "pick_cancel" or not button_id.startswith("pick_"):
+            self.dismiss(None)
+            return
+        try:
+            idx = int(button_id.split("_", 1)[1])
+        except ValueError:
+            self.dismiss(None)
+            return
+        self.dismiss(self._matchnames[idx])
+
+
 class Dashboard(App):
     BINDINGS = [
         ("o", "goto_tab('tab_overview')", "Vue d'ensemble"),
@@ -708,6 +792,7 @@ class Dashboard(App):
                 with Horizontal(classes="button_row"):
                     yield Button("🗑 Vider matches_todo", id="clear_queue", variant="warning")
                     yield Button("🗑 Vider matchs en cours (running)", id="clear_running", variant="warning")
+                    yield Button("⛔ Annuler reprise d'un match", id="cancel_resume", variant="warning")
                     yield Button("devMode: ...", id="toggle_devmode", variant="default")
                 yield Input(placeholder="Filtrer les logs (ex: 300, WIN, error...)", id="log_filter")
                 with TabbedContent(id="logs_tabs"):
@@ -874,6 +959,22 @@ class Dashboard(App):
                 self._on_clear_running_confirmed,
             )
             return
+        if button_id == "cancel_resume":
+            matchnames = get_running_matchnames()
+            if not matchnames:
+                self.notify("Aucun match 'en cours' à annuler.", severity="information")
+            elif len(matchnames) == 1:
+                self.push_screen(
+                    ConfirmScreen(
+                        f"Annuler la reprise de '{matchnames[0]}' ?\n"
+                        "Le bot ne rouvrira plus ce match au prochain démarrage/cycle "
+                        "de recherche ; il repartira sur une recherche normale."
+                    ),
+                    lambda confirmed: self._on_cancel_resume_confirmed(confirmed, matchnames[0]),
+                )
+            else:
+                self.push_screen(SelectMatchScreen(matchnames), self._on_match_picked)
+            return
         if button_id == "toggle_devmode":
             set_dev_mode(not get_dev_mode())
             self._refresh_devmode_button()
@@ -928,6 +1029,24 @@ class Dashboard(App):
         if not confirmed:
             return
         clear_running_table()
+        self.refresh_fixed_log_headers()
+
+    def _on_match_picked(self, matchname) -> None:
+        if not matchname:
+            return
+        self.push_screen(
+            ConfirmScreen(
+                f"Annuler la reprise de '{matchname}' ?\n"
+                "Le bot ne rouvrira plus ce match au prochain démarrage/cycle de "
+                "recherche ; il repartira sur une recherche normale."
+            ),
+            lambda confirmed: self._on_cancel_resume_confirmed(confirmed, matchname),
+        )
+
+    def _on_cancel_resume_confirmed(self, confirmed: bool, matchname: str) -> None:
+        if not confirmed:
+            return
+        clear_running_match(matchname)
         self.refresh_fixed_log_headers()
 
     # ─── Raccourcis clavier ────────────────────────────────────────────────

@@ -135,6 +135,26 @@ def GetBetNew(driver, nextBet=False, selection=''):
                     win_texte = '0:40+'
                     config.win_type = '0:40'  # inversé
                     sType = "Jeu " + str(config.looking_game) + " 0:40+, Joueur " + str(first_player)
+
+            # Sur certains sites/variantes (ex: ca.1xbet.com), cette catégorie de marché
+            # n'est pas un canvas mais une vraie liste DOM (<button class="market"> avec
+            # <span class="ui-market__name">texte exact du sType</span>) — le clic à
+            # l'aveugle dans market-grid-canvas__container (plus bas) ne peut alors jamais
+            # tomber dessus. On tente d'abord un clic direct par correspondance exacte de
+            # texte ; si la liste n'existe pas (autre variante du site), on retombe sans
+            # erreur sur le mécanisme canvas existant.
+            try:
+                dom_market_elements = driver.find_elements(By.CLASS_NAME, 'ui-market__name')
+            except Exception:
+                dom_market_elements = []
+            for dom_market_element in dom_market_elements:
+                try:
+                    if dom_market_element.text.strip() == sType:
+                        dom_market_element.click()
+                        config.log_clear_line(logline)
+                        return True
+                except Exception:
+                    continue
         if config.scriptType == '030':
             scoreboard_player = driver.find_elements(By.CLASS_NAME, 'scoreboard-periods-body__container')
             scoreboard_player1 = scoreboard_player[0].find_elements(By.CLASS_NAME, 'scoreboard-periods-inning')[0]
