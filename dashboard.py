@@ -42,13 +42,17 @@ if not os.path.exists(VENV_PYTHON):
     # venv Windows (créé via Scripts/, sans bin/) : on bascule sur le venv WSL à côté
     VENV_PYTHON = os.path.join(PROJECT_DIR, "venv_wsl", "bin", "python")
 
-# Pour l'instant on ne pilote que ces deux bots depuis le dashboard (pas les 36
-# scripts de lancement) : 1530A (bridge 1xBet) et 456P (représenté par 4P6P-1, cf.
-# choix utilisateur — il n'y a pas de fichier "456P-1.py" unique, la famille 456P
-# étant répartie sur plusieurs dossiers SCRIPTS_*).
+# Pour l'instant on ne pilote que ces trois process depuis le dashboard (pas les
+# 36 scripts de lancement) : 1530A (bridge 1xBet), 456P (représenté par 4P6P-1,
+# cf. choix utilisateur — il n'y a pas de fichier "456P-1.py" unique, la famille
+# 456P étant répartie sur plusieurs dossiers SCRIPTS_*) et le Watcher Telegram
+# (SCRIPTS_WATCH/main-1.py — pas une famille de scriptType martingale, n'a donc
+# pas d'entrée dans FAMILY_SCRIPTTYPES ci-dessous : son statut n'affiche que le
+# pid, pas d'infos de match en cours).
 FIXED_LAUNCHERS = [
     (os.path.join(PROJECT_DIR, "SCRIPTS_1530A", "1530A-1.py"), "1530A"),
     (os.path.join(PROJECT_DIR, "SCRIPTS_4P6P", "4P6P-1.py"), "456P"),
+    (os.path.join(PROJECT_DIR, "SCRIPTS_WATCH", "main-1.py"), "Watcher"),
 ]
 
 # ScriptTypes gérés par chaque famille de bot (cf. config.VALID_SCRIPTTYPES_1530A/456P
@@ -758,7 +762,7 @@ class Dashboard(App):
             except Exception:
                 continue
             if pid:
-                info = get_family_live_info(label)
+                info = get_family_live_info(label) if label in FAMILY_SCRIPTTYPES else None
                 if info:
                     gain_color = "green" if info["gain"] >= 0 else "red"
                     bet = info.get("last_bet")
@@ -771,8 +775,10 @@ class Dashboard(App):
                         f"({info['score']}) | perte en cours [yellow]{info['perte']:.2f}€[/yellow] | "
                         f"gain total [{gain_color}]{info['gain']:.2f}€[/{gain_color}] | {bet_txt}"
                     )
-                else:
+                elif label in FAMILY_SCRIPTTYPES:
                     details = " | en attente d'un match"
+                else:
+                    details = ""
                 status.update(f"{label} — [b green]en cours[/b green] (pid {pid}){details}")
                 button.label = "⏸"
                 button.variant = "error"
