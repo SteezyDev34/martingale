@@ -1150,18 +1150,25 @@ class Dashboard(App):
                 pass
             self._match_tab_ids.discard(tab_id)
 
+        # table.clear() remet le scroll en haut -- on le restaure juste après pour ne
+        # pas interrompre une lecture en cours (refresh_data tourne toutes les 2s,
+        # cf. set_interval dans on_mount).
         table = self.query_one("#queue_panel", DataTable)
+        _queue_scroll_y = table.scroll_y
         table.clear()
         for match_id, players, league, script_types, match_date in get_matches_todo():
             table.add_row(players or match_id, league or "", script_types or "[]", match_date or "-")
+        table.scroll_to(y=_queue_scroll_y, animate=False)
 
         history_table = self.query_one("#history_panel", DataTable)
+        _history_scroll_y = history_table.scroll_y
         history_table.clear()
         for match_id, script_type, gain, finished_at in get_match_history():
             gain_color = "green" if gain >= 0 else "red"
             history_table.add_row(
                 match_id, script_type, Text(f"{gain:.2f}€", style=gain_color), finished_at
             )
+        history_table.scroll_to(y=_history_scroll_y, animate=False)
 
         # Le flux de logs est alimenté exclusivement par _drain_process_queues (stdout
         # en direct des scripts lancés depuis ce dashboard) — pas de fallback fichier :
