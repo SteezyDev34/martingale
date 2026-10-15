@@ -22,6 +22,7 @@ from typing import Optional, List, Dict
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from Functions.Logs.Logger import log
+from Functions.Logs import BetTrace
 
 LOLLYBET_URL = "https://lolly-bet99.com"
 LOLLYBET_WINDOW = 8
@@ -996,6 +997,8 @@ class LollybetScraper:
     def _run_sync(self, bet: Dict) -> Dict:
         result = {"bookmaker": self.name, "odds": None, "success": False,
                   "challenge_activated": False, "error": None}
+        trace_dir = bet.get('trace_dir')
+        driver = None
         try:
             driver = self._get_driver()
             if not driver:
@@ -1004,12 +1007,15 @@ class LollybetScraper:
             if not self.is_logged_in(driver):
                 result["error"] = "session_expired"
                 log("[Lollybet] ❌ Session inactive", "error")
+                BetTrace.capture_failure(trace_dir, "session_expired", driver=driver, tag="session_expired")
                 return result
 
             # Mode combiné (accumulateur)
             if bet.get("is_combined") and bet.get("matches_list"):
                 success = self.place_accumulator(driver, bet["matches_list"], float(bet.get("mise", 10)))
                 result["success"] = success
+                if not success:
+                    BetTrace.capture_failure(trace_dir, "placement_failed", driver=driver, tag="place_accumulator")
                 return result
 
             equipe_1 = bet.get("equipe_1", "")
@@ -1019,6 +1025,7 @@ class LollybetScraper:
                                           str(bet.get("sport", "")), bet.get("date", ""))
             if not match_url:
                 result["error"] = "match_not_found"
+                BetTrace.capture_failure(trace_dir, "match_not_found", driver=driver, tag="search_match")
                 return result
             odds = self.get_odds(driver, match_url, bet.get("selection", ""), bet.get("categorie", ""), intitule=intitule)
             result["odds"] = odds
@@ -1026,9 +1033,12 @@ class LollybetScraper:
                                      bet.get("categorie", ""), float(bet.get("mise", 10)),
                                      intitule=intitule)
             result["success"] = success
+            if not success:
+                BetTrace.capture_failure(trace_dir, "placement_failed", driver=driver, tag="place_bet")
         except Exception as e:
             result["error"] = str(e)
             log(f"[Lollybet] Erreur run: {e}", "error")
+            BetTrace.capture_failure(trace_dir, e, driver=driver, tag="exception")
         return result
 
     def _fetch_odds_sync(self, bet: Dict) -> Dict:

@@ -14,6 +14,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from Functions.BetLabelsDB import get_label
 from Functions.Logs.Logger import log
+from Functions.Logs import BetTrace
 
 
 # ── Résolution IA des labels Stake ──────────────────────────────────────────
@@ -1173,7 +1174,8 @@ class StakeScraper:
         return await asyncio.get_event_loop().run_in_executor(None, self._fetch_odds_sync, bet)
 
     def _run_sync(self, bet: Dict) -> Dict:
-        from Functions.Bookmakers.StakeBridge import is_connected as _stake_bridge_connected
+        from Functions.Bookmakers.StakeBridge import is_connected as _stake_bridge_connected, stake_bridge
+        trace_dir = bet.get('trace_dir')
         if _stake_bridge_connected():
             result = {"bookmaker": self.name, "odds": None, "success": False,
                       "challenge_activated": False, "error": None}
@@ -1183,6 +1185,7 @@ class StakeScraper:
                 match_url = self._bridge_search_match(equipe_1, equipe_2, sport)
                 if not match_url:
                     result["error"] = "match_not_found"
+                    BetTrace.capture_failure(trace_dir, "match_not_found", bridge=stake_bridge, tag="search_match")
                     return result
 
                 combined_events = bet.get("combined_events")
@@ -1195,9 +1198,12 @@ class StakeScraper:
                 else:
                     result["odds"] = self._bridge_get_odds(match_url, bet.get("selection", ""), sport)
                     result["success"] = self._bridge_place_bet(match_url, bet.get("selection", ""), sport, mise)
+                if not result["success"]:
+                    BetTrace.capture_failure(trace_dir, result.get("error") or "placement_failed", bridge=stake_bridge, tag="place_bet")
             except Exception as e:
                 result["error"] = str(e)
                 log(f"[Stake/bridge] Erreur run: {e}", "error")
+                BetTrace.capture_failure(trace_dir, e, bridge=stake_bridge, tag="exception")
             return result
         return self._run_sync_selenium(bet)
 
@@ -1224,6 +1230,8 @@ class StakeScraper:
     def _run_sync_selenium(self, bet: Dict) -> Dict:
         result = {"bookmaker": self.name, "odds": None, "success": False,
                   "challenge_activated": False, "error": None}
+        trace_dir = bet.get('trace_dir')
+        driver = None
         try:
             driver = self._get_driver()
             if not driver:
@@ -1232,11 +1240,13 @@ class StakeScraper:
             if not self.is_logged_in(driver):
                 result["error"] = "session_expired"
                 log("[Stake] ❌ Session inactive", "error")
+                BetTrace.capture_failure(trace_dir, "session_expired", driver=driver, tag="session_expired")
                 return result
             match_url = self.search_match(driver, bet.get("equipe_1", ""), bet.get("equipe_2", ""),
                                           str(bet.get("sport", "")), bet.get("date", ""))
             if not match_url:
                 result["error"] = "match_not_found"
+                BetTrace.capture_failure(trace_dir, "match_not_found", driver=driver, tag="search_match")
                 return result
 
             combined_events = bet.get("combined_events")
@@ -1257,9 +1267,12 @@ class StakeScraper:
                                          bet.get("categorie", ""), mise)
 
             result["success"] = success
+            if not success:
+                BetTrace.capture_failure(trace_dir, "placement_failed", driver=driver, tag="place_bet")
         except Exception as e:
             result["error"] = str(e)
             log(f"[Stake] Erreur run: {e}", "error")
+            BetTrace.capture_failure(trace_dir, e, driver=driver, tag="exception")
         return result
 
     def _fetch_odds_sync_selenium(self, bet: Dict) -> Dict:

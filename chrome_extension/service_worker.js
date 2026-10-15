@@ -400,6 +400,18 @@ async function handlePythonMessage(msg, port) {
 
     // DEBUG uniquement — compte les éléments correspondant à un sélecteur CSS exact
     // (contrairement à debug_scan_classes qui dédoublonne par nom de classe).
+    // Python demande une capture d'écran de l'onglet — utilisé pour le trace
+    // forensique d'un pari en échec (Functions/Logs/BetTrace.py). Générique :
+    // marche pour n'importe quelle connexion (1xBet comme Stake), pas besoin
+    // d'un case dédié par bookmaker.
+    case 'capture_screenshot': {
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'screenshot_response', req_id: msg.req_id, error: 'no_tab' }); break; }
+      const image = await captureTabScreenshot(tabId);
+      sendToPython(port, { action: 'screenshot_response', req_id: msg.req_id, image, tab_id: tabId });
+      break;
+    }
+
     case 'debug_count_selector': {
       const tabId = await resolveTabId(msg, conn);
       if (!tabId) { sendToPython(port, { action: 'debug_count_selector_response', req_id: msg.req_id, error: 'no_tab' }); break; }
@@ -562,6 +574,43 @@ async function activateThenExec(tabId, fn, args = null) {
   }
 
   return result;
+}
+
+// Capture un PNG (dataURL base64) de l'onglet donné, même s'il n'est pas actif
+// (captureVisibleTab ne fonctionne que sur l'onglet ACTIF de sa fenêtre) —
+// même pattern que activateThenExec : active brièvement, capture, restaure.
+async function captureTabScreenshot(tabId) {
+  let previousActiveTabId = null;
+  let windowId = null;
+  try {
+    const tab = await chrome.tabs.get(tabId);
+    windowId = tab.windowId;
+    if (!tab.active) {
+      const [currentActive] = await chrome.tabs.query({ active: true, windowId });
+      previousActiveTabId = currentActive ? currentActive.id : null;
+      await chrome.tabs.update(tabId, { active: true });
+      await new Promise(r => setTimeout(r, 150));
+    }
+  } catch (e) {
+    console.warn('[captureTabScreenshot] activation échouée:', e && e.message);
+  }
+
+  let image = null;
+  try {
+    image = await chrome.tabs.captureVisibleTab(windowId, { format: 'png' });
+  } catch (e) {
+    console.warn('[captureTabScreenshot] capture échouée:', e && e.message);
+  }
+
+  if (previousActiveTabId) {
+    try {
+      await chrome.tabs.update(previousActiveTabId, { active: true });
+    } catch (e) {
+      // onglet précédent fermé entre-temps — rien à faire
+    }
+  }
+
+  return image;
 }
 
 // Retrouve quelle connexion (port) possède cet onglet — utilisé pour router les

@@ -211,7 +211,7 @@ def enrich_bet_with_challenges(bet: Dict, openai_client=None) -> Dict:
     return bet
 
 
-def place_combined_bet(matches_list: List[Dict], mise: float) -> Dict:
+def place_combined_bet(matches_list: List[Dict], mise: float, trace_dir: str = None) -> Dict:
     """
     Place un pari combiné (accumulateur) sur Lollybet.
     matches_list : liste de dicts match (equipe_1, equipe_2, selection, sport, date, intitule, categorie)
@@ -220,7 +220,7 @@ def place_combined_bet(matches_list: List[Dict], mise: float) -> Dict:
         log("[Router] ❌ Lollybet désactivé — impossible de placer le combiné", "error")
         return {"bookmaker": "Lollybet", "success": False, "error": "lollybet_disabled"}
 
-    bet = {"is_combined": True, "matches_list": matches_list, "mise": mise}
+    bet = {"is_combined": True, "matches_list": matches_list, "mise": mise, "trace_dir": trace_dir}
     log(f"[Router] 🎯 Placement combiné {len(matches_list)} legs sur Lollybet", "info")
     return _place_bet_sync(LollybetScraper, bet)
 

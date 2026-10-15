@@ -15,6 +15,7 @@ import config
 from Functions.TelegramBetsAPI import telegram_bets_api
 from Functions.Bookmakers.router import place_best_bet, refresh_all_challenges, place_combined_bet
 from Functions.Logs.Logger import log, log_clear_line
+from Functions.Logs import BetTrace
 from Functions.GetMise import get_recommended_stake
 
 def process_api_bets(limit: int = 10) -> int:
@@ -59,6 +60,8 @@ def process_api_bets(limit: int = 10) -> int:
         tipster = bet_data.get("tipster", "")
         all_matches = bet_data.get("matches", [])
 
+        trace_dir = BetTrace.start(bet['id'], {"tipster": tipster, "matches": all_matches})
+
         # ── Récupérer la mise ────────────────────────────────────────────
         ref_odds = all_matches[0].get("odds") if all_matches else bet_data.get("odds")
         try:
@@ -69,6 +72,7 @@ def process_api_bets(limit: int = 10) -> int:
         except Exception as e:
             mise = 1.0
             log(f"⚠️ Mise par défaut 1€ ({e})", "warning", clear=False)
+        BetTrace.step(trace_dir, "mise_calculee", {"mise": mise, "ref_odds": ref_odds})
         # ────────────────────────────────────────────────────────────────
 
         # ── Combiné : plusieurs matches → un seul ticket accumulateur ───
@@ -76,7 +80,8 @@ def process_api_bets(limit: int = 10) -> int:
             log(f"🎯 Pari combiné ID {bet['id']}: {len(all_matches)} legs", "info", clear=False)
             for m in all_matches:
                 log(f"   · {m.get('equipe_1')} vs {m.get('equipe_2')} | {m.get('selection')}", "info", clear=False)
-            result = place_combined_bet(all_matches, mise)
+            BetTrace.step(trace_dir, "placement_tente", {"type": "combine", "bookmaker": "Lollybet", "legs": len(all_matches)})
+            result = place_combined_bet(all_matches, mise, trace_dir=trace_dir)
         else:
             # ── Simple : 1 match ─────────────────────────────────────────
             if all_matches:
@@ -96,16 +101,20 @@ def process_api_bets(limit: int = 10) -> int:
                 }
             match["tipster"] = tipster
             match["mise"] = mise
+            match["trace_dir"] = trace_dir
             log(f"Pari simple ID {bet['id']}: {match.get('equipe_1')} vs {match.get('equipe_2')} | {match.get('selection')}", "info", clear=False)
+            BetTrace.step(trace_dir, "placement_tente", {"type": "simple", "match": f"{match.get('equipe_1')} vs {match.get('equipe_2')}", "selection": match.get('selection')})
             result = place_best_bet(match)
 
         if result.get("success"):
             log(f"✅ Pari placé sur {result.get('bookmaker')} @ {result.get('odds','?')} (mise={mise}€)", "info", clear=False)
+            BetTrace.step(trace_dir, "resultat", {"success": True, "bookmaker": result.get('bookmaker'), "odds": result.get('odds')})
             if telegram_bets_api.mark_bet_as_processed(bet['id']):
                 processed_count += 1
                 log(f"Pari ID {bet['id']} marqué traité", "info", clear=False)
         else:
             log(f"❌ Échec placement ID {bet['id']}: {result.get('error','')}", "error", clear=False)
+            BetTrace.step(trace_dir, "resultat", {"success": False, "bookmaker": result.get('bookmaker'), "error": result.get('error')}, level="error")
             telegram_bets_api.mark_bet_as_processed(bet['id'], processed=2)
 
         time.sleep(2)

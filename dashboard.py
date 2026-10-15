@@ -53,6 +53,7 @@ FIXED_LAUNCHERS = [
     (os.path.join(PROJECT_DIR, "SCRIPTS_1530A", "1530A-1.py"), "1530A"),
     (os.path.join(PROJECT_DIR, "SCRIPTS_4P6P", "4P6P-1.py"), "456P"),
     (os.path.join(PROJECT_DIR, "SCRIPTS_WATCH", "main-1.py"), "Watcher"),
+    (os.path.join(PROJECT_DIR, "SCRIPTS_WATCH", "process_bets_loop.py"), "Placement paris"),
 ]
 
 # ScriptTypes gérés par chaque famille de bot (cf. config.VALID_SCRIPTTYPES_1530A/456P

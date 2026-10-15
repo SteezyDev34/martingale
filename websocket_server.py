@@ -207,6 +207,28 @@ class ExtensionBridge:
         """Étape 1/2 de la recherche : clique le bouton recherche (navigue vers /search-events)."""
         return self._send_and_wait({'action': 'click_search_button'}, timeout=20)
 
+    def capture_screenshot(self, save_path=None):
+        """
+        Capture un PNG de l'onglet de ce bridge (générique, marche pour n'importe
+        quel pont — 1xBet comme Stake). Utilisé par Functions/Logs/BetTrace.py pour
+        le trace forensique d'un pari en échec. Retourne le chemin sauvegardé, ou
+        None si la capture a échoué (ne lève jamais — un échec de screenshot ne doit
+        pas faire planter le vrai traitement du pari).
+        """
+        try:
+            resp = self._send_and_wait({'action': 'capture_screenshot'}, timeout=10)
+            data_url = resp.get('image')
+            if not data_url or not save_path:
+                return None
+            import base64
+            header, _, b64data = data_url.partition(',')
+            with open(save_path, 'wb') as f:
+                f.write(base64.b64decode(b64data))
+            return save_path
+        except Exception as e:
+            print(f"[WS] capture_screenshot échouée: {e}")
+            return None
+
     def search_on_results_page(self, equipe1, equipe2):
         """Étape 2/2 : tape le texte et lit les résultats, une fois sur /search-events."""
         return self._send_and_wait({'action': 'search_on_results_page', 'equipe1': equipe1, 'equipe2': equipe2}, timeout=25)
