@@ -62,7 +62,7 @@ class MatchManager:
 
     # (supprimé: version dupliquée de _init_db)
 
-    def add_match(self, match_id: str, url: str = None) -> None:
+    def add_match(self, match_id: str, url: str = None, bot_family: str = None) -> None:
         """
         Ajoute un nouveau match à la base de données.
 
@@ -74,15 +74,22 @@ class MatchManager:
         Args:
             match_id (str): Identifiant unique du match
             url (str): URL 1xBet de la page du match
+            bot_family (str, optional): famille appelante (1530A/456P) -- défaut
+                config.bot_family. `strategy` (clé composite avec match_id) n'était
+                jusqu'ici jamais renseigné (self.strategy_name toujours None, cf.
+                get_instance()/match_manager jamais appelé avec un vrai nom) :
+                1530A et 456P engageant le même match_id collisionnaient déjà sur
+                cette table (2e INSERT avalé par l'IntegrityError ci-dessous).
         """
+        bot_family = bot_family if bot_family is not None else (getattr(config, 'bot_family', '') or '')
         with sqlite3.connect(self.db_path) as conn:
             try:
                 conn.execute(
                     "INSERT INTO matches (match_id, strategy, created_at, status, script_types, total_gain_wanted, url) "
                     "VALUES (?, ?, ?, ?, "
-                    "(SELECT script_types FROM matches_todo WHERE match_id = ?), "
-                    "(SELECT total_gain_wanted FROM matches_todo WHERE match_id = ?), ?)",
-                    (match_id, self.strategy_name, datetime.now(), "active", match_id, match_id, url)
+                    "(SELECT script_types FROM matches_todo WHERE match_id = ? AND bot_family = ?), "
+                    "(SELECT total_gain_wanted FROM matches_todo WHERE match_id = ? AND bot_family = ?), ?)",
+                    (match_id, bot_family, datetime.now(), "active", match_id, bot_family, match_id, bot_family, url)
                 )
             except sqlite3.IntegrityError:
                 pass
@@ -192,47 +199,52 @@ class MatchManager:
             config.log(f"Exception lors de l'envoi de la matchlist : {str(e)}", 'error', True)
             return False
 
-    def remove_match(self, match_id: str) -> None:
+    def remove_match(self, match_id: str, bot_family: str = None) -> None:
         """
         Supprime un match de la base de données.
-        
+
         Args:
             match_id (str): Identifiant du match à supprimer
+            bot_family (str, optional): voir add_match -- défaut config.bot_family.
         """
+        bot_family = bot_family if bot_family is not None else (getattr(config, 'bot_family', '') or '')
         with sqlite3.connect(self.db_path) as conn:
             conn.execute(
                 "DELETE FROM matches WHERE match_id = ? AND strategy = ?",
-                (match_id, self.strategy_name)
+                (match_id, bot_family)
             )
 
-    def get_all_matches(self) -> List[tuple]:
+    def get_all_matches(self, bot_family: str = None) -> List[tuple]:
         """
-        Récupère tous les matchs pour la stratégie courante.
-        
+        Récupère tous les matchs pour la famille courante.
+
         Returns:
             List[tuple]: Liste de tuples contenant (match_id, created_at, status)
         """
+        bot_family = bot_family if bot_family is not None else (getattr(config, 'bot_family', '') or '')
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
                 "SELECT match_id, created_at, status FROM matches WHERE strategy = ?",
-                (self.strategy_name,)
+                (bot_family,)
             )
             return cursor.fetchall()
 
-    def match_exists(self, match_id: str) -> bool:
+    def match_exists(self, match_id: str, bot_family: str = None) -> bool:
         """
-        Vérifie si un match existe pour la stratégie courante.
-        
+        Vérifie si un match existe pour la famille courante.
+
         Args:
             match_id (str): Identifiant du match à vérifier
-            
+            bot_family (str, optional): voir add_match -- défaut config.bot_family.
+
         Returns:
             bool: True si le match existe, False sinon
         """
+        bot_family = bot_family if bot_family is not None else (getattr(config, 'bot_family', '') or '')
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
                 "SELECT 1 FROM matches WHERE match_id = ? AND strategy = ?",
-                (match_id, self.strategy_name)
+                (match_id, bot_family)
             )
             return cursor.fetchone() is not None
 
@@ -251,20 +263,22 @@ class MatchManager:
         else:
             raise ValueError("Action invalide. Utilisez 'add' ou 'del'")
 
-    def get_match_status(self, match_id: str) -> Optional[str]:
+    def get_match_status(self, match_id: str, bot_family: str = None) -> Optional[str]:
         """
         Récupère le statut actuel d'un match.
-        
+
         Args:
             match_id (str): Identifiant du match à vérifier
-            
+            bot_family (str, optional): voir add_match -- défaut config.bot_family.
+
         Returns:
             Optional[str]: Statut du match s'il est trouvé, None sinon
         """
+        bot_family = bot_family if bot_family is not None else (getattr(config, 'bot_family', '') or '')
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
                 "SELECT status FROM matches WHERE match_id = ? AND strategy = ?",
-                (match_id, self.strategy_name)
+                (match_id, bot_family)
             )
             result = cursor.fetchone()
             return result[0] if result else None
@@ -695,24 +709,26 @@ class MatchManager:
             )
             return cursor.fetchall()
 
-    def cleanup_old_matches(self, days: int = 7) -> int:
+    def cleanup_old_matches(self, days: int = 7, bot_family: str = None) -> int:
         """
         Supprime les matchs plus vieux que le nombre de jours spécifié.
-        
+
         Args:
             days (int): Nombre de jours de conservation des matchs
-            
+            bot_family (str, optional): voir add_match -- défaut config.bot_family.
+
         Returns:
             int: Nombre de matchs supprimés
         """
+        bot_family = bot_family if bot_family is not None else (getattr(config, 'bot_family', '') or '')
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
                 """
-                DELETE FROM matches 
-                WHERE strategy = ? 
+                DELETE FROM matches
+                WHERE strategy = ?
                 AND datetime(created_at) < datetime('now', ?)
                 """,
-                (self.strategy_name, f'-{days} days')
+                (bot_family, f'-{days} days')
             )
             deleted_count = cursor.rowcount
 
@@ -728,35 +744,37 @@ class MatchManager:
 
             return deleted_count
 
-    def clear_all_matches(self, strategy_only: bool = True) -> int:
+    def clear_all_matches(self, strategy_only: bool = True, bot_family: str = None) -> int:
         """
         Supprime tous les matchs de la base de données.
-        
+
         Args:
-            strategy_only (bool): Si True, supprime uniquement les matchs de la stratégie courante.
-                                Si False, supprime tous les matchs toutes stratégies confondues.
-            
+            strategy_only (bool): Si True, supprime uniquement les matchs de la famille courante.
+                                Si False, supprime tous les matchs toutes familles confondues.
+            bot_family (str, optional): voir add_match -- défaut config.bot_family.
+
         Returns:
             int: Nombre de matchs supprimés
-            
+
         Example:
-            >>> manager = MatchManager.get_instance("40A")
-            >>> # Supprimer uniquement les matchs de la stratégie 40A
+            >>> manager = MatchManager.get_instance()
+            >>> # Supprimer uniquement les matchs de la famille courante (config.bot_family)
             >>> manager.clear_all_matches()
-            >>> # Supprimer tous les matchs de toutes les stratégies
+            >>> # Supprimer tous les matchs de toutes les familles
             >>> manager.clear_all_matches(strategy_only=False)
-        
+
         Raises:
-            ValueError: Si strategy_only est True mais qu'aucune stratégie n'est définie
+            ValueError: Si strategy_only est True mais qu'aucune famille n'est définie
         """
-        if strategy_only and not self.strategy_name:
-            raise ValueError("Une stratégie doit être définie pour supprimer les matchs par stratégie")
+        bot_family = bot_family if bot_family is not None else (getattr(config, 'bot_family', '') or '')
+        if strategy_only and not bot_family:
+            raise ValueError("Une famille (bot_family) doit être définie pour supprimer les matchs par famille")
 
         with sqlite3.connect(self.db_path) as conn:
             if strategy_only:
                 cursor = conn.execute(
                     "DELETE FROM matches WHERE strategy = ?",
-                    (self.strategy_name,)
+                    (bot_family,)
                 )
             else:
                 cursor = conn.execute("DELETE FROM matches")
