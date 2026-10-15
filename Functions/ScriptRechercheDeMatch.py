@@ -173,7 +173,15 @@ def traiter_matchlist(matchlist):
                 f"pour {players_name[0]} vs {players_name[1]}: {script_types_api} — {api_details}",
                 'info', False
             )
-        script_types = list(dict.fromkeys(script_types_api + script_types_legacy))
+        # Si l'API auxotracker n'a aucune stat pour ce match (api_details vide —
+        # tension introuvable/pas fiable), on désactive temporairement aussi le
+        # calcul maison (BREAK/030/HOLD via svc/ret) : on ne garde que ce qui a
+        # déjà été déterminé par l'API lors du classement, pas de recalcul local
+        # de secours qui activerait un scriptType sans aucune stat fiable derrière.
+        if api_details:
+            script_types = list(dict.fromkeys(script_types_api + script_types_legacy))
+        else:
+            script_types = []
         # On n'inclut le match que si au moins un scriptType est activé
         if not script_types:
             config.log(f"Aucun scriptType activé pour {players_name[0]} vs {players_name[1]}, match ignoré", 'warning', False)
