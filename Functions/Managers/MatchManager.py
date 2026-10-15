@@ -313,6 +313,39 @@ class MatchManager:
             if 'total_gain_wanted' not in existing_cols:
                 conn.execute("ALTER TABLE matches_todo ADD COLUMN total_gain_wanted FLOAT")
 
+            # Migration : bot_family rejoint la clé primaire (match_id seul causait un
+            # bug cross-famille -- 1530A et 456P partagent le même match_id pour un
+            # même match, mais chacun a ses propres scriptTypes à y stocker ; avec
+            # match_id PRIMARY KEY seul, le 2e INSERT échouait silencieusement
+            # (IntegrityError avalée) et un remove_match_todo() de l'un supprimait
+            # aussi la ligne de l'autre. SQLite ne permet pas d'ALTER une PRIMARY KEY
+            # -> reconstruction de la table si bot_family est absent.
+            existing_cols = [row[1] for row in conn.execute("PRAGMA table_info(matches_todo)")]
+            if 'bot_family' not in existing_cols:
+                conn.execute("ALTER TABLE matches_todo RENAME TO matches_todo_old")
+                conn.execute('''
+                    CREATE TABLE matches_todo (
+                        match_id TEXT,
+                        bot_family TEXT NOT NULL DEFAULT '',
+                        players TEXT,
+                        league TEXT,
+                        match_date TIMESTAMP,
+                        probability FLOAT,
+                        link TEXT,
+                        script_types TEXT,
+                        total_gain_wanted FLOAT,
+                        created_at TIMESTAMP,
+                        PRIMARY KEY (match_id, bot_family)
+                    )
+                ''')
+                conn.execute('''
+                    INSERT INTO matches_todo
+                    (match_id, bot_family, players, league, match_date, probability, link, script_types, total_gain_wanted, created_at)
+                    SELECT match_id, '', players, league, match_date, probability, link, script_types, total_gain_wanted, created_at
+                    FROM matches_todo_old
+                ''')
+                conn.execute("DROP TABLE matches_todo_old")
+
             # Historique des gains par scriptType une fois un match terminé (plus en
             # cours de pari) — permet un récap après coup, ce que config.global_match_win
             # (en mémoire, remis à 0 à la fin de chaque match) ne permettait pas.
@@ -409,19 +442,28 @@ class MatchManager:
                 config.log(f"Erreur suppression distante de {match_id} : {e}", 'warning', False)
         return removed
 
-    def get_match_link(self, match_id: str) -> Optional[str]:
+    def get_match_link(self, match_id: str, bot_family: str = None) -> Optional[str]:
         """
         Récupère le lien Sofascore d'un match à partir de son `match_id` (local uniquement).
 
         Args:
             match_id (str): Identifiant du match à rechercher
+            bot_family (str, optional): famille appelante (1530A/456P) -- défaut
+                config.bot_family du process en cours. 1530A et 456P ont chacun
+                leur propre ligne pour le même match_id (cf. migration bot_family
+                dans _init_db), donc ce filtre est nécessaire pour ne pas lire la
+                ligne de l'autre famille.
 
         Returns:
             Optional[str]: URL Sofascore trouvée, ou `None` si non trouvée
         """
+        bot_family = bot_family if bot_family is not None else (getattr(config, 'bot_family', '') or '')
         try:
             with sqlite3.connect(self.db_path) as conn:
-                cur = conn.execute("SELECT link FROM matches_todo WHERE match_id = ?", (match_id,))
+                cur = conn.execute(
+                    "SELECT link FROM matches_todo WHERE match_id = ? AND bot_family = ?",
+                    (match_id, bot_family)
+                )
                 row = cur.fetchone()
                 if row and row[0]:
                     return row[0]
@@ -430,16 +472,19 @@ class MatchManager:
 
         return None
 
-    def get_match_script_config(self, match_id: str) -> dict:
+    def get_match_script_config(self, match_id: str, bot_family: str = None) -> dict:
         """
         Retourne {'script_types': list, 'total_gain_wanted': float} pour un match.
         Retourne un dict vide si non trouvé.
+
+        bot_family (str, optional): voir get_match_link -- même raison de filtrer.
         """
+        bot_family = bot_family if bot_family is not None else (getattr(config, 'bot_family', '') or '')
         try:
             with sqlite3.connect(self.db_path) as conn:
                 cur = conn.execute(
-                    "SELECT script_types, total_gain_wanted FROM matches_todo WHERE match_id = ?",
-                    (match_id,)
+                    "SELECT script_types, total_gain_wanted FROM matches_todo WHERE match_id = ? AND bot_family = ?",
+                    (match_id, bot_family)
                 )
                 row = cur.fetchone()
                 if not row:
@@ -460,21 +505,25 @@ class MatchManager:
             config.log(f"Erreur DB get_match_script_config: {e}", 'warning', True)
         return {}
 
-    def is_match_todo(self, match_id: str) -> bool:
+    def is_match_todo(self, match_id: str, bot_family: str = None) -> bool:
         """
         Vérifie si un match est dans la liste des matchs à faire (locale ou distante).
-        
+
         Args:
             match_id (str): Identifiant du match à vérifier
-            
+            bot_family (str, optional): voir get_match_link -- même raison de filtrer
+                côté local. La vérification distante reste non filtrée (le dedup
+                distant matchlisttodo ne stocke pas de scriptTypes par famille).
+
         Returns:
             bool: True si le match est dans la liste des matchs à faire, False sinon
         """
+        bot_family = bot_family if bot_family is not None else (getattr(config, 'bot_family', '') or '')
         # Vérification locale
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
-                "SELECT 1 FROM matches_todo WHERE match_id = ?",
-                (match_id,)
+                "SELECT 1 FROM matches_todo WHERE match_id = ? AND bot_family = ?",
+                (match_id, bot_family)
             )
             if cursor.fetchone() is not None:
                 return True
@@ -500,6 +549,7 @@ class MatchManager:
             link = parts[5] if len(parts) > 5 else ''
             script_types_json = parts[6] if len(parts) > 6 else '[]'
             total_gain_wanted = float(parts[7]) if len(parts) > 7 else 0.0
+            bot_family = getattr(config, 'bot_family', '') or ''
             # Ajout local
             added_locally = False
             with sqlite3.connect(self.db_path) as conn:
@@ -507,10 +557,10 @@ class MatchManager:
                     conn.execute(
                         """
                         INSERT INTO matches_todo
-                        (match_id, players, league, match_date, probability, link, script_types, total_gain_wanted, created_at)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        (match_id, bot_family, players, league, match_date, probability, link, script_types, total_gain_wanted, created_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """,
-                        (match_id, players, league, date_str, float(prob), link, script_types_json, total_gain_wanted, datetime.now())
+                        (match_id, bot_family, players, league, date_str, float(prob), link, script_types_json, total_gain_wanted, datetime.now())
                     )
                     added_locally = True
                 except sqlite3.IntegrityError:
@@ -570,22 +620,31 @@ class MatchManager:
             config.log(f"Erreur lors de l'ajout du match : {str(e)}", 'error')
             return False
 
-    def remove_match_todo(self, match_id: str) -> bool:
+    def remove_match_todo(self, match_id: str, bot_family: str = None) -> bool:
         """
         Supprime un match de la liste des matchs à faire (locale et distante).
-        
+
         Args:
             match_id (str): Identifiant du match à supprimer
-            
+            bot_family (str, optional): famille appelante (1530A/456P) -- défaut
+                config.bot_family du process en cours. SANS ce filtre, retirer
+                le match engagé par UNE famille supprimait aussi la ligne de
+                l'AUTRE famille (même match_id, scriptTypes différents) : elle
+                ne le voyait alors plus jamais comme "à faire" et ne pariait
+                jamais dessus. La suppression distante (matchlisttodo, simple
+                dedup par slug, ne stocke pas de scriptTypes) reste volontairement
+                non filtrée -- limite connue pour la cohérence multi-machine.
+
         Returns:
             bool: True si supprimé avec succès (local ou distant), False si non trouvé
         """
+        bot_family = bot_family if bot_family is not None else (getattr(config, 'bot_family', '') or '')
         # Suppression locale
         removed_locally = False
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
-                "DELETE FROM matches_todo WHERE match_id = ?",
-                (match_id,)
+                "DELETE FROM matches_todo WHERE match_id = ? AND bot_family = ?",
+                (match_id, bot_family)
             )
             removed_locally = cursor.rowcount > 0
 

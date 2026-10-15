@@ -99,17 +99,35 @@ def get_running_matches():
     return result
 
 
-def get_match_info(matchname):
+def get_match_info(matchname, bot_family=None):
+    """
+    bot_family (optionnel) : 1530A et 456P ont chacun leur propre ligne pour le
+    même match_id depuis la correction du bug de partage de matches_todo (une
+    famille qui engageait un match supprimait la ligne de l'autre) -- sans ce
+    filtre, la ligne retournée est arbitraire quand les deux existent.
+    """
     try:
         conn = _connect(MATCHES_DB)
-        row = conn.execute(
-            "SELECT players, league, script_types FROM matches_todo WHERE match_id = ?",
-            (matchname,)
-        ).fetchone()
+        if bot_family:
+            row = conn.execute(
+                "SELECT players, league, script_types FROM matches_todo WHERE match_id = ? AND bot_family = ?",
+                (matchname, bot_family)
+            ).fetchone()
+        else:
+            row = conn.execute(
+                "SELECT players, league, script_types FROM matches_todo WHERE match_id = ?",
+                (matchname,)
+            ).fetchone()
         conn.close()
         return row
     except Exception:
         return None
+
+
+def _infer_bot_family(scripttypes):
+    """Déduit 1530A/456P à partir d'une liste de scriptTypes actifs (None si mixte/inconnu)."""
+    families = {fam for fam, sts in FAMILY_SCRIPTTYPES.items() if sts & set(scripttypes or [])}
+    return families.pop() if len(families) == 1 else None
 
 
 def get_live_score(matchname):
@@ -584,7 +602,7 @@ def stop_launcher(path):
 
 def _render_match_block(matchname, scripttypes):
     """Construit le texte (avec markup Rich) d'un panneau de match, couleur selon le gain."""
-    info = get_match_info(matchname)
+    info = get_match_info(matchname, bot_family=_infer_bot_family(scripttypes))
     score_row = get_live_score(matchname)
     perte, gain = get_perte_gain(matchname, scripttypes)
     gain_color = "green" if gain >= 0 else "red"
