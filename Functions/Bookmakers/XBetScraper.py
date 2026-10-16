@@ -8,6 +8,7 @@ import asyncio
 
 from Functions.OneXBetBridge import find_and_prepare_bet
 from Functions.Logs import BetTrace
+from Functions.Logs.Logger import log
 
 
 def _matches_from_bet(bet):
@@ -26,6 +27,8 @@ class XBetScraper:
         from websocket_server import bridge
         bridge.delete_bet()
         if not prepared.get('success'):
+            m = matches[0] if matches else {}
+            log(f"[1xBet] Échec recherche/sélection pour {m.get('equipe_1')} vs {m.get('equipe_2')}: {prepared.get('error')}", "warning")
             return {"bookmaker": self.name, "odds": None, "error": prepared.get('error')}
         return {"bookmaker": self.name, "odds": prepared.get('cote')}
 
