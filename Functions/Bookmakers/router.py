@@ -47,8 +47,15 @@ except Exception as e:
 # tourne deja sur 9999 en parallele, meme port = collision au bind si les deux
 # process tournent en meme temps (cas normal en prod).
 try:
-    from websocket_server import start_bridge as _start_xbet_bridge
+    from websocket_server import start_bridge as _start_xbet_bridge, bridge as _xbet_bridge
     _start_xbet_bridge(wait_timeout=10, port=9102)
+    # Ouvre/enregistre l'onglet dedie a CE process (meme principe que les scripts
+    # SCRIPTS_1530A/SCRIPTS_4P6P au demarrage) -- sans ca, _tab_id reste None et
+    # _search_and_open_match (OneXBetBridge.py, clique un bouton recherche)
+    # echoue tout de suite en "no_tab" : aucune fenetre ne s'ouvrait jamais,
+    # "match_not_found" quasi instantane sans recherche reelle (constate 2026-10-16).
+    import config as _config
+    _xbet_bridge.navigate(_config.site_url)
 except Exception as e:
     log(f"⚠️ Démarrage bridge 1xBet échoué: {e}", "warning")
 
