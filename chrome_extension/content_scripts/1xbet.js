@@ -346,11 +346,17 @@
       const cardsFound = await waitFor('.ui-game-card__content', 15000);
       if (!cardsFound) return { found: false, error: 'no_search_results' };
       await sleep(1500);
+      clickTousFilter();
 
       // Liste a chargement au scroll (constate le 2026-10-16 : le bon match
       // apparaissait tout en bas, jamais rendu sans scroller) -- scrolle le
       // conteneur de resultats jusqu'a ce que le nombre de cartes n'augmente
       // plus (fin de liste atteinte), ou apres un nombre max d'iterations.
+      // PAS de scroll sur window/document ici : ca faisait revenir le filtre
+      // sur "En direct" (effet de bord cote page hors du modal, constate le
+      // 2026-10-16) -- uniquement le conteneur de resultats, et on reclique
+      // "Tous" a chaque iteration au cas ou le re-render de la pagination le
+      // reinitialise aussi.
       const scrollContainer = qs('.search-app-body', modalContent) || qs('.search-games-list', modalContent) || modalContent;
       let previousCount = 0;
       for (let i = 0; i < 20; i++) {
@@ -359,9 +365,8 @@
         previousCount = count;
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
         scrollContainer.dispatchEvent(new Event('scroll', { bubbles: true }));
-        window.scrollTo(0, document.body.scrollHeight);
-        window.dispatchEvent(new Event('scroll', { bubbles: true }));
         await sleep(400);
+        clickTousFilter();
       }
 
       const matches = qsa('.search-game-card', modalContent);
