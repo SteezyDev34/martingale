@@ -348,38 +348,16 @@
       await sleep(1500);
       clickTousFilter();
 
-      // Liste a chargement au scroll (constate le 2026-10-16 : le bon match
-      // apparaissait tout en bas, jamais rendu sans scroller) -- scrolle le
-      // conteneur de resultats jusqu'a ce que le nombre de cartes n'augmente
-      // plus (fin de liste atteinte), ou apres un nombre max d'iterations.
-      // PAS de scroll sur window/document ici : ca faisait revenir le filtre
-      // sur "En direct" (effet de bord cote page hors du modal, constate le
-      // 2026-10-16) -- uniquement le conteneur de resultats, et on reclique
-      // "Tous" a chaque iteration au cas ou le re-render de la pagination le
-      // reinitialise aussi.
-      const scrollContainer = qs('.search-app-body', modalContent) || qs('.search-games-list', modalContent) || modalContent;
-      let previousCount = 0;
-      for (let i = 0; i < 20; i++) {
-        const count = qsa('.search-game-card', modalContent).length;
-        if (count === previousCount && i > 0) break;
-        previousCount = count;
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
-        scrollContainer.dispatchEvent(new Event('scroll', { bubbles: true }));
-        await sleep(400);
-        clickTousFilter();
-      }
-
-      const matches = qsa('.search-game-card', modalContent);
-      const candidates = [];
       const norm = (s) => (s || '').toLowerCase().trim();
       const loose = (a, b) => norm(a).includes(norm(b)) || norm(b).includes(norm(a));
 
-      for (const m of matches) {
-        let team1 = null, team2 = null, link = null;
-        // Markup change constate le 2026-10-16 (inspection live) :
-        // .ui-game-card-scoreboard-teams-name__caption n'existe plus. Priorite aux
-        // data-test (plus stables, pensés pour les tests E2E), repli sur la classe
-        // actuelle .ui-game-card-scoreboard__name, puis l'ancienne methode au cas ou.
+      // Extrait {team1, team2, url} d'une carte, ou null si illisible.
+      // Markup change constate le 2026-10-16 (inspection live) :
+      // .ui-game-card-scoreboard-teams-name__caption n'existe plus. Priorite aux
+      // data-test (plus stables, pensés pour les tests E2E), repli sur la classe
+      // actuelle .ui-game-card-scoreboard__name, puis l'ancienne methode au cas ou.
+      const extractCandidate = (m) => {
+        let team1 = null, team2 = null;
         const t1El = qs('[data-test="betting-ui-game-card-scoreboard-first-team-name"]', m);
         const t2El = qs('[data-test="betting-ui-game-card-scoreboard-second-team-name"]', m);
         if (t1El && t2El) {
@@ -399,14 +377,50 @@
           }
         }
         const a = m.querySelector('a');
-        link = a ? a.href : null;
-        if (!team1 || !team2 || !link) continue;
+        const link = a ? a.href : null;
+        if (!team1 || !team2 || !link) return null;
+        return { team1, team2, url: link };
+      };
 
-        if (loose(team1, equipe1) && loose(team2, equipe2)) {
-          return { found: true, url: link, team1, team2 };
+      // Verifie les cartes deja rendues ; retourne le match si trouve.
+      const checkCurrentCards = () => {
+        for (const m of qsa('.search-game-card', modalContent)) {
+          const c = extractCandidate(m);
+          if (c && loose(c.team1, equipe1) && loose(c.team2, equipe2)) return c;
         }
-        candidates.push({ team1, team2, url: link });
+        return null;
+      };
+
+      // Liste a chargement au scroll (constate le 2026-10-16 : le bon match
+      // apparaissait tout en bas, jamais rendu sans scroller) -- scrolle le
+      // conteneur de resultats en verifiant APRES CHAQUE etape si le match est
+      // deja la (retour immediat des que trouve, pas d'attente de fin de liste
+      // -- sinon flaky : un plateau de chargement temporaire pouvait faire
+      // sortir de la boucle avant que le vrai match ait eu le temps d'apparaitre,
+      // constate le 2026-10-16 en conditions reelles malgre un dry-run concluant).
+      // PAS de scroll sur window/document ici : ca faisait revenir le filtre
+      // sur "En direct" (effet de bord cote page hors du modal).
+      let found = checkCurrentCards();
+      if (found) return { found: true, url: found.url, team1: found.team1, team2: found.team2 };
+
+      const scrollContainer = qs('.search-app-body', modalContent) || qs('.search-games-list', modalContent) || modalContent;
+      let previousCount = 0;
+      for (let i = 0; i < 25; i++) {
+        const count = qsa('.search-game-card', modalContent).length;
+        if (count === previousCount && i > 0) break;
+        previousCount = count;
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        scrollContainer.dispatchEvent(new Event('scroll', { bubbles: true }));
+        await sleep(450);
+        clickTousFilter();
+
+        found = checkCurrentCards();
+        if (found) return { found: true, url: found.url, team1: found.team1, team2: found.team2 };
       }
+
+      const candidates = qsa('.search-game-card', modalContent)
+        .map(extractCandidate)
+        .filter(Boolean);
 
       return { found: false, candidates };
     },
