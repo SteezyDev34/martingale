@@ -30,6 +30,7 @@ const WS_PORTS = [
   9015, // SCRIPTS_BREAK2/BREAK2-2.py
   9016, // SCRIPTS_HOLD/HOLD-1.py
   9101, // Functions/Bookmakers/StakeBridge.py (router.py — placement Stake.bet)
+  9102, // websocket_server.bridge demarre par router.py (placement 1xBet, process_bets_loop.py)
   9999, // port historique — usage manuel/debug (python websocket_server.py)
 ];
 

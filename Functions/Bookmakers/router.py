@@ -40,6 +40,18 @@ try:
 except Exception as e:
     log(f"⚠️ Démarrage StakeBridge échoué (fallback Selenium): {e}", "warning")
 
+# Meme chose pour le bridge 1xBet general (websocket_server.bridge, utilise par
+# XBetScraper) : sans ca, "Extension Chrome non connectee" systematique dans ce
+# process (constate le 2026-10-16, XBetScraper._fetch_odds_sync echoue direct).
+# Port dedie 9102 (pas le 9999 par defaut) : le watcher (SCRIPTS_WATCH/main-1.py)
+# tourne deja sur 9999 en parallele, meme port = collision au bind si les deux
+# process tournent en meme temps (cas normal en prod).
+try:
+    from websocket_server import start_bridge as _start_xbet_bridge
+    _start_xbet_bridge(wait_timeout=10, port=9102)
+except Exception as e:
+    log(f"⚠️ Démarrage bridge 1xBet échoué: {e}", "warning")
+
 # Bookmakers sans VPN — lancés en parallèle (Lollybet mis de côté, désactivé via BOOKMAKER_STATE)
 NO_VPN_SCRAPERS = [WinamaxScraper, BetclicScraper]
 
