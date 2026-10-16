@@ -40,6 +40,14 @@ def _search_and_open_match(equipe1, equipe2, sport_id=None):
 
     result = b.search_on_results_page(equipe1, equipe2)
     if result.get('found'):
+        # Bug trouve le 2026-10-16 : ce chemin (match trouve directement, sans
+        # passer par la liste de candidats ci-dessous) ne naviguait jamais vers
+        # la page du match -- selectMarketByText tournait donc sur la page de
+        # recherche elle-meme, d'ou "selection_not_found" systematique malgre
+        # un search_on_results_page reussi.
+        url = result.get('url')
+        if url:
+            b.navigate(url)
         return True
 
     candidates = result.get('candidates') or []
