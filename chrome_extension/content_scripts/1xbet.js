@@ -299,6 +299,18 @@
       const modalContent = await waitFor('.search-app__content', 15000);
       if (!modalContent) return { found: false, error: 'search_modal_not_found' };
 
+      // Le switch "Tous / En direct / Avant-match" est sur "En direct" par defaut
+      // (search-app-controls__switches) -- un match qui n'a pas encore commence
+      // (pari pre-match depuis Telegram) n'apparaissait donc jamais dans les
+      // resultats (constate le 2026-10-16). On bascule sur "Tous" avant de
+      // chercher, pour couvrir live + a venir.
+      const switchLabels = qsa('.search-app-controls__switches .ui-switches-switch', modalContent);
+      const tousLabel = switchLabels.find(l => (l.textContent || '').trim().toLowerCase() === 'tous');
+      if (tousLabel) {
+        tousLabel.click();
+        await sleep(300);
+      }
+
       const inputSelectors = [
         '.games-search-modal__input', 'input.ui-field__input', 'input.ui-search-default',
         'input.search-app-head__search', 'input.ui-field__input.search-app-head__search',
