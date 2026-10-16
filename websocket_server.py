@@ -204,8 +204,14 @@ class ExtensionBridge:
         return self._send_and_wait({'action': 'search_match', 'equipe1': equipe1, 'equipe2': equipe2}, timeout=60)
 
     def click_search_button(self):
-        """Étape 1/2 de la recherche : clique le bouton recherche (navigue vers /search-events)."""
-        return self._send_and_wait({'action': 'click_search_button'}, timeout=20)
+        """
+        Étape 1/2 de la recherche : clique le bouton recherche (navigue vers /search-events).
+        timeout=25 > les 20000ms de waitFor() côté content script (1xbet.js) -- sinon
+        Python abandonne (TimeoutError générique, aucune réponse logguée) juste avant
+        que l'extension renvoie sa vraie réponse ({success:False, error:'search_button_not_found'}),
+        masquant la cause réelle (constaté le 2026-10-16).
+        """
+        return self._send_and_wait({'action': 'click_search_button'}, timeout=25)
 
     def capture_screenshot(self, save_path=None):
         """
