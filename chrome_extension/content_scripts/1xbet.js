@@ -302,14 +302,26 @@
       // Le switch "Tous / En direct / Avant-match" est sur "En direct" par defaut
       // (search-app-controls__switches) -- un match qui n'a pas encore commence
       // (pari pre-match depuis Telegram) n'apparaissait donc jamais dans les
-      // resultats (constate le 2026-10-16). On bascule sur "Tous" avant de
-      // chercher, pour couvrir live + a venir.
-      const switchLabels = qsa('.search-app-controls__switches .ui-switches-switch', modalContent);
-      const tousLabel = switchLabels.find(l => (l.textContent || '').trim().toLowerCase() === 'tous');
-      if (tousLabel) {
+      // resultats (constate le 2026-10-16). On bascule sur "Tous", AVANT et APRES
+      // la saisie (le simple .click() sur le <label> seul ne suffisait pas --
+      // constate par l'utilisateur, l'onglet restait sur "En direct" -- on clique
+      // aussi le <input type=radio> sous-jacent avec les bons evenements).
+      const clickTousFilter = () => {
+        const switchLabels = qsa('.search-app-controls__switches .ui-switches-switch', modalContent);
+        const tousLabel = switchLabels.find(l => (l.textContent || '').trim().toLowerCase() === 'tous');
+        if (!tousLabel) return false;
         tousLabel.click();
-        await sleep(300);
-      }
+        const radio = qs('input[type="radio"]', tousLabel);
+        if (radio && !radio.checked) {
+          const nativeCheckedSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'checked').set;
+          nativeCheckedSetter.call(radio, true);
+          radio.dispatchEvent(new Event('click', { bubbles: true }));
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        return true;
+      };
+      clickTousFilter();
+      await sleep(400);
 
       const inputSelectors = [
         '.games-search-modal__input', 'input.ui-field__input', 'input.ui-search-default',
@@ -327,6 +339,9 @@
       nativeInputSetter.call(input, term);
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('change', { bubbles: true }));
+
+      await sleep(300);
+      clickTousFilter();
 
       const cardsFound = await waitFor('.ui-game-card__content', 15000);
       if (!cardsFound) return { found: false, error: 'no_search_results' };
