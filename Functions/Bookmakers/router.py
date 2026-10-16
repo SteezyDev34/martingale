@@ -56,7 +56,14 @@ try:
     # "match_not_found" quasi instantane sans recherche reelle (constate 2026-10-16).
     import config as _config
     import time as _time
-    _xbet_bridge.navigate(_config.site_url)
+    # Version mobile, pas desktop : partout ailleurs dans le bot (recherche de
+    # match, page de match individuelle, placement), ScriptRechercheDeMatch.py
+    # bascule systematiquement en ?platform_type=mobile des qu'il s'agit
+    # d'autre chose que lister des ligues -- le bouton de recherche
+    # (.home-navigation__link--search, 1xbet.js) est vraisemblablement propre
+    # au DOM mobile (constate le 2026-10-16 : clic sans effet en desktop).
+    _xbet_search_url = _config.site_url.replace('?platform_type=desktop', '').replace('?platform_type=mobile', '') + '?platform_type=mobile'
+    _xbet_bridge.navigate(_xbet_search_url)
     # Laisse la page se charger avant le premier clic (meme pattern que
     # _bridge_recherche_match dans ScriptRechercheDeMatch.py) -- sans ca, le
     # tout premier pari traite juste apres le demarrage tombait sur un timeout
