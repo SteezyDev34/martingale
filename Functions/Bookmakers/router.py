@@ -55,7 +55,14 @@ try:
     # echoue tout de suite en "no_tab" : aucune fenetre ne s'ouvrait jamais,
     # "match_not_found" quasi instantane sans recherche reelle (constate 2026-10-16).
     import config as _config
+    import time as _time
     _xbet_bridge.navigate(_config.site_url)
+    # Laisse la page se charger avant le premier clic (meme pattern que
+    # _bridge_recherche_match dans ScriptRechercheDeMatch.py) -- sans ca, le
+    # tout premier pari traite juste apres le demarrage tombait sur un timeout
+    # de click_search_button (page encore en cours de chargement, constate le
+    # 2026-10-16).
+    _time.sleep(2)
 except Exception as e:
     log(f"⚠️ Démarrage bridge 1xBet échoué: {e}", "warning")
 
