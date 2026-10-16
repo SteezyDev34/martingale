@@ -285,7 +285,11 @@
     // clickSearchButton() (retourne aussitôt après le clic) puis, une fois le content script
     // réinjecté sur la nouvelle page, searchOnResultsPage() (tape le texte, lit les résultats).
     async clickSearchButton() {
-      const searchBtn = await waitFor('.home-navigation__link--search', 20000);
+      // Markup change constate le 2026-10-16 (inspection live) : l'ancienne classe
+      // .home-navigation__link--search n'existe plus, remplacee par
+      // <a href="/fr/search-events?tab=live" aria-label="Recherche" ...>. On garde
+      // l'ancien selecteur en repli au cas ou il reapparaisse sur une autre page/version.
+      const searchBtn = await waitFor('a[aria-label="Recherche"], .home-navigation__link--search', 20000);
       if (!searchBtn) return { success: false, error: 'search_button_not_found' };
       searchBtn.click();
       return { success: true };
