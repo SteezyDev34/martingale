@@ -23,7 +23,11 @@ class XBetScraper:
 
     def _fetch_odds_sync(self, bet):
         matches = _matches_from_bet(bet)
-        prepared = find_and_prepare_bet(matches)
+        # Reutilise l'URL deja connue si ce bet a deja ete recherche (voir
+        # commentaire _run_sync ci-dessous pour le pourquoi).
+        prepared = find_and_prepare_bet(matches, cached_url=bet.get('_xbet_match_url'))
+        if prepared.get('match_url'):
+            bet['_xbet_match_url'] = prepared['match_url']
         from websocket_server import bridge
         bridge.delete_bet()
         if not prepared.get('success'):
@@ -37,7 +41,18 @@ class XBetScraper:
         from websocket_server import bridge
 
         matches = _matches_from_bet(bet)
-        prepared = find_and_prepare_bet(matches)
+        # Reutilise l'URL du match deja trouvee par un fetch_odds precedent sur
+        # ce meme bet (router.py appelle fetch_odds puis run sur le MEME dict
+        # bet, cf. priorite 1xBet dans place_best_bet) -- une 2e recherche
+        # independante quelques secondes apres la 1ere echouait parfois en
+        # match_not_found alors que la 1ere venait de reussir (constate en
+        # conditions reelles le 2026-10-16, cause jamais identifiee avec
+        # certitude -- probablement un effet de l'etat laisse par la 1ere
+        # recherche sur la page). Naviguer directement vers l'URL deja connue
+        # evite completement cette 2e recherche redondante et peu fiable.
+        prepared = find_and_prepare_bet(matches, cached_url=bet.get('_xbet_match_url'))
+        if prepared.get('match_url'):
+            bet['_xbet_match_url'] = prepared['match_url']
         if not prepared.get('success'):
             BetTrace.capture_failure(trace_dir, prepared.get('error'), bridge=bridge, tag="find_prepare")
             return {"bookmaker": self.name, "success": False, "error": prepared.get('error')}
