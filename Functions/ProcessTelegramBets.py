@@ -12,11 +12,47 @@ from typing import List, Dict
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
-from Functions.TelegramBetsAPI import telegram_bets_api
+from Functions.TelegramBetsAPI import telegram_bets_api, send_bet_to_auxotracker
 from Functions.Bookmakers.router import place_best_bet, refresh_all_challenges, place_combined_bet
 from Functions.Logs.Logger import log, log_clear_line
 from Functions.Logs import BetTrace
 from Functions.GetMise import get_recommended_stake
+
+
+def _report_bet_to_auxotracker(bet_id, result, mise, tipster, events_source):
+    """
+    Envoie le pari place a POST /api/auxobot/bets (AuxoTracker), pour qu'il
+    apparaisse dans le suivi/bankroll -- gap trouve le 2026-10-16 : un pari
+    place avec succes etait marque "traite" localement mais jamais remonte
+    a l'API, contrairement a ce que documente /loop (skill Claude Code).
+    Champs alignes sur cette doc (event_list, pas events -- different de
+    l'ancien PlacerPari.py). N'echoue jamais le traitement du pari si ce
+    reporting rate (deja logge dans send_bet_to_auxotracker) : le pari est
+    reellement place sur le bookmaker, ca prime sur le suivi.
+    """
+    try:
+        event_list = [{
+            "equipe_1": m.get("equipe_1", ""),
+            "equipe_2": m.get("equipe_2", ""),
+            "selection": m.get("selection", ""),
+            "odds": m.get("odds"),
+            "sport_id": m.get("sport", "1"),
+        } for m in events_source]
+        bet_dict = {
+            "bet_date": time.strftime('%Y-%m-%d %H:%M:%S'),
+            "global_odds": result.get("odds"),
+            "bet_code": f"{result.get('bookmaker', '?')}-{bet_id}",
+            "result": "pending",
+            "stake": mise,
+            "stake_type": "currency",
+            "bankroll_id": 2,
+            "tipster": tipster,
+            "sport_id": events_source[0].get("sport", "1") if events_source else "1",
+            "event_list": event_list,
+        }
+        send_bet_to_auxotracker(bet_dict)
+    except Exception as e:
+        log(f"⚠️ Échec report AuxoTracker pour pari ID {bet_id}: {e}", "warning", clear=False)
 
 def process_api_bets(limit: int = 10) -> int:
     """
@@ -90,6 +126,7 @@ def process_api_bets(limit: int = 10) -> int:
                 log(f"   · {m.get('equipe_1')} vs {m.get('equipe_2')} | {m.get('selection')}", "info", clear=False)
             BetTrace.step(trace_dir, "placement_tente", {"type": "combine", "bookmaker": "Lollybet", "legs": len(all_matches)})
             result = place_combined_bet(all_matches, mise, trace_dir=trace_dir)
+            events_for_report = all_matches
         else:
             # ── Simple : 1 match ─────────────────────────────────────────
             if all_matches:
@@ -113,10 +150,12 @@ def process_api_bets(limit: int = 10) -> int:
             log(f"Pari simple ID {bet['id']}: {match.get('equipe_1')} vs {match.get('equipe_2')} | {match.get('selection')}", "info", clear=False)
             BetTrace.step(trace_dir, "placement_tente", {"type": "simple", "match": f"{match.get('equipe_1')} vs {match.get('equipe_2')}", "selection": match.get('selection')})
             result = place_best_bet(match)
+            events_for_report = [match]
 
         if result.get("success"):
             log(f"✅ Pari placé sur {result.get('bookmaker')} @ {result.get('odds','?')} (mise={mise}€)", "info", clear=False)
             BetTrace.step(trace_dir, "resultat", {"success": True, "bookmaker": result.get('bookmaker'), "odds": result.get('odds')})
+            _report_bet_to_auxotracker(bet['id'], result, mise, tipster, events_for_report)
             if telegram_bets_api.mark_bet_as_processed(bet['id']):
                 processed_count += 1
                 log(f"Pari ID {bet['id']} marqué traité", "info", clear=False)
