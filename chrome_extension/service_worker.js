@@ -122,9 +122,21 @@ async function handlePythonMessage(msg, port) {
     // script déjà en cours.
     case 'navigate': {
       let targetTabId = msg.tab_id || conn.tabId;
+      let alreadyThere = false;
       if (targetTabId) {
         try {
-          await chrome.tabs.update(targetTabId, { url: msg.url });
+          // Deja sur cette page (meme URL hors query string) -- evite un
+          // rechargement inutile (et l'attente qui va avec). Ajoute le
+          // 2026-10-16 : fetch_odds et le placement reel naviguent tous les
+          // deux vers la meme page de match (URL mise en cache cote Python,
+          // cf. OneXBetBridge.py) quelques secondes d'intervalle -- le 2e
+          // chargement complet n'apportait rien, juste plus lent.
+          const existing = await chrome.tabs.get(targetTabId);
+          alreadyThere = !!(existing?.url && msg.url &&
+            existing.url.split('?')[0] === msg.url.split('?')[0]);
+          if (!alreadyThere) {
+            await chrome.tabs.update(targetTabId, { url: msg.url });
+          }
         } catch (e) {
           // Onglet fermé entre-temps (ex: fermé manuellement) → en recréer un.
           targetTabId = null;
@@ -135,7 +147,12 @@ async function handlePythonMessage(msg, port) {
         targetTabId = tab.id;
       }
       conn.tabId = targetTabId;
-      await waitForTabLoad(targetTabId);
+      // alreadyThere : rien ne va declencher l'evenement 'complete' attendu
+      // par waitForTabLoad (aucun chargement lance) -- l'appeler quand meme
+      // bloquerait pour rien jusqu'a son timeout (15s).
+      if (!alreadyThere) {
+        await waitForTabLoad(targetTabId);
+      }
       sendToPython(port, { action: 'navigate_ack', req_id: msg.req_id, tab_id: targetTabId });
       break;
     }
