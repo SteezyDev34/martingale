@@ -25,11 +25,18 @@ from Functions.Logs.Logger import log
 # False dans ce process (celui qui place reellement les paris, via
 # ProcessTelegramBets.py) et retombe silencieusement sur l'ancien Selenium,
 # meme si le bridge tourne par ailleurs dans le process du watcher
-# (SCRIPTS_WATCH/main-1.py via session_init.py). Non bloquant : si l'extension
-# Chrome n'est pas connectee sur ce port, StakeScraper retombe sur Selenium.
+# (SCRIPTS_WATCH/main-1.py via session_init.py). wait_timeout=10 (pas 0) :
+# constate en prod le 2026-10-16 -- le tout premier pari traite juste apres
+# le demarrage du process voyait is_connected()=False (extension pas encore
+# connectee) et retombait sur Selenium, une fraction de seconde avant que
+# l'extension se connecte reellement. Cette attente bloquante ne coute que
+# quelques secondes une seule fois a l'import (StakeBridge.start_stake_bridge
+# est idempotent) ; si l'extension n'est vraiment pas disponible, wait_connected
+# leve TimeoutError, capture ci-dessous, et le fallback Selenium s'applique
+# normalement pour tous les paris (comme avant ce fix).
 try:
     from Functions.Bookmakers.StakeBridge import start_stake_bridge
-    start_stake_bridge(wait_timeout=0)
+    start_stake_bridge(wait_timeout=10)
 except Exception as e:
     log(f"⚠️ Démarrage StakeBridge échoué (fallback Selenium): {e}", "warning")
 
