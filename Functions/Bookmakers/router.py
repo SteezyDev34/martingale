@@ -236,8 +236,10 @@ def place_best_bet(bet: Dict) -> Dict:
     """
     Point d'entrée principal appelé depuis process_api_bets.
     1. Enrichit le pari avec les défis actifs (IA)
-    2. Lance la comparaison sur tous les bookmakers actifs (Playwright + 1xBet via l'extension Chrome)
-    3. Place le pari sur le meilleur bookmaker
+    2. Défi détecté → placement direct sur le bookmaker du défi
+    3. 1xBet prioritaire : si trouvé avec une cote, pari direct dessus (pas de comparaison)
+    4. Sinon, comparaison sur tous les bookmakers actifs (Playwright + 1xBet via l'extension Chrome)
+    5. Place le pari sur le meilleur bookmaker
     Retourne un dict résultat.
     """
     # Pari combiné sur le même match → Stake uniquement (MyMatch)
@@ -271,6 +273,18 @@ def place_best_bet(bet: Dict) -> Dict:
             result = _run_scraper_sync(scraper_map[target_bk], bet)
             if result.get("success"):
                 return result
+
+    # 1xBet en priorité stricte (demandé le 2026-10-16) : s'il trouve le match
+    # avec une cote valide, on parie direct dessus sans comparer aux autres
+    # bookmakers. Sinon (match non trouvé, erreur), on retombe sur la
+    # comparaison multi-bookmaker ci-dessous comme avant.
+    if _is_bookmaker_active("1xBet"):
+        xbet_odds = _fetch_odds_sync(XBetScraper, bet)
+        if xbet_odds.get("odds"):
+            log(f"[Router] 🎯 1xBet prioritaire @ {xbet_odds['odds']}", "info")
+            return _place_bet_sync(XBetScraper, bet)
+        else:
+            log(f"[Router] 1xBet prioritaire sans cote ({xbet_odds.get('error')}) — comparaison multi-bookmaker", "info")
 
     # Comparaison multi-bookmaker : récupérer les cotes sur tous
     best = get_best_odds(bet)
