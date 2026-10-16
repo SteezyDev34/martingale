@@ -68,7 +68,7 @@ BOOKMAKER_STATE: Dict[str, Dict] = {
     "Winamax":  {"enabled": False,  "balance": None},
     "Betclic":  {"enabled": False,  "balance": None},
     "Lollybet": {"enabled": False, "balance": None},
-    "Stake":    {"enabled": True,  "balance": None},
+    "Stake":    {"enabled": False, "balance": None},
     "1xBet":    {"enabled": True,  "balance": None},
 }
 
