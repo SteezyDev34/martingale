@@ -347,7 +347,24 @@
       if (!cardsFound) return { found: false, error: 'no_search_results' };
       await sleep(1500);
 
-      const matches = qsa('.search-game-card');
+      // Liste a chargement au scroll (constate le 2026-10-16 : le bon match
+      // apparaissait tout en bas, jamais rendu sans scroller) -- scrolle le
+      // conteneur de resultats jusqu'a ce que le nombre de cartes n'augmente
+      // plus (fin de liste atteinte), ou apres un nombre max d'iterations.
+      const scrollContainer = qs('.search-app-body', modalContent) || qs('.search-games-list', modalContent) || modalContent;
+      let previousCount = 0;
+      for (let i = 0; i < 20; i++) {
+        const count = qsa('.search-game-card', modalContent).length;
+        if (count === previousCount && i > 0) break;
+        previousCount = count;
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        scrollContainer.dispatchEvent(new Event('scroll', { bubbles: true }));
+        window.scrollTo(0, document.body.scrollHeight);
+        window.dispatchEvent(new Event('scroll', { bubbles: true }));
+        await sleep(400);
+      }
+
+      const matches = qsa('.search-game-card', modalContent);
       const candidates = [];
       const norm = (s) => (s || '').toLowerCase().trim();
       const loose = (a, b) => norm(a).includes(norm(b)) || norm(b).includes(norm(a));
