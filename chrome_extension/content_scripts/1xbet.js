@@ -327,15 +327,26 @@
 
       for (const m of matches) {
         let team1 = null, team2 = null, link = null;
-        const teamNames = qsa('.ui-game-card-scoreboard-teams-name__caption', m);
-        if (teamNames.length >= 2) {
-          team1 = teamNames[0].textContent.trim();
-          team2 = teamNames[1].textContent.trim();
+        // Markup change constate le 2026-10-16 (inspection live) :
+        // .ui-game-card-scoreboard-teams-name__caption n'existe plus. Priorite aux
+        // data-test (plus stables, pensés pour les tests E2E), repli sur la classe
+        // actuelle .ui-game-card-scoreboard__name, puis l'ancienne methode au cas ou.
+        const t1El = qs('[data-test="betting-ui-game-card-scoreboard-first-team-name"]', m);
+        const t2El = qs('[data-test="betting-ui-game-card-scoreboard-second-team-name"]', m);
+        if (t1El && t2El) {
+          team1 = t1El.textContent.trim();
+          team2 = t2El.textContent.trim();
         } else {
-          const scoreboard = qs('.ui-game-card-scoreboard', m);
-          const teamsText = scoreboard ? scoreboard.textContent : '';
-          if (teamsText.includes(' - ')) {
-            [team1, team2] = teamsText.split(' - ').map(s => s.trim());
+          const teamNames = qsa('.ui-game-card-scoreboard__name, .ui-game-card-scoreboard-teams-name__caption', m);
+          if (teamNames.length >= 2) {
+            team1 = teamNames[0].textContent.trim();
+            team2 = teamNames[1].textContent.trim();
+          } else {
+            const scoreboard = qs('.ui-game-card-scoreboard', m);
+            const teamsText = scoreboard ? scoreboard.textContent : '';
+            if (teamsText.includes(' - ')) {
+              [team1, team2] = teamsText.split(' - ').map(s => s.trim());
+            }
           }
         }
         const a = m.querySelector('a');
