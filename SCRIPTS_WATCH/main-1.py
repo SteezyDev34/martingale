@@ -128,6 +128,8 @@ from Functions.TelegramBetsAPI import send_bet_data_to_api, is_ignored_sender
 from Functions.AdrBettingScraper import scrape_adrbetting_coupons
 from Functions.FrancePronosScraper import scrape_francepronos
 from Functions.Bookmakers.session_init import init_bookmaker_sessions
+from Functions.Bookmakers.router import place_best_bet, place_combined_bet
+from Functions.GetMise import get_recommended_stake
 
 # Connexion manuelle aux bookmakers au démarrage
 init_bookmaker_sessions()
@@ -400,6 +402,87 @@ except Exception as e:
     client = TelegramClient('2', api_id, api_hash)
 
 
+# --- Placement direct pour le canal live "France Pronos Live" -------------------
+# Demande utilisateur du 2026-10-17 : contrairement aux autres canaux (stockés via
+# send_bet_data_to_api puis traités par le poll de 30s de process_bets_loop.py),
+# les tips de ce canal doivent être placés IMMÉDIATEMENT -- un pari live perd de sa
+# valeur (cote qui bouge, marché qui se ferme) à chaque seconde d'attente.
+# Les tips y arrivent parfois en image, parfois en texte seul, et une image est
+# généralement suivie d'un texte explicatif pour LE MÊME pari -- sans dédoublonnage
+# il serait placé deux fois. _is_duplicate_live_bet() filtre sur (equipe_1, equipe_2,
+# selection) avec une fenêtre de 5 minutes.
+_LIVE_BET_DEDUP_TTL = datetime.timedelta(minutes=5)
+_live_bet_seen = {}
+
+
+def _live_bet_key(match):
+    e1 = (match.get('equipe_1') or '').strip().lower()
+    e2 = (match.get('equipe_2') or '').strip().lower()
+    sel = (match.get('selection') or '').strip().lower()
+    return f"{e1}|{e2}|{sel}"
+
+
+def _is_duplicate_live_bet(matches):
+    now = datetime.datetime.now()
+    for k in list(_live_bet_seen.keys()):
+        if now - _live_bet_seen[k] > _LIVE_BET_DEDUP_TTL:
+            del _live_bet_seen[k]
+    combo_key = "||".join(sorted(_live_bet_key(m) for m in matches))
+    if combo_key in _live_bet_seen:
+        return True
+    _live_bet_seen[combo_key] = now
+    return False
+
+
+def _format_live_matches(matches):
+    return " + ".join(f"{m.get('equipe_1')} vs {m.get('equipe_2')} | {m.get('selection')}" for m in matches)
+
+
+def _place_live_bet_direct(pari_dict, source_label):
+    """
+    Placement DIRECT (sans passer par la queue API telegram_bets) pour "France
+    Pronos Live". Lancé dans un thread séparé car place_best_bet/place_combined_bet
+    sont bloquants (pilotage Selenium/extension Chrome) -- sinon ça gèlerait la
+    réception des autres messages Telegram pendant tout le placement.
+    """
+    matches = pari_dict.get("matches", [])
+    if not matches:
+        return
+    tipster = pari_dict.get("tipster", "France Pronos Live")
+    if _is_duplicate_live_bet(matches):
+        log(f"[FrancePronosLive] Doublon ignoré ({source_label}) : {_format_live_matches(matches)}", "warning", clear=False)
+        return
+
+    def _run():
+        try:
+            ref_odds = matches[0].get("odds")
+            try:
+                stake_data = get_recommended_stake(cote=ref_odds, tipster=tipster)
+                mise = float(stake_data.get("recommended_stake") or 1.0)
+            except Exception:
+                mise = 1.0
+            log(f"[FrancePronosLive] 🎯 Placement direct ({source_label}, mise={mise}€) : {_format_live_matches(matches)}", "info", clear=False)
+            if len(matches) > 1:
+                result = place_combined_bet(matches, mise)
+            else:
+                match = dict(matches[0])
+                match["tipster"] = tipster
+                match["mise"] = mise
+                result = place_best_bet(match)
+            if result.get("success"):
+                log(f"[FrancePronosLive] ✅ Pari placé sur {result.get('bookmaker')} @ {result.get('odds', '?')}", "info", clear=False)
+                for m in matches:
+                    msg = f"⚡ France Pronos Live (direct)\n{m.get('equipe_1')} vs {m.get('equipe_2')}\n🎯 {m.get('selection')} @ {result.get('odds', '?')}"
+                    send_telegram(Functions_telegram.alertGroup, msg)
+            else:
+                log(f"[FrancePronosLive] ❌ Échec placement direct : {result.get('error', '')}", "error", clear=False)
+        except Exception as e:
+            log(f"[FrancePronosLive] Erreur placement direct : {e}", "error", clear=False)
+
+    threading.Thread(target=_run, daemon=True).start()
+# ----------------------------------------------------------------------------------
+
+
 # Gestionnaire d'evenements pour detecter les nouveaux messages Telegram
 @client.on(events.NewMessage())
 async def my_event_handler(event):
@@ -661,24 +744,33 @@ async def my_event_handler(event):
                             pari_dict["tipster"] = chat_title
                             matches = pari_dict.get("matches", [])
                             if matches:
+                                if chat_title == "France Pronos Live":
+                                    # Live : placement direct, pas de queue API (réactivité) --
+                                    # _place_live_bet_direct gère aussi la notification Telegram
+                                    # et le dédoublonnage avec le texte explicatif qui suit souvent.
+                                    _place_live_bet_direct(pari_dict, "image")
                                 # TEMPÊTE BETTING combine souvent plusieurs picks dans un même
                                 # ticket/message (ex: "PALIER X MONTANTE" = plusieurs victoires
                                 # combinées). On envoie un pari séparé par match au lieu d'un seul
                                 # pari multi-matchs, pour que chacun soit évalué/parié
                                 # individuellement côté router (sinon len(matches)>1 le fait
                                 # traiter comme un seul pari combiné, cf. place_combined_bet).
-                                if chat_title == "TEMPÊTE BETTING" and len(matches) > 1:
+                                elif chat_title == "TEMPÊTE BETTING" and len(matches) > 1:
                                     api_success = True
                                     for match in matches:
                                         single_pari = {**pari_dict, "matches": [match]}
                                         if not send_bet_data_to_api(single_pari, message_original=txt, sender_username=chat_title, image_path=image_path):
                                             api_success = False
+                                    if api_success:
+                                        for match in matches:
+                                            msg = f"📩 {chat_title}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
+                                            send_telegram(Functions_telegram.alertGroup, msg)
                                 else:
                                     api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title, image_path=image_path)
-                                if api_success:
-                                    for match in matches:
-                                        msg = f"📩 {chat_title}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
-                                        send_telegram(Functions_telegram.alertGroup, msg)
+                                    if api_success:
+                                        for match in matches:
+                                            msg = f"📩 {chat_title}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
+                                            send_telegram(Functions_telegram.alertGroup, msg)
                         except Exception as _e:
                             log(f"[Image] [{chat_title}] Erreur traitement OCR: {_e}", "error", clear=False)
                         # Delete the downloaded image file
@@ -721,6 +813,27 @@ async def my_event_handler(event):
                         os.chdir(original_cwd)
                     # except Exception as e:
                     # log(f"Error downloading media: {e}", "error", clear=False)
+
+                elif chat_title == "France Pronos Live" and txt and txt.strip():
+                    # Tip texte seul (sans image) sur le canal live -- généralement
+                    # une image est suivie d'un texte explicatif pour le MÊME pari ;
+                    # _place_live_bet_direct s'occupe du dédoublonnage.
+                    log("[FrancePronosLive] Tip texte reçu — extraction + placement direct", "info", clear=False)
+
+                    def _run_text_live(txt=txt, chat_title=chat_title):
+                        try:
+                            result = extraire_pari_depuis_texte(txt, txt)
+                            pari_dict = json.loads(result)
+                            pari_dict["tipster"] = chat_title
+                            matches = pari_dict.get("matches", [])
+                            if matches:
+                                _place_live_bet_direct(pari_dict, "texte")
+                            else:
+                                log("[FrancePronosLive] Aucun match extrait du texte", "warning", clear=False)
+                        except Exception as e:
+                            log(f"[FrancePronosLive] Erreur traitement texte: {e}", "error", clear=False)
+
+                    threading.Thread(target=_run_text_live, daemon=True).start()
 
             else:
                 log("Expediteur introuvable", "warning", clear=False)
