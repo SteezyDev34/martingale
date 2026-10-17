@@ -1627,7 +1627,6 @@ def newclassementeDeMatch(driver):
                         or 'special' in cntrybtn.text.lower()
                         or 'mixte' in cntrybtn.text.lower()
                         or 'gagnant' in cntrybtn.text.lower()
-                        or 'itf' in cntrybtn.text.lower()
                         or 'winner' in cntrybtn.text.lower()
                         or 'utr' in cntrybtn.text.lower()):
                     continue

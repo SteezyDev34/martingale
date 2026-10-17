@@ -756,7 +756,7 @@
       const country = qs('.sports-menu-group-by-country');
       if (!country) return { success: false, error: 'country_group_not_found', leagues: [] };
 
-      const GROUP_EXCLUDED = ['double', 'spéciaux', 'special', 'mixte', 'gagnant', 'itf', 'winner', 'utr'];
+      const GROUP_EXCLUDED = ['double', 'spéciaux', 'special', 'mixte', 'gagnant', 'winner', 'utr'];
       const LINK_EXCLUDED = ['double', 'spéciaux', 'mixte', 'gagnant', 'winner', 'utr'];
       const SUB_ITEM = 'sports-menu-app-champ-with-sub-champs-group__item';
       const leagues = [];
