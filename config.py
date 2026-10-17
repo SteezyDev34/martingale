@@ -614,6 +614,12 @@ def log(message, type="", clear=True, indent=0, show_script_type=True):
     """
     global log_message
     refresh_dev_mode()
+    # devMode OFF : les messages de type 'debug' (traces verbeuses RedisIPC,
+    # resync de score, etc.) ne sont ni affichés ni sauvegardés -- seuls les
+    # types "normaux" (info/warning/error/success/...) restent visibles.
+    # devMode ON : tout s'affiche, debug compris.
+    if type == "debug" and not devMode:
+        return
     # Détermination de la couleur en fonction du type de message
     if type == "info":
         color = WHITE

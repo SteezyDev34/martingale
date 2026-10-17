@@ -144,6 +144,13 @@ def log(message, type="", clear=True, indent=0, show_script_type=True):
     :return: La longueur du message actuel, pour l'utiliser dans l'appel suivant.
     """
     global log_message
+    # Relit devMode depuis redis_fallback.sqlite (même mécanisme que config.log) --
+    # sans cet appel, ce logger (watcher/placement, scrapers bookmakers) ne voyait
+    # jamais les bascules faites depuis le dashboard.
+    config.refresh_dev_mode()
+    # devMode OFF : les messages de type 'debug' ne sont ni affichés ni sauvegardés.
+    if type == "debug" and not config.devMode:
+        return
     # Détermination de la couleur en fonction du type de message
     if type == "info":
         color = WHITE
