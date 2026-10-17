@@ -17,8 +17,8 @@ Sortie : DataFiles/debug_classement_<timestamp>.json avec :
   - par_match_api   : pour chaque match, le résultat de l'appel AuxoTracker
                        (introuvable / échec API / scriptTypes trouvés)
   - goodmatch       : matchs avec au moins un scriptType actif
-  - top_matches     : les 30 matchs qui seraient réellement transmis au bot
-                       (après le plafond max_matches=30)
+  - top_matches     : tous les matchs qualifiés, dans l'ordre de priorité par
+                       ligue (ATP > Challenger > WTA > ITF) — plus de plafond
 """
 import json
 import os
@@ -62,7 +62,9 @@ config.log = _orig_log  # restaure le logger normal
 tableau_trie = sorted(goodmatch, key=lambda x: x[4], reverse=True)
 
 
-def prioritize_matches_by_league(matches, max_matches=30):
+def prioritize_matches_by_league(matches):
+    # Plus de plafond (retiré du code de prod le 2026-10-17) : ordre de
+    # priorité par ligue uniquement, tous les matchs qualifiés sont gardés.
     priority_groups = {i: [] for i in range(1, 9)}
     for match in matches:
         ligue_name = match[1].lower()
@@ -82,15 +84,12 @@ def prioritize_matches_by_league(matches, max_matches=30):
     final_matches = []
     for priority in sorted(priority_groups.keys()):
         group_sorted = sorted(priority_groups[priority], key=lambda x: x[4], reverse=True)
-        remaining_slots = max_matches - len(final_matches)
-        if remaining_slots <= 0:
-            break
-        final_matches.extend(group_sorted[:remaining_slots])
+        final_matches.extend(group_sorted)
     return final_matches
 
 
-top_matches = prioritize_matches_by_league(tableau_trie, 30)
-print(f"Top matches retenus (plafond 30) : {len(top_matches)}")
+top_matches = prioritize_matches_by_league(tableau_trie)
+print(f"Matchs retenus (sans plafond) : {len(top_matches)}")
 
 output = {
     "timestamp": datetime.now().isoformat(),

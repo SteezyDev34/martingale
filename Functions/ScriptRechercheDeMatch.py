@@ -1175,7 +1175,11 @@ def _finaliser_classement(matchlist):
     # pointé silencieusement vers le mauvais champ après l'ajout de script_types/link.
     tableau_trie = sorted(goodmatch, key=lambda x: x[4], reverse=True)
 
-    def prioritize_matches_by_league(matches, max_matches=30):
+    def prioritize_matches_by_league(matches):
+        # Plus de plafond (max_matches=30 retiré à la demande de l'utilisateur,
+        # 2026-10-17 : la moitié des matchs du jour étaient perdus avant même
+        # d'être pariables) — on garde seulement l'ordre de priorité par ligue
+        # (ATP > Challenger > WTA > ITF), tous les matchs qualifiés sont inclus.
         priority_groups = {i: [] for i in range(1, 9)}
         for match in matches:
             ligue_name = match[1].lower()
@@ -1195,13 +1199,10 @@ def _finaliser_classement(matchlist):
         final_matches = []
         for priority in sorted(priority_groups.keys()):
             group_sorted = sorted(priority_groups[priority], key=lambda x: x[4], reverse=True)
-            remaining_slots = max_matches - len(final_matches)
-            if remaining_slots <= 0:
-                break
-            final_matches.extend(group_sorted[:remaining_slots])
+            final_matches.extend(group_sorted)
         return final_matches
 
-    top_matches = prioritize_matches_by_league(tableau_trie, 30)
+    top_matches = prioritize_matches_by_league(tableau_trie)
     _ajouter_matchs_todo(top_matches)
 
     last_classement_file = os.path.join(config.projectPath, "DataFiles", "last_classement.txt")
@@ -1829,12 +1830,14 @@ def newclassementeDeMatch(driver):
         # _finaliser_classement, un index relatif (x[-2]) est fragile ici.
         tableau_trie = sorted(goodmatch, key=lambda x: x[4], reverse=True)
 
-        # Fonction de priorisation des matchs par ligue
-        def prioritize_matches_by_league(matches, max_matches=100):
+        # Fonction de priorisation des matchs par ligue (plus de plafond — retiré
+        # à la demande de l'utilisateur, 2026-10-17 : tous les matchs qualifiés
+        # doivent être retenus, pas seulement les N meilleurs)
+        def prioritize_matches_by_league(matches):
             """
             Priorise les matchs selon la hiérarchie des ligues :
             1. ATP sans "qualification"
-            2. Challenger sans "qualification"  
+            2. Challenger sans "qualification"
             3. WTA sans "qualification"
             4. ATP avec "qualification"
             5. Challenger avec "qualification"
@@ -1873,24 +1876,18 @@ def newclassementeDeMatch(driver):
 
                 priority_groups[priority].append(match)
 
-            # Construire la liste finale en respectant les priorités
+            # Construire la liste finale en respectant les priorités (toutes les
+            # ligues, triées par priorité puis par probabilité décroissante)
             final_matches = []
             for priority in sorted(priority_groups.keys()):
                 group = priority_groups[priority]
-                # Trier chaque groupe par probabilité décroissante
                 group_sorted = sorted(group, key=lambda x: x[4], reverse=True)
-
-                # Ajouter les matchs jusqu'à atteindre la limite
-                remaining_slots = max_matches - len(final_matches)
-                if remaining_slots <= 0:
-                    break
-
-                final_matches.extend(group_sorted[:remaining_slots])
+                final_matches.extend(group_sorted)
 
             return final_matches
 
-        # Appliquer la priorisation pour retenir les 30 meilleurs matchs
-        top_matches = prioritize_matches_by_league(tableau_trie, 30)
+        # Appliquer la priorisation (ordre uniquement, plus de plafond)
+        top_matches = prioritize_matches_by_league(tableau_trie)
         
 
         for match in top_matches:
