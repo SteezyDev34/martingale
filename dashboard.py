@@ -788,6 +788,13 @@ class Dashboard(App):
     .button_row Button {
         margin-right: 1;
     }
+    #toggle_devmode {
+        /* Largeur fixe : "devMode: ON"/"devMode: OFF" ont une longueur différente --
+           sans ça le bouton change de taille au toggle et décale les autres boutons
+           de la rangée, faisant rater le clic suivant au même endroit à l'écran
+           (bug rapporté le 2026-10-17, reproduit via Pilot.click : 2e clic sans effet). */
+        width: 16;
+    }
     RichLog {
         height: 1fr;
         /* wrap=False -> une barre de scroll horizontale apparaît en bas dès qu'une
