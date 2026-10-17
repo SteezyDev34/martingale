@@ -29,6 +29,13 @@ def FirstGameBet(driver):
     if config.scriptType in ['15V1', '15V2']:
         attempts = 1
     while not bet_40a and not config.error and tentative < attempts:
+        # GetJeuActuel() rafraichi a CHAQUE tentative (pas seulement avant la boucle,
+        # ligne 28) -- sinon jeu_actuel reste fige sur sa valeur de depart pendant les
+        # ~20-25s de retry (observe en conditions reelles le 2026-10-17 : le match
+        # progressait de jeu 5 a jeu 6/7 pendant les tentatives, mais le bot continuait
+        # a chercher "Jeu 5 ..." -- marche deja resolu/verrouille, "introuvable" alors
+        # que le marche du jeu courant etait bien present).
+        GetJeuActuel(driver)
         GetScoreActuel(driver)
         print(f'config.scriptTypepass ici: {config.scriptType}')
         config.looking_game = int(config.jeu_actuel)

@@ -59,30 +59,36 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                 first_player = scoreboard_player1.find_elements(By.CLASS_NAME,
                                                                 config.classes['score_ball'][config.site_type])
             if config.scriptType == '4030' or config.scriptType == '4015' or config.scriptType == '400':
+                # Format sType corrige le 2026-10-17 : l'ancien texte ("Joueur X va
+                # gagner le Jeu N 40-30") ne correspondait a RIEN sur la page reelle
+                # -- le vrai texte DOM (verifie en conditions reelles) est
+                # "Jeu N 40+:30, Joueur X" (score inverse pour le joueur 2, comme
+                # GetBetNew.py deja corrige le 2026-10-16). select_market_by_text
+                # fait un match par inclusion de sous-chaine (1xbet.js), donc un
+                # format completement different ne matchait jamais -- "introuvable"
+                # systematique quel que soit le numero de jeu.
                 if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet):
                     first_player = 1
                     if config.scriptType == '4030':
                         config.win_type = ['40:30']
+                        sType = f"Jeu {config.looking_game} 40+:30, Joueur {first_player}"
                     elif config.scriptType == '4015':
                         config.win_type = ['40:15']  # inversé
+                        sType = f"Jeu {config.looking_game} 40+:15, Joueur {first_player}"
                     elif config.scriptType == '400':
                         config.win_type = ['40:0']  # inversé
-
+                        sType = f"Jeu {config.looking_game} 40+:0, Joueur {first_player}"
                 else:
                     first_player = 2
                     if config.scriptType == '4030':
                         config.win_type = ['30:40']  # inversé
+                        sType = f"Jeu {config.looking_game} 30:40+, Joueur {first_player}"
                     elif config.scriptType == '4015':
                         config.win_type = ['15:40']  # inversé
+                        sType = f"Jeu {config.looking_game} 15:40+, Joueur {first_player}"
                     elif config.scriptType == '400':
                         config.win_type = ['0:40']  # inversé
-                if config.scriptType == '4030':
-                    sType = 'Joueur ' + str(first_player) + ' va gagner le Jeu ' + str(config.looking_game) + ' 40-30'
-                elif config.scriptType == '4015':
-                    sType = 'Joueur ' + str(first_player) + ' va gagner le Jeu ' + str(config.looking_game) + ' 40-15'
-                elif config.scriptType == '400':
-                    sType = 'Joueur ' + str(first_player) + ' va gagner le Jeu ' + str(
-                        config.looking_game) + ' 40-0'
+                        sType = f"Jeu {config.looking_game} 0:40+, Joueur {first_player}"
             if config.scriptType == '030':
                 sType = f"Jeu {jeu}, Receveur va mener 30-0"
                 # print(sType)
