@@ -250,6 +250,23 @@ def get_matches_todo(limit=20):
         return []
 
 
+def get_matches_todo_count():
+    """
+    Total réel de matches_todo, sans la limite d'affichage (get_matches_todo
+    plafonne à limit=20 pour la table -- depuis la suppression du plafond
+    max_matches=30 côté classement, ScriptRechercheDeMatch.py, il peut y avoir
+    bien plus de 20 matchs en attente et la table n'en montrerait qu'une partie
+    sans ce compteur séparé).
+    """
+    try:
+        conn = _connect(MATCHES_DB)
+        count = conn.execute("SELECT COUNT(*) FROM matches_todo").fetchone()[0]
+        conn.close()
+        return count
+    except Exception:
+        return 0
+
+
 def get_match_history(limit=200):
     """
     Récap des gains par scriptType pour les matchs terminés (cf.
@@ -806,6 +823,7 @@ class Dashboard(App):
         yield Header()
         with TabbedContent():
             with TabPane("Vue d'ensemble", id="tab_overview"):
+                yield Static("", id="queue_count")
                 with Horizontal(id="top"):
                     yield DataTable(id="queue_panel")
                 with Horizontal(classes="button_row"):
@@ -921,10 +939,10 @@ class Dashboard(App):
                     finished = True
                     break
                 if kind == "erase":
-                    if payload > 0:
-                        del lines[-payload:]
-                        appended.clear()  # tout ce qu'on comptait ajouter tel quel est invalidé
-                        erased = True
+                    # Désactivé à la demande de l'utilisateur (2026-10-17) : on ne
+                    # reproduit plus l'effacement dynamique du bot (config.log_clear_line)
+                    # dans le dashboard -- tous les logs restent affichés et défilent
+                    # normalement, même ceux que le bot efface dans un vrai terminal.
                     continue
                 if kind == "partial":
                     # Reliquat sans \n (ex: prompt input() en attente d'une réponse) —
@@ -1153,6 +1171,8 @@ class Dashboard(App):
         # table.clear() remet le scroll en haut -- on le restaure juste après pour ne
         # pas interrompre une lecture en cours (refresh_data tourne toutes les 2s,
         # cf. set_interval dans on_mount).
+        queue_count = get_matches_todo_count()
+        self.query_one("#queue_count", Static).update(f"{queue_count} match(s) dans matches_todo")
         table = self.query_one("#queue_panel", DataTable)
         _queue_scroll_y = table.scroll_y
         table.clear()
