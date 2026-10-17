@@ -1190,7 +1190,9 @@ def _finaliser_classement(matchlist):
                 priority = 5 if has_qualification else 2
             elif any(wta_term in ligue_name for wta_term in ['wta', 'féminin', 'femmes', 'women']):
                 priority = 6 if has_qualification else 3
-            elif 'itf' in ligue_name:
+            elif 'itf' in ligue_name or 'world tennis' in ligue_name:
+                # 1xBet a renommé la catégorie ITF en "World Tennis" (2026-10-17) —
+                # on garde 'itf' pour compat si jamais le libellé change de nouveau.
                 priority = 8 if has_qualification else 7
             else:
                 priority = 8
@@ -1868,7 +1870,8 @@ def newclassementeDeMatch(driver):
                     priority = 5 if has_qualification else 2
                 elif any(wta_term in ligue_name for wta_term in ['wta', 'féminin', 'femmes', 'women']):
                     priority = 6 if has_qualification else 3
-                elif 'itf' in ligue_name:
+                elif 'itf' in ligue_name or 'world tennis' in ligue_name:
+                    # 1xBet a renommé la catégorie ITF en "World Tennis" (2026-10-17).
                     priority = 8 if has_qualification else 7
                 else:
                     # Autres ligues, priorité basse

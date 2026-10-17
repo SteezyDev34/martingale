@@ -75,7 +75,7 @@ def prioritize_matches_by_league(matches):
             priority = 5 if has_qualification else 2
         elif any(wta_term in ligue_name for wta_term in ['wta', 'féminin', 'femmes', 'women']):
             priority = 6 if has_qualification else 3
-        elif 'itf' in ligue_name:
+        elif 'itf' in ligue_name or 'world tennis' in ligue_name:
             priority = 8 if has_qualification else 7
         else:
             priority = 8
