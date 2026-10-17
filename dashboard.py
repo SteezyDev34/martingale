@@ -838,6 +838,7 @@ class Dashboard(App):
                     yield Button("🗑 Vider matchs en cours (running)", id="clear_running", variant="warning")
                     yield Button("⛔ Annuler reprise d'un match", id="cancel_resume", variant="warning")
                     yield Button("devMode: ...", id="toggle_devmode", variant="default")
+                    yield Button("📋 Copier matches_todo", id="copy_queue", variant="default")
                 yield Input(placeholder="Filtrer les logs (ex: 300, WIN, error...)", id="log_filter")
                 with TabbedContent(id="logs_tabs"):
                     for i, (_path, label) in enumerate(FIXED_LAUNCHERS):
@@ -845,6 +846,7 @@ class Dashboard(App):
                             with Horizontal(classes="script_row"):
                                 yield Button("▶", id=f"logtoggle_{i}", classes="toggle_icon", variant="success")
                                 yield Static(label, id=f"logstatus_{i}")
+                                yield Button("📋", id=f"logcopy_{i}", classes="toggle_icon", variant="default")
                             yield RichLog(id=f"logrich_{i}", wrap=False, highlight=False, markup=True)
                             # Repère fixe (ne scrolle pas avec le log) confirmant qu'on est
                             # bien arrivé à la toute dernière ligne affichée — la barre de
@@ -871,6 +873,28 @@ class Dashboard(App):
         self.call_later(self.refresh_data)
         self.refresh_fixed_log_headers()
         self._refresh_devmode_button()
+
+    def _copy_text(self, text: str, export_name: str) -> None:
+        """
+        Copie `text` dans le presse-papier du terminal (OSC 52, cf. Textual
+        App.copy_to_clipboard) -- ne fonctionne pas sur macOS Terminal.app
+        (limite documentée de Textual), fonctionne sur la plupart des autres
+        terminaux (iTerm2 avec l'option presse-papier activée, etc.). Écrit
+        aussi systématiquement le texte dans DataFiles/exports/ comme filet de
+        secours fiable quel que soit le terminal, demandé le 2026-10-17 car les
+        tableaux (DataTable) n'implémentent pas la sélection de texte native de
+        Textual (ALLOW_SELECT=False côté librairie).
+        """
+        self.copy_to_clipboard(text)
+        try:
+            export_dir = os.path.join(PROJECT_DIR, "DataFiles", "exports")
+            os.makedirs(export_dir, exist_ok=True)
+            path = os.path.join(export_dir, export_name)
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(text)
+            self.notify(f"Copié (si le terminal le permet) + exporté vers {path}")
+        except Exception as e:
+            self.notify(f"Échec de l'export fichier : {e}", severity="error")
 
     def _refresh_devmode_button(self) -> None:
         try:
@@ -1022,6 +1046,24 @@ class Dashboard(App):
         if button_id == "toggle_devmode":
             set_dev_mode(not get_dev_mode())
             self._refresh_devmode_button()
+            return
+        if button_id == "copy_queue":
+            rows = get_matches_todo(limit=1_000_000)
+            lines = ["Match\tLigue\tScriptTypes\tDate/heure prévue"]
+            for match_id, players, league, script_types, match_date in rows:
+                lines.append(f"{players or match_id}\t{league or ''}\t{script_types or '[]'}\t{match_date or '-'}")
+            self._copy_text("\n".join(lines), "matches_todo.txt")
+            return
+        if button_id.startswith("logcopy_"):
+            try:
+                idx = int(button_id.split("_", 1)[1])
+            except ValueError:
+                return
+            lines = self._log_lines_by_idx.get(idx, [])
+            text = "\n".join(plain for plain, _rendered in lines)
+            label = FIXED_LAUNCHERS[idx][1] if 0 <= idx < len(FIXED_LAUNCHERS) else f"log_{idx}"
+            safe_label = re.sub(r"[^A-Za-z0-9_-]+", "_", label)
+            self._copy_text(text, f"log_{safe_label}.txt")
             return
         if not button_id.startswith("logtoggle_"):
             return
