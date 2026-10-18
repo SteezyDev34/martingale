@@ -1220,7 +1220,14 @@ def compute_script_types_from_match_data(match_data, mode=None):
             activable = edge > 0
             details[st] = {'proba': proba, 'edge': edge}
         elif mode == 'in_set':
-            activable = proba >= 1.0
+            # Seuil 100% appliqué sur le pourcentage arrondi à l'entier (et non
+            # la valeur brute) : le panneau AuxoTracker affiche lui-même
+            # proba_pct arrondi, donc 99.5%-100.49% s'affichent déjà "100% ✅"
+            # côté utilisateur -- comparer sur la valeur brute non-arrondie
+            # excluait silencieusement des scriptTypes que l'utilisateur voit
+            # comme "à 100%" (ex: 4015 à 99.96%, 4030 à 99.75% sur un vrai
+            # match le 2026-10-18, tous deux arrondis à 100% dans le panneau).
+            activable = round(proba_pct) >= 100
             details[st] = {'proba': proba, 'threshold': 1.0}
         else:
             threshold = _LOOSE_THRESHOLDS.get(st, 1.0)
