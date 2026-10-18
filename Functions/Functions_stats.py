@@ -1121,6 +1121,16 @@ _ALL_SCRIPT_TYPES = ['15A', '30A', '40A', '150', '015', '300', '030', '400', '40
 _MIN_TIGHTNESS_FOR_SET_LEAD_SCRIPT_TYPES = 50
 _TIGHTNESS_GATED_SCRIPT_TYPES = {'15A', '30A', '40A', '4015', '4030'}
 
+# Exclusion TOTALE (pas conditionnée à la tension du match, contrairement au
+# garde-fou ci-dessus) de 4015/4030/400, demandée le 2026-10-18 -- "pour
+# l'instant", donc a priori temporaire. Ne couvre QUE ces 3 codes exacts --
+# PAS leurs alias 4P/5P/6P (cf. _MATCH_DATA_FIELD, même donnée sous-jacente :
+# 4P->400, 5P->4015, 6P->4030), qui restent donc évaluables normalement tant
+# que ce n'est pas explicitement redemandé (cf. feedback_no_unsolicited_
+# scope_expansion, l'utilisateur a déjà corrigé une extension non sollicitée
+# similaire sur 5P/6P plus tôt le même jour).
+_TEMPORARILY_DISABLED_SCRIPT_TYPES = {'4015', '4030', '400'}
+
 
 def get_match_link_and_probs(playerName1, playerName2, date_str=None):
     """
@@ -1199,6 +1209,8 @@ def compute_script_types_from_match_data(match_data, mode=None):
     script_types = []
     details = {}
     for st in _ALL_SCRIPT_TYPES:
+        if st in _TEMPORARILY_DISABLED_SCRIPT_TYPES:
+            continue
         if tightness_gated and st in _TIGHTNESS_GATED_SCRIPT_TYPES:
             continue
         field = _MATCH_DATA_FIELD.get(st, st)
