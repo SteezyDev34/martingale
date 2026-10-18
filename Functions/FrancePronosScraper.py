@@ -20,6 +20,7 @@ from Functions.Logs.Logger import log
 FRANCEPRONOS_URL = "https://www.france-pronos.com"
 PRONOS_URL = f"{FRANCEPRONOS_URL}/pronostics"
 LOGIN_URL = f"{FRANCEPRONOS_URL}/login"
+API_BASE = "https://api.france-pronos.fr"
 TIPSTER_NAME = "FrancePronos"
 
 
@@ -202,6 +203,30 @@ class FrancePronosScraper:
             if has_today and stable_for >= stable_needed_s:
                 break
 
+    def _resolve_image_url(self, media_path: str) -> str:
+        """
+        Le champ "image" d'un pari (ex: "/api/media_objects/<uuid>") pointe vers une
+        ressource JSON-LD (métadonnées), pas vers l'image elle-même -- le vrai
+        fichier est dans son champ "contentUrl" (ex: "/media/xxx_capture.png").
+        Les deux endpoints sont publics, pas besoin de cookie de session (vérifié
+        le 2026-10-18). Retourne l'URL finale directement utilisable (ex: pour
+        Telegram sendPhoto), ou "" si indisponible.
+        """
+        if not media_path:
+            return ""
+        try:
+            import requests
+            from urllib.parse import quote
+            r = requests.get(f"{API_BASE}{media_path}", timeout=10, verify=False)
+            r.raise_for_status()
+            content_url = r.json().get("contentUrl") or ""
+            if not content_url:
+                return ""
+            return f"{API_BASE}{quote(content_url, safe='/')}"
+        except Exception as e:
+            log(f"[FrancePronos] Erreur résolution image {media_path}: {e}", "warning")
+            return ""
+
     def _extract_todays_pending_pronos(self) -> List[Dict]:
         """
         Filtre self._bets_by_id sur la date du jour ET status=None (pari pas encore
@@ -235,6 +260,7 @@ class FrancePronosScraper:
                 "equipe_2": equipe_2,
                 "intitule": b.get("displayName") or "",
                 "selection": b.get("displayChoice") or "",
+                "image": self._resolve_image_url(b.get("image")),
                 "odds": b.get("odds"),
                 "date": (b.get("startAt") or "")[:10],
                 "sport": sport,

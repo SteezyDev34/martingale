@@ -38,7 +38,7 @@ if os.getenv('PYCHARM_HOSTED') != '1':  # Si execute dans PyCharm
 
 # Chargement des variables globales
 import Functions.Functions_telegram
-from Functions.Functions_telegram import send_telegram
+from Functions.Functions_telegram import send_telegram, send_telegram_photo
 from Functions.PlacerCode import PlacerCode
 from Functions.PlacerPari import placer_pari
 from Functions.Logs.Logger import log, log_clear_line
@@ -653,7 +653,11 @@ async def my_event_handler(event):
                                         for match in matches:
                                             log(f"[FrancePronos] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
                                             msg = f"🇫🇷 France Pronos\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
-                                            send_telegram(Functions_telegram.alertGroup, msg)
+                                            image_url = raw.get('image')
+                                            if image_url:
+                                                send_telegram_photo(Functions_telegram.alertGroup, image_url, caption=msg)
+                                            else:
+                                                send_telegram(Functions_telegram.alertGroup, msg)
                                     else:
                                         log(f"[FrancePronos] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
                             except json.JSONDecodeError as e:

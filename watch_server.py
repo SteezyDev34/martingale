@@ -44,7 +44,7 @@ load_dotenv(os.path.join(project_directory, '.env'))
 
 from Functions.Logs.Logger import log
 import Functions.Functions_telegram
-from Functions.Functions_telegram import send_telegram
+from Functions.Functions_telegram import send_telegram, send_telegram_photo
 from Functions.getTextFromImageGPT import extraire_pari_depuis_image, extraire_pari_depuis_texte
 from Functions.TelegramBetsAPI import send_bet_data_to_api, is_ignored_sender
 from Functions.AdrBettingScraper import scrape_adrbetting_coupons
@@ -404,7 +404,16 @@ async def my_event_handler(event):
                         pari_dict["tipster"] = "FrancePronos"
                         matches = pari_dict.get("matches", [])
                         if matches:
-                            send_bet_data_to_api(pari_dict, message_original=txt, sender_username="FrancePronos")
+                            api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username="FrancePronos")
+                            if api_success:
+                                for match in matches:
+                                    log(f"[FrancePronos] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
+                                    msg = f"🇫🇷 France Pronos\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
+                                    image_url = raw.get('image')
+                                    if image_url:
+                                        send_telegram_photo(Functions.Functions_telegram.alertGroup, image_url, caption=msg)
+                                    else:
+                                        send_telegram(Functions.Functions_telegram.alertGroup, msg)
                     except Exception as e:
                         log(f"[FrancePronos] Erreur: {e}", "error", clear=False)
             except Exception as e:

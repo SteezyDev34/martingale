@@ -104,6 +104,35 @@ def send_telegram(groupid, message):
         print(f"Une erreur est survenue : {e}")
 
 
+def send_telegram_photo(groupid, photo, caption=""):
+    """
+    Envoie une photo avec légende. `photo` peut être une URL publique (Telegram
+    la télécharge lui-même, ex: image de ticket FrancePronos) ou un chemin de
+    fichier local (uploadé en multipart). En cas d'échec (URL invalide, image
+    trop lourde, etc.), retombe automatiquement sur un message texte simple
+    avec `caption` pour ne jamais perdre la notification.
+    """
+    try:
+        url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
+        if photo.startswith("http://") or photo.startswith("https://"):
+            data = {'chat_id': groupid, 'caption': caption, 'photo': photo}
+            response = session.post(url, data=data, verify=False)
+        else:
+            with open(photo, 'rb') as f:
+                response = session.post(
+                    url, data={'chat_id': groupid, 'caption': caption}, files={'photo': f}, verify=False
+                )
+        if response.status_code != 200:
+            print(f"Erreur HTTP {response.status_code}: {response.text}")
+            send_telegram(groupid, caption)
+            return False
+        return True
+    except Exception as e:
+        print(f"Une erreur est survenue (send_telegram_photo) : {e}")
+        send_telegram(groupid, caption)
+        return False
+
+
 def send_telegram_group(groupid, message, code):
     try:
         # Utiliser requests directement avec notre session SSL configurée
