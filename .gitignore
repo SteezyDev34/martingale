@@ -2,6 +2,7 @@
 /build/
 /venv/
 logScript*
+/Logs/bet_traces/
 .eggs
 /GsheetsJson
 DataFiles/*
