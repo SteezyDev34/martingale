@@ -41,8 +41,6 @@ if (count($rows) > 0) {
     }
 }
 
-// Fermer la connexion
-$conn->close();
 // Préparer la réponse JSON
 $response = array(
     "compet_recup_ok" => $column1_data,
