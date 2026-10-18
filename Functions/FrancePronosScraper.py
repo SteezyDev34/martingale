@@ -2,7 +2,9 @@
 """
 Scraper Playwright pour france-pronos.com
 - Se connecte automatiquement si nécessaire (profil persistant)
-- Extrait les pronostics du jour directement depuis le DOM (pas d'OCR)
+- Extrait les pronostics du jour via l'API https://api.france-pronos.fr/api/bets
+  (capture réseau, pas de lecture du DOM ni d'OCR -- le rendu DOM peut être
+  bloqué par une modale non fermable, cf. _start_bets_capture)
 - Retourne une liste de dicts prêts à envoyer à l'API
 """
 import asyncio
@@ -153,61 +155,94 @@ class FrancePronosScraper:
             log(f"[FrancePronos] ❌ Erreur lors de la connexion: {e}", "error")
             return False
 
-    async def _extract_pronos(self, page) -> List[Dict]:
+    def _start_bets_capture(self, page):
         """
-        Extrait les pronostics du jour depuis div.app-prono-preview.
-        Retourne une liste de dicts avec equipe_1, equipe_2, selection, odds, date, sport.
+        Les pronos du jour sont servis par l'API https://api.france-pronos.fr/api/bets
+        (pagination chronologique, la plus ancienne en premier), chargée en arrière-plan
+        par l'app -- MÊME quand le rendu DOM est bloqué par une modale non fermable
+        (constaté le 2026-10-18 : composant "app-member-is-out", abonnement en échec
+        d'après le site alors que la page Profil dit "Premium jusqu'au 01/11/2026" --
+        incohérence côté site, mais les données sont bien là). On capture ces réponses
+        réseau au lieu de lire le DOM. L'archive remonte à plusieurs mois ; il faut
+        attendre que la pagination arrive jusqu'à aujourd'hui (~1600+ paris, jusqu'à 60s).
         """
-        try:
-            # Fermer une éventuelle popup
-            try:
-                close_btn = await page.query_selector("button.close, .mat-dialog-container button, [aria-label='Close']")
-                if close_btn:
-                    await close_btn.click()
-                    await page.wait_for_timeout(500)
-            except Exception:
-                pass
+        self._bets_by_id = {}
 
-            pronos = await page.evaluate('''() => {
-                const cards = document.querySelectorAll("div.app-prono-preview");
-                const result = [];
-                cards.forEach(card => {
-                    const get = sel => {
-                        const el = card.querySelector(sel);
-                        return el ? el.innerText.trim() : "";
-                    };
-                    const matchRaw = get(".title-3");
-                    // Séparer equipe_1 et equipe_2 sur le premier " - "
-                    const dashIdx = matchRaw.indexOf(" - ");
-                    const equipe_1 = dashIdx >= 0 ? matchRaw.slice(0, dashIdx).trim() : matchRaw;
-                    const equipe_2_raw = dashIdx >= 0 ? matchRaw.slice(dashIdx + 3) : "";
-                    // Retirer la mention entre parenthèses à la fin (ex: "(Coupe du monde)")
-                    const equipe_2 = equipe_2_raw.replace(/\s*\(.*?\)\s*$/, "").trim();
+        async def _on_response(response):
+            if "/api/bets?page=" in response.url:
+                try:
+                    data = await response.json()
+                    for b in data:
+                        self._bets_by_id[b.get("id")] = b
+                except Exception:
+                    pass
 
-                    const odds_raw = get(".cote-value.bold");
+        page.on("response", _on_response)
 
-                    result.push({
-                        equipe_1: equipe_1,
-                        equipe_2: equipe_2,
-                        intitule: matchRaw,
-                        selection: get(".description"),
-                        odds: odds_raw,
-                        date: get(".date.bold") || get(".hidden-mobile.date.bold"),
-                        sport: get(".sport-label"),
-                        tipster: "FrancePronos",
-                    });
-                });
-                return result;
-            }''')
+    async def _wait_for_today_bets(self, page, max_wait_s: int = 60, poll_every_s: int = 3, stable_needed_s: int = 6) -> None:
+        """
+        Poll self._bets_by_id (alimenté par _start_bets_capture) jusqu'à ce que des
+        paris datés d'aujourd'hui soient présents ET que plus aucun nouveau pari
+        n'arrive depuis `stable_needed_s` (la pagination en arrière-plan a fini de
+        remonter jusqu'à aujourd'hui), ou jusqu'à `max_wait_s` en dernier recours.
+        """
+        import datetime
+        today_str = datetime.date.today().isoformat()
+        elapsed = 0
+        last_count = -1
+        stable_for = 0
+        while elapsed < max_wait_s:
+            await page.wait_for_timeout(poll_every_s * 1000)
+            elapsed += poll_every_s
+            has_today = any((b.get("startAt") or "").startswith(today_str) for b in self._bets_by_id.values())
+            count = len(self._bets_by_id)
+            stable_for = stable_for + poll_every_s if count == last_count else 0
+            last_count = count
+            log(f"[FrancePronos] Chargement en arrière-plan... {count} paris reçus ({elapsed}s)", "info")
+            if has_today and stable_for >= stable_needed_s:
+                break
 
-            # Filtrer les entrées sans match valide
-            valid = [p for p in pronos if p.get("equipe_1") and p.get("selection")]
-            log(f"[FrancePronos] {len(valid)} pronostic(s) extrait(s) sur {len(pronos)} card(s)", "info")
-            return valid
+    def _extract_todays_pending_pronos(self) -> List[Dict]:
+        """
+        Filtre self._bets_by_id sur la date du jour ET status=None (pari pas encore
+        résolu = à venir/en cours, par opposition à "won"/"lost"/"refunded" qui sont
+        des résultats déjà connus plus tôt dans la journée). Retourne le même format
+        de dict que l'ancienne extraction DOM (equipe_1, equipe_2, intitule, selection,
+        odds, date, sport, tipster) pour rester compatible avec le reste du pipeline
+        (extraire_pari_depuis_texte côté appelant).
+        """
+        import datetime
+        today_str = datetime.date.today().isoformat()
+        pending_today = [
+            b for b in self._bets_by_id.values()
+            if (b.get("startAt") or "").startswith(today_str) and b.get("status") is None
+        ]
+        pending_today.sort(key=lambda b: b.get("startAt") or "")
 
-        except Exception as e:
-            log(f"[FrancePronos] Erreur extraction pronos: {e}", "error")
-            return []
+        results = []
+        for b in pending_today:
+            items = b.get("betItems") or []
+            if items:
+                equipe_1 = items[0].get("teamA") or ""
+                equipe_2 = items[0].get("teamB") or ""
+                sport = items[0].get("displaySport") or ""
+            else:
+                equipe_1 = b.get("teamA") or ""
+                equipe_2 = b.get("teamB") or ""
+                sport = b.get("displaySport") or ""
+            results.append({
+                "equipe_1": equipe_1,
+                "equipe_2": equipe_2,
+                "intitule": b.get("displayName") or "",
+                "selection": b.get("displayChoice") or "",
+                "odds": b.get("odds"),
+                "date": (b.get("startAt") or "")[:10],
+                "sport": sport,
+                "tipster": "FrancePronos",
+            })
+
+        log(f"[FrancePronos] {len(results)} pronostic(s) du jour en attente (sur {len(self._bets_by_id)} paris reçus au total)", "info")
+        return results
 
     async def scrape_pronos(self) -> List[Dict]:
         try:
@@ -226,6 +261,9 @@ class FrancePronosScraper:
                 viewport={"width": 1280, "height": 900},
             )
             page = browser.pages[0] if browser.pages else await browser.new_page()
+            # Attaché AVANT toute navigation (y compris celle de _is_logged_in) pour
+            # ne rater aucune des premières pages /api/bets?page=N chargées au login.
+            self._start_bets_capture(page)
             try:
                 if not await self._is_logged_in(page):
                     if not await self._login(page):
@@ -234,7 +272,8 @@ class FrancePronosScraper:
                     await page.goto(PRONOS_URL, wait_until="domcontentloaded", timeout=20000)
                     await page.wait_for_timeout(2000)
 
-                results = await self._extract_pronos(page)
+                await self._wait_for_today_bets(page)
+                results = self._extract_todays_pending_pronos()
             finally:
                 await browser.close()
 
