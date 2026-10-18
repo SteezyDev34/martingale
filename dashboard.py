@@ -23,6 +23,7 @@ import signal
 import sqlite3
 import subprocess
 import threading
+import time
 
 from rich.text import Text
 from textual.app import App, ComposeResult
@@ -865,6 +866,7 @@ class Dashboard(App):
         history_table.add_columns("Match", "ScriptType", "Gain", "Terminé le")
         self._log_lines_by_idx = {i: [] for i in range(len(FIXED_LAUNCHERS))}
         self._partial_by_idx = {i: "" for i in range(len(FIXED_LAUNCHERS))}
+        self._last_partial_rerender = {}
         self._log_filter = ""
         self._match_tab_ids = set()
         self.set_interval(2.0, self.refresh_data)
@@ -991,8 +993,22 @@ class Dashboard(App):
                 lines.append(entry_line)
                 appended.append(entry_line)
             self._log_lines_by_idx[i] = lines[-MAX_LOG_LINES:]
-            if erased or partial_changed:
+            if erased:
                 self._rerender_log(i)
+            elif partial_changed:
+                # Une réécriture complète (clear + jusqu'à MAX_LOG_LINES write()) à
+                # chaque changement de ligne partielle (ex: barre de progression sans
+                # \n) pouvait arriver plusieurs fois par seconde pour un script
+                # verbeux -- lenteur + scroll qui saute en bas à chaque fois (clear()
+                # réinitialise le scroll de RichLog). Throttle : au plus une réécriture
+                # toutes les 300ms par fenêtre pour ce motif précis (le contenu final
+                # arrive de toute façon peu après via une vraie ligne complète, gérée
+                # sans throttle juste en dessous).
+                now = time.monotonic()
+                last = self._last_partial_rerender.get(i, 0.0)
+                if now - last >= 0.3:
+                    self._last_partial_rerender[i] = now
+                    self._rerender_log(i)
             elif appended:
                 try:
                     log_widget = self.query_one(f"#logrich_{i}", RichLog)
@@ -1176,13 +1192,25 @@ class Dashboard(App):
             log_widget = self.query_one(f"#logrich_{i}", RichLog)
         except Exception:
             return
+        # clear() réinitialise le scroll de RichLog -- sans ça, toute réécriture complète
+        # (y compris le throttle ci-dessus) faisait sauter la lecture en cours tout en bas.
+        # On ne restaure la position que si l'utilisateur n'y était pas déjà, pour continuer
+        # à suivre le flux en direct dans le cas normal (déjà en bas avant la réécriture).
+        was_at_end = log_widget.is_vertical_scroll_end
+        saved_scroll_y = log_widget.scroll_y
         log_widget.clear()
+        # scroll_end=False pendant la boucle : évite un calcul de scroll à CHAQUE ligne
+        # (coûteux sur jusqu'à MAX_LOG_LINES lignes), un seul ajustement final suffit.
         for plain, rendered in self._log_lines_by_idx.get(i, []):
             if not filt or filt in plain.lower():
-                log_widget.write(rendered)
+                log_widget.write(rendered, scroll_end=False)
         partial = self._partial_by_idx.get(i, "")
         if partial and (not filt or filt in partial.lower()):
-            log_widget.write(Text.from_ansi(partial))
+            log_widget.write(Text.from_ansi(partial), scroll_end=False)
+        if was_at_end:
+            log_widget.scroll_end(animate=False)
+        else:
+            log_widget.scroll_to(y=saved_scroll_y, animate=False)
 
     # ─── Rafraîchissement principal ───────────────────────────────────────
 
