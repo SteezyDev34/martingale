@@ -1105,12 +1105,18 @@ _ALL_SCRIPT_TYPES = ['15A', '30A', '40A', '150', '015', '300', '030', '400', '40
 
 # Sous ce score de tension du match (0-100), un match est déséquilibré et les
 # probas moyennes 15A/30A/40A (in_set) ne sont pas représentatives — même
-# seuil et même portée que MIN_TIGHTNESS_FOR_SET_LEAD_PROBS côté frontend
-# (TodayMatches.vue) et tts.score >= 50 côté MatchController::today (demandé
-# le 2026-10-15). 30-0/G:40-0/15/30 restent représentatifs indépendamment de
-# l'équilibre du match, donc pas concernés par ce garde-fou.
+# seuil que MIN_TIGHTNESS_FOR_SET_LEAD_PROBS côté frontend (TodayMatches.vue)
+# et tts.score >= 50 côté MatchController::today (demandé le 2026-10-15).
+# 4015/4030 (+ leurs alias 5P/6P, cf. _MATCH_DATA_FIELD -- même donnée
+# sous-jacente, sans les deux le filtre ne servait à rien pour ces deux
+# scriptTypes) ajoutés le 2026-10-18 à la demande de l'utilisateur (même
+# raisonnement que 15A/30A/40A : un match à tightness=0 vu en conditions
+# réelles activait quand même 4015/4030 à 100%) -- portée plus large que le
+# garde-fou AuxoTracker lui-même, qui ne filtre que 15A/30A/40A côté frontend.
+# 30-0/G:40-0/150/015 restent représentatifs indépendamment de l'équilibre du
+# match, donc pas concernés par ce garde-fou.
 _MIN_TIGHTNESS_FOR_SET_LEAD_SCRIPT_TYPES = 50
-_TIGHTNESS_GATED_SCRIPT_TYPES = {'15A', '30A', '40A'}
+_TIGHTNESS_GATED_SCRIPT_TYPES = {'15A', '30A', '40A', '4015', '4030', '5P', '6P'}
 
 
 def get_match_link_and_probs(playerName1, playerName2, date_str=None):
@@ -1169,8 +1175,8 @@ def compute_script_types_from_match_data(match_data, mode=None):
     sur les cas sans la moindre exception historique, quitte à activer
     beaucoup moins de scriptTypes).
 
-    15A/30A/40A sont en plus invalidés si le match n'est pas serré (tightness
-    < 50), cf. _MIN_TIGHTNESS_FOR_SET_LEAD_SCRIPT_TYPES ci-dessus.
+    15A/30A/40A/4015/4030 sont en plus invalidés si le match n'est pas serré
+    (tightness < 50), cf. _TIGHTNESS_GATED_SCRIPT_TYPES ci-dessus.
 
     Retourne (script_types: list[str], details: dict) — details garde, pour
     chaque scriptType évalué, la proba utilisée (et l'edge en strict).
