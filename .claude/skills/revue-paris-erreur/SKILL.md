@@ -81,32 +81,41 @@ pour ne plus re-proposer ce pari la prochaine fois.
 3. **Si le diagnostic confirmé est `label_mismatch`** :
    - Comparer la `selection` tentée (et `categorie`/`type_de_pari` si
      présents) aux `candidates` réels affichés par `show`.
-   - **Important (appris le 2026-10-18 sur 1xBet)** : ne pas supposer que
-     tous les bookmakers fonctionnent comme 1xBet. Sur 1xBet,
-     `categorie`/`type_de_pari` sont purement cosmétiques — seul le texte
-     de `selection` est utilisé pour matcher le marché sur la page
-     (`chrome_extension/content_scripts/1xbet.js`, fonction
-     `selectMarketByText`, correspondance par sous-chaîne). Avant de
-     proposer un correctif pour un AUTRE bookmaker (Stake, Lollybet...),
-     vérifier d'abord dans son scraper (`Functions/Bookmakers/*.py`,
-     `_bridge_place_bet`/`place_bet`/`get_odds`) si le mécanisme de
-     matching est le même (texte libre) ou différent (ex: recherche par
-     `categorie`+`type_de_pari` structurés) — ça change complètement la
-     nature du correctif à proposer.
-   - Pour 1xBet spécifiquement : le correctif est une règle ajoutée au
-     prompt système de `extraire_pari_depuis_image`/`extraire_pari_depuis_texte`
-     dans `Functions/getTextFromImageGPT.py` (voir la règle "buteur à tout
-     moment" ajoutée le 2026-10-18 comme modèle — un bloc `RÈGLE` avec le
-     motif de texte source, le mapping exact vers `categorie`/`type_de_pari`/
-     `selection`, basé sur du HTML réel si possible, pas une supposition).
-   - Proposer le texte exact de la règle à ajouter, **avec la citation du
-     `candidates` réel qui la justifie**, et attendre validation avant
-     d'éditer le fichier. Après édition : `py_compile` le fichier modifié.
-   - Si Steeven fournit du HTML/une capture d'un autre bookmaker pour
-     clarifier un libellé (comme il l'a fait pour 1xBet le 2026-10-18),
-     s'en servir comme source de vérité plutôt que de deviner depuis un
-     fichier de référence existant (`xbet_selections.json` n'est qu'un
-     exemple pour le prompt IA, pas la logique de matching réelle).
+   - **Architecture (tranchée le 2026-10-18)** : l'IA d'extraction
+     (`getTextFromImageGPT.py`) produit TOUJOURS une sélection "pivot" basée
+     sur la taxonomie 1xBet, et ne peut pas faire autrement — au moment de
+     l'extraction, le bookmaker qui recevra le pari n'est pas encore connu
+     (`get_best_odds` compare après coup). La correspondance vers le texte
+     réel d'un bookmaker spécifique se fait donc **au placement**, pas à
+     l'extraction. Deux mécanismes distincts selon le bookmaker en échec :
+
+     - **1xBet** : lui-même est la source de vérité du pivot — un
+       `label_mismatch` ici veut dire que l'IA a mal choisi le libellé
+       pivot. Le correctif est une règle ajoutée au prompt système de
+       `extraire_pari_depuis_image`/`extraire_pari_depuis_texte` dans
+       `Functions/getTextFromImageGPT.py` (voir la règle "buteur à tout
+       moment" du 2026-10-18 comme modèle — un bloc `RÈGLE` avec le motif de
+       texte source, le mapping exact vers `categorie`/`type_de_pari`/
+       `selection`, basé sur du HTML réel si possible, pas une supposition).
+       Matching 1xBet confirmé par le code : seul le texte de `selection`
+       compte, par sous-chaîne (`chrome_extension/content_scripts/1xbet.js`,
+       `selectMarketByText`) — `categorie`/`type_de_pari` sont cosmétiques.
+
+     - **Stake, Lollybet, Betclic, Winamax** : ces 4 scrapers appellent déjà
+       `get_label(bookmaker, sport_id, selection)` (`Functions/BetLabelsDB.py`,
+       table SQLite `bet_labels.db`) juste avant de chercher le marché sur
+       la page, avec repli sur la sélection pivot si rien n'est mappé. Le
+       pivot lui-même reste correct dans ce cas (c'est le bon libellé côté
+       1xBet) — seule la traduction pour CE bookmaker manque. Corriger avec :
+       ```bash
+       ./venv/bin/python3 Functions/Logs/review_failed_bets.py label \
+         --bookmaker <Stake|Lollybet|Betclic|Winamax> --sport <sport_id> \
+         --standard "<selection pivot exacte>" --target "<texte réel, cité depuis candidates>"
+       ```
+       Ne JAMAIS deviner `--target` : le prendre dans les `candidates` réels
+       affichés par `show`, ou dans un HTML/capture que Steeven fournit.
+       1xBet n'utilise PAS cette table (il n'appelle pas `get_label`) — ne
+       jamais proposer `label` pour un échec 1xBet.
 
 4. **Si le diagnostic confirmé est `match_ended` ou `technical`** : rien à
    corriger dans le code en général — juste comprendre et classer. Si un
@@ -120,13 +129,12 @@ pour ne plus re-proposer ce pari la prochaine fois.
    pourquoi dans `--note`), puis **demander si on continue au suivant** —
    ne jamais enchaîner seul sur le pari suivant.
 
-## Ce que ce skill ne fait PAS (pour l'instant)
+## Ce que ce skill ne fait PAS
 
 - Pas de correction automatique en masse : chaque cas est discuté avant
-  toute modification de code.
-- Pas encore de fichier de référence de marché par bookmaker type
-  `xbet_selections.json` pour Stake/Lollybet (Phase 3, pas commencée) —
-  tant que ça n'existe pas, les cas `label_mismatch` sur ces bookmakers se
-  traitent au cas par cas comme pour 1xBet.
+  toute modification de code ou d'entrée dans `bet_labels.db`.
 - Ne touche jamais aux paris déjà engagés/placés avec succès — uniquement
   ceux dont la dernière tentative connue est un échec.
+- Ne propose jamais `label` (table `bet_labels.db`) pour un échec 1xBet —
+  ce bookmaker n'appelle pas `get_label()`, il faut corriger le prompt
+  d'extraction à la place (cf. section 3 ci-dessus).

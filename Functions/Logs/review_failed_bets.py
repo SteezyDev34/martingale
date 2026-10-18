@@ -19,6 +19,18 @@ tokens, pas besoin de parser le JSONL à la main) :
       Enregistre la décision prise ensemble dans l'état de revue, pour ne
       plus re-proposer ce pari la prochaine fois (sauf --all).
 
+  label --bookmaker <nom> --sport <sport_id> --standard "<sélection pivot>" \
+        --target "<texte réel bookmaker>" [--pattern "<regex optionnelle>"]
+      Enregistre une correspondance de libellé dans Functions/BetLabelsDB.py
+      (table bet_labels, déjà lue au placement par Stake/Lollybet/Betclic/
+      Winamax via get_label() -- PAS 1xBet, qui garde le pivot comme source
+      de vérité). À utiliser pour un `label_mismatch` confirmé sur un de ces
+      bookmakers : la sélection pivot (taxonomie 1xBet, choisie par l'IA
+      d'extraction AVANT de savoir quel bookmaker sera retenu) reste
+      inchangée, seule la traduction pour CE bookmaker est ajoutée/mise à
+      jour. Un `label_mismatch` sur 1xBet lui-même se corrige autrement
+      (règle de prompt dans getTextFromImageGPT.py, cf. SKILL.md).
+
 Un pari est un "trace_dir" = Logs/bet_traces/<date>/<bet_id>/ ; son
 trace.jsonl peut contenir PLUSIEURS cycles start/résultat (le même bet_id est
 retenté plusieurs fois par ProcessTelegramBets tant qu'il échoue) — seul le
@@ -232,6 +244,22 @@ def cmd_mark(args):
     print(f"OK : {key} -> {state[key]}")
 
 
+_LABEL_BOOKMAKERS = ["Stake", "Lollybet", "Betclic", "Winamax"]
+
+
+def cmd_label(args):
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    from Functions.BetLabelsDB import upsert_label, get_label
+
+    previous = get_label(args.bookmaker, args.sport, args.standard)
+    upsert_label(args.bookmaker, args.sport, args.standard, args.target, args.pattern)
+    if previous:
+        print(f"OK : {args.bookmaker}/sport={args.sport} {args.standard!r} -> {args.target!r} "
+              f"(remplace {previous!r})")
+    else:
+        print(f"OK : {args.bookmaker}/sport={args.sport} {args.standard!r} -> {args.target!r} (nouvelle entrée)")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -254,6 +282,15 @@ def main():
                          choices=["match_ended", "label_mismatch", "technical", "unknown"])
     p_mark.add_argument("--note", default="")
     p_mark.set_defaults(func=cmd_mark)
+
+    p_label = sub.add_parser("label", help="Ajoute/MAJ une correspondance de libellé (bet_labels.db)")
+    p_label.add_argument("--bookmaker", required=True, choices=_LABEL_BOOKMAKERS,
+                          help="1xBet exclu : il garde le pivot comme source de vérité, cf. SKILL.md")
+    p_label.add_argument("--sport", required=True, help="sport_id (ex: 1=football, 2=tennis)")
+    p_label.add_argument("--standard", required=True, help="Sélection pivot (telle qu'extraite par l'IA)")
+    p_label.add_argument("--target", required=True, help="Texte réel vu chez ce bookmaker")
+    p_label.add_argument("--pattern", default=None, help="Regex optionnelle (non utilisée par get_label pour l'instant)")
+    p_label.set_defaults(func=cmd_label)
 
     args = parser.parse_args()
     args.func(args)
