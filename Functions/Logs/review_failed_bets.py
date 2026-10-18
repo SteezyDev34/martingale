@@ -31,6 +31,13 @@ tokens, pas besoin de parser le JSONL à la main) :
       jour. Un `label_mismatch` sur 1xBet lui-même se corrige autrement
       (règle de prompt dans getTextFromImageGPT.py, cf. SKILL.md).
 
+  requeue <date> <bet_id>
+      Remet un pari Telegram dans la file "non traités" de l'API
+      telegram_bets (processed=0) pour qu'il soit retenté au prochain
+      process_api_bets() -- utile car le message Telegram déclencheur est
+      déjà passé et ne reviendra pas. À utiliser seulement après avoir
+      corrigé la vraie cause (label/prompt), jamais pour un match_ended.
+
 Un pari est un "trace_dir" = Logs/bet_traces/<date>/<bet_id>/ ; son
 trace.jsonl peut contenir PLUSIEURS cycles start/résultat (le même bet_id est
 retenté plusieurs fois par ProcessTelegramBets tant qu'il échoue) — seul le
@@ -244,6 +251,34 @@ def cmd_mark(args):
     print(f"OK : {key} -> {state[key]}")
 
 
+def cmd_requeue(args):
+    """
+    Remet un pari Telegram (France Pronos, AdrBetting, Tempête, Tennistiqueur,
+    Auxo1XBOT...) dans la file "non traités" de l'API telegram_bets, pour que
+    ProcessTelegramBets.py le retente au prochain passage -- SANS attendre un
+    nouveau message Telegram (qui ne reviendra pas, le message déclencheur est
+    déjà passé). N'a de sens qu'après avoir corrigé la vraie cause (label ajouté
+    via `label`, règle de prompt ajoutée dans getTextFromImageGPT.py...) --
+    jamais pour un `match_ended` (le match est fini, retenter ne sert à rien).
+    """
+    bet_dir = os.path.join(TRACE_ROOT, args.date, args.bet_id)
+    context = _read_context(bet_dir)
+    info = _match_summary(context)
+    if info:
+        print(f"Pari {args.bet_id} ({args.date}) : {info.get('match')} -- {info.get('selection')}")
+
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    from Functions.TelegramBetsAPI import telegram_bets_api
+
+    ok = telegram_bets_api.mark_bet_as_processed(int(args.bet_id), processed=0)
+    if ok:
+        print(f"OK : pari {args.bet_id} remis en file (processed=0) -- "
+              f"sera retenté au prochain process_api_bets()")
+    else:
+        print(f"ÉCHEC : impossible de remettre le pari {args.bet_id} en file (voir logs)", file=sys.stderr)
+        sys.exit(1)
+
+
 _LABEL_BOOKMAKERS = ["Stake", "Lollybet", "Betclic", "Winamax"]
 
 
@@ -291,6 +326,11 @@ def main():
     p_label.add_argument("--target", required=True, help="Texte réel vu chez ce bookmaker")
     p_label.add_argument("--pattern", default=None, help="Regex optionnelle (non utilisée par get_label pour l'instant)")
     p_label.set_defaults(func=cmd_label)
+
+    p_requeue = sub.add_parser("requeue", help="Remet un pari Telegram en file pour retentative")
+    p_requeue.add_argument("date")
+    p_requeue.add_argument("bet_id")
+    p_requeue.set_defaults(func=cmd_requeue)
 
     args = parser.parse_args()
     args.func(args)

@@ -50,6 +50,16 @@ avec les `candidates` et le chemin de la capture d'écran quand présents.
 Enregistre la décision prise ensemble dans `Logs/bet_traces/_review_state.json`
 pour ne plus re-proposer ce pari la prochaine fois.
 
+```bash
+./venv/bin/python3 Functions/Logs/review_failed_bets.py requeue <date> <bet_id>
+```
+Remet le pari dans la file "non traités" de l'API telegram_bets
+(`processed=0`) pour qu'il soit retenté au prochain passage de
+`ProcessTelegramBets.py` — **nécessaire** pour qu'un correctif serve à
+quelque chose : le message Telegram qui a déclenché le traitement initial
+est déjà passé et ne redéclenchera jamais tout seul. Seulement après avoir
+corrigé la vraie cause, jamais pour un `match_ended`.
+
 ## Déroulé
 
 1. **Lancer `list`** (sans argument = seulement les non-revus). S'il n'y a
@@ -123,11 +133,22 @@ pour ne plus re-proposer ce pari la prochaine fois.
    le signaler à Steeven (ça peut valoir une investigation séparée, mais
    ne pas la lancer sans qu'il le demande).
 
-5. **Marquer avec `mark`** une fois la décision prise (`--status resolved`
+5. **Si un correctif a été appliqué** (`label` ou règle de prompt) et que le
+   match est probablement encore jouable (vérifier l'heure du match vs
+   maintenant — pas de certitude absolue possible sans re-consulter
+   Sofascore/AuxoTracker, mais un match commencé il y a 10 minutes a
+   plus de chances d'être encore valide qu'un match d'il y a 3 heures) :
+   **proposer `requeue`** à Steeven plutôt que le faire automatiquement —
+   c'est lui qui juge si ça vaut le coup de retenter. Sans ça, le correctif
+   ne sert à rien pour CE pari précis (seulement pour les futurs paris
+   similaires) puisque le message Telegram déclencheur ne reviendra pas.
+
+6. **Marquer avec `mark`** une fois la décision prise (`--status resolved`
    si un correctif a été appliqué ou si la cause est actionnable et
    comprise, `--status skipped` si on laisse de côté sans agir — préciser
-   pourquoi dans `--note`), puis **demander si on continue au suivant** —
-   ne jamais enchaîner seul sur le pari suivant.
+   pourquoi dans `--note`, et mentionner si `requeue` a été fait ou pas et
+   pourquoi), puis **demander si on continue au suivant** — ne jamais
+   enchaîner seul sur le pari suivant.
 
 ## Ce que ce skill ne fait PAS
 
