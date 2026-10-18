@@ -17,6 +17,17 @@ Prérequis déjà en place (Phase 1, commits `b1d3851af` et suivants) : chaque
 (et les `candidates` — textes de marché réels vus sur la page — quand
 pertinent) jusque dans `Logs/bet_traces/<date>/<bet_id>/trace.jsonl`.
 
+**Important (2026-10-18)** : `Logs/bet_traces/` est local à la machine qui
+exécute le placement. Si cette session tourne sur une AUTRE machine, les
+commandes `list`/`show` locales ne verront rien d'utile — utiliser
+`list-remote`/`show-remote` à la place, qui lisent les mêmes infos
+(bookmaker/error/candidates, pas l'historique détaillé ni les captures
+d'écran) via l'API en ligne telegram_bets, accessible de partout. Les
+commandes `mark`, `label` et `requeue` fonctionnent pareil dans les deux cas
+(déjà en ligne pour `requeue`/`label` ; `mark` reste local à
+`_review_state.json`, donc le suivi "déjà revu" n'est pas partagé entre
+machines pour l'instant).
+
 ## Outil
 
 Tout passe par `Functions/Logs/review_failed_bets.py` (toujours avec le venv

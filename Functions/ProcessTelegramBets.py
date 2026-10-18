@@ -93,12 +93,12 @@ def process_api_bets(limit: int = 10) -> int:
                 # chaque passage de la boucle (process_bets_loop.py tourne en
                 # continu désormais, contrairement à l'ancien /loop ponctuel).
                 log(f"Erreur parsing selection pour pari ID {bet.get('id')} (données corrompues, marqué échec)", "error")
-                telegram_bets_api.mark_bet_as_processed(bet['id'], processed=2)
+                telegram_bets_api.mark_bet_as_processed(bet['id'], processed=2, error="parse_error")
                 continue
 
         if not bet_data:
             log(f"Impossible de récupérer les données pour pari ID {bet.get('id')} (marqué échec)", "error")
-            telegram_bets_api.mark_bet_as_processed(bet['id'], processed=2)
+            telegram_bets_api.mark_bet_as_processed(bet['id'], processed=2, error="missing_bet_data")
             continue
 
         tipster = bet_data.get("tipster", "")
@@ -162,7 +162,11 @@ def process_api_bets(limit: int = 10) -> int:
         else:
             log(f"❌ Échec placement ID {bet['id']}: {result.get('error','')}", "error", clear=False)
             BetTrace.step(trace_dir, "resultat", {"success": False, "bookmaker": result.get('bookmaker'), "error": result.get('error'), "candidates": result.get('candidates')}, level="error")
-            telegram_bets_api.mark_bet_as_processed(bet['id'], processed=2)
+            telegram_bets_api.mark_bet_as_processed(
+                bet['id'], processed=2,
+                error=result.get('error'), bookmaker=result.get('bookmaker'),
+                candidates=result.get('candidates'),
+            )
 
         time.sleep(2)
 

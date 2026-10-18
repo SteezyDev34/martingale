@@ -38,6 +38,17 @@ tokens, pas besoin de parser le JSONL à la main) :
       déjà passé et ne reviendra pas. À utiliser seulement après avoir
       corrigé la vraie cause (label/prompt), jamais pour un match_ended.
 
+  list-remote [--limit N]
+  show-remote <bet_id>
+      Équivalents de list/show mais via l'API en ligne (telegram_bets,
+      colonnes error/bookmaker/candidates ajoutées le 2026-10-18) au lieu
+      des fichiers locaux Logs/bet_traces/ -- à utiliser quand ce skill
+      tourne sur une machine DIFFÉRENTE de celle qui exécute le placement
+      (les fichiers locaux n'y sont pas accessibles). Pas de suivi "déjà
+      revu" dans ce mode (c'est local à _review_state.json) et pas
+      d'historique détaillé/screenshot (pas stockés en ligne, trop lourd) --
+      seulement bookmaker/error/candidates, suffisant pour trier.
+
 Un pari est un "trace_dir" = Logs/bet_traces/<date>/<bet_id>/ ; son
 trace.jsonl peut contenir PLUSIEURS cycles start/résultat (le même bet_id est
 retenté plusieurs fois par ProcessTelegramBets tant qu'il échoue) — seul le
@@ -144,6 +155,85 @@ def _match_summary(context):
         "tipster": context.get("tipster", ""),
         "odds": m.get("odds"),
     }
+
+
+def _api_base():
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    import config
+    return f"{config.api_url}/telegram_bets"
+
+
+def cmd_list_remote(args):
+    """
+    Liste les paris en échec (processed=2) via l'API en ligne telegram_bets,
+    au lieu des fichiers locaux Logs/bet_traces/ -- à utiliser quand cette
+    session tourne sur une machine différente de celle qui exécute le
+    placement (Logs/bet_traces/ n'est pas partagé entre machines, mais
+    l'API oui). Pas de suivi "déjà revu" ici (c'est local à _review_state.json,
+    donc machine-dépendant) -- chaque appel montre tout.
+    """
+    import requests
+    r = requests.get(f"{_api_base()}/get.php", params={"processed": 2, "limit": args.limit}, timeout=15)
+    r.raise_for_status()
+    data = r.json()
+    if not data.get("success"):
+        print(f"Erreur API : {data.get('message')}", file=sys.stderr)
+        sys.exit(1)
+    for row in data.get("data", []):
+        try:
+            sel = json.loads(row.get("selection") or "{}")
+        except (json.JSONDecodeError, TypeError):
+            sel = {}
+        matches = sel.get("matches") or []
+        m = matches[-1] if matches else {}
+        candidates = row.get("candidates")
+        try:
+            n_candidates = len(json.loads(candidates)) if candidates else 0
+        except (json.JSONDecodeError, TypeError):
+            n_candidates = 0
+        print("\t".join([
+            str(row.get("id")),
+            sel.get("tipster", ""),
+            f"{m.get('equipe_1', '?')} vs {m.get('equipe_2', '?')}",
+            m.get("selection", ""),
+            row.get("bookmaker") or "-",
+            row.get("error") or "(vide)",
+            f"candidates={n_candidates}",
+        ]))
+
+
+def cmd_show_remote(args):
+    """Détail d'un pari en échec via l'API en ligne (recherche par id dans processed=2)."""
+    import requests
+    r = requests.get(f"{_api_base()}/get.php", params={"processed": 2, "limit": 1000}, timeout=15)
+    r.raise_for_status()
+    data = r.json()
+    row = next((x for x in data.get("data", []) if str(x.get("id")) == str(args.bet_id)), None)
+    if not row:
+        print(f"Pari {args.bet_id} introuvable parmi les échecs (processed=2) via l'API.", file=sys.stderr)
+        sys.exit(1)
+    try:
+        sel = json.loads(row.get("selection") or "{}")
+    except (json.JSONDecodeError, TypeError):
+        sel = {}
+    matches = sel.get("matches") or []
+    m = matches[-1] if matches else {}
+    print(f"=== pari {args.bet_id} (via API en ligne) ===")
+    print(f"Tipster      : {sel.get('tipster')}")
+    print(f"Match        : {m.get('equipe_1')} vs {m.get('equipe_2')}  ({m.get('date')})")
+    print(f"Marché       : {m.get('categorie')} / {m.get('type_de_pari')}")
+    print(f"Sélection    : {m.get('selection')}")
+    print(f"Bookmaker    : {row.get('bookmaker')}")
+    print(f"Erreur       : {row.get('error')}")
+    candidates = row.get("candidates")
+    if candidates:
+        try:
+            cands = json.loads(candidates)
+        except (json.JSONDecodeError, TypeError):
+            cands = [candidates]
+        print(f"Candidates ({len(cands)}) :")
+        for c in cands:
+            print(f"  - {c}")
 
 
 def cmd_list(args):
@@ -331,6 +421,15 @@ def main():
     p_requeue.add_argument("date")
     p_requeue.add_argument("bet_id")
     p_requeue.set_defaults(func=cmd_requeue)
+
+    p_list_remote = sub.add_parser("list-remote",
+                                    help="Liste les échecs via l'API en ligne (pour une machine différente de celle qui place les paris)")
+    p_list_remote.add_argument("--limit", type=int, default=50)
+    p_list_remote.set_defaults(func=cmd_list_remote)
+
+    p_show_remote = sub.add_parser("show-remote", help="Détail d'un échec via l'API en ligne")
+    p_show_remote.add_argument("bet_id")
+    p_show_remote.set_defaults(func=cmd_show_remote)
 
     args = parser.parse_args()
     args.func(args)

@@ -154,14 +154,21 @@ class TelegramBetsAPI:
             config.log(f"Exception lors de la récupération des paris: {str(e)}", 'error')
             return []
 
-    def mark_bet_as_processed(self, bet_id: int, processed: int = 1) -> bool:
+    def mark_bet_as_processed(self, bet_id: int, processed: int = 1,
+                               error: str = None, bookmaker: str = None, candidates: list = None) -> bool:
         """
         Marque un pari comme traité dans l'API.
-        
+
         Args:
             bet_id (int): ID du pari à marquer comme traité
-            processed (int): Statut à définir (1 pour traité, 0 pour non traité)
-            
+            processed (int): Statut à définir (1=succès, 2=échec, 0=remise en file)
+            error, bookmaker, candidates (optionnels) : raison de l'échec, exposée
+                via l'API (colonnes error/bookmaker/candidates, ajoutées le
+                2026-10-18) pour que le skill de revue des paris en erreur puisse
+                lire ça depuis N'IMPORTE QUELLE machine -- Logs/bet_traces/ est
+                local à celle qui a exécuté le placement, pas consultable à
+                distance.
+
         Returns:
             bool: True si la mise à jour est réussie, False sinon
         """
@@ -171,6 +178,12 @@ class TelegramBetsAPI:
                 "id": bet_id,
                 "processed": processed
             }
+            if error is not None:
+                data["error"] = error
+            if bookmaker is not None:
+                data["bookmaker"] = bookmaker
+            if candidates:
+                data["candidates"] = candidates
 
             response = requests.post(url, headers=self.headers, data=json.dumps(data), timeout=10)
 
