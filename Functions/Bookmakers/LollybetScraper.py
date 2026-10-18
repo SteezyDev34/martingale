@@ -1015,6 +1015,7 @@ class LollybetScraper:
                 success = self.place_accumulator(driver, bet["matches_list"], float(bet.get("mise", 10)))
                 result["success"] = success
                 if not success:
+                    result["error"] = "placement_failed"
                     BetTrace.capture_failure(trace_dir, "placement_failed", driver=driver, tag="place_accumulator")
                 return result
 
@@ -1034,6 +1035,7 @@ class LollybetScraper:
                                      intitule=intitule)
             result["success"] = success
             if not success:
+                result["error"] = "placement_failed"
                 BetTrace.capture_failure(trace_dir, "placement_failed", driver=driver, tag="place_bet")
         except Exception as e:
             result["error"] = str(e)

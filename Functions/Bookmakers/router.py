@@ -147,6 +147,14 @@ def get_best_odds(bet: Dict) -> Optional[Dict]:
         return None
 
     results = []
+    # Tous les résultats reçus (cote trouvée ou non), pour pouvoir diagnostiquer
+    # POURQUOI aucune cote n'a été trouvée si `results` finit vide -- avant ce
+    # correctif, un résultat sans cote (ex: error="match_not_found") était jeté
+    # silencieusement (constaté le 2026-10-18, BetTrace enregistrait
+    # error:null/bookmaker:null pour ces cas). Exposé sur `bet` (pattern déjà
+    # utilisé ailleurs, cf. bet['_xbet_match_url']) plutôt que de changer la
+    # signature de cette fonction (son seul appelant est place_best_bet).
+    attempts = []
 
     with ThreadPoolExecutor(max_workers=len(active_scrapers)) as executor:
         futures = {
@@ -154,13 +162,20 @@ def get_best_odds(bet: Dict) -> Optional[Dict]:
             for cls in active_scrapers
         }
         for future in futures:
+            bk_name = futures[future]
             try:
                 result = future.result(timeout=120)
+                attempts.append(result)
                 if result.get("odds"):
                     results.append(result)
                     log(f"[Router] {result['bookmaker']}: {result['odds']}", "info")
+                else:
+                    log(f"[Router] {bk_name}: pas de cote ({result.get('error', 'raison inconnue')})", "warning")
             except Exception as e:
-                log(f"[Router] Erreur scraper {futures[future]}: {e}", "error")
+                log(f"[Router] Erreur scraper {bk_name}: {e}", "error")
+                attempts.append({"bookmaker": bk_name, "odds": None, "error": str(e)})
+
+    bet['_odds_attempts'] = attempts
 
     if not results:
         log("[Router] Aucune cote trouvée", "warning")
@@ -303,9 +318,13 @@ def place_best_bet(bet: Dict) -> Dict:
         }
         if target_bk in scraper_map and _is_bookmaker_active(target_bk):
             log(f"[Router] Placement direct sur {target_bk} (défi détecté)", "info")
-            result = _run_scraper_sync(scraper_map[target_bk], bet)
+            result = _place_bet_sync(scraper_map[target_bk], bet)
             if result.get("success"):
                 return result
+            log(
+                f"[Router] Échec placement défi sur {target_bk} ({result.get('error', 'raison inconnue')}) "
+                f"— repli sur la comparaison multi-bookmaker", "warning"
+            )
 
     # 1xBet en priorité stricte (demandé le 2026-10-16) : s'il trouve le match
     # avec une cote valide, on parie direct dessus sans comparer aux autres
@@ -322,8 +341,13 @@ def place_best_bet(bet: Dict) -> Dict:
     # Comparaison multi-bookmaker : récupérer les cotes sur tous
     best = get_best_odds(bet)
     if not best:
-        log("[Router] ❌ Aucune cote trouvée", "error")
-        return {"bookmaker": None, "success": False}
+        attempts = bet.get('_odds_attempts', [])
+        if attempts:
+            reasons = "; ".join(f"{a.get('bookmaker', '?')}:{a.get('error') or 'pas de cote'}" for a in attempts)
+        else:
+            reasons = "aucun bookmaker actif"
+        log(f"[Router] ❌ Aucune cote trouvée ({reasons})", "error")
+        return {"bookmaker": None, "success": False, "error": f"no_odds_found: {reasons}"}
 
     # Placer le pari uniquement sur le meilleur bookmaker
     scraper_map = {
@@ -336,7 +360,7 @@ def place_best_bet(bet: Dict) -> Dict:
     target_cls = scraper_map.get(best["bookmaker"])
     if not target_cls:
         log(f"[Router] ❌ Bookmaker inconnu: {best['bookmaker']}", "error")
-        return {"bookmaker": None, "success": False}
+        return {"bookmaker": None, "success": False, "error": f"unknown_bookmaker:{best['bookmaker']}"}
 
     log(f"[Router] 🎯 Placement sur {best['bookmaker']} @ {best['odds']}", "info")
     return _place_bet_sync(target_cls, bet)

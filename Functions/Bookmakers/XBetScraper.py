@@ -33,7 +33,8 @@ class XBetScraper:
         if not prepared.get('success'):
             m = matches[0] if matches else {}
             log(f"[1xBet] Échec recherche/sélection pour {m.get('equipe_1')} vs {m.get('equipe_2')}: {prepared.get('error')}", "warning")
-            return {"bookmaker": self.name, "odds": None, "error": prepared.get('error')}
+            return {"bookmaker": self.name, "odds": None, "error": prepared.get('error'),
+                    "candidates": prepared.get('candidates') or []}
         return {"bookmaker": self.name, "odds": prepared.get('cote')}
 
     def _run_sync(self, bet):
@@ -54,8 +55,10 @@ class XBetScraper:
         if prepared.get('match_url'):
             bet['_xbet_match_url'] = prepared['match_url']
         if not prepared.get('success'):
-            BetTrace.capture_failure(trace_dir, prepared.get('error'), bridge=bridge, tag="find_prepare")
-            return {"bookmaker": self.name, "success": False, "error": prepared.get('error')}
+            BetTrace.capture_failure(trace_dir, prepared.get('error'), bridge=bridge, tag="find_prepare",
+                                      candidates=prepared.get('candidates'))
+            return {"bookmaker": self.name, "success": False, "error": prepared.get('error'),
+                    "candidates": prepared.get('candidates') or []}
 
         mise = bet.get('mise', 1.0)
         stake_result = bridge.set_stake(mise)

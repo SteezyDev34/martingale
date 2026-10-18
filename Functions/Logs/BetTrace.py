@@ -60,11 +60,16 @@ def step(trace_dir, label: str, detail=None, level: str = "info"):
         print(f"[BetTrace] step échoué ({label}): {e}")
 
 
-def capture_failure(trace_dir, error, driver=None, bridge=None, tag: str = "error"):
+def capture_failure(trace_dir, error, driver=None, bridge=None, tag: str = "error", candidates=None):
     """
     Capture une screenshot au moment de l'échec (Selenium `driver` OU bridge extension
     Chrome `bridge`, selon le bookmaker) et finalise le trace avec l'erreur. Retourne
     le chemin de la screenshot (ou None si indisponible/échouée).
+
+    `candidates` (optionnel) : textes de marché réels vus sur la page au moment de
+    l'échec (ex: renvoyés par 1xBet quand la sélection attendue ne matche aucun
+    bouton) -- utile pour la revue manuelle d'un libellé qui ne correspond pas au
+    marché du bookmaker.
     """
     if not trace_dir:
         return None
@@ -82,5 +87,8 @@ def capture_failure(trace_dir, error, driver=None, bridge=None, tag: str = "erro
     except Exception as e:
         print(f"[BetTrace] capture_failure screenshot échouée: {e}")
 
-    step(trace_dir, "failure", {"error": str(error), "screenshot": screenshot_path}, level="error")
+    detail = {"error": str(error), "screenshot": screenshot_path}
+    if candidates:
+        detail["candidates"] = candidates
+    step(trace_dir, "failure", detail, level="error")
     return screenshot_path

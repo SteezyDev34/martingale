@@ -199,6 +199,8 @@ class BookmakerScraper(ABC):
 
                     success = await self.place_bet(page, match_url, selection, categorie, mise)
                     result["success"] = success
+                    if not success:
+                        result["error"] = "placement_failed"
 
                 finally:
                     await browser.close()

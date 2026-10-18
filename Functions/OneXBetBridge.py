@@ -126,7 +126,8 @@ def find_and_prepare_bet(matches, cached_url=None):
         leg = {**leg, 'match_name': f"{equipe1} vs {equipe2}"}
         result = _select_leg(leg)
         if not result.get('success'):
-            return {'success': False, 'error': result.get('error', 'market_not_found'), 'match_url': match_url}
+            return {'success': False, 'error': result.get('error', 'market_not_found'),
+                    'match_url': match_url, 'candidates': result.get('candidates') or []}
         return {'success': True, 'cote': result.get('cote'), 'match_url': match_url}
 
     legs = [
@@ -139,5 +140,13 @@ def find_and_prepare_bet(matches, cached_url=None):
     ]
     result = b.select_combined_markets(legs)
     if not result.get('success'):
-        return {'success': False, 'error': result.get('error', 'combined_market_not_found'), 'match_url': match_url}
+        # Le JS renvoie {error:'leg_failed', leg, results} -- `results` porte les
+        # candidates (textes de marché réels vus) jambe par jambe.
+        leg_results = result.get('results') or []
+        candidates = []
+        for r in leg_results:
+            if isinstance(r, dict) and r.get('candidates'):
+                candidates.extend(r['candidates'])
+        return {'success': False, 'error': result.get('error', 'combined_market_not_found'),
+                'match_url': match_url, 'candidates': candidates, 'failed_leg': result.get('leg')}
     return {'success': True, 'cote': None, 'match_url': match_url}

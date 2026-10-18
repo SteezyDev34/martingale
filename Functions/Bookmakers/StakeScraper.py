@@ -1142,6 +1142,7 @@ class StakeScraper:
         if resp.get("success"):
             log("[Stake/bridge] ✅ Pari placé", "info")
             return True
+        self._last_bridge_error = resp.get("error") or "placement_failed"
         log(f"[Stake/bridge] ❌ Échec place_bet: {resp.get('error')}", "error")
         return False
 
@@ -1160,6 +1161,7 @@ class StakeScraper:
         if resp.get("success"):
             log(f"[Stake/bridge] ✅ Pari SGM confirmé ({resp.get('selectionsClicked')} sélections @ {mise}€)", "info")
             return True
+        self._last_bridge_error = resp.get("error") or "placement_failed"
         log(f"[Stake/bridge] ❌ Échec SGM: {resp.get('error')} ({resp.get('selectionsClicked', 0)} sélection(s))", "error")
         return False
 
@@ -1191,6 +1193,7 @@ class StakeScraper:
                 combined_events = bet.get("combined_events")
                 mise = float(bet.get("mise", 10))
 
+                self._last_bridge_error = None
                 if combined_events:
                     log(f"[Stake/bridge] Mode MyMatch ({len(combined_events)} événements): {bet.get('combined_label', '')}", "info")
                     result["odds"] = bet.get("odds")
@@ -1199,7 +1202,8 @@ class StakeScraper:
                     result["odds"] = self._bridge_get_odds(match_url, bet.get("selection", ""), sport)
                     result["success"] = self._bridge_place_bet(match_url, bet.get("selection", ""), sport, mise)
                 if not result["success"]:
-                    BetTrace.capture_failure(trace_dir, result.get("error") or "placement_failed", bridge=stake_bridge, tag="place_bet")
+                    result["error"] = self._last_bridge_error or "placement_failed"
+                    BetTrace.capture_failure(trace_dir, result["error"], bridge=stake_bridge, tag="place_bet")
             except Exception as e:
                 result["error"] = str(e)
                 log(f"[Stake/bridge] Erreur run: {e}", "error")
@@ -1268,6 +1272,7 @@ class StakeScraper:
 
             result["success"] = success
             if not success:
+                result["error"] = "placement_failed"
                 BetTrace.capture_failure(trace_dir, "placement_failed", driver=driver, tag="place_bet")
         except Exception as e:
             result["error"] = str(e)

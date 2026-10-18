@@ -161,7 +161,7 @@ def process_api_bets(limit: int = 10) -> int:
                 log(f"Pari ID {bet['id']} marqué traité", "info", clear=False)
         else:
             log(f"❌ Échec placement ID {bet['id']}: {result.get('error','')}", "error", clear=False)
-            BetTrace.step(trace_dir, "resultat", {"success": False, "bookmaker": result.get('bookmaker'), "error": result.get('error')}, level="error")
+            BetTrace.step(trace_dir, "resultat", {"success": False, "bookmaker": result.get('bookmaker'), "error": result.get('error'), "candidates": result.get('candidates')}, level="error")
             telegram_bets_api.mark_bet_as_processed(bet['id'], processed=2)
 
         time.sleep(2)
