@@ -36,7 +36,7 @@ class FrancePronosScraper:
     async def _is_logged_in(self, page) -> bool:
         try:
             await page.goto(PRONOS_URL, wait_until="domcontentloaded", timeout=20000)
-            await page.wait_for_timeout(2000)
+            await page.wait_for_timeout(3000)
             # Si redirigé vers /login = pas connecté
             if "/login" in page.url:
                 log("[FrancePronos] Session inactive — redirigé vers login", "info")
@@ -46,6 +46,17 @@ class FrancePronosScraper:
             if card:
                 log("[FrancePronos] ✅ Session active — pronostics détectés", "info")
                 return True
+            # Pas de cards ne suffit PAS à conclure à une session active : la page
+            # "Pronostics du jour" s'affiche aussi (vide) quand on est déconnecté
+            # (bug constaté le 2026-10-18 — _login() n'était jamais appelé, la
+            # session persistante n'a donc jamais été établie). Le menu affiche
+            # "SE CONNECTER" uniquement quand on n'est pas authentifié -- signal
+            # fiable pour distinguer "vraiment connecté, pas de pronos aujourd'hui"
+            # de "pas connecté du tout".
+            body_text = await page.evaluate("() => document.body.innerText")
+            if "SE CONNECTER" in body_text.upper():
+                log("[FrancePronos] Session inactive — bouton 'Se connecter' détecté", "info")
+                return False
             log("[FrancePronos] Session active (page chargée sans cards)", "info")
             return True
         except Exception as e:
@@ -57,15 +68,43 @@ class FrancePronosScraper:
             log("[FrancePronos] ❌ FRANCEPRONOS_EMAIL ou FRANCEPRONOS_PASSWORD non définis", "error")
             return False
         try:
-            log(f"[FrancePronos] Connexion sur {LOGIN_URL} avec {self.email}...", "info")
-            await page.goto(LOGIN_URL, wait_until="domcontentloaded", timeout=20000)
+            log(f"[FrancePronos] Connexion avec {self.email}...", "info")
+            # Naviguer directement vers LOGIN_URL affiche une page blanche (route
+            # Angular cote-client qui ne s'initialise pas correctement en deep-link
+            # direct, constate le 2026-10-18) -- on passe par PRONOS_URL (pas la page
+            # d'accueil : le clic depuis l'accueil ne déclenche pas la navigation,
+            # probablement une popup différente qui intercepte le clic) et on clique
+            # sur "SE CONNECTER" comme un vrai utilisateur.
+            await page.goto(PRONOS_URL, wait_until="domcontentloaded", timeout=20000)
+            await page.wait_for_timeout(2000)
+            clicked = await page.evaluate('''() => {
+                // Deux éléments "SE CONNECTER" coexistent dans le DOM (nav desktop
+                // visible + duplicata mobile caché via CSS) -- ne cliquer que le
+                // visible, sinon le clic sur l'élément caché ne déclenche pas la
+                // navigation (constaté le 2026-10-18, échec intermittent).
+                const els = Array.from(document.querySelectorAll("button, a, span, div"));
+                const target = els.find(e =>
+                    e.innerText && e.innerText.trim().toUpperCase() === "SE CONNECTER" &&
+                    (e.offsetWidth || e.offsetHeight)
+                );
+                if (target) { target.click(); return true; }
+                return false;
+            }''')
+            if not clicked:
+                log("[FrancePronos] ❌ Bouton 'Se connecter' introuvable sur la page d'accueil", "error")
+                return False
             await page.wait_for_timeout(1500)
+            await page.wait_for_selector("input[type='email']", timeout=10000)
 
-            # App Angular — utiliser evaluate pour déclencher les events natifs
-            await page.evaluate('''(args) => {
-                const inputs = document.querySelectorAll("input");
-                const emailInput = Array.from(inputs).find(i => i.type === "email");
-                const passInput = Array.from(inputs).find(i => i.type === "password");
+            # App Angular — utiliser evaluate pour déclencher les events natifs.
+            # Comme pour "SE CONNECTER", le site duplique ses éléments (versions
+            # desktop/mobile) : ne cibler que les champs/bouton VISIBLES, sinon on
+            # remplit/clique une copie cachée qui n'affecte pas le vrai formulaire.
+            filled = await page.evaluate('''(args) => {
+                const visible = el => !!(el.offsetWidth || el.offsetHeight);
+                const inputs = Array.from(document.querySelectorAll("input"));
+                const emailInput = inputs.find(i => i.type === "email" && visible(i));
+                const passInput = inputs.find(i => i.type === "password" && visible(i));
                 function setVal(el, val) {
                     const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
                     setter.call(el, val);
@@ -74,12 +113,33 @@ class FrancePronosScraper:
                 }
                 if (emailInput) setVal(emailInput, args.email);
                 if (passInput) setVal(passInput, args.password);
+                return !!(emailInput && passInput);
             }''', {"email": self.email, "password": self.password})
+            if not filled:
+                log("[FrancePronos] ❌ Champs email/mot de passe visibles introuvables", "error")
+                return False
 
-            await page.wait_for_timeout(500)
-
-            # Cliquer sur le bouton submit
-            await page.click("button[type='submit']")
+            # Cliquer sur le bouton submit visible (JS, pas page.click() -- le
+            # sélecteur CSS seul peut matcher la copie cachée en premier). En
+            # Filtrer sur la PROPRIÉTÉ JS .type (pas le sélecteur CSS [type='submit'],
+            # qui ne matche que l'attribut HTML littéral -- un <button> sans attribut
+            # type explicite vaut "submit" par défaut pour le navigateur mais pas pour
+            # ce sélecteur, constaté le 2026-10-18 : le bouton était bien visible et
+            # cliquable à l'écran mais jamais trouvé par l'attribut).
+            submitted = False
+            for _ in range(10):
+                submitted = await page.evaluate('''() => {
+                    const visible = el => !!(el.offsetWidth || el.offsetHeight);
+                    const btn = Array.from(document.querySelectorAll("button")).find(b => b.type === "submit" && visible(b));
+                    if (btn) { btn.click(); return true; }
+                    return false;
+                }''')
+                if submitted:
+                    break
+                await page.wait_for_timeout(300)
+            if not submitted:
+                log("[FrancePronos] ❌ Bouton de connexion visible introuvable", "error")
+                return False
             await page.wait_for_load_state("domcontentloaded", timeout=15000)
             await page.wait_for_timeout(2000)
 
