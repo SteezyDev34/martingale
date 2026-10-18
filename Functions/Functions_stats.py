@@ -1107,16 +1107,19 @@ _ALL_SCRIPT_TYPES = ['15A', '30A', '40A', '150', '015', '300', '030', '400', '40
 # probas moyennes 15A/30A/40A (in_set) ne sont pas représentatives — même
 # seuil que MIN_TIGHTNESS_FOR_SET_LEAD_PROBS côté frontend (TodayMatches.vue)
 # et tts.score >= 50 côté MatchController::today (demandé le 2026-10-15).
-# 4015/4030 (+ leurs alias 5P/6P, cf. _MATCH_DATA_FIELD -- même donnée
-# sous-jacente, sans les deux le filtre ne servait à rien pour ces deux
-# scriptTypes) ajoutés le 2026-10-18 à la demande de l'utilisateur (même
+# 4015/4030 ajoutés le 2026-10-18 à la demande de l'utilisateur (même
 # raisonnement que 15A/30A/40A : un match à tightness=0 vu en conditions
 # réelles activait quand même 4015/4030 à 100%) -- portée plus large que le
 # garde-fou AuxoTracker lui-même, qui ne filtre que 15A/30A/40A côté frontend.
+# NB : leurs alias 5P/6P (cf. _MATCH_DATA_FIELD -- même donnée sous-jacente)
+# ne sont volontairement PAS dans ce set -- demande explicite de l'utilisateur
+# de ne pas étendre au-delà de 4015/4030 (2026-10-18), malgré le fait que 5P/6P
+# contournent techniquement ce garde-fou de la même façon. Ne pas les rajouter
+# sans redemander.
 # 30-0/G:40-0/150/015 restent représentatifs indépendamment de l'équilibre du
 # match, donc pas concernés par ce garde-fou.
 _MIN_TIGHTNESS_FOR_SET_LEAD_SCRIPT_TYPES = 50
-_TIGHTNESS_GATED_SCRIPT_TYPES = {'15A', '30A', '40A', '4015', '4030', '5P', '6P'}
+_TIGHTNESS_GATED_SCRIPT_TYPES = {'15A', '30A', '40A', '4015', '4030'}
 
 
 def get_match_link_and_probs(playerName1, playerName2, date_str=None):
