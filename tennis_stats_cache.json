@@ -34,9 +34,9 @@
   "player_iva jovic_40-40": 0.31411458333333336,
   "player_magda linette_40-40": 0.2692217050609792,
   "atp_ids": [],
-  "atp_ranking_date": "2026-08-24",
+  "atp_ranking_date": "2026-10-18",
   "wta_ids": [],
-  "wta_ranking_date": "2026-08-24",
+  "wta_ranking_date": "2026-10-18",
   "player_katarzyna kawa_40-40": 0.29504654255319146,
   "player_justina mikulskyte_40-40": 0.2151603498542274,
   "player_elizara yaneva_40-40": 0.24149659863945577,
@@ -229,6 +229,3310 @@
     "ret2": 0.0
   },
   "match_stats_sebastian baez_hubert hurkacz": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_diana shnaider_jelena ostapenko": {
+    "proba40A": 0.6246649230517389,
+    "svc1": 0.6281784076698624,
+    "ret1": 0.4668304668304668,
+    "svc2": 0.6628242074927954,
+    "ret2": 0.5
+  },
+  "match_stats_mathilde lollia_clara burel": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ane mintegi del olmo_rebeka masarova": {
+    "proba40A": 0.603647879175421,
+    "svc1": 0.5853658536585366,
+    "ret1": 0.5185185185185185,
+    "svc2": 0.6968115942028985,
+    "ret2": 0.4307116104868914
+  },
+  "match_stats_anouk koevermans_lea boskovic": {
+    "proba40A": 0.6373442612302136,
+    "svc1": 0.6899563318777293,
+    "ret1": 0.4235294117647059,
+    "svc2": 0.580441640378549,
+    "ret2": 0.5945945945945946
+  },
+  "match_stats_antonia ruzic_bianca vanessa andreescu": {
+    "proba40A": 0.2634792555945969,
+    "svc1": 0.5732454074422987,
+    "ret1": 0.45962732919254656,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_matej dodig_lukas neumayer": {
+    "proba40A": 0.5361942292054019,
+    "svc1": 0.7255301794453507,
+    "ret1": 0.3866279069767442,
+    "svc2": 0.6617703904136065,
+    "ret2": 0.38636363636363635
+  },
+  "match_stats_maxim mrva_francesco maestrelli": {
+    "proba40A": 0.5570128394460789,
+    "svc1": 0.6351501668520578,
+    "ret1": 0.49201277955271566,
+    "svc2": 0.7087719298245614,
+    "ret2": 0.34497816593886466
+  },
+  "match_stats_etienne donnet_matteo martineau": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_moise kouame_nicolai budkov kjaer": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_gianluca cadenasso_svyatoslav gulin": {
+    "proba40A": 0.4900761144308615,
+    "svc1": 0.6545313710302091,
+    "ret1": 0.3944954128440367,
+    "svc2": 0.6852173913043478,
+    "ret2": 0.3383838383838384
+  },
+  "match_stats_guido ivan justo_juan manuel la serna": {
+    "proba40A": 0.5666968131798062,
+    "svc1": 0.6493693693693694,
+    "ret1": 0.476303317535545,
+    "svc2": 0.6173044925124792,
+    "ret2": 0.41697416974169743
+  },
+  "match_stats_thiago seyboth wild_carlos maria zarate": {
+    "proba40A": 0.5418995596886667,
+    "svc1": 0.7215568862275449,
+    "ret1": 0.4142857142857143,
+    "svc2": 0.6505295007564297,
+    "ret2": 0.37349397590361444
+  },
+  "match_stats_franco roncadelli_juan carlos prado angelo": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ayana akli_hina inoue": {
+    "proba40A": 0.23177570093457944,
+    "svc1": 0.5794392523364486,
+    "ret1": 0.4,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mingge xu_cadence brace": {
+    "proba40A": 0.38720045308130685,
+    "svc1": 0.6177777777777778,
+    "ret1": 0.23255813953488372,
+    "svc2": 0.5555555555555556,
+    "ret2": 0.4383561643835616
+  },
+  "match_stats_yuki naito_kallista liu": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_reese brantmeier_hiromi abe": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_francoise abanda_thara gowda": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_valeriya strakhova_malaika rapolu": {
+    "proba40A": 0.2236024844720497,
+    "svc1": 0.5714285714285714,
+    "ret1": 0.391304347826087,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_martina okalova_alicia herrero linana": {
+    "proba40A": 0.31435624259062833,
+    "svc1": 0.5,
+    "ret1": 0.125,
+    "svc2": 0.5783365570599613,
+    "ret2": 0.43548387096774194
+  },
+  "match_stats_dana guzman_caroline dolehide": {
+    "proba40A": 0.27087457205104265,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6183006535947713,
+    "ret2": 0.4380952380952381
+  },
+  "match_stats_yeon woo ku_arantxa rus": {
+    "proba40A": 0.26006003328578225,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5805991440798859,
+    "ret2": 0.4479166666666667
+  },
+  "match_stats_madison brengle_sloane stephens": {
+    "proba40A": 0.2725668179525971,
+    "svc1": 0.4977307110438729,
+    "ret1": 0.5476190476190477,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_lea fojcik_charlotte pikkaart": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_stefanie auer_mika buchnik": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_barbara gatica_luana plaza araujo": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_paola lopez_luna maria cinalli": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jenna defalco_annika penickova": {
+    "proba40A": 0.2760416666666667,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5520833333333334,
+    "ret2": 0.5
+  },
+  "match_stats_connie ma_jo-yee chan": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_christasha mcneil_salma drugdova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_lan mi_maria sholokhova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_nao nishino_berta passola": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_francesca pace_duru soke": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_sydney jara_lea ma": {
+    "proba40A": 0.3232931726907631,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6465863453815262,
+    "ret2": 0.5
+  },
+  "match_stats_vivian wolff_arina bulatova": {
+    "proba40A": 0.2317433516251583,
+    "svc1": 0.5922330097087378,
+    "ret1": 0.391304347826087,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ekaterina ovcharenko_chengyiyi yuan": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_sarah ye_sijia wei": {
+    "proba40A": 0.1431818181818182,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.4772727272727273,
+    "ret2": 0.3
+  },
+  "match_stats_dominick mosejczuk_zsombor velcz": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_lui maxted_roger pascual ferra": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_andrew fenty_shunsuke mitsui": {
+    "proba40A": 0.5235819806551547,
+    "svc1": 0.6912181303116147,
+    "ret1": 0.32989690721649484,
+    "svc2": 0.6945454545454546,
+    "ret2": 0.425531914893617
+  },
+  "match_stats_alastair gray_litu": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_nikola slavic_christopher thies": {
+    "proba40A": 0.9095567867036011,
+    "svc1": 0.6535087719298246,
+    "ret1": 0.47368421052631576,
+    "svc2": 0.6,
+    "ret2": 1.0
+  },
+  "match_stats_johan oscar lien_enzo kohlmann de freitas": {
+    "proba40A": 0.18695652173913047,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6142857142857143,
+    "ret2": 0.30434782608695654
+  },
+  "match_stats_noah zamora_pablo martinez gomez": {
+    "proba40A": 0.5165229885057471,
+    "svc1": 0.5632183908045977,
+    "ret1": 0.21428571428571427,
+    "svc2": 0.7916666666666666,
+    "ret2": 0.5
+  },
+  "match_stats_gavin goode_pepijn bastiaansen": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_eli stephenson_nicolas arseneault": {
+    "proba40A": 0.0,
+    "svc1": 0.6046511627906976,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_victor hugo remondy pagotto_pedro henrique chabalgoity": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_nicolas bruna_gabriel schenekenberg": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_oscar jose gutierrez_valentin basel": {
+    "proba40A": 0.19876543209876543,
+    "svc1": 0.6625514403292181,
+    "ret1": 0.3,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_martin borisiouk_kristjan tamm": {
+    "proba40A": 0.35418118466898957,
+    "svc1": 0.8780487804878049,
+    "ret1": 0.2,
+    "svc2": 0.7142857142857143,
+    "ret2": 0.25
+  },
+  "match_stats_egor pleshivtsev_cruz hewitt": {
+    "proba40A": 0.4279686071691649,
+    "svc1": 0.53125,
+    "ret1": 0.3333333333333333,
+    "svc2": 0.6597353497164461,
+    "ret2": 0.38028169014084506
+  },
+  "match_stats_sergey fomin_yusuke takahashi": {
+    "proba40A": 0.2469423741035565,
+    "svc1": 0.6492194674012856,
+    "ret1": 0.3803680981595092,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ivan dreycopp_matteo covato": {
+    "proba40A": 0.14347687400318979,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6290909090909091,
+    "ret2": 0.22807017543859648
+  },
+  "match_stats_lucas andrade da silva_tadeo meneo": {
+    "proba40A": 0.3833374934132069,
+    "svc1": 0.7557932263814616,
+    "ret1": 0.35714285714285715,
+    "svc2": 0.6237623762376238,
+    "ret2": 0.18181818181818182
+  },
+  "match_stats_juan sebastian osorio_ryan fishback": {
+    "proba40A": 0.40648781842404047,
+    "svc1": 0.6853002070393375,
+    "ret1": 0.34210526315789475,
+    "svc2": 0.5161290322580645,
+    "ret2": 0.3333333333333333
+  },
+  "match_stats_alex hernandez_felipe de dios": {
+    "proba40A": 0.3919464995551952,
+    "svc1": 0.6372377622377622,
+    "ret1": 0.391304347826087,
+    "svc2": 0.5703703703703704,
+    "ret2": 0.25
+  },
+  "match_stats_alberto odiseo alvarado berrospi_tristan mccormick": {
+    "proba40A": 0.4094728800611153,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.7165775401069518,
+    "ret2": 0.5714285714285714
+  },
+  "match_stats_lorenzo claverie_mwendwa mbithi": {
+    "proba40A": 0.1843645484949833,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6847826086956522,
+    "ret2": 0.2692307692307692
+  },
+  "match_stats_nicolas hollender_juan sebastian gomez": {
+    "proba40A": 0.3529940891020865,
+    "svc1": 0.4647887323943662,
+    "ret1": 0.4,
+    "svc2": 0.5847750865051903,
+    "ret2": 0.2857142857142857
+  },
+  "match_stats_felipe jose rivadeneira gallegos_daniel salazar": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_s d prajwal dev_thanapet chanta": {
+    "proba40A": 0.26642546106557374,
+    "svc1": 0.6434426229508197,
+    "ret1": 0.4140625,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_adhithya ganesan_karan singh": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jamilah snells_sara saito": {
+    "proba40A": 0.25499231950844853,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.564625850340136,
+    "ret2": 0.45161290322580644
+  },
+  "match_stats_sofia kryvoruchko_stella jurina": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_daniil medvedev_tommy paul": {
+    "proba40A": 0.623495242449726,
+    "svc1": 0.7482563932248423,
+    "ret1": 0.4043478260869565,
+    "svc2": 0.7424140256237357,
+    "ret2": 0.4322916666666667
+  },
+  "match_stats_alexander zverev_alejandro davidovich fokina": {
+    "proba40A": 0.30284675953967294,
+    "svc1": 0.7692307692307693,
+    "ret1": 0.3937007874015748,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_dalma galfi_francesca jones": {
+    "proba40A": 0.2904692816665908,
+    "svc1": 0.6155182397220614,
+    "ret1": 0.47191011235955055,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_leyre romero gormaz_fiona ferro": {
+    "proba40A": 0.28231986394612785,
+    "svc1": 0.5772432932469935,
+    "ret1": 0.4890829694323144,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jessica bouzas maneiro_polona hercog": {
+    "proba40A": 0.5569402215755614,
+    "svc1": 0.5737789203084833,
+    "ret1": 0.5,
+    "svc2": 0.5786802030456852,
+    "ret2": 0.4666666666666667
+  },
+  "match_stats_clara burel_guiomar maristany zuleta de reales": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_julia grabher_ariana geerlings martinez": {
+    "proba40A": 0.3958158765981059,
+    "svc1": 0.6225728155339806,
+    "ret1": 0.3924050632911392,
+    "svc2": 0.45454545454545453,
+    "ret2": 0.3333333333333333
+  },
+  "match_stats_francesca curmi_elizara yaneva": {
+    "proba40A": 0.572141883111178,
+    "svc1": 0.5850144092219021,
+    "ret1": 0.5609756097560976,
+    "svc2": 0.5504807692307693,
+    "ret2": 0.4431818181818182
+  },
+  "match_stats_andrea lazaro garcia_laura samson": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_gabriela andrea knutson_martyna kubka": {
+    "proba40A": 0.3269349845201239,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6175438596491228,
+    "ret2": 0.5294117647058824
+  },
+  "match_stats_dominika salkova_lea boskovic": {
+    "proba40A": 0.5983707832246195,
+    "svc1": 0.5753688261706222,
+    "ret1": 0.44014084507042256,
+    "svc2": 0.580441640378549,
+    "ret2": 0.5945945945945946
+  },
+  "match_stats_lucie havlickova_jil belen teichmann": {
+    "proba40A": 0.2628834391295802,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5961820851688693,
+    "ret2": 0.4409448818897638
+  },
+  "match_stats_bianca vanessa andreescu_lucrezia stefanini": {
+    "proba40A": 0.27640770630733313,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5366748166259169,
+    "ret2": 0.5150375939849624
+  },
+  "match_stats_alejo sanchez quilez_luka mikrut": {
+    "proba40A": 0.5874620207496312,
+    "svc1": 0.6559432933478735,
+    "ret1": 0.4295774647887324,
+    "svc2": 0.7132616487455197,
+    "ret2": 0.42857142857142855
+  },
+  "match_stats_lorenzo giustino_zsombor piros": {
+    "proba40A": 0.5816709455097069,
+    "svc1": 0.6852766798418972,
+    "ret1": 0.4149377593360996,
+    "svc2": 0.6826819648619576,
+    "ret2": 0.43552311435523117
+  },
+  "match_stats_marco trungelliti_francesco passaro": {
+    "proba40A": 0.5130732658101158,
+    "svc1": 0.7103791174642635,
+    "ret1": 0.36253041362530414,
+    "svc2": 0.7111995451961342,
+    "ret2": 0.3593073593073593
+  },
+  "match_stats_matej dodig_tristan boyer": {
+    "proba40A": 0.563418161403527,
+    "svc1": 0.7255301794453507,
+    "ret1": 0.3866279069767442,
+    "svc2": 0.6732161323681489,
+    "ret2": 0.42023346303501946
+  },
+  "match_stats_tom gentzsch_damir dzumhur": {
+    "proba40A": 0.5500971852012945,
+    "svc1": 0.7205298013245033,
+    "ret1": 0.41944444444444445,
+    "svc2": 0.61296211775445,
+    "ret2": 0.4043887147335423
+  },
+  "match_stats_maks kasnikowski_stefano travaglia": {
+    "proba40A": 0.5923945312841145,
+    "svc1": 0.7199810156620788,
+    "ret1": 0.3812316715542522,
+    "svc2": 0.6968864468864469,
+    "ret2": 0.4561933534743202
+  },
+  "match_stats_jacob fearnley_maxim mrva": {
+    "proba40A": 0.3125019990262521,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6351501668520578,
+    "ret2": 0.49201277955271566
+  },
+  "match_stats_michael mmoh_luca nardi": {
+    "proba40A": 0.2542639199517447,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6732215153267784,
+    "ret2": 0.3776824034334764
+  },
+  "match_stats_jerome kym_dominic stephan stricker": {
+    "proba40A": 0.2606324091005212,
+    "svc1": 0.760926803580832,
+    "ret1": 0.3425196850393701,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_felix balshaw_mika brunold": {
+    "proba40A": 0.5635974129543948,
+    "svc1": 0.7305039787798409,
+    "ret1": 0.3745928338762215,
+    "svc2": 0.6711941143180532,
+    "ret2": 0.432
+  },
+  "match_stats_hugo gaston_nicolai budkov kjaer": {
+    "proba40A": 0.27253519938822784,
+    "svc1": 0.6687743190661478,
+    "ret1": 0.407514450867052,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_matteo martineau_sascha gueymard wayenburg": {
+    "proba40A": 0.29951527311084286,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.7122331691297209,
+    "ret2": 0.4205298013245033
+  },
+  "match_stats_buvaysar gadamauri_felix gill": {
+    "proba40A": 0.46641571887811106,
+    "svc1": 0.6963855421686747,
+    "ret1": 0.36574074074074076,
+    "svc2": 0.6952752492414391,
+    "ret2": 0.30451127819548873
+  },
+  "match_stats_radu mihai papoe_zdenek kolar": {
+    "proba40A": 0.25022004275116305,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6605809128630705,
+    "ret2": 0.3787878787878788
+  },
+  "match_stats_max wiskandt_massimo giunta": {
+    "proba40A": 0.5256598260420944,
+    "svc1": 0.6781437125748503,
+    "ret1": 0.38961038961038963,
+    "svc2": 0.71898197242842,
+    "ret2": 0.36363636363636365
+  },
+  "match_stats_gianluca cadenasso_marvin moeller": {
+    "proba40A": 0.2582096234339357,
+    "svc1": 0.6545313710302091,
+    "ret1": 0.3944954128440367,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_francisco comesana_genaro alberto olivieri": {
+    "proba40A": 0.516139198332046,
+    "svc1": 0.7152406417112299,
+    "ret1": 0.38095238095238093,
+    "svc2": 0.5917616770871644,
+    "ret2": 0.4117647058823529
+  },
+  "match_stats_luis guto miguel_hugo dellien": {
+    "proba40A": 0.5621032150537901,
+    "svc1": 0.7043795620437956,
+    "ret1": 0.3804347826086957,
+    "svc2": 0.6583696328562539,
+    "ret2": 0.44675925925925924
+  },
+  "match_stats_juan manuel la serna_franco roncadelli": {
+    "proba40A": 0.5358810409014387,
+    "svc1": 0.6173044925124792,
+    "ret1": 0.41697416974169743,
+    "svc2": 0.5928950592078399,
+    "ret2": 0.4696969696969697
+  },
+  "match_stats_thiago seyboth wild_nicolas kicker": {
+    "proba40A": 0.6390216799828818,
+    "svc1": 0.7215568862275449,
+    "ret1": 0.4142857142857143,
+    "svc2": 0.6487889273356401,
+    "ret2": 0.5241935483870968
+  },
+  "match_stats_ayana akli_ariana arseneault": {
+    "proba40A": 0.3674899866488651,
+    "svc1": 0.5794392523364486,
+    "ret1": 0.4,
+    "svc2": 0.5428571428571428,
+    "ret2": 0.25
+  },
+  "match_stats_thara gowda_reese brantmeier": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_yuki naito_mingge xu": {
+    "proba40A": 0.14366925064599484,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6177777777777778,
+    "ret2": 0.23255813953488372
+  },
+  "match_stats_kajsa rinaldo persson_sara saito": {
+    "proba40A": 0.49599053697725426,
+    "svc1": 0.5561497326203209,
+    "ret1": 0.43333333333333335,
+    "svc2": 0.564625850340136,
+    "ret2": 0.45161290322580644
+  },
+  "match_stats_manon leonard_jessika ponchet": {
+    "proba40A": 0.4701693908463743,
+    "svc1": 0.5029940119760479,
+    "ret1": 0.40540540540540543,
+    "svc2": 0.6699266503667481,
+    "ret2": 0.3974358974358974
+  },
+  "match_stats_mika stojsavljevic_alicia dudeney": {
+    "proba40A": 0.5797910264762575,
+    "svc1": 0.6339869281045751,
+    "ret1": 0.42105263157894735,
+    "svc2": 0.6256983240223464,
+    "ret2": 0.5
+  },
+  "match_stats_alisa oktiabreva_cristiana nicoleta todoni": {
+    "proba40A": 0.3368511368511369,
+    "svc1": 0.6486486486486487,
+    "ret1": 0.3333333333333333,
+    "svc2": 0.5428571428571428,
+    "ret2": 0.2222222222222222
+  },
+  "match_stats_alice tubello_stella jurina": {
+    "proba40A": 0.2001547736196964,
+    "svc1": 0.5244055068836045,
+    "ret1": 0.3816793893129771,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_maria sara popa_dunja maric": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mika buchnik_elena ruxandra bertea": {
+    "proba40A": 0.08305647840531562,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5813953488372093,
+    "ret2": 0.14285714285714285
+  },
+  "match_stats_astrid lew yan foon_charlotte pikkaart": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_angela fita boluda_ilinca dalina amariei": {
+    "proba40A": 0.5866238190435265,
+    "svc1": 0.7060702875399361,
+    "ret1": 0.3333333333333333,
+    "svc2": 0.5578947368421052,
+    "ret2": 0.6296296296296297
+  },
+  "match_stats_lucie petruzelova_denislava glushkova": {
+    "proba40A": 0.2634146341463415,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.43902439024390244,
+    "ret2": 0.6
+  },
+  "match_stats_rositsa dencheva_valeriia artemeva": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_sonja zhenikhova_alena kovackova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_benjamin willwerth_cosme rolland de ravel": {
+    "proba40A": 0.5596568127141504,
+    "svc1": 0.6077586206896551,
+    "ret1": 0.3181818181818182,
+    "svc2": 0.7325581395348837,
+    "ret2": 0.5
+  },
+  "match_stats_lui maxted_andrew fenty": {
+    "proba40A": 0.2280307234017698,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6912181303116147,
+    "ret2": 0.32989690721649484
+  },
+  "match_stats_iker urribarrens ramirez_dominick mosejczuk": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_alastair gray_sebastian gorzny": {
+    "proba40A": 0.30119581464872947,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.695067264573991,
+    "ret2": 0.43333333333333335
+  },
+  "match_stats_carles cordoba_iannis miletich": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_matthias ujvary_alan wazny": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_dorian tremblay_emilien demanet": {
+    "proba40A": 0.3038461538461539,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6752136752136753,
+    "ret2": 0.45
+  },
+  "match_stats_florent bax_allan gatoto": {
+    "proba40A": 0.22677737415672028,
+    "svc1": 0.7613240418118467,
+    "ret1": 0.2978723404255319,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_isaac nortey_thomas faurel": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_louis larue_jack loge": {
+    "proba40A": 0.29539565477376917,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6589595375722543,
+    "ret2": 0.4482758620689655
+  },
+  "match_stats_pedro henrique chabalgoity_rafael tosetto": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_pedro sakamoto_nicolas bruna": {
+    "proba40A": 0.2370555867382429,
+    "svc1": 0.6538146021328958,
+    "ret1": 0.36257309941520466,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_oscar jose gutierrez_joao eduardo schiessl": {
+    "proba40A": 0.452461187940444,
+    "svc1": 0.6625514403292181,
+    "ret1": 0.3,
+    "svc2": 0.6197424892703862,
+    "ret2": 0.4093567251461988
+  },
+  "match_stats_hernando jose escurra isnardi_julian cundom": {
+    "proba40A": 0.1746031746031746,
+    "svc1": 0.6984126984126984,
+    "ret1": 0.25,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_flynn thomas_calvin mueller": {
+    "proba40A": 0.17281879194630873,
+    "svc1": 0.6912751677852349,
+    "ret1": 0.25,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_sara victoria balan_sophie luescher": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_gala ivanovic_carolina meligeni rodrigues alves": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_anita tu_tara wuerth": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_valentin gonzalez-galino_giulio perego": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jip van assendelft_petros tsitsipas": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_leonardo rossi_mika petkovic": {
+    "proba40A": 0.2111241676459068,
+    "svc1": 0.7101449275362319,
+    "ret1": 0.2972972972972973,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ann li_iga swiatek": {
+    "proba40A": 0.63124822444875,
+    "svc1": 0.6723910171730515,
+    "ret1": 0.4360313315926893,
+    "svc2": 0.6679503637141635,
+    "ret2": 0.5061224489795918
+  },
+  "match_stats_alisa oktiabreva_maria herazo gonzalez": {
+    "proba40A": 0.21621621621621623,
+    "svc1": 0.6486486486486487,
+    "ret1": 0.3333333333333333,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_alice tubello_elena korokozidi": {
+    "proba40A": 0.2001547736196964,
+    "svc1": 0.5244055068836045,
+    "ret1": 0.3816793893129771,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_maria sara popa_tilwith di girolami": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ana sofia sanchez_marjorie souza": {
+    "proba40A": 0.16770333511047925,
+    "svc1": 0.4501510574018127,
+    "ret1": 0.37254901960784315,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_julia konishi camargo silva_luna maria cinalli": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_tamara zidansek_rebeka masarova": {
+    "proba40A": 0.30012484394506866,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6968115942028985,
+    "ret2": 0.4307116104868914
+  },
+  "match_stats_astrid lew yan foon_elena ruxandra bertea": {
+    "proba40A": 0.08305647840531562,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5813953488372093,
+    "ret2": 0.14285714285714285
+  },
+  "match_stats_barbara gatica_maria florencia urrutia": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_josefina estevez_fernanda labrana": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_eli stephenson_noah zamora": {
+    "proba40A": 0.12068965517241378,
+    "svc1": 0.6046511627906976,
+    "ret1": 0.0,
+    "svc2": 0.5632183908045977,
+    "ret2": 0.21428571428571427
+  },
+  "match_stats_theo papamalamis_johan oscar lien": {
+    "proba40A": 0.2621847597036231,
+    "svc1": 0.6485623003194888,
+    "ret1": 0.40425531914893614,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mwendwa mbithi_daniel salazar": {
+    "proba40A": 0.1843645484949833,
+    "svc1": 0.6847826086956522,
+    "ret1": 0.2692307692307692,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_varvara lepchenko_julieta pareja": {
+    "proba40A": 0.4801660397692685,
+    "svc1": 0.5998967475477542,
+    "ret1": 0.4186046511627907,
+    "svc2": 0.627151051625239,
+    "ret2": 0.3652173913043478
+  },
+  "match_stats_nikola slavic_felix corwin": {
+    "proba40A": 0.5444733463955138,
+    "svc1": 0.6535087719298246,
+    "ret1": 0.47368421052631576,
+    "svc2": 0.7439024390243902,
+    "ret2": 0.3157894736842105
+  },
+  "match_stats_pepijn bastiaansen_jack anthrop": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_juan sebastian osorio_tristan mccormick": {
+    "proba40A": 0.6439176877324676,
+    "svc1": 0.6853002070393375,
+    "ret1": 0.34210526315789475,
+    "svc2": 0.7165775401069518,
+    "ret2": 0.5714285714285714
+  },
+  "match_stats_alex hernandez_ivan dreycopp": {
+    "proba40A": 0.2493539069626026,
+    "svc1": 0.6372377622377622,
+    "ret1": 0.391304347826087,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_tatjana maria_dana guzman": {
+    "proba40A": 0.29055183946488294,
+    "svc1": 0.6521739130434783,
+    "ret1": 0.44551282051282054,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_thea frodin_renata zarazua": {
+    "proba40A": 0.24725882973115443,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5678571428571428,
+    "ret2": 0.4354243542435424
+  },
+  "match_stats_elvina kalieva_kristina penickova": {
+    "proba40A": 0.7343132744294032,
+    "svc1": 0.652542372881356,
+    "ret1": 0.47896440129449835,
+    "svc2": 0.6326530612244898,
+    "ret2": 0.6666666666666666
+  },
+  "match_stats_malaika rapolu_christina lyutova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_maria sholokhova_connie ma": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_vivian wolff_nao nishino": {
+    "proba40A": 0.2317433516251583,
+    "svc1": 0.5922330097087378,
+    "ret1": 0.391304347826087,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_salma drugdova_lea ma": {
+    "proba40A": 0.3232931726907631,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6465863453815262,
+    "ret2": 0.5
+  },
+  "match_stats_yeon woo ku_renata zarazua": {
+    "proba40A": 0.24725882973115443,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5678571428571428,
+    "ret2": 0.4354243542435424
+  },
+  "match_stats_duru soke_annika penickova": {
+    "proba40A": 0.2760416666666667,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5520833333333334,
+    "ret2": 0.5
+  },
+  "match_stats_daria khomutyanskaya_junhan zhang": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5,
+    "ret2": 0.0
+  },
+  "match_stats_chengyiyi yuan_sijia wei": {
+    "proba40A": 0.1431818181818182,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.4772727272727273,
+    "ret2": 0.3
+  },
+  "match_stats_maya joint_kyoka okamura": {
+    "proba40A": 0.15,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6,
+    "ret2": 0.25
+  },
+  "match_stats_mary stoiana_rinko matsuda": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ena koike_kayla day": {
+    "proba40A": 0.4114285714285714,
+    "svc1": 0.6857142857142857,
+    "ret1": 0.6,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_sayaka ishii_elina avanesyan": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_daria snigur_yu jun lin": {
+    "proba40A": 0.2834445151825505,
+    "svc1": 0.6115623506927855,
+    "ret1": 0.4634760705289673,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_yulia starodubtsewa_anastasia zakharova": {
+    "proba40A": 0.2600688660798346,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5769739744155271,
+    "ret2": 0.4507462686567164
+  },
+  "match_stats_katarzyna kawa_katie volynets": {
+    "proba40A": 0.28903924441832185,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5957193816884662,
+    "ret2": 0.48519362186788156
+  },
+  "match_stats_egor pleshivtsev_matthew dellavedova": {
+    "proba40A": 0.38791766706682673,
+    "svc1": 0.53125,
+    "ret1": 0.3333333333333333,
+    "svc2": 0.5903361344537815,
+    "ret2": 0.35714285714285715
+  },
+  "match_stats_martin borisiouk_sergey fomin": {
+    "proba40A": 0.4225521302011175,
+    "svc1": 0.8780487804878049,
+    "ret1": 0.2,
+    "svc2": 0.6492194674012856,
+    "ret2": 0.3803680981595092
+  },
+  "match_stats_karan singh_thanapet chanta": {
+    "proba40A": 0.20955882352941174,
+    "svc1": 0.6985294117647058,
+    "ret1": 0.3,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_rafael jodar_daniil medvedev": {
+    "proba40A": 0.6091679850233603,
+    "svc1": 0.696588868940754,
+    "ret1": 0.44016227180527384,
+    "svc2": 0.7482563932248423,
+    "ret2": 0.4043478260869565
+  },
+  "match_stats_sonay kartal_jelena ostapenko": {
+    "proba40A": 0.6354922065521377,
+    "svc1": 0.6532091097308489,
+    "ret1": 0.46551724137931033,
+    "svc2": 0.6628242074927954,
+    "ret2": 0.5
+  },
+  "match_stats_iga swiatek_maja chwalinska": {
+    "proba40A": 0.3380646738798215,
+    "svc1": 0.6679503637141635,
+    "ret1": 0.5061224489795918,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_leyre romero gormaz_dalma galfi": {
+    "proba40A": 0.5727891456127187,
+    "svc1": 0.5772432932469935,
+    "ret1": 0.4890829694323144,
+    "svc2": 0.6155182397220614,
+    "ret2": 0.47191011235955055
+  },
+  "match_stats_jessica bouzas maneiro_clara burel": {
+    "proba40A": 0.28688946015424166,
+    "svc1": 0.5737789203084833,
+    "ret1": 0.5,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ariana geerlings martinez_francesca curmi": {
+    "proba40A": 0.47969396644451123,
+    "svc1": 0.45454545454545453,
+    "ret1": 0.3333333333333333,
+    "svc2": 0.5850144092219021,
+    "ret2": 0.5609756097560976
+  },
+  "match_stats_tamara zidansek_laura samson": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_martyna kubka_dominika salkova": {
+    "proba40A": 0.5801783058980385,
+    "svc1": 0.6175438596491228,
+    "ret1": 0.5294117647058824,
+    "svc2": 0.5753688261706222,
+    "ret2": 0.44014084507042256
+  },
+  "match_stats_bianca vanessa andreescu_lucie havlickova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mingge xu_ariana arseneault": {
+    "proba40A": 0.27938353636028057,
+    "svc1": 0.6177777777777778,
+    "ret1": 0.23255813953488372,
+    "svc2": 0.5428571428571428,
+    "ret2": 0.25
+  },
+  "match_stats_reese brantmeier_kajsa rinaldo persson": {
+    "proba40A": 0.2409982174688057,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5561497326203209,
+    "ret2": 0.43333333333333335
+  },
+  "match_stats_alycia parks_jeline vandromme": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jiali dong_alina korneeva": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_dayana yastremska_kamilla rakhimova": {
+    "proba40A": 0.5453464247955877,
+    "svc1": 0.5920372285418821,
+    "ret1": 0.4273255813953488,
+    "svc2": 0.6091903719912473,
+    "ret2": 0.4799054373522459
+  },
+  "match_stats_magdalena frech_han shi": {
+    "proba40A": 0.2801067073170732,
+    "svc1": 0.64599609375,
+    "ret1": 0.43360433604336046,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mayar sherif_tatiana prozorova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_william rejchtman vinciguerra_samir banerjee": {
+    "proba40A": 0.4670425182053089,
+    "svc1": 0.6363636363636364,
+    "ret1": 0.4418604651162791,
+    "svc2": 0.6814814814814815,
+    "ret2": 0.2727272727272727
+  },
+  "match_stats_sara sorribes tormo_maddison inglis": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_taylah preston_haruka kaji": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_heather watson_emerson jones": {
+    "proba40A": 0.31477861401622526,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5743329097839899,
+    "ret2": 0.5480769230769231
+  },
+  "match_stats_mei yamaguchi_sofia kenin": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_amir omarkhanov_rei sakamoto": {
+    "proba40A": 0.28857877035619545,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.7321350284962735,
+    "ret2": 0.39416058394160586
+  },
+  "match_stats_gabriel diallo_harold mayot": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_adam walton_beibit zhukayev": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_petr bar biryukov_stefanos sakellaridis": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_alexandre chevtchenko_daniil glinka": {
+    "proba40A": 0.5202684745541488,
+    "svc1": 0.6955128205128205,
+    "ret1": 0.3447204968944099,
+    "svc2": 0.7076526225279449,
+    "ret2": 0.3963963963963964
+  },
+  "match_stats_astrid cirotte_kamonwan yodpetch": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_sophie luescher_giulia safina popa": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_kristina kroitor_felitsata dorofeeva-rybas": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_oskari paldanius_amr elsayed": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_artur kukasian_romain faucon": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ustiniya lekomtseva_lamis alhussein abdel aziz": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_yuliya perapekhina_dune vaissaud": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_aoi ito_tyra caterina grant": {
+    "proba40A": 0.2644628099173554,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6666666666666666,
+    "ret2": 0.39669421487603307
+  },
+  "match_stats_sinja kraus_momoko kobori": {
+    "proba40A": 0.27183845029239767,
+    "svc1": 0.6140350877192983,
+    "ret1": 0.4427083333333333,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_claire liu_kanon sawashiro": {
+    "proba40A": 0.054878048780487805,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.43902439024390244,
+    "ret2": 0.125
+  },
+  "match_stats_harriet dart_rina saigo": {
+    "proba40A": 0.5443034341862049,
+    "svc1": 0.6312384473197782,
+    "ret1": 0.5,
+    "svc2": 0.5197368421052632,
+    "ret2": 0.44
+  },
+  "match_stats_polina kudermetova_mananchaya sawangkaew": {
+    "proba40A": 0.3099101187256947,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6500553709856035,
+    "ret2": 0.47674418604651164
+  },
+  "match_stats_yihan qu_yulia putintseva": {
+    "proba40A": 0.49542454677889,
+    "svc1": 0.6212121212121212,
+    "ret1": 0.3333333333333333,
+    "svc2": 0.6046603475513428,
+    "ret2": 0.4768856447688564
+  },
+  "match_stats_aliaksandra sasnovich_anna bondar": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_anhelina kalinina_simona waltert": {
+    "proba40A": 0.291121866647403,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6141732283464567,
+    "ret2": 0.4740061162079511
+  },
+  "match_stats_ipek oz_iva ivanova": {
+    "proba40A": 0.2260318492037699,
+    "svc1": 0.5911602209944752,
+    "ret1": 0.38235294117647056,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_taro daniel_nikoloz basilashvili": {
+    "proba40A": 0.2870119319127277,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.7520775623268698,
+    "ret2": 0.38162544169611307
+  },
+  "match_stats_jessica pieri_beatrise zeltina": {
+    "proba40A": 0.23901445339024155,
+    "svc1": 0.5207100591715976,
+    "ret1": 0.45901639344262296,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_nina radovanovic_valentini grammatikopoulou": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_giorgio tabacco_matthew william donald": {
+    "proba40A": 0.5810589463279336,
+    "svc1": 0.671875,
+    "ret1": 0.46153846153846156,
+    "svc2": 0.6421818181818182,
+    "ret2": 0.4219409282700422
+  },
+  "match_stats_didi bredberg canizares_anna petkovic": {
+    "proba40A": 0.13157894736842105,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.39473684210526316,
+    "ret2": 0.3333333333333333
+  },
+  "match_stats_lukas pokorny_arvid nordquist": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_kristijan juhas_mykyta mashtakov": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_stefan seifert_pietro orlando fellin": {
+    "proba40A": 0.0,
+    "svc1": 0.5172413793103449,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_angela fita boluda_alena kovackova": {
+    "proba40A": 0.235356762513312,
+    "svc1": 0.7060702875399361,
+    "ret1": 0.3333333333333333,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mattia bellucci_shintaro mochizuki": {
+    "proba40A": 0.5813482549580562,
+    "svc1": 0.7274989630858565,
+    "ret1": 0.3656957928802589,
+    "svc2": 0.6866180048661801,
+    "ret2": 0.459214501510574
+  },
+  "match_stats_manon leonard_alicia dudeney": {
+    "proba40A": 0.3128491620111732,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6256983240223464,
+    "ret2": 0.5
+  },
+  "match_stats_emilien demanet_thomas faurel": {
+    "proba40A": 0.3038461538461539,
+    "svc1": 0.6752136752136753,
+    "ret1": 0.45,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_calvin mueller_mika petkovic": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_roman safiullin_ilya ivashka": {
+    "proba40A": 0.26542416691807175,
+    "svc1": 0.7260131624523727,
+    "ret1": 0.3655913978494624,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_luka pavlovic_ilia simakin": {
+    "proba40A": 0.2760239269313541,
+    "svc1": 0.7552742616033755,
+    "ret1": 0.3654618473895582,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_joel josef schwarzler_federico cina": {
+    "proba40A": 0.29202142661633684,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6973932754061202,
+    "ret2": 0.418732782369146
+  },
+  "match_stats_harry wendelken_gauthier onclin": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_giovanni mpetshi perricard_remy bertola": {
+    "proba40A": 0.2829174749704551,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.7003367003367004,
+    "ret2": 0.40397350993377484
+  },
+  "match_stats_clement chidekh_gilles arnaud bailly": {
+    "proba40A": 0.5154495992057704,
+    "svc1": 0.7065435568044962,
+    "ret1": 0.3773148148148148,
+    "svc2": 0.6234604105571847,
+    "ret2": 0.39915966386554624
+  },
+  "match_stats_kimmer coppejans_andrea guerrieri": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_nishesh basavareddy_edas butvilas": {
+    "proba40A": 0.268263335421108,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.7066937119675456,
+    "ret2": 0.37960339943342775
+  },
+  "match_stats_aziz dougaz_tom gentzsch": {
+    "proba40A": 0.3022222222222222,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.7205298013245033,
+    "ret2": 0.41944444444444445
+  },
+  "match_stats_martin damm_buvaysar gadamauri": {
+    "proba40A": 0.25469656403391344,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6963855421686747,
+    "ret2": 0.36574074074074076
+  },
+  "match_stats_claire liu_maddison inglis": {
+    "proba40A": 0.29004210526315793,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6305263157894737,
+    "ret2": 0.46
+  },
+  "match_stats_maya joint_kayla day": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mary stoiana_sayaka ishii": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_harriet dart_aoi ito": {
+    "proba40A": 0.3156192236598891,
+    "svc1": 0.6312384473197782,
+    "ret1": 0.5,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_alycia parks_yulia putintseva": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_anastasia zakharova_polina kudermetova": {
+    "proba40A": 0.2600688660798346,
+    "svc1": 0.5769739744155271,
+    "ret1": 0.4507462686567164,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_daria snigur_katarzyna kawa": {
+    "proba40A": 0.2834445151825505,
+    "svc1": 0.6115623506927855,
+    "ret1": 0.4634760705289673,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_zsombor piros_alejo sanchez quilez": {
+    "proba40A": 0.5791022324523796,
+    "svc1": 0.6826819648619576,
+    "ret1": 0.43552311435523117,
+    "svc2": 0.6559432933478735,
+    "ret2": 0.4295774647887324
+  },
+  "match_stats_francesco passaro_matej dodig": {
+    "proba40A": 0.5360494452524355,
+    "svc1": 0.7111995451961342,
+    "ret1": 0.3593073593073593,
+    "svc2": 0.7255301794453507,
+    "ret2": 0.3866279069767442
+  },
+  "match_stats_maks kasnikowski_damir dzumhur": {
+    "proba40A": 0.2744795660881825,
+    "svc1": 0.7199810156620788,
+    "ret1": 0.3812316715542522,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jacob fearnley_luca nardi": {
+    "proba40A": 0.2542639199517447,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6732215153267784,
+    "ret2": 0.3776824034334764
+  },
+  "match_stats_jerome kym_mika brunold": {
+    "proba40A": 0.5505882664859202,
+    "svc1": 0.760926803580832,
+    "ret1": 0.3425196850393701,
+    "svc2": 0.6711941143180532,
+    "ret2": 0.432
+  },
+  "match_stats_nicolai budkov kjaer_matteo martineau": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_juan manuel la serna_hugo dellien": {
+    "proba40A": 0.5515327577368614,
+    "svc1": 0.6173044925124792,
+    "ret1": 0.41697416974169743,
+    "svc2": 0.6583696328562539,
+    "ret2": 0.44675925925925924
+  },
+  "match_stats_francisco comesana_thiago seyboth wild": {
+    "proba40A": 0.27247262541380185,
+    "svc1": 0.7152406417112299,
+    "ret1": 0.38095238095238093,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_dana guzman_sloane stephens": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_kristina penickova_julieta pareja": {
+    "proba40A": 0.6508151785113414,
+    "svc1": 0.6326530612244898,
+    "ret1": 0.6666666666666666,
+    "svc2": 0.627151051625239,
+    "ret2": 0.3652173913043478
+  },
+  "match_stats_christina lyutova_renata zarazua": {
+    "proba40A": 0.6793575951632531,
+    "svc1": 0.6481481481481481,
+    "ret1": 0.6666666666666666,
+    "svc2": 0.5678571428571428,
+    "ret2": 0.4354243542435424
+  },
+  "match_stats_alice tubello_alisa oktiabreva": {
+    "proba40A": 0.21621621621621623,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6486486486486487,
+    "ret2": 0.3333333333333333
+  },
+  "match_stats_tilwith di girolami_elena ruxandra bertea": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ana sofia sanchez_luna maria cinalli": {
+    "proba40A": 0.16770333511047925,
+    "svc1": 0.4501510574018127,
+    "ret1": 0.37254901960784315,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_josefina estevez_barbara gatica": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_connie ma_lea ma": {
+    "proba40A": 0.3232931726907631,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6465863453815262,
+    "ret2": 0.5
+  },
+  "match_stats_nao nishino_annika penickova": {
+    "proba40A": 0.2760416666666667,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5520833333333334,
+    "ret2": 0.5
+  },
+  "match_stats_valeriia artemeva_carolina meligeni rodrigues alves": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_lucie petruzelova_luisina giovannini": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_martin borisiouk_matthew dellavedova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jack anthrop_eli stephenson": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6046511627906976,
+    "ret2": 0.0
+  },
+  "match_stats_nikola slavic_theo papamalamis": {
+    "proba40A": 0.5717415464072242,
+    "svc1": 0.6535087719298246,
+    "ret1": 0.47368421052631576,
+    "svc2": 0.6485623003194888,
+    "ret2": 0.40425531914893614
+  },
+  "match_stats_florent bax_jack loge": {
+    "proba40A": 0.5221730289304894,
+    "svc1": 0.7613240418118467,
+    "ret1": 0.2978723404255319,
+    "svc2": 0.6589595375722543,
+    "ret2": 0.4482758620689655
+  },
+  "match_stats_rafael tosetto_joao eduardo schiessl": {
+    "proba40A": 0.2536957558416786,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6197424892703862,
+    "ret2": 0.4093567251461988
+  },
+  "match_stats_pedro sakamoto_hernando jose escurra isnardi": {
+    "proba40A": 0.4116587613414175,
+    "svc1": 0.6538146021328958,
+    "ret1": 0.36257309941520466,
+    "svc2": 0.6984126984126984,
+    "ret2": 0.25
+  },
+  "match_stats_mwendwa mbithi_lucas andrade da silva": {
+    "proba40A": 0.45429070077407674,
+    "svc1": 0.6847826086956522,
+    "ret1": 0.2692307692307692,
+    "svc2": 0.7557932263814616,
+    "ret2": 0.35714285714285715
+  },
+  "match_stats_alex hernandez_juan sebastian osorio": {
+    "proba40A": 0.4837987146339549,
+    "svc1": 0.6372377622377622,
+    "ret1": 0.391304347826087,
+    "svc2": 0.6853002070393375,
+    "ret2": 0.34210526315789475
+  },
+  "match_stats_taylah preston_emerson jones": {
+    "proba40A": 0.31477861401622526,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5743329097839899,
+    "ret2": 0.5480769230769231
+  },
+  "match_stats_arthur weber_dominik palan": {
+    "proba40A": 0.3375430539609644,
+    "svc1": 0.6268656716417911,
+    "ret1": 0.5384615384615384,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_xiaoyin yang_khumoyun sultanov": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_xi cheng huang_semen pankin": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_daria khomutyanskaya_sijia wei": {
+    "proba40A": 0.1431818181818182,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.4772727272727273,
+    "ret2": 0.3
+  },
+  "match_stats_lui maxted_cosme rolland de ravel": {
+    "proba40A": 0.36627906976744184,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.7325581395348837,
+    "ret2": 0.5
+  },
+  "match_stats_alastair gray_dominick mosejczuk": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jiayu xu_kanna soeda": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_yu shan_anna yang": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_junjie sun_chihiro muramatsu": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_roman safiullin_ilia simakin": {
+    "proba40A": 0.560948998644468,
+    "svc1": 0.7260131624523727,
+    "ret1": 0.3655913978494624,
+    "svc2": 0.7154811715481172,
+    "ret2": 0.41304347826086957
+  },
+  "match_stats_alexandre chevtchenko_stefanos sakellaridis": {
+    "proba40A": 0.5493442725620663,
+    "svc1": 0.6955128205128205,
+    "ret1": 0.3447204968944099,
+    "svc2": 0.7174550020929259,
+    "ret2": 0.4315068493150685
+  },
+  "match_stats_otto virtanen_vitaliy sachko": {
+    "proba40A": 0.559046458264464,
+    "svc1": 0.7495847176079734,
+    "ret1": 0.3767123287671233,
+    "svc2": 0.6643688065489013,
+    "ret2": 0.41643835616438357
+  },
+  "match_stats_jurij rodionov_pierre-hugues herbert": {
+    "proba40A": 0.2838632417979294,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.7516378796902918,
+    "ret2": 0.3776595744680851
+  },
+  "match_stats_kyrian jacquet_sascha gueymard wayenburg": {
+    "proba40A": 0.5870965762930319,
+    "svc1": 0.7247826086956521,
+    "ret1": 0.3967828418230563,
+    "svc2": 0.7122331691297209,
+    "ret2": 0.4205298013245033
+  },
+  "match_stats_maxim mrva_dusan lajovic": {
+    "proba40A": 0.3125019990262521,
+    "svc1": 0.6351501668520578,
+    "ret1": 0.49201277955271566,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_valentin royer_clement tabur": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_francesco maestrelli_borna gojo": {
+    "proba40A": 0.24451084041982687,
+    "svc1": 0.7087719298245614,
+    "ret1": 0.34497816593886466,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ugo blanchet_nicolai budkov kjaer": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jan kumstat_michael mmoh": {
+    "proba40A": 0.2932559255113713,
+    "svc1": 0.7857754927163667,
+    "ret1": 0.37320574162679426,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_remy bertola_federico cina": {
+    "proba40A": 0.574938901586792,
+    "svc1": 0.7003367003367004,
+    "ret1": 0.40397350993377484,
+    "svc2": 0.6973932754061202,
+    "ret2": 0.418732782369146
+  },
+  "match_stats_clement chidekh_gauthier onclin": {
+    "proba40A": 0.26658935129428907,
+    "svc1": 0.7065435568044962,
+    "ret1": 0.3773148148148148,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_martin damm_andrea guerrieri": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_alejandro davidovich fokina_rafael jodar": {
+    "proba40A": 0.30661213906722845,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.696588868940754,
+    "ret2": 0.44016227180527384
+  },
+  "match_stats_maja chwalinska_sonay kartal": {
+    "proba40A": 0.30408010280574,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6532091097308489,
+    "ret2": 0.46551724137931033
+  },
+  "match_stats_bianca vanessa andreescu_dominika salkova": {
+    "proba40A": 0.2532433213779147,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.5753688261706222,
+    "ret2": 0.44014084507042256
+  },
+  "match_stats_jose pereira_tristan mccormick": {
+    "proba40A": 0.6526041709581998,
+    "svc1": 0.6375442739079102,
+    "ret1": 0.3813559322033898,
+    "svc2": 0.7165775401069518,
+    "ret2": 0.5714285714285714
+  },
+  "match_stats_felipe meligeni rodrigues alves_lorenzo claverie": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mateus alves_bernardo munk mesa": {
+    "proba40A": 0.4818245485977878,
+    "svc1": 0.6729131175468483,
+    "ret1": 0.3333333333333333,
+    "svc2": 0.6724137931034483,
+    "ret2": 0.3829787234042553
+  },
+  "match_stats_alex hernandez_matteo covato": {
+    "proba40A": 0.3928307809657924,
+    "svc1": 0.6372377622377622,
+    "ret1": 0.391304347826087,
+    "svc2": 0.6290909090909091,
+    "ret2": 0.22807017543859648
+  },
+  "match_stats_santiago rodriguez taverna_mariano kestelboim": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_kasidit samrej_naoya honda": {
+    "proba40A": 0.24965810029617325,
+    "svc1": 0.7141382868937048,
+    "ret1": 0.34959349593495936,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_egor pleshivtsev_luca castelnuovo": {
+    "proba40A": 0.45060216732916897,
+    "svc1": 0.53125,
+    "ret1": 0.3333333333333333,
+    "svc2": 0.7385008517887564,
+    "ret2": 0.37037037037037035
+  },
+  "match_stats_francesco passaro_zsombor piros": {
+    "proba40A": 0.5528630059758461,
+    "svc1": 0.7111995451961342,
+    "ret1": 0.3593073593073593,
+    "svc2": 0.6826819648619576,
+    "ret2": 0.43552311435523117
+  },
+  "match_stats_matteo sciahbasi_daniel siniakov": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_sergi perez contri_sebastian gima": {
+    "proba40A": 0.21433150183150185,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6637362637362637,
+    "ret2": 0.3229166666666667
+  },
+  "match_stats_izan almazan valiente_adrian andreev": {
+    "proba40A": 0.2936614153155909,
+    "svc1": 0.6948608137044968,
+    "ret1": 0.4226190476190476,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_filip misolic_dominik recek": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jakub vrba_alex marti pujolras": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_dmitry popko_daniele rapagnetta": {
+    "proba40A": 0.26639414069153466,
+    "svc1": 0.6601941747572816,
+    "ret1": 0.40350877192982454,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_federico iannaccone_pierluigi basile": {
+    "proba40A": 0.29109356257497,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6963414634146341,
+    "ret2": 0.4180327868852459
+  },
+  "match_stats_matthew william donald_gabriele pennaforti": {
+    "proba40A": 0.5990051205241078,
+    "svc1": 0.6421818181818182,
+    "ret1": 0.4219409282700422,
+    "svc2": 0.7380952380952381,
+    "ret2": 0.4444444444444444
+  },
+  "match_stats_pavel lagutin_yanaki milev": {
+    "proba40A": 0.3033122925749984,
+    "svc1": 0.6528925619834711,
+    "ret1": 0.4645669291338583,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_joao dinis silva_alexande rritschard": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_szymon kielan_benjamin hassan": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_abedallah shelbayh_pedro rodenas": {
+    "proba40A": 0.27607558977314833,
+    "svc1": 0.6713656387665198,
+    "ret1": 0.411214953271028,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_andrej martin_tiago cacao": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_olle wallin_vasco leote prata": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_pedro liborio_oleksii krutykh": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_carlos taberner_goncalo marques": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_patrick schoen_francisco rocha": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_takeru yuzuki_svyatoslav gulin": {
+    "proba40A": 0.23186649099692577,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6852173913043478,
+    "ret2": 0.3383838383838384
+  },
+  "match_stats_jacob fearnley_damir dzumhur": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_thiago seyboth wild_hugo dellien": {
+    "proba40A": 0.2941327294936505,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6583696328562539,
+    "ret2": 0.44675925925925924
+  },
+  "match_stats_gianluca cadenasso_radu mihai papoe": {
+    "proba40A": 0.2582096234339357,
+    "svc1": 0.6545313710302091,
+    "ret1": 0.3944954128440367,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mattia bellucci_martin landaluce": {
+    "proba40A": 0.5414742642810442,
+    "svc1": 0.7274989630858565,
+    "ret1": 0.3656957928802589,
+    "svc2": 0.6939992545657846,
+    "ret2": 0.396875
+  },
+  "match_stats_kajsa rinaldo persson_mingge xu": {
+    "proba40A": 0.38466746811480057,
+    "svc1": 0.5561497326203209,
+    "ret1": 0.43333333333333335,
+    "svc2": 0.6177777777777778,
+    "ret2": 0.23255813953488372
+  },
+  "match_stats_yuliya perapekhina_lamis alhussein abdel aziz": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_sloane stephens_christina lyutova": {
+    "proba40A": 0.43209876543209874,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6481481481481481,
+    "ret2": 0.6666666666666666
+  },
+  "match_stats_alisa oktiabreva_tilwith di girolami": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_annika penickova_connie ma": {
+    "proba40A": 0.2760416666666667,
+    "svc1": 0.5520833333333334,
+    "ret1": 0.5,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jessica pieri_nina radovanovic": {
+    "proba40A": 0.23901445339024155,
+    "svc1": 0.5207100591715976,
+    "ret1": 0.45901639344262296,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_tori kinard_michika ozeki": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_carson tanguilig_ava catanzarite": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_annabelle xu_kisa yoshioka": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_merna refaat_alexandra vagramov": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ella mcdonald_kate fakih": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_alana smith_emma kamper": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_carmen andreea herea_lexington reed": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_isadora sigrist_guisella insfran": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_manuela maia citolino_valentina de andrade silva barros": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_maraia paula manrique_olivia elliott": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_maria jose rico sanchez_sophia santos": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_clara vlasselaer_hanna bougouffa": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_carolann delaunay_liv boulard": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_amahee charrier_lian tran": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_sarah iliev_severine deppner": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_helena stevic_maia ilinca burcescu": {
+    "proba40A": 0.22235576923076925,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.578125,
+    "ret2": 0.38461538461538464
+  },
+  "match_stats_delia gaillard_marine szostak": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_julie myatovic_arina arifullina": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jana otzipka_megan mae root": {
+    "proba40A": 0.3625,
+    "svc1": 0.6041666666666666,
+    "ret1": 0.6,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_anastasiia firman_milena ciocan": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jiangxue han_jiale zhang": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_yuhan wang_jiayue pan": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ipek oz_lucie petruzelova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_anna-lena friedsam_sophie bekker": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_leticia romanova_victoria allen": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_rosie cho_mayuka aikawa": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_annabel wong_petra sedlackova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_lizette cabrera_megan davies": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_sofya lansere_daniela vismane": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_lois newberry_dalayna hewitt": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mina hodzic_carolin raschdorf": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_eliz maloney_indianna spink": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_caroline werner_amelie brooks": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_kristijan juhas_alan wazny": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jack anthrop_theo papamalamis": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jack loge_thomas faurel": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_juan sebastian osorio_lucas andrade da silva": {
+    "proba40A": 0.26992615227909345,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.7557932263814616,
+    "ret2": 0.35714285714285715
+  },
+  "match_stats_oskari paldanius_romain faucon": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_lukas pokorny_pietro orlando fellin": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_alastair gray_cosme rolland de ravel": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ioannis xilas_luka talan lopatic": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_finn murgett_amit vales": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_lucas goncalves franca_miguel simao": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_victor braga_eric martins": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_harry jordan_jared horwood": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jake evans_alexis canter": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_cameron price_bader idrees": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_matthew carroll_younes jenkins": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jake fellows_dylan leeman": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_sean hodkin_patrick foley": {
+    "proba40A": 0.0,
+    "svc1": 0.5757575757575758,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_toby clarke_conor brady": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_alex kobelt_alex michael": {
+    "proba40A": 0.0,
+    "svc1": 0.6451612903225806,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_rahul dhokia_charlie pycroft": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_martin riu_leonardo borrelli": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_elijah sanogo_andre megrabian": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_antoine walch_james beaven": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_adrien gobat_romain andres": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_amaury raynel_thomas gerbaud": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_kennyde schepper_nicolas gry": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_martin simon_florent lagarrigue": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_octave caillat_timeo trufelli": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_vincent dullinger_arian barbic": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_azuma visaya_clemens cserni": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_congsup congcar_natthayut nithithananont": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_rahul sachdev_ethan david zapp": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_finnian bult_sam kydd baumgartner": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_omaansh choudhary saharia_alexander watanabe eriksson": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_kazuma kawachi_muthu aadhitiya senthilkumar": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_felitsata dorofeeva-rybas_giulia safina popa": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_carolina meligeni rodrigues alves_alena kovackova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_nishesh basavareddy_aziz dougaz": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_clara burel_leyre romero gormaz": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ariana geerlings martinez_laura samson": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_benjamin torrealba_daniel salazar": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jesse flores_franco ribero": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_diego dedura-palomero_adria soriano barrera": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_sergio luis hernandez ramirez_wilson leite": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mitsuki wei kang leong_fumin jiang": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mattia nannelli_dimitris sakellaridis": {
+    "proba40A": 0.3460589036431733,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6479400749063671,
+    "ret2": 0.5340909090909091
+  },
+  "match_stats_joao domingues_ivan gakhov": {
+    "proba40A": 0.3048854935203112,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6980273141122914,
+    "ret2": 0.4367816091954023
+  },
+  "match_stats_matteo martineau_mika brunold": {
+    "proba40A": 0.289955857385399,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6711941143180532,
+    "ret2": 0.432
+  },
+  "match_stats_karl poling_alex rybakov": {
+    "proba40A": 0.24680276403942614,
+    "svc1": 0.6778385772913816,
+    "ret1": 0.3641025641025641,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_kenta miyoshi_keshav chopra": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_keegan rice_sander jong": {
+    "proba40A": 0.26962645437844457,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.7295774647887324,
+    "ret2": 0.3695652173913043
+  },
+  "match_stats_james kent trotter_gavin young": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_cooper woestendick_bor artnak": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_roger pascual ferra_duncan chan": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_albert pedrico kravtsov_daniil ostapenkov": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_quinn vandecasteele_michael antonius": {
+    "proba40A": 0.28664543934559455,
+    "svc1": 0.6892373485388453,
+    "ret1": 0.4158878504672897,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_shunsuke mitsui_patrick zahraj": {
+    "proba40A": 0.29555125725338494,
+    "svc1": 0.6945454545454546,
+    "ret1": 0.425531914893617,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_joshua sheehy_aidan mchugh": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_spencer johnson_erik arutiunian": {
+    "proba40A": 0.3080040526849038,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.6893424036281179,
+    "ret2": 0.44680851063829785
+  },
+  "match_stats_andrew fenty_kaylan bigun": {
+    "proba40A": 0.2280307234017698,
+    "svc1": 0.6912181303116147,
+    "ret1": 0.32989690721649484,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ana sofia sanchez_barbara gatica": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_adriana reami_arina bulatova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_diae el jardi_rebecca munk mortensen": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_gina marie dittmann_evita ramirez": {
+    "proba40A": 0.2857142857142857,
+    "svc1": 0.5714285714285714,
+    "ret1": 0.5,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_pedro sakamoto_joao eduardo schiessl": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_mason dace_kyle mckay": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_arthur bonnaud_remi dugardin": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_robert dolya_rishabdev raman": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_anna petkovic_tara wuerth": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_luka talan lopatic_amit vales": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_eve thibault_michaela bayerlova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_rodrigo machado moreira filho_enzo crevelaro": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_victoria hu_samantha alicea": {
+    "proba40A": 0.29411764705882354,
+    "svc1": 0.6176470588235294,
+    "ret1": 0.47619047619047616,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_irina balus_avery alexander": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jasmin gimbrere_andrea cabio": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_alan magadan_juan miguel bolivar idarraga": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_frazier rengifo_nicolas villalon": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_kai wehnelt_milos karol": {
+    "proba40A": 0.22903348365462448,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.7455770850884583,
+    "ret2": 0.30718954248366015
+  },
+  "match_stats_alejo sanchez quilez_duarte de lima sanches": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_viktoria morvayova_hiroko kuwata": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ivana sebestova_andre lukosiute": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_lily hutchings_alice gillan": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_elena malygina_savannah dada mascoll": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_adan freire da silva_hanu patel": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_rasheeda mcadoo_olivia lincer": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_olivia gram_marie mattel": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_emy gauvin_lilian poling": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_marian gomez pezuela cano_amelie van impe": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_yuliya hatouka_maria kononova": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_nina vargova_clemence mercier": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_havah kaur kaler_kallista liu": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_bautista de la pena_luka bojicic ono": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_linea bajraliu_jamilah snells": {
+    "proba40A": 0.1568627450980392,
+    "svc1": 0.47058823529411764,
+    "ret1": 0.3333333333333333,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_nalah kaler_carolina kuhl": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_christasha mcneil_evialina laskevich": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_pedro dietrich_valentino conte": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_varvara lepchenko_cristina ramos sierra": {
+    "proba40A": 0.2511195687409204,
+    "svc1": 0.5998967475477542,
+    "ret1": 0.4186046511627907,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_thea frodin_nadia elle valdez": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_jiayu xu_yu shan": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_ekaterina khodzhaeva_jannat chiripal": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_yanan hou_xichen zhao": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_yui chikaraishi_xiaochuan nie": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_yuka matsumoto_saily prashantkumar thakkar": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_zijun jiang_chihiro muramatsu": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_lidia podgorichani_amodini naik": {
+    "proba40A": 0.0,
+    "svc1": 0.0,
+    "ret1": 0.0,
+    "svc2": 0.0,
+    "ret2": 0.0
+  },
+  "match_stats_hong-lin fu_luke jie xi ho": {
     "proba40A": 0.0,
     "svc1": 0.0,
     "ret1": 0.0,

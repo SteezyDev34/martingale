@@ -1,0 +1,77 @@
+[
+    {
+        "montant": 12.0,
+        "cote": 1.1,
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-10-15 06:22:59",
+        "url": "https://ca.1xbet.com/fr/live/tennis/5596-atp-shanghai/761769354-alexander-zverev-alex-de-minaur?platform_type=mobile"
+    },
+    {
+        "montant": 3.08,
+        "cote": 1.13,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-10-17 12:34:04",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915542-atp-brussels-qualification/762520233-aziz-dougaz-tom-gentzsch?platform_type=mobile"
+    },
+    {
+        "montant": 40.0,
+        "cote": 1.01,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-10-17 12:37:11",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915542-atp-brussels-qualification/762520233-aziz-dougaz-tom-gentzsch?platform_type=mobile"
+    },
+    {
+        "montant": 1.82,
+        "cote": 1.22,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "0:40",
+            "15:40",
+            "30:40",
+            "40:A"
+        ],
+        "timestamp": "2026-10-18 03:56:31",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2769427-atp-almaty-qualification/762714039-roman-safiullin-ilia-simakin?platform_type=mobile"
+    },
+    {
+        "montant": 10.09,
+        "cote": "1.22",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:0",
+            "40:15",
+            "40:30",
+            "A:40"
+        ],
+        "timestamp": "2026-10-18 04:01:07",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2769427-atp-almaty-qualification/762714039-roman-safiullin-ilia-simakin?platform_type=mobile"
+    }
+]
