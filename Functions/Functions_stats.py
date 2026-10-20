@@ -1129,7 +1129,9 @@ _TIGHTNESS_GATED_SCRIPT_TYPES = {'15A', '30A', '40A', '4015', '4030'}
 # que ce n'est pas explicitement redemandé (cf. feedback_no_unsolicited_
 # scope_expansion, l'utilisateur a déjà corrigé une extension non sollicitée
 # similaire sur 5P/6P plus tôt le même jour).
-_TEMPORARILY_DISABLED_SCRIPT_TYPES = {'4015', '4030', '400'}
+# HOLD ajouté le 2026-10-20, même principe (temporaire) -- BREAK n'a PAS été
+# demandé, ne pas l'ajouter sans redemander.
+_TEMPORARILY_DISABLED_SCRIPT_TYPES = {'4015', '4030', '400', 'HOLD'}
 
 
 def get_match_link_and_probs(playerName1, playerName2, date_str=None):
