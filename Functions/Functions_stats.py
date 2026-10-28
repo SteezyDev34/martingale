@@ -1260,4 +1260,36 @@ def compute_script_types_from_match_data(match_data, mode=None):
         if activable:
             script_types.append(st)
 
+    # 15V1/15V2 : logique dédiée, pas le seuil proba/edge classique ci-dessus.
+    # 15V1 cible le FAVORI du match (classement ATP/WTA le plus bas), 15V2 le
+    # non-favori — chacun un process Chrome séparé (VALID_SCRIPTTYPES_15V1/15V2
+    # dans config.py garantit que l'un n'hérite jamais du scriptType de l'autre).
+    # Chacun n'est activé QUE si SON propre risque de perdre tout son jeu de
+    # service à zéro (SERVERLOSS, prob_server_loss1/2 côté AuxoTracker) reste
+    # sous un seuil "acceptable" (demandé le 2026-10-28 — "si leurs stats le
+    # permettent"). Pas de cote de référence pour ce marché -> pas d'edge, mode
+    # strict/in_set/loose ne s'applique pas ici.
+    _SERVER_LOSS_SAFE_THRESHOLD = 5.0  # %, sous ce seuil = "les stats le permettent"
+    ranking1 = (match_data.get('team1') or {}).get('ranking')
+    ranking2 = (match_data.get('team2') or {}).get('ranking')
+    server_loss1 = probs_in_set.get('SERVERLOSS_1')
+    server_loss2 = probs_in_set.get('SERVERLOSS_2')
+    if (ranking1 is not None and ranking2 is not None and float(ranking1) != float(ranking2)
+            and server_loss1 is not None and server_loss2 is not None):
+        favori_is_1 = float(ranking1) < float(ranking2)
+        favori_loss = float(server_loss1) if favori_is_1 else float(server_loss2)
+        underdog_loss = float(server_loss2) if favori_is_1 else float(server_loss1)
+        if favori_loss < _SERVER_LOSS_SAFE_THRESHOLD:
+            script_types.append('15V1')
+            details['15V1'] = {
+                'favori_ranking': ranking1 if favori_is_1 else ranking2,
+                'server_loss': favori_loss, 'threshold': _SERVER_LOSS_SAFE_THRESHOLD,
+            }
+        if underdog_loss < _SERVER_LOSS_SAFE_THRESHOLD:
+            script_types.append('15V2')
+            details['15V2'] = {
+                'underdog_ranking': ranking2 if favori_is_1 else ranking1,
+                'server_loss': underdog_loss, 'threshold': _SERVER_LOSS_SAFE_THRESHOLD,
+            }
+
     return script_types, details

@@ -122,27 +122,34 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     config.win_type = '0:15'  # inversé
                 sType = f"V{first_player} Point 1 Dans le Jeu {jeu}"
                 # print(sType)
+            # 15V1/15V2 ciblent une position FIXE (favori/non-favori, déterminée
+            # une fois pour tout le match dans Functions_15V1.all_script) et non
+            # plus le serveur/relanceur courant — contrairement aux autres
+            # scriptTypes ci-dessus, `first_player` (indicateur balle au service)
+            # n'intervient pas ici, demandé le 2026-10-28.
             if config.scriptType == '15V1':
-                if len(first_player) > 0:
-                    first_player = 1
-                    config.win_type = 1  # inversé
+                # 15V1 = favori. config.favori_position est None uniquement si le
+                # classement n'a pas pu être déterminé — ne devrait pas arriver
+                # (Functions_15V1 vide scriptTypeList dans ce cas), mais prudence.
+                if config.favori_position is None:
+                    config.log('15V1 : favori_position indéterminé, pas de pari', 'warning', True)
                 else:
-                    first_player = 2
-                    config.win_type = 2  # inversé
-                sType = f"V{first_player} Point {point} Dans le Jeu {config.jeu_actuel}"
-                config.looking_point = point
-                config.looking_game = config.jeu_actuel
+                    first_player = config.favori_position
+                    config.win_type = first_player
+                    sType = f"V{first_player} Point {point} Dans le Jeu {config.jeu_actuel}"
+                    config.looking_point = point
+                    config.looking_game = config.jeu_actuel
 
             if config.scriptType == '15V2':
-                if len(first_player) > 0:
-                    first_player = 2
-                    config.win_type = 2  # inversé
+                # 15V2 = non-favori (position inverse de favori_position).
+                if config.favori_position is None:
+                    config.log('15V2 : favori_position indéterminé, pas de pari', 'warning', True)
                 else:
-                    first_player = 1
-                    config.win_type = 1  # inversé
-                sType = f"V{first_player} Point {point} Dans le Jeu {config.jeu_actuel}"
-                config.looking_point = point
-                config.looking_game = config.jeu_actuel
+                    first_player = 2 if config.favori_position == 1 else 1
+                    config.win_type = first_player
+                    sType = f"V{first_player} Point {point} Dans le Jeu {config.jeu_actuel}"
+                    config.looking_point = point
+                    config.looking_game = config.jeu_actuel
 
                 # print(sType)
             if config.scriptType == '300':

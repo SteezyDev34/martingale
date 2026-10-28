@@ -43,26 +43,32 @@ if not os.path.exists(VENV_PYTHON):
     # venv Windows (créé via Scripts/, sans bin/) : on bascule sur le venv WSL à côté
     VENV_PYTHON = os.path.join(PROJECT_DIR, "venv_wsl", "bin", "python")
 
-# Pour l'instant on ne pilote que ces trois process depuis le dashboard (pas les
+# Pour l'instant on ne pilote que ces process depuis le dashboard (pas les
 # 36 scripts de lancement) : 1530A (bridge 1xBet), 456P (représenté par 4P6P-1,
 # cf. choix utilisateur — il n'y a pas de fichier "456P-1.py" unique, la famille
-# 456P étant répartie sur plusieurs dossiers SCRIPTS_*) et le Watcher Telegram
-# (SCRIPTS_WATCH/main-1.py — pas une famille de scriptType martingale, n'a donc
-# pas d'entrée dans FAMILY_SCRIPTTYPES ci-dessous : son statut n'affiche que le
-# pid, pas d'infos de match en cours).
+# 456P étant répartie sur plusieurs dossiers SCRIPTS_*), 15V1/15V2 (deux process
+# Chrome séparés — favori/non-favori du match, cf. config.VALID_SCRIPTTYPES_15V1/
+# 15V2 et compute_script_types_from_match_data, ajoutés le 2026-10-28) et le
+# Watcher Telegram (SCRIPTS_WATCH/main-1.py — pas une famille de scriptType
+# martingale, n'a donc pas d'entrée dans FAMILY_SCRIPTTYPES ci-dessous : son
+# statut n'affiche que le pid, pas d'infos de match en cours).
 FIXED_LAUNCHERS = [
     (os.path.join(PROJECT_DIR, "SCRIPTS_1530A", "1530A-1.py"), "1530A"),
     (os.path.join(PROJECT_DIR, "SCRIPTS_4P6P", "4P6P-1.py"), "456P"),
+    (os.path.join(PROJECT_DIR, "SCRIPTS_15V1", "15V1-1.py"), "15V1"),
+    (os.path.join(PROJECT_DIR, "SCRIPTS_15V2", "15V2-1.py"), "15V2"),
     (os.path.join(PROJECT_DIR, "SCRIPTS_WATCH", "main-1.py"), "Watcher"),
     (os.path.join(PROJECT_DIR, "SCRIPTS_WATCH", "process_bets_loop.py"), "Placement paris"),
 ]
 
-# ScriptTypes gérés par chaque famille de bot (cf. config.VALID_SCRIPTTYPES_1530A/456P
-# dans le bot lui-même) — dupliqué ici pour ne pas importer tout le module config.py
-# (effets de bord au chargement) juste pour ces deux constantes.
+# ScriptTypes gérés par chaque famille de bot (cf. config.VALID_SCRIPTTYPES_1530A/
+# 456P/15V1/15V2 dans le bot lui-même) — dupliqué ici pour ne pas importer tout
+# le module config.py (effets de bord au chargement) juste pour ces constantes.
 FAMILY_SCRIPTTYPES = {
     "1530A": {"150", "015", "030", "300", "15A", "30A"},
     "456P": {"40A", "4015", "4030", "400", "4P", "5P", "6P", "BREAK", "HOLD"},
+    "15V1": {"15V1"},
+    "15V2": {"15V2"},
 }
 
 # API distante de la liste des matchs (= config.api_url, dupliqué pour la même raison).

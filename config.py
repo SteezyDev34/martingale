@@ -47,6 +47,12 @@ bot_family = None
 # (scripts Selenium séparés : SCRIPTS_BREAK, SCRIPTS_HOLD, SCRIPTS_4P6P, SCRIPTS_5P40A).
 VALID_SCRIPTTYPES_1530A = {'150', '015', '030', '300', '15A', '30A'}
 VALID_SCRIPTTYPES_456P = {'40A', '4015', '4030', '400', '4P', '5P', '6P', 'BREAK', 'HOLD'}
+# 15V1 cible le favori du match, 15V2 le non-favori (processus Chrome séparés,
+# cf. SCRIPTS_15V1/15V1-1.py et SCRIPTS_15V2/15V2-1.py) — chacun ne doit charger
+# que SON propre scriptType depuis la classification dynamique (2026-10-28,
+# evite que le même process tente de parier les deux côtés).
+VALID_SCRIPTTYPES_15V1 = {'15V1'}
+VALID_SCRIPTTYPES_15V2 = {'15V2'}
 
 # Ordre de référence ("tableau modèle") des scriptTypes 1530A — un set Python n'a pas
 # d'ordre garanti, donc l'ordre d'itération de VALID_SCRIPTTYPES_1530A ne reflète pas

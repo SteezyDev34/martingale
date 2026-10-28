@@ -66,6 +66,11 @@ from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
 
 config.in_stat = True
+# Détermine le filtre appliqué par _load_dynamic_scripttypes (ScriptRechercheDeMatch.py)
+# quand rechercheDeMatch() charge les scriptTypes calculés au classement pour un
+# match : seul '15V1' (favori du match, cf. compute_script_types_from_match_data)
+# sera retenu pour ce process (2026-10-28).
+config.bot_family = '15V1'
 config.scriptTypeList = config.scriptTypeList
 for i in config.scriptTypeList:
     config.ScriptConfig(i)

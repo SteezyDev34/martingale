@@ -103,6 +103,35 @@ def all_script(driver):
         # Récupère les noms des joueurs/équipes
         config.teams = GetPlayersName(driver)
 
+        # 15V1 cible le FAVORI du match (classement ATP/WTA le plus bas), 15V2
+        # le non-favori — position FIXE pour tout le match, déterminée une
+        # seule fois ici (pas par jeu/par balle au service, voir GetBetOld.py
+        # qui lit config.favori_position au lieu de l'indicateur de service
+        # pour les scriptTypes 15V1/15V2 — demandé le 2026-10-28). Le go/no-go
+        # ("si les stats le permettent") a déjà été tranché au classement
+        # (compute_script_types_from_match_data, config.scriptTypeList vide si
+        # aucun des deux n'est activable pour ce match) ; cet appel ne sert
+        # qu'à retrouver QUELLE position (1=config.teams[0], 2=config.teams[1])
+        # est le favori pour cibler le bon joueur sur le site de paris.
+        config.favori_position = None
+        if config.scriptType in ('15V1', '15V2'):
+            try:
+                from Functions.Functions_stats import get_match_link_and_probs
+                _match_data = get_match_link_and_probs(config.teams[0], config.teams[1])
+                if _match_data:
+                    _ranking1 = (_match_data.get('team1') or {}).get('ranking')
+                    _ranking2 = (_match_data.get('team2') or {}).get('ranking')
+                    if _ranking1 is not None and _ranking2 is not None and float(_ranking1) != float(_ranking2):
+                        config.favori_position = 1 if float(_ranking1) < float(_ranking2) else 2
+            except Exception as e:
+                config.log(f"Impossible de déterminer le favori (classement) pour {config.teams}: {e}", 'warning', True)
+            if config.favori_position is None:
+                # Classement indisponible/égal pour l'un des deux joueurs : pas de
+                # favori déterminable -> pas de pari possible pour 15V1/15V2 sur ce
+                # match plutôt que de deviner (cohérent avec la classification qui
+                # exige déjà ranking1/ranking2 connus pour activer ces scriptTypes).
+                config.log(f"Favori indéterminé pour {config.teams} — {config.scriptType} ne pariera pas sur ce match", 'warning', True)
+                config.scriptTypeList = []
 
         # Déterminer l'identifiant du match depuis l'URL
         try:

@@ -266,6 +266,10 @@ def _get_valid_scripttypes_for_match(match_id):
         _new_list = [st for st in _new_list if st in config.VALID_SCRIPTTYPES_1530A]
     elif config.bot_family == '456P':
         _new_list = [st for st in _new_list if st in config.VALID_SCRIPTTYPES_456P]
+    elif config.bot_family == '15V1':
+        _new_list = [st for st in _new_list if st in config.VALID_SCRIPTTYPES_15V1]
+    elif config.bot_family == '15V2':
+        _new_list = [st for st in _new_list if st in config.VALID_SCRIPTTYPES_15V2]
     return _new_list
 
 
@@ -279,6 +283,10 @@ def _family_scripttypes():
         return config.VALID_SCRIPTTYPES_1530A
     if config.bot_family == '456P':
         return config.VALID_SCRIPTTYPES_456P
+    if config.bot_family == '15V1':
+        return config.VALID_SCRIPTTYPES_15V1
+    if config.bot_family == '15V2':
+        return config.VALID_SCRIPTTYPES_15V2
     return set()
 
 
@@ -768,6 +776,10 @@ def rechercheDeMatch(driver):
                 _new_list = [st for st in _new_list if st in config.VALID_SCRIPTTYPES_1530A]
             elif config.bot_family == '456P':
                 _new_list = [st for st in _new_list if st in config.VALID_SCRIPTTYPES_456P]
+            elif config.bot_family == '15V1':
+                _new_list = [st for st in _new_list if st in config.VALID_SCRIPTTYPES_15V1]
+            elif config.bot_family == '15V2':
+                _new_list = [st for st in _new_list if st in config.VALID_SCRIPTTYPES_15V2]
             config.scriptTypeList = _new_list
             for st in _new_list:
                 if st not in config.winmatch:
