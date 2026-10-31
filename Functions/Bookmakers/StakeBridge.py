@@ -33,24 +33,73 @@ class StakeExtensionBridge(ExtensionBridge):
         """Cote Draw No Bet (Handicap X (0)) pour l'équipe 1 ou 2."""
         return self._send_and_wait({'action': 'stake_get_odds', 'dnb_team_idx': team_idx}, timeout=timeout)
 
-    def place_bet(self, search_labels: list = None, mise: float = None, dnb_team_idx: int = None, timeout: int = 15) -> dict:
-        """Clique la sélection (par label ou DNB), saisit la mise, confirme. Retourne {success, error?}."""
+    def get_table_market_odds(self, handicap_market: dict, timeout: int = 10) -> dict:
+        """Cote d'un marché "table à 2 colonnes" (tennis) -- Handicap de sets/jeux,
+        Total de jeux (global ou par joueur) -- le nom de colonne n'est pas dans le
+        bouton (cf. stake.js _findTableMarketButton). handicap_market: dict avec
+        marketLabel (nom exact) OU marketSubstrings (liste), + targetName + handicapValue."""
+        return self._send_and_wait({
+            'action': 'stake_get_odds',
+            'handicap_market': handicap_market,
+        }, timeout=timeout)
+
+    def place_bet(self, search_labels: list = None, mise: float = None, dnb_team_idx: int = None,
+                  handicap_market: dict = None, dry_run: bool = False, timeout: int = 15) -> dict:
+        """Clique la sélection (par label, DNB, ou handicap de sets/jeux), saisit la
+        mise, confirme. Retourne {success, error?}.
+        dry_run=True : s'arrête juste avant le clic de confirmation finale (aucun pari réel) —
+        retourne {success: True, simulated: True} si tout le reste s'est bien déroulé."""
         return self._send_and_wait({
             'action': 'stake_place_bet',
             'search_labels': search_labels,
             'mise': mise,
             'dnb_team_idx': dnb_team_idx,
+            'handicap_market': handicap_market,
+            'dry_run': dry_run,
         }, timeout=timeout)
 
-    def place_same_game_multi(self, combined_legs: list, mise: float, timeout: int = 40) -> dict:
+    def place_same_game_multi(self, combined_legs: list, mise: float, dry_run: bool = False, timeout: int = 40) -> dict:
         """
-        combined_legs: [{'search_labels': [variante1, variante2, ...]}, ...]
+        combined_legs: [{'search_labels': [...]} | {'handicap_market': {...}}, ...] --
+        handicap_market pour les marchés "table à 2 colonnes" (Total, Handicap de
+        sets/jeux -- cf. StakeScraper._match_table_market), search_labels sinon.
         Place un pari combiné sur le même match (onglet "Pari Multiple sur un Même Match").
+        dry_run=True : s'arrête juste avant le clic "Parier" final (aucun pari réel).
         """
         return self._send_and_wait({
             'action': 'stake_place_sgm',
             'combined_legs': combined_legs,
             'mise': mise,
+            'dry_run': dry_run,
+        }, timeout=timeout)
+
+    def reset_betslip(self, timeout: int = 10) -> dict:
+        """Vide le betslip. À appeler UNE fois avant la 1ère jambe d'un combiné
+        multi-matchs (les jambes suivantes ne doivent PAS reset, cf. add_combo_leg)."""
+        return self._send_and_wait({'action': 'stake_reset_betslip'}, timeout=timeout)
+
+    def add_combo_leg(self, search_labels: list = None, dnb_team_idx: int = None,
+                      handicap_market: dict = None, timeout: int = 15) -> dict:
+        """Ajoute UNE jambe d'un combiné multi-matchs (accumulateur, matchs
+        différents) sans vider le betslip -- appeler stake_bridge.navigate() vers le
+        match de cette jambe juste avant. Stake accumule automatiquement une section
+        "Pari multiple" dans le betslip dès 2 jambes de matchs différents ajoutées.
+        Retourne {clicked: bool}."""
+        return self._send_and_wait({
+            'action': 'stake_add_combo_leg',
+            'search_labels': search_labels,
+            'dnb_team_idx': dnb_team_idx,
+            'handicap_market': handicap_market,
+        }, timeout=timeout)
+
+    def confirm_combo(self, mise: float, dry_run: bool = False, timeout: int = 15) -> dict:
+        """Saisit la mise du combiné (section "Pari multiple" du betslip, pas les
+        paris simples individuels) et confirme. dry_run=True : s'arrête avant le clic
+        de confirmation finale (aucun pari réel)."""
+        return self._send_and_wait({
+            'action': 'stake_confirm_combo',
+            'mise': mise,
+            'dry_run': dry_run,
         }, timeout=timeout)
 
 

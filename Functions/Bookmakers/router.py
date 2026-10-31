@@ -85,13 +85,24 @@ PLAYWRIGHT_SCRAPERS = NO_VPN_SCRAPERS + VPN_SCRAPERS
 
 # État des bookmakers : enabled (actif) + balance (solde connu)
 # Modifiables à la volée depuis n'importe quel module via router.BOOKMAKER_STATE
+# Stake uniquement actif (demande explicite utilisateur, 2026-10-28) — test du
+# traitement de la file d'attente API en mode simulation (cf. SIMULATE_MODE).
 BOOKMAKER_STATE: Dict[str, Dict] = {
-    "Winamax":  {"enabled": False,  "balance": None},
-    "Betclic":  {"enabled": False,  "balance": None},
+    "Winamax":  {"enabled": False, "balance": None},
+    "Betclic":  {"enabled": False, "balance": None},
     "Lollybet": {"enabled": False, "balance": None},
-    "Stake":    {"enabled": False, "balance": None},
-    "1xBet":    {"enabled": True,  "balance": None},
+    "Stake":    {"enabled": True,  "balance": None},
+    "1xBet":    {"enabled": False, "balance": None},
 }
+
+# Mode simulation : le pipeline va jusqu'au bet slip Stake (recherche du match,
+# cote, mise remplie dans le formulaire) mais NE CLIQUE PAS le bouton de
+# confirmation finale -- aucun pari réel n'est passé, aucun argent risqué.
+# Propagé via bet['dry_run'] jusqu'à StakeScraper puis au content script de
+# l'extension (chrome_extension/content_scripts/stake.js). Activé à la demande
+# utilisateur le 2026-10-28 pour tester le traitement de la file d'attente API.
+# Repasser à False pour revenir au placement réel.
+SIMULATE_MODE = True
 
 
 def _is_bookmaker_active(name: str) -> bool:
@@ -268,16 +279,24 @@ def enrich_bet_with_challenges(bet: Dict, openai_client=None) -> Dict:
 
 def place_combined_bet(matches_list: List[Dict], mise: float, trace_dir: str = None) -> Dict:
     """
-    Place un pari combiné (accumulateur) sur Lollybet.
+    Place un pari combiné (accumulateur, matchs différents) -- Lollybet en priorité
+    s'il est actif, sinon Stake (accumulateur multi-matchs, cf.
+    StakeScraper._bridge_place_multi_match_combo, ajouté le 2026-10-28).
     matches_list : liste de dicts match (equipe_1, equipe_2, selection, sport, date, intitule, categorie)
     """
-    if not _is_bookmaker_active("Lollybet"):
-        log("[Router] ❌ Lollybet désactivé — impossible de placer le combiné", "error")
-        return {"bookmaker": "Lollybet", "success": False, "error": "lollybet_disabled"}
+    bet = {"is_combined": True, "matches_list": matches_list, "mise": mise, "trace_dir": trace_dir,
+           "dry_run": SIMULATE_MODE}
 
-    bet = {"is_combined": True, "matches_list": matches_list, "mise": mise, "trace_dir": trace_dir}
-    log(f"[Router] 🎯 Placement combiné {len(matches_list)} legs sur Lollybet", "info")
-    return _place_bet_sync(LollybetScraper, bet)
+    if _is_bookmaker_active("Lollybet"):
+        log(f"[Router] 🎯 Placement combiné {len(matches_list)} legs sur Lollybet", "info")
+        return _place_bet_sync(LollybetScraper, bet)
+
+    if _is_bookmaker_active("Stake"):
+        log(f"[Router] 🎯 Placement combiné {len(matches_list)} legs sur Stake (Lollybet désactivé)", "info")
+        return _place_bet_sync(StakeScraper, bet)
+
+    log("[Router] ❌ Aucun bookmaker actif ne supporte les combinés multi-matchs", "error")
+    return {"bookmaker": None, "success": False, "error": "no_combo_bookmaker_active"}
 
 
 def place_best_bet(bet: Dict) -> Dict:
@@ -290,6 +309,8 @@ def place_best_bet(bet: Dict) -> Dict:
     5. Place le pari sur le meilleur bookmaker
     Retourne un dict résultat.
     """
+    bet['dry_run'] = SIMULATE_MODE
+
     # Pari combiné sur le même match → Stake uniquement (MyMatch)
     if bet.get("combined_events"):
         log(f"[Router] 🎯 Pari Same Game Multi détecté → Stake uniquement: {bet.get('combined_label', '')}", "info")

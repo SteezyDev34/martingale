@@ -468,9 +468,14 @@ async function handlePythonMessage(msg, port) {
     case 'stake_get_odds': {
       const tabId = await resolveTabId(msg, conn);
       if (!tabId) { sendToPython(port, { action: 'stake_odds_response', req_id: msg.req_id, found: false, error: 'no_tab' }); break; }
-      const result = msg.dnb_team_idx
-        ? await execInTab(tabId, (idx) => window._martingale?.getDnbOdds?.(idx), msg.dnb_team_idx)
-        : await execInTab(tabId, (labels) => window._martingale?.getOddsByLabel?.(labels), msg.search_labels);
+      let result;
+      if (msg.dnb_team_idx) {
+        result = await execInTab(tabId, (idx) => window._martingale?.getDnbOdds?.(idx), msg.dnb_team_idx);
+      } else if (msg.handicap_market) {
+        result = await execInTab(tabId, (hm) => window._martingale?.getHandicapSetGameOdds?.(hm), msg.handicap_market);
+      } else {
+        result = await execInTab(tabId, (labels) => window._martingale?.getOddsByLabel?.(labels), msg.search_labels);
+      }
       sendToPython(port, { action: 'stake_odds_response', req_id: msg.req_id, ...(result || { found: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
@@ -480,6 +485,7 @@ async function handlePythonMessage(msg, port) {
       if (!tabId) { sendToPython(port, { action: 'stake_place_bet_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.placeBet?.(args), {
         searchLabels: msg.search_labels, mise: msg.mise, dnbTeamIdx: msg.dnb_team_idx,
+        handicapMarket: msg.handicap_market, dryRun: msg.dry_run,
       });
       sendToPython(port, { action: 'stake_place_bet_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
@@ -489,9 +495,41 @@ async function handlePythonMessage(msg, port) {
       const tabId = await resolveTabId(msg, conn);
       if (!tabId) { sendToPython(port, { action: 'stake_place_sgm_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
       const result = await execInTab(tabId, (args) => window._martingale?.placeSameGameMulti?.(args), {
-        combinedLegs: msg.combined_legs, mise: msg.mise,
+        combinedLegs: msg.combined_legs, mise: msg.mise, dryRun: msg.dry_run,
       });
       sendToPython(port, { action: 'stake_place_sgm_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
+      break;
+    }
+
+    // Combiné multi-matchs (accumulateur, matchs différents) -- chaque jambe est
+    // ajoutée séparément : Python navigate vers chaque match puis appelle
+    // stake_add_combo_leg, Stake accumule automatiquement une section "Pari
+    // multiple" dans le betslip (cf. stake.js addComboLeg).
+    case 'stake_reset_betslip': {
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'stake_reset_betslip_response', req_id: msg.req_id, reset: false, error: 'no_tab' }); break; }
+      const result = await execInTab(tabId, () => window._martingale?.resetBetslip?.());
+      sendToPython(port, { action: 'stake_reset_betslip_response', req_id: msg.req_id, ...(result || { reset: false, error: 'exec_failed' }), tab_id: tabId });
+      break;
+    }
+
+    case 'stake_add_combo_leg': {
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'stake_add_combo_leg_response', req_id: msg.req_id, clicked: false, error: 'no_tab' }); break; }
+      const result = await execInTab(tabId, (args) => window._martingale?.addComboLeg?.(args), {
+        searchLabels: msg.search_labels, dnbTeamIdx: msg.dnb_team_idx, handicapMarket: msg.handicap_market,
+      });
+      sendToPython(port, { action: 'stake_add_combo_leg_response', req_id: msg.req_id, ...(result || { clicked: false, error: 'exec_failed' }), tab_id: tabId });
+      break;
+    }
+
+    case 'stake_confirm_combo': {
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'stake_confirm_combo_response', req_id: msg.req_id, success: false, error: 'no_tab' }); break; }
+      const result = await execInTab(tabId, (args) => window._martingale?.confirmCombo?.(args), {
+        mise: msg.mise, dryRun: msg.dry_run,
+      });
+      sendToPython(port, { action: 'stake_confirm_combo_response', req_id: msg.req_id, ...(result || { success: false, error: 'exec_failed' }), tab_id: tabId });
       break;
     }
 

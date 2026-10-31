@@ -701,7 +701,18 @@ async def my_event_handler(event):
 
                 chat_title = event.chat.title if event.chat and hasattr(event.chat, "title") else ""
 
-                codes = extract_code_1XBET(event.raw_text)
+                # Détection de code 1XBET restreinte aux canaux censés en envoyer --
+                # sans ce filtre, n'importe quel mot de 5 caractères majuscules/chiffres
+                # dans N'IMPORTE QUEL canal (ex: "PRONO DU JOUR" matche involontairement)
+                # était traité comme un code potentiel, ce qui pouvait déclencher une
+                # tentative de placement vouée à l'échec (cf. bug boucle infinie dans
+                # check(), corrigé le 2026-10-28 : del codeList[0] même en cas d'échec).
+                CODE_1XBET_CHANNELS = {"France Pronos Live", "Auxo1XBOT"}
+                is_code_channel = (
+                    chat_title in CODE_1XBET_CHANNELS
+                    or str(event.chat_id) == str(auxo_bot_id)
+                )
+                codes = extract_code_1XBET(event.raw_text) if is_code_channel else False
                 if codes and isinstance(codes, list):
                     for code in codes:
                         codeList.append(code)
@@ -872,12 +883,19 @@ def check():
         # Traitement des codes directs
         if codeList != []:
             bridge.navigate(config.site_line_url)
+            code = codeList[0]
             try:
-                PlacerCode(codeList[0])
+                PlacerCode(code)
             except Exception as e:
                 log(f"Erreur lors du placement du code: {e}", "error", clear=False)
             else:
-                log(f"Code place avec succès: {codeList[0]}", "info", clear=False)
+                log(f"Code place avec succès: {code}", "info", clear=False)
+            finally:
+                # Toujours retirer le code tenté (succès OU échec) -- sinon un code
+                # invalide (faux positif, déjà utilisé, expiré) reste en tête de
+                # codeList pour toujours : la boucle while True ci-dessus le retente
+                # à chaque passage, sans fin (bug "boucle infinie" constaté le
+                # 2026-10-28). Une tentative par code suffit ; pas de retry voulu ici.
                 del codeList[0]
 
         # Traitement des paris en temps reel

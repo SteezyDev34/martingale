@@ -168,8 +168,17 @@ class ExtensionBridge:
         ouvre un NOUVEL onglet rien que pour ce process — jamais un onglet existant qui
         pourrait appartenir à un autre script. Les appels suivants réutilisent ce même
         onglet (tab_id mémorisé, ré-injecté automatiquement par _send_and_wait).
+
+        timeout=20 (pas 15) : côté extension, waitForTabLoad() (service_worker.js)
+        a son propre timer de repli à exactement 15000ms -- avec un timeout client
+        identique, la réponse serveur (qui arrive TOUJOURS, au plus tard à 15s +
+        marge de transit réseau) peut atterrir juste après que Python ait déjà
+        abandonné (constaté le 2026-10-30 : "Timeout attente réponse action=navigate"
+        systématique sur le flux Same Game Multi, juste après une résolution IA qui
+        laisse l'onglet "occupé" plus longtemps). Un timeout client strictement plus
+        grand que le pire cas serveur élimine cette course.
         """
-        resp = self._send_and_wait({'action': 'navigate', 'url': url}, timeout=15)
+        resp = self._send_and_wait({'action': 'navigate', 'url': url}, timeout=20)
         if resp.get('tab_id'):
             self._tab_id = resp['tab_id']
         return resp

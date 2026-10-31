@@ -152,7 +152,15 @@ def process_api_bets(limit: int = 10) -> int:
             result = place_best_bet(match)
             events_for_report = [match]
 
-        if result.get("success"):
+        if result.get("success") and result.get("simulated"):
+            # Simulation (SIMULATE_MODE côté router.py) : le bet slip a été
+            # rempli mais la confirmation finale n'a PAS été cliquée -- aucun
+            # argent risqué. Pour ne pas fausser l'état réel : le pari reste
+            # "non traité" dans la file API (sera rejoué pour de vrai plus
+            # tard) et n'est PAS reporté à AuxoTracker (pas de faux "pending").
+            log(f"🧪 [SIMULATION] Pari ID {bet['id']} aurait été placé sur {result.get('bookmaker')} @ {result.get('odds','?')} (mise={mise}€) — non confirmé, file d'attente inchangée", "info", clear=False)
+            BetTrace.step(trace_dir, "resultat", {"success": True, "simulated": True, "bookmaker": result.get('bookmaker'), "odds": result.get('odds')})
+        elif result.get("success"):
             log(f"✅ Pari placé sur {result.get('bookmaker')} @ {result.get('odds','?')} (mise={mise}€)", "info", clear=False)
             BetTrace.step(trace_dir, "resultat", {"success": True, "bookmaker": result.get('bookmaker'), "odds": result.get('odds')})
             _report_bet_to_auxotracker(bet['id'], result, mise, tipster, events_for_report)
