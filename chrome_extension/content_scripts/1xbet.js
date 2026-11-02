@@ -70,6 +70,30 @@
     return null;
   }
 
+  // Comme waitFor, mais pour un sélecteur multi-classes (ex: "A, B") où plusieurs
+  // variantes du même bouton peuvent coexister dans le DOM (un mode caché, l'autre
+  // actif) -- querySelector prend le premier par ordre DOM sans égard à la visibilité,
+  // ce qui peut cliquer un bouton inactif (incident 2026-11-02 : confirm_button trouvé
+  // via '.quick-coupon-put-bet-button, .sb-place-bet' mais ciblait vraisemblablement le
+  // mauvais mode du bet slip, menant à un appel malformé côté 1xBet -- 405 sur
+  // LiveBet/Secure/MakeBetWeb). offsetParent (même idiome que loadCouponCode ci-dessus)
+  // repli sur le 1er match si aucun n'est visible, plutôt que de renvoyer null.
+  async function waitForVisible(sel, timeout = 5000, root = document) {
+    const start = Date.now();
+    let lastSeen = null;
+    while (Date.now() - start < timeout) {
+      const candidates = qsa(sel, root);
+      const visible = candidates.find(el => el.offsetParent);
+      if (visible) return visible;
+      if (candidates.length) lastSeen = candidates[0];
+      await sleep(100);
+    }
+    // Timeout écoulé sans qu'aucun match ne devienne visible : on se rabat sur le
+    // premier match vu (comportement précédent) plutôt que d'échouer "introuvable"
+    // alors qu'un élément existe (juste caché pour une raison non anticipée).
+    return lastSeen;
+  }
+
   function readScore() {
     // mobile_site : deux éléments séparés
     const mob1 = qs('.scoreboard-scores__item--team-1');
@@ -234,7 +258,7 @@
 
     async validateBet({ confirm = true } = {}) {
       if (!confirm) return { validated: false };
-      const btn = await waitFor(SEL.betslip_confirm, 3000);
+      const btn = await waitForVisible(SEL.betslip_confirm, 3000);
       if (!btn) return { validated: false, error: 'confirm_button_not_found' };
       btn.click();
       await sleep(1500);
