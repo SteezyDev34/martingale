@@ -10,9 +10,15 @@ car Stake a son propre onglet/port, pour pouvoir tourner en parallèle du
 bridge 1xBet dans le même process (router.py compare les cotes des deux
 bookmakers).
 """
+import os
+
 from websocket_server import ExtensionBridge
 
-STAKE_WS_PORT = 9101
+# Override possible via STAKE_BRIDGE_PORT (lu une seule fois, à l'import) --
+# permet à un process qui tourne en parallèle d'un autre (ex: SCRIPTS_WATCH/main-1.py
+# à côté de process_bets_loop.py) d'utiliser un port dédié pour éviter une collision
+# de bind -- cf. main-1.py qui fixe cette variable avant ses propres imports.
+STAKE_WS_PORT = int(os.getenv('STAKE_BRIDGE_PORT', '9101'))
 
 
 class StakeExtensionBridge(ExtensionBridge):
@@ -107,19 +113,27 @@ stake_bridge = StakeExtensionBridge(port=STAKE_WS_PORT)
 _stake_bridge_started = False
 
 
-def start_stake_bridge(wait_timeout: int = 0):
-    """Démarre le serveur WebSocket dédié Stake. Idempotent (sans effet si déjà démarré)."""
+def start_stake_bridge(wait_timeout: int = 0, port: int = STAKE_WS_PORT):
+    """Démarre le serveur WebSocket dédié Stake. Idempotent (sans effet si déjà démarré).
+
+    port: port WS dédié à CE process (même principe que websocket_server.start_bridge
+    pour le bridge 1xBet, cf. router.py qui utilise le port 9102 au lieu du 9999 par
+    défaut de main-1.py) -- deux process qui tournent en même temps (ex: main-1.py et
+    process_bets_loop.py) ne doivent PAS partager le même port, sinon le second ne
+    peut pas bind et retombe en silence sur Selenium (constaté le 2026-11-01).
+    """
     global _stake_bridge_started
     if _stake_bridge_started:
         return
+    stake_bridge._port = port
     stake_bridge.start()
     _stake_bridge_started = True
     if wait_timeout > 0:
-        print(f'[WS:{STAKE_WS_PORT}] Attente connexion extension Chrome (Stake, {wait_timeout}s max)...')
+        print(f'[WS:{port}] Attente connexion extension Chrome (Stake, {wait_timeout}s max)...')
         stake_bridge.wait_connected(timeout=wait_timeout)
-        print(f'[WS:{STAKE_WS_PORT}] Extension connectée (Stake) ✓')
+        print(f'[WS:{port}] Extension connectée (Stake) ✓')
     else:
-        print(f'[WS:{STAKE_WS_PORT}] Serveur WebSocket démarré (Stake) — en attente de l\'extension Chrome...')
+        print(f'[WS:{port}] Serveur WebSocket démarré (Stake) — en attente de l\'extension Chrome...')
 
 
 def is_connected() -> bool:

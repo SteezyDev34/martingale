@@ -36,6 +36,17 @@ if os.getenv('PYCHARM_HOSTED') != '1':  # Si execute dans PyCharm
     # Revenir au repertoire original
     os.chdir(original_cwd)
 
+# Port dédié au bridge Stake de CE process (pas le 9101 par défaut) -- DOIT être
+# fixé avant tout import qui charge Functions.Bookmakers.router, dont le code au
+# niveau module démarre déjà le bridge Stake sur le port par défaut dès l'import
+# (avant même que session_init.py ait la main) : passer port=9103 seulement à
+# l'appel dans session_init.py arrive trop tard, start_stake_bridge() est déjà
+# idempotent sur le premier port utilisé (constaté le 2026-11-01). Même principe
+# que le port 9102 dédié au bridge 1xBet de process_bets_loop.py (router.py) vs
+# le 9999 par défaut de ce process -- process_bets_loop.py tourne déjà sur 9101
+# en parallèle, même port = collision au bind.
+os.environ.setdefault('STAKE_BRIDGE_PORT', '9103')
+
 # Chargement des variables globales
 import Functions.Functions_telegram
 from Functions.Functions_telegram import send_telegram, send_telegram_photo
