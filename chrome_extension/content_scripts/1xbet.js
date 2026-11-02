@@ -233,8 +233,14 @@
     // Port de PlacerMise (Functions/PlacerMise.py) : l'input de mise est cherché DANS le
     // wrapper cpn_amount (quick-coupon-bet-amount__steps), pas globalement sur la page.
     async setStake(mise) {
+      // Repli waitForVisible (pas waitFor) : même classe de bug que validateBet
+      // (incident 2026-11-02, 405 sur LiveBet/Secure/MakeBetWeb) -- ici constaté sur
+      // LiveBet-update/Open/UpdateCoupon. SEL.betslip_input a deux variantes
+      // ('.ui-number-input__field, .sb-bet-slip-loader__input input') qui peuvent
+      // coexister dans le DOM (mode caché + mode actif) ; sans filtre de visibilité,
+      // le mauvais input pouvait recevoir la mise et declencher un appel malforme.
       const wrapper = await waitFor('.quick-coupon-bet-amount__steps', 5000);
-      const input = wrapper ? qs('.ui-number-input__field', wrapper) : await waitFor(SEL.betslip_input, 5000);
+      const input = wrapper ? qs('.ui-number-input__field', wrapper) : await waitForVisible(SEL.betslip_input, 5000);
       if (!input) return { success: false, error: 'betslip_input_not_found' };
 
       input.focus();
