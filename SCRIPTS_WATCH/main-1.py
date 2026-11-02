@@ -47,6 +47,46 @@ if os.getenv('PYCHARM_HOSTED') != '1':  # Si execute dans PyCharm
 # en parallèle, même port = collision au bind.
 os.environ.setdefault('STAKE_BRIDGE_PORT', '9103')
 
+# Lance process_bets_loop.py en sous-processus au démarrage -- jusqu'ici il
+# fallait le lancer séparément à la main en plus de main-1.py (demande
+# explicite de l'utilisateur le 2026-11-02 : un seul script à lancer pour les
+# deux). Idempotent : si le port 9101 (bridge Stake de process_bets_loop.py)
+# répond déjà, un autre process_bets_loop.py tourne déjà ailleurs -- ne pas en
+# relancer un second (collision de bind sinon). Non bloquant et non fatal : si
+# ce lancement échoue, main-1.py continue quand même (le watcher reste la
+# fonction principale de ce script). start_new_session=True détache le
+# sous-processus du groupe de ce script : il continue de tourner même si
+# main-1.py est arrêté (Ctrl+C), comme quand les deux étaient lancés à la main
+# dans des terminaux séparés.
+def _start_process_bets_loop():
+    import socket
+    try:
+        with socket.create_connection(('127.0.0.1', 9101), timeout=0.5):
+            print("[main-1] process_bets_loop.py déjà actif (port 9101 répond), pas de relance.")
+            return
+    except OSError:
+        pass
+    try:
+        import subprocess
+        log_dir = os.path.join(project_directory, 'Logs')
+        os.makedirs(log_dir, exist_ok=True)
+        log_path = os.path.join(log_dir, 'process_bets_loop.log')
+        script_path = os.path.join(parent_directory, 'process_bets_loop.py')
+        with open(log_path, 'ab') as log_file:
+            subprocess.Popen(
+                [sys.executable, script_path],
+                cwd=project_directory,
+                stdout=log_file,
+                stderr=subprocess.STDOUT,
+                start_new_session=True,
+            )
+        print(f"[main-1] process_bets_loop.py lancé en arrière-plan (log: {log_path})")
+    except Exception as e:
+        print(f"[main-1] ⚠️ Échec lancement process_bets_loop.py: {e}")
+
+
+_start_process_bets_loop()
+
 # Chargement des variables globales
 import Functions.Functions_telegram
 from Functions.Functions_telegram import send_telegram, send_telegram_photo

@@ -20,59 +20,6 @@ from Functions.Bookmakers.XBetScraper import XBetScraper
 from Functions.BetLabelsDB import get_all_challenges_for_prompt
 from Functions.Logs.Logger import log
 
-# Demarre le bridge WebSocket dedie Stake (port 9101, cf. StakeBridge.py) des
-# l'import de ce module — sans ca, StakeScraper.is_connected() reste toujours
-# False dans ce process (celui qui place reellement les paris, via
-# ProcessTelegramBets.py) et retombe silencieusement sur l'ancien Selenium,
-# meme si le bridge tourne par ailleurs dans le process du watcher
-# (SCRIPTS_WATCH/main-1.py via session_init.py). wait_timeout=10 (pas 0) :
-# constate en prod le 2026-10-16 -- le tout premier pari traite juste apres
-# le demarrage du process voyait is_connected()=False (extension pas encore
-# connectee) et retombait sur Selenium, une fraction de seconde avant que
-# l'extension se connecte reellement. Cette attente bloquante ne coute que
-# quelques secondes une seule fois a l'import (StakeBridge.start_stake_bridge
-# est idempotent) ; si l'extension n'est vraiment pas disponible, wait_connected
-# leve TimeoutError, capture ci-dessous, et le fallback Selenium s'applique
-# normalement pour tous les paris (comme avant ce fix).
-try:
-    from Functions.Bookmakers.StakeBridge import start_stake_bridge
-    start_stake_bridge(wait_timeout=10)
-except Exception as e:
-    log(f"⚠️ Démarrage StakeBridge échoué (fallback Selenium): {e}", "warning")
-
-# Meme chose pour le bridge 1xBet general (websocket_server.bridge, utilise par
-# XBetScraper) : sans ca, "Extension Chrome non connectee" systematique dans ce
-# process (constate le 2026-10-16, XBetScraper._fetch_odds_sync echoue direct).
-# Port dedie 9102 (pas le 9999 par defaut) : le watcher (SCRIPTS_WATCH/main-1.py)
-# tourne deja sur 9999 en parallele, meme port = collision au bind si les deux
-# process tournent en meme temps (cas normal en prod).
-try:
-    from websocket_server import start_bridge as _start_xbet_bridge, bridge as _xbet_bridge
-    _start_xbet_bridge(wait_timeout=10, port=9102)
-    # Ouvre/enregistre l'onglet dedie a CE process (meme principe que les scripts
-    # SCRIPTS_1530A/SCRIPTS_4P6P au demarrage) -- sans ca, _tab_id reste None et
-    # _search_and_open_match (OneXBetBridge.py, clique un bouton recherche)
-    # echoue tout de suite en "no_tab" : aucune fenetre ne s'ouvrait jamais,
-    # "match_not_found" quasi instantane sans recherche reelle (constate 2026-10-16).
-    import config as _config
-    import time as _time
-    # Version mobile, pas desktop : partout ailleurs dans le bot (recherche de
-    # match, page de match individuelle, placement), ScriptRechercheDeMatch.py
-    # bascule systematiquement en ?platform_type=mobile des qu'il s'agit
-    # d'autre chose que lister des ligues -- le bouton de recherche
-    # (.home-navigation__link--search, 1xbet.js) est vraisemblablement propre
-    # au DOM mobile (constate le 2026-10-16 : clic sans effet en desktop).
-    _xbet_search_url = _config.site_url.replace('?platform_type=desktop', '').replace('?platform_type=mobile', '') + '?platform_type=mobile'
-    _xbet_bridge.navigate(_xbet_search_url)
-    # Laisse la page se charger avant le premier clic (meme pattern que
-    # _bridge_recherche_match dans ScriptRechercheDeMatch.py) -- sans ca, le
-    # tout premier pari traite juste apres le demarrage tombait sur un timeout
-    # de click_search_button (page encore en cours de chargement, constate le
-    # 2026-10-16).
-    _time.sleep(2)
-except Exception as e:
-    log(f"⚠️ Démarrage bridge 1xBet échoué: {e}", "warning")
-
 # Bookmakers sans VPN — lancés en parallèle (Lollybet mis de côté, désactivé via BOOKMAKER_STATE)
 NO_VPN_SCRAPERS = [WinamaxScraper, BetclicScraper]
 
@@ -87,6 +34,11 @@ PLAYWRIGHT_SCRAPERS = NO_VPN_SCRAPERS + VPN_SCRAPERS
 # Modifiables à la volée depuis n'importe quel module via router.BOOKMAKER_STATE
 # Stake uniquement actif (demande explicite utilisateur, 2026-10-28) — test du
 # traitement de la file d'attente API en mode simulation (cf. SIMULATE_MODE).
+# Définie ICI (avant les blocs de démarrage des bridges plus bas) pour pouvoir
+# les conditionner dessus -- avant le 2026-11-02 ce dict était défini APRÈS ces
+# blocs, qui tournaient donc inconditionnellement à l'import de ce module, même
+# pour un bookmaker désactivé (ex: le bridge 1xBet démarrait et ouvrait un
+# onglet 1xBet à chaque lancement alors que seul Stake est actif).
 BOOKMAKER_STATE: Dict[str, Dict] = {
     "Winamax":  {"enabled": False, "balance": None},
     "Betclic":  {"enabled": False, "balance": None},
@@ -116,6 +68,64 @@ def _is_bookmaker_active(name: str) -> bool:
         log(f"[Router] ⏭ {name} ignoré (solde nul : {balance})", "info")
         return False
     return True
+
+
+# Demarre le bridge WebSocket dedie Stake (port 9101, cf. StakeBridge.py) des
+# l'import de ce module — sans ca, StakeScraper.is_connected() reste toujours
+# False dans ce process (celui qui place reellement les paris, via
+# ProcessTelegramBets.py) et retombe silencieusement sur l'ancien Selenium,
+# meme si le bridge tourne par ailleurs dans le process du watcher
+# (SCRIPTS_WATCH/main-1.py via session_init.py). wait_timeout=10 (pas 0) :
+# constate en prod le 2026-10-16 -- le tout premier pari traite juste apres
+# le demarrage du process voyait is_connected()=False (extension pas encore
+# connectee) et retombait sur Selenium, une fraction de seconde avant que
+# l'extension se connecte reellement. Cette attente bloquante ne coute que
+# quelques secondes une seule fois a l'import (StakeBridge.start_stake_bridge
+# est idempotent) ; si l'extension n'est vraiment pas disponible, wait_connected
+# leve TimeoutError, capture ci-dessous, et le fallback Selenium s'applique
+# normalement pour tous les paris (comme avant ce fix).
+if _is_bookmaker_active("Stake"):
+    try:
+        from Functions.Bookmakers.StakeBridge import start_stake_bridge
+        start_stake_bridge(wait_timeout=10)
+    except Exception as e:
+        log(f"⚠️ Démarrage StakeBridge échoué (fallback Selenium): {e}", "warning")
+
+# Meme chose pour le bridge 1xBet general (websocket_server.bridge, utilise par
+# XBetScraper) : sans ca, "Extension Chrome non connectee" systematique dans ce
+# process (constate le 2026-10-16, XBetScraper._fetch_odds_sync echoue direct).
+# Port dedie 9102 (pas le 9999 par defaut) : le watcher (SCRIPTS_WATCH/main-1.py)
+# tourne deja sur 9999 en parallele, meme port = collision au bind si les deux
+# process tournent en meme temps (cas normal en prod). Conditionné à 1xBet actif
+# (cf. BOOKMAKER_STATE ci-dessus) depuis le 2026-11-02 -- tournait avant sans
+# condition, ouvrant un onglet 1xBet à chaque lancement même 1xBet désactivé.
+if _is_bookmaker_active("1xBet"):
+    try:
+        from websocket_server import start_bridge as _start_xbet_bridge, bridge as _xbet_bridge
+        _start_xbet_bridge(wait_timeout=10, port=9102)
+        # Ouvre/enregistre l'onglet dedie a CE process (meme principe que les scripts
+        # SCRIPTS_1530A/SCRIPTS_4P6P au demarrage) -- sans ca, _tab_id reste None et
+        # _search_and_open_match (OneXBetBridge.py, clique un bouton recherche)
+        # echoue tout de suite en "no_tab" : aucune fenetre ne s'ouvrait jamais,
+        # "match_not_found" quasi instantane sans recherche reelle (constate 2026-10-16).
+        import config as _config
+        import time as _time
+        # Version mobile, pas desktop : partout ailleurs dans le bot (recherche de
+        # match, page de match individuelle, placement), ScriptRechercheDeMatch.py
+        # bascule systematiquement en ?platform_type=mobile des qu'il s'agit
+        # d'autre chose que lister des ligues -- le bouton de recherche
+        # (.home-navigation__link--search, 1xbet.js) est vraisemblablement propre
+        # au DOM mobile (constate le 2026-10-16 : clic sans effet en desktop).
+        _xbet_search_url = _config.site_url.replace('?platform_type=desktop', '').replace('?platform_type=mobile', '') + '?platform_type=mobile'
+        _xbet_bridge.navigate(_xbet_search_url)
+        # Laisse la page se charger avant le premier clic (meme pattern que
+        # _bridge_recherche_match dans ScriptRechercheDeMatch.py) -- sans ca, le
+        # tout premier pari traite juste apres le demarrage tombait sur un timeout
+        # de click_search_button (page encore en cours de chargement, constate le
+        # 2026-10-16).
+        _time.sleep(2)
+    except Exception as e:
+        log(f"⚠️ Démarrage bridge 1xBet échoué: {e}", "warning")
 
 
 def _fetch_odds_sync(scraper_class, bet: Dict) -> Dict:
