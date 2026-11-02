@@ -266,6 +266,21 @@
       if (!confirm) return { validated: false };
       const btn = await waitForVisible(SEL.betslip_confirm, 3000);
       if (!btn) return { validated: false, error: 'confirm_button_not_found' };
+
+      // Fermer toute notification de succès/erreur déjà présente AVANT de cliquer --
+      // sans ça, la vérification post-clic ci-dessous peut retomber sur une
+      // notification laissée par un pari précédent (jamais fermée, ou fermeture
+      // précédente ratée) et déclarer CE pari validé alors que rien n'a été
+      // réellement soumis pour lui (faux positif constaté le 2026-11-02 : un pari
+      // de 98.18€ marqué "validé"/envoyé à AuxoTracker, jamais réellement placé
+      // sur le site). On ne vérifie que la PRÉSENCE de la notification après coup,
+      // jamais qu'elle est nouvelle -- ce nettoyage préalable garantit ça.
+      for (const stale of qsa('.ui-notification-alert--status-success, .ui-notification-alert--status-error, .ui-notification-alert--status-question')) {
+        const closeBtn = qs('.ui-notification-base__close', stale) || qs('.ui-notification-base__close');
+        if (closeBtn) closeBtn.click();
+      }
+      await sleep(200);
+
       btn.click();
       await sleep(1500);
 
@@ -289,10 +304,20 @@
         return { validated: true, accepted: alreadyPlaced, message: text };
       }
 
-      // Fallback : sélecteurs génériques (autres site_type)
+      // Fallback : sélecteurs génériques (autres site_type). BUG CRITIQUE corrigé le
+      // 2026-11-02 : l'ancien code retournait {validated:true, accepted: !!win || !lose}
+      // -- si win ET lose sont tous les deux absents (cas normal quand RIEN ne s'est
+      // passé, ex: clic sur un bouton caché/inactif après l'échec du filtre de
+      // visibilité), !lose vaut true et le pari était déclaré validé PAR DÉFAUT alors
+      // que rien n'avait été réellement soumis (faux positif réel : 98.18€ marqué
+      // "validé"/envoyé à AuxoTracker, jamais placé sur le site). Un succès doit être
+      // prouvé par un signal positif, jamais supposé par l'absence de signal négatif.
       const win = qs(SEL.betslip_result_win);
       const lose = qs(SEL.betslip_result_lose);
-      return { validated: true, accepted: !!win || !lose };
+      if (win || lose) {
+        return { validated: true, accepted: !!win };
+      }
+      return { validated: false, error: 'no_confirmation_found' };
     },
 
     async deleteBet() {
