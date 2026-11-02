@@ -1256,6 +1256,18 @@ class StakeScraper:
             return None, "", "", candidates
 
         url, n1, n2, candidates = _try_exact_match()
+        if not url and not candidates:
+            # Repli : un premier essai à 0 candidat est parfois un faux négatif
+            # transitoire -- avant le 2026-11-02 seul le cas "candidats présents
+            # mais aucun match exact" plus bas bénéficiait d'un retry, pas
+            # celui-ci (0 candidat), laissant échouer des matchs pourtant
+            # trouvables l'instant d'après (constaté sur un pari NBA réel :
+            # succès "Match exact" sur un essai, "Aucun candidat" quelques
+            # secondes plus tard sur un retraitement du même pari -- cause
+            # exacte encore non confirmée, possiblement une requête concurrente
+            # sur un autre onglet Stake du bridge 1xBet/main-1.py en parallèle).
+            time.sleep(1.5)
+            url, n1, n2, candidates = _try_exact_match()
         if url:
             e1r, e2r = _assign_resolved_names(n1, n2)
             return url, e1r, e2r
@@ -1341,7 +1353,8 @@ class StakeScraper:
 
     def _bridge_get_odds(self, match_url: str, selection: str, sport: str,
                           equipe_1: str = "", equipe_2: str = "",
-                          equipe_1_resolved: str = "", equipe_2_resolved: str = "") -> Optional[float]:
+                          equipe_1_resolved: str = "", equipe_2_resolved: str = "",
+                          intitule: str = "") -> Optional[float]:
         from Functions.Bookmakers.StakeBridge import stake_bridge
         stake_bridge.navigate(match_url)
 
@@ -1352,7 +1365,7 @@ class StakeScraper:
             resp = stake_bridge.get_dnb_odds(int(m.group(1)))
             return resp.get("odds") if resp.get("found") else None
 
-        table_market = _match_table_market(selection, sport_id, equipe_1, equipe_2)
+        table_market = _match_table_market(selection, sport_id, equipe_1, equipe_2, intitule)
         if table_market:
             resp = stake_bridge.get_table_market_odds(table_market)
             return resp.get("odds") if resp.get("found") else None
@@ -1364,14 +1377,15 @@ class StakeScraper:
 
     def _bridge_place_bet(self, match_url: str, selection: str, sport: str, mise: float,
                            equipe_1: str = "", equipe_2: str = "", dry_run: bool = False,
-                           equipe_1_resolved: str = "", equipe_2_resolved: str = "") -> bool:
+                           equipe_1_resolved: str = "", equipe_2_resolved: str = "",
+                           intitule: str = "") -> bool:
         from Functions.Bookmakers.StakeBridge import stake_bridge
         stake_bridge.navigate(match_url)
 
         import re as _re
         sport_id = _detect_sport_from_url(match_url) or str(sport)
         m = _re.match(r'handicap\s*([12])\s*\(0\)', selection.lower().strip())
-        table_market = None if m else _match_table_market(selection, sport_id, equipe_1, equipe_2)
+        table_market = None if m else _match_table_market(selection, sport_id, equipe_1, equipe_2, intitule)
         if m:
             resp = stake_bridge.place_bet(dnb_team_idx=int(m.group(1)), mise=mise, dry_run=dry_run)
         elif table_market:
@@ -1398,7 +1412,7 @@ class StakeScraper:
         legs = []
         for event in combined_events:
             selection = event.get("selection", "")
-            table_market = _match_table_market(selection, sport_id, equipe_1, equipe_2)
+            table_market = _match_table_market(selection, sport_id, equipe_1, equipe_2, event.get("intitule", ""))
             if table_market:
                 legs.append({"handicap_market": table_market})
             else:
@@ -1449,7 +1463,7 @@ class StakeScraper:
 
             sport_id = _detect_sport_from_url(match_url) or sport
             dnb_m = _re.match(r'handicap\s*([12])\s*\(0\)', selection.lower().strip())
-            table_market = None if dnb_m else _match_table_market(selection, sport_id, equipe_1, equipe_2)
+            table_market = None if dnb_m else _match_table_market(selection, sport_id, equipe_1, equipe_2, m.get("intitule", ""))
 
             if dnb_m:
                 resp = stake_bridge.add_combo_leg(dnb_team_idx=int(dnb_m.group(1)))
@@ -1531,10 +1545,12 @@ class StakeScraper:
                         equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved)
                 else:
                     result["odds"] = self._bridge_get_odds(match_url, bet.get("selection", ""), sport, equipe_1, equipe_2,
-                                                             equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved)
+                                                             equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved,
+                                                             intitule=bet.get("intitule", ""))
                     result["success"] = self._bridge_place_bet(
                         match_url, bet.get("selection", ""), sport, mise, equipe_1, equipe_2, dry_run=dry_run,
-                        equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved)
+                        equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved,
+                        intitule=bet.get("intitule", ""))
                 result["simulated"] = dry_run and result["success"]
                 if not result["success"]:
                     result["error"] = self._last_bridge_error or "placement_failed"
@@ -1567,7 +1583,8 @@ class StakeScraper:
                     return result
                 result["match_url"] = match_url
                 result["odds"] = self._bridge_get_odds(match_url, bet.get("selection", ""), sport, equipe_1, equipe_2,
-                                                         equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved)
+                                                         equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved,
+                                                         intitule=bet.get("intitule", ""))
             except Exception as e:
                 result["error"] = str(e)
                 log(f"[Stake/bridge] Erreur fetch_odds: {e}", "error")
@@ -1669,6 +1686,48 @@ _TOTAL_INDIVIDUEL_RE = _re_module.compile(r'^total\s+individuel\s+([12])\s+(plus
 # naturel côté marché "Buts du joueur" à seuils 1+/2+/3+).
 _PLAYER_SCORER_RE = _re_module.compile(r'^(.+?)\s*-\s*oui$', _re_module.IGNORECASE)
 
+# "{Joueur} - Plus de/Moins de {valeur}" : props joueur combinés (basketball
+# "Statistiques des joueurs", ex: "Shai Gilgeous-Alexander - Plus de 39.5" pour
+# "points + rebonds + passes") -- découvert le 2026-11-02 sur un vrai ticket
+# Auxo1XBOT (NBA). Contrairement à Total Asiatique (table multi-lignes, valeur
+# dans le texte du bouton), ces marchés n'ont qu'UNE ligne par catégorie de
+# stat, sans valeur dans le bouton -- il faut d'abord identifier LA bonne
+# catégorie (Points / Points + Rebonds / Points + Assists + Rebonds / etc.),
+# absente de `selection` (juste "Plus de 39.5") mais présente dans `intitule`
+# ("... plus de 39.5 points rebonds passes").
+_PLAYER_STAT_RE = _re_module.compile(r'^(.+?)\s*-\s*(plus|moins)\s+de\s+(\d+(?:[.,]\d+)?)$', _re_module.IGNORECASE)
+
+# Mot-clé (FR ou EN, tel qu'extrait par l'IA dans `intitule`) -> sous-chaîne du
+# libellé Stake correspondant (observé le 2026-11-02 sur une page NBA réelle :
+# Stake mélange les langues dans ses en-têtes de props combinés, ex: "Points +
+# Rebonds" mais "Points + Assists" -- pas de traduction cohérente prévisible,
+# cette table capture ce qui a été vérifié, pas une règle générale).
+_STAT_KEYWORDS = [
+    ('points', 'points'),
+    ('rebonds', 'rebonds'),
+    ('rebounds', 'rebonds'),
+    ('passes', 'assists'),
+    ('assists', 'assists'),
+    ('interceptions', 'interceptions'),
+    ('steals', 'interceptions'),
+    ('contres', 'blocages'),
+    ('blocages', 'blocages'),
+    ('blocks', 'blocages'),
+    ('pertes', 'turnovers'),
+    ('turnovers', 'turnovers'),
+]
+
+
+def _extract_stat_substrings(intitule: str) -> List[str]:
+    """Extrait, dans l'ordre d'apparition et sans doublon, les sous-chaînes de
+    libellé Stake correspondant aux mots-clés de stat trouvés dans `intitule`."""
+    low = (intitule or "").lower()
+    found = []
+    for kw, stake_sub in _STAT_KEYWORDS:
+        if kw in low and stake_sub not in found:
+            found.append(stake_sub)
+    return found
+
 # sport_id -> (intitulé Stake du Total global, suffixe du Total par joueur/équipe).
 # Seuls les sports vérifiés manuellement sont listés -- un sport absent retombe
 # sur la recherche par label classique (_match_table_market retourne None).
@@ -1678,7 +1737,7 @@ _TOTAL_HEADINGS = {
 }
 
 
-def _match_table_market(selection: str, sport_id: str, equipe_1: str = "", equipe_2: str = ""):
+def _match_table_market(selection: str, sport_id: str, equipe_1: str = "", equipe_2: str = "", intitule: str = ""):
     """Détecte une sélection correspondant à un marché Stake affiché en table à 2
     colonnes (Handicap de sets/jeux, Total de jeux global ou par joueur) -- ces
     marchés n'ont jamais le nom de la colonne dans le texte du bouton, la
@@ -1704,6 +1763,28 @@ def _match_table_market(selection: str, sport_id: str, equipe_1: str = "", equip
         market_label = "Set handicap" if m.group(4).startswith("set") else "Jeux handicap"
         target_name = equipe_1 if team_idx == 1 else equipe_2
         return {'marketLabel': market_label, 'targetName': target_name, 'handicapValue': value}
+
+    m = _PLAYER_STAT_RE.match(s)
+    if m:
+        player_name = m.group(1).strip()
+        target_name = "Plus de" if m.group(2).lower() == "plus" else "Moins de"
+        value = float(m.group(3).replace(',', '.'))
+        stat_substrings = _extract_stat_substrings(intitule)
+        player_words = player_name.split()
+        # Dernier mot (nom de famille) : suffisant pour matcher l'en-tête
+        # joueur affiché par Stake (ex: "Shai Gilgeous-Alexander (PG)"), plus
+        # robuste qu'exiger le nom complet si une variante d'accent/tiret diffère.
+        player_last = player_words[-1] if player_words else player_name
+        if player_last and stat_substrings:
+            return {
+                'marketSubstrings': stat_substrings,
+                'playerSubstrings': [player_last],
+                'targetName': target_name,
+                'handicapValue': value,
+            }
+        # Pas de mot-clé de stat reconnu dans intitule (ex: intitule absent --
+        # jambes de combiné SGM qui n'en portent pas individuellement) -- repli
+        # sur la recherche par label classique plutôt que de deviner.
 
     headings = _TOTAL_HEADINGS.get(sport_id)
     if not headings:

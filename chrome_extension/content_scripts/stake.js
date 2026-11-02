@@ -255,11 +255,12 @@
     //   nom extrait côté bot ("Humbert Ugo") ne correspond pas exactement à
     //   l'affichage Stake ("Humbert, Ugo")).
 
-    function _findMarketContainer(marketLabel, marketSubstrings) {
+    function _findMarketContainer(marketLabel, marketSubstrings, root) {
+      root = root || document;
       const matchFn = marketSubstrings
         ? (t) => { const low = t.toLowerCase(); return marketSubstrings.every((s) => low.includes(s.toLowerCase())); }
         : (t) => t.toLowerCase() === (marketLabel || '').toLowerCase();
-      const all = Array.from(document.querySelectorAll('*'));
+      const all = Array.from(root.querySelectorAll('*'));
       const headerEl = all.find((el) => el.children.length === 0 && matchFn((el.textContent || '').trim()));
       if (!headerEl) return null;
       let container = headerEl;
@@ -282,11 +283,113 @@
         if (headers.length === 2) break;
       }
       if (headers.length < 2) return null;
-      return { headers, outcomeBtns };
+      return { headers, outcomeBtns, container };
     }
 
-    function _findTableMarketButton(args) {
-      const { marketLabel, marketSubstrings, targetName, handicapValue } = args || {};
+    // Scope la recherche d'un marché au conteneur d'UN joueur (ex: props
+    // combinés "Points + Assists + Rebonds") -- sans ça, _findMarketContainer
+    // chercherait la 1ère occurrence du libellé de marché sur TOUTE la page,
+    // qui peut appartenir à un AUTRE joueur partageant le même type de prop
+    // (constaté le 2026-11-02 : les deux équipes ont souvent les mêmes
+    // catégories de props). Le conteneur `[data-testid="players"] > ... >
+    // .secondary-accordion.level-2` d'un joueur regroupe déjà TOUTES ses
+    // props (vérifié : 42 boutons pour un seul joueur) -- même technique de
+    // remontée par nombre de fixture-outcome que _findMarketContainer.
+    async function _findPlayerStatContainer(playerSubstrings) {
+      // Marge d'hydratation SPA : navigate() côté Python ne garantit que l'event
+      // 'complete' du chargement + 400ms (cf. waitForTabLoad, service_worker.js),
+      // pas la fin de l'hydratation Svelte -- sans cette marge, l'onglet "Props du
+      // Joueur" n'existe pas encore dans le DOM au moment du clic (constaté le
+      // 2026-11-02 : échec systématique sans délai, succès fiable avec).  Même
+      // nécessité déjà documentée pour _bridge_search_match (sleep(1) après son
+      // propre navigate), jamais appliquée à ce chemin avant ce jour.
+      await sleep(1000);
+      const matchFn = () => {
+        const all = Array.from(document.querySelectorAll('*'));
+        return all.find((el) => el.children.length === 0 && playerSubstrings.every(
+          (s) => (el.textContent || '').toLowerCase().includes(s.toLowerCase())
+        ));
+      };
+      let headerEl = matchFn();
+      if (!headerEl) {
+        // Les props joueur ne sont rendues dans le DOM que sous l'onglet
+        // "Props du Joueur" -- absentes de l'onglet par défaut "Marchés"
+        // (constaté le 2026-11-02 : le nom du joueur n'apparaît nulle part
+        // dans document.body.innerText tant que cet onglet n'est pas actif).
+        const propsTab = document.querySelector('[data-testid="tab-playerProps"]');
+        if (propsTab) {
+          propsTab.click();
+          await sleep(1200);
+          headerEl = matchFn();
+        }
+      }
+      if (!headerEl) return null;
+      let container = headerEl;
+      for (let i = 0; i < 8 && container; i++) {
+        if (container.querySelectorAll('[data-testid="fixture-outcome"]').length >= 2) break;
+        container = container.parentElement;
+      }
+      if (container && container.querySelectorAll('[data-testid="fixture-outcome"]').length >= 2) return container;
+
+      // Accordéon de props repliè par défaut (constaté le 2026-11-02 : aucun
+      // bouton monté dans le DOM tant que la section du joueur n'est pas
+      // ouverte -- contrairement à "Total Asiatique"/marchés classiques,
+      // toujours rendus). Le header cliquable est l'ancêtre `.header.rounded`,
+      // 4 niveaux au-dessus du nom du joueur (vérifié par inspection manuelle) ;
+      // walk-up générique jusqu'à un ancêtre cliquable plausible, par sécurité
+      // si Stake change la profondeur exacte.
+      let header = headerEl;
+      for (let i = 0; i < 6 && header; i++) {
+        if ((header.className || '').toString().includes('header')) break;
+        header = header.parentElement;
+      }
+      if (header) {
+        header.click();
+        await sleep(1000);
+      }
+      container = headerEl;
+      for (let i = 0; i < 8 && container; i++) {
+        if (container.querySelectorAll('[data-testid="fixture-outcome"]').length >= 2) break;
+        container = container.parentElement;
+      }
+      return container;
+    }
+
+
+    async function _findTableMarketButton(args) {
+      const { marketLabel, marketSubstrings, targetName, handicapValue, playerSubstrings } = args || {};
+
+      // Props joueur combinés ("Points + Assists + Rebonds", etc.) -- scope la
+      // recherche au conteneur du joueur d'abord (sans ça, on prendrait la 1ère
+      // occurrence du libellé sur TOUTE la page, qui peut appartenir à l'AUTRE
+      // joueur partageant la même catégorie de prop, constaté le 2026-11-02).
+      // Contrairement à Total Asiatique (en-têtes "Plus de"/"Moins de" dans des
+      // éléments SÉPARÉS au-dessus de plusieurs lignes numérotées), ces marchés
+      // à une seule ligne n'ont PAS d'en-tête de colonne distinct -- "Plus de"/
+      // "Moins de" sont directement DANS le texte de chaque bouton ("Plus de
+      // 1,86"), donc _findMarketContainer (qui exclut le texte à l'intérieur
+      // des boutons) n'y trouve jamais d'en-tête -- recherche directe par texte
+      // de bouton à la place, pas de recherche par handicapValue (absent du
+      // texte du bouton ici, contrairement à Total Asiatique).
+      if (playerSubstrings) {
+        const playerRoot = await _findPlayerStatContainer(playerSubstrings);
+        if (!playerRoot) return null;
+        const all = Array.from(playerRoot.querySelectorAll('*'));
+        const headerEl = all.find((el) => el.children.length === 0 && (marketSubstrings || []).every(
+          (s) => (el.textContent || '').toLowerCase().includes(s.toLowerCase())
+        ));
+        if (!headerEl) return null;
+        let container = headerEl;
+        for (let i = 0; i < 10 && container; i++) {
+          if (container.querySelectorAll('[data-testid="fixture-outcome"]').length >= 2) break;
+          container = container.parentElement;
+        }
+        if (!container) return null;
+        const outcomeBtns = Array.from(container.querySelectorAll('[data-testid="fixture-outcome"]'));
+        const nameLower = (targetName || '').toLowerCase();
+        return outcomeBtns.find((b) => (b.textContent || '').trim().toLowerCase().startsWith(nameLower)) || null;
+      }
+
       const parsed = _findMarketContainer(marketLabel, marketSubstrings);
       if (!parsed) return null;
       const { headers, outcomeBtns } = parsed;
@@ -307,16 +410,16 @@
       return null;
     }
 
-    function getHandicapSetGameOdds(args) {
-      const btn = _findTableMarketButton(args);
+    async function getHandicapSetGameOdds(args) {
+      const btn = await _findTableMarketButton(args);
       if (!btn) return { found: false, odds: null };
       const parts = (btn.textContent || '').trim().split(/\s+/);
       const odds = parseFloat((parts[parts.length - 1] || '').replace(',', '.'));
       return Number.isNaN(odds) ? { found: false, odds: null } : { found: true, odds };
     }
 
-    function clickHandicapSetGameOutcome(args) {
-      const btn = _findTableMarketButton(args);
+    async function clickHandicapSetGameOutcome(args) {
+      const btn = await _findTableMarketButton(args);
       if (!btn) return { clicked: false };
       btn.scrollIntoView({ behavior: 'instant', block: 'center' });
       dispatchClick(btn);
@@ -399,10 +502,10 @@
       return { reset: !!reset };
     }
 
-    function addComboLeg(args) {
+    async function addComboLeg(args) {
       const { searchLabels, dnbTeamIdx, handicapMarket } = args || {};
       if (dnbTeamIdx) return clickDnbOutcome(dnbTeamIdx);
-      if (handicapMarket) return clickHandicapSetGameOutcome(handicapMarket);
+      if (handicapMarket) return await clickHandicapSetGameOutcome(handicapMarket);
       return clickOutcomeByLabel(searchLabels || [], true);
     }
 
@@ -468,7 +571,7 @@
       if (dnbTeamIdx) {
         clicked = clickDnbOutcome(dnbTeamIdx).clicked;
       } else if (handicapMarket) {
-        clicked = clickHandicapSetGameOutcome(handicapMarket).clicked;
+        clicked = (await clickHandicapSetGameOutcome(handicapMarket)).clicked;
       } else {
         clicked = clickOutcomeByLabel(searchLabels || []).clicked;
       }
@@ -571,7 +674,7 @@
         // Python, sans renommer les clés internes de chaque jambe.
         const legHandicapMarket = leg.handicapMarket || leg.handicap_market;
         if (legHandicapMarket) {
-          const btn = _findTableMarketButton(legHandicapMarket);
+          const btn = await _findTableMarketButton(legHandicapMarket);
           if (btn) {
             btn.scrollIntoView({ behavior: 'instant', block: 'center' });
             await sleep(350);
