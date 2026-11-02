@@ -523,23 +523,45 @@
     async function placeSameGameMulti(args) {
       const { combinedLegs, mise, dryRun } = args || {};
 
-      // 1. Onglet SGM
-      let sgmClicked = false;
-      for (const sel of ['[data-testid="tab-customBet"]', 'button[data-testid*="customBet"]']) {
-        const btns = Array.from(document.querySelectorAll(sel));
-        if (btns.length) { dispatchClick(btns[0]); sgmClicked = true; await sleep(1200); break; }
+      // 1. Onglet SGM -- clic réel + vérification + retry (constaté le 2026-11-01 :
+      // dispatchClick (MouseEvent synthétique) sur cet onglet est intermittent, comme
+      // "Ajouter un pari" plus bas ("vrai clic nécessaire, état Svelte") -- sans
+      // vérifier aria-selected après coup, un clic silencieusement ignoré laissait
+      // la page sur l'onglet "Marchés" standard : les jambes cliquaient alors de
+      // VRAIS boutons (même data-testid="fixture-outcome" sur les deux onglets),
+      // donnant l'illusion que tout fonctionnait, jusqu'à l'étape "Ajouter un pari"
+      // (propre à l'onglet SGM) introuvable -- ressemblait à tort à un refus Stake
+      // pour cause de marchés corrélés.
+      function _sgmTabSelected() {
+        const el = document.querySelector('[data-testid="tab-customBet"]');
+        return !!el && el.getAttribute('aria-pressed') === 'true';
       }
-      if (!sgmClicked) {
-        for (const btn of Array.from(document.querySelectorAll('button'))) {
-          const t = (btn.textContent || '').toLowerCase();
-          if (t.includes('pari multiple sur un même match') || t.includes('same game')) {
-            dispatchClick(btn); sgmClicked = true; await sleep(1200); break;
+      let sgmClicked = _sgmTabSelected();
+      for (let i = 0; i < 6 && !sgmClicked; i++) {
+        let clickedOne = false;
+        for (const sel of ['[data-testid="tab-customBet"]', 'button[data-testid*="customBet"]']) {
+          const btns = Array.from(document.querySelectorAll(sel));
+          if (btns.length) { btns[0].click(); clickedOne = true; break; }
+        }
+        if (!clickedOne) {
+          for (const btn of Array.from(document.querySelectorAll('button'))) {
+            const t = (btn.textContent || '').toLowerCase();
+            if (t.includes('pari multiple sur un même match') || t.includes('same game')) {
+              btn.click(); clickedOne = true; break;
+            }
           }
         }
+        await sleep(700);
+        sgmClicked = _sgmTabSelected();
       }
+      if (!sgmClicked) {
+        return { success: false, error: 'sgm_tab_not_selected', selectionsClicked: 0, legResults: [] };
+      }
+      await sleep(500);
 
       // 2. Sélectionner chaque jambe
       let selectionsClicked = 0;
+      const legResults = [];
       for (const leg of (combinedLegs || [])) {
         // Marché "table à 2 colonnes" (Total, Handicap de sets/jeux) -- même
         // onglet "Pari Multiple" que les marchés simples, donc _findTableMarketButton
@@ -555,14 +577,24 @@
             await sleep(350);
             dispatchClick(btn);
             selectionsClicked++;
+            legResults.push({ type: 'table', clicked: true });
             await sleep(700);
           } else {
             console.warn('[Stake SGM] sélection table non trouvée:', legHandicapMarket);
+            legResults.push({ type: 'table', clicked: false });
           }
           continue;
         }
 
-        const labelsLower = (leg.searchLabels || []).map((s) => s.toLowerCase());
+        // leg.searchLabels || leg.search_labels : comme handicapMarket plus haut,
+        // service_worker.js transmet combined_legs tel quel depuis Python (snake_case
+        // non renommé) -- lire uniquement searchLabels (camelCase) faisait échouer
+        // TOUTE jambe non-table-market en silence (clicked=false, aucune exception),
+        // ce qui ressemblait à tort à un problème de résolution de nom d'équipe
+        // (constaté le 2026-11-01 : V1+V2 → 0/2, V1+Total/V2+Total → 1/2 à chaque
+        // fois, seule la jambe handicap_market -- déjà en double-clé -- passait).
+        const legSearchLabels = leg.searchLabels || leg.search_labels;
+        const labelsLower = (legSearchLabels || []).map((s) => s.toLowerCase());
         let btns = await _fetchSgmButtons();
         let clicked = false;
         for (const btn of btns) {
@@ -578,27 +610,47 @@
           }
         }
         if (!clicked) {
-          console.warn('[Stake SGM] sélection non trouvée:', leg.searchLabels);
+          console.warn('[Stake SGM] sélection non trouvée:', legSearchLabels);
         }
+        legResults.push({ type: 'search', clicked, labels: legSearchLabels });
       }
 
       if (selectionsClicked < 2) {
-        return { success: false, error: 'not_enough_selections', selectionsClicked };
+        return { success: false, error: 'not_enough_selections', selectionsClicked, legResults };
       }
 
       await sleep(1000);
 
-      // 3. "Ajouter un pari"
-      let ajouterClicked = false;
-      for (const btn of Array.from(document.querySelectorAll('button'))) {
-        if ((btn.textContent || '').toLowerCase().includes('ajouter un pari')) {
-          btn.click(); // vrai clic nécessaire (état Svelte)
-          ajouterClicked = true;
-          await sleep(2200);
-          break;
-        }
+      // 3. "Ajouter un pari" -- retry loop : juste après le dernier clic, Stake
+      // recalcule la cote combinée et peut re-render le bouton avec un léger délai
+      // (un scan immédiat trouve parfois 0 bouton, constaté le 2026-11-01). Match
+      // EXACT du texte (trim), pas une sous-chaîne -- un bouton englobant/accordéon
+      // contient aussi "Ajouter un pari" en sous-chaîne (ex: "Cotes Totales : 2,32
+      // ... Ajouter un pari") et serait cliqué en premier par un simple .includes(),
+      // sans jamais soumettre le vrai pari (ajouterClicked restait vrai à tort).
+      let ajouterBtn = null;
+      let debugCandidates = [];
+      for (let i = 0; i < 16 && !ajouterBtn; i++) {
+        const candidates = Array.from(document.querySelectorAll('button')).filter(
+          (b) => (b.textContent || '').trim().toLowerCase() === 'ajouter un pari'
+        );
+        if (candidates.length) { ajouterBtn = candidates[0]; break; }
+        debugCandidates = Array.from(document.querySelectorAll('button'))
+          .filter((b) => (b.textContent || '').toLowerCase().includes('ajouter'))
+          .map((b) => ({ text: (b.textContent || '').trim().slice(0, 80), disabled: b.disabled }));
+        await sleep(500);
       }
-      if (!ajouterClicked) return { success: false, error: 'add_bet_button_not_found', selectionsClicked };
+      if (!ajouterBtn) {
+        return { success: false, error: 'add_bet_button_not_found', selectionsClicked, legResults, debugCandidates };
+      }
+      if (ajouterBtn.disabled) {
+        // Bouton trouvé mais désactivé -- distinct de not_enough_selections pour
+        // savoir si c'est le clic qui échoue ou une règle Stake (sélections jugées
+        // incompatibles/corrélées) qui bloque CE combo précis.
+        return { success: false, error: 'add_bet_button_disabled', selectionsClicked, legResults };
+      }
+      ajouterBtn.click(); // vrai clic nécessaire (état Svelte)
+      await sleep(2200);
 
       // 4. Mise dans le betslip
       let miseInput = null;

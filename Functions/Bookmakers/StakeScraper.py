@@ -31,15 +31,15 @@ def _get_anthropic_client():
         return None
 
 
-def _ai_resolve_match(candidates: List[Dict], equipe_1: str, equipe_2: str) -> Optional[str]:
+def _ai_resolve_match(candidates: List[Dict], equipe_1: str, equipe_2: str) -> "tuple[Optional[str], Optional[str]]":
     """
     Demande à Claude de choisir le bon match parmi les résultats de recherche.
     candidates = [{"text": "Panama\nAngleterre", "url": "https://..."}]
-    Retourne l'URL du match ou None.
+    Retourne (url, texte_candidat) ou (None, None).
     """
     client = _get_anthropic_client()
     if not client or not candidates:
-        return None
+        return None, None
     try:
         lines = "\n".join(
             f"{i+1}. [{c['text'].strip()[:60]}] → {c['url']}"
@@ -61,10 +61,10 @@ def _ai_resolve_match(candidates: List[Dict], equipe_1: str, equipe_2: str) -> O
             idx = int(answer) - 1
             if 0 <= idx < len(candidates):
                 log(f"[Stake AI] ✅ Match résolu: {candidates[idx]['text'].strip()[:50]}", "info")
-                return candidates[idx]["url"]
+                return candidates[idx]["url"], candidates[idx]["text"]
     except Exception as e:
         log(f"[Stake AI] Erreur résolution match: {e}", "warning")
-    return None
+    return None, None
 
 
 def _ai_resolve_outcome(available_outcomes: List[str], event: Dict) -> Optional[str]:
@@ -582,7 +582,7 @@ class StakeScraper:
 
             # ── 6. Résolution IA si pas de match exact ────────────────────
             log(f"[Stake] Résolution IA pour: {equipe_1} vs {equipe_2} ({len(candidates)} candidats)", "info")
-            url = _ai_resolve_match(candidates, equipe_1, equipe_2)
+            url, _resolved_text = _ai_resolve_match(candidates, equipe_1, equipe_2)
             if url:
                 return url
 
@@ -1106,7 +1106,8 @@ class StakeScraper:
     # le matching direct s'avère insuffisant en usage réel.
 
     def _build_search_variants(self, selection: str, sport_id: str, intitule: str = "",
-                                equipe_1: str = "", equipe_2: str = "") -> List[str]:
+                                equipe_1: str = "", equipe_2: str = "",
+                                equipe_1_resolved: str = "", equipe_2_resolved: str = "") -> List[str]:
         sel_upper = (selection or "").strip().upper()
         scorer_m = _PLAYER_SCORER_RE.match((selection or "").strip())
         if sel_upper in ("V1", "V2") and (equipe_1 or equipe_2):
@@ -1116,6 +1117,21 @@ class StakeScraper:
             # (constaté le 2026-10-28 : outcome_not_found systématique). get_label
             # n'est pas pertinent ici (ce n'est pas un nom de marché mappable).
             base = (equipe_1 if sel_upper == "V1" else equipe_2).strip()
+            resolved = (equipe_1_resolved if sel_upper == "V1" else equipe_2_resolved).strip()
+            if resolved and resolved.lower() != base.lower():
+                # Le nom affiché par Stake peut différer du nom extrait par l'IA au-delà
+                # d'une simple variation d'accent/virgule -- traduction complète entre
+                # langues (ex: "Venise" vs "Venezia" affiché par Stake, constaté le
+                # 2026-11-01 : "venise" ne matche jamais "Venezia", échec systématique
+                # côté SGM). equipe_X_resolved vient du nom déjà confirmé par la
+                # recherche/l'IA lors de la résolution du match -- le réutiliser ici
+                # évite de redemander à l'IA pour chaque jambe d'un même pari.
+                variants = [base.lower(), resolved.lower()]
+                parts = resolved.split()
+                if len(parts) == 2:
+                    variants.append(f"{parts[1]}, {parts[0]}".lower())
+                    variants.append(parts[1].lower())
+                return variants
         elif scorer_m:
             # "{Joueur} - Oui" (buteur à tout moment, pivot IA) : Stake n'offre pas
             # toujours ce marché binaire Oui/Non -- mais le marché "Buts du joueur"
@@ -1151,7 +1167,7 @@ class StakeScraper:
                 variants.append(words[-1].lower())
         return variants
 
-    def _bridge_search_match(self, equipe_1: str, equipe_2: str, sport: str) -> Optional[str]:
+    def _bridge_search_match(self, equipe_1: str, equipe_2: str, sport: str) -> "tuple[Optional[str], str, str]":
         from Functions.Bookmakers.StakeBridge import stake_bridge
         sport_slug = SPORTS_MAP.get(str(sport), "soccer")
         stake_bridge.navigate(f"{STAKE_URL}/fr/sports/{sport_slug}/matches/all")
@@ -1174,6 +1190,37 @@ class StakeScraper:
             ascii_s = _ud.normalize('NFKD', s).encode('ascii', 'ignore').decode('ascii')
             return set(_re_module.findall(r'[a-z0-9]+', ascii_s.lower()))
 
+        def _split_candidate_names(text: str) -> "tuple[str, str]":
+            """Extrait (nom1, nom2) depuis le texte brut d'un candidat Stake. Format
+            observé en pratique (constaté le 2026-11-01, ex: "Côme 1907 - Venezia") :
+            une seule ligne séparée par " - ", pas par un saut de ligne comme le texte
+            des candidats de recherche (search_match) le suggérait. Ordre = ordre
+            d'affichage Stake, PAS forcément domicile/extérieur du billet -- voir
+            _assign_resolved_names."""
+            raw = text or ""
+            parts = [p.strip() for p in raw.split("\n") if p.strip()]
+            if len(parts) < 2:
+                parts = [p.strip() for p in raw.split(" - ") if p.strip()]
+            if len(parts) < 2:
+                parts = [p.strip() for p in raw.split(" vs ") if p.strip()]
+            if len(parts) >= 2:
+                return parts[0], parts[1]
+            return "", ""
+
+        def _assign_resolved_names(n1: str, n2: str) -> "tuple[str, str]":
+            """Associe n1/n2 (ordre d'affichage Stake) à equipe_1/equipe_2 (ordre
+            billet) par recouvrement de mots -- l'ordre d'affichage Stake ne
+            correspond pas toujours à l'ordre domicile/extérieur utilisé par le
+            tipster. Repli sur l'ordre brut si aucun recouvrement détecté."""
+            if not n1 and not n2:
+                return "", ""
+            w1, w2 = _words(n1), _words(n2)
+            if (w1 & e1_words) or (w2 & e2_words):
+                return n1, n2
+            if (w1 & e2_words) or (w2 & e1_words):
+                return n2, n1
+            return n1, n2
+
         e1_words = _words(equipe_1)
         e2_words = _words(equipe_2)
 
@@ -1185,26 +1232,29 @@ class StakeScraper:
                 href_words = _words(c["url"])
                 if (e1_words <= t_words and e2_words <= t_words) or (e1_words <= href_words and e2_words <= href_words):
                     log(f"[Stake/bridge] ✅ Match exact: {c['text'][:60]}", "info")
-                    return c["url"], candidates
-            return None, candidates
+                    n1, n2 = _split_candidate_names(c["text"])
+                    return c["url"], n1, n2, candidates
+            return None, "", "", candidates
 
-        url, candidates = _try_exact_match()
+        url, n1, n2, candidates = _try_exact_match()
         if url:
-            return url
+            e1r, e2r = _assign_resolved_names(n1, n2)
+            return url, e1r, e2r
         if not candidates:
             log(f"[Stake/bridge] Aucun candidat match trouvé pour: {equipe_1} vs {equipe_2}", "warning")
-            return None
+            return None, "", ""
 
         # Repli : liste de candidats parfois instable/incomplète d'un appel à
         # l'autre (constaté le 2026-10-29) -- une 2e recherche après une courte
         # pause retrouve souvent le match exact sans avoir besoin de l'IA.
         time.sleep(1.5)
-        url, candidates = _try_exact_match()
+        url, n1, n2, candidates = _try_exact_match()
         if url:
-            return url
+            e1r, e2r = _assign_resolved_names(n1, n2)
+            return url, e1r, e2r
         if not candidates:
             log(f"[Stake/bridge] Aucun candidat match trouvé pour: {equipe_1} vs {equipe_2}", "warning")
-            return None
+            return None, "", ""
 
         # Repli : abréviations ("Paris SG" vs "Paris Saint-Germain" affiché par
         # Stake) -- aucune comparaison textuelle ne peut deviner ce genre
@@ -1243,19 +1293,36 @@ class StakeScraper:
                 e2_ok = any(v <= t_words or v <= href_words for v in e2_variants)
                 if e1_ok and e2_ok:
                     log(f"[Stake/bridge] ✅ Match via surnoms AuxoTracker: {c['text'][:60]}", "info")
-                    return c["url"]
+                    n1, n2 = _split_candidate_names(c["text"])
+                    e1r, e2r = _assign_resolved_names(n1, n2)
+                    return c["url"], e1r, e2r
         except Exception as e:
             log(f"[Stake/bridge] Repli surnoms AuxoTracker indisponible: {e}", "warning")
 
         log(f"[Stake/bridge] Résolution IA pour: {equipe_1} vs {equipe_2} ({len(candidates)} candidats)", "info")
-        url = _ai_resolve_match(candidates, equipe_1, equipe_2)
+        url, resolved_text = _ai_resolve_match(candidates, equipe_1, equipe_2)
         if url:
-            return url
+            n1, n2 = _split_candidate_names(resolved_text)
+            e1r, e2r = _assign_resolved_names(n1, n2)
+            # Nouvelle correspondance découverte par l'IA (pas déjà connue d'AuxoTracker,
+            # sinon le repli "surnoms AuxoTracker" juste au-dessus l'aurait trouvée) --
+            # la signaler pour enrichir teams.nickname, afin que la prochaine fois
+            # teams/search trouve directement la correspondance sans re-solliciter l'IA.
+            try:
+                from Functions.getTextFromImageGPT import report_team_nickname
+                if e1r and e1r.lower() != equipe_1.strip().lower():
+                    report_team_nickname(sport, e1r, equipe_1)
+                if e2r and e2r.lower() != equipe_2.strip().lower():
+                    report_team_nickname(sport, e2r, equipe_2)
+            except Exception as e:
+                log(f"[Stake/bridge] Signalement nickname AuxoTracker indisponible: {e}", "warning")
+            return url, e1r, e2r
         log(f"[Stake/bridge] Match non trouvé: {equipe_1} vs {equipe_2}", "warning")
-        return None
+        return None, "", ""
 
     def _bridge_get_odds(self, match_url: str, selection: str, sport: str,
-                          equipe_1: str = "", equipe_2: str = "") -> Optional[float]:
+                          equipe_1: str = "", equipe_2: str = "",
+                          equipe_1_resolved: str = "", equipe_2_resolved: str = "") -> Optional[float]:
         from Functions.Bookmakers.StakeBridge import stake_bridge
         stake_bridge.navigate(match_url)
 
@@ -1271,12 +1338,14 @@ class StakeScraper:
             resp = stake_bridge.get_table_market_odds(table_market)
             return resp.get("odds") if resp.get("found") else None
 
-        variants = self._build_search_variants(selection, sport_id, equipe_1=equipe_1, equipe_2=equipe_2)
+        variants = self._build_search_variants(selection, sport_id, equipe_1=equipe_1, equipe_2=equipe_2,
+                                                 equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved)
         resp = stake_bridge.get_odds(variants)
         return resp.get("odds") if resp.get("found") else None
 
     def _bridge_place_bet(self, match_url: str, selection: str, sport: str, mise: float,
-                           equipe_1: str = "", equipe_2: str = "", dry_run: bool = False) -> bool:
+                           equipe_1: str = "", equipe_2: str = "", dry_run: bool = False,
+                           equipe_1_resolved: str = "", equipe_2_resolved: str = "") -> bool:
         from Functions.Bookmakers.StakeBridge import stake_bridge
         stake_bridge.navigate(match_url)
 
@@ -1289,7 +1358,8 @@ class StakeScraper:
         elif table_market:
             resp = stake_bridge.place_bet(handicap_market=table_market, mise=mise, dry_run=dry_run)
         else:
-            variants = self._build_search_variants(selection, sport_id, equipe_1=equipe_1, equipe_2=equipe_2)
+            variants = self._build_search_variants(selection, sport_id, equipe_1=equipe_1, equipe_2=equipe_2,
+                                                     equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved)
             resp = stake_bridge.place_bet(search_labels=variants, mise=mise, dry_run=dry_run)
 
         if resp.get("success"):
@@ -1300,7 +1370,8 @@ class StakeScraper:
         return False
 
     def _bridge_place_same_game_multi(self, match_url: str, combined_events: List[Dict], mise: float,
-                                       equipe_1: str = "", equipe_2: str = "", dry_run: bool = False) -> bool:
+                                       equipe_1: str = "", equipe_2: str = "", dry_run: bool = False,
+                                       equipe_1_resolved: str = "", equipe_2_resolved: str = "") -> bool:
         from Functions.Bookmakers.StakeBridge import stake_bridge
         stake_bridge.navigate(match_url)
 
@@ -1313,7 +1384,8 @@ class StakeScraper:
                 legs.append({"handicap_market": table_market})
             else:
                 variants = self._build_search_variants(
-                    selection, sport_id, event.get("intitule", ""), equipe_1, equipe_2)
+                    selection, sport_id, event.get("intitule", ""), equipe_1, equipe_2,
+                    equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved)
                 legs.append({"search_labels": variants})
 
         resp = stake_bridge.place_same_game_multi(legs, mise, dry_run=dry_run)
@@ -1347,7 +1419,7 @@ class StakeScraper:
             sport = str(m.get("sport", ""))
             selection = m.get("selection", "")
 
-            match_url = self._bridge_search_match(equipe_1, equipe_2, sport)
+            match_url, equipe_1_resolved, equipe_2_resolved = self._bridge_search_match(equipe_1, equipe_2, sport)
             if not match_url:
                 result["error"] = f"match_not_found:{equipe_1} vs {equipe_2}"
                 return result
@@ -1365,7 +1437,8 @@ class StakeScraper:
             elif table_market:
                 resp = stake_bridge.add_combo_leg(handicap_market=table_market)
             else:
-                variants = self._build_search_variants(selection, sport_id, equipe_1=equipe_1, equipe_2=equipe_2)
+                variants = self._build_search_variants(selection, sport_id, equipe_1=equipe_1, equipe_2=equipe_2,
+                                                         equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved)
                 resp = stake_bridge.add_combo_leg(search_labels=variants)
 
             if not resp.get("clicked"):
@@ -1421,7 +1494,7 @@ class StakeScraper:
             try:
                 equipe_1, equipe_2 = bet.get("equipe_1", ""), bet.get("equipe_2", "")
                 sport = str(bet.get("sport", ""))
-                match_url = self._bridge_search_match(equipe_1, equipe_2, sport)
+                match_url, equipe_1_resolved, equipe_2_resolved = self._bridge_search_match(equipe_1, equipe_2, sport)
                 if not match_url:
                     result["error"] = "match_not_found"
                     BetTrace.capture_failure(trace_dir, "match_not_found", bridge=stake_bridge, tag="search_match")
@@ -1434,10 +1507,15 @@ class StakeScraper:
                 if combined_events:
                     log(f"[Stake/bridge] Mode MyMatch ({len(combined_events)} événements): {bet.get('combined_label', '')}", "info")
                     result["odds"] = bet.get("odds")
-                    result["success"] = self._bridge_place_same_game_multi(match_url, combined_events, mise, equipe_1, equipe_2, dry_run=dry_run)
+                    result["success"] = self._bridge_place_same_game_multi(
+                        match_url, combined_events, mise, equipe_1, equipe_2, dry_run=dry_run,
+                        equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved)
                 else:
-                    result["odds"] = self._bridge_get_odds(match_url, bet.get("selection", ""), sport, equipe_1, equipe_2)
-                    result["success"] = self._bridge_place_bet(match_url, bet.get("selection", ""), sport, mise, equipe_1, equipe_2, dry_run=dry_run)
+                    result["odds"] = self._bridge_get_odds(match_url, bet.get("selection", ""), sport, equipe_1, equipe_2,
+                                                             equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved)
+                    result["success"] = self._bridge_place_bet(
+                        match_url, bet.get("selection", ""), sport, mise, equipe_1, equipe_2, dry_run=dry_run,
+                        equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved)
                 result["simulated"] = dry_run and result["success"]
                 if not result["success"]:
                     result["error"] = self._last_bridge_error or "placement_failed"
@@ -1464,12 +1542,13 @@ class StakeScraper:
             try:
                 equipe_1, equipe_2 = bet.get("equipe_1", ""), bet.get("equipe_2", "")
                 sport = str(bet.get("sport", ""))
-                match_url = self._bridge_search_match(equipe_1, equipe_2, sport)
+                match_url, equipe_1_resolved, equipe_2_resolved = self._bridge_search_match(equipe_1, equipe_2, sport)
                 if not match_url:
                     result["error"] = "match_not_found"
                     return result
                 result["match_url"] = match_url
-                result["odds"] = self._bridge_get_odds(match_url, bet.get("selection", ""), sport, equipe_1, equipe_2)
+                result["odds"] = self._bridge_get_odds(match_url, bet.get("selection", ""), sport, equipe_1, equipe_2,
+                                                         equipe_1_resolved=equipe_1_resolved, equipe_2_resolved=equipe_2_resolved)
             except Exception as e:
                 result["error"] = str(e)
                 log(f"[Stake/bridge] Erreur fetch_odds: {e}", "error")

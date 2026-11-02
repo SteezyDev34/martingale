@@ -519,6 +519,33 @@ def _names_from_api(query, sport_id):
         return set()
 
 
+def report_team_nickname(sport_id, team_name, nickname):
+    """Signale à AuxoTracker qu'un nom différent (ex: "Venise") désigne la même
+    équipe qu'un nom déjà connu en base (ex: "Venezia") -- enrichit
+    `teams.nickname` une fois pour toutes, pour que `teams/search` trouve la
+    correspondance directement la prochaine fois sans repasser par l'IA.
+    Best-effort : échec silencieux (log seulement), jamais bloquant pour le
+    placement du pari en cours.
+    """
+    token = getattr(config, 'AUXOBOT_TOKEN', None)
+    if not token or not team_name or not nickname:
+        return False
+    if team_name.strip().lower() == nickname.strip().lower():
+        return False
+    try:
+        base = getattr(config, 'AUXOTRACK_API_URL', 'https://api.auxotracker.fr')
+        url = f"{base.rstrip('/')}/api/auxobot/teams/{sport_id}/nickname"
+        r = requests.post(
+            url,
+            json={'team_name': team_name, 'nickname': nickname},
+            headers={'Authorization': f'Bearer {token}'},
+            timeout=5,
+        )
+        return r.ok and r.json().get('success', False)
+    except Exception:
+        return False
+
+
 def compare_match_name(match_name1, match_name2, sport_id):
     """Compare deux intitulés de match en utilisant l'API locale plutôt que l'IA.
 
