@@ -1132,6 +1132,25 @@ class StakeScraper:
                     variants.append(f"{parts[1]}, {parts[0]}".lower())
                     variants.append(parts[1].lower())
                 return variants
+        elif sel_upper in ("1X", "X2", "12") and (equipe_1 or equipe_2):
+            # Double chance : Stake affiche "{équipe} ou Match nul" / "Match nul ou
+            # {équipe}" / "{équipe1} ou {équipe2}", jamais "1X"/"X2"/"12" littéralement
+            # -- même traduction que V1/V2 ci-dessus, jamais faite avant ce jour
+            # (découvert le 2026-11-02 sur un vrai ticket MyMatch Atalanta/Parme :
+            # jambe "1X" introuvable en l'état, aucun bouton Stake ne contient "1x").
+            e1 = equipe_1.strip()
+            e2 = equipe_2.strip()
+            e1r = equipe_1_resolved.strip() or e1
+            e2r = equipe_2_resolved.strip() or e2
+            if sel_upper == "1X":
+                variants = [f"{e1} ou match nul".lower(), f"{e1r} ou match nul".lower()]
+            elif sel_upper == "X2":
+                variants = [f"match nul ou {e2}".lower(), f"match nul ou {e2r}".lower()]
+            else:  # "12"
+                variants = [f"{e1} ou {e2}".lower(), f"{e1r} ou {e2r}".lower()]
+            seen = set()
+            variants = [v for v in variants if not (v in seen or seen.add(v))]
+            return variants
         elif scorer_m:
             # "{Joueur} - Oui" (buteur à tout moment, pivot IA) : Stake n'offre pas
             # toujours ce marché binaire Oui/Non -- mais le marché "Buts du joueur"
@@ -1643,7 +1662,7 @@ import unicodedata as _ud
 _SET_GAME_HANDICAP_RE = _re_module.compile(
     r'^([12])\s*handicap\s*\(\s*([+-]?)\s*(\d+(?:[.,]\d+)?)\s*\)\s*(sets?|jeux|games?)$'
 )
-_TOTAL_OVERALL_RE = _re_module.compile(r'^total\s+(plus|moins)\s+de\s+(\d+(?:[.,]\d+)?)$')
+_TOTAL_OVERALL_RE = _re_module.compile(r'^(?:total\s+)?(plus|moins)\s+de\s+(\d+(?:[.,]\d+)?)$')
 _TOTAL_INDIVIDUEL_RE = _re_module.compile(r'^total\s+individuel\s+([12])\s+(plus|moins)\s+de\s+(\d+(?:[.,]\d+)?)$')
 # "{Joueur} - Oui" : pivot IA pour "buteur à tout moment" (cf. getTextFromImageGPT.py,
 # règle "Buteur à tout moment"). Volontairement pas de pendant "- Non" (pas d'équivalent
