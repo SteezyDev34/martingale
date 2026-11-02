@@ -356,30 +356,67 @@
     }
 
 
-    async function _findTableMarketButton(args) {
-      const { marketLabel, marketSubstrings, targetName, handicapValue, playerSubstrings } = args || {};
+    // Normalise un texte en liste de mots (accents retirés) pour le scoring
+    // par recouvrement ci-dessous.
+    function _normWords(s) {
+      const ascii = (s || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+      return ascii.match(/[a-z]+/g) || [];
+    }
 
-      // Props joueur combinés ("Points + Assists + Rebonds", etc.) -- scope la
-      // recherche au conteneur du joueur d'abord (sans ça, on prendrait la 1ère
-      // occurrence du libellé sur TOUTE la page, qui peut appartenir à l'AUTRE
-      // joueur partageant la même catégorie de prop, constaté le 2026-11-02).
-      // Contrairement à Total Asiatique (en-têtes "Plus de"/"Moins de" dans des
-      // éléments SÉPARÉS au-dessus de plusieurs lignes numérotées), ces marchés
-      // à une seule ligne n'ont PAS d'en-tête de colonne distinct -- "Plus de"/
-      // "Moins de" sont directement DANS le texte de chaque bouton ("Plus de
-      // 1,86"), donc _findMarketContainer (qui exclut le texte à l'intérieur
-      // des boutons) n'y trouve jamais d'en-tête -- recherche directe par texte
-      // de bouton à la place, pas de recherche par handicapValue (absent du
-      // texte du bouton ici, contrairement à Total Asiatique).
+    // Coefficient de Dice (2×intersection / somme des tailles) entre deux
+    // ensembles de mots -- favorise naturellement un en-tête dont TOUS les mots
+    // correspondent (score 1.0) sur un en-tête plus large qui ne fait que
+    // contenir une partie des mots en commun (score < 1.0), sans dictionnaire
+    // de traduction : fonctionne tel quel entre "tirs a trois points reussis"
+    // et l'en-tête Stake "Tirs à trois points réussis" (score 1.0) tout en
+    // écartant correctement "Points" seul (score 0.4) malgré le mot "points"
+    // partagé -- contrairement à une recherche par sous-chaîne, qui les
+    // confondait (constaté le 2026-11-02 : "tirs à trois points" matchait à
+    // tort "Points").
+    function _diceScore(wordsA, wordsB) {
+      const setA = new Set(wordsA);
+      const setB = new Set(wordsB);
+      let overlap = 0;
+      for (const w of setA) if (setB.has(w)) overlap++;
+      const total = setA.size + setB.size;
+      return total ? (2 * overlap) / total : 0;
+    }
+
+    async function _findTableMarketButton(args) {
+      const { marketLabel, marketSubstrings, targetName, handicapValue, playerSubstrings, statTokens } = args || {};
+
+      // Props joueur (combinés "Points + Assists + Rebonds" ou simples "Points",
+      // "Passes décisives", etc.) -- scope la recherche au conteneur du joueur
+      // d'abord (sans ça, on prendrait la 1ère occurrence du libellé sur TOUTE
+      // la page, qui peut appartenir à l'AUTRE joueur partageant la même
+      // catégorie de prop, constaté le 2026-11-02). Catégorie identifiée par
+      // recouvrement de mots (statTokens, extraits de `intitule` côté Python)
+      // contre les VRAIS en-têtes présents dans la section du joueur -- pas de
+      // dictionnaire de traduction FR/EN figé (Stake mélange les langues selon
+      // le marché, ex: "Rebounds" seul mais "Points + Rebonds" en combiné,
+      // "Passes décisives" seul mais "Assists" en combiné -- aucune règle fiable
+      // trouvée). Contrairement à Total Asiatique (en-têtes "Plus de"/"Moins de"
+      // SÉPARÉS au-dessus de plusieurs lignes numérotées), ces marchés à une
+      // seule ligne n'ont pas d'en-tête de colonne distinct -- "Plus de"/"Moins
+      // de" sont directement DANS le texte du bouton -- recherche directe par
+      // texte de bouton, pas par handicapValue (absent du texte ici).
       if (playerSubstrings) {
         const playerRoot = await _findPlayerStatContainer(playerSubstrings);
         if (!playerRoot) return null;
         const all = Array.from(playerRoot.querySelectorAll('*'));
-        const headerEl = all.find((el) => el.children.length === 0 && (marketSubstrings || []).every(
-          (s) => (el.textContent || '').toLowerCase().includes(s.toLowerCase())
-        ));
-        if (!headerEl) return null;
-        let container = headerEl;
+        let best = null;
+        let bestScore = 0;
+        for (const el of all) {
+          if (el.children.length !== 0 || el.closest('button')) continue;
+          const t = (el.textContent || '').trim();
+          if (!t || /^les\s+\d|^plus\s+de$|^moins\s+de$|^-?\d/i.test(t)) continue;
+          const score = _diceScore(statTokens || [], _normWords(t));
+          if (score > bestScore) { bestScore = score; best = el; }
+        }
+        // Seuil empirique : exige au moins ~1/3 de recouvrement, pour éviter un
+        // faux match quasi vide si `intitule` ne décrit pas clairement la stat.
+        if (!best || bestScore < 0.34) return null;
+        let container = best;
         for (let i = 0; i < 10 && container; i++) {
           if (container.querySelectorAll('[data-testid="fixture-outcome"]').length >= 2) break;
           container = container.parentElement;

@@ -1686,47 +1686,40 @@ _TOTAL_INDIVIDUEL_RE = _re_module.compile(r'^total\s+individuel\s+([12])\s+(plus
 # naturel côté marché "Buts du joueur" à seuils 1+/2+/3+).
 _PLAYER_SCORER_RE = _re_module.compile(r'^(.+?)\s*-\s*oui$', _re_module.IGNORECASE)
 
-# "{Joueur} - Plus de/Moins de {valeur}" : props joueur combinés (basketball
+# "{Joueur} - Plus de/Moins de {valeur}" : props joueur (basketball
 # "Statistiques des joueurs", ex: "Shai Gilgeous-Alexander - Plus de 39.5" pour
 # "points + rebonds + passes") -- découvert le 2026-11-02 sur un vrai ticket
 # Auxo1XBOT (NBA). Contrairement à Total Asiatique (table multi-lignes, valeur
 # dans le texte du bouton), ces marchés n'ont qu'UNE ligne par catégorie de
 # stat, sans valeur dans le bouton -- il faut d'abord identifier LA bonne
-# catégorie (Points / Points + Rebonds / Points + Assists + Rebonds / etc.),
-# absente de `selection` (juste "Plus de 39.5") mais présente dans `intitule`
-# ("... plus de 39.5 points rebonds passes").
+# catégorie (Points / Points + Rebonds / Tirs à trois points réussis / Passes
+# décisives / etc.), absente de `selection` (juste "Plus de 39.5") mais
+# présente dans `intitule` ("... plus de 39.5 points rebonds passes").
 _PLAYER_STAT_RE = _re_module.compile(r'^(.+?)\s*-\s*(plus|moins)\s+de\s+(\d+(?:[.,]\d+)?)$', _re_module.IGNORECASE)
 
-# Mot-clé (FR ou EN, tel qu'extrait par l'IA dans `intitule`) -> sous-chaîne du
-# libellé Stake correspondant (observé le 2026-11-02 sur une page NBA réelle :
-# Stake mélange les langues dans ses en-têtes de props combinés, ex: "Points +
-# Rebonds" mais "Points + Assists" -- pas de traduction cohérente prévisible,
-# cette table capture ce qui a été vérifié, pas une règle générale).
-_STAT_KEYWORDS = [
-    ('points', 'points'),
-    ('rebonds', 'rebonds'),
-    ('rebounds', 'rebonds'),
-    ('passes', 'assists'),
-    ('assists', 'assists'),
-    ('interceptions', 'interceptions'),
-    ('steals', 'interceptions'),
-    ('contres', 'blocages'),
-    ('blocages', 'blocages'),
-    ('blocks', 'blocages'),
-    ('pertes', 'turnovers'),
-    ('turnovers', 'turnovers'),
-]
+# Mots vides à ignorer lors de l'extraction des tokens de stat -- ni le choix
+# d'un dictionnaire de traduction FR->EN des noms de stats (Stake mélange les
+# langues selon le marché : "Rebounds" seul mais "Points + Rebonds" en combiné,
+# "Passes décisives" seul mais "Assists" en combiné -- pas de règle fiable,
+# cf. essais ratés le 2026-11-02), ni une liste de stats explicite (jamais
+# exhaustive) : les tokens bruts de `intitule` sont comparés en JS par
+# recouvrement de mots contre les VRAIS en-têtes de marché disponibles pour CE
+# joueur sur la page -- fonctionne quel que soit le vocabulaire exact tant que
+# l'IA et Stake décrivent la même stat avec des mots globalement proches.
+_STAT_STOPWORDS = {'de', 'du', 'des', 'le', 'la', 'les', 'un', 'une', 'et', 'a', 'sur', 'pour', 'dans', 'au', 'aux'}
 
 
-def _extract_stat_substrings(intitule: str) -> List[str]:
-    """Extrait, dans l'ordre d'apparition et sans doublon, les sous-chaînes de
-    libellé Stake correspondant aux mots-clés de stat trouvés dans `intitule`."""
+def _extract_stat_tokens(intitule: str) -> List[str]:
+    """Extrait les mots significatifs de la partie de `intitule` qui décrit la
+    stat (après la valeur numérique du seuil), accents normalisés, mots vides
+    filtrés -- comparés en JS par recouvrement de mots contre les en-têtes
+    réellement présents dans la section du joueur (pas de traduction figée)."""
     low = (intitule or "").lower()
-    found = []
-    for kw, stake_sub in _STAT_KEYWORDS:
-        if kw in low and stake_sub not in found:
-            found.append(stake_sub)
-    return found
+    m = _re_module.search(r'\d+(?:[.,]\d+)?\s*(.*)$', low)
+    tail = m.group(1) if m else low
+    ascii_tail = _ud.normalize('NFKD', tail).encode('ascii', 'ignore').decode('ascii')
+    words = _re_module.findall(r'[a-z]+', ascii_tail)
+    return [w for w in words if w not in _STAT_STOPWORDS and len(w) > 1]
 
 # sport_id -> (intitulé Stake du Total global, suffixe du Total par joueur/équipe).
 # Seuls les sports vérifiés manuellement sont listés -- un sport absent retombe
@@ -1769,15 +1762,15 @@ def _match_table_market(selection: str, sport_id: str, equipe_1: str = "", equip
         player_name = m.group(1).strip()
         target_name = "Plus de" if m.group(2).lower() == "plus" else "Moins de"
         value = float(m.group(3).replace(',', '.'))
-        stat_substrings = _extract_stat_substrings(intitule)
+        stat_tokens = _extract_stat_tokens(intitule)
         player_words = player_name.split()
         # Dernier mot (nom de famille) : suffisant pour matcher l'en-tête
         # joueur affiché par Stake (ex: "Shai Gilgeous-Alexander (PG)"), plus
         # robuste qu'exiger le nom complet si une variante d'accent/tiret diffère.
         player_last = player_words[-1] if player_words else player_name
-        if player_last and stat_substrings:
+        if player_last and stat_tokens:
             return {
-                'marketSubstrings': stat_substrings,
+                'statTokens': stat_tokens,
                 'playerSubstrings': [player_last],
                 'targetName': target_name,
                 'handicapValue': value,
