@@ -36,21 +36,21 @@ if os.getenv('PYCHARM_HOSTED') != '1':  # Si execute dans PyCharm
     # Revenir au repertoire original
     os.chdir(original_cwd)
 
-# Port dédié au bridge Stake de CE process (pas le 9101 par défaut) -- DOIT être
+# Port dédié au bridge Stake de CE process (pas le 10101 par défaut) -- DOIT être
 # fixé avant tout import qui charge Functions.Bookmakers.router, dont le code au
 # niveau module démarre déjà le bridge Stake sur le port par défaut dès l'import
-# (avant même que session_init.py ait la main) : passer port=9103 seulement à
+# (avant même que session_init.py ait la main) : passer port=10103 seulement à
 # l'appel dans session_init.py arrive trop tard, start_stake_bridge() est déjà
 # idempotent sur le premier port utilisé (constaté le 2026-11-01). Même principe
-# que le port 9102 dédié au bridge 1xBet de process_bets_loop.py (router.py) vs
-# le 9999 par défaut de ce process -- process_bets_loop.py tourne déjà sur 9101
+# que le port 10102 dédié au bridge 1xBet de process_bets_loop.py (router.py) vs
+# le 9999 par défaut de ce process -- process_bets_loop.py tourne déjà sur 10101
 # en parallèle, même port = collision au bind.
-os.environ.setdefault('STAKE_BRIDGE_PORT', '9103')
+os.environ.setdefault('STAKE_BRIDGE_PORT', '10103')
 
 # Lance process_bets_loop.py en sous-processus au démarrage -- jusqu'ici il
 # fallait le lancer séparément à la main en plus de main-1.py (demande
 # explicite de l'utilisateur le 2026-11-02 : un seul script à lancer pour les
-# deux). Idempotent : si le port 9101 (bridge Stake de process_bets_loop.py)
+# deux). Idempotent : si le port 10101 (bridge Stake de process_bets_loop.py)
 # répond déjà, un autre process_bets_loop.py tourne déjà ailleurs -- ne pas en
 # relancer un second (collision de bind sinon). Non bloquant et non fatal : si
 # ce lancement échoue, main-1.py continue quand même (le watcher reste la
@@ -61,8 +61,8 @@ os.environ.setdefault('STAKE_BRIDGE_PORT', '9103')
 def _start_process_bets_loop():
     import socket
     try:
-        with socket.create_connection(('127.0.0.1', 9101), timeout=0.5):
-            print("[main-1] process_bets_loop.py déjà actif (port 9101 répond), pas de relance.")
+        with socket.create_connection(('127.0.0.1', 10101), timeout=0.5):
+            print("[main-1] process_bets_loop.py déjà actif (port 10101 répond), pas de relance.")
             return
     except OSError:
         pass

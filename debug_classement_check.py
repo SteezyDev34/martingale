@@ -9,7 +9,7 @@ Pré-requis avant de lancer :
    chrome_extension/content_scripts/1xbet.js ne prend effet qu'après reload).
 2. Avoir Chrome ouvert avec un onglet sur le site de paris 1xBet (ligue/line),
    connecté au port 9999 (port de debug manuel, ne touche pas aux ports
-   9001-9016/9101-9102 utilisés par les bots en prod).
+   9001-9016/10101-10102 utilisés par les bots en prod).
 3. Aucun bot de prod ne doit tourner en même temps sur le port 9999.
 
 Sortie : DataFiles/debug_classement_<timestamp>.json avec :

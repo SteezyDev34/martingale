@@ -17,7 +17,7 @@ load_dotenv(os.path.join(project_root, ".env"))
 from selenium.webdriver.common.by import By
 from Functions.Logs.Logger import log
 
-# Stake est passé sur le bridge extension Chrome (StakeBridge.py, port 9101) — plus
+# Stake est passé sur le bridge extension Chrome (StakeBridge.py, port 10101) — plus
 # besoin de session Selenium/login manuel pour ce bookmaker. Ces dicts restent vides
 # en attendant qu'un futur bookmaker non-bridge en ait besoin ; tant qu'ils le sont,
 # init_bookmaker_sessions() ne lance aucun Chrome Selenium (voir plus bas).
@@ -114,16 +114,16 @@ def init_bookmaker_sessions() -> dict:
 
     from ChromeDriver.SetDriver import get_script_driver
 
-    # Démarre le bridge WebSocket dédié Stake -- port 9103 (pas le 9101 par défaut)
-    # : router.py (process_bets_loop.py) tourne déjà sur 9101 en parallèle, même
+    # Démarre le bridge WebSocket dédié Stake -- port 10103 (pas le 10101 par défaut)
+    # : router.py (process_bets_loop.py) tourne déjà sur 10101 en parallèle, même
     # port = collision au bind si les deux process tournent en même temps (cas
     # normal en prod, constaté le 2026-11-01) -- même principe que le bridge 1xBet
-    # un peu plus bas (port 9999 ici vs 9102 pour router.py). Non bloquant,
+    # un peu plus bas (port 9999 ici vs 10102 pour router.py). Non bloquant,
     # StakeScraper retombe sur Selenium tant que l'extension Chrome n'est pas
     # connectée sur ce port.
     try:
         from Functions.Bookmakers.StakeBridge import start_stake_bridge
-        start_stake_bridge(wait_timeout=0, port=9103)
+        start_stake_bridge(wait_timeout=0, port=10103)
     except Exception as e:
         log(f"⚠️ Démarrage StakeBridge échoué (fallback Selenium): {e}", "warning")
 

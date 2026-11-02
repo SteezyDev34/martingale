@@ -70,7 +70,7 @@ def _is_bookmaker_active(name: str) -> bool:
     return True
 
 
-# Demarre le bridge WebSocket dedie Stake (port 9101, cf. StakeBridge.py) des
+# Demarre le bridge WebSocket dedie Stake (port 10101, cf. StakeBridge.py) des
 # l'import de ce module — sans ca, StakeScraper.is_connected() reste toujours
 # False dans ce process (celui qui place reellement les paris, via
 # ProcessTelegramBets.py) et retombe silencieusement sur l'ancien Selenium,
@@ -94,7 +94,7 @@ if _is_bookmaker_active("Stake"):
 # Meme chose pour le bridge 1xBet general (websocket_server.bridge, utilise par
 # XBetScraper) : sans ca, "Extension Chrome non connectee" systematique dans ce
 # process (constate le 2026-10-16, XBetScraper._fetch_odds_sync echoue direct).
-# Port dedie 9102 (pas le 9999 par defaut) : le watcher (SCRIPTS_WATCH/main-1.py)
+# Port dedie 10102 (pas le 9999 par defaut) : le watcher (SCRIPTS_WATCH/main-1.py)
 # tourne deja sur 9999 en parallele, meme port = collision au bind si les deux
 # process tournent en meme temps (cas normal en prod). Conditionné à 1xBet actif
 # (cf. BOOKMAKER_STATE ci-dessus) depuis le 2026-11-02 -- tournait avant sans
@@ -102,7 +102,7 @@ if _is_bookmaker_active("Stake"):
 if _is_bookmaker_active("1xBet"):
     try:
         from websocket_server import start_bridge as _start_xbet_bridge, bridge as _xbet_bridge
-        _start_xbet_bridge(wait_timeout=10, port=9102)
+        _start_xbet_bridge(wait_timeout=10, port=10102)
         # Ouvre/enregistre l'onglet dedie a CE process (meme principe que les scripts
         # SCRIPTS_1530A/SCRIPTS_4P6P au demarrage) -- sans ca, _tab_id reste None et
         # _search_and_open_match (OneXBetBridge.py, clique un bouton recherche)

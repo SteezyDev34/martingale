@@ -1098,7 +1098,7 @@ class StakeScraper:
 
     # ── Bridge (extension Chrome) ────────────────────────────────────────
     # Même principe que 1xBet/XBetScraper : si l'extension est connectée sur le
-    # port dédié Stake (StakeBridge, 9101), on pilote l'onglet via l'extension au
+    # port dédié Stake (StakeBridge, 10101), on pilote l'onglet via l'extension au
     # lieu de Selenium. Résolution de labels/variantes de noms identique à la
     # version Selenium (BetLabelsDB), seule la couche DOM change.
     # Limite connue v1 : pas de fallback IA (_ai_resolve_outcome) si le premier

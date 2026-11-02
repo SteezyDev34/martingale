@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 StakeBridge — pont WebSocket dédié à Stake.bet (port distinct du bridge 1xBet :
-Functions/Bookmakers/StakeBridge.STAKE_WS_PORT = 9101, cf. service_worker.js
+Functions/Bookmakers/StakeBridge.STAKE_WS_PORT = 10101, cf. service_worker.js
 WS_PORTS), utilisé par StakeScraper quand l'extension Chrome est connectée.
 
 Même mécanisme que websocket_server.ExtensionBridge pour 1xBet (port dédié,
@@ -18,7 +18,7 @@ from websocket_server import ExtensionBridge
 # permet à un process qui tourne en parallèle d'un autre (ex: SCRIPTS_WATCH/main-1.py
 # à côté de process_bets_loop.py) d'utiliser un port dédié pour éviter une collision
 # de bind -- cf. main-1.py qui fixe cette variable avant ses propres imports.
-STAKE_WS_PORT = int(os.getenv('STAKE_BRIDGE_PORT', '9101'))
+STAKE_WS_PORT = int(os.getenv('STAKE_BRIDGE_PORT', '10101'))
 
 
 class StakeExtensionBridge(ExtensionBridge):
@@ -117,7 +117,7 @@ def start_stake_bridge(wait_timeout: int = 0, port: int = STAKE_WS_PORT):
     """Démarre le serveur WebSocket dédié Stake. Idempotent (sans effet si déjà démarré).
 
     port: port WS dédié à CE process (même principe que websocket_server.start_bridge
-    pour le bridge 1xBet, cf. router.py qui utilise le port 9102 au lieu du 9999 par
+    pour le bridge 1xBet, cf. router.py qui utilise le port 10102 au lieu du 9999 par
     défaut de main-1.py) -- deux process qui tournent en même temps (ex: main-1.py et
     process_bets_loop.py) ne doivent PAS partager le même port, sinon le second ne
     peut pas bind et retombe en silence sur Selenium (constaté le 2026-11-01).
