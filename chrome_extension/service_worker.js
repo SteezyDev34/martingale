@@ -32,6 +32,8 @@ const WS_PORTS = [
   10101, // Functions/Bookmakers/StakeBridge.py (router.py — placement Stake.bet, process_bets_loop.py)
   10102, // websocket_server.bridge demarre par router.py (placement 1xBet, process_bets_loop.py)
   10103, // Functions/Bookmakers/StakeBridge.py (session_init.py — placement Stake.bet direct, SCRIPTS_WATCH/main-1.py)
+  10104, // SCRIPTS_15V1/15V1-1.py (websocket_server.bridge, start_bridge port dedie)
+  10105, // SCRIPTS_15V2/15V2-1.py (websocket_server.bridge, start_bridge port dedie)
   9999, // port historique — usage manuel/debug (python websocket_server.py)
 ];
 
