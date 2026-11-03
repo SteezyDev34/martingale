@@ -166,28 +166,17 @@ def ValidationDuParis(driver, nexbet=False):
         config.placed_game = config.looking_game
         config.log(f'{config.validated_bet}', 'info', False, indent=3)
 
-        json_filename = f"{config.scriptType}_validated_bets.json"
-        try:
-            try:
-                with open(json_filename, 'r') as f:
-                    existing_bets = json.load(f)
-            except FileNotFoundError:
-                existing_bets = []
-            except json.JSONDecodeError:
-                backup_name = json_filename.replace('.json', f'_corrupted_{int(time.time())}.json')
-                os.rename(json_filename, backup_name)
-                existing_bets = []
-            existing_bets.append(config.validated_bet)
-            with open(json_filename, 'w') as f:
-                json.dump(existing_bets, f, indent=4)
-        except Exception as e:
-            config.log(f"Erreur lors de la sauvegarde du pari validé dans le JSON : {e}", 'error', False)
-
         # Envoi au service distant legacy + à l'API AuxoTracker (stockage de l'ID pour
         # mise à jour du résultat) -- manquait sur ce chemin bridge (la branche Selenium
         # ci-dessous le fait depuis longtemps), ce qui faisait perdre le reporting
         # AuxoTracker dès qu'un placement passait par l'extension plutôt que Selenium
         # (constaté le 2026-11-02). Même logique que la branche Selenium plus bas.
+        # IMPORTANT : fait AVANT l'écriture du JSON ci-dessous (pas après, comme
+        # c'était le cas initialement) -- sinon api_bet_id est assigné sur
+        # config.validated_bet APRÈS que le fichier JSON ait déjà été sérialisé,
+        # et le champ reste bloqué à null dans tous les paris enregistrés, rendant
+        # tout recoupement avec AuxoTracker impossible après coup (constaté le
+        # 2026-11-03 en cherchant d'autres paris fantômes).
         try:
             SendBetData()
         except Exception as e:
@@ -224,6 +213,23 @@ def ValidationDuParis(driver, nexbet=False):
                 config.validated_bet['api_bet_id'] = _api_bet_id
         except Exception as _e:
             config.log(f"Erreur envoi pari API AuxoTracker: {_e}", 'warning', False)
+
+        json_filename = f"{config.scriptType}_validated_bets.json"
+        try:
+            try:
+                with open(json_filename, 'r') as f:
+                    existing_bets = json.load(f)
+            except FileNotFoundError:
+                existing_bets = []
+            except json.JSONDecodeError:
+                backup_name = json_filename.replace('.json', f'_corrupted_{int(time.time())}.json')
+                os.rename(json_filename, backup_name)
+                existing_bets = []
+            existing_bets.append(config.validated_bet)
+            with open(json_filename, 'w') as f:
+                json.dump(existing_bets, f, indent=4)
+        except Exception as e:
+            config.log(f"Erreur lors de la sauvegarde du pari validé dans le JSON : {e}", 'error', False)
 
         if not already_placed:
             config.perte = RedisIPC.get_loss(config.scriptType, config.perte)
@@ -417,34 +423,14 @@ def ValidationDuParis(driver, nexbet=False):
             except Exception as e:
                 config.log(f"Erreur lors de l'envoi des données du pari : {e}", 'error', False)
 
-        # Save validated bet to JSON file named after script type
-        json_filename = f"{config.scriptType}_validated_bets.json"
-        try:
-            # Chargement des paris existants avec gestion de corruption JSON
-            try:
-                with open(json_filename, 'r') as f:
-                    existing_bets = json.load(f)
-            except FileNotFoundError:
-                existing_bets = []
-            except json.JSONDecodeError as e:
-                # Sauvegarde du fichier corrompu
-                backup_name = json_filename.replace('.json', f'_corrupted_{int(time.time())}.json')
-                os.rename(json_filename, backup_name)
-                config.log(f"Fichier JSON corrompu détecté, backup créé : {backup_name}", 'error', False)
-                existing_bets = []
-
-            # Ajout du nouveau pari
-            existing_bets.append(config.validated_bet)
-
-            # Sauvegarde des paris mis à jour
-            with open(json_filename, 'w') as f:
-                json.dump(existing_bets, f, indent=4)
-        except Exception as e:
-            config.log(f"Erreur lors de la sauvegarde du pari validé dans le JSON : {e}", 'error', False)
         config.placed_game = config.looking_game
         config.log(f'{config.validated_bet}', 'info', False, indent=3)
 
-        # Envoi du pari validé à l'API AuxoTracker et stockage de l'ID pour mise à jour du résultat
+        # Envoi du pari validé à l'API AuxoTracker et stockage de l'ID pour mise à jour du résultat.
+        # IMPORTANT : fait AVANT l'écriture du JSON ci-dessous (pas après) -- sinon
+        # api_bet_id est assigné sur config.validated_bet APRÈS que le fichier JSON
+        # ait déjà été sérialisé, et le champ reste bloqué à null dans tous les paris
+        # enregistrés (constaté le 2026-11-03, même bug déjà corrigé côté bridge).
         try:
             from Functions.TelegramBetsAPI import send_bet_to_auxotracker
             _teams = getattr(config, 'teams', None) or []
@@ -477,6 +463,31 @@ def ValidationDuParis(driver, nexbet=False):
                 config.validated_bet['api_bet_id'] = _api_bet_id
         except Exception as _e:
             config.log(f"Erreur envoi pari API AuxoTracker: {_e}", 'warning', False)
+
+        # Save validated bet to JSON file named after script type
+        json_filename = f"{config.scriptType}_validated_bets.json"
+        try:
+            # Chargement des paris existants avec gestion de corruption JSON
+            try:
+                with open(json_filename, 'r') as f:
+                    existing_bets = json.load(f)
+            except FileNotFoundError:
+                existing_bets = []
+            except json.JSONDecodeError as e:
+                # Sauvegarde du fichier corrompu
+                backup_name = json_filename.replace('.json', f'_corrupted_{int(time.time())}.json')
+                os.rename(json_filename, backup_name)
+                config.log(f"Fichier JSON corrompu détecté, backup créé : {backup_name}", 'error', False)
+                existing_bets = []
+
+            # Ajout du nouveau pari
+            existing_bets.append(config.validated_bet)
+
+            # Sauvegarde des paris mis à jour
+            with open(json_filename, 'w') as f:
+                json.dump(existing_bets, f, indent=4)
+        except Exception as e:
+            config.log(f"Erreur lors de la sauvegarde du pari validé dans le JSON : {e}", 'error', False)
 
         config.perte = RedisIPC.get_loss(config.scriptType, config.perte)
 
