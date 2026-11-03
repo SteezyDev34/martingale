@@ -168,7 +168,7 @@ def traiter_matchlist(matchlist):
         sofascore_link = match_data.get('sofascore_link') if match_data else None
 
         if match_data:
-            script_types_api, api_details = Functions_stats.compute_script_types_from_match_data(match_data)
+            script_types_api, api_details = Functions_stats.compute_script_types_from_match_data(match_data, ligue_name=ligue_name)
             config.log(
                 f"ScriptTypes API ({getattr(config, 'SCRIPT_SELECTION_MODE', 'strict')}) "
                 f"pour {players_name[0]} vs {players_name[1]}: {script_types_api} — {api_details}",

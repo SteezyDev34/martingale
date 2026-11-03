@@ -1133,6 +1133,15 @@ _TIGHTNESS_GATED_SCRIPT_TYPES = {'15A', '30A', '40A', '4015', '4030'}
 # demandé, ne pas l'ajouter sans redemander.
 _TEMPORARILY_DISABLED_SCRIPT_TYPES = {'4015', '4030', '400', 'HOLD'}
 
+# Durci le 2026-11-03 à la demande de l'utilisateur : 150/300 (reach 15-0 /
+# reach 30-0) exigent un échantillon (sample_size) plus large que la normale
+# sur un match WTA ou ITF femmes -- mêmes termes de détection que
+# prioritize_matches_by_league ci-dessous ('wta', 'féminin', 'femmes',
+# 'women'). Seuil choisi par l'utilisateur, pas backtest-validé comme le
+# seuil 100%/in_set -- à ajuster s'il se révèle trop/pas assez strict.
+_MIN_SAMPLE_SIZE_FOR_WOMEN_150_300 = 500
+_WOMEN_SAMPLE_GATED_SCRIPT_TYPES = {'150', '300'}
+
 
 def get_match_link_and_probs(playerName1, playerName2, date_str=None):
     """
@@ -1174,7 +1183,7 @@ def get_match_link_and_probs(playerName1, playerName2, date_str=None):
     return None
 
 
-def compute_script_types_from_match_data(match_data, mode=None):
+def compute_script_types_from_match_data(match_data, mode=None, ligue_name=None):
     """
     Détermine les scriptTypes activables à partir des probas/edges/tightness
     déjà calculés côté AuxoTracker pour CE match (match_data = réponse de
@@ -1193,6 +1202,13 @@ def compute_script_types_from_match_data(match_data, mode=None):
     15A/30A/40A/4015/4030 sont en plus invalidés si le match n'est pas serré
     (tightness < 50), cf. _TIGHTNESS_GATED_SCRIPT_TYPES ci-dessus.
 
+    ligue_name (optionnel) : libellé de ligue tel que scrapé sur 1xBet (ex:
+    "wta. wuhan. dur"), même source que prioritize_matches_by_league
+    ci-dessous. Si le match est WTA ou ITF femmes (mêmes termes de détection
+    que cette fonction), 150/300 exigent en plus sample_size >=
+    _MIN_SAMPLE_SIZE_FOR_WOMEN_150_300 -- demandé le 2026-11-03, l'historique
+    disponible sur ces matchs est jugé moins fiable à volume égal.
+
     Retourne (script_types: list[str], details: dict) — details garde, pour
     chaque scriptType évalué, la proba utilisée (et l'edge en strict).
     """
@@ -1201,6 +1217,13 @@ def compute_script_types_from_match_data(match_data, mode=None):
     edges = match_data.get('edges') or {}
     tightness = match_data.get('tightness_score')
     tightness_gated = tightness is not None and tightness < _MIN_TIGHTNESS_FOR_SET_LEAD_SCRIPT_TYPES
+    sample_size = match_data.get('sample_size')
+    _ligue_lower = (ligue_name or '').lower()
+    is_women_wta_itf = any(term in _ligue_lower for term in ('wta', 'féminin', 'femmes', 'women'))
+    women_sample_gated = (
+        is_women_wta_itf and
+        (sample_size is None or sample_size < _MIN_SAMPLE_SIZE_FOR_WOMEN_150_300)
+    )
 
     def _avg(d, key_base):
         v1, v2 = d.get(f'{key_base}_1'), d.get(f'{key_base}_2')
@@ -1214,6 +1237,8 @@ def compute_script_types_from_match_data(match_data, mode=None):
         if st in _TEMPORARILY_DISABLED_SCRIPT_TYPES:
             continue
         if tightness_gated and st in _TIGHTNESS_GATED_SCRIPT_TYPES:
+            continue
+        if women_sample_gated and st in _WOMEN_SAMPLE_GATED_SCRIPT_TYPES:
             continue
         field = _MATCH_DATA_FIELD.get(st, st)
         if st == '030':
