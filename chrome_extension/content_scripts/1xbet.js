@@ -262,10 +262,28 @@
       return { success: input.value === String(mise), mise };
     },
 
-    async validateBet({ confirm = true } = {}) {
+    async validateBet({ confirm = true, expected_mise = null } = {}) {
       if (!confirm) return { validated: false };
       const btn = await waitForVisible(SEL.betslip_confirm, 3000);
       if (!btn) return { validated: false, error: 'confirm_button_not_found' };
+
+      // Revérifie la mise juste avant de cliquer -- port du même garde-fou que la
+      // branche Selenium (ValidationDuParis.py : relit cpn_amount_input et compare à
+      // config.mise avant de cliquer "Placer le pari", sinon retente PlacerMise). Le
+      // chemin bridge faisait confiance à setStake() plus tôt dans le flux sans jamais
+      // revérifier ici -- un champ resté sur une ancienne valeur (ex: setStake a écrit
+      // dans le mauvais input à cause de l'ambiguïté quick-coupon/sb- déjà rencontrée
+      // sur ce fichier) validait alors un pari avec un montant différent de celui
+      // voulu (signalé le 2026-11-03). expected_mise optionnel : si absent, pas de
+      // vérification (compat avec d'éventuels appels qui n'en fournissent pas).
+      if (expected_mise !== null && expected_mise !== undefined) {
+        const wrapper = await waitFor('.quick-coupon-bet-amount__steps', 1000);
+        const stakeInput = wrapper ? qs('.ui-number-input__field', wrapper) : await waitForVisible(SEL.betslip_input, 1000);
+        const actual = stakeInput ? stakeInput.value : null;
+        if (actual !== String(expected_mise)) {
+          return { validated: false, error: 'mise_mismatch', expected: expected_mise, actual };
+        }
+      }
 
       // Fermer toute notification de succès/erreur déjà présente AVANT de cliquer --
       // sans ça, la vérification post-clic ci-dessous peut retomber sur une

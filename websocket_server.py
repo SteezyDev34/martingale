@@ -196,9 +196,21 @@ class ExtensionBridge:
         """Remplit la mise sur un marché déjà sélectionné (via select_market/select_combined_markets)."""
         return self._send_and_wait({'action': 'set_stake', 'mise': mise})
 
-    def validate_bet(self, confirm=True):
-        """Confirme (ou annule) le pari. Retourne {validated, accepted}."""
-        return self._send_and_wait({'action': 'validate_bet', 'confirm': confirm})
+    def validate_bet(self, confirm=True, expected_mise=None):
+        """
+        Confirme (ou annule) le pari. Retourne {validated, accepted}.
+
+        expected_mise (optionnel) : si fourni, l'extension revérifie que le champ de
+        mise contient bien cette valeur juste avant de cliquer "Placer le pari" (même
+        garde-fou que la branche Selenium de ValidationDuParis.py) -- sans ça, un
+        champ resté sur une ancienne valeur pouvait valider un pari avec le mauvais
+        montant (signalé le 2026-11-03). Retourne {validated:False, error:'mise_mismatch',
+        expected, actual} si ça ne correspond pas, sans jamais cliquer.
+        """
+        payload = {'action': 'validate_bet', 'confirm': confirm}
+        if expected_mise is not None:
+            payload['expected_mise'] = expected_mise
+        return self._send_and_wait(payload)
 
     def delete_bet(self):
         """Supprime tous les paris du betslip."""

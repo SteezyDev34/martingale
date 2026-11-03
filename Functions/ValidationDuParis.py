@@ -145,7 +145,13 @@ def ValidationDuParis(driver, nexbet=False):
         # le ferait après le clic sur "Placer le pari" (texte "effectué" = succès,
         # "déjà"/"peut être accepté" = pari déjà placé, sinon échec).
         from websocket_server import bridge
-        result = bridge.validate_bet(confirm=True)
+        result = bridge.validate_bet(confirm=True, expected_mise=config.mise)
+        if result.get('error') == 'mise_mismatch':
+            config.log(
+                f"Mise incorrecte dans le champ au moment de la confirmation "
+                f"(attendu {result.get('expected')}, trouvé {result.get('actual')}) — pari NON validé.",
+                'error', False)
+            return False
         message = (result.get('message') or '').lower()
         already_placed = 'déjà' in message or 'peut être accepté' in message
         accepted = bool(result.get('accepted')) or already_placed
