@@ -552,8 +552,14 @@
       // sur la 2e jambe (appel séparé depuis Python, juste après addComboLeg) --
       // sans cette pause, _waitMiseInput pouvait tomber sur un DOM pas encore à jour
       // (constaté le 2026-10-29 : mise_input_not_found malgré les 2 jambes ajoutées).
-      await sleep(800);
-      const miseInput = await _waitMiseInput();
+      // Délai initial et timeout de retry augmentés le 2026-11-04 : un vrai combo
+      // (Galatasaray + Man United, compétitions différentes) a de nouveau échoué en
+      // mode réel malgré ce fix -- non reproduit sur 3 tentatives avec d'autres
+      // matchs (toujours trouvé du premier coup), donc probablement un ralentissement
+      // ponctuel plutôt qu'un bug déterministe, mais marge de sécurité élargie par
+      // précaution plutôt que de laisser échouer un combo réel sur un simple délai.
+      await sleep(1500);
+      const miseInput = await _waitMiseInput(12000);
       if (!miseInput) return { success: false, error: 'mise_input_not_found' };
       // Le 1er input-bet-amount du betslip est celui de la section "Pari multiple"
       // (combiné) -- elle se rend AVANT la section "Paris simples" (vérifié en DOM,

@@ -375,8 +375,13 @@ def check_tempete_images():
                         if r.status_code != 200:
                             log(f"[Tempête] Téléchargement échoué: {img_name} ({r.status_code})", "warning", clear=False)
                             continue
-                        script_dir = os.path.dirname(os.path.abspath(__file__))
-                        temp_dir = os.path.join(script_dir, 'media')
+                        # parent_directory (calculé une fois au niveau module, pas __file__
+                        # ré-évalué ici) -- ce thread dédié (threading.Thread, pas asyncio)
+                        # a vu __file__ devenir NameError de façon répétée et non reproductible
+                        # en isolation (constaté plusieurs fois, dont le 2026-11-04 : échec
+                        # systématique sur chaque image Tempête). parent_directory est une
+                        # simple variable Python déjà résolue, insensible à ce problème.
+                        temp_dir = os.path.join(parent_directory, 'media')
                         os.makedirs(temp_dir, exist_ok=True)
                         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
                         img_path = os.path.join(temp_dir, f"tempete_{timestamp}.jpg")
@@ -601,8 +606,7 @@ async def my_event_handler(event):
                 if "TICKET JACKPOT" in txt_upper and event.message.media is not None:
                     log("[AdrBetting] Ticket Jackpot détecté — OCR direct de l'image", "info", clear=False)
                     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-                    script_dir = os.path.dirname(os.path.abspath(__file__))
-                    temp_dir = os.path.join(script_dir, 'media')
+                    temp_dir = os.path.join(parent_directory, 'media')
                     os.makedirs(temp_dir, exist_ok=True)
                     image_path = os.path.join(temp_dir, f"jackpot_{timestamp}.jpg")
                     await event.message.download_media(file=image_path)
@@ -793,8 +797,7 @@ async def my_event_handler(event):
                         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
                         filename = f"media_{timestamp}.jpg"
                         # Create temp directory in the script directory
-                        script_dir = os.path.dirname(os.path.abspath(__file__))
-                        temp_dir = os.path.join(script_dir, 'media')
+                        temp_dir = os.path.join(parent_directory, 'media')
                         os.makedirs(temp_dir, exist_ok=True)
                         # Set full path for the image in temp directory
                         image_path = os.path.join(temp_dir, filename)

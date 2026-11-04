@@ -356,9 +356,15 @@ def _nettoyer_fin_match(scripts: list[BaseScript], driver) -> None:
         scripts (list[BaseScript]): Liste des scripts actifs
         driver: Instance du driver Selenium
     """
+    from Functions import RedisIPC
     for script in scripts:
         script.activer()
         config.log(f'Nettoyage fin de match : {script.script_type}', 'info', False)
+        # Séquence martingale abandonnée en cours (abort opérationnel, pas un gain) --
+        # envoyer le pari consolidé "perdu" avant la remise à zéro ci-dessous.
+        if config.error and RedisIPC.get_loss(script.script_type) > 0:
+            from Functions.MartingaleSequence import finalize_sequence_lost
+            finalize_sequence_lost(script.script_type)
         DispatchPerte()
         config.ScriptConfig(script.script_type).reset()
         config.init_variable()

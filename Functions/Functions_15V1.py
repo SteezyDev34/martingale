@@ -317,11 +317,9 @@ def all_script(driver):
 
                     continue
                 config.result = GetResult(driver)
-                _api_id = (config.validated_bet or {}).get('api_bet_id')
-                if _api_id:
-                    from Functions.TelegramBetsAPI import queue_bet_result
-                    queue_bet_result(_api_id, 'win' if config.result == 'WIN' else 'lost')
                 if config.result == 'WIN':
+                    from Functions.MartingaleSequence import finalize_sequence_win
+                    finalize_sequence_win(config.scriptType, config.validated_bet.get('montant'), config.validated_bet.get('cote'))
                     #GetIfGameEnd(driver)
                     config.perte = RedisIPC.get_loss(config.scriptType)
                     config.netprofit = round((float(config.validated_bet.get('montant', 0)) * float(config.validated_bet.get('cote', 0))) - float(config.perte), 2)
@@ -450,11 +448,6 @@ def all_script(driver):
             if not config.validated_bet or config.validated_bet.get('result') is None:
                 print('result', config.validated_bet.get('result'))
                 GetResult(driver)
-                _api_id = (config.validated_bet or {}).get('api_bet_id')
-                _res = (config.validated_bet or {}).get('result')
-                if _api_id and _res in ('WIN', 'LOSE'):
-                    from Functions.TelegramBetsAPI import queue_bet_result
-                    queue_bet_result(_api_id, 'win' if _res == 'WIN' else 'lost')
 
             total_gain = RedisIPC.get_total_gain(config.newmatch)-RedisIPC.get_total_loss(config.newmatch)
             config.log(f"Gain total match {config.newmatch}: {total_gain}", 'success', False)
@@ -498,6 +491,8 @@ def all_script(driver):
                     firstjeu = True
             
             elif config.validated_bet.get('result') == 'WIN':
+                from Functions.MartingaleSequence import finalize_sequence_win
+                finalize_sequence_win(config.scriptType, config.validated_bet.get('montant'), config.validated_bet.get('cote'))
                 config.perte = RedisIPC.get_loss(config.scriptType)
                 config.netprofit = round((float(config.validated_bet.get('montant', 0)) * float(config.validated_bet.get('cote', 0))) - float(config.perte), 2)
                 config.global_match_win[scriptType] = float(config.global_match_win[scriptType]) + float(
@@ -641,6 +636,11 @@ def all_script(driver):
         config.switchScript(i)
         RedisIPC.set_running(config.scriptType, False)
         print('perte', config.perte)
+        # Séquence martingale abandonnée en cours (abort opérationnel, pas un gain) --
+        # envoyer le pari consolidé "perdu" avant la remise à zéro ci-dessous.
+        if config.error and RedisIPC.get_loss(i) > 0:
+            from Functions.MartingaleSequence import finalize_sequence_lost
+            finalize_sequence_lost(i)
         #DispatchPerte()
         config.ScriptConfig(i).reset()
         config.init_variable()

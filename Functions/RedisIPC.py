@@ -467,6 +467,68 @@ def set_dev_mode(value: bool) -> bool:
         return False
 
 
+def _martingale_legs_key(script_type: str) -> str:
+    return f"martingale_legs:{str(script_type).upper()}"
+
+
+def get_martingale_legs(script_type: str) -> list:
+    """
+    Lit l'historique des jeux déjà joués dans la séquence martingale en cours
+    pour `script_type` (table settings, clé martingale_legs:<SCRIPT_TYPE>) --
+    persisté (pas juste en mémoire process) pour qu'un redémarrage en pleine
+    séquence ne perde pas les jeux déjà joués (cf. MartingaleSequence.py).
+    """
+    try:
+        conn = _get_sqlite_conn()
+        row = conn.execute(
+            "SELECT value FROM settings WHERE key=?", (_martingale_legs_key(script_type),)
+        ).fetchone()
+        conn.close()
+        if row is None:
+            return []
+        return json.loads(row[0])
+    except Exception:
+        return []
+
+
+def append_martingale_leg(script_type: str, leg: dict) -> bool:
+    """Ajoute un jeu à l'historique persisté de la séquence martingale en cours."""
+    try:
+        key = _martingale_legs_key(script_type)
+        conn = _get_sqlite_conn()
+        conn.execute("BEGIN IMMEDIATE")
+        row = conn.execute("SELECT value FROM settings WHERE key=?", (key,)).fetchone()
+        legs = json.loads(row[0]) if row else []
+        legs.append(leg)
+        conn.execute(
+            "INSERT INTO settings (key, value) VALUES (?, ?) "
+            "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+            (key, json.dumps(legs))
+        )
+        conn.commit()
+        conn.close()
+        return True
+    except Exception:
+        try:
+            import config
+            config.log(f"[RedisIPC] append_martingale_leg error for {script_type}", 'error')
+        except Exception:
+            pass
+        return False
+
+
+def clear_martingale_legs(script_type: str) -> bool:
+    """Vide l'historique persisté -- appelé une fois la séquence martingale conclue (gain ou abandon)."""
+    try:
+        conn = _get_sqlite_conn()
+        conn.execute("DELETE FROM settings WHERE key=?", (_martingale_legs_key(script_type),))
+        conn.commit()
+        conn.close()
+        return True
+    except Exception:
+        return False
+
+
 def _est_transition_evolutive(ancien_set, ancien_jeu, ancien_numero_point, nouveau_set, nouveau_jeu, nouveau_numero_point) -> bool:
     """
     Détermine si une nouvelle observation de score représente une réelle progression

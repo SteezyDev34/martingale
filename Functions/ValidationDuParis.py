@@ -172,23 +172,18 @@ def ValidationDuParis(driver, nexbet=False):
         config.placed_game = config.looking_game
         config.log(f'{config.validated_bet}', 'info', False, indent=3)
 
-        # Envoi au service distant legacy + à l'API AuxoTracker (stockage de l'ID pour
-        # mise à jour du résultat) -- manquait sur ce chemin bridge (la branche Selenium
-        # ci-dessous le fait depuis longtemps), ce qui faisait perdre le reporting
-        # AuxoTracker dès qu'un placement passait par l'extension plutôt que Selenium
-        # (constaté le 2026-11-02). Même logique que la branche Selenium plus bas.
-        # IMPORTANT : fait AVANT l'écriture du JSON ci-dessous (pas après, comme
-        # c'était le cas initialement) -- sinon api_bet_id est assigné sur
-        # config.validated_bet APRÈS que le fichier JSON ait déjà été sérialisé,
-        # et le champ reste bloqué à null dans tous les paris enregistrés, rendant
-        # tout recoupement avec AuxoTracker impossible après coup (constaté le
-        # 2026-11-03 en cherchant d'autres paris fantômes).
+        # Envoi au service distant legacy (inchangé). L'envoi à AuxoTracker ne se fait
+        # plus jeu par jeu (voir Functions/MartingaleSequence.py, 2026-11-04) -- chaque
+        # jeu est seulement enregistré dans l'historique persisté de la séquence en
+        # cours ; un seul pari consolidé est envoyé quand la séquence se conclut (gain
+        # ou abandon), par les moteurs (Functions_431a.py/Functions_456P.py/
+        # Functions_15V1.py/core/martingale/script_types.py).
         try:
             SendBetData()
         except Exception as e:
             config.log(f"Erreur lors de l'envoi des données du pari : {e}", 'error', False)
         try:
-            from Functions.TelegramBetsAPI import send_bet_to_auxotracker
+            from Functions.MartingaleSequence import record_leg
             _teams = getattr(config, 'teams', None) or []
             _eq1 = _teams[0] if len(_teams) >= 1 else ''
             _eq2 = _teams[1] if len(_teams) >= 2 else ''
@@ -197,28 +192,18 @@ def ValidationDuParis(driver, nexbet=False):
                 _parts = _newmatch.split(' - ', 1)
                 _eq1 = _parts[0].strip() if len(_parts) >= 1 else _newmatch
                 _eq2 = _parts[1].strip() if len(_parts) >= 2 else ''
-            _bet_dict = {
-                "tipster": "AutoBot",
-                "bet_date": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                "global_odds": float(getattr(config, 'cote', 1)),
-                "bet_code": f"autobot-{getattr(config, 'scriptType', 'bot').lower()}",
-                "stake": float(getattr(config, 'mise', 0)),
-                "stake_type": "currency",
-                "result": "pending",
-                "bankroll_id": 2,
-                "event_list": [{
-                    "equipe_1": _eq1,
-                    "equipe_2": _eq2,
-                    "selection": str(getattr(config, 'win_type', '')),
-                    "odds": float(getattr(config, 'cote', 1)),
-                    "sport_id": 2
-                }]
-            }
-            _api_bet_id = send_bet_to_auxotracker(_bet_dict)
-            if _api_bet_id and config.validated_bet is not None:
-                config.validated_bet['api_bet_id'] = _api_bet_id
+            record_leg(
+                getattr(config, 'scriptType', 'UNKNOWN'),
+                jeu=config.looking_game,
+                mise=float(getattr(config, 'mise', 0)),
+                cote=float(getattr(config, 'cote', 1)),
+                equipe_1=_eq1,
+                equipe_2=_eq2,
+                win_type=str(getattr(config, 'win_type', '')),
+                timestamp=current_timestamp,
+            )
         except Exception as _e:
-            config.log(f"Erreur envoi pari API AuxoTracker: {_e}", 'warning', False)
+            config.log(f"Erreur enregistrement leg martingale: {_e}", 'warning', False)
 
         json_filename = f"{config.scriptType}_validated_bets.json"
         try:
@@ -432,13 +417,11 @@ def ValidationDuParis(driver, nexbet=False):
         config.placed_game = config.looking_game
         config.log(f'{config.validated_bet}', 'info', False, indent=3)
 
-        # Envoi du pari validé à l'API AuxoTracker et stockage de l'ID pour mise à jour du résultat.
-        # IMPORTANT : fait AVANT l'écriture du JSON ci-dessous (pas après) -- sinon
-        # api_bet_id est assigné sur config.validated_bet APRÈS que le fichier JSON
-        # ait déjà été sérialisé, et le champ reste bloqué à null dans tous les paris
-        # enregistrés (constaté le 2026-11-03, même bug déjà corrigé côté bridge).
+        # Enregistrement du jeu dans l'historique de la séquence martingale en cours
+        # (pas d'envoi direct à AuxoTracker -- voir Functions/MartingaleSequence.py,
+        # 2026-11-04, et le commentaire équivalent dans la branche bridge plus haut).
         try:
-            from Functions.TelegramBetsAPI import send_bet_to_auxotracker
+            from Functions.MartingaleSequence import record_leg
             _teams = getattr(config, 'teams', None) or []
             _eq1 = _teams[0] if len(_teams) >= 1 else ''
             _eq2 = _teams[1] if len(_teams) >= 2 else ''
@@ -447,28 +430,18 @@ def ValidationDuParis(driver, nexbet=False):
                 _parts = _newmatch.split(' - ', 1)
                 _eq1 = _parts[0].strip() if len(_parts) >= 1 else _newmatch
                 _eq2 = _parts[1].strip() if len(_parts) >= 2 else ''
-            _bet_dict = {
-                "tipster": "AutoBot",
-                "bet_date": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                "global_odds": float(getattr(config, 'cote', 1)),
-                "bet_code": f"autobot-{getattr(config, 'scriptType', 'bot').lower()}",
-                "stake": float(getattr(config, 'mise', 0)),
-                "stake_type": "currency",
-                "result": "pending",
-                "bankroll_id": 2,
-                "event_list": [{
-                    "equipe_1": _eq1,
-                    "equipe_2": _eq2,
-                    "selection": str(getattr(config, 'win_type', '')),
-                    "odds": float(getattr(config, 'cote', 1)),
-                    "sport_id": 2
-                }]
-            }
-            _api_bet_id = send_bet_to_auxotracker(_bet_dict)
-            if _api_bet_id and config.validated_bet is not None:
-                config.validated_bet['api_bet_id'] = _api_bet_id
+            record_leg(
+                getattr(config, 'scriptType', 'UNKNOWN'),
+                jeu=config.looking_game,
+                mise=float(getattr(config, 'mise', 0)),
+                cote=float(getattr(config, 'cote', 1)),
+                equipe_1=_eq1,
+                equipe_2=_eq2,
+                win_type=str(getattr(config, 'win_type', '')),
+                timestamp=current_timestamp,
+            )
         except Exception as _e:
-            config.log(f"Erreur envoi pari API AuxoTracker: {_e}", 'warning', False)
+            config.log(f"Erreur enregistrement leg martingale: {_e}", 'warning', False)
 
         # Save validated bet to JSON file named after script type
         json_filename = f"{config.scriptType}_validated_bets.json"

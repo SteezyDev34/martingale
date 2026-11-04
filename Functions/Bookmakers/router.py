@@ -53,8 +53,10 @@ BOOKMAKER_STATE: Dict[str, Dict] = {
 # Propagé via bet['dry_run'] jusqu'à StakeScraper puis au content script de
 # l'extension (chrome_extension/content_scripts/stake.js). Activé à la demande
 # utilisateur le 2026-10-28 pour tester le traitement de la file d'attente API.
-# Repasser à False pour revenir au placement réel.
-SIMULATE_MODE = True
+# Désactivé à la demande explicite de l'utilisateur le 2026-11-03 (placement
+# réel) après validation extensive en dry-run (SGM, Double Chance, props
+# joueur, etc.) -- repasser à True pour revenir en simulation si besoin.
+SIMULATE_MODE = False
 
 
 def _is_bookmaker_active(name: str) -> bool:

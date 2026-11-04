@@ -306,6 +306,8 @@ class BaseScript(ABC):
         Met à jour les compteurs après une victoire et recharge la configuration
         si l'objectif du match n'est pas encore atteint.
         """
+        from Functions.MartingaleSequence import finalize_sequence_win
+        finalize_sequence_win(self.script_type, config.validated_bet.get('montant'), config.validated_bet.get('cote'))
         config.global_match_win[self.script_type] = (
             float(config.global_match_win.get(self.script_type, 0)) + float(config.netprofit)
         )
