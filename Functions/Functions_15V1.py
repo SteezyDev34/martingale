@@ -376,6 +376,18 @@ def all_script(driver):
                         config.ScriptConfig(scriptType).reset()
                         DeleteBet(driver)
 
+                        # Objectif de ce scriptType atteint : remettre perte à 0 ici aussi,
+                        # pas seulement dans la branche "Restart" ci-dessus. Sans ça, si la
+                        # sortie anticipée plus bas ne se déclenche pas (un autre process --
+                        # 15V1/15V2 -- tourne encore sur ce match), la boucle continue et
+                        # replace une mise sur le jeu suivant avec l'ancienne perte jamais
+                        # remise à 0, qui ne fait alors que grossir (constaté le 2026-11-06
+                        # sur 15V2 : perte 3.075 puis 5.485 après un gain ayant pourtant
+                        # atteint l'objectif).
+                        config.perte = 0
+                        if RedisIPC:
+                            RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
+
                         config.log(
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                         config.log(f"FIN {config.scriptType}", 'success', False)
