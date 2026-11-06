@@ -123,32 +123,38 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                 sType = f"V{first_player} Point 1 Dans le Jeu {jeu}"
                 # print(sType)
             # 15V1 = LE SERVEUR gagne son point, 15V2 = LE RECEVEUR gagne le
-            # point — basé sur l'indicateur balle au service (`first_player`,
-            # comme 150/015 juste au-dessus), PAS sur une position fixe
-            # favori/non-favori. Le favori/non-favori change de rôle serveur/
-            # receveur à chaque jeu (le service tourne), donc cibler une
-            # position fixe pour tout le match rendait la martingale biaisée
-            # (un pari "15V2" pouvait tomber sur un jeu où le non-favori
-            # servait, où il est simplement favorisé à gagner le point sans
-            # rapport avec la stratégie de break visée). Correction demandée
-            # le 2026-11-06 (remplace la logique position fixe du 2026-10-28).
+            # point — basé directement sur l'indicateur balle au service
+            # (`first_player`), PAS sur une position fixe favori/non-favori.
+            # Le favori/non-favori change de rôle serveur/receveur à chaque
+            # jeu (le service tourne), donc cibler une position fixe pour
+            # tout le match rendait la martingale biaisée (un pari "15V2"
+            # pouvait tomber sur un jeu où le non-favori servait, où il est
+            # simplement favorisé à gagner le point sans rapport avec la
+            # stratégie de break visée). Correction demandée le 2026-11-06
+            # (remplace la logique position fixe du 2026-10-28).
+            #
+            # IMPORTANT : contrairement à 150/015 ci-dessus, on n'utilise PAS
+            # l'inversion "nextBet" ici (qui sert à PRÉDIRE le serveur du
+            # PROCHAIN jeu avant qu'il ne commence). GetAndPlaceBet.py appelle
+            # toujours GetBet(driver, True) pour 15V1/15V2 -- avec nextBet
+            # toujours vrai, la condition "len(first_player)==0 and nextBet"
+            # s'activait à CHAQUE fois que le joueur 1 n'avait pas la balle et
+            # forçait quand même first_player=1, cassant l'alternance du
+            # service entre jeux consécutifs (bug confirmé en live le
+            # 2026-11-06 : jeu 1 et jeu 2 du même set avaient le même
+            # winscore, alors que le service alterne toujours à chaque jeu).
+            # 15V1/15V2 veulent le serveur du jeu EN COURS (lu point par
+            # point, jamais une prédiction), donc lecture directe de
+            # l'indicateur, sans inversion.
             if config.scriptType == '15V1':
-                if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
-                        len(first_player) > 0 and int(config.jeu_actuel) == int(config.looking_game)):
-                    first_player = 1
-                else:
-                    first_player = 2
+                first_player = 1 if len(first_player) > 0 else 2
                 config.win_type = first_player
                 sType = f"V{first_player} Point {point} Dans le Jeu {config.jeu_actuel}"
                 config.looking_point = point
                 config.looking_game = config.jeu_actuel
 
             if config.scriptType == '15V2':
-                if (len(first_player) > 0 and not nextBet) or (len(first_player) == 0 and nextBet) or (
-                        len(first_player) > 0 and int(config.jeu_actuel) == int(config.looking_game)):
-                    first_player = 2
-                else:
-                    first_player = 1
+                first_player = 2 if len(first_player) > 0 else 1
                 config.win_type = first_player
                 sType = f"V{first_player} Point {point} Dans le Jeu {config.jeu_actuel}"
                 config.looking_point = point
