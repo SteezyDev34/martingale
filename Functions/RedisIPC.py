@@ -770,10 +770,17 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
     Exclut les script_types 15V1 et 15V2 (jamais rattrapés par ce mécanisme).
 
     Args:
-        matchname (str): si fourni, restreint la recherche aux script_types associés
-            à ce match (évite de rattraper la perte d'un match différent tournant
-            en parallèle dans un autre process). Si omis, comportement historique :
-            recherche tous matchs confondus.
+        matchname (str): si fourni, cherche d'abord une perte sur CE match. Si
+            aucune n'existe, replie sur la plus grosse perte parmi les AUTRES
+            matchs actuellement EN COURS (au moins un scriptType avec
+            running=1 dessus, cf. table `running`) -- jamais sur un match
+            abandonné/stale qui ne sera plus jamais rejoué (demandé le
+            2026-11-06 : auparavant une perte réelle sur un autre match actif
+            en parallèle n'était jamais récupérée, cf. Carlos Alcaraz/Bueno
+            Lautaro Midon pendant que ~100€ de perte traînaient sur
+            hance-aidan-mchugh, activement en cours sur 1530A/4P6P au même
+            moment). Si `matchname` est omis, comportement historique :
+            recherche tous matchs confondus sans distinction actif/stale.
 
     Returns:
         tuple: `(script_type, perte)` de l'entrée avec la plus grande perte,
@@ -782,19 +789,31 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
     try:
         conn = _get_sqlite_conn()
         cur = conn.cursor()
+        fallback_used = False
         if matchname is not None:
             cur.execute(
-                "SELECT script_type, loss FROM perte WHERE matchname = ? AND script_type NOT IN ('15V1', '15V2') ORDER BY loss DESC LIMIT 1",
+                "SELECT script_type, loss FROM perte WHERE matchname = ? AND script_type NOT IN ('15V1', '15V2') AND loss > 0 ORDER BY loss DESC LIMIT 1",
                 (str(matchname),),
             )
+            row = cur.fetchone()
+            if not row:
+                fallback_used = True
+                cur.execute(
+                    "SELECT script_type, loss FROM perte "
+                    "WHERE matchname != ? AND matchname != '' AND script_type NOT IN ('15V1', '15V2') AND loss > 0 "
+                    "AND matchname IN (SELECT DISTINCT matchname FROM running WHERE is_running = 1 AND matchname != '') "
+                    "ORDER BY loss DESC LIMIT 1",
+                    (str(matchname),),
+                )
+                row = cur.fetchone()
         else:
             cur.execute("SELECT script_type, loss FROM perte WHERE script_type NOT IN ('15V1', '15V2') ORDER BY loss DESC LIMIT 1")
-        row = cur.fetchone()
+            row = cur.fetchone()
         conn.close()
         if not row:
             try:
                 import config
-                config.log(f"[RedisIPC] deduct_largest: aucune perte trouvée (matchname={matchname})", 'warning')
+                config.log(f"[RedisIPC] deduct_largest: aucune perte trouvée (matchname={matchname}, autres matchs en cours inclus={fallback_used})", 'warning')
                 # log ce qui est réellement dans la table pour diagnostic
                 conn2 = _get_sqlite_conn()
                 rows_all = conn2.execute("SELECT script_type, loss, matchname FROM perte").fetchall()
@@ -803,6 +822,12 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
             except Exception:
                 pass
             return 0
+        if fallback_used:
+            try:
+                import config
+                config.log(f"[RedisIPC] deduct_largest: aucune perte sur {matchname}, repli sur {row[0]}={row[1]} (autre match en cours)", 'warning')
+            except Exception:
+                pass
 
         script_type, val = row
         try:
