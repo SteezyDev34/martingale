@@ -843,7 +843,20 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
                 pass
             return 0
 
-        if valf > 1.0:
+        # 15V1/15V2 ne récupèrent que 30% de la perte empruntée (contre 50% pour les
+        # autres scriptTypes au-dessus de 1€) -- martingale au niveau du point, pas du
+        # jeu, donc un emprunt trop agressif grossirait leurs mises de façon disproportionnée
+        # par rapport à leur propre cycle (demandé le 2026-11-06).
+        try:
+            import config
+            is_15v = getattr(config, 'scriptType', None) in ('15V1', '15V2')
+        except Exception:
+            is_15v = False
+
+        if is_15v:
+            deducted = round(valf * 0.30, 8)
+            new_val = round(valf - deducted, 8)
+        elif valf > 1.0:
             deducted = round(valf * 0.50, 8)
             new_val = round(valf - deducted, 8)
         else:
