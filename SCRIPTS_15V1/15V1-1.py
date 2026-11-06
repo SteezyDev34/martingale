@@ -106,7 +106,7 @@ while (config.win < 100):
             config.init_variable()
             config.global_match_win[i] = 0  # Initialize win counter for script type
             config.winmatch[i] = 0  # Initialize match counter for script type
-            sucess = False
+        sucess = False
         while not sucess:
             try:
                 driver.get(config.site_url)
