@@ -1,0 +1,72 @@
+[
+    {
+        "montant": 0.2,
+        "cote": 4.33,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "40:40",
+        "timestamp": "2026-11-02 05:16:07",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767360687-ignacio-buse-zizou-bergs?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": "4.33",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "40:40",
+        "timestamp": "2026-11-02 05:20:34",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767360687-ignacio-buse-zizou-bergs?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": 3.5,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "40:40",
+        "timestamp": "2026-11-02 06:31:36",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
+    },
+    {
+        "montant": 0.24,
+        "cote": "3.5",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "40:40",
+        "timestamp": "2026-11-02 06:40:52",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
+    },
+    {
+        "montant": 0.34,
+        "cote": "3.5",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "40:40",
+        "timestamp": "2026-11-02 06:45:10",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
+    },
+    {
+        "montant": 0.47,
+        "cote": "3.5",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "40:40",
+        "timestamp": "2026-11-02 06:48:22",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
+    },
+    {
+        "montant": 0.66,
+        "cote": "3.5",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "40:40",
+        "timestamp": "2026-11-02 06:50:59",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
+    }
+]

@@ -1,0 +1,92 @@
+[
+    {
+        "montant": 0.43,
+        "cote": 1.93,
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 05:21:25",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767360687-ignacio-buse-zizou-bergs?platform_type=mobile"
+    },
+    {
+        "montant": 0.4,
+        "cote": 2,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 06:37:04",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
+    },
+    {
+        "montant": 0.8,
+        "cote": "2",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 06:41:39",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
+    },
+    {
+        "montant": 0.36,
+        "cote": 2.1,
+        "jeu": 9,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 07:48:56",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767386656-alejandro-tabilo-rafael-jodar?platform_type=mobile"
+    },
+    {
+        "montant": 0.44,
+        "cote": 1.9,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 09:59:47",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2454087-challenger-villa-maria-qualification/767422383-franco-ribero-nicolas-bruna?platform_type=mobile"
+    },
+    {
+        "montant": 0.93,
+        "cote": "1.9",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 10:02:32",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2454087-challenger-villa-maria-qualification/767422383-franco-ribero-nicolas-bruna?platform_type=mobile"
+    },
+    {
+        "montant": 1.97,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 10:06:23",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2454087-challenger-villa-maria-qualification/767422383-franco-ribero-nicolas-bruna?platform_type=mobile"
+    },
+    {
+        "montant": 4.16,
+        "cote": "1.9",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 10:09:28",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2454087-challenger-villa-maria-qualification/767422383-franco-ribero-nicolas-bruna?platform_type=mobile"
+    },
+    {
+        "montant": 8.78,
+        "cote": "1.9",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 10:12:35",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2454087-challenger-villa-maria-qualification/767422383-franco-ribero-nicolas-bruna?platform_type=mobile"
+    }
+]
