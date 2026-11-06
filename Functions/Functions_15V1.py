@@ -442,6 +442,14 @@ def all_script(driver):
                 firstjeu = False
                 current_game = config.jeu_actuel
             else:
+                # Pas de sleep ici auparavant -- contrairement à la branche "jeu changé"
+                # ci-dessus (2s), ce cas (jeu INCHANGÉ, le cas normal en attendant un point
+                # pendant un jeu) tournait en boucle serrée : GetJeuActuel en haut de la
+                # boucle while revient instantanément avec le même jeu_actuel tant que le
+                # point n'a pas progressé, donc rien ne ralentissait les itérations --
+                # des dizaines de lignes "verification du jeu actuel" par seconde
+                # (constaté le 2026-11-06, 15V2). Alignée sur l'autre branche.
+                time.sleep(2)
                 config.log('verification du jeu actuel dans tous les script')
                 ok = True
                 for scriptType in config.scriptTypeList:
