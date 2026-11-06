@@ -699,16 +699,15 @@ class MatchManager:
                 (match_id, bot_family)
             )
             removed_locally = cursor.rowcount > 0
-            if not removed_locally and bot_family != '':
-                # Même repli que get_match_script_config/get_match_link : un match
-                # engagé via la ligne bot_family='' (classé par un outil qui ne la
-                # renseigne pas) doit quand même être retiré, sinon il reste collé
-                # indéfiniment dans matches_todo malgré l'engagement.
-                cursor = conn.execute(
-                    "DELETE FROM matches_todo WHERE match_id = ? AND bot_family = ''",
-                    (match_id,)
-                )
-                removed_locally = cursor.rowcount > 0
+            # PAS de repli pour supprimer la ligne bot_family='' ici (contrairement à
+            # get_match_script_config/get_match_link) : cette ligne partagée (classée
+            # par un outil qui ne renseigne pas bot_family) sert de source à TOUTES les
+            # familles qui n'ont pas encore engagé ce match -- la supprimer dès que LA
+            # PREMIÈRE famille s'engage privait les suivantes de script_types (constaté
+            # le 2026-11-06 : 15V2 engage hance-aidan-mchugh via le repli, supprime la
+            # ligne bot_family='', puis 15V1 arrive ensuite et n'a plus rien à lire ->
+            # engagé avec script_types vide). La ligne partagée reste donc en place même
+            # après un premier engagement, lisible par les familles suivantes.
 
         # Suppression distante
         try:
