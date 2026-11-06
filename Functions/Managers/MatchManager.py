@@ -83,13 +83,28 @@ class MatchManager:
         """
         bot_family = bot_family if bot_family is not None else (getattr(config, 'bot_family', '') or '')
         with sqlite3.connect(self.db_path) as conn:
+            row = conn.execute(
+                "SELECT script_types, total_gain_wanted FROM matches_todo WHERE match_id = ? AND bot_family = ?",
+                (match_id, bot_family)
+            ).fetchone()
+            if not row and bot_family != '':
+                # Même repli que get_match_script_config/get_match_link (cf. commentaire
+                # là-bas) : sans ça, un match classé sous bot_family='' copiait
+                # script_types=NULL dans `matches` à l'engagement -- le process qui
+                # engage (ex: 1530A) perdait sa propre liste de scriptTypes, et toute
+                # reprise ultérieure (get_match_script_config retombant sur `matches`)
+                # héritait de ce NULL (constaté le 2026-11-06 sur Carlos Alcaraz).
+                row = conn.execute(
+                    "SELECT script_types, total_gain_wanted FROM matches_todo WHERE match_id = ? AND bot_family = ''",
+                    (match_id,)
+                ).fetchone()
+            script_types = row[0] if row else None
+            total_gain_wanted = row[1] if row else None
             try:
                 conn.execute(
                     "INSERT INTO matches (match_id, strategy, created_at, status, script_types, total_gain_wanted, url) "
-                    "VALUES (?, ?, ?, ?, "
-                    "(SELECT script_types FROM matches_todo WHERE match_id = ? AND bot_family = ?), "
-                    "(SELECT total_gain_wanted FROM matches_todo WHERE match_id = ? AND bot_family = ?), ?)",
-                    (match_id, bot_family, datetime.now(), "active", match_id, bot_family, match_id, bot_family, url)
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    (match_id, bot_family, datetime.now(), "active", script_types, total_gain_wanted, url)
                 )
             except sqlite3.IntegrityError:
                 pass
