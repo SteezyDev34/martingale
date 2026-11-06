@@ -131,10 +131,22 @@ def ValidationDuParis(driver, nexbet=False):
         # plusieurs fois pour le même pari déjà passé.
         if hasattr(config, 'validated_bet') and config.validated_bet is not None:
             current_set = getattr(config, 'set_actuel', None)
+            # 15V1/15V2 peuvent re-parier plusieurs fois DANS LE MÊME jeu (un
+            # nouveau point ciblé après chaque perte, martingale au niveau du
+            # point -- cf. GetBetOld.py qui met à jour looking_point à chaque
+            # nouvelle tentative), contrairement aux autres scriptTypes qui ne
+            # parient qu'une fois par jeu. Sans comparer aussi numero_point, ce
+            # garde-fou bloquait à tort tout nouveau point du même jeu en le
+            # prenant pour un doublon -- la boucle appelante continuait alors
+            # indéfiniment sans jamais valider le nouveau pari (constaté le
+            # 2026-11-06, boucle visible sur 15V1). Pour les autres scriptTypes,
+            # config.looking_point reste toujours None des deux côtés -- aucun
+            # changement de comportement.
             if (config.looking_game is not None and current_set is not None and
                     config.validated_bet.get('jeu') == config.looking_game and
                     config.validated_bet.get('set') == current_set and
-                    config.validated_bet.get('url') == config.match_Url):
+                    config.validated_bet.get('url') == config.match_Url and
+                    config.validated_bet.get('numero_point') == getattr(config, 'looking_point', None)):
                 config.log(
                     f"Ce jeu ({config.looking_game}) et ce set ({current_set}) ont déjà été pariés. Annulation.",
                     'warning', False)
