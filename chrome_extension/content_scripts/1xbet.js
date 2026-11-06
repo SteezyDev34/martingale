@@ -576,9 +576,9 @@
     // Clique un autre onglet de catégorie puis revient sur "Temps réglementaire" pour
     // forcer 1xBet à recharger la liste des marchés (correctif observé manuellement).
     async _reloadMarketsViaCategoryToggle() {
-      const listWrapper = await waitFor('.game-sub-games__list', 3000);
+      const listWrapper = await waitFor('.ui-sub-game-tabs__list', 3000);
       if (!listWrapper) return false;
-      const options = qsa('.game-sub-games__item', listWrapper);
+      const options = qsa('.ui-sub-game-tabs__item', listWrapper);
       const current = options.find(o => o.className.includes('is-selected'));
       const other = options.find(o => o !== current);
       const target = options.find(o => /temps r.glementaire/i.test(o.textContent));
@@ -610,22 +610,22 @@
     },
 
     // DEBUG uniquement — liste les options de la barre de catégories déjà visible
-    // (game-sub-games__list), sans cliquer aucune.
+    // (ui-sub-game-tabs__list), sans cliquer aucune.
     async debugListCategoryOptions() {
-      const listWrapper = await waitFor('.game-sub-games__list', 5000);
-      const options = listWrapper ? qsa('.game-sub-games__item', listWrapper).map(o => o.textContent.trim()) : [];
+      const listWrapper = await waitFor('.ui-sub-game-tabs__list', 5000);
+      const options = listWrapper ? qsa('.ui-sub-game-tabs__item', listWrapper).map(o => o.textContent.trim()) : [];
       return { success: true, options };
     },
 
     // Port de RetourTpsRegMobile (Functions/retour_section_tps_reglementaire.py) : clique
-    // l'option déjà visible dans la barre de catégories (game-sub-games__list) — sur
+    // l'option déjà visible dans la barre de catégories (ui-sub-game-tabs__list) — sur
     // mobile_site cette liste est affichée directement, ce n'est pas un dropdown à ouvrir.
     async clickCategoryOption(text) {
       const urlBefore = location.href;
-      const listWrapper = await waitFor('.game-sub-games__list', 5000);
+      const listWrapper = await waitFor('.ui-sub-game-tabs__list', 5000);
       if (!listWrapper) return { success: false, error: 'category_list_not_found' };
       const norm = (s) => (s || '').toLowerCase().trim();
-      const options = qsa('.game-sub-games__item', listWrapper);
+      const options = qsa('.ui-sub-game-tabs__item', listWrapper);
       for (const opt of options) {
         if (norm(opt.textContent) === norm(text)) {
           opt.click();
@@ -638,7 +638,7 @@
     },
 
     // Port de AfficherParisMobile (Functions/AfficherParis.py, branche allScriptType) :
-    // clique la catégorie déjà visible dans la barre game-sub-games__list, puis filtre par
+    // clique la catégorie déjà visible dans la barre ui-sub-game-tabs__list, puis filtre par
     // `key` via la recherche de marché (game-search*). categorie_text et key sont déjà
     // calculés par le code Python (theset/args/key) — ici on ne fait QUE le geste DOM.
     //
@@ -651,11 +651,11 @@
     async selectCategoryOption(categorie_text) {
       const urlBefore = location.href;
 
-      const listWrapper = await waitFor('.game-sub-games__list', 5000);
+      const listWrapper = await waitFor('.ui-sub-game-tabs__list', 5000);
       if (!listWrapper) return { success: false, error: 'category_list_not_found' };
 
       const norm = (s) => (s || '').toLowerCase().trim();
-      const options = qsa('.game-sub-games__item', listWrapper);
+      const options = qsa('.ui-sub-game-tabs__item', listWrapper);
       let matched = null;
       for (const opt of options) {
         if (norm(opt.textContent) === norm(categorie_text)) { matched = opt; break; }

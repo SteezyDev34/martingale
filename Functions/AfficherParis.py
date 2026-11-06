@@ -271,6 +271,7 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
             config.log(f'Sélection catégorie échouée : {e}', 'warning', False, 3)
             cat_result = {}
         if not cat_result.get('success'):
+            config.log(f'catégorie "{categorie_text}" introuvable ({cat_result.get("error")})', 'warning', False, 3)
             config.log_clear_line(logline)
             return False
 
