@@ -47,25 +47,22 @@ else:
     exit()
 
 # Chargement des functions
-# Chargement de Chrome driver
-config.localhost = 43151
-command = f'open -na "Google Chrome" --args --remote-debugging-port={config.localhost} --user-data-dir="$HOME/ChromeDebugProfile{config.localhost}"'
-
-print(command)
-
-from ChromeDriver.SetDriver import get_script_driver
 from websocket_server import start_bridge
 
-num_fenetre = 1
-time.sleep((num_fenetre - 1) * 3)  # Attendre un peu pour s'assurer que la fenêtre est prête
-
-driver = get_script_driver(num_fenetre)
 # Port dédié (pas le 9999 par défaut) -- sans ça, 15V1 et 15V2 (et une
 # session debug_classement_check.py en parallèle) entraient en collision de
 # bind sur le même port 9999, empêchant l'extension de s'y connecter et
 # faisant retomber tout le flux sur Selenium en silence (constaté le
 # 2026-11-02, cf. WS_PORTS dans chrome_extension/service_worker.js).
-start_bridge(wait_timeout=0, port=10104)  # démarre WS, n'attend pas l'extension (fallback Selenium si absent)
+WS_PORT = 10104  # port dedie a ce script - cf. WS_PORTS dans chrome_extension/service_worker.js
+
+start_bridge(wait_timeout=0, port=WS_PORT)
+# Plus de fenêtre Selenium ouverte systématiquement au démarrage (get_script_driver) --
+# le reste du flux (ValidationDuParis, AfficherParis, GetBetOld, etc.) vérifie déjà
+# bridge_active() partout et ne touche jamais à `driver` tant que le bridge répond,
+# aligné sur le pattern déjà en place côté 1530A/4P6P (demandé le 2026-11-06, la
+# fenêtre Selenium qui s'ouvrait sans jamais servir ne se justifiait plus).
+driver = None
 from Functions import Functions_15V1
 from Functions.GetJsonData import DispatchPerte
 from Functions.ScriptRechercheDeMatch import classementeDeMatch, newclassementeDeMatch
