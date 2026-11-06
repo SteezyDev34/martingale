@@ -106,7 +106,11 @@ while (config.win < 100):
         sucess = False
         while not sucess:
             try:
-                driver.get(config.site_url)
+                from websocket_server import bridge
+                if bridge.connected:
+                    bridge.navigate(config.site_url)
+                elif driver:
+                    driver.get(config.site_url)
             except:
                 continue
             else:
