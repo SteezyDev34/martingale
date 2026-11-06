@@ -60,6 +60,14 @@ def _attendre_point_valide_15v(driver):
         target = None
 
     config.log(f'Attente du point {target} pour valider le pari', 'info', indent=3)
+    # Garde-fou (demandé le 2026-11-06) : sans ce timeout, une boucle "while not
+    # config.error" attendait indéfiniment si config.all_scores arrêtait de
+    # progresser (watcher Sofascore/bridge bloqué) -- 15V1/15V2 restaient figés
+    # (CPU élevé, aucun log visible car la seule trace était en niveau 'debug',
+    # masquée si devMode est désactivé sur ce process). 30s est largement
+    # au-dessus du temps normal d'attente d'un point (quelques secondes).
+    _wait_start = time.time()
+    _TIMEOUT_S = 30
     while not config.error:
         last = _dernier_numero_point()
         config.log(f'Last point: {last}, Target point: {target}', 'debug', indent=4)
@@ -68,6 +76,9 @@ def _attendre_point_valide_15v(driver):
         if last is None or target is None:
             break
         if last >= target:
+            break
+        if time.time() - _wait_start > _TIMEOUT_S:
+            config.log(f'Attente du point {target} abandonnée après {_TIMEOUT_S}s (last={last})', 'warning', False, indent=3)
             break
         GetScoreActuel(driver)
         time.sleep(0.1)
