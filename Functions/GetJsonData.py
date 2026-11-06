@@ -19,7 +19,7 @@ def getPerte():
             print(url)
         try:
             # Envoyer une requête GET à l'URL
-            response = requests.get(url)
+            response = requests.get(url, timeout=10)
             # Vérifier que la requête a réussi
             response.raise_for_status()
             print(response.json())
@@ -52,7 +52,7 @@ def get1setGlobalPerte():
     url = f"{config.api_url}/strategy1SET/get_last_perte.php?mtt_recup={config.mtt_recup}"
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         print(response.json())
@@ -89,7 +89,7 @@ def getIf1setGlobalPerte():
     url = f"{config.api_url}/strategy1SET/get_last_perte.php?infos"
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -116,7 +116,7 @@ def getGlobalPerte():
     url = f"{config.api_url}/strategy40A/get_global_perte.php"
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -157,7 +157,7 @@ def getIfGlobalPerte():
     url = f"{config.api_url}/strategy40A/get_global_perte.php"
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -184,7 +184,7 @@ def delPerte(id):
     url = f"{config.api_url}/strategy" + config.scriptType + "/del_perte.php?id=" + str(id)
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -211,7 +211,7 @@ def del1setPerte(id):
     url = f"{config.api_url}/strategy1SET/del_perte.php?id=" + str(id)
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -239,7 +239,7 @@ def getCompetRecup():
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -284,7 +284,7 @@ def getCompet():
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -333,7 +333,7 @@ def SendPerte(scriptType, perte):
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -369,7 +369,7 @@ def SendPerte1set(scriptType, perte):
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -401,7 +401,7 @@ def SendGlobalPerte(scriptType, mise):
     # URL du lien JSON de la strategy
     try:
         # Envoyer une requête GET à l'URL
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
@@ -444,7 +444,7 @@ def SendBetPlaced(scriptType, mise):
 
         }
         # Envoi de la requête POST avec les données
-        response = requests.post(url, data=data)
+        response = requests.post(url, data=data, timeout=10)
         # Vérifier que la requête a réussi
         response.raise_for_status()
         # Parser le JSON depuis la réponse
