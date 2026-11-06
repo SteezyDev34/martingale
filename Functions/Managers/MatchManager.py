@@ -481,6 +481,15 @@ class MatchManager:
                 row = cur.fetchone()
                 if row and row[0]:
                     return row[0]
+                if bot_family != '':
+                    # Même repli que get_match_script_config (cf. commentaire là-bas) :
+                    # ligne classée sans bot_family, sinon invisible pour ce process.
+                    row = conn.execute(
+                        "SELECT link FROM matches_todo WHERE match_id = ? AND bot_family = ''",
+                        (match_id,)
+                    ).fetchone()
+                    if row and row[0]:
+                        return row[0]
         except Exception as e:
             config.log(f"Erreur DB lors de la recherche du link local: {e}", 'warning', True)
 
@@ -501,6 +510,20 @@ class MatchManager:
                     (match_id, bot_family)
                 )
                 row = cur.fetchone()
+                if not row and bot_family != '':
+                    # Repli sur une ligne classée sans bot_family (classement lancé par
+                    # un outil qui ne le renseigne pas, ex: SCRIPTS_WATCH/watch-12345.py
+                    # -- confirmé le 2026-11-06 : 60 des 65 lignes de matches_todo avaient
+                    # bot_family='' et étaient donc invisibles pour TOUS les process
+                    # 1530A/456P/15V1/15V2, qui filtrent chacun sur leur propre famille
+                    # -- cf. Carlos Alcaraz, classé avec 5 scriptTypes valides mais jamais
+                    # vu par aucun process). script_types représente déjà l'éligibilité
+                    # tous marchés confondus ; le filtre par famille (VALID_SCRIPTTYPES_*)
+                    # s'applique de toute façon juste après dans l'appelant.
+                    row = conn.execute(
+                        "SELECT script_types, total_gain_wanted FROM matches_todo WHERE match_id = ? AND bot_family = ''",
+                        (match_id,)
+                    ).fetchone()
                 if not row:
                     # Match déjà engagé (retiré de matches_todo) : scriptTypes copiés
                     # dans matches par add_match.
@@ -661,6 +684,16 @@ class MatchManager:
                 (match_id, bot_family)
             )
             removed_locally = cursor.rowcount > 0
+            if not removed_locally and bot_family != '':
+                # Même repli que get_match_script_config/get_match_link : un match
+                # engagé via la ligne bot_family='' (classé par un outil qui ne la
+                # renseigne pas) doit quand même être retiré, sinon il reste collé
+                # indéfiniment dans matches_todo malgré l'engagement.
+                cursor = conn.execute(
+                    "DELETE FROM matches_todo WHERE match_id = ? AND bot_family = ''",
+                    (match_id,)
+                )
+                removed_locally = cursor.rowcount > 0
 
         # Suppression distante
         try:

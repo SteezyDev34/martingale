@@ -246,9 +246,25 @@ def get_family_live_info(label):
 def get_matches_todo(limit=20):
     try:
         conn = _connect(MATCHES_DB)
+        # Trié par proximité du coup d'envoi, pas par date d'ajout : avec le
+        # classement qui tourne en continu, un match ajouté tôt mais démarrant
+        # plus tard que d'autres se faisait repousser hors des `limit` lignes
+        # affichées dès que d'autres matchs étaient ajoutés après lui, alors
+        # qu'il restait parfaitement éligible (cf. Carlos Alcaraz le 2026-11-06
+        # : ajouté à 13h01 pour un match à 21h, invisible derrière 62 matchs
+        # ajoutés ensuite). Les matchs à venir passent en premier (le plus
+        # proche d'abord) ; les matchs dont l'heure est déjà dépassée (jamais
+        # engagés/nettoyés) suivent, le plus récent d'abord, plutôt que d'être
+        # masqués silencieusement.
         rows = conn.execute(
-            "SELECT match_id, players, league, script_types, match_date FROM matches_todo "
-            "ORDER BY created_at DESC LIMIT ?",
+            """
+            SELECT match_id, players, league, script_types, match_date FROM matches_todo
+            ORDER BY
+                (match_date >= datetime('now', 'localtime')) DESC,
+                CASE WHEN match_date >= datetime('now', 'localtime') THEN match_date END ASC,
+                CASE WHEN match_date <  datetime('now', 'localtime') THEN match_date END DESC
+            LIMIT ?
+            """,
             (limit,)
         ).fetchall()
         conn.close()
