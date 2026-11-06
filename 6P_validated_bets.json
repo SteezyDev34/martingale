@@ -1,0 +1,41 @@
+[
+    {
+        "montant": 0.2,
+        "cote": 3,
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-11-02 05:56:14",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118192-wta-luanda-qualification/767369950-laura-boehner-prathyusha-rachapudi?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": 3,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-11-02 07:06:08",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118754-world-tennis-liberec-women-qualification/767386321-emma-slavikova-daria-gorska?platform_type=mobile"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:30",
+            "30:40"
+        ],
+        "timestamp": "2026-11-02 07:11:31",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118754-world-tennis-liberec-women-qualification/767386321-emma-slavikova-daria-gorska?platform_type=mobile"
+    }
+]

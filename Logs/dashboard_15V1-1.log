@@ -1,0 +1,873 @@
+Vérification des dépendances dans 'requirements.txt'...
+Package manquant : playwright>=1.40.0
+Package manquant : playwright-stealth>=2.0.0
+Package manquant : redis>=4.8.0
+Package manquant : hiredis>=2.0.0
+Package manquant : websockets>=12.0
+Package manquant : textual>=0.58.0
+Les dépendances manquantes seront installées : playwright>=1.40.0, playwright-stealth>=2.0.0, redis>=4.8.0, hiredis>=2.0.0, websockets>=12.0, textual>=0.58.0
+Requirement already satisfied: playwright>=1.40.0 in ./venv_wsl/lib/python3.12/site-packages (1.64.0)
+Requirement already satisfied: playwright-stealth>=2.0.0 in ./venv_wsl/lib/python3.12/site-packages (2.0.3)
+Requirement already satisfied: redis>=4.8.0 in ./venv_wsl/lib/python3.12/site-packages (8.1.0)
+Requirement already satisfied: hiredis>=2.0.0 in ./venv_wsl/lib/python3.12/site-packages (3.4.2)
+Requirement already satisfied: websockets>=12.0 in ./venv_wsl/lib/python3.12/site-packages (17.2)
+Requirement already satisfied: textual>=0.58.0 in ./venv_wsl/lib/python3.12/site-packages (8.2.8)
+Requirement already satisfied: pyee<15,>=13 in ./venv_wsl/lib/python3.12/site-packages (from playwright>=1.40.0) (14.0.0)
+Requirement already satisfied: greenlet<4.0.0,>=3.1.1 in ./venv_wsl/lib/python3.12/site-packages (from playwright>=1.40.0) (3.5.6)
+Requirement already satisfied: typing-extensions in ./venv_wsl/lib/python3.12/site-packages (from pyee<15,>=13->playwright>=1.40.0) (4.13.0)
+Requirement already satisfied: markdown-it-py>=2.1.0 in ./venv_wsl/lib/python3.12/site-packages (from markdown-it-py[linkify]>=2.1.0->textual>=0.58.0) (4.2.0)
+Requirement already satisfied: mdit-py-plugins in ./venv_wsl/lib/python3.12/site-packages (from textual>=0.58.0) (0.6.1)
+Requirement already satisfied: platformdirs<5,>=3.6.0 in ./venv_wsl/lib/python3.12/site-packages (from textual>=0.58.0) (4.13.0)
+Requirement already satisfied: pygments<3.0.0,>=2.19.2 in ./venv_wsl/lib/python3.12/site-packages (from textual>=0.58.0) (2.21.0)
+Requirement already satisfied: rich>=14.2.0 in ./venv_wsl/lib/python3.12/site-packages (from textual>=0.58.0) (15.0.0)
+Requirement already satisfied: mdurl~=0.1 in ./venv_wsl/lib/python3.12/site-packages (from markdown-it-py>=2.1.0->markdown-it-py[linkify]>=2.1.0->textual>=0.58.0) (0.1.2)
+Requirement already satisfied: linkify-it-py<3,>=1 in ./venv_wsl/lib/python3.12/site-packages (from markdown-it-py[linkify]>=2.1.0->textual>=0.58.0) (2.2.0)
+
+[1m[[0m[34;49mnotice[0m[1;39;49m][0m[39;49m A new release of pip is available: [0m[31;49m26.2.1[0m[39;49m -> [0m[32;49m26.2.2[0m
+[1m[[0m[34;49mnotice[0m[1;39;49m][0m[39;49m To update, run: [0m[32;49m/mnt/c/Users/Administrator/Projets/MARTINGAL/venv_wsl/bin/python -m pip install --upgrade pip[0m
+Toutes les dépendances manquantes ont été installées avec succès.
+[32mTout est prêt !
+[0m
+[1A[2K[1A[2K[1A[2K[35m ____   _                 _                             _    _                       _   _  ____  __     __ _   _ 
+/ ___| | |_   __ _  _ __ | |_   _ __ ___    __ _  _ __ | |_ (_) _ __    __ _   __ _ | | / || ___| \ \   / // | / |
+\___ \ | __| / _` || '__|| __| | '_ ` _ \  / _` || '__|| __|| || '_ \  / _` | / _` || | | ||___ \  \ \ / / | | | |
+ ___) || |_ | (_| || |   | |_  | | | | | || (_| || |   | |_ | || | | || (_| || (_| || | | | ___) |  \ V /  | | | |
+|____/  \__| \__,_||_|    \__| |_| |_| |_| \__,_||_|    \__||_||_| |_| \__, | \__,_||_| |_||____/    \_/   |_| |_|
+                                                                       |___/                                      
+
+open -na "Google Chrome" --args --remote-debugging-port=43151 --user-data-dir="$HOME/ChromeDebugProfile43151"
+🚀 Lancement de Chrome sur le port 43151...
+❌ Erreur lors du lancement de Chrome : Chrome n'est pas installé dans l'emplacement standard
+[WS] Serveur WebSocket démarré sur ws://localhost:9999
+[WS] Serveur WebSocket démarré — en attente de l'extension Chrome...
+[36m[2026-11-02 05:35:22]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:22]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:22]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:22]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:22]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:22]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:22] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:22]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:22]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:22]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:22]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:22]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:23]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:23] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:23]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:23]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:23]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:23]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:23]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:23]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:23] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:23]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:23]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:23]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:24]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:24]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:24]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:24] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:24]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:24]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:24]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:25]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:25]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:25]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:26] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:26]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:26]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:26]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:26]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:26]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:26]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:27] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:27]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:27]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:27]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:27]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:27]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:27]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:27] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:27]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:27]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:27]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:27]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:27]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:28]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:28] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:28]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:28]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:28]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:28]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:28]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:28]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:28] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:28]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:28]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:28]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:28]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:29]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:29]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:29] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:29]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:29]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:29]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:29]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:29]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:29]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:29] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:29]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:30]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:30]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:30]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:30]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:30]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:30] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:30]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:30]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:30]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:30]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:30]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:30]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:31] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:31]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:31]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:31]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:31]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:31]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:31]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:31] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:31]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:31]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:32]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:32]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:32]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:32]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:32] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:32]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:32]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:32]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:32]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:32]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:32]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:32] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:32]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:32]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:33]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:33]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:33]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:33]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:33] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:33]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:33]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:33]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:33]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:33]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:33]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:33] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:34]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:34]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:34]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:34]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:34]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:34]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:34] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:34]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:34]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:34]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:34]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:34]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:34]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:35] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:35]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:35]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:35]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:35]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:35]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:35]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:35] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:35]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:35]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:35]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:35]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:35]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:36]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:36] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:36]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:36]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:36]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:36]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:36]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:36]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:36] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:37]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:37]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:37]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:37]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:37]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:37]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:38] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:38]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:38]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:38]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:38]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:38]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:38]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:38] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:38]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:38]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:38]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:39]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:39]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:39]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:39] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:39]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:39]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:39]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:39]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:39]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:39]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:39] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:39]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:40]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:40]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:40]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:40]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:40]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:40] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:40]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:40]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:40]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:40]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:40]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:40]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:41] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:41]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:41]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:41]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:41]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:41]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:41]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:41] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:41]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:41]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:41]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:41]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:41]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:41]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:42] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:42]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:42]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:42]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:42]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:42]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:42]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:42] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:42]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:42]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:42]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:42]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:42]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:43]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:43] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:43]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:43]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:43]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:43]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:43]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:43]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:43] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:43]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:44]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:44]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:44]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:44]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:44]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:44] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:44]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:44]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:44]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:44]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:45]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:45]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:45] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:45]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:45]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:45]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:45]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:45]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:45]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:45] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:45]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:45]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:46]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:46]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:46]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:46]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:46] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:46]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:46]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:47]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:47]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:47]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:48]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:50] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:50]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:50]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:50]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:51]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:51]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:51]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:51] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:51]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:51]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:51]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:51]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:51]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:51]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:52] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:52]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:52]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:52]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:52]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:52]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:52]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:53] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:53]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:53]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:54]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:55]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:56]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:56]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:56] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:56]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:56]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:57]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:57]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:57]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:57]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:57] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:57]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:57]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:57]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:57]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:57]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:57]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:58] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:58]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:58]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:58]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:58]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:58]      Récupération des ligues[0m
+[33m[2026-11-02 05:35:58]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:35:58] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:35:58]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:35:58]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:35:59]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:35:59]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:35:59]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:00]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:01] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:01]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:01]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:01]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:01]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:01]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:02]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:02] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:02]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:02]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:02]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:02]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:02]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:02]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:02] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:02]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:02]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:02]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:02]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:02]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:02]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:03] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:03]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:03]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:03]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:03]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:03]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:03]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:03] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:03]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:03]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:03]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:03]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:03]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:03]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:04] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:04]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:04]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:04]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:04]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:04]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:04]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:04] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:04]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:04]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:04]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:04]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:04]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:04]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:05] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:05]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:05]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:05]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:05]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:05]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:05]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:05] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:05]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:05]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:05]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:05]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:05]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:05]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:05] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:06]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:06]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:06]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:06]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:06]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:06]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:06] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:06]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:07]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:07]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:08]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:08]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:08]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:08] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:08]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:08]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:08]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:08]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:08]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:08]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:09] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:09]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:09]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:09]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:09]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:09]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:09]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:09] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:09]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:09]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:09]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:10]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:10]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:10]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:10] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:10]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:10]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:10]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:10]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:10]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:10]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:11] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:11]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:11]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:12]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:12]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:12]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:12]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:12] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:12]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:12]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:12]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:12]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:12]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:12]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 05:36:13] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 05:36:13]  ------------------------------------------------------------[0m
+[36m[2026-11-02 05:36:13]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 05:36:13]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 05:36:13]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 05:36:13]      Récupération des ligues[0m
+[33m[2026-11-02 05:36:13]          ligues introuvables![0m
+Vérification des dépendances dans 'requirements.txt'...
+Package manquant : playwright>=1.40.0
+Package manquant : playwright-stealth>=2.0.0
+Package manquant : redis>=4.8.0
+Package manquant : hiredis>=2.0.0
+Package manquant : websockets>=12.0
+Package manquant : textual>=0.58.0
+Les dépendances manquantes seront installées : playwright>=1.40.0, playwright-stealth>=2.0.0, redis>=4.8.0, hiredis>=2.0.0, websockets>=12.0, textual>=0.58.0
+Requirement already satisfied: playwright>=1.40.0 in ./venv_wsl/lib/python3.12/site-packages (1.64.0)
+Requirement already satisfied: playwright-stealth>=2.0.0 in ./venv_wsl/lib/python3.12/site-packages (2.0.3)
+Requirement already satisfied: redis>=4.8.0 in ./venv_wsl/lib/python3.12/site-packages (8.1.0)
+Requirement already satisfied: hiredis>=2.0.0 in ./venv_wsl/lib/python3.12/site-packages (3.4.2)
+Requirement already satisfied: websockets>=12.0 in ./venv_wsl/lib/python3.12/site-packages (17.2)
+Requirement already satisfied: textual>=0.58.0 in ./venv_wsl/lib/python3.12/site-packages (8.2.8)
+Requirement already satisfied: pyee<15,>=13 in ./venv_wsl/lib/python3.12/site-packages (from playwright>=1.40.0) (14.0.0)
+Requirement already satisfied: greenlet<4.0.0,>=3.1.1 in ./venv_wsl/lib/python3.12/site-packages (from playwright>=1.40.0) (3.5.6)
+Requirement already satisfied: typing-extensions in ./venv_wsl/lib/python3.12/site-packages (from pyee<15,>=13->playwright>=1.40.0) (4.13.0)
+Requirement already satisfied: markdown-it-py>=2.1.0 in ./venv_wsl/lib/python3.12/site-packages (from markdown-it-py[linkify]>=2.1.0->textual>=0.58.0) (4.2.0)
+Requirement already satisfied: mdit-py-plugins in ./venv_wsl/lib/python3.12/site-packages (from textual>=0.58.0) (0.6.1)
+Requirement already satisfied: platformdirs<5,>=3.6.0 in ./venv_wsl/lib/python3.12/site-packages (from textual>=0.58.0) (4.13.0)
+Requirement already satisfied: pygments<3.0.0,>=2.19.2 in ./venv_wsl/lib/python3.12/site-packages (from textual>=0.58.0) (2.21.0)
+Requirement already satisfied: rich>=14.2.0 in ./venv_wsl/lib/python3.12/site-packages (from textual>=0.58.0) (15.0.0)
+Requirement already satisfied: mdurl~=0.1 in ./venv_wsl/lib/python3.12/site-packages (from markdown-it-py>=2.1.0->markdown-it-py[linkify]>=2.1.0->textual>=0.58.0) (0.1.2)
+Requirement already satisfied: linkify-it-py<3,>=1 in ./venv_wsl/lib/python3.12/site-packages (from markdown-it-py[linkify]>=2.1.0->textual>=0.58.0) (2.2.0)
+
+[1m[[0m[34;49mnotice[0m[1;39;49m][0m[39;49m A new release of pip is available: [0m[31;49m26.2.1[0m[39;49m -> [0m[32;49m26.2.2[0m
+[1m[[0m[34;49mnotice[0m[1;39;49m][0m[39;49m To update, run: [0m[32;49m/mnt/c/Users/Administrator/Projets/MARTINGAL/venv_wsl/bin/python -m pip install --upgrade pip[0m
+Toutes les dépendances manquantes ont été installées avec succès.
+[32mTout est prêt !
+[0m
+[1A[2K[1A[2K[1A[2K[35m ____   _                 _                             _    _                       _   _  ____  __     __ _   _ 
+/ ___| | |_   __ _  _ __ | |_   _ __ ___    __ _  _ __ | |_ (_) _ __    __ _   __ _ | | / || ___| \ \   / // | / |
+\___ \ | __| / _` || '__|| __| | '_ ` _ \  / _` || '__|| __|| || '_ \  / _` | / _` || | | ||___ \  \ \ / / | | | |
+ ___) || |_ | (_| || |   | |_  | | | | | || (_| || |   | |_ | || | | || (_| || (_| || | | | ___) |  \ V /  | | | |
+|____/  \__| \__,_||_|    \__| |_| |_| |_| \__,_||_|    \__||_||_| |_| \__, | \__,_||_| |_||____/    \_/   |_| |_|
+                                                                       |___/                                      
+
+open -na "Google Chrome" --args --remote-debugging-port=43151 --user-data-dir="$HOME/ChromeDebugProfile43151"
+🚀 Lancement de Chrome sur le port 43151...
+❌ Erreur lors du lancement de Chrome : Chrome n'est pas installé dans l'emplacement standard
+[WS] Serveur WebSocket démarré sur ws://localhost:9999
+[WS] Serveur WebSocket démarré — en attente de l'extension Chrome...
+[36m[2026-11-02 09:11:05]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:05]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:05]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:05]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:05]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:06]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:06] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:06]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:06]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:06]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:06]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:06]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:06]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:06] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:06]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:06]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:07]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:07]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:07]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:07]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:07] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:07]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:07]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:07]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:07]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:07]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:07]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:07] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:07]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:07]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:07]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:08]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:08]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:08]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:08] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:08]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:08]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:08]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:08]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:08]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:08]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:08] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:08]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:08]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:09]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:09]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:09]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:09]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:09] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:09]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:09]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:09]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:09]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:09]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:09]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:10] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:10]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:10]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:10]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:10]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:10]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:10]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:10] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:10]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:10]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:10]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:11]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:11]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:11]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:11] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:11]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:11]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:11]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:11]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:11]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:11]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:11] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:11]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:12]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:12]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:12]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:12]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:12]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:12] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:12]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:12]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:12]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:12]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:12]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:12]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:13] 15V1         Erreur lors de la recherche de match![0m
+[36m[2026-11-02 09:11:13]  ------------------------------------------------------------[0m
+[36m[2026-11-02 09:11:13]   RECHERCHE DE MATCH[0m
+[36m[2026-11-02 09:11:13]  ------------------------------------------------------------[0m
+test error False
+[33m[2026-11-02 09:11:13]  Tableau des scores introuvable![0m
+[1A[2Kpas de bouton supprimé
+pas de bouton supprimé
+[37m[2026-11-02 09:11:13]      Récupération des ligues[0m
+[33m[2026-11-02 09:11:13]          ligues introuvables![0m
+[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[31m[2026-11-02 09:11:13] 15V1         Erreur lors de la recherche de match![0m
