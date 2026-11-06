@@ -18,13 +18,41 @@ Formule validée explicitement par l'utilisateur (ne pas dévier) :
 Pour une séquence perdue : mise_envoyee = total_mise_reelle (somme réelle),
 cote_moyenne identique, result='lost'.
 """
+import json
+import os
 from datetime import datetime
 
 import config
 from Functions import RedisIPC
 from Functions.TelegramBetsAPI import send_bet_to_auxotracker
 
-_DESCRIPTION_MAX_LEN = 500
+_FAILED_SENDS_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'martingale_failed_sends.json')
+
+
+def _save_failed_send(script_type, bet_dict: dict) -> None:
+    """Append-only : garde une trace locale des paris consolidés jamais créés côté AuxoTracker."""
+    try:
+        try:
+            with open(_FAILED_SENDS_PATH, 'r') as f:
+                existing = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            existing = []
+        existing.append({
+            'script_type': script_type,
+            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'bet_dict': bet_dict,
+        })
+        with open(_FAILED_SENDS_PATH, 'w') as f:
+            json.dump(existing, f, indent=2)
+    except Exception:
+        pass
+
+# 255, pas 500 : la validation Laravel du endpoint auxobot/bets autorise 500
+# caractères pour events.*.description, mais la colonne SQL réelle qui la
+# stocke (events.type / events.market, cf. BetController::storeAuxobot) est
+# en varchar(255) -- au-delà, MySQL renvoie "1406 Data too long for column"
+# (constaté le 2026-11-06, erreur 500 sur un pari consolidé réel).
+_DESCRIPTION_MAX_LEN = 255
 _DESCRIPTION_RESERVE = 60  # marge pour la ligne récap si troncature
 
 
@@ -124,9 +152,21 @@ def _send_consolidated(script_type, legs: list, *, stake: float, odds: float, re
         }],
     }
     try:
-        send_bet_to_auxotracker(bet_dict)
+        api_bet_id = send_bet_to_auxotracker(bet_dict)
     except Exception as e:
+        api_bet_id = None
         config.log(f"Erreur envoi pari consolidé AuxoTracker ({script_type}): {e}", 'warning', False)
+
+    if not api_bet_id:
+        # send_bet_to_auxotracker avale déjà les erreurs HTTP (ne lève pas
+        # d'exception sur un 4xx/5xx, retourne juste None) -- sans ce log,
+        # un échec d'envoi passait inaperçu ET l'historique de la séquence
+        # était quand même vidé juste après par l'appelant (finalize_*),
+        # perdant le pari définitivement (constaté le 2026-11-06, erreur 500
+        # "Data too long for column" sur un pari consolidé réel). Conservé
+        # ici pour reconstruction manuelle a posteriori.
+        config.log(f"Échec envoi pari consolidé AuxoTracker ({script_type}), sauvegarde locale pour récupération manuelle", 'warning', False)
+        _save_failed_send(script_type, bet_dict)
 
 
 def finalize_sequence_win(script_type, final_mise, final_cote) -> None:
