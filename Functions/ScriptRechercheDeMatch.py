@@ -1129,7 +1129,19 @@ def _ajouter_matchs_todo(matches):
             date_str = match[3]
             prob = match[4]
             link = match[5]
-            script_types_json = json.dumps(match[6]) if len(match) > 6 else json.dumps([])
+            # Même ordre que celui appliqué à l'exécution pour la famille 1530A
+            # (_load_dynamic_scripttypes, config.SCRIPTTYPE_ORDER_1530A : 150, 015,
+            # 030, 300, 15A, 30A — 015 toujours après 150 et avant 15A) : appliqué
+            # dès l'écriture pour que l'ordre stocké dans matches_todo (affiché tel
+            # quel au dashboard) soit déjà correct, pas seulement au moment du pari
+            # (demandé le 2026-11-06).
+            _raw_types = match[6] if len(match) > 6 else []
+            _order = config.SCRIPTTYPE_ORDER_1530A
+            _sorted_types = sorted(
+                _raw_types,
+                key=lambda st: _order.index(st) if st in _order else len(_order)
+            )
+            script_types_json = json.dumps(_sorted_types)
             total_gain = str(match[7]) if len(match) > 7 else '0'
             match_info = "|".join([
                 players_str, str(league), str(match_id), str(date_str),
