@@ -228,7 +228,15 @@ def all_script(driver):
 
     for scriptType in config.scriptTypeList:
         config.switchScript(scriptType)
-        RedisIPC.set_running(config.scriptType, True)
+        # matchname manquant ici (contrairement à Functions_431a.py/Functions_456P.py
+        # qui le passent déjà) : get_interrupted_match() exclut les lignes avec
+        # matchname='' (WHERE matchname != ''), donc un 15V1/15V2 tué puis relancé ne
+        # voyait jamais son propre match comme "interrompu à reprendre" -- il repartait
+        # sur une recherche normale, retrouvait le match déjà engagé (table matches,
+        # "Match déjà parié!") et l'ignorait, abandonnant sa perte en cours (constaté le
+        # 2026-11-06 sur Carlos Alcaraz : 15V1/15V2 perdus après redémarrage, 1530A/456P
+        # qui passent déjà matchname non affectés).
+        RedisIPC.set_running(config.scriptType, True, config.newmatch)
         config.log(f'RECHERCHE INFOS DE MISE {scriptType.upper()}', 'title', False)
         config.ScriptConfig(scriptType).reset()
         config.init_variable()
@@ -401,6 +409,16 @@ def all_script(driver):
                             float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                             config.scriptTypeList)
                         if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+                            # Envoi consolidé unique pour tout le match ici (pas à chaque
+                            # séquence gagnante, cf. MartingaleSequence.py) : ce scriptType a
+                            # fini d'intervenir sur ce match à ce point précis (running passe
+                            # à False juste au-dessus, plus aucun pari ne sera replacé) --
+                            # appeler finalize_match plus tôt (dès "FIN" logué) risquerait un
+                            # double comptage si le `continue` plus bas relance un pari (un
+                            # sibling 15V1/15V2 encore actif bloque cette sortie), auquel cas
+                            # global_match_win continuerait de grossir après un premier envoi.
+                            from Functions.MartingaleSequence import finalize_match
+                            finalize_match(scriptType, config.global_match_win[scriptType])
                             for st in config.scriptTypeList:
                                 config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                            'success', False)
@@ -545,6 +563,16 @@ def all_script(driver):
                     float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                     config.scriptTypeList)
                 if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+                    # Envoi consolidé unique pour tout le match ici (pas à chaque séquence
+                    # gagnante, cf. MartingaleSequence.py) : à ce point précis, ce
+                    # scriptType a fini d'intervenir sur ce match (running passe à False
+                    # juste après, plus aucun pari ne sera placé) -- appeler finalize_match
+                    # plus tôt (dès all_below_one, avant ce check list_running) risquerait
+                    # un double comptage si le process continue à parier en attendant un
+                    # sibling (branche ci-dessous, global_match_win continuerait de
+                    # grossir après un premier envoi déjà fait).
+                    from Functions.MartingaleSequence import finalize_match
+                    finalize_match(config.scriptType, config.global_match_win[scriptType])
                     for st in config.scriptTypeList:
                         config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                    'success', False)

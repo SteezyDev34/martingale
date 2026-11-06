@@ -202,6 +202,10 @@ def all_script(driver):
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                         config.log(f"FIN {config.scriptType}", 'success', False)
                         RedisIPC.set_running(config.scriptType, False, config.newmatch)
+                        # Envoi consolidé unique pour tout le match pour CE scriptType (pas à
+                        # chaque séquence gagnante, cf. MartingaleSequence.py).
+                        from Functions.MartingaleSequence import finalize_match
+                        finalize_match(scriptType, config.global_match_win[scriptType])
                         # Tous les scriptTypes ont atteint leur objectif : sortir tout de
                         # suite plutôt que d'attendre la fin du jeu en cours pour repartir
                         # sur une recherche de nouveau match (demandé le 2026-11-07).
@@ -414,6 +418,10 @@ def all_script(driver):
                         f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                     config.log(f"FIN {config.scriptType}", 'success', False)
                     RedisIPC.set_running(config.scriptType, False, config.newmatch)
+                    # Envoi consolidé unique pour tout le match pour CE scriptType (pas à
+                    # chaque séquence gagnante, cf. MartingaleSequence.py).
+                    from Functions.MartingaleSequence import finalize_match
+                    finalize_match(scriptType, config.global_match_win[scriptType])
                     # Tous les scriptTypes ont atteint leur objectif : sortir tout de
                     # suite plutôt que d'attendre la fin du jeu en cours pour repartir
                     # sur une recherche de nouveau match (demandé le 2026-11-07).

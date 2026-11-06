@@ -100,6 +100,15 @@ while (config.win < 100):
             config.switchScript(i)
             config.ScriptConfig(i).reset()
             DispatchPerte()
+            # Filet de sécurité : si le match s'est terminé (ou le bot a été
+            # interrompu) avant que ce scriptType atteigne son objectif de gain,
+            # Functions_15V1.py n'a jamais appelé finalize_match -- sans ça, les
+            # jeux déjà accumulés resteraient collés au prochain match pour ce
+            # même scriptType (martingale_legs n'est pas scopé par match, cf.
+            # MartingaleSequence.py, demandé le 2026-11-06). No-op si déjà vidé
+            # (cas normal : objectif atteint, déjà envoyé plus haut).
+            from Functions.MartingaleSequence import finalize_match
+            finalize_match(i, config.global_match_win.get(i, 0))
             config.init_variable()
             config.global_match_win[i] = 0  # Initialize win counter for script type
             config.winmatch[i] = 0  # Initialize match counter for script type

@@ -266,6 +266,13 @@ def all_script(driver):
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                         config.log(f"FIN 6 {config.scriptType}", 'success', False)
                         RedisIPC.set_running(config.scriptType, False, config.newmatch)
+                        # Envoi consolidé unique pour tout le match pour CE scriptType ici
+                        # (pas à chaque séquence gagnante, cf. MartingaleSequence.py) : il
+                        # vient d'atteindre son objectif et ne pariera plus (running=False
+                        # ci-dessus, pas de blocage par un sibling contrairement à 15V1/15V2
+                        # -- safe de l'appeler une seule fois, ici).
+                        from Functions.MartingaleSequence import finalize_match
+                        finalize_match(scriptType, config.global_match_win[scriptType])
                         # Tous les scriptTypes ont atteint leur objectif : sortir tout de
                         # suite plutôt que d'attendre la fin du jeu en cours (GetIfGameEnd
                         # plus bas) pour repartir sur une recherche de nouveau match
@@ -492,6 +499,10 @@ def all_script(driver):
                     config.perte = 0
                     config.log(f"FIN 7 {config.scriptType}", 'success', False)
                     RedisIPC.set_running(config.scriptType, False, config.newmatch)
+                    # Envoi consolidé unique pour tout le match pour CE scriptType (pas à
+                    # chaque séquence gagnante, cf. MartingaleSequence.py).
+                    from Functions.MartingaleSequence import finalize_match
+                    finalize_match(scriptType, config.global_match_win[scriptType])
                     # Tous les scriptTypes ont atteint leur objectif : sortir tout de
                     # suite plutôt que d'attendre la fin du jeu en cours pour repartir
                     # sur une recherche de nouveau match (demandé le 2026-11-07).

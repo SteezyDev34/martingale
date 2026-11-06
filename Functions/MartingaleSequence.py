@@ -1,22 +1,36 @@
 """
-Consolidation des séquences martingale envoyées à AuxoTracker (2026-11-04).
+Consolidation des paris martingale envoyés à AuxoTracker (2026-11-04, étendu
+au niveau match le 2026-11-06).
 
-Avant : chaque jeu/tentative d'une séquence (jeu 1, jeu 2 à mise doublée...)
-était envoyé comme un pari séparé à AuxoTracker, polluant le tracker. Ce
-module accumule les jeux d'une séquence (via record_leg, appelé depuis
-Functions/ValidationDuParis.py à chaque jeu validé) et n'envoie qu'UN SEUL
-pari consolidé à la fin de la séquence (gain -> finalize_sequence_win,
-abandon -> finalize_sequence_lost).
+Avant (2026-11-04) : chaque jeu/tentative d'une séquence (jeu 1, jeu 2 à mise
+doublée...) était envoyé comme un pari séparé à AuxoTracker, polluant le
+tracker. Un premier passage consolidait par SÉQUENCE (une série de mises
+jusqu'à un gain ou un abandon) -- mais un scriptType comme 15V1/15V2/431a/456P
+peut enchaîner PLUSIEURS séquences dans le même match (il continue de parier
+tant que son objectif de gain match n'est pas atteint), donc plusieurs envois
+par match. Demande explicite du 2026-11-06 : un seul envoi consolidé par
+MATCH, à la toute fin (objectif de gain atteint, ou abandon du match).
+
+record_leg() accumule chaque jeu (table settings, clé martingale_legs:<ST>) --
+PLUS vidée entre deux séquences gagnantes : finalize_sequence_win/lost ne font
+plus que garantir que le jeu courant est bien dans l'historique, sans envoyer
+ni vider. Seul finalize_match() envoie et vide, au moment où le scriptType
+termine son implication sur CE match (objectif atteint ou match abandonné).
 
 Formule validée explicitement par l'utilisateur (ne pas dévier) :
-    total_mise_reelle = somme des mises de TOUS les jeux de la séquence
-    gain_reel         = mise_dernier_jeu_gagnant * cote_dernier_jeu_gagnant
-    benefice_reel     = gain_reel - total_mise_reelle
-    cote_moyenne      = moyenne arithmétique de TOUTES les cotes jouées
+    total_mise_reelle = somme des mises de TOUS les jeux du match (toutes séquences)
+    benefice_reel     = net profit réel du match pour ce scriptType
+                         (config.global_match_win[script_type], déjà calculé
+                         jeu par jeu par le moteur -- gain du dernier jeu gagnant
+                         de CHAQUE séquence gagnante moins la mise de CETTE
+                         séquence, sommé sur tout le match -- recalculer ce total
+                         depuis les legs seuls ne marche pas dès qu'il y a eu
+                         plus d'une séquence gagnante dans le match)
+    cote_moyenne      = moyenne arithmétique de TOUTES les cotes jouées sur le match
     mise_envoyee      = benefice_reel / (cote_moyenne - 1)
     gain_affiche      = mise_envoyee * cote_moyenne
-Pour une séquence perdue : mise_envoyee = total_mise_reelle (somme réelle),
-cote_moyenne identique, result='lost'.
+Si le match se termine sans profit net (abandon) : mise_envoyee =
+total_mise_reelle (somme réelle), cote_moyenne identique, result='lost'.
 """
 import json
 import os
@@ -171,14 +185,17 @@ def _send_consolidated(script_type, legs: list, *, stake: float, odds: float, re
 
 def finalize_sequence_win(script_type, final_mise, final_cote) -> None:
     """
-    Calcule et envoie le pari consolidé d'une séquence gagnante, puis vide
-    l'historique persisté. `final_mise`/`final_cote` sont ceux du jeu gagnant
+    Garantit que le jeu gagnant de cette séquence est bien dans l'historique
+    persisté du match (pas d'envoi ni de vidage ici -- cf. finalize_match,
+    une séquence gagnante n'est pas forcément la fin du match : le scriptType
+    peut enchaîner une nouvelle séquence si son objectif de gain match n'est
+    pas encore atteint). `final_mise`/`final_cote` sont ceux du jeu gagnant
     (passés explicitement, pas relus depuis l'historique -- voir garde-fou
     ci-dessous).
     """
     legs = RedisIPC.get_martingale_legs(script_type)
     if not legs:
-        config.log(f"[MartingaleSequence] win: aucun jeu enregistré pour {script_type}, envoi annulé", 'warning', False)
+        config.log(f"[MartingaleSequence] win: aucun jeu enregistré pour {script_type}", 'warning', False)
         return
 
     final_mise = float(final_mise)
@@ -186,18 +203,49 @@ def finalize_sequence_win(script_type, final_mise, final_cote) -> None:
     last = legs[-1]
     # Garde-fou : si record_leg avait silencieusement échoué pour le jeu
     # gagnant (son propre except avale l'erreur), l'historique persisté
-    # pourrait ne pas le contenir -- l'ajouter en mémoire pour ne pas
-    # sous-compter total_mise_reelle/cote_moyenne.
+    # pourrait ne pas le contenir -- l'ajouter pour ne pas sous-compter
+    # total_mise_reelle/cote_moyenne au moment de finalize_match.
     if abs(last['mise'] - final_mise) > 0.001 or abs(last['cote'] - final_cote) > 0.001:
-        legs = legs + [{
+        RedisIPC.append_martingale_leg(script_type, {
             'jeu': getattr(config, 'looking_game', None), 'mise': final_mise, 'cote': final_cote,
             'equipe_1': last.get('equipe_1', ''), 'equipe_2': last.get('equipe_2', ''),
             'win_type': last.get('win_type', ''), 'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        }]
+        })
 
+
+def finalize_sequence_lost(script_type) -> None:
+    """
+    Aucune action : le(s) jeu(x) de la séquence perdue sont déjà dans
+    l'historique persisté via record_leg (appelé à chaque jeu validé), et
+    restent accumulés pour le prochain envoi (finalize_match, fin du match).
+    Conservée pour la lisibilité des appelants (symétrique à
+    finalize_sequence_win) et en cas de besoin de logique dédiée plus tard.
+    """
+    return
+
+
+def finalize_match(script_type, net_profit) -> None:
+    """
+    Calcule et envoie LE pari consolidé du match pour ce scriptType (toutes
+    séquences confondues), puis vide l'historique persisté. À appeler une
+    fois que le scriptType a fini d'intervenir sur ce match -- objectif de
+    gain atteint, ou match abandonné/terminé avant (filet de sécurité dans
+    les scripts SCRIPTS_*/*.py, sinon des legs orphelins resteraient collés
+    au prochain match pour ce même scriptType).
+
+    `net_profit` : config.global_match_win[script_type] au moment de l'appel
+    -- déjà le vrai bénéfice net du match (somme jeu par jeu par le moteur),
+    pas recalculable depuis les seuls legs dès qu'il y a eu plus d'une
+    séquence gagnante dans le match (le gain d'une séquence antérieure
+    n'apparaît pas dans les legs, seulement sa mise) -- cf. note de formule
+    en tête de fichier.
+    """
+    legs = RedisIPC.get_martingale_legs(script_type)
+    if not legs:
+        return
+
+    net_profit = float(net_profit)
     total_mise_reelle = sum(l['mise'] for l in legs)
-    gain_reel = final_mise * final_cote
-    benefice_reel = gain_reel - total_mise_reelle
     cote_moyenne = sum(l['cote'] for l in legs) / len(legs)
 
     if cote_moyenne <= 1:
@@ -205,18 +253,12 @@ def finalize_sequence_win(script_type, final_mise, final_cote) -> None:
         RedisIPC.clear_martingale_legs(script_type)
         return
 
-    mise_envoyee = benefice_reel / (cote_moyenne - 1)
-    _send_consolidated(script_type, legs, stake=mise_envoyee, odds=cote_moyenne, result='win')
-    RedisIPC.clear_martingale_legs(script_type)
+    if net_profit > 0:
+        mise_envoyee = net_profit / (cote_moyenne - 1)
+        result = 'win'
+    else:
+        mise_envoyee = total_mise_reelle
+        result = 'lost'
 
-
-def finalize_sequence_lost(script_type) -> None:
-    """Calcule et envoie le pari consolidé d'une séquence abandonnée (perte), puis vide l'historique."""
-    legs = RedisIPC.get_martingale_legs(script_type)
-    if not legs:
-        return
-
-    total_mise_reelle = sum(l['mise'] for l in legs)
-    cote_moyenne = sum(l['cote'] for l in legs) / len(legs)
-    _send_consolidated(script_type, legs, stake=total_mise_reelle, odds=cote_moyenne, result='lost')
+    _send_consolidated(script_type, legs, stake=mise_envoyee, odds=cote_moyenne, result=result)
     RedisIPC.clear_martingale_legs(script_type)
