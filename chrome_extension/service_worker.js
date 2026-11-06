@@ -457,6 +457,27 @@ async function handlePythonMessage(msg, port) {
       break;
     }
 
+    // DEBUG uniquement — texte visible d'un sélecteur (ou document.body si omis),
+    // pour inspecter une page sans ouvrir Claude in Chrome/Browser (bloqués sur
+    // 1xbet.com). Clique optionnellement chaque élément matché par `clickSelector`
+    // avant de lire le texte (ex: déplier un accordéon d'historique de paris).
+    case 'debug_get_text': {
+      const tabId = await resolveTabId(msg, conn);
+      if (!tabId) { sendToPython(port, { action: 'debug_get_text_response', req_id: msg.req_id, error: 'no_tab' }); break; }
+      const result = await execInTab(tabId, (opts) => {
+        const { selector, clickSelector, maxLen } = opts;
+        if (clickSelector) {
+          document.querySelectorAll(clickSelector).forEach((el) => { try { el.click(); } catch (e) {} });
+        }
+        const root = selector ? document.querySelector(selector) : document.body;
+        if (!root) return { error: 'selector_not_found' };
+        const text = (root.innerText || root.textContent || '').trim();
+        return { text: text.slice(0, maxLen || 20000), truncated: text.length > (maxLen || 20000) };
+      }, { selector: msg.selector, clickSelector: msg.clickSelector, maxLen: msg.maxLen });
+      sendToPython(port, { action: 'debug_get_text_response', req_id: msg.req_id, result, tab_id: tabId });
+      break;
+    }
+
     // ─── Stake.bet (Functions/Bookmakers/StakeBridge.py) ─────────────────────
     // Même logique que les actions 1xBet ci-dessus (resolveTabId + exec sur
     // window._martingale), juste un contenu de page différent (content_scripts/stake.js).

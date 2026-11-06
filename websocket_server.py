@@ -351,6 +351,17 @@ class ExtensionBridge:
         """DEBUG uniquement : compte les éléments correspondant à un sélecteur CSS exact."""
         return self._send_and_wait({'action': 'debug_count_selector', 'selector': selector}, timeout=15)
 
+    def debug_get_text(self, selector=None, click_selector=None, max_len=20000):
+        """DEBUG uniquement : texte visible d'un sélecteur (page entière si omis).
+        click_selector clique chaque élément matché avant lecture (ex: déplier un
+        accordéon)."""
+        return self._send_and_wait({
+            'action': 'debug_get_text',
+            'selector': selector,
+            'clickSelector': click_selector,
+            'maxLen': max_len,
+        }, timeout=15)
+
     def get_match_list(self):
         """Retourne [{leagueName, matches:[{p1,p2,score,url,hasBall}]}]."""
         resp = self._send_and_wait({'action': 'get_match_list'}, timeout=40)
