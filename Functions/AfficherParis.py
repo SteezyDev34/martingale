@@ -182,14 +182,10 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
                                                                     config.site_type]))
                                                         )
                                                     except:
-                                                        if key == 'Paris':
-                                                            key = 'Game Score. ' + theset + args
-                                                        elif key == 'Game Score. ' + theset + args:
-                                                            key = 'Score de la partie'
-                                                        elif key == 'Score de la partie':
+                                                        if key == 'Score de la partie':
                                                             key = 'Score du jeu. ' + theset + args
                                                         else:
-                                                            key = 'Paris'
+                                                            key = 'Score de la partie'
                                                     else:
                                                         paris = 1
                                                 else:
@@ -275,10 +271,11 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
             config.log_clear_line(logline)
             return False
 
-        # Même chaîne de fallback que l'ancien Selenium : Paris -> Game Score. {theset}{args}
-        # -> Score de la partie -> Score du jeu. {theset}{args} -> Paris -> ... (cyclique,
-        # sans espace entre theset et args pour ces 3 libellés, comme côté Selenium).
-        cycle = ['Paris', f'Game Score. {theset}{args}', 'Score de la partie', f'Score du jeu. {theset}{args}']
+        # Même chaîne de fallback que l'ancien Selenium : Score de la partie ->
+        # Score du jeu. {theset}{args} -> ... (cyclique). "Paris"/"Game Score.
+        # ..." retirés le 2026-11-06 -- libellés obsolètes côté 1xBet, ne
+        # servent plus à rien dans la rotation.
+        cycle = ['Score de la partie', f'Score du jeu. {theset}{args}']
         tentative_key = key
         for i in range(6):
             config.log(f'recherche marché, clé {i+1}/6 : {tentative_key}', 'info', False, 3)
@@ -390,14 +387,10 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
                                                             config.site_type]))
                                                 )
                                             except:
-                                                if key == 'Paris':
-                                                    key = 'Game Score. ' + theset + args
-                                                elif key == 'Game Score. ' + theset + args:
-                                                    key = 'Score de la partie'
-                                                elif key == 'Score de la partie':
-                                                            key = 'Score du jeu. ' + theset + args
+                                                if key == 'Score de la partie':
+                                                    key = 'Score du jeu. ' + theset + args
                                                 else:
-                                                    key = 'Paris'
+                                                    key = 'Score de la partie'
                                             else:
                                                 paris = 1
                                         else:

@@ -1,20 +1,7 @@
 [
     {
         "montant": 0.2,
-        "cote": 3,
-        "jeu": 1,
-        "set": "1",
-        "numero_point": false,
-        "winscore": [
-            "40:15",
-            "15:40"
-        ],
-        "timestamp": "2026-11-02 05:06:17",
-        "url": "https://ca.1xbet.com/fr/live/tennis/122579-challenger-bratislava-qualification/767362024-michal-krajci-niels-visker?platform_type=mobile"
-    },
-    {
-        "montant": 0.3,
-        "cote": "3",
+        "cote": 3.25,
         "jeu": 2,
         "set": "1",
         "numero_point": false,
@@ -22,25 +9,12 @@
             "40:15",
             "15:40"
         ],
-        "timestamp": "2026-11-02 05:11:23",
-        "url": "https://ca.1xbet.com/fr/live/tennis/122579-challenger-bratislava-qualification/767362024-michal-krajci-niels-visker?platform_type=mobile"
+        "timestamp": "2026-10-20 19:58:54",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
     },
     {
         "montant": 0.2,
         "cote": 3,
-        "jeu": 3,
-        "set": "1",
-        "numero_point": false,
-        "winscore": [
-            "40:15",
-            "15:40"
-        ],
-        "timestamp": "2026-11-02 05:16:16",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767360687-ignacio-buse-zizou-bergs?platform_type=mobile"
-    },
-    {
-        "montant": 0.3,
-        "cote": "3",
         "jeu": 4,
         "set": "1",
         "numero_point": false,
@@ -48,11 +22,11 @@
             "40:15",
             "15:40"
         ],
-        "timestamp": "2026-11-02 05:21:07",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767360687-ignacio-buse-zizou-bergs?platform_type=mobile"
+        "timestamp": "2026-10-20 20:07:22",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
     },
     {
-        "montant": 0.45,
+        "montant": 0.2,
         "cote": "3",
         "jeu": 5,
         "set": "1",
@@ -61,11 +35,11 @@
             "40:15",
             "15:40"
         ],
-        "timestamp": "2026-11-02 05:27:33",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767360687-ignacio-buse-zizou-bergs?platform_type=mobile"
+        "timestamp": "2026-10-20 20:12:17",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
     },
     {
-        "montant": 0.67,
+        "montant": 0.3,
         "cote": "3",
         "jeu": 6,
         "set": "1",
@@ -74,12 +48,181 @@
             "40:15",
             "15:40"
         ],
-        "timestamp": "2026-11-02 05:33:50",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767360687-ignacio-buse-zizou-bergs?platform_type=mobile"
+        "timestamp": "2026-10-20 20:15:32",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": 3,
+        "jeu": 7,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 20:20:11",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
+    },
+    {
+        "montant": 0.3,
+        "cote": "3",
+        "jeu": 8,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 20:22:38",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
+    },
+    {
+        "montant": 0.45,
+        "cote": "3",
+        "jeu": 9,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 20:29:34",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
+    },
+    {
+        "montant": 0.45,
+        "cote": "3",
+        "jeu": 1,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 20:32:54",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
+    },
+    {
+        "montant": 0.67,
+        "cote": "3",
+        "jeu": 2,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 20:38:00",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
+    },
+    {
+        "montant": 1.01,
+        "cote": "3",
+        "jeu": 3,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 20:45:09",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
+    },
+    {
+        "montant": 1.52,
+        "cote": "3",
+        "jeu": 4,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 20:48:51",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
+    },
+    {
+        "montant": 2.27,
+        "cote": "3",
+        "jeu": 5,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 20:55:41",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
+    },
+    {
+        "montant": 3.41,
+        "cote": "3",
+        "jeu": 6,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 20:59:25",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
     },
     {
         "montant": 0.2,
         "cote": 3.25,
+        "jeu": 7,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 21:04:32",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2915556-atp-brussels/763448953-nishesh-basavareddy-raphael-collignon?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": 3.25,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 21:29:36",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 0.27,
+        "cote": "3.25",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 21:31:40",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 0.39,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 21:37:53",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 0.56,
+        "cote": "3.25",
         "jeu": 4,
         "set": "1",
         "numero_point": false,
@@ -87,11 +230,11 @@
             "40:15",
             "15:40"
         ],
-        "timestamp": "2026-11-02 05:59:16",
-        "url": "https://ca.1xbet.com/fr/live/tennis/3118192-wta-luanda-qualification/767369950-laura-boehner-prathyusha-rachapudi?platform_type=mobile"
+        "timestamp": "2026-10-20 21:40:40",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
     },
     {
-        "montant": 0.27,
+        "montant": 0.81,
         "cote": "3.25",
         "jeu": 5,
         "set": "1",
@@ -100,12 +243,130 @@
             "40:15",
             "15:40"
         ],
-        "timestamp": "2026-11-02 06:06:36",
-        "url": "https://ca.1xbet.com/fr/live/tennis/3118192-wta-luanda-qualification/767369950-laura-boehner-prathyusha-rachapudi?platform_type=mobile"
+        "timestamp": "2026-10-20 21:48:58",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
     },
     {
-        "montant": 0.2,
-        "cote": 3.25,
+        "montant": 1.17,
+        "cote": "3.25",
+        "jeu": 6,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 21:57:28",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 1.69,
+        "cote": "3.25",
+        "jeu": 7,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 22:03:19",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 2.44,
+        "cote": "3.25",
+        "jeu": 8,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 22:05:44",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 3.52,
+        "cote": "3.25",
+        "jeu": 9,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 22:09:48",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 5.09,
+        "cote": "3.25",
+        "jeu": 10,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 22:14:47",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 7.35,
+        "cote": "3.25",
+        "jeu": 11,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 22:18:47",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 10.62,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 22:32:16",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 15.34,
+        "cote": "3.25",
+        "jeu": 4,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-10-20 22:35:46",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3108863-challenger-fort-worth/763479103-kenta-miyoshi-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 0.5,
+        "cote": 3.4,
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 18:12:39",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767732403-victoria-jimenez-kasintseva-anna-lena-friedsam?platform_type=mobile",
+        "api_bet_id": 44066
+    },
+    {
+        "montant": 0.71,
+        "cote": "3.4",
         "jeu": 5,
         "set": "1",
         "numero_point": false,
@@ -113,7 +374,669 @@
             "40:15",
             "15:40"
         ],
-        "timestamp": "2026-11-02 06:20:19",
-        "url": "https://ca.1xbet.com/fr/live/tennis/3118754-world-tennis-liberec-women-qualification/767373525-anna-hsu-oriana-gniewkowska?platform_type=mobile"
+        "timestamp": "2026-11-03 18:23:34",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767732403-victoria-jimenez-kasintseva-anna-lena-friedsam?platform_type=mobile",
+        "api_bet_id": 44074
+    },
+    {
+        "montant": 1.0,
+        "cote": "3.4",
+        "jeu": 6,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 18:29:23",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767732403-victoria-jimenez-kasintseva-anna-lena-friedsam?platform_type=mobile",
+        "api_bet_id": 44079
+    },
+    {
+        "montant": 0.48,
+        "cote": 3.5,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 18:37:00",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3114265-world-tennis-pembroke/767741877-pedro-petroski-rocha-jacob-brumm?platform_type=mobile",
+        "api_bet_id": 44083
+    },
+    {
+        "montant": 0.67,
+        "cote": "3.5",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 18:46:12",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3114265-world-tennis-pembroke/767741877-pedro-petroski-rocha-jacob-brumm?platform_type=mobile",
+        "api_bet_id": 44088
+    },
+    {
+        "montant": 0.94,
+        "cote": "3.5",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 18:50:35",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3114265-world-tennis-pembroke/767741877-pedro-petroski-rocha-jacob-brumm?platform_type=mobile",
+        "api_bet_id": 44090
+    },
+    {
+        "montant": 0.69,
+        "cote": 2.75,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 19:05:46",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767744518-ben-shelton-cameron-norrie?platform_type=mobile",
+        "api_bet_id": 44096
+    },
+    {
+        "montant": 1.08,
+        "cote": "2.75",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 19:11:41",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767744518-ben-shelton-cameron-norrie?platform_type=mobile",
+        "api_bet_id": 44102
+    },
+    {
+        "montant": 1.7,
+        "cote": "2.75",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 19:14:12",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767744518-ben-shelton-cameron-norrie?platform_type=mobile",
+        "api_bet_id": 44105
+    },
+    {
+        "montant": 2.67,
+        "cote": "2.75",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 19:18:09",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767744518-ben-shelton-cameron-norrie?platform_type=mobile",
+        "api_bet_id": 44107
+    },
+    {
+        "montant": 0.69,
+        "cote": 2.75,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 19:23:50",
+        "url": "https://ca.1xbet.com/fr/live/tennis/120985-challenger-charlottesville/767752667-andres-santamarta-roig-clement-chidekh?platform_type=mobile",
+        "api_bet_id": 44109
+    },
+    {
+        "montant": 1.08,
+        "cote": "2.75",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 19:27:09",
+        "url": "https://ca.1xbet.com/fr/live/tennis/120985-challenger-charlottesville/767752667-andres-santamarta-roig-clement-chidekh?platform_type=mobile",
+        "api_bet_id": 44111
+    },
+    {
+        "montant": 0.6,
+        "cote": 3,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 19:32:42",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767753437-jan-lennard-struff-arthur-gea?platform_type=mobile",
+        "api_bet_id": 44115
+    },
+    {
+        "montant": 0.9,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 19:38:05",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767753437-jan-lennard-struff-arthur-gea?platform_type=mobile",
+        "api_bet_id": 44120
+    },
+    {
+        "montant": 0.5,
+        "cote": 3.4,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 19:45:51",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2027900-challenger-bratislava-2/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44127
+    },
+    {
+        "montant": 0.71,
+        "cote": "3.4",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 19:49:20",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2027900-challenger-bratislava-2/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44130
+    },
+    {
+        "montant": 1.0,
+        "cote": "3.4",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 19:52:27",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2027900-challenger-bratislava-2/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44133
+    },
+    {
+        "montant": 1.42,
+        "cote": "3.4",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 20:03:05",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2027900-challenger-bratislava-2/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44136
+    },
+    {
+        "montant": 2.01,
+        "cote": "3.4",
+        "jeu": 6,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 20:06:59",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2027900-challenger-bratislava-2/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44139
+    },
+    {
+        "montant": 2.85,
+        "cote": "3.4",
+        "jeu": 7,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 20:10:06",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2027900-challenger-bratislava-2/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44142
+    },
+    {
+        "montant": 4.04,
+        "cote": "3.4",
+        "jeu": 8,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 20:12:35",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2027900-challenger-bratislava-2/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44145
+    },
+    {
+        "montant": 0.5,
+        "cote": 3.4,
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 20:26:05",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119534-world-tennis-harlingen-qualification/767764899-togan-tokac-connor-henry-van-schalkwyk?platform_type=mobile",
+        "api_bet_id": 44154
+    },
+    {
+        "montant": 0.53,
+        "cote": 3.25,
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 20:41:31",
+        "url": "https://ca.1xbet.com/fr/live/tennis/120985-challenger-charlottesville/767767932-marcos-giron-dylan-dietrich?platform_type=mobile",
+        "api_bet_id": 44159
+    },
+    {
+        "montant": 0.77,
+        "cote": "3.25",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 20:47:14",
+        "url": "https://ca.1xbet.com/fr/live/tennis/120985-challenger-charlottesville/767767932-marcos-giron-dylan-dietrich?platform_type=mobile",
+        "api_bet_id": 44161
+    },
+    {
+        "montant": 1.11,
+        "cote": "3.25",
+        "jeu": 6,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 20:50:47",
+        "url": "https://ca.1xbet.com/fr/live/tennis/120985-challenger-charlottesville/767767932-marcos-giron-dylan-dietrich?platform_type=mobile",
+        "api_bet_id": 44163
+    },
+    {
+        "montant": 1.6,
+        "cote": "3.25",
+        "jeu": 7,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-03 20:55:02",
+        "url": "https://ca.1xbet.com/fr/live/tennis/120985-challenger-charlottesville/767767932-marcos-giron-dylan-dietrich?platform_type=mobile",
+        "api_bet_id": 44164
+    },
+    {
+        "montant": 0.2,
+        "cote": 3.4,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 15:48:03",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767988965-katarina-zavatska-veronika-podrez?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.4",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 15:54:45",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767988965-katarina-zavatska-veronika-podrez?platform_type=mobile"
+    },
+    {
+        "montant": 0.25,
+        "cote": "3.4",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 15:59:25",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767988965-katarina-zavatska-veronika-podrez?platform_type=mobile"
+    },
+    {
+        "montant": 0.35,
+        "cote": "3.4",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 16:04:34",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767988965-katarina-zavatska-veronika-podrez?platform_type=mobile"
+    },
+    {
+        "montant": 0.5,
+        "cote": "3.4",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 16:08:49",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767988965-katarina-zavatska-veronika-podrez?platform_type=mobile"
+    },
+    {
+        "montant": 0.71,
+        "cote": "3.4",
+        "jeu": 6,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 16:12:11",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767988965-katarina-zavatska-veronika-podrez?platform_type=mobile"
+    },
+    {
+        "montant": 1.0,
+        "cote": "3.4",
+        "jeu": 7,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 16:18:02",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767988965-katarina-zavatska-veronika-podrez?platform_type=mobile"
+    },
+    {
+        "montant": 1.42,
+        "cote": "3.4",
+        "jeu": 8,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 16:24:57",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767988965-katarina-zavatska-veronika-podrez?platform_type=mobile"
+    },
+    {
+        "montant": 2.01,
+        "cote": "3.4",
+        "jeu": 9,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 16:29:49",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767988965-katarina-zavatska-veronika-podrez?platform_type=mobile"
+    },
+    {
+        "montant": 2.85,
+        "cote": "3.4",
+        "jeu": 10,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 16:34:31",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767988965-katarina-zavatska-veronika-podrez?platform_type=mobile"
+    },
+    {
+        "montant": 2.85,
+        "cote": "3.4",
+        "jeu": 7,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 17:27:49",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767988965-katarina-zavatska-veronika-podrez?platform_type=mobile"
+    },
+    {
+        "montant": 4.04,
+        "cote": "3.4",
+        "jeu": 8,
+        "set": "2",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 17:29:13",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767988965-katarina-zavatska-veronika-podrez?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": 3.25,
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 17:36:37",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119537-world-tennis-orlando-women/768011420-aspen-schuman-kajsa-rinaldo-persson?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": 3.25,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 17:49:46",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2027900-challenger-bratislava-2/768015629-lukas-pokorny-toby-samuel?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.25",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 17:54:08",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2027900-challenger-bratislava-2/768015629-lukas-pokorny-toby-samuel?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": 3.5,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 17:58:49",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/768016038-marie-weckerle-anna-siskova?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3.5",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 18:03:12",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/768016038-marie-weckerle-anna-siskova?platform_type=mobile"
+    },
+    {
+        "montant": 0.24,
+        "cote": "3.5",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 18:05:56",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/768016038-marie-weckerle-anna-siskova?platform_type=mobile"
+    },
+    {
+        "montant": 0.34,
+        "cote": "3.5",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 18:10:10",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/768016038-marie-weckerle-anna-siskova?platform_type=mobile"
+    },
+    {
+        "montant": 0.47,
+        "cote": "3.5",
+        "jeu": 6,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 18:12:53",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/768016038-marie-weckerle-anna-siskova?platform_type=mobile"
+    },
+    {
+        "montant": 0.66,
+        "cote": "3.5",
+        "jeu": 7,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 18:17:54",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/768016038-marie-weckerle-anna-siskova?platform_type=mobile"
+    },
+    {
+        "montant": 0.92,
+        "cote": "3.5",
+        "jeu": 8,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 18:27:47",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/768016038-marie-weckerle-anna-siskova?platform_type=mobile"
+    },
+    {
+        "montant": 1.29,
+        "cote": "3.5",
+        "jeu": 9,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 18:31:45",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/768016038-marie-weckerle-anna-siskova?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": 3,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 18:37:11",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3113803-world-tennis-neuquen-women/768027509-luciana-moyano-isabel-arabarco?platform_type=mobile"
+    },
+    {
+        "montant": 0.2,
+        "cote": "3",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": [
+            "40:15",
+            "15:40"
+        ],
+        "timestamp": "2026-11-04 18:45:13",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3113803-world-tennis-neuquen-women/768027509-luciana-moyano-isabel-arabarco?platform_type=mobile"
     }
 ]

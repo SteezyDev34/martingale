@@ -1,72 +1,46 @@
 [
     {
-        "montant": 0.2,
-        "cote": 4.33,
-        "jeu": 2,
-        "set": "1",
-        "numero_point": false,
-        "winscore": "40:40",
-        "timestamp": "2026-11-02 05:16:07",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767360687-ignacio-buse-zizou-bergs?platform_type=mobile"
-    },
-    {
-        "montant": 0.2,
-        "cote": "4.33",
-        "jeu": 4,
-        "set": "1",
-        "numero_point": false,
-        "winscore": "40:40",
-        "timestamp": "2026-11-02 05:20:34",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767360687-ignacio-buse-zizou-bergs?platform_type=mobile"
-    },
-    {
-        "montant": 0.2,
-        "cote": 3.5,
+        "montant": 0.87,
+        "cote": 2.375,
         "jeu": 1,
         "set": "1",
         "numero_point": false,
         "winscore": "40:40",
-        "timestamp": "2026-11-02 06:31:36",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
+        "timestamp": "2026-11-03 19:32:33",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767753437-jan-lennard-struff-arthur-gea?platform_type=mobile",
+        "api_bet_id": 44114
     },
     {
-        "montant": 0.24,
-        "cote": "3.5",
+        "montant": 0.5,
+        "cote": 3.4,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "40:40",
+        "timestamp": "2026-11-03 21:00:27",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767767305-casper-ruud-rafael-jodar?platform_type=mobile",
+        "api_bet_id": 44167
+    },
+    {
+        "montant": 0.71,
+        "cote": "3.4",
         "jeu": 2,
         "set": "1",
         "numero_point": false,
         "winscore": "40:40",
-        "timestamp": "2026-11-02 06:40:52",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
+        "timestamp": "2026-11-03 21:05:56",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767767305-casper-ruud-rafael-jodar?platform_type=mobile",
+        "api_bet_id": 44169
     },
     {
-        "montant": 0.34,
-        "cote": "3.5",
+        "montant": 1.0,
+        "cote": "3.4",
         "jeu": 3,
         "set": "1",
         "numero_point": false,
         "winscore": "40:40",
-        "timestamp": "2026-11-02 06:45:10",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
-    },
-    {
-        "montant": 0.47,
-        "cote": "3.5",
-        "jeu": 4,
-        "set": "1",
-        "numero_point": false,
-        "winscore": "40:40",
-        "timestamp": "2026-11-02 06:48:22",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
-    },
-    {
-        "montant": 0.66,
-        "cote": "3.5",
-        "jeu": 5,
-        "set": "1",
-        "numero_point": false,
-        "winscore": "40:40",
-        "timestamp": "2026-11-02 06:50:59",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
+        "timestamp": "2026-11-03 21:09:52",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767767305-casper-ruud-rafael-jodar?platform_type=mobile",
+        "api_bet_id": 44170
     }
 ]

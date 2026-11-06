@@ -56,7 +56,11 @@ BOOKMAKER_STATE: Dict[str, Dict] = {
 # Désactivé à la demande explicite de l'utilisateur le 2026-11-03 (placement
 # réel) après validation extensive en dry-run (SGM, Double Chance, props
 # joueur, etc.) -- repasser à True pour revenir en simulation si besoin.
-SIMULATE_MODE = False
+# Réactivé temporairement à la demande explicite de l'utilisateur le
+# 2026-11-06 pour tester en conditions réelles (sans risquer de mise) le fix
+# props joueur basketball (_TOTAL_HEADINGS["4"] + règle GPT panier/passe/assist
+# + concordance de vocabulaire) avant de repasser en placement réel.
+SIMULATE_MODE = True
 
 
 def _is_bookmaker_active(name: str) -> bool:

@@ -266,6 +266,20 @@ def all_script(driver):
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                         config.log(f"FIN 6 {config.scriptType}", 'success', False)
                         RedisIPC.set_running(config.scriptType, False, config.newmatch)
+                        # Tous les scriptTypes ont atteint leur objectif : sortir tout de
+                        # suite plutôt que d'attendre la fin du jeu en cours (GetIfGameEnd
+                        # plus bas) pour repartir sur une recherche de nouveau match
+                        # (demandé le 2026-11-07).
+                        all_below_one = all(
+                            float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
+                            config.scriptTypeList)
+                        if all_below_one:
+                            for st in config.scriptTypeList:
+                                config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
+                                           'success', False)
+                                RedisIPC.set_running(st, False, config.newmatch)
+                            _record_match_history()
+                            return True
                         continue
                 else:
                     firstjeu = True
@@ -478,6 +492,19 @@ def all_script(driver):
                     config.perte = 0
                     config.log(f"FIN 7 {config.scriptType}", 'success', False)
                     RedisIPC.set_running(config.scriptType, False, config.newmatch)
+                    # Tous les scriptTypes ont atteint leur objectif : sortir tout de
+                    # suite plutôt que d'attendre la fin du jeu en cours pour repartir
+                    # sur une recherche de nouveau match (demandé le 2026-11-07).
+                    all_below_one = all(
+                        float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
+                        config.scriptTypeList)
+                    if all_below_one:
+                        for st in config.scriptTypeList:
+                            config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
+                                       'success', False)
+                            RedisIPC.set_running(st, False, config.newmatch)
+                        _record_match_history()
+                        return True
 
         if not GetIfMatchPage(driver):
             config.error = True

@@ -1727,6 +1727,10 @@ def _extract_stat_tokens(intitule: str) -> List[str]:
 _TOTAL_HEADINGS = {
     "2": ("Total jeux", "total jeux"),       # tennis (jeux)
     "3": ("Total Asiatique", "total"),       # football (buts) -- vérifié 2026-10-30
+    "4": ("Total (prolongations incluses)", "total"),  # basketball (points) -- vérifié 2026-11-05
+    # Par équipe : "{Équipe} total (prolongations incluses)" (même structure que
+    # football, substring "total" suffit) -- constaté sur Boston Celtics @
+    # Milwaukee Bucks (avant-match, onglet "Marchés" > "Populaire").
 }
 
 

@@ -72,6 +72,16 @@ def _start_process_bets_loop():
         os.makedirs(log_dir, exist_ok=True)
         log_path = os.path.join(log_dir, 'process_bets_loop.log')
         script_path = os.path.join(parent_directory, 'process_bets_loop.py')
+        # Le sous-processus hérite par défaut de TOUT os.environ, y compris le
+        # STAKE_BRIDGE_PORT=10103 fixé en haut de ce fichier pour CE process --
+        # sans l'override ci-dessous, process_bets_loop.py essaierait de bind
+        # 10103 au lieu de son port dédié 10101 (StakeBridge.py ne lit cette
+        # var qu'une fois à l'import, avec '10101' comme défaut), collision
+        # avec le bridge de main-1.py (constaté le 2026-11-06 au premier lancement
+        # réel depuis un redémarrage de la machine, où aucun process_bets_loop.py
+        # ne tournait déjà pour masquer le bug via l'idempotence ci-dessus).
+        child_env = dict(os.environ)
+        child_env['STAKE_BRIDGE_PORT'] = '10101'
         with open(log_path, 'ab') as log_file:
             subprocess.Popen(
                 [sys.executable, script_path],
@@ -79,6 +89,7 @@ def _start_process_bets_loop():
                 stdout=log_file,
                 stderr=subprocess.STDOUT,
                 start_new_session=True,
+                env=child_env,
             )
         print(f"[main-1] process_bets_loop.py lancé en arrière-plan (log: {log_path})")
     except Exception as e:

@@ -1,92 +1,570 @@
 [
     {
-        "montant": 0.43,
-        "cote": 1.93,
-        "jeu": 4,
-        "set": "1",
-        "numero_point": false,
-        "winscore": "15:15",
-        "timestamp": "2026-11-02 05:21:25",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767360687-ignacio-buse-zizou-bergs?platform_type=mobile"
-    },
-    {
-        "montant": 0.4,
-        "cote": 2,
-        "jeu": 2,
-        "set": "1",
-        "numero_point": false,
-        "winscore": "15:15",
-        "timestamp": "2026-11-02 06:37:04",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
-    },
-    {
-        "montant": 0.8,
-        "cote": "2",
+        "montant": 0.36,
+        "cote": 2.1,
         "jeu": 3,
         "set": "1",
         "numero_point": false,
         "winscore": "15:15",
-        "timestamp": "2026-11-02 06:41:39",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767377538-luca-van-assche-mariano-navone?platform_type=mobile"
+        "timestamp": "2026-10-20 20:18:24",
+        "url": "https://ca.1xbet.com/fr/live/tennis/1501475-atp-lyon/763457174-matteo-berrettini-kyrian-jacquet?platform_type=mobile"
     },
     {
-        "montant": 0.36,
-        "cote": 2.1,
-        "jeu": 9,
-        "set": "1",
-        "numero_point": false,
-        "winscore": "15:15",
-        "timestamp": "2026-11-02 07:48:56",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767386656-alejandro-tabilo-rafael-jodar?platform_type=mobile"
-    },
-    {
-        "montant": 0.44,
-        "cote": 1.9,
+        "montant": 0.46,
+        "cote": 1.87,
         "jeu": 1,
         "set": "1",
         "numero_point": false,
         "winscore": "15:15",
-        "timestamp": "2026-11-02 09:59:47",
-        "url": "https://ca.1xbet.com/fr/live/tennis/2454087-challenger-villa-maria-qualification/767422383-franco-ribero-nicolas-bruna?platform_type=mobile"
+        "timestamp": "2026-11-02 17:07:31",
+        "url": "https://ca.1xbet.com/fr/live/tennis/150427-wta-cali/767438249-leolia-jeanjean-lucia-bronzetti?platform_type=mobile"
     },
     {
-        "montant": 0.93,
-        "cote": "1.9",
+        "montant": 0.99,
+        "cote": "1.87",
         "jeu": 2,
         "set": "1",
         "numero_point": false,
         "winscore": "15:15",
-        "timestamp": "2026-11-02 10:02:32",
-        "url": "https://ca.1xbet.com/fr/live/tennis/2454087-challenger-villa-maria-qualification/767422383-franco-ribero-nicolas-bruna?platform_type=mobile"
+        "timestamp": "2026-11-02 17:10:07",
+        "url": "https://ca.1xbet.com/fr/live/tennis/150427-wta-cali/767438249-leolia-jeanjean-lucia-bronzetti?platform_type=mobile"
     },
     {
-        "montant": 1.97,
-        "cote": "1.9",
+        "montant": 1.38,
+        "cote": 1.87,
         "jeu": 3,
         "set": "1",
         "numero_point": false,
         "winscore": "15:15",
-        "timestamp": "2026-11-02 10:06:23",
-        "url": "https://ca.1xbet.com/fr/live/tennis/2454087-challenger-villa-maria-qualification/767422383-franco-ribero-nicolas-bruna?platform_type=mobile"
+        "timestamp": "2026-11-02 19:09:02",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2918361-challenger-costa-do-sauipe-qualification/767463596-santiago-rodriguez-taverna-wilson-leite?platform_type=mobile"
     },
     {
-        "montant": 4.16,
+        "montant": 2.97,
+        "cote": "1.87",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 19:13:13",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2918361-challenger-costa-do-sauipe-qualification/767463596-santiago-rodriguez-taverna-wilson-leite?platform_type=mobile"
+    },
+    {
+        "montant": 6.38,
+        "cote": "1.87",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 19:19:49",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2918361-challenger-costa-do-sauipe-qualification/767463596-santiago-rodriguez-taverna-wilson-leite?platform_type=mobile"
+    },
+    {
+        "montant": 13.71,
+        "cote": "1.87",
+        "jeu": 6,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 19:22:35",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2918361-challenger-costa-do-sauipe-qualification/767463596-santiago-rodriguez-taverna-wilson-leite?platform_type=mobile"
+    },
+    {
+        "montant": 29.47,
+        "cote": "1.87",
+        "jeu": 7,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 19:31:22",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2918361-challenger-costa-do-sauipe-qualification/767463596-santiago-rodriguez-taverna-wilson-leite?platform_type=mobile"
+    },
+    {
+        "montant": 1.18,
+        "cote": 2.02,
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 21:42:49",
+        "url": "https://ca.1xbet.com/fr/live/tennis/120985-challenger-charlottesville/767499369-nicolas-mejia-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 1.09,
+        "cote": 2.1,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 21:55:15",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767501213-ugo-humbert-botic-van-de-zandschulp?platform_type=mobile"
+    },
+    {
+        "montant": 2.08,
+        "cote": "2.1",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 21:59:33",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767501213-ugo-humbert-botic-van-de-zandschulp?platform_type=mobile"
+    },
+    {
+        "montant": 1.33,
+        "cote": 1.9,
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 22:17:30",
+        "url": "https://ca.1xbet.com/fr/live/tennis/150427-wta-cali/767504326-polona-hercog-leyre-romero-gormaz?platform_type=mobile"
+    },
+    {
+        "montant": 2.81,
+        "cote": "1.9",
+        "jeu": 6,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 22:23:50",
+        "url": "https://ca.1xbet.com/fr/live/tennis/150427-wta-cali/767504326-polona-hercog-leyre-romero-gormaz?platform_type=mobile"
+    },
+    {
+        "montant": 1.41,
+        "cote": 1.85,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 23:04:57",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2918438-challenger-costa-do-sauipe/767515359-gustavo-heide-guido-ivan-justo?platform_type=mobile"
+    },
+    {
+        "montant": 3.07,
+        "cote": "1.85",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 23:10:00",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2918438-challenger-costa-do-sauipe/767515359-gustavo-heide-guido-ivan-justo?platform_type=mobile"
+    },
+    {
+        "montant": 6.68,
+        "cote": "1.85",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 23:16:17",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2918438-challenger-costa-do-sauipe/767515359-gustavo-heide-guido-ivan-justo?platform_type=mobile"
+    },
+    {
+        "montant": 14.54,
+        "cote": "1.85",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-02 23:20:26",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2918438-challenger-costa-do-sauipe/767515359-gustavo-heide-guido-ivan-justo?platform_type=mobile"
+    },
+    {
+        "montant": 1.41,
+        "cote": 1.85,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 08:37:32",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2449906-wta-chennai/767605916-anastasia-zakharova-polina-iatcenko?platform_type=mobile"
+    },
+    {
+        "montant": 3.07,
+        "cote": "1.85",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 08:39:26",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2449906-wta-chennai/767605916-anastasia-zakharova-polina-iatcenko?platform_type=mobile"
+    },
+    {
+        "montant": 6.68,
+        "cote": "1.85",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 08:44:25",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2449906-wta-chennai/767605916-anastasia-zakharova-polina-iatcenko?platform_type=mobile"
+    },
+    {
+        "montant": 1.38,
+        "cote": 1.87,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 09:22:25",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3100554-world-tennis-heraklion-women/767613155-astrid-lew-yan-foon-ruth-roura-llaverias?platform_type=mobile"
+    },
+    {
+        "montant": 2.97,
+        "cote": "1.87",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 09:25:17",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3100554-world-tennis-heraklion-women/767613155-astrid-lew-yan-foon-ruth-roura-llaverias?platform_type=mobile"
+    },
+    {
+        "montant": 1.3,
+        "cote": 1.92,
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 10:54:42",
+        "url": "https://ca.1xbet.com/fr/live/tennis/879883-wta-hong-kong/767630847-alexandra-shubladze-liudmila-samsonova?platform_type=mobile"
+    },
+    {
+        "montant": 2.72,
+        "cote": "1.92",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 10:55:49",
+        "url": "https://ca.1xbet.com/fr/live/tennis/879883-wta-hong-kong/767630847-alexandra-shubladze-liudmila-samsonova?platform_type=mobile"
+    },
+    {
+        "montant": 5.67,
+        "cote": "1.92",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 11:00:21",
+        "url": "https://ca.1xbet.com/fr/live/tennis/879883-wta-hong-kong/767630847-alexandra-shubladze-liudmila-samsonova?platform_type=mobile"
+    },
+    {
+        "montant": 1.26,
+        "cote": 1.95,
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 11:21:11",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767633546-arthur-rinderknech-francisco-cerundolo?platform_type=mobile"
+    },
+    {
+        "montant": 1.26,
+        "cote": 1.95,
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 15:54:30",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767699160-tommy-paul-holger-vitus-nodskov-rune?platform_type=mobile",
+        "api_bet_id": 44014
+    },
+    {
+        "montant": 1.18,
+        "cote": 2.02,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 16:50:43",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767714152-alex-michelsen-jiri-lehecka?platform_type=mobile",
+        "api_bet_id": 44031
+    },
+    {
+        "montant": 2.33,
+        "cote": "2.02",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 16:54:07",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767714152-alex-michelsen-jiri-lehecka?platform_type=mobile",
+        "api_bet_id": 44032
+    },
+    {
+        "montant": 1.33,
+        "cote": 1.9,
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 16:59:07",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118209-challenger-taranto/767714444-sumit-nagal-georgii-kravchenko?platform_type=mobile",
+        "api_bet_id": 44034
+    },
+    {
+        "montant": 2.81,
         "cote": "1.9",
         "jeu": 4,
         "set": "1",
         "numero_point": false,
         "winscore": "15:15",
-        "timestamp": "2026-11-02 10:09:28",
-        "url": "https://ca.1xbet.com/fr/live/tennis/2454087-challenger-villa-maria-qualification/767422383-franco-ribero-nicolas-bruna?platform_type=mobile"
+        "timestamp": "2026-11-03 17:06:10",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118209-challenger-taranto/767714444-sumit-nagal-georgii-kravchenko?platform_type=mobile",
+        "api_bet_id": 44038
     },
     {
-        "montant": 8.78,
+        "montant": 1.41,
+        "cote": 1.85,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 17:25:28",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2454199-challenger-villa-maria/767721285-thiago-cigarran-hernan-casanova?platform_type=mobile",
+        "api_bet_id": 44045
+    },
+    {
+        "montant": 1.41,
+        "cote": 1.85,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 17:49:47",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2449906-wta-chennai/767727050-mei-yamaguchi-zhibek-kulambayeva?platform_type=mobile",
+        "api_bet_id": 44053
+    },
+    {
+        "montant": 1.38,
+        "cote": 1.87,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 18:12:03",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767732403-victoria-jimenez-kasintseva-anna-lena-friedsam?platform_type=mobile",
+        "api_bet_id": 44064
+    },
+    {
+        "montant": 2.97,
+        "cote": "1.87",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 18:13:25",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767732403-victoria-jimenez-kasintseva-anna-lena-friedsam?platform_type=mobile",
+        "api_bet_id": 44069
+    },
+    {
+        "montant": 6.38,
+        "cote": "1.87",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 18:22:17",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767732403-victoria-jimenez-kasintseva-anna-lena-friedsam?platform_type=mobile",
+        "api_bet_id": 44071
+    },
+    {
+        "montant": 13.71,
+        "cote": "1.87",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 18:24:01",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3118523-world-tennis-petange-women/767732403-victoria-jimenez-kasintseva-anna-lena-friedsam?platform_type=mobile",
+        "api_bet_id": 44076
+    },
+    {
+        "montant": 0.6,
+        "cote": 3,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 19:10:49",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767744518-ben-shelton-cameron-norrie?platform_type=mobile",
+        "api_bet_id": 44100
+    },
+    {
+        "montant": 1.33,
+        "cote": 1.9,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 19:42:41",
+        "url": "https://ca.1xbet.com/fr/live/tennis/122339-challenger-bratislava/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44125
+    },
+    {
+        "montant": 2.81,
+        "cote": "1.9",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 19:48:51",
+        "url": "https://ca.1xbet.com/fr/live/tennis/122339-challenger-bratislava/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44129
+    },
+    {
+        "montant": 5.93,
+        "cote": "1.9",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 19:50:21",
+        "url": "https://ca.1xbet.com/fr/live/tennis/122339-challenger-bratislava/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44132
+    },
+    {
+        "montant": 12.52,
         "cote": "1.9",
         "jeu": 5,
         "set": "1",
         "numero_point": false,
         "winscore": "15:15",
-        "timestamp": "2026-11-02 10:12:35",
-        "url": "https://ca.1xbet.com/fr/live/tennis/2454087-challenger-villa-maria-qualification/767422383-franco-ribero-nicolas-bruna?platform_type=mobile"
+        "timestamp": "2026-11-03 20:00:59",
+        "url": "https://ca.1xbet.com/fr/live/tennis/122339-challenger-bratislava/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44135
+    },
+    {
+        "montant": 26.43,
+        "cote": "1.9",
+        "jeu": 6,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 20:06:07",
+        "url": "https://ca.1xbet.com/fr/live/tennis/122339-challenger-bratislava/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44138
+    },
+    {
+        "montant": 55.8,
+        "cote": "1.9",
+        "jeu": 7,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 20:09:03",
+        "url": "https://ca.1xbet.com/fr/live/tennis/122339-challenger-bratislava/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44141
+    },
+    {
+        "montant": 117.8,
+        "cote": "1.9",
+        "jeu": 8,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 20:11:38",
+        "url": "https://ca.1xbet.com/fr/live/tennis/122339-challenger-bratislava/767756123-dalibor-svrcina-norbert-gombos?platform_type=mobile",
+        "api_bet_id": 44144
+    },
+    {
+        "montant": 1.26,
+        "cote": 1.95,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 21:43:00",
+        "url": "https://ca.1xbet.com/fr/live/tennis/122339-challenger-bratislava/767787255-shintaro-mochizuki-nicolai-budkov-kjaer?platform_type=mobile",
+        "api_bet_id": 44175
+    },
+    {
+        "montant": 2.59,
+        "cote": "1.95",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 21:46:14",
+        "url": "https://ca.1xbet.com/fr/live/tennis/122339-challenger-bratislava/767787255-shintaro-mochizuki-nicolai-budkov-kjaer?platform_type=mobile",
+        "api_bet_id": 44179
+    },
+    {
+        "montant": 5.32,
+        "cote": "1.95",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 21:48:00",
+        "url": "https://ca.1xbet.com/fr/live/tennis/122339-challenger-bratislava/767787255-shintaro-mochizuki-nicolai-budkov-kjaer?platform_type=mobile",
+        "api_bet_id": 44181
+    },
+    {
+        "montant": 1.33,
+        "cote": 1.9,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-03 21:57:32",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119436-world-tennis-harlingen/767789916-quinn-vandecasteele-bryce-nakashima?platform_type=mobile",
+        "api_bet_id": 44184
+    },
+    {
+        "montant": 0.23,
+        "cote": 1.87,
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-04 18:43:29",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119436-world-tennis-harlingen/768026962-andreja-petrovic-aidan-mchugh?platform_type=mobile",
+        "api_bet_id": 44224
+    },
+    {
+        "montant": 0.49,
+        "cote": "1.87",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-04 18:50:47",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119436-world-tennis-harlingen/768026962-andreja-petrovic-aidan-mchugh?platform_type=mobile",
+        "api_bet_id": 44227
+    },
+    {
+        "montant": 1.06,
+        "cote": "1.87",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-04 18:55:58",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119436-world-tennis-harlingen/768026962-andreja-petrovic-aidan-mchugh?platform_type=mobile",
+        "api_bet_id": 44228
+    },
+    {
+        "montant": 0.23,
+        "cote": 1.88,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-04 21:27:31",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119537-world-tennis-orlando-women/768068977-brooke-black-annika-penickova?platform_type=mobile",
+        "api_bet_id": 44274
+    },
+    {
+        "montant": 0.22,
+        "cote": 1.93,
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:15",
+        "timestamp": "2026-11-04 23:14:32",
+        "url": "https://ca.1xbet.com/fr/live/tennis/2454199-challenger-villa-maria/768086426-lucio-ratti-carlos-maria-zarate?platform_type=mobile",
+        "api_bet_id": 44296
     }
 ]

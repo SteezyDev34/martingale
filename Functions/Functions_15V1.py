@@ -369,6 +369,19 @@ def all_script(driver):
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                         config.log(f"FIN {config.scriptType}", 'success', False)
                         RedisIPC.set_running(config.scriptType, False)
+                        # Tous les scriptTypes ont atteint leur objectif (et aucun autre
+                        # process -- 15V1/15V2 -- ne tourne encore sur ce match) : sortir
+                        # tout de suite plutôt que d'attendre la fin du jeu en cours pour
+                        # repartir sur une recherche de nouveau match (demandé le 2026-11-07).
+                        all_below_one = all(
+                            float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
+                            config.scriptTypeList)
+                        if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+                            for st in config.scriptTypeList:
+                                config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
+                                           'success', False)
+                                RedisIPC.set_running(st, False)
+                            return True
                         continue
                 else:
                     firstjeu = True
@@ -499,11 +512,24 @@ def all_script(driver):
                     config.netprofit)
                 config.log(f"netprofit : {config.netprofit}")
                 config.winmatch[scriptType] = config.winmatch[scriptType] + 1
-                
-                
+
+                # Tous les scriptTypes ont atteint leur objectif (et aucun autre process --
+                # 15V1/15V2 -- ne tourne encore sur ce match) : sortir tout de suite plutôt
+                # que d'attendre la fin du jeu en cours (GetIfGameEnd plus bas) pour repartir
+                # sur une recherche de nouveau match (demandé le 2026-11-07).
+                all_below_one = all(
+                    float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
+                    config.scriptTypeList)
+                if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+                    for st in config.scriptTypeList:
+                        config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
+                                   'success', False)
+                        RedisIPC.set_running(st, False)
+                    return True
+
                 mtt_recup = getattr(config, 'mtt_recup', 0.0)
                 print("#RECHERCHE INFOS DE MISE")
-                
+
                 RedisIPC.add_gain_to_all(float(config.netprofit), config.newmatch)
                 config.perte = 0
                 config.wantwin =0.2

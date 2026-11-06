@@ -1,82 +1,222 @@
 [
     {
-        "montant": 0.32,
+        "montant": 0.4,
+        "cote": 1.995,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "0:15",
+        "timestamp": "2026-11-02 17:07:15",
+        "url": "https://ca.1xbet.com/fr/live/tennis/150427-wta-cali/767438249-leolia-jeanjean-lucia-bronzetti?platform_type=mobile"
+    },
+    {
+        "montant": 0.8,
+        "cote": "1.995",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:0",
+        "timestamp": "2026-11-02 17:09:25",
+        "url": "https://ca.1xbet.com/fr/live/tennis/150427-wta-cali/767438249-leolia-jeanjean-lucia-bronzetti?platform_type=mobile"
+    },
+    {
+        "montant": 0.29,
+        "cote": 2.36,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "0:15",
+        "timestamp": "2026-11-02 17:34:23",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3100554-world-tennis-heraklion-women/767443545-sarah-van-emst-thea-marcu?platform_type=mobile"
+    },
+    {
+        "montant": 0.51,
+        "cote": "2.36",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:0",
+        "timestamp": "2026-11-02 17:50:06",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3100554-world-tennis-heraklion-women/767443545-sarah-van-emst-thea-marcu?platform_type=mobile"
+    },
+    {
+        "montant": 0.88,
+        "cote": "2.36",
+        "jeu": 6,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "0:15",
+        "timestamp": "2026-11-02 17:50:48",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3100554-world-tennis-heraklion-women/767443545-sarah-van-emst-thea-marcu?platform_type=mobile"
+    },
+    {
+        "montant": 0.96,
         "cote": 2.25,
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "0:15",
+        "timestamp": "2026-11-02 21:42:16",
+        "url": "https://ca.1xbet.com/fr/live/tennis/120985-challenger-charlottesville/767499369-nicolas-mejia-murphy-cassone?platform_type=mobile"
+    },
+    {
+        "montant": 0.96,
+        "cote": 2.25,
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:0",
+        "timestamp": "2026-11-03 10:54:26",
+        "url": "https://ca.1xbet.com/fr/live/tennis/879883-wta-hong-kong/767630847-alexandra-shubladze-liudmila-samsonova?platform_type=mobile"
+    },
+    {
+        "montant": 1.73,
+        "cote": "2.25",
         "jeu": 4,
         "set": "1",
         "numero_point": false,
         "winscore": "0:15",
-        "timestamp": "2026-11-02 05:18:15",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767360687-ignacio-buse-zizou-bergs?platform_type=mobile"
+        "timestamp": "2026-11-03 10:55:24",
+        "url": "https://ca.1xbet.com/fr/live/tennis/879883-wta-hong-kong/767630847-alexandra-shubladze-liudmila-samsonova?platform_type=mobile"
     },
     {
-        "montant": 0.58,
+        "montant": 3.11,
         "cote": "2.25",
         "jeu": 5,
         "set": "1",
         "numero_point": false,
         "winscore": "15:0",
-        "timestamp": "2026-11-02 05:26:28",
-        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767360687-ignacio-buse-zizou-bergs?platform_type=mobile"
+        "timestamp": "2026-11-03 11:00:06",
+        "url": "https://ca.1xbet.com/fr/live/tennis/879883-wta-hong-kong/767630847-alexandra-shubladze-liudmila-samsonova?platform_type=mobile"
     },
     {
-        "montant": 0.27,
-        "cote": 2.465,
+        "montant": 0.88,
+        "cote": 2.36,
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "0:15",
+        "timestamp": "2026-11-03 11:20:55",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767633546-arthur-rinderknech-francisco-cerundolo?platform_type=mobile"
+    },
+    {
+        "montant": 1.53,
+        "cote": "2.36",
+        "jeu": 5,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:0",
+        "timestamp": "2026-11-03 11:24:00",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767633546-arthur-rinderknech-francisco-cerundolo?platform_type=mobile"
+    },
+    {
+        "montant": 1.33,
+        "cote": 1.904,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "0:15",
+        "timestamp": "2026-11-03 18:37:05",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3114265-world-tennis-pembroke/767741877-pedro-petroski-rocha-jacob-brumm?platform_type=mobile",
+        "api_bet_id": 44084
+    },
+    {
+        "montant": 0.96,
+        "cote": 2.25,
         "jeu": 2,
         "set": "1",
         "numero_point": false,
         "winscore": "15:0",
-        "timestamp": "2026-11-02 05:40:28",
-        "url": "https://ca.1xbet.com/fr/live/tennis/879883-wta-hong-kong/767367152-venus-williams-mary-stoiana?platform_type=mobile"
+        "timestamp": "2026-11-03 20:24:39",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119534-world-tennis-harlingen-qualification/767764899-togan-tokac-connor-henry-van-schalkwyk?platform_type=mobile",
+        "api_bet_id": 44151
     },
     {
-        "montant": 0.27,
-        "cote": "2.465",
-        "jeu": 3,
-        "set": "2",
+        "montant": 0.2,
+        "cote": 2.184,
+        "jeu": 1,
+        "set": "1",
         "numero_point": false,
         "winscore": "0:15",
-        "timestamp": "2026-11-02 06:21:14",
-        "url": "https://ca.1xbet.com/fr/live/tennis/879883-wta-hong-kong/767367152-venus-williams-mary-stoiana?platform_type=mobile"
+        "timestamp": "2026-11-04 14:58:27",
+        "url": "https://ca.1xbet.com/fr/live/tennis/7304-atp-paris/767977276-ignacio-buse-daniil-medvedev?platform_type=mobile",
+        "api_bet_id": 44194
     },
     {
-        "montant": 0.4,
+        "montant": 0.2,
         "cote": 1.995,
-        "jeu": 2,
-        "set": "1",
-        "numero_point": false,
-        "winscore": "0:15",
-        "timestamp": "2026-11-02 07:10:47",
-        "url": "https://ca.1xbet.com/fr/live/tennis/3118754-world-tennis-liberec-women-qualification/767386321-emma-slavikova-daria-gorska?platform_type=mobile"
-    },
-    {
-        "montant": 0.8,
-        "cote": "1.995",
-        "jeu": 3,
-        "set": "1",
-        "numero_point": false,
-        "winscore": "15:0",
-        "timestamp": "2026-11-02 07:12:58",
-        "url": "https://ca.1xbet.com/fr/live/tennis/3118754-world-tennis-liberec-women-qualification/767386321-emma-slavikova-daria-gorska?platform_type=mobile"
-    },
-    {
-        "montant": 0.7,
-        "cote": 1.57,
         "jeu": 1,
         "set": "1",
         "numero_point": false,
         "winscore": "15:0",
-        "timestamp": "2026-11-02 11:30:16",
-        "url": "https://ca.1xbet.com/fr/live/tennis/3100554-world-tennis-heraklion-women/767443545-sarah-van-emst-thea-marcu?platform_type=mobile"
+        "timestamp": "2026-11-04 18:11:44",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119615-world-tennis-hilton-head-island-women/768022564-margaret-sohns-ireland-obrien?platform_type=mobile",
+        "api_bet_id": 44216
     },
     {
-        "montant": 0.71,
-        "cote": 2.55,
+        "montant": 0.38,
+        "cote": 1.52,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:0",
+        "timestamp": "2026-11-04 18:33:28",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3113803-world-tennis-neuquen-women/768027509-luciana-moyano-isabel-arabarco?platform_type=mobile",
+        "api_bet_id": 44220
+    },
+    {
+        "montant": 0.24,
+        "cote": 1.85,
         "jeu": 2,
-        "set": "2",
+        "set": "1",
         "numero_point": false,
         "winscore": "0:15",
-        "timestamp": "2026-11-02 12:08:45",
-        "url": "https://ca.1xbet.com/fr/live/tennis/3100554-world-tennis-heraklion-women/767443545-sarah-van-emst-thea-marcu?platform_type=mobile"
+        "timestamp": "2026-11-04 19:00:10",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3113803-world-tennis-neuquen-women/768031957-sofia-simon-padros-gabriela-kawano-cho?platform_type=mobile",
+        "api_bet_id": 44230
+    },
+    {
+        "montant": 0.22,
+        "cote": 1.904,
+        "jeu": 1,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "0:15",
+        "timestamp": "2026-11-04 21:59:44",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119537-world-tennis-orlando-women/768075571-merna-refaat-edda-mamedova?platform_type=mobile",
+        "api_bet_id": 44278
+    },
+    {
+        "montant": 0.46,
+        "cote": "1.904",
+        "jeu": 2,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "0:15",
+        "timestamp": "2026-11-04 22:05:29",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119537-world-tennis-orlando-women/768075571-merna-refaat-edda-mamedova?platform_type=mobile",
+        "api_bet_id": 44280
+    },
+    {
+        "montant": 0.97,
+        "cote": "1.904",
+        "jeu": 3,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "0:15",
+        "timestamp": "2026-11-04 22:08:53",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119537-world-tennis-orlando-women/768075571-merna-refaat-edda-mamedova?platform_type=mobile",
+        "api_bet_id": 44281
+    },
+    {
+        "montant": 2.05,
+        "cote": "1.904",
+        "jeu": 4,
+        "set": "1",
+        "numero_point": false,
+        "winscore": "15:0",
+        "timestamp": "2026-11-04 22:18:19",
+        "url": "https://ca.1xbet.com/fr/live/tennis/3119537-world-tennis-orlando-women/768075571-merna-refaat-edda-mamedova?platform_type=mobile",
+        "api_bet_id": 44282
     }
 ]
