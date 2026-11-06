@@ -162,12 +162,20 @@ class ExtensionBridge:
         resp = self._send_and_wait({'action': 'get_players'})
         return resp.get('p1'), resp.get('p2')
 
-    def navigate(self, url):
+    def navigate(self, url, force=False):
         """
         Navigue vers url. Au tout premier appel (self._tab_id encore None), l'extension
         ouvre un NOUVEL onglet rien que pour ce process — jamais un onglet existant qui
         pourrait appartenir à un autre script. Les appels suivants réutilisent ce même
         onglet (tab_id mémorisé, ré-injecté automatiquement par _send_and_wait).
+
+        force=True (ajouté le 2026-11-06) : contourne l'optimisation "même URL =
+        pas de rechargement" côté extension. À utiliser pour une page dont le
+        contenu peut changer sans que l'URL change (SPA) -- ex: la recherche de
+        match live navigue vers la même config.site_url à chaque tentative ; sans
+        force, aucun vrai rechargement n'avait jamais lieu après le tout premier
+        appel, et si 1xBet affichait un autre contenu (foot, basket) sur cette
+        même URL, la page restait figée dessus indéfiniment.
 
         timeout=20 (pas 15) : côté extension, waitForTabLoad() (service_worker.js)
         a son propre timer de repli à exactement 15000ms -- avec un timeout client
@@ -178,7 +186,7 @@ class ExtensionBridge:
         laisse l'onglet "occupé" plus longtemps). Un timeout client strictement plus
         grand que le pire cas serveur élimine cette course.
         """
-        resp = self._send_and_wait({'action': 'navigate', 'url': url}, timeout=20)
+        resp = self._send_and_wait({'action': 'navigate', 'url': url, 'force': force}, timeout=20)
         if resp.get('tab_id'):
             self._tab_id = resp['tab_id']
         return resp

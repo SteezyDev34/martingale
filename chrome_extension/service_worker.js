@@ -134,8 +134,17 @@ async function handlePythonMessage(msg, port) {
           // deux vers la meme page de match (URL mise en cache cote Python,
           // cf. OneXBetBridge.py) quelques secondes d'intervalle -- le 2e
           // chargement complet n'apportait rien, juste plus lent.
+          //
+          // msg.force (ajoute le 2026-11-06) contourne cette optimisation :
+          // la recherche de match live (_bridge_recherche_match) navigue vers
+          // la MEME URL fixe (config.site_url) a chaque tentative, donc
+          // "meme URL" matchait toujours et aucun vrai rechargement n'avait
+          // jamais lieu apres le tout premier chargement -- si 1xBet
+          // redirige/affiche un autre contenu (foot, basket) sans changer
+          // l'URL (SPA), la page restait figee sur ce contenu perime pour
+          // toujours. force=true saute ce raccourci et recharge pour de vrai.
           const existing = await chrome.tabs.get(targetTabId);
-          alreadyThere = !!(existing?.url && msg.url &&
+          alreadyThere = !msg.force && !!(existing?.url && msg.url &&
             existing.url.split('?')[0] === msg.url.split('?')[0]);
           if (!alreadyThere) {
             await chrome.tabs.update(targetTabId, { url: msg.url });

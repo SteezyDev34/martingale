@@ -358,7 +358,11 @@ def _bridge_recherche_match():
     # siennes (logligueline), et l'ensemble du passage (toutes ligues) s'efface une
     # fois terminé si rien n'a été trouvé (logline) — même principe que rechercheDeMatch.
     logline = 0
-    bridge.navigate(config.site_url)
+    # force=True (2026-11-06) : navigue vers la même URL à chaque tentative, donc
+    # sans ça aucun vrai rechargement n'a jamais lieu après le premier appel (cf.
+    # service_worker.js) -- si 1xBet affiche un autre contenu (foot, basket) sur
+    # cette même URL (SPA), la page restait figée dessus indéfiniment.
+    bridge.navigate(config.site_url, force=True)
     time.sleep(2)
     leagues = bridge.get_match_list()  # service worker attend que la page soit chargée
     if not leagues:
