@@ -355,6 +355,12 @@ def all_script(driver):
                     f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                 config.log(f"FIN 5 {config.scriptType}", 'success', False)
                 RedisIPC.set_running(config.scriptType, False, config.newmatch)
+                # Ce scriptType a atteint son objectif mais la sortie complète du match
+                # reste bloquée tant qu'un AUTRE scriptType a encore une perte en cours
+                # (get_total_loss(matchname) > 0, cf. ligne 340) -- sans pause ici, cette
+                # branche boucle en continu sans rien faire (spam "FIN 5" toutes les 1-3s,
+                # constaté en live le 2026-11-07 sur 300/genaro-alberto-olivieri).
+                time.sleep(2)
                 continue
             if int(config.jeu_actuel) == 13:
                 _attendre_debut_tie_break(driver)

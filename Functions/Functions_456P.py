@@ -271,6 +271,15 @@ def all_script(driver):
                 if config.scriptType == config.scriptTypeList[-1]:
                     print(' last waitendgame')
                     GetIfGameEnd(driver)
+                else:
+                    # Ce scriptType a atteint son objectif mais la sortie complète du
+                    # match reste bloquée tant qu'un AUTRE scriptType a encore une perte
+                    # en cours (get_total_loss(matchname) > 0 ci-dessus) -- sans pause
+                    # ici, cette branche boucle en continu sans rien faire (même bug que
+                    # celui corrigé le 2026-11-07 dans Functions_431a.py, "FIN 5").
+                    # Seul le DERNIER scriptType de la liste est naturellement ralenti
+                    # par GetIfGameEnd (bloquant) ci-dessus.
+                    time.sleep(2)
                 continue
             if int(config.jeu_actuel) == 13:
                 config.log('Tie break en cours attente début')
