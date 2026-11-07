@@ -571,6 +571,16 @@ def all_script(driver):
                     float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                     config.scriptTypeList)
                 if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch) and RedisIPC.get_total_loss(config.newmatch) <= 0:
+                    # Objectif atteint : remettre perte à 0 ici (contrairement au Site A,
+                    # ce chemin ne le faisait jamais avant finalize_match/return True) --
+                    # sans ça, DispatchPerte (appelé juste après par le lanceur une fois
+                    # all_script() revenu) renvoyait cette perte déjà comptée dans
+                    # netprofit vers l'API legacy, comme une perte encore à rattraper
+                    # (constaté le 2026-11-07 : "33.55864 insert in strategy15V2" alors
+                    # que ce montant venait tout juste d'être gagné).
+                    config.perte = 0
+                    if RedisIPC:
+                        RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
                     # Envoi consolidé unique pour tout le match ici (pas à chaque séquence
                     # gagnante, cf. MartingaleSequence.py) : à ce point précis, ce
                     # scriptType a fini d'intervenir sur ce match (running passe à False

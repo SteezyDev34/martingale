@@ -202,6 +202,15 @@ def all_script(driver):
                             f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
                         config.log(f"FIN {config.scriptType}", 'success', False)
                         RedisIPC.set_running(config.scriptType, False, config.newmatch)
+                        # Objectif atteint : remettre perte à 0 (ce bloc ne calcule jamais
+                        # config.netprofit/config.perte lui-même -- cf. ValidationDuParis.py
+                        # -- et ne les remettait jamais à 0 ici, contrairement à l'autre bloc
+                        # WIN plus bas dans ce fichier). Sans ça, DispatchPerte (appelé par
+                        # le lanceur une fois all_script() revenu) renvoyait cette perte déjà
+                        # comptée dans le gain vers l'API legacy, comme encore à rattraper.
+                        config.perte = 0
+                        if RedisIPC:
+                            RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
                         # Envoi consolidé unique pour tout le match pour CE scriptType (pas à
                         # chaque séquence gagnante, cf. MartingaleSequence.py).
                         from Functions.MartingaleSequence import finalize_match
