@@ -33,6 +33,18 @@ def GetResult(driver):
     timesleep = 1  # TEMPS D'ATTENTE AVANT DE RECUPERER LE SCORE PASSE À 1 SI 40 DANS LE SCORE
     result = False
     _getresult_iterations = 0
+    # Nombre de passages consécutifs où getresult=True mais aucune entrée de
+    # config.all_scores ne correspond encore au winscore attendu (branche
+    # 40A/30A/150/015/15A/030/300 ci-dessous) -- le bridge/Sofascore peut avoir
+    # un léger retard à enregistrer le score exact, donc "pas encore trouvé"
+    # ne veut pas dire "a perdu". Sans délai de grâce, un pari gagnant pouvait
+    # être déclaré LOSE par erreur avant même que le point ne soit vraiment
+    # joué/enregistré, déclenchant une remise inutile pendant qu'un pari plus
+    # ancien restait en fait gagnant (constaté le 2026-11-07 sur 30A : le
+    # score "30:30" matchant le pari n'est apparu dans all_scores que ~4min
+    # après sa mise, après que le moteur ait déjà replacé une nouvelle mise).
+    _no_match_streak = 0
+    _NO_MATCH_GRACE = 6  # ~6s de répit (timesleep=1s) avant de conclure LOSE
     while not result and not config.error:
         getresult = False
         _getresult_iterations += 1
@@ -125,11 +137,20 @@ def GetResult(driver):
                     print("Matching score found:", matching_scores[0])
                     result = 'WIN'
                     config.log(f"Result: {result}", 'success', False, 2)
+                    config.validated_bet['result'] = result
+                    return result
                 else:
+                    _no_match_streak += 1
+                    if _no_match_streak < _NO_MATCH_GRACE:
+                        # Pas encore trouvé -- laisser une chance au score de
+                        # rattraper avant de conclure LOSE (cf. commentaire plus
+                        # haut). On reboucle (sleep déjà géré en haut de boucle).
+                        config.log(f"Aucune entrée correspondante pour l'instant ({_no_match_streak}/{_NO_MATCH_GRACE}), ré-essai", 'warning', False, indent=3)
+                        continue
                     result = 'LOSE'
                     config.log(result, 'error', False, 2)
-                config.validated_bet['result'] = result
-                return result
+                    config.validated_bet['result'] = result
+                    return result
         elif config.scriptType == "15V1" or config.scriptType == "15V2":
             if _getresult_iterations > 300:
                 # Timeout long (5 min) : forcer uniquement si on a dépassé le jeu du pari
