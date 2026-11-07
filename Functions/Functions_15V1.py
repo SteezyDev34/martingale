@@ -272,7 +272,7 @@ def all_script(driver):
             all_below_one = all(
                 float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
                 config.scriptTypeList)
-            if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+            if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch) and RedisIPC.get_total_loss(config.newmatch) <= 0:
                 for st in config.scriptTypeList:
                     config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                'success', False)
@@ -408,7 +408,7 @@ def all_script(driver):
                         all_below_one = all(
                             float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                             config.scriptTypeList)
-                        if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+                        if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch) and RedisIPC.get_total_loss(config.newmatch) <= 0:
                             # Envoi consolidé unique pour tout le match ici (pas à chaque
                             # séquence gagnante, cf. MartingaleSequence.py) : ce scriptType a
                             # fini d'intervenir sur ce match à ce point précis (running passe
@@ -471,7 +471,7 @@ def all_script(driver):
             all_below_one = all(
                 float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                 config.scriptTypeList)
-            if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+            if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch) and RedisIPC.get_total_loss(config.newmatch) <= 0:
                 for st in config.scriptTypeList:
                     config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                'success', False)
@@ -570,7 +570,7 @@ def all_script(driver):
                 all_below_one = all(
                     float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                     config.scriptTypeList)
-                if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+                if all_below_one and not RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch) and RedisIPC.get_total_loss(config.newmatch) <= 0:
                     # Envoi consolidé unique pour tout le match ici (pas à chaque séquence
                     # gagnante, cf. MartingaleSequence.py) : à ce point précis, ce
                     # scriptType a fini d'intervenir sur ce match (running passe à False

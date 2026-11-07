@@ -98,7 +98,7 @@ def all_script(driver):
         all_below_one = all(
             float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
             config.scriptTypeList)
-        if all_below_one:
+        if all_below_one and RedisIPC.get_total_loss(config.newmatch) <= 0:
             for st in config.scriptTypeList:
                 config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                            'success', False)
@@ -157,7 +157,7 @@ def all_script(driver):
                 all_below_one = all(
                     float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                     config.scriptTypeList)
-                if all_below_one:
+                if all_below_one and RedisIPC.get_total_loss(config.newmatch) <= 0:
                     for st in config.scriptTypeList:
                         config.log(
                             f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
@@ -212,7 +212,7 @@ def all_script(driver):
                         all_below_one = all(
                             float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                             config.scriptTypeList)
-                        if all_below_one:
+                        if all_below_one and RedisIPC.get_total_loss(config.newmatch) <= 0:
                             for st in config.scriptTypeList:
                                 config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                            'success', False)
@@ -245,7 +245,7 @@ def all_script(driver):
             all_below_one = all(
                 float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                 config.scriptTypeList)
-            if all_below_one:
+            if all_below_one and RedisIPC.get_total_loss(config.newmatch) <= 0:
                 for st in config.scriptTypeList:
                     config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                'success', False)
@@ -428,7 +428,7 @@ def all_script(driver):
                     all_below_one = all(
                         float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                         config.scriptTypeList)
-                    if all_below_one:
+                    if all_below_one and RedisIPC.get_total_loss(config.newmatch) <= 0:
                         for st in config.scriptTypeList:
                             config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                        'success', False)
