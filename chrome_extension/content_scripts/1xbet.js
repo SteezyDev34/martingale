@@ -285,71 +285,70 @@
         }
       }
 
-      // Fermer toute notification de succès/erreur déjà présente AVANT de cliquer --
-      // sans ça, la vérification post-clic ci-dessous peut retomber sur une
-      // notification laissée par un pari précédent (jamais fermée, ou fermeture
-      // précédente ratée) et déclarer CE pari validé alors que rien n'a été
-      // réellement soumis pour lui (faux positif constaté le 2026-11-02 : un pari
-      // de 98.18€ marqué "validé"/envoyé à AuxoTracker, jamais réellement placé
-      // sur le site). On ne vérifie que la PRÉSENCE de la notification après coup,
-      // jamais qu'elle est nouvelle -- ce nettoyage préalable garantit ça.
-      const staleSel = '.ui-notification-alert--status-success, .ui-notification-alert--status-error, .ui-notification-alert--status-question';
-      for (const stale of qsa(staleSel)) {
+      // Ensemble UNIFIÉ de tout ce qui peut signaler un résultat, toasts
+      // (.ui-notification-alert--status-*, mobile_site) ET messages inline new_site
+      // (.c-bet-place__message--win/lose, cf. SEL.betslip_result_win/lose) --
+      // consolidé le 2026-11-08 : avant, seuls les toasts étaient attendus (waitFor)
+      // dans le flux principal, et les messages new_site n'étaient regardés qu'en
+      // tout dernier recours via un qs() instantané sans attente. Sur une page où le
+      // signal passe uniquement par les messages new_site, ça faisait perdre 6s pour
+      // rien avant de retomber sur une vérification instantanée elle-même sujette à
+      // rater le message s'il arrivait une fraction de seconde trop tard (rapporté le
+      // 2026-11-08 : "régulièrement... considère le pari validé alors que la fenêtre
+      // n'est pas apparue" OU l'inverse).
+      const successSel = '.ui-notification-alert--status-success, .c-bet-place__message--win';
+      const errorSel = '.ui-notification-alert--status-error, .ui-notification-alert--status-question, .c-bet-place__message--lose';
+      const anySel = `${successSel}, ${errorSel}`;
+
+      // Nettoyage AVANT de cliquer : supprime (pas juste "clic fermer", qui suppose à
+      // tort un bouton de fermeture ET une suppression immédiate du DOM) tout élément
+      // déjà présent de CET ensemble unifié -- sans ça, un message new_site laissé par
+      // un pari précédent (jamais couvert par l'ancien nettoyage, qui ne ciblait que les
+      // toasts) peut faire déclarer CE pari validé par le fallback alors que rien n'a
+      // été réellement soumis pour lui (même classe de faux positif que celui du
+      // 2026-11-02, mais via le sélecteur new_site resté hors du nettoyage).
+      for (const stale of qsa(anySel)) {
         const closeBtn = qs('.ui-notification-base__close', stale) || qs('.ui-notification-base__close');
         if (closeBtn) closeBtn.click();
+        stale.remove();
       }
-      // Attend que les notifications périmées aient vraiment disparu du DOM avant de
-      // cliquer -- un simple click() sur le bouton fermer + sleep(200) fixe ne garantit
-      // pas que l'animation de fermeture soit terminée ; si une notification périmée
-      // traîne encore au moment du clic, la vérification post-clic ci-dessous peut la
-      // retomber dessus et déclarer CE pari validé alors que rien n'a été réellement
-      // soumis pour lui (même faux positif que celui déjà documenté le 2026-11-02).
+      // Attend que ça ait vraiment disparu du DOM avant de cliquer (l'animation de
+      // fermeture peut prendre plus que les 200ms d'un sleep fixe).
       {
         const staleWaitStart = Date.now();
-        while (qs(staleSel) && Date.now() - staleWaitStart < 1000) await sleep(100);
+        while (qs(anySel) && Date.now() - staleWaitStart < 1000) await sleep(100);
       }
 
       btn.click();
       await sleep(1500);
 
-      // Notification de succès (le texte contient "effectué" sur mobile_site)
-      let notif = await waitFor('.ui-notification-alert--status-success', 4000);
-      if (notif) {
-        const text = (notif.textContent || '').trim();
-        const accepted = /effectu/i.test(text);
-        const closeBtn = qs('.ui-notification-base__close', notif) || qs('.ui-notification-base__close');
-        if (closeBtn) closeBtn.click();
-        return { validated: true, accepted, message: text };
+      // Boucle de polling UNIQUE sur l'ensemble unifié (au lieu de deux waitFor
+      // séquentiels qui ne couvraient que les toasts) -- budget total 6s après le
+      // sleep(1500) initial, soit 7.5s après le clic, identique à avant mais sans le
+      // temps perdu sur des sélecteurs qui ne peuvent jamais matcher sur ce site_type.
+      const pollStart = Date.now();
+      while (Date.now() - pollStart < 6000) {
+        const notif = qs(anySel);
+        if (notif) {
+          const text = (notif.textContent || '').trim();
+          const isError = notif.matches(errorSel);
+          const closeBtn = qs('.ui-notification-base__close', notif) || qs('.ui-notification-base__close');
+          if (closeBtn) closeBtn.click();
+          notif.remove();
+          if (!isError) {
+            // Toast mobile_site : le texte doit contenir "effectué" pour être un
+            // vrai succès (même garde-fou qu'avant la consolidation). Message
+            // inline new_site (.c-bet-place__message--win) : accepté par sa seule
+            // présence, comme l'ancien fallback le faisait déjà.
+            const accepted = notif.matches('.c-bet-place__message--win') || /effectu/i.test(text);
+            return { validated: true, accepted, message: text };
+          }
+          const alreadyPlaced = /déjà|peut être accepté/i.test(text);
+          return { validated: true, accepted: alreadyPlaced, message: text };
+        }
+        await sleep(100);
       }
 
-      // Notification d'erreur ou question (cote modifiée, mise max, pari déjà placé, etc.)
-      // -- attend aussi (waitFor, pas qs instantané) : sans délai propre, une erreur qui
-      // met un peu plus longtemps que la fenêtre de succès ci-dessus à s'afficher était
-      // manquée, et le pari finissait en "no_confirmation_found" (considéré échoué) alors
-      // qu'un vrai message (succès OU erreur) allait apparaître l'instant d'après --
-      // signalé le 2026-11-08 ("la fenêtre n'a pas le temps de s'afficher").
-      notif = await waitFor('.ui-notification-alert--status-error, .ui-notification-alert--status-question', 2000);
-      if (notif) {
-        const text = (notif.textContent || '').trim();
-        const alreadyPlaced = /déjà|peut être accepté/i.test(text);
-        const closeBtn = qs('.ui-notification-base__close', notif) || qs('.ui-notification-base__close');
-        if (closeBtn) closeBtn.click();
-        return { validated: true, accepted: alreadyPlaced, message: text };
-      }
-
-      // Fallback : sélecteurs génériques (autres site_type). BUG CRITIQUE corrigé le
-      // 2026-11-02 : l'ancien code retournait {validated:true, accepted: !!win || !lose}
-      // -- si win ET lose sont tous les deux absents (cas normal quand RIEN ne s'est
-      // passé, ex: clic sur un bouton caché/inactif après l'échec du filtre de
-      // visibilité), !lose vaut true et le pari était déclaré validé PAR DÉFAUT alors
-      // que rien n'avait été réellement soumis (faux positif réel : 98.18€ marqué
-      // "validé"/envoyé à AuxoTracker, jamais placé sur le site). Un succès doit être
-      // prouvé par un signal positif, jamais supposé par l'absence de signal négatif.
-      const win = qs(SEL.betslip_result_win);
-      const lose = qs(SEL.betslip_result_lose);
-      if (win || lose) {
-        return { validated: true, accepted: !!win };
-      }
       return { validated: false, error: 'no_confirmation_found' };
     },
 
