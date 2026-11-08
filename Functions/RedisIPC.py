@@ -764,6 +764,44 @@ def any_loss_exists(script_type: str) -> bool:
         return False
 
 
+def list_active_losses() -> list:
+    """
+    Liste tous les script_type ayant actuellement une perte non nulle en base (SQLite
+    de secours, table `perte`) -- utilisé par la commande Telegram /perte_globale pour
+    afficher les pertes en cours des scripts martingale, en plus de la perte globale
+    40A (cf. SCRIPTS_WATCH/main-1.py, send_global_perte).
+
+    Retourne une liste de tuples (script_type, loss, matchname, is_active), triée par
+    perte décroissante. is_active (bool) : vrai si ce script_type est encore marqué
+    running=1 SUR CE MÊME MATCH (table running) -- sinon la perte est abandonnée
+    (le process propriétaire est reparti sur un autre match ou s'est arrêté), personne
+    ne viendra jamais la recouvrir (même distinction que get_total_loss(only_active=True),
+    affichée ici pour ne pas laisser croire qu'une perte orpheline est "en cours" --
+    signalé le 2026-11-08 sur 015/ferrari-michele-mecarelli). Liste vide si aucune
+    perte en cours ou en cas d'erreur.
+    """
+    try:
+        conn = _get_sqlite_conn()
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT perte.script_type, perte.loss, perte.matchname, "
+            "(running.is_running IS NOT NULL AND running.is_running = 1) AS is_active "
+            "FROM perte LEFT JOIN running "
+            "ON running.script_type = perte.script_type AND running.matchname = perte.matchname "
+            "WHERE perte.loss != 0 ORDER BY perte.loss DESC"
+        )
+        rows = cur.fetchall()
+        conn.close()
+        return [(r[0], float(r[1]), r[2] or '', bool(r[3])) for r in rows]
+    except Exception as e:
+        try:
+            import config
+            config.log(f"[RedisIPC] sqlite list_active_losses error: {e}", 'error')
+        except Exception:
+            pass
+        return []
+
+
 def deduct_largest(matchname: str = None) -> Optional[tuple]:
     """
     Retourne la perte la plus grande stockée dans SQLite sans la modifier.

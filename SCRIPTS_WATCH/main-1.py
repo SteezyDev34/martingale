@@ -1,5 +1,6 @@
 # Import des modules personnalises
 # Import des modules standards
+import base64
 import datetime
 import json
 import os
@@ -186,12 +187,15 @@ requests.adapters.DEFAULT_RETRIES = 3
 
 from Functions import Functions_telegram
 from Functions.getTextFromImageGPT import extraire_pari_depuis_image, extraire_pari_depuis_texte
-from Functions.TelegramBetsAPI import send_bet_data_to_api, is_ignored_sender
+from Functions.TelegramBetsAPI import send_bet_data_to_api, is_ignored_sender, get_pending_and_failed_bets
 from Functions.AdrBettingScraper import scrape_adrbetting_coupons
 from Functions.FrancePronosScraper import scrape_francepronos
 from Functions.Bookmakers.session_init import init_bookmaker_sessions
 from Functions.Bookmakers.router import place_best_bet, place_combined_bet
+import Functions.Bookmakers.router as bookmaker_router
 from Functions.GetMise import get_recommended_stake
+from Functions.ProcessTelegramBets import preview_bet, place_bet_now, place_bet_manually
+from Functions import RedisIPC
 
 # Connexion manuelle aux bookmakers au démarrage
 init_bookmaker_sessions()
@@ -230,12 +234,447 @@ def filter_txt(txt):
 
 def bot_msg_handler(txt):
     # Gestion des commandes specifiques via regex
-    if len(re.findall("/addword", txt)) == 1:
-        Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id, "Quel mot?")
-    elif len(re.findall("/delword", txt)) == 1:
-        Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id, "Mot a supprimer?")
-    elif len(re.findall("/instapronos", txt)) == 1:
-        Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id, "team1 - team2\npick\nCOTE :\nMISE :")
+    if len(re.findall("/echecs", txt)) == 1:
+        send_failed_bets_list()
+    elif len(re.findall("/relance_scraping", txt)) == 1:
+        relance_scraping()
+    elif len(re.findall("/perte_globale", txt)) == 1:
+        send_global_perte()
+
+
+# ---- Commande /perte_globale : affichage en LECTURE SEULE de la perte globale -------
+# GetJsonData.getGlobalPerte() interroge le même endpoint mais a des effets de bord
+# (consomme la perte via SendGlobalPerte(), basé sur config.scriptType/mtt_recup du
+# script APPELANT -- non définis dans ce process main-1.py, qui n'est pas un script
+# martingale numéroté) -- inadapté pour une simple commande d'affichage. On refait ici
+# juste le GET, sans toucher à rien côté serveur.
+def fetch_global_perte():
+    try:
+        r = requests.get(f"{config.api_url}/strategy40A/get_global_perte.php", timeout=10)
+        r.raise_for_status()
+        data = r.json()
+        return data[0] if data else None
+    except Exception as e:
+        log(f"[PerteGlobale] Erreur récupération: {e}", "error", clear=False)
+        return None
+
+
+def send_global_perte():
+    pertes = fetch_global_perte()
+    if pertes is None:
+        Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id, "❌ Impossible de récupérer la perte globale (voir logs).")
+        return
+    msg = f"📉 Perte globale actuelle: {pertes.get('perte', '?')}€"
+
+    # Pertes en cours par script martingale (015/150/15A/30A/300/5P/6P/etc.) -- lues
+    # dans redis_fallback.sqlite (table `perte`, alimentée par RedisIPC.set_loss à
+    # chaque jeu perdu). Affichées seulement si au moins un script a une perte non
+    # nulle actuellement (séquence pas encore rattrapée).
+    try:
+        active_losses = RedisIPC.list_active_losses()
+    except Exception as e:
+        active_losses = []
+        log(f"[PerteGlobale] Erreur lecture pertes scripts: {e}", "error", clear=False)
+    if active_losses:
+        msg += "\n\n🎾 Pertes en cours par script:"
+        for script_type, loss, matchname, is_active in active_losses:
+            suffixe = f" ({matchname})" if matchname else ""
+            # Perte dont le process propriétaire n'est plus actif sur CE match : personne
+            # ne la recouvrira (process reparti ailleurs ou arrêté) -- distingué pour ne
+            # pas laisser croire qu'elle est encore "en cours" (signalé le 2026-11-08).
+            if not is_active:
+                suffixe += " ⚠️ abandonnée"
+            msg += f"\n• {script_type}: {loss:.2f}€{suffixe}"
+
+    Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id, msg)
+
+
+# ---- Commande /echecs : revue + relance manuelle des paris en erreur/non traités ----
+# Flux par boutons inline (callback_query, cf. _poll_callback_queries plus bas -- ancien
+# flux "répondre avec l'ID en texte" remplacé le 2026-11-07 à la demande utilisateur) :
+#   1) /echecs -> liste des paris (#id + match + statut) + 1 bouton "🔄 #id" par pari
+#   2) Clic sur un bouton -> callback "preview:<id>" -> nouveau message avec l'aperçu
+#      (match + mise suggérée + mode simulation/réel) et 3 boutons Auto/Manuel/Annuler
+#   3) Clic "🤖 Auto" -> callback "confirm:<id>:<mise>" -> placement automatisé réel (ou
+#      simulé si SIMULATE_MODE) via le bookmaker, cf. place_bet_now
+#      Clic "📝 Manuel" -> callback "manual:<id>:<mise>" -> AUCUN placement automatisé :
+#      c'est l'utilisateur qui place lui-même chez le bookmaker, le bot se contente de
+#      reporter le pari à AuxoTracker pour le suivi, cf. place_bet_manually
+#      Clic "❌ Annuler" -> callback "cancel:<id>" -> rien n'est fait
+#      Dans tous les cas le message est édité en place avec le résultat (boutons
+#      retirés, pour empêcher un second clic de repasser le même pari)
+_ECHECS_LIST_HEADER = "📋 PARIS EN ERREUR / NON TRAITÉS"
+
+
+def _bet_display_text(match: dict) -> str:
+    """
+    Texte lisible généré par l'IA pour CE match -- priorité à `combined_label` (texte
+    qui décrit TOUTES les jambes d'un combiné sur le même match, ex: "Double chance X2
+    et Total Plus de 1.5"), puis `intitule` (ne décrit que la 1ère jambe pour un combiné
+    -- insuffisant seul, cf. retour utilisateur du 2026-11-07 sur un Bet Builder AZ
+    Alkmaar/Juventus où `intitule` omettait la jambe "Total Plus de 1.5"), puis repli sur
+    `selection` (code technique, dernier recours). Les paris "plusieurs paris sur le même
+    match empilés l'un en dessous de l'autre" (Bet Builder) sont fréquents -- toujours
+    vérifier `combined_label` avant d'afficher quoi que ce soit à l'utilisateur.
+    """
+    return (match.get('combined_label') or '').strip() \
+        or (match.get('intitule') or '').strip() \
+        or match.get('selection', '?')
+
+
+def _format_bet_line(bet):
+    try:
+        sel = json.loads(bet.get('selection') or '{}')
+        matches = sel.get('matches', [])
+        if matches:
+            m = matches[0]
+            desc = f"{m.get('equipe_1', '?')} vs {m.get('equipe_2', '?')} | {_bet_display_text(m)}"
+            if len(matches) > 1:
+                desc += f" (+{len(matches) - 1} jambes)"
+        else:
+            desc = "? vs ?"
+    except Exception:
+        desc = "(données illisibles)"
+    if int(bet.get('processed') or 0) == 0:
+        status = "⏳ non traité"
+    else:
+        status = f"❌ {bet.get('error') or 'échec'}"
+    return f"#{bet.get('id')} {desc}\n   {status}"
+
+
+def send_failed_bets_list():
+    bets = get_pending_and_failed_bets(limit_each=20)
+    if not bets:
+        Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id, f"{_ECHECS_LIST_HEADER}\n\nAucun pari en attente ou en échec actuellement.")
+        return
+    # Un clavier inline Telegram reste lisible avec ~25 boutons (1 par ligne ici), même
+    # limite d'affichage que l'ancienne liste texte -- pas besoin de la revoir à la baisse.
+    shown = bets[:25]
+    lines = [_format_bet_line(b) for b in shown]
+    msg = f"{_ECHECS_LIST_HEADER}\n\n" + "\n\n".join(lines)
+    if len(bets) > len(shown):
+        msg += f"\n\n({len(bets) - len(shown)} de plus non affichés)"
+    buttons = [[(f"🔄 Relancer #{b.get('id')}", f"preview:{b.get('id')}")] for b in shown]
+    Functions_telegram.send_telegram_buttons(Functions_telegram.auxo_bot_id, msg, buttons)
+
+
+_MANUAL_ENTRY_HEADER = "📝 SAISIE MANUELLE #"
+
+
+def _remove_list_button(cq: dict, bet_id: int):
+    """
+    Retire le bouton "🔄 Relancer #<bet_id>" de la liste /echecs dès qu'il est cliqué
+    (demande utilisateur du 2026-11-07 : éviter qu'un bouton déjà pris en charge reste
+    cliquable dans la liste). Reconstruit le clavier à partir de celui que Telegram
+    renvoie dans le callback_query lui-même (cq['message']['reply_markup']) -- pas besoin
+    de connaître la liste complète par ailleurs.
+    """
+    msg = cq.get('message', {})
+    chat_id = msg.get('chat', {}).get('id')
+    message_id = msg.get('message_id')
+    current_rows = msg.get('reply_markup', {}).get('inline_keyboard', [])
+    target_cb = f"preview:{bet_id}"
+    remaining_rows = [row for row in current_rows if not any(btn.get('callback_data') == target_cb for btn in row)]
+    new_buttons = [[(btn['text'], btn['callback_data']) for btn in row] for row in remaining_rows]
+    Functions_telegram.edit_telegram_reply_markup(chat_id, message_id, new_buttons)
+
+
+def _is_photo_message(message: dict) -> bool:
+    return bool(message.get('photo'))
+
+
+def _edit_bet_message(chat_id, message_id, is_photo: bool, text: str, buttons=None):
+    """
+    Édite le texte/légende d'un message de pari -- dispatch vers editMessageCaption si
+    le message est une photo (aperçu envoyé avec l'image du ticket) ou editMessageText
+    sinon, Telegram n'acceptant pas editMessageText sur un message photo.
+
+    Si l'édition échoue pour n'importe quelle raison (ex: Telegram rejette avec "message
+    is not modified" si contenu+boutons sont identiques à l'existant, message trop
+    ancien, etc.), envoie un NOUVEAU message à la place -- sans ce repli, un échec
+    d'édition est totalement invisible pour l'utilisateur ("rien ne se passe" au clic,
+    constaté le 2026-11-08 sur le bouton Manuel).
+    """
+    if is_photo:
+        ok = Functions_telegram.edit_telegram_caption(chat_id, message_id, text, buttons)
+    else:
+        ok = Functions_telegram.edit_telegram_message(chat_id, message_id, text, buttons)
+    if not ok:
+        if buttons:
+            Functions_telegram.send_telegram_buttons(chat_id, text, buttons)
+        else:
+            Functions_telegram.send_telegram(chat_id, text)
+
+
+def handle_echecs_callback(action: str, parts: list, cq: dict):
+    """
+    Traite un clic sur bouton inline émis par /echecs (cf. _poll_callback_queries) :
+    'preview' (choix d'un pari dans la liste) -> retire ce bouton de la liste puis
+    affiche l'aperçu Auto/Manuel/Annuler, avec l'image source du ticket quand
+    disponible (bet_data['image_base64'], stockée par l'API nichée dans la colonne
+    `selection` -- cf. preview_bet) ; 'confirm' (Auto) -> placement automatisé ;
+    'manual' -> demande la mise et la cote RÉELLES avant de valider (cf.
+    _MANUAL_ENTRY_HEADER, suite gérée en texte dans my_event_handler car un bouton ne
+    peut pas capturer une saisie libre) ; 'manual_confirm' -> enregistrement AuxoTracker
+    avec les valeurs saisies ; 'cancel' -> rien. Toujours répondu via
+    answer_callback_query pour retirer le spinner côté client Telegram.
+    """
+    message = cq.get('message', {})
+    chat_id = message.get('chat', {}).get('id')
+    message_id = message.get('message_id')
+    callback_id = cq.get('id')
+    is_photo = _is_photo_message(message)
+
+    if action == 'preview':
+        bet_id = int(parts[1])
+        Functions_telegram.answer_callback_query(callback_id)
+
+        def _worker():
+            try:
+                preview = preview_bet(bet_id)
+                if not preview:
+                    Functions_telegram.send_telegram(chat_id, f"Pari #{bet_id} introuvable ou données corrompues.")
+                    return
+                matches = preview['matches']
+                if matches:
+                    m = matches[0]
+                    texte = _bet_display_text(m)
+                    desc = f"{m.get('equipe_1', '?')} vs {m.get('equipe_2', '?')}\n{texte}"
+                    if len(matches) > 1:
+                        desc += f"\n(+{len(matches) - 1} autres jambes du combiné)"
+                else:
+                    desc = "?"
+                mode = "🧪 SIMULATION (aucun argent risqué)" if bookmaker_router.SIMULATE_MODE else "⚠️ ARGENT RÉEL"
+                msg = (f"🎯 Pari #{bet_id}\n{desc}\n\n💰 Mise suggérée: {preview['mise']:.2f}€\n{mode}\n\n"
+                       f"🤖 Auto : le bot cherche et place le pari lui-même\n"
+                       f"📝 Manuel : tu le places toi-même chez le bookmaker (mise et cote RÉELLES demandées), "
+                       f"le bot se contente de l'enregistrer dans AuxoTracker")
+                mise_str = f"{preview['mise']:.2f}"
+                buttons = [
+                    [("🤖 Auto", f"confirm:{bet_id}:{mise_str}"), ("📝 Manuel", f"manual:{bet_id}:{mise_str}")],
+                    [("❌ Annuler", f"cancel:{bet_id}")],
+                ]
+                # Image du ticket source si disponible (cf. docstring) -- repli texte
+                # seul sinon (ticket ancien envoyé avant que l'IA n'attache l'image, ou
+                # décodage échoué).
+                image_b64 = preview['bet_data'].get('image_base64')
+                sent_as_photo = False
+                if image_b64:
+                    try:
+                        photo_bytes = base64.b64decode(image_b64)
+                        sent_as_photo = Functions_telegram.send_telegram_photo_bytes(chat_id, photo_bytes, msg, buttons) is not None
+                    except Exception as e:
+                        log(f"[echecs] Décodage image échoué pour pari #{bet_id}: {e}", "warning", clear=False)
+                sent_ok = sent_as_photo
+                if not sent_as_photo:
+                    sent_ok = Functions_telegram.send_telegram_buttons(chat_id, msg, buttons) is not None
+                # Ne retire le bouton "🔄 Relancer #id" de la liste QU'APRÈS que l'aperçu
+                # a bien été affiché -- demande utilisateur du 2026-11-08 : le bouton
+                # doit disparaître une fois le pari et ses boutons affichés, pas avant
+                # (sinon un échec d'envoi de l'aperçu laisserait l'utilisateur sans rien
+                # à cliquer pour ce pari).
+                if sent_ok:
+                    _remove_list_button(cq, bet_id)
+            except Exception as e:
+                Functions_telegram.send_telegram(chat_id, f"Erreur lors de la préparation du pari #{bet_id}: {e}")
+
+        threading.Thread(target=_worker, daemon=True).start()
+
+    elif action == 'confirm':
+        bet_id = int(parts[1])
+        mise = float(parts[2])
+        Functions_telegram.answer_callback_query(callback_id, "⏳ Placement en cours...")
+        _edit_bet_message(chat_id, message_id, is_photo, f"⏳ Placement du pari #{bet_id} en cours...", buttons=[])
+
+        def _worker():
+            try:
+                result = place_bet_now(bet_id, mise)
+                if result.get('success') and result.get('simulated'):
+                    txt_res = f"🧪 [SIMULATION] Pari #{bet_id} serait placé sur {result.get('bookmaker')} @ {result.get('odds', '?')} (mise={mise:.2f}€) — non confirmé réellement."
+                elif result.get('success'):
+                    txt_res = f"✅ Pari #{bet_id} placé sur {result.get('bookmaker')} @ {result.get('odds', '?')} (mise={mise:.2f}€)"
+                else:
+                    txt_res = f"❌ Échec placement #{bet_id}: {result.get('error', 'erreur inconnue')}"
+            except Exception as e:
+                txt_res = f"Erreur lors du placement du pari #{bet_id}: {e}"
+            _edit_bet_message(chat_id, message_id, is_photo, txt_res, buttons=[])
+
+        threading.Thread(target=_worker, daemon=True).start()
+
+    elif action == 'manual':
+        # Ne place/n'enregistre RIEN ici -- demande d'abord la mise et la cote RÉELLES
+        # utilisées par l'utilisateur chez le bookmaker (demande explicite du
+        # 2026-11-07 : la mise suggérée et la cote du ticket peuvent différer de ce que
+        # l'utilisateur a réellement obtenu). La suite (parsing de la réponse texte) est
+        # gérée dans my_event_handler, repérée via _MANUAL_ENTRY_HEADER.
+        bet_id = int(parts[1])
+        # Conserve le texte/légende de l'aperçu (match + mise suggérée + mode, + l'image
+        # si présente) au lieu de l'écraser -- demande utilisateur du 2026-11-08 : il
+        # faut garder le pari sous les yeux pendant la saisie de la mise/cote réelles.
+        existing_text = (message.get('caption') if is_photo else message.get('text')) or f"🎯 Pari #{bet_id}"
+        Functions_telegram.answer_callback_query(callback_id)
+        _edit_bet_message(
+            chat_id, message_id, is_photo,
+            f"{existing_text}\n\n"
+            f"{_MANUAL_ENTRY_HEADER}{bet_id}\n"
+            f"Réponds à CE message avec la mise réelle et la cote réelle utilisées, "
+            f"séparées par un ESPACE (la virgule est gardée pour les décimales).\n"
+            f"Ex: 12 1.75 ou 12,50 1.75",
+            buttons=[]
+        )
+
+    elif action == 'manual_confirm':
+        bet_id = int(parts[1])
+        mise = float(parts[2])
+        cote = float(parts[3])
+        Functions_telegram.answer_callback_query(callback_id, "📝 Enregistrement...")
+        _edit_bet_message(chat_id, message_id, is_photo, f"📝 Enregistrement manuel du pari #{bet_id}...", buttons=[])
+
+        def _worker():
+            try:
+                result = place_bet_manually(bet_id, mise, odds_override=cote)
+                if result.get('success'):
+                    txt_res = (f"📝 Pari #{bet_id} enregistré en MANUEL @ {result.get('odds', '?')} "
+                               f"(mise={mise:.2f}€) — reporté à AuxoTracker.")
+                else:
+                    txt_res = f"❌ Échec enregistrement manuel #{bet_id}: {result.get('error', 'erreur inconnue')}"
+            except Exception as e:
+                txt_res = f"Erreur lors de l'enregistrement manuel du pari #{bet_id}: {e}"
+            _edit_bet_message(chat_id, message_id, is_photo, txt_res, buttons=[])
+
+        threading.Thread(target=_worker, daemon=True).start()
+
+    elif action == 'cancel':
+        bet_id = parts[1] if len(parts) > 1 else '?'
+        Functions_telegram.answer_callback_query(callback_id)
+        _edit_bet_message(chat_id, message_id, is_photo, f"Annulé — pari #{bet_id} laissé en l'état (toujours visible dans /echecs).", buttons=[])
+
+
+def handle_manual_entry_reply(reply_raw_text: str, user_txt: str):
+    """
+    Traite la réponse texte à l'invite "📝 SAISIE MANUELLE #<id>" (cf. action 'manual'
+    de handle_echecs_callback) : extrait mise et cote réelles de la réponse libre de
+    l'utilisateur, puis affiche un message de confirmation avant tout enregistrement
+    (aucun appel à AuxoTracker ici).
+    """
+    id_match = re.search(rf'{re.escape(_MANUAL_ENTRY_HEADER)}(\d+)', reply_raw_text)
+    if not id_match:
+        return
+    bet_id = int(id_match.group(1))
+
+    # La virgule sert de décimale (convention FR, ex: "12,50") -- normalisée en point
+    # AVANT de découper par nombre, donc jamais ambiguë avec un séparateur (qui est un
+    # ESPACE, pas une virgule -- cf. retour utilisateur du 2026-11-08 : "12,1.75" avec
+    # virgule-séparateur était mal interprété comme mise=12.1, cote=75).
+    numbers = re.findall(r'\d+\.?\d*', user_txt.replace(',', '.'))
+    if len(numbers) < 2:
+        Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id,
+                                          "Format non reconnu — réponds avec 2 nombres séparés par un espace (mise cote), ex: 12 1.75")
+        return
+    mise = float(numbers[0])
+    cote = float(numbers[1])
+
+    msg = f"📝 Confirme pour le pari #{bet_id} :\nMise réelle: {mise:.2f}€\nCote réelle: {cote:.2f}"
+    buttons = [[("✅ Confirmer", f"manual_confirm:{bet_id}:{mise:.2f}:{cote:.2f}"), ("❌ Annuler", f"cancel:{bet_id}")]]
+    Functions_telegram.send_telegram_buttons(Functions_telegram.auxo_bot_id, msg, buttons)
+
+
+def _poll_callback_queries():
+    """
+    Poller getUpdates dédié aux clics de bouton inline (callback_query) -- infra ajoutée
+    le 2026-11-07 pour remplacer le flux texte "répondre avec l'ID" de /echecs par des
+    boutons cliquables (callback_query n'est délivré QUE via l'API Bot/getUpdates, jamais
+    au client Telethon qui gère le reste du bot avec un compte UTILISATEUR -- cf.
+    Functions_telegram.get_updates). Tourne dans son propre thread, indépendant du client
+    Telethon : pas de conflit puisque chacun écoute un type d'update et un compte
+    Telegram différents.
+    """
+    import time
+    offset = None
+    log("[CallbackPoller] Démarré (écoute des boutons /echecs)", "info", clear=False)
+    while True:
+        try:
+            updates = Functions_telegram.get_updates(offset=offset, timeout=30)
+            for upd in updates:
+                offset = upd['update_id'] + 1
+                cq = upd.get('callback_query')
+                if not cq:
+                    continue
+                try:
+                    data = cq.get('data', '') or ''
+                    parts = data.split(':')
+                    action = parts[0] if parts else ''
+                    if action in ('preview', 'confirm', 'manual', 'manual_confirm', 'cancel'):
+                        handle_echecs_callback(action, parts, cq)
+                    else:
+                        Functions_telegram.answer_callback_query(cq.get('id'))
+                except Exception as e:
+                    log(f"[CallbackPoller] Erreur traitement callback: {e}", "error", clear=False)
+        except Exception as e:
+            log(f"[CallbackPoller] Erreur boucle: {e}", "error", clear=False)
+            time.sleep(5)
+# ---------------------------------------------------------------------------------
+
+
+# ---- Notification Telegram (canal alertGroup) d'un pari envoyé à l'API --------
+def _format_pari_caption(label, match):
+    """
+    Texte lisible pour la notification Telegram d'un pari envoyé à l'API -- cf.
+    _bet_display_text pour la logique de choix du texte (combined_label > intitule >
+    selection). Retour utilisateur du 2026-11-07 : le texte affiché n'était pas le bon
+    (manquait une jambe d'un Bet Builder/combiné sur le même match).
+    """
+    texte = _bet_display_text(match)
+    return f"{label}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {texte} @ {match.get('odds')}"
+
+
+def _send_pari_notification(label, match, image=None):
+    """
+    Envoie la notification Telegram d'un pari envoyé à l'API, avec l'image source
+    analysée en pièce jointe quand disponible (chemin local ou URL, cf.
+    send_telegram_photo qui gère les deux) -- repli texte seul sinon.
+    """
+    caption = _format_pari_caption(label, match)
+    if image:
+        send_telegram_photo(Functions_telegram.alertGroup, image, caption)
+    else:
+        send_telegram(Functions_telegram.alertGroup, caption)
+# ---------------------------------------------------------------------------------
+
+
+# ---- Commande /relance_scraping : relance à la demande des 3 sources de scraping ----
+# (AdrBetting VIP, France Pronos, Tempête) au lieu d'attendre leur déclenchement normal
+# (message Telegram reçu pour les 2 premiers, polling toutes les 10 min pour Tempête).
+# Les 3 fonctions réutilisées (run_adrbetting_scrape/run_francepronos_scrape/
+# _tempete_check_once) sont définies plus bas dans ce fichier (étaient des closures
+# imbriquées dans my_event_handler, factorisées le 2026-11-07 pour être appelables ici).
+def relance_scraping():
+    send_telegram(Functions_telegram.auxo_bot_id, "⏳ Relance du scraping (AdrBetting VIP, France Pronos, Tempête)...")
+
+    def _worker():
+        results = {}
+        for nom, fn in (("AdrBetting VIP", lambda: run_adrbetting_scrape("Relance manuelle /relance_scraping")),
+                         ("France Pronos", lambda: run_francepronos_scrape("Relance manuelle /relance_scraping")),
+                         ("Tempête", _tempete_check_once)):
+            try:
+                results[nom] = fn()
+            except Exception as e:
+                log(f"[Relance scraping] Erreur {nom}: {e}", "error", clear=False)
+                results[nom] = None
+
+        def _fmt(n):
+            return f"{n} pari(s) envoyé(s)" if n is not None else "❌ erreur (voir logs)"
+
+        msg = (
+            "✅ Relance terminée\n"
+            f"🎰 AdrBetting VIP: {_fmt(results['AdrBetting VIP'])}\n"
+            f"🇫🇷 France Pronos: {_fmt(results['France Pronos'])}\n"
+            f"🌪️ Tempête: {_fmt(results['Tempête'])}"
+        )
+        send_telegram(Functions_telegram.auxo_bot_id, msg)
+
+    threading.Thread(target=_worker, daemon=True).start()
+# ---------------------------------------------------------------------------------
 
 
 def add_word_to_replace(word):
@@ -364,73 +803,358 @@ def _tempete_mark_seen(url):
     conn.close()
 
 
+def _tempete_check_once() -> int:
+    """
+    Un passage de vérification des nouvelles images Tempête (tempetebetting.com) --
+    factorisée depuis check_tempete_images() (qui ne fait plus que boucler dessus) pour
+    être réutilisable depuis la commande Telegram /relance_scraping (cf. bot_msg_handler).
+    Retourne le nombre de paris effectivement envoyés à l'API.
+    """
+    import time
+    sent_count = 0
+    try:
+        now = datetime.datetime.now()
+        url = TEMPETE_BASE_URL.format(year=now.year, month=now.month)
+        links = _tempete_get_image_links(url)
+        originals = _tempete_filter_originals(links)
+        new_images = _tempete_filter_new(originals)
+        if new_images:
+            log(f"[Tempête] {len(new_images)} nouvelle(s) image(s) détectée(s)", "info", clear=False)
+            for i, img_name in enumerate(new_images):
+                if i > 0:
+                    time.sleep(3)
+                full_url = img_name if img_name.startswith('http') else url + img_name
+                try:
+                    r = requests.get(full_url, headers=TEMPETE_HEADERS, timeout=15, verify=False)
+                    if r.status_code != 200:
+                        log(f"[Tempête] Téléchargement échoué: {img_name} ({r.status_code})", "warning", clear=False)
+                        continue
+                    # parent_directory (calculé une fois au niveau module, pas __file__
+                    # ré-évalué ici) -- ce thread dédié (threading.Thread, pas asyncio)
+                    # a vu __file__ devenir NameError de façon répétée et non reproductible
+                    # en isolation (constaté plusieurs fois, dont le 2026-11-04 : échec
+                    # systématique sur chaque image Tempête). parent_directory est une
+                    # simple variable Python déjà résolue, insensible à ce problème.
+                    temp_dir = os.path.join(parent_directory, 'media')
+                    os.makedirs(temp_dir, exist_ok=True)
+                    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                    img_path = os.path.join(temp_dir, f"tempete_{timestamp}.jpg")
+                    with open(img_path, 'wb') as f:
+                        f.write(r.content)
+                    log(f"[Tempête] Image téléchargée: {img_name}", "info", clear=False)
+                    result = extraire_pari_depuis_image(img_path, "Tempête Betting")
+                    try:
+                        pari_dict = json.loads(result)
+                        pari_dict["tipster"] = "TEMPÊTE BETTING"
+                        matches = pari_dict.get("matches", [])
+                        if matches:
+                            api_success = send_bet_data_to_api(pari_dict, message_original=full_url, sender_username="TEMPÊTE BETTING", image_path=img_path)
+                            if api_success:
+                                sent_count += 1
+                                for match in matches:
+                                    log(f"[Tempête] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
+                                    _send_pari_notification("🌪️ TEMPÊTE BETTING", match, img_path)
+                            else:
+                                log(f"[Tempête] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
+                        else:
+                            log(f"[Tempête] Aucun match extrait de {img_name}", "warning", clear=False)
+                        # Traitement réussi (avec ou sans match détecté) : marquer vue
+                        # seulement maintenant, pour qu'un échec plus haut (timeout OCR,
+                        # JSON invalide) soit retenté au prochain cycle au lieu d'être
+                        # perdu silencieusement pour toujours.
+                        _tempete_mark_seen(img_name)
+                    except json.JSONDecodeError as e:
+                        log(f"[Tempête] Erreur JSON OCR: {e}", "error", clear=False)
+                    finally:
+                        if os.path.exists(img_path):
+                            os.remove(img_path)
+                except Exception as e:
+                    log(f"[Tempête] Erreur traitement image {img_name}: {e}", "error", clear=False)
+        else:
+            log("[Tempête] Aucune nouvelle image", "info", clear=False)
+    except Exception as e:
+        log(f"[Tempête] Erreur boucle principale: {e}", "error", clear=False)
+    return sent_count
+
+
+def run_adrbetting_scrape(txt: str = "Relance manuelle") -> int:
+    """
+    Scrape AdrBetting VIP (coupons "PRONOS EN LIGNE") et traite chaque coupon trouvé --
+    factorisée depuis une closure imbriquée dans my_event_handler pour être réutilisable
+    depuis la commande Telegram /relance_scraping. `txt` accompagne l'OCR/l'envoi API
+    comme le ferait le message Telegram déclencheur normalement.
+    Retourne le nombre de paris effectivement envoyés à l'API.
+    """
+    sent_count = 0
+    try:
+        coupons = scrape_adrbetting_coupons()  # List[tuple(filepath, tipster)]
+        if not coupons:
+            log("[AdrBetting] Aucun coupon récupéré", "warning", clear=False)
+            return 0
+        log(f"[AdrBetting] {len(coupons)} coupon(s) récupéré(s), lancement OCR...", "info", clear=False)
+        for img_path, tipster in coupons:
+            try:
+                log(f"[AdrBetting] OCR [{tipster}]: {os.path.basename(img_path)}", "info", clear=False)
+                result = extraire_pari_depuis_image(img_path, txt)
+                pari_dict = json.loads(result)
+                pari_dict["tipster"] = tipster
+                matches = pari_dict.get("matches", [])
+                if matches:
+                    api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=tipster, image_path=img_path)
+                    if api_success:
+                        sent_count += 1
+                        for match in matches:
+                            log(f"[AdrBetting] ✅ [{tipster}] Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
+                            _send_pari_notification(f"🎰 {tipster}", match, img_path)
+                    else:
+                        log(f"[AdrBetting] ❌ [{tipster}] Échec envoi pari ({len(matches)} match(s))", "error", clear=False)
+                if os.path.exists(img_path):
+                    os.remove(img_path)
+            except json.JSONDecodeError as e:
+                log(f"[AdrBetting] Erreur JSON OCR [{tipster}]: {e}", "error", clear=False)
+            except Exception as e:
+                log(f"[AdrBetting] Erreur traitement coupon {img_path}: {e}", "error", clear=False)
+    except Exception as e:
+        log(f"[AdrBetting] Erreur scraping: {e}", "error", clear=False)
+    return sent_count
+
+
+def run_francepronos_scrape(txt: str = "Relance manuelle") -> int:
+    """
+    Scrape FrancePronos et traite chaque pronostic trouvé -- factorisée depuis une
+    closure imbriquée dans my_event_handler pour être réutilisable depuis la commande
+    Telegram /relance_scraping. Retourne le nombre de paris effectivement envoyés à l'API.
+    """
+    sent_count = 0
+    try:
+        pronos = scrape_francepronos()
+        if not pronos:
+            log("[FrancePronos] Aucun pronostic récupéré", "warning", clear=False)
+            return 0
+        log(f"[FrancePronos] {len(pronos)} pronostic(s) récupéré(s), passage à l'IA...", "info", clear=False)
+        for raw in pronos:
+            try:
+                # Formatter le texte brut pour l'IA
+                texte = (
+                    f"Sport: {raw.get('sport', '')}\n"
+                    f"Date: {raw.get('date', '')}\n"
+                    f"Match: {raw.get('intitule', raw.get('equipe_1','') + ' vs ' + raw.get('equipe_2',''))}\n"
+                    f"Équipe 1: {raw.get('equipe_1', '')}\n"
+                    f"Équipe 2: {raw.get('equipe_2', '')}\n"
+                    f"Sélection: {raw.get('selection', '')}\n"
+                    f"Cote: {raw.get('odds', '')}\n"
+                    f"Tipster: FrancePronos"
+                )
+                result = extraire_pari_depuis_texte(texte, txt)
+                pari_dict = json.loads(result)
+                pari_dict["tipster"] = "FrancePronos"
+                matches = pari_dict.get("matches", [])
+                if matches:
+                    api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username="FrancePronos")
+                    if api_success:
+                        sent_count += 1
+                        for match in matches:
+                            log(f"[FrancePronos] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
+                            _send_pari_notification("🇫🇷 France Pronos", match, raw.get('image'))
+                    else:
+                        log(f"[FrancePronos] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
+            except json.JSONDecodeError as e:
+                log(f"[FrancePronos] Erreur JSON IA: {e}", "error", clear=False)
+            except Exception as e:
+                log(f"[FrancePronos] Erreur traitement prono: {e}", "error", clear=False)
+    except Exception as e:
+        log(f"[FrancePronos] Erreur scraping: {e}", "error", clear=False)
+    return sent_count
+
+
+def process_channel_image(chat_title: str, txt: str, image_path: str) -> int:
+    """
+    Pipeline OCR + envoi API + notification pour une image reçue d'un canal "public"
+    (AdrBetting, Tennistiqueur, TEMPÊTE BETTING, France Pronos Live, Auxo1XBOT) --
+    factorisée depuis le bloc `elif has_media:` de my_event_handler (qui l'appelle pour
+    chaque NOUVEAU message) pour être réutilisée aussi par relance_canaux_backlog()
+    (relecture de l'historique récent, cf. commande Telegram /relance_canaux).
+    Ne supprime PAS `image_path` -- laissé à l'appelant, qui gère le cycle de vie du
+    fichier différemment selon le cas (répertoire temp partagé vs fichier dédié).
+    Retourne le nombre de paris effectivement envoyés à l'API.
+    """
+    sent_count = 0
+    result = extraire_pari_depuis_image(image_path, txt)
+    try:
+        pari_dict = json.loads(result)
+        pari_dict["tipster"] = chat_title
+        matches = pari_dict.get("matches", [])
+        if not matches:
+            return 0
+        if chat_title == "France Pronos Live":
+            # Live : placement direct, pas de queue API (réactivité) --
+            # _place_live_bet_direct gère aussi la notification Telegram
+            # et le dédoublonnage avec le texte explicatif qui suit souvent.
+            _place_live_bet_direct(pari_dict, "image")
+            sent_count = 1
+        elif chat_title == "TEMPÊTE BETTING ®️" and len(matches) > 1:
+            # TEMPÊTE BETTING combine souvent plusieurs picks dans un même
+            # ticket/message (ex: "PALIER X MONTANTE" = plusieurs victoires
+            # combinées). On envoie un pari séparé par match au lieu d'un seul
+            # pari multi-matchs, pour que chacun soit évalué/parié
+            # individuellement côté router (sinon len(matches)>1 le fait
+            # traiter comme un seul pari combiné, cf. place_combined_bet).
+            api_success = True
+            for match in matches:
+                single_pari = {**pari_dict, "matches": [match]}
+                if not send_bet_data_to_api(single_pari, message_original=txt, sender_username=chat_title, image_path=image_path):
+                    api_success = False
+            if api_success:
+                sent_count = len(matches)
+                for match in matches:
+                    _send_pari_notification(f"📩 {chat_title}", match, image_path)
+        else:
+            api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title, image_path=image_path)
+            if api_success:
+                sent_count = len(matches)
+                for match in matches:
+                    _send_pari_notification(f"📩 {chat_title}", match, image_path)
+    except Exception as _e:
+        log(f"[Image] [{chat_title}] Erreur traitement OCR: {_e}", "error", clear=False)
+    return sent_count
+
+
+# ---- Commande /relance_canaux : relecture de l'historique récent des canaux PUBLICS --
+# (AdrBetting public -- pas VIP, Tennistiqueur, TEMPÊTE BETTING) pour rattraper un
+# message de prono manqué (ex: bot hors-ligne au moment de l'envoi) -- contrairement
+# au flux normal (my_event_handler), qui ne réagit qu'aux NOUVEAUX messages reçus en
+# direct et ne revient jamais sur l'historique.
+BACKLOG_CHANNELS = {
+    "AdrBetting":          "TICKET SAFE PUBLIC",
+    "Tennistiqueur 🎾":    "CONFIANCE",
+    "TEMPÊTE BETTING ®️":  ("PRONO DU JOUR", "PALIER"),
+}
+
+# chat_id par titre de canal, peuplé au fil des messages live reçus par my_event_handler
+# -- cf. commentaire sur chat_title dans my_event_handler pour pourquoi ceci est plus
+# fiable que client.iter_dialogs() pour relance_canaux_backlog().
+_known_channel_entities: dict = {}
+
+CHANNEL_BACKLOG_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "channel_backlog_seen.db")
+
+
+def _backlog_create_db():
+    conn = sqlite3.connect(CHANNEL_BACKLOG_DB_PATH)
+    conn.execute('''CREATE TABLE IF NOT EXISTS seen_messages (
+        channel TEXT,
+        message_id INTEGER,
+        seen_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (channel, message_id)
+    )''')
+    conn.commit()
+    conn.close()
+
+
+def _backlog_is_seen(channel, message_id) -> bool:
+    conn = sqlite3.connect(CHANNEL_BACKLOG_DB_PATH)
+    row = conn.execute('SELECT 1 FROM seen_messages WHERE channel=? AND message_id=?', (channel, message_id)).fetchone()
+    conn.close()
+    return row is not None
+
+
+def _backlog_mark_seen(channel, message_id):
+    conn = sqlite3.connect(CHANNEL_BACKLOG_DB_PATH)
+    conn.execute('INSERT OR IGNORE INTO seen_messages (channel, message_id) VALUES (?, ?)', (channel, message_id))
+    conn.commit()
+    conn.close()
+
+
+def _backlog_message_matches(chat_title: str, msg_text: str) -> bool:
+    """Même logique de condition textuelle que IMAGE_CHANNELS dans my_event_handler."""
+    required_text = BACKLOG_CHANNELS.get(chat_title)
+    if required_text is None:
+        return True
+    conditions = required_text if isinstance(required_text, (list, tuple)) else (required_text,)
+    return any(c.upper() in (msg_text or "").upper() for c in conditions)
+
+
+async def relance_canaux_backlog(limit_per_channel: int = 20):
+    """
+    Parcourt les `limit_per_channel` derniers messages des canaux PUBLICS AdrBetting,
+    Tennistiqueur et TEMPÊTE BETTING et retraite toute image de prono pas encore vue
+    (dédoublonnage persistant via channel_backlog_seen.db -- un message déjà vu n'est
+    jamais retraité, même après plusieurs appels de /relance_canaux).
+    """
+    from telethon.tl.types import MessageMediaDocument
+    _backlog_create_db()
+    Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id, "⏳ Vérification de l'historique récent (AdrBetting, Tennistiqueur, TEMPÊTE BETTING)...")
+
+    results = {}
+    for chat_title in BACKLOG_CHANNELS:
+        scanned = 0
+        found = 0
+        sent = 0
+        try:
+            # Priorité au chat_id déjà vu en live (fiable) -- repli sur iter_dialogs()
+            # seulement si aucun message de ce canal n'est encore arrivé depuis le
+            # dernier redémarrage (cf. _known_channel_entities).
+            entity = _known_channel_entities.get(chat_title)
+            if entity is None:
+                async for dialog in client.iter_dialogs():
+                    if dialog.title == chat_title:
+                        entity = dialog.entity
+                        break
+            if entity is None:
+                log(f"[Backlog] Canal '{chat_title}' introuvable (ni vu en live, ni dans les dialogues)", "warning", clear=False)
+                results[chat_title] = None
+                continue
+
+            messages = await client.get_messages(entity, limit=limit_per_channel)
+            scanned = len(messages)
+            for msg in messages:
+                if not msg.media or _backlog_is_seen(chat_title, msg.id):
+                    continue
+                msg_text = msg.raw_text or ""
+                if not _backlog_message_matches(chat_title, msg_text):
+                    _backlog_mark_seen(chat_title, msg.id)
+                    continue
+                if isinstance(msg.media, MessageMediaDocument):
+                    doc = msg.media.document
+                    if any(getattr(attr, 'mime_type', '') == 'image/gif' or str(type(attr).__name__) == 'DocumentAttributeAnimated' for attr in (doc.attributes or [])):
+                        _backlog_mark_seen(chat_title, msg.id)
+                        continue
+
+                found += 1
+                timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                temp_dir = os.path.join(parent_directory, 'media')
+                os.makedirs(temp_dir, exist_ok=True)
+                image_path = os.path.join(temp_dir, f"backlog_{chat_title.replace(' ', '_')}_{msg.id}_{timestamp}.jpg")
+                try:
+                    await msg.download_media(file=image_path)
+                    sent += process_channel_image(chat_title, msg_text, image_path)
+                except Exception as e:
+                    log(f"[Backlog] [{chat_title}] Erreur traitement message {msg.id}: {e}", "error", clear=False)
+                finally:
+                    if os.path.exists(image_path):
+                        os.remove(image_path)
+                    _backlog_mark_seen(chat_title, msg.id)
+            results[chat_title] = (scanned, found, sent)
+        except Exception as e:
+            log(f"[Backlog] Erreur canal '{chat_title}': {e}", "error", clear=False)
+            results[chat_title] = None
+
+    lines = ["✅ Vérification terminée"]
+    for chat_title, r in results.items():
+        if r is None:
+            lines.append(f"❌ {chat_title}: canal introuvable ou erreur (voir logs)")
+        else:
+            sc, f, s = r
+            lines.append(f"📩 {chat_title}: {sc} message(s) scanné(s), {f} image(s) nouvelle(s), {s} pari(s) envoyé(s)")
+    Functions_telegram.send_telegram(Functions_telegram.auxo_bot_id, "\n".join(lines))
+# ---------------------------------------------------------------------------------
+
+
 def check_tempete_images():
     import time
     _tempete_create_db()
     log("[Tempête] Thread de vérification des images démarré", "info", clear=False)
     while True:
-        try:
-            now = datetime.datetime.now()
-            url = TEMPETE_BASE_URL.format(year=now.year, month=now.month)
-            links = _tempete_get_image_links(url)
-            originals = _tempete_filter_originals(links)
-            new_images = _tempete_filter_new(originals)
-            if new_images:
-                log(f"[Tempête] {len(new_images)} nouvelle(s) image(s) détectée(s)", "info", clear=False)
-                for i, img_name in enumerate(new_images):
-                    if i > 0:
-                        time.sleep(3)
-                    full_url = img_name if img_name.startswith('http') else url + img_name
-                    try:
-                        r = requests.get(full_url, headers=TEMPETE_HEADERS, timeout=15, verify=False)
-                        if r.status_code != 200:
-                            log(f"[Tempête] Téléchargement échoué: {img_name} ({r.status_code})", "warning", clear=False)
-                            continue
-                        # parent_directory (calculé une fois au niveau module, pas __file__
-                        # ré-évalué ici) -- ce thread dédié (threading.Thread, pas asyncio)
-                        # a vu __file__ devenir NameError de façon répétée et non reproductible
-                        # en isolation (constaté plusieurs fois, dont le 2026-11-04 : échec
-                        # systématique sur chaque image Tempête). parent_directory est une
-                        # simple variable Python déjà résolue, insensible à ce problème.
-                        temp_dir = os.path.join(parent_directory, 'media')
-                        os.makedirs(temp_dir, exist_ok=True)
-                        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-                        img_path = os.path.join(temp_dir, f"tempete_{timestamp}.jpg")
-                        with open(img_path, 'wb') as f:
-                            f.write(r.content)
-                        log(f"[Tempête] Image téléchargée: {img_name}", "info", clear=False)
-                        result = extraire_pari_depuis_image(img_path, "Tempête Betting")
-                        try:
-                            pari_dict = json.loads(result)
-                            pari_dict["tipster"] = "TEMPÊTE BETTING"
-                            matches = pari_dict.get("matches", [])
-                            if matches:
-                                api_success = send_bet_data_to_api(pari_dict, message_original=full_url, sender_username="TEMPÊTE BETTING", image_path=img_path)
-                                if api_success:
-                                    for match in matches:
-                                        log(f"[Tempête] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
-                                        msg = f"🌪️ TEMPÊTE BETTING\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
-                                        send_telegram(Functions_telegram.alertGroup, msg)
-                                else:
-                                    log(f"[Tempête] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
-                            else:
-                                log(f"[Tempête] Aucun match extrait de {img_name}", "warning", clear=False)
-                            # Traitement réussi (avec ou sans match détecté) : marquer vue
-                            # seulement maintenant, pour qu'un échec plus haut (timeout OCR,
-                            # JSON invalide) soit retenté au prochain cycle au lieu d'être
-                            # perdu silencieusement pour toujours.
-                            _tempete_mark_seen(img_name)
-                        except json.JSONDecodeError as e:
-                            log(f"[Tempête] Erreur JSON OCR: {e}", "error", clear=False)
-                        finally:
-                            if os.path.exists(img_path):
-                                os.remove(img_path)
-                    except Exception as e:
-                        log(f"[Tempête] Erreur traitement image {img_name}: {e}", "error", clear=False)
-            else:
-                log("[Tempête] Aucune nouvelle image", "info", clear=False)
-        except Exception as e:
-            log(f"[Tempête] Erreur boucle principale: {e}", "error", clear=False)
+        _tempete_check_once()
         time.sleep(600)  # Vérification toutes les 10 minutes
 
 
@@ -585,26 +1309,18 @@ async def my_event_handler(event):
 
             if str(event.chat_id) == '1910869556':
                 bot_msg_handler(txt)
+                if len(re.findall("/relance_canaux", txt)) == 1:
+                    await relance_canaux_backlog()
                 reply = await event.get_reply_message()  # Recupère le message auquel il est repondu
                 if reply:
                     reply_raw_text = reply.raw_text  # Texte du message de reponse
-                    # Cas où on ajoute un mot a la liste
-                    if reply_raw_text == "Quel mot?":
-                        word = add_word_to_replace(txt)
-                        try:
-                            if word == True:
-                                Functions_telegram.send_telegram(auxo_bot_id, txt + ' Ajoute!')
-                        except Exception as e:
-                            log(f"Erreur : {e}", "error", clear=False)
+                    # Cas où on répond à l'invite "📝 SAISIE MANUELLE #<id>" avec la
+                    # mise et la cote réelles -- suite de l'action 'manual' de
+                    # handle_echecs_callback (un bouton ne peut pas capturer une saisie
+                    # libre, cf. _MANUAL_ENTRY_HEADER).
+                    if _MANUAL_ENTRY_HEADER in reply_raw_text:
+                        handle_manual_entry_reply(reply_raw_text, txt)
 
-                    # Cas où on supprime un mot de la liste
-                    elif reply_raw_text == "Mot a supprimer?":
-                        word = delete_word_to_replace(txt)
-                        try:
-                            if word == True:
-                                Functions_telegram.send_telegram(auxo_bot_id, txt + ' Supprime!')
-                        except Exception as e:
-                            log(f"Erreur : {e}", "error", clear=False)
             if event.chat and hasattr(event.chat, 'title') and event.chat.title == 'AdrBetting VIP':
                 txt_upper = txt.upper()
 
@@ -630,8 +1346,7 @@ async def my_event_handler(event):
                             api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username="AdrBetting VIP", image_path=image_path)
                             if api_success:
                                 for match in matches:
-                                    msg = f"🎰 AdrBetting VIP Jackpot\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
-                                    send_telegram(Functions_telegram.alertGroup, msg)
+                                    _send_pari_notification("🎰 AdrBetting VIP Jackpot", match, image_path)
                             else:
                                 log("[AdrBetting] ❌ Échec envoi pari Jackpot", "error", clear=False)
                     except json.JSONDecodeError as e:
@@ -648,40 +1363,7 @@ async def my_event_handler(event):
                     return
                 log(f"[AdrBetting] Message reçu du canal VIP — lancement du scraping", "info", clear=False)
                 # Lancer le scraping dans un thread séparé pour ne pas bloquer l'event loop Telegram
-                def _run_adrbetting_scrape():
-                    try:
-                        coupons = scrape_adrbetting_coupons()  # List[tuple(filepath, tipster)]
-                        if not coupons:
-                            log("[AdrBetting] Aucun coupon récupéré", "warning", clear=False)
-                            return
-                        log(f"[AdrBetting] {len(coupons)} coupon(s) récupéré(s), lancement OCR...", "info", clear=False)
-                        for img_path, tipster in coupons:
-                            try:
-                                log(f"[AdrBetting] OCR [{tipster}]: {os.path.basename(img_path)}", "info", clear=False)
-                                result = extraire_pari_depuis_image(img_path, txt)
-                                pari_dict = json.loads(result)
-                                pari_dict["tipster"] = tipster
-                                matches = pari_dict.get("matches", [])
-                                if matches:
-                                    api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=tipster, image_path=img_path)
-                                    if api_success:
-                                        for match in matches:
-                                            log(f"[AdrBetting] ✅ [{tipster}] Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
-                                            msg = f"🎰 {tipster}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
-                                            send_telegram(Functions_telegram.alertGroup, msg)
-                                    else:
-                                        log(f"[AdrBetting] ❌ [{tipster}] Échec envoi pari ({len(matches)} match(s))", "error", clear=False)
-                                if os.path.exists(img_path):
-                                    os.remove(img_path)
-                            except json.JSONDecodeError as e:
-                                log(f"[AdrBetting] Erreur JSON OCR [{tipster}]: {e}", "error", clear=False)
-                            except Exception as e:
-                                log(f"[AdrBetting] Erreur traitement coupon {img_path}: {e}", "error", clear=False)
-                    except Exception as e:
-                        log(f"[AdrBetting] Erreur scraping: {e}", "error", clear=False)
-
-                scrape_thread = threading.Thread(target=_run_adrbetting_scrape, daemon=True)
-                scrape_thread.start()
+                threading.Thread(target=run_adrbetting_scrape, args=(txt,), daemon=True).start()
                 return  # Ne pas traiter le message Telegram normalement
 
             if event.chat and hasattr(event.chat, 'title') and event.chat.title == 'France Pronos':
@@ -689,51 +1371,7 @@ async def my_event_handler(event):
                     log("[FrancePronos] Message ignoré (pas de lien france-pronos.com)", "info", clear=False)
                     return
                 log("[FrancePronos] Message reçu — lancement du scraping", "info", clear=False)
-                def _run_francepronos_scrape():
-                    try:
-                        pronos = scrape_francepronos()
-                        if not pronos:
-                            log("[FrancePronos] Aucun pronostic récupéré", "warning", clear=False)
-                            return
-                        log(f"[FrancePronos] {len(pronos)} pronostic(s) récupéré(s), passage à l'IA...", "info", clear=False)
-                        for raw in pronos:
-                            try:
-                                # Formatter le texte brut pour l'IA
-                                texte = (
-                                    f"Sport: {raw.get('sport', '')}\n"
-                                    f"Date: {raw.get('date', '')}\n"
-                                    f"Match: {raw.get('intitule', raw.get('equipe_1','') + ' vs ' + raw.get('equipe_2',''))}\n"
-                                    f"Équipe 1: {raw.get('equipe_1', '')}\n"
-                                    f"Équipe 2: {raw.get('equipe_2', '')}\n"
-                                    f"Sélection: {raw.get('selection', '')}\n"
-                                    f"Cote: {raw.get('odds', '')}\n"
-                                    f"Tipster: FrancePronos"
-                                )
-                                result = extraire_pari_depuis_texte(texte, txt)
-                                pari_dict = json.loads(result)
-                                pari_dict["tipster"] = "FrancePronos"
-                                matches = pari_dict.get("matches", [])
-                                if matches:
-                                    api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username="FrancePronos")
-                                    if api_success:
-                                        for match in matches:
-                                            log(f"[FrancePronos] ✅ Pari envoyé: {match.get('equipe_1')} vs {match.get('equipe_2')}", "info", clear=False)
-                                            msg = f"🇫🇷 France Pronos\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
-                                            image_url = raw.get('image')
-                                            if image_url:
-                                                send_telegram_photo(Functions_telegram.alertGroup, image_url, caption=msg)
-                                            else:
-                                                send_telegram(Functions_telegram.alertGroup, msg)
-                                    else:
-                                        log(f"[FrancePronos] ❌ Échec envoi ({len(matches)} match(s))", "error", clear=False)
-                            except json.JSONDecodeError as e:
-                                log(f"[FrancePronos] Erreur JSON IA: {e}", "error", clear=False)
-                            except Exception as e:
-                                log(f"[FrancePronos] Erreur traitement prono: {e}", "error", clear=False)
-                    except Exception as e:
-                        log(f"[FrancePronos] Erreur scraping: {e}", "error", clear=False)
-                scrape_thread = threading.Thread(target=_run_francepronos_scrape, daemon=True)
-                scrape_thread.start()
+                threading.Thread(target=run_francepronos_scrape, args=(txt,), daemon=True).start()
                 return  # Ne pas traiter le message Telegram normalement
             if sender or event.chat_id:
                 if is_ignored_sender(sender.username if sender else None, event.chat_id):
@@ -758,14 +1396,24 @@ async def my_event_handler(event):
                 # alternatifs (OR) — ex: TEMPÊTE BETTING poste soit un "PRONO DU JOUR" classique,
                 # soit une mise à jour de "PALIER X MONTANTE", les deux sont des paris valides.
                 IMAGE_CHANNELS = {
-                    "AdrBetting":        "TICKET SAFE PUBLIC",
-                    "Tennistiqueur 🎾":  "CONFIANCE",
-                    "TEMPÊTE BETTING":   ("PRONO DU JOUR", "PALIER"),
+                    "AdrBetting":          "TICKET SAFE PUBLIC",
+                    "Tennistiqueur 🎾":    "CONFIANCE",
+                    "TEMPÊTE BETTING ®️":  ("PRONO DU JOUR", "PALIER"),
                     "France Pronos Live": None,
                     "Auxo1XBOT": None
                 }
 
                 chat_title = event.chat.title if event.chat and hasattr(event.chat, "title") else ""
+                if chat_title:
+                    # Mémorise le chat_id réel par titre de canal -- relance_canaux_backlog()
+                    # en a besoin pour relire l'historique (client.get_messages), mais
+                    # client.iter_dialogs() s'est révélé peu fiable pour retrouver certains
+                    # canaux par titre (constaté le 2026-11-07 : "TEMPÊTE BETTING" jamais
+                    # trouvé alors que ce canal reçoit des messages live sans problème) --
+                    # capturer le chat_id directement depuis les events live est bien plus
+                    # fiable, au prix de devoir avoir déjà vu au moins un message du canal
+                    # depuis le dernier redémarrage (fallback iter_dialogs() sinon).
+                    _known_channel_entities[chat_title] = event.chat_id
 
                 # Détection de code 1XBET restreinte aux canaux censés en envoyer --
                 # sans ce filtre, n'importe quel mot de 5 caractères majuscules/chiffres
@@ -818,41 +1466,7 @@ async def my_event_handler(event):
                         await event.message.download_media(file=image_path)
                         log(f"Media downloaded successfully as {image_path}", "info", clear=False)
                         # Process the image
-                        result = extraire_pari_depuis_image(image_path, txt)
-                        try:
-                            pari_dict = json.loads(result)
-                            pari_dict["tipster"] = chat_title
-                            matches = pari_dict.get("matches", [])
-                            if matches:
-                                if chat_title == "France Pronos Live":
-                                    # Live : placement direct, pas de queue API (réactivité) --
-                                    # _place_live_bet_direct gère aussi la notification Telegram
-                                    # et le dédoublonnage avec le texte explicatif qui suit souvent.
-                                    _place_live_bet_direct(pari_dict, "image")
-                                # TEMPÊTE BETTING combine souvent plusieurs picks dans un même
-                                # ticket/message (ex: "PALIER X MONTANTE" = plusieurs victoires
-                                # combinées). On envoie un pari séparé par match au lieu d'un seul
-                                # pari multi-matchs, pour que chacun soit évalué/parié
-                                # individuellement côté router (sinon len(matches)>1 le fait
-                                # traiter comme un seul pari combiné, cf. place_combined_bet).
-                                elif chat_title == "TEMPÊTE BETTING" and len(matches) > 1:
-                                    api_success = True
-                                    for match in matches:
-                                        single_pari = {**pari_dict, "matches": [match]}
-                                        if not send_bet_data_to_api(single_pari, message_original=txt, sender_username=chat_title, image_path=image_path):
-                                            api_success = False
-                                    if api_success:
-                                        for match in matches:
-                                            msg = f"📩 {chat_title}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
-                                            send_telegram(Functions_telegram.alertGroup, msg)
-                                else:
-                                    api_success = send_bet_data_to_api(pari_dict, message_original=txt, sender_username=chat_title, image_path=image_path)
-                                    if api_success:
-                                        for match in matches:
-                                            msg = f"📩 {chat_title}\n{match.get('equipe_1')} vs {match.get('equipe_2')}\n🎯 {match.get('selection')} @ {match.get('odds')}"
-                                            send_telegram(Functions_telegram.alertGroup, msg)
-                        except Exception as _e:
-                            log(f"[Image] [{chat_title}] Erreur traitement OCR: {_e}", "error", clear=False)
+                        process_channel_image(chat_title, txt, image_path)
                         # Delete the downloaded image file
                         print("Attempting to delete the image file...")
                         # try:
@@ -1000,6 +1614,9 @@ confirmThread.start()
 # Thread de vérification des images publiées sur tempetebetting.com
 tempeteThread = threading.Thread(target=check_tempete_images, daemon=True)
 tempeteThread.start()
+
+callbackPollerThread = threading.Thread(target=_poll_callback_queries, daemon=True)
+callbackPollerThread.start()
 
 # Indique que le bot est demarre
 Functions_telegram.send_telegram(auxo_bot_id, "Bot 1XBET Demarre")

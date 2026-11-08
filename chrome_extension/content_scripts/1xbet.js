@@ -293,11 +293,21 @@
       // de 98.18€ marqué "validé"/envoyé à AuxoTracker, jamais réellement placé
       // sur le site). On ne vérifie que la PRÉSENCE de la notification après coup,
       // jamais qu'elle est nouvelle -- ce nettoyage préalable garantit ça.
-      for (const stale of qsa('.ui-notification-alert--status-success, .ui-notification-alert--status-error, .ui-notification-alert--status-question')) {
+      const staleSel = '.ui-notification-alert--status-success, .ui-notification-alert--status-error, .ui-notification-alert--status-question';
+      for (const stale of qsa(staleSel)) {
         const closeBtn = qs('.ui-notification-base__close', stale) || qs('.ui-notification-base__close');
         if (closeBtn) closeBtn.click();
       }
-      await sleep(200);
+      // Attend que les notifications périmées aient vraiment disparu du DOM avant de
+      // cliquer -- un simple click() sur le bouton fermer + sleep(200) fixe ne garantit
+      // pas que l'animation de fermeture soit terminée ; si une notification périmée
+      // traîne encore au moment du clic, la vérification post-clic ci-dessous peut la
+      // retomber dessus et déclarer CE pari validé alors que rien n'a été réellement
+      // soumis pour lui (même faux positif que celui déjà documenté le 2026-11-02).
+      {
+        const staleWaitStart = Date.now();
+        while (qs(staleSel) && Date.now() - staleWaitStart < 1000) await sleep(100);
+      }
 
       btn.click();
       await sleep(1500);
@@ -313,7 +323,12 @@
       }
 
       // Notification d'erreur ou question (cote modifiée, mise max, pari déjà placé, etc.)
-      notif = qs('.ui-notification-alert--status-error, .ui-notification-alert--status-question');
+      // -- attend aussi (waitFor, pas qs instantané) : sans délai propre, une erreur qui
+      // met un peu plus longtemps que la fenêtre de succès ci-dessus à s'afficher était
+      // manquée, et le pari finissait en "no_confirmation_found" (considéré échoué) alors
+      // qu'un vrai message (succès OU erreur) allait apparaître l'instant d'après --
+      // signalé le 2026-11-08 ("la fenêtre n'a pas le temps de s'afficher").
+      notif = await waitFor('.ui-notification-alert--status-error, .ui-notification-alert--status-question', 2000);
       if (notif) {
         const text = (notif.textContent || '').trim();
         const alreadyPlaced = /déjà|peut être accepté/i.test(text);
