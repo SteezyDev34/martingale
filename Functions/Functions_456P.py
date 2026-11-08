@@ -135,6 +135,17 @@ def all_script(driver):
         GetIfGameEnd(driver)
     RetourTpsReg(driver)
     passageset = False
+    # Détecte la boucle "else:" (plus bas) qui tourne sans jamais déclencher
+    # passageset=True -- config.newset (global persistant entre matchs, jamais
+    # réinitialisé en arrivant sur un nouveau match/set) peut rester désynchronisé
+    # de config.set_actuel indéfiniment : la seule façon de le remettre à jour
+    # est justement cette condition "newset == set_actuel", donc s'il part
+    # décalé, plus rien ne le recale jamais (constaté en live le 2026-11-08,
+    # 6P bloqué en boucle "JEU START ON PREPARE LE PROCHAIN BET"/"ATTENTE DEBUT
+    # DE JEU" sans aucune pause, set 3 jamais traité). Resynchronise de force
+    # après quelques passages sans transition détectée.
+    _stale_passageset_count = 0
+    _STALE_PASSAGESET_RESYNC = 15
     while not config.error:
         GetJeuActuel(driver)
         # WAIT FOR GAME START
@@ -240,7 +251,20 @@ def all_script(driver):
                 config.newset = int(config.set_actuel) + 1
                 config.log(txtlog, config.newmatch)
                 DeleteBet(driver)
+                _stale_passageset_count = 0
                 continue
+            _stale_passageset_count += 1
+            if _stale_passageset_count >= _STALE_PASSAGESET_RESYNC:
+                # newset désynchronisé de set_actuel sans espoir de se recaler tout
+                # seul (cf. commentaire plus haut) -- force la resynchronisation.
+                config.log(f"newset ({config.newset}) désynchronisé de set_actuel ({config.set_actuel}) depuis {_stale_passageset_count} passages -- resynchronisation forcée", 'warning', False)
+                config.newset = int(config.set_actuel)
+                _stale_passageset_count = 0
+            else:
+                # Pas de pause auparavant ici -- si GetIfGameStart (ci-dessous) revient
+                # vite (score déjà avancé, lu à chaque passage), toute cette boucle
+                # tournait sans aucune pause (constaté en live le 2026-11-08, 6P).
+                time.sleep(1)
             print('ATTENTE DEBUT DE JEU')
             GetIfGameStart(driver)
         # JEU FINI ON PREPARE LE IPROCHAIN BET

@@ -272,6 +272,14 @@ def all_script(driver):
     # par un autre process sur le même match).
     _stale_jeu_count = 0
     _STALE_JEU_FORCE_RELOAD = 90  # ~90 * 2s de sleep ci-dessous ≈ 3 min
+    # Même logique que _stale_jeu_count mais pour config.newset (global persistant
+    # entre matchs, jamais réinitialisé en arrivant sur un nouveau match) qui peut
+    # rester désynchronisé de config.jeu_actuel indéfiniment -- la seule façon de
+    # le remettre à jour est justement la condition "newset == jeu_actuel" plus
+    # bas, donc s'il part décalé, plus rien ne le recale jamais (même bug que
+    # celui corrigé le 2026-11-08 dans Functions_431a.py/Functions_456P.py).
+    _stale_passageset_count = 0
+    _STALE_PASSAGESET_RESYNC = 15
     allfirstgamebet = False
     while not allfirstgamebet:
         allfirstgamebet = True
@@ -457,7 +465,13 @@ def all_script(driver):
                 config.newset = int(config.jeu_actuel) + 1
                 config.log(txtlog, config.newmatch)
                 DeleteBet(driver)
+                _stale_passageset_count = 0
                 continue
+            _stale_passageset_count += 1
+            if _stale_passageset_count >= _STALE_PASSAGESET_RESYNC:
+                config.log(f"newset ({config.newset}) désynchronisé de jeu_actuel ({config.jeu_actuel}) depuis {_stale_passageset_count} passages -- resynchronisation forcée", 'warning', False)
+                config.newset = int(config.jeu_actuel)
+                _stale_passageset_count = 0
             if firstjeu or int(current_game) != int(config.jeu_actuel):
                 print('firstjeu', firstjeu)
                 print('current_game', current_game)

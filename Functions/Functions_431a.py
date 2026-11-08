@@ -186,6 +186,16 @@ def all_script(driver):
         GetIfGameEnd(driver)
     RetourTpsReg(driver)
     passageset = False
+    # Détecte le cas où config.newset (global persistant entre matchs, jamais
+    # réinitialisé en arrivant sur un nouveau match/set) reste désynchronisé de
+    # config.set_actuel indéfiniment -- la seule façon de le remettre à jour est
+    # justement la condition "newset == set_actuel" ci-dessous, donc s'il part
+    # décalé, plus rien ne le recale jamais et la transition de set (Site A,
+    # bet placing + checks FIN inclus) n'est plus jamais traitée (même bug que
+    # celui corrigé le 2026-11-08 dans Functions_456P.py). Resynchronise de
+    # force après quelques passages sans transition détectée.
+    _stale_passageset_count = 0
+    _STALE_PASSAGESET_RESYNC = 15
     RedisIPC.set_running(config.scriptType, True, config.newmatch)
     while not config.error:
         GetJeuActuel(driver)
@@ -298,7 +308,13 @@ def all_script(driver):
                 config.newset = int(config.set_actuel) + 1
                 config.log(txtlog, config.newmatch)
                 DeleteBet(driver)
+                _stale_passageset_count = 0
                 continue
+            _stale_passageset_count += 1
+            if _stale_passageset_count >= _STALE_PASSAGESET_RESYNC:
+                config.log(f"newset ({config.newset}) désynchronisé de set_actuel ({config.set_actuel}) depuis {_stale_passageset_count} passages -- resynchronisation forcée", 'warning', False)
+                config.newset = int(config.set_actuel)
+                _stale_passageset_count = 0
             if firstjeu or int(current_game) != int(config.jeu_actuel):
                 print('firstjeu', firstjeu)
                 print('current_game', current_game)
