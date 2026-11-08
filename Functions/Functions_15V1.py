@@ -262,6 +262,16 @@ def all_script(driver):
         config.error = True
     firstjeu = True
     current_game = int(config.jeu_actuel)
+    # Compteur de passages consécutifs où le jeu n'a pas changé (cf. plus bas,
+    # branche "jeu inchangé") -- sert à détecter un onglet/connexion bridge
+    # figé pour CE process (chaque scriptType a son propre onglet 1xBet,
+    # d'autres process peuvent très bien continuer de lire le score à jour sur
+    # LEUR propre onglet pendant que celui-ci reste bloqué). Constaté en live
+    # le 2026-11-08 sur 15V1 et 15V2 : jeu resté figé ~4min alors que le vrai
+    # match avait progressé de 2 jeux (confirmé via match_score, mis à jour
+    # par un autre process sur le même match).
+    _stale_jeu_count = 0
+    _STALE_JEU_FORCE_RELOAD = 90  # ~90 * 2s de sleep ci-dessous ≈ 3 min
     allfirstgamebet = False
     while not allfirstgamebet:
         allfirstgamebet = True
@@ -441,6 +451,7 @@ def all_script(driver):
                 time.sleep(2)
                 firstjeu = False
                 current_game = config.jeu_actuel
+                _stale_jeu_count = 0
             else:
                 # Pas de sleep ici auparavant -- contrairement à la branche "jeu changé"
                 # ci-dessus (2s), ce cas (jeu INCHANGÉ, le cas normal en attendant un point
@@ -450,6 +461,21 @@ def all_script(driver):
                 # des dizaines de lignes "verification du jeu actuel" par seconde
                 # (constaté le 2026-11-06, 15V2). Alignée sur l'autre branche.
                 time.sleep(2)
+                _stale_jeu_count += 1
+                if _stale_jeu_count >= _STALE_JEU_FORCE_RELOAD:
+                    # Onglet/connexion bridge de CE process figé (cf. commentaire plus
+                    # haut) -- forcer un vrai rechargement de la page du match pour
+                    # tenter de reconnecter/resynchroniser, plutôt que de rester bloqué
+                    # indéfiniment sur un jeu périmé.
+                    config.log(f"Jeu inchangé depuis {_stale_jeu_count * 2}s, onglet probablement figé -- rechargement forcé", 'warning', False)
+                    try:
+                        from websocket_server import bridge
+                        if bridge.connected and config.match_Url:
+                            bridge.navigate(config.match_Url, force=True)
+                            time.sleep(3)
+                    except Exception as e:
+                        config.log(f"Échec du rechargement forcé: {e}", 'warning', False)
+                    _stale_jeu_count = 0
                 config.log('verification du jeu actuel dans tous les script')
                 ok = True
                 for scriptType in config.scriptTypeList:
