@@ -309,6 +309,19 @@ def all_script(driver):
     while not config.error:
         GetJeuActuel(driver)
 
+        # 15V1/15V2 n'ont qu'UN SEUL scriptType dans leur liste -- si FisrtGameBet.py
+        # l'a retiré (marché introuvable après 3 tentatives, cf. "retiré de
+        # scriptTypeList"), la liste est maintenant vide. Sans ce garde-fou, la boucle
+        # "verification du jeu actuel" ci-dessous itère sur une liste vide pour
+        # toujours : plus aucun FIN/sortie n'est jamais évalué, le process reste
+        # bloqué indéfiniment sur ce match sans rien faire (constaté en live le
+        # 2026-11-08). Traiter comme un FIN normal : plus rien à parier ici, repartir
+        # sur une recherche de nouveau match.
+        if not config.scriptTypeList:
+            config.log(f"{config.scriptType}: plus aucun scriptType actif sur ce match (marché introuvable), fin de match", 'warning', False)
+            RedisIPC.set_running(config.scriptType, False, config.newmatch)
+            return True
+
         # WAIT FOR GAME START
         if passageset:
             GetSetActuel(driver)
