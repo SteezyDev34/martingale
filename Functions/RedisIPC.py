@@ -1225,7 +1225,7 @@ def add_gain_to_all(gain_value: float, matchname: str = 'GLOBAL') -> bool:
         return False
 
 
-def get_total_loss(matchname: str = None, default: float = 0.0) -> float:
+def get_total_loss(matchname: str = None, default: float = 0.0, exclude_script_types=None) -> float:
     """
     Retourne la somme des pertes cumulées de tous les script types confondus.
 
@@ -1234,6 +1234,14 @@ def get_total_loss(matchname: str = None, default: float = 0.0) -> float:
             ce match uniquement (évite de comparer un gain par match à une perte
             globale tous matchs confondus lorsque plusieurs matchs tournent en
             parallèle). Si omis, comportement historique : somme de tout.
+        exclude_script_types (Iterable[str]): script_types à exclure de la somme --
+            utilisé pour les checks "sortie complète du match bloquée tant que perte
+            en cours" (ex: Functions_431a.py/Functions_456P.py), avec ('15V1', '15V2')
+            pour les mêmes raisons que deduct_largest les exclut déjà des scriptTypes
+            empruntables : leur perte n'est récupérable par personne d'autre qu'eux-
+            mêmes, donc 1530A/456P ne doit jamais attendre qu'elle se résolve (sinon
+            blocage permanent si ces process sont arrêtés -- constaté le 2026-11-08).
+            Si omis, comportement historique : aucune exclusion.
 
     Returns:
         float: total des pertes, ou `default` si la table est vide ou en cas d'erreur
@@ -1241,10 +1249,22 @@ def get_total_loss(matchname: str = None, default: float = 0.0) -> float:
     try:
         conn = _get_sqlite_conn()
         cur = conn.cursor()
+        exclude_script_types = [str(st).upper() for st in exclude_script_types] if exclude_script_types else []
         if matchname is not None:
-            cur.execute("SELECT SUM(loss) FROM perte WHERE matchname = ?", (str(matchname),))
+            if exclude_script_types:
+                placeholders = ','.join('?' for _ in exclude_script_types)
+                cur.execute(
+                    f"SELECT SUM(loss) FROM perte WHERE matchname = ? AND script_type NOT IN ({placeholders})",
+                    (str(matchname), *exclude_script_types),
+                )
+            else:
+                cur.execute("SELECT SUM(loss) FROM perte WHERE matchname = ?", (str(matchname),))
         else:
-            cur.execute("SELECT SUM(loss) FROM perte")
+            if exclude_script_types:
+                placeholders = ','.join('?' for _ in exclude_script_types)
+                cur.execute(f"SELECT SUM(loss) FROM perte WHERE script_type NOT IN ({placeholders})", tuple(exclude_script_types))
+            else:
+                cur.execute("SELECT SUM(loss) FROM perte")
         row = cur.fetchone()
         conn.close()
         if not row or row[0] is None:
