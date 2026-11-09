@@ -295,7 +295,13 @@ def all_script(driver):
                     config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                'success', False)
                 return True
-            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+            # cf. commentaire détaillé plus bas (bloc "verification du jeu actuel") : même
+            # garde-fou get_total_loss ajouté ici pour éviter un faux FIN sur un creux
+            # momentané de list_running() (les autres scriptTypes togglent running=0/1
+            # entre deux cycles).
+            if (float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType])
+                    or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch)
+                    or RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) > 0):
                 config.log(
                     f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
             else:
@@ -507,7 +513,18 @@ def all_script(driver):
                 ok = True
                 for scriptType in config.scriptTypeList:
                     config.switchScript(scriptType)
-                    if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+                    # list_running() seul est sujet à un faux FIN : les autres scriptTypes
+                    # (1530A/456P) togglent brièvement leur flag running=0/1 entre deux
+                    # cycles de pari -- si ce check tombe pile dans ce creux, il concluait
+                    # à tort "plus personne d'actif" et déclenchait FIN, repartant aussitôt
+                    # sur un nouveau pari (même perte jamais remise à 0) : boucle de paris
+                    # réels toutes les ~2s observée en direct le 2026-11-09 sur
+                    # duckworth-cameron-norrie. Ajout du même garde-fou robuste (perte
+                    # active réelle, via la table perte/running jointe, pas un flag
+                    # instantané) que les autres points de sortie de ce fichier.
+                    if (float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType])
+                            or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch)
+                            or RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) > 0):
                         config.log(f'Net profit: {config.global_match_win[scriptType]}')
                     else:
                         config.log(f'Net profit: {config.global_match_win[scriptType]}')
@@ -531,7 +548,9 @@ def all_script(driver):
                 return True
             print('is running for ',config.newmatch)
             print(RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch))
-            if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+            if (float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType])
+                    or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch)
+                    or RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) > 0):
                 config.log(
                     f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
             else:
@@ -667,7 +686,9 @@ def all_script(driver):
                 config.validated_bet = {}
 
                 print(RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch))
-                if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]) or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+                if (float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType])
+                        or RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch)
+                        or RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) > 0):
 
                     #GetIfGameEnd(driver)
 
