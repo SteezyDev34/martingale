@@ -807,16 +807,16 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
     Retourne la perte la plus grande stockée dans SQLite sans la modifier.
     Exclut les script_types 15V1 et 15V2 (jamais rattrapés par ce mécanisme),
     SAUF l'un envers l'autre quand la perte GLOBALE (somme de TOUS les
-    scriptTypes, tous matchs confondus) dépasse 30€ -- 15V1 peut alors
+    scriptTypes, tous matchs confondus) dépasse 50€ -- 15V1 peut alors
     emprunter à 15V2 (et inversement), mais toujours pas à lui-même. Le
     déclencheur est la perte globale, pas la perte propre de l'emprunteur
     (corrigé le 2026-11-09 : la première version ne regardait que la perte
     du script appelant, qui peut rester petite -- ex: 15V1 à 6.87€ -- alors
     que 15V2 a 345€ de perte non récupérée sur le même match ; la perte
-    globale, elle, dépasse largement 30€ dans ce cas). Une fois 15V2 (ou
+    globale, elle, dépasse largement 50€ dans ce cas). Une fois 15V2 (ou
     15V1) éligible, c'est toujours la plus grosse perte disponible tous
     scripts confondus qui est choisie (ORDER BY loss DESC), pas forcément
-    15V1/15V2 lui-même. En dessous de 30€ de perte globale, ou pour tout
+    15V1/15V2 lui-même. En dessous de 50€ de perte globale, ou pour tout
     autre scriptType (1530A/456P), le comportement reste inchangé : 15V1/
     15V2 restent hors du pool empruntable.
 
@@ -837,7 +837,7 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
         tuple: `(script_type, perte)` de l'entrée avec la plus grande perte,
                ou None si aucune perte positive n'existe.
     """
-    _CROSS_15V_THRESHOLD = 30.0
+    _CROSS_15V_THRESHOLD = 50.0
     exclude = {'15V1', '15V2'}
     try:
         import config
