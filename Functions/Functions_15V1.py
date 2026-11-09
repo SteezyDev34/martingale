@@ -285,6 +285,16 @@ def all_script(driver):
         allfirstgamebet = True
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
+            # Réaffirme running=1 à chaque passage actif sur ce scriptType -- sans ça,
+            # un FIN déclaré une fois (ex: objectif ponctuellement atteint avant que
+            # la perte globale ne le bloque, cf. garde-fou get_total_loss plus haut)
+            # laissait running=0 alors que le scriptType continuait réellement à
+            # parier juste après : deduct_largest() traite un match running=0 comme
+            # abandonné et refuse d'y puiser, empêchant 15V1/15V2 de se récupérer
+            # mutuellement même avec le seuil de 30€ dépassé (perte réelle observée
+            # en direct le 2026-11-09 : 15V2 à 119€ sur machac-borna-gojo, running=0,
+            # jamais recouvrée par 15V1 malgré des paris 15V2 toujours actifs).
+            RedisIPC.set_running(config.scriptType, True, config.newmatch)
             # Arrêt individuel par scriptType (objectif propre total_want_win[scriptType]) —
             # l'objectif global config.total_gain_wanted n'est plus utilisé (aligné sur 431a).
             all_below_one = all(
@@ -352,6 +362,9 @@ def all_script(driver):
             config.log(txtlog, config.newmatch)
             for scriptType in config.scriptTypeList:
                 config.switchScript(scriptType)
+                # Réaffirme running=1 à chaque passage actif sur ce scriptType -- cf.
+                # commentaire détaillé sur les autres occurrences de ce même ajout.
+                RedisIPC.set_running(config.scriptType, True, config.newmatch)
                 # Arrêt individuel par scriptType — objectif global retiré.
                 all_below_one = all(
                     float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
@@ -513,6 +526,9 @@ def all_script(driver):
                 ok = True
                 for scriptType in config.scriptTypeList:
                     config.switchScript(scriptType)
+                    # Réaffirme running=1 à chaque passage actif sur ce scriptType -- cf.
+                    # commentaire détaillé sur les autres occurrences de ce même ajout.
+                    RedisIPC.set_running(config.scriptType, True, config.newmatch)
                     # list_running() seul est sujet à un faux FIN : les autres scriptTypes
                     # (1530A/456P) togglent brièvement leur flag running=0/1 entre deux
                     # cycles de pari -- si ce check tombe pile dans ce creux, il concluait
@@ -537,6 +553,16 @@ def all_script(driver):
         current_game = int(config.jeu_actuel)
         for scriptType in config.scriptTypeList:
             config.switchScript(scriptType)
+            # Réaffirme running=1 à chaque passage actif sur ce scriptType -- sans ça,
+            # un FIN déclaré une fois (ex: objectif ponctuellement atteint avant que
+            # la perte globale ne le bloque, cf. garde-fou get_total_loss plus haut)
+            # laissait running=0 alors que le scriptType continuait réellement à
+            # parier juste après : deduct_largest() traite un match running=0 comme
+            # abandonné et refuse d'y puiser, empêchant 15V1/15V2 de se récupérer
+            # mutuellement même avec le seuil de 30€ dépassé (perte réelle observée
+            # en direct le 2026-11-09 : 15V2 à 119€ sur machac-borna-gojo, running=0,
+            # jamais recouvrée par 15V1 malgré des paris 15V2 toujours actifs).
+            RedisIPC.set_running(config.scriptType, True, config.newmatch)
             # Check if all script types have global_match_win > 1
             all_below_one = all(
                 float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
