@@ -1285,32 +1285,31 @@ def compute_script_types_from_match_data(match_data, mode=None, ligue_name=None)
     # 15V1 cible le FAVORI du match (classement ATP/WTA le plus bas), 15V2 le
     # non-favori — chacun un process Chrome séparé (VALID_SCRIPTTYPES_15V1/15V2
     # dans config.py garantit que l'un n'hérite jamais du scriptType de l'autre).
-    # Chacun n'est activé QUE si SON propre risque de perdre tout son jeu de
-    # service à zéro (SERVERLOSS, prob_server_loss1/2 côté AuxoTracker) reste
-    # sous un seuil "acceptable" (demandé le 2026-10-28 — "si leurs stats le
-    # permettent"). Pas de cote de référence pour ce marché -> pas d'edge, mode
-    # strict/in_set/loose ne s'applique pas ici.
-    _SERVER_LOSS_SAFE_THRESHOLD = 5.0  # %, sous ce seuil = "les stats le permettent"
+    # Ajoutés d'office dès que le match a au moins un AUTRE scriptType activé
+    # (demandé le 2026-11-09, remplace l'ancien filtre SERVERLOSS<5% du
+    # 2026-10-28 : en pratique l'utilisateur forçait systématiquement 15V1/15V2
+    # manuellement sur les matchs où ce filtre les excluait -- ex: James
+    # Duckworth/Cameron Norrie et Hugo Grenier/Martin Krumich le 2026-11-09,
+    # SERVERLOSS à 7.42% pourtant au-dessus du seuil). ranking1/ranking2 restent
+    # nécessaires : c'est ce qui détermine qui est favori/outsider pour cibler
+    # le bon joueur, indépendamment du risque jugé acceptable ou non.
     ranking1 = (match_data.get('team1') or {}).get('ranking')
     ranking2 = (match_data.get('team2') or {}).get('ranking')
     server_loss1 = probs_in_set.get('SERVERLOSS_1')
     server_loss2 = probs_in_set.get('SERVERLOSS_2')
-    if (ranking1 is not None and ranking2 is not None and float(ranking1) != float(ranking2)
-            and server_loss1 is not None and server_loss2 is not None):
+    if script_types and ranking1 is not None and ranking2 is not None and float(ranking1) != float(ranking2):
         favori_is_1 = float(ranking1) < float(ranking2)
-        favori_loss = float(server_loss1) if favori_is_1 else float(server_loss2)
-        underdog_loss = float(server_loss2) if favori_is_1 else float(server_loss1)
-        if favori_loss < _SERVER_LOSS_SAFE_THRESHOLD:
-            script_types.append('15V1')
-            details['15V1'] = {
-                'favori_ranking': ranking1 if favori_is_1 else ranking2,
-                'server_loss': favori_loss, 'threshold': _SERVER_LOSS_SAFE_THRESHOLD,
-            }
-        if underdog_loss < _SERVER_LOSS_SAFE_THRESHOLD:
-            script_types.append('15V2')
-            details['15V2'] = {
-                'underdog_ranking': ranking2 if favori_is_1 else ranking1,
-                'server_loss': underdog_loss, 'threshold': _SERVER_LOSS_SAFE_THRESHOLD,
-            }
+        favori_loss = (float(server_loss1) if server_loss1 is not None else None) if favori_is_1 else (float(server_loss2) if server_loss2 is not None else None)
+        underdog_loss = (float(server_loss2) if server_loss2 is not None else None) if favori_is_1 else (float(server_loss1) if server_loss1 is not None else None)
+        script_types.append('15V1')
+        details['15V1'] = {
+            'favori_ranking': ranking1 if favori_is_1 else ranking2,
+            'server_loss': favori_loss,
+        }
+        script_types.append('15V2')
+        details['15V2'] = {
+            'underdog_ranking': ranking2 if favori_is_1 else ranking1,
+            'server_loss': underdog_loss,
+        }
 
     return script_types, details
