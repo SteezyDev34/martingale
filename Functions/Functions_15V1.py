@@ -157,7 +157,7 @@ def all_script(driver):
             sofascore_link = match_manager.get_match_link(config.newmatch)
             print(f"lien SofaScore récupéré localement: {sofascore_link}")
             config.sofascore_link = sofascore_link or ''
-            if sofascore_link and isinstance(sofascore_link, str) and sofascore_link.startswith('http'):
+            if sofascore_link and isinstance(sofascore_link, str) and sofascore_link.startswith('http') and driver is not None:
                 config.log(f"Lien SofaScore trouvé localement: {sofascore_link}", 'info', False, 1)
                 # Ouvrir le lien dans un nouvel onglet et revenir à l'onglet original
                 try:
