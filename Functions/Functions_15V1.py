@@ -304,6 +304,7 @@ def all_script(driver):
                 for st in config.scriptTypeList:
                     config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                'success', False)
+                    RedisIPC.set_running(st, False)
                 return True
             # cf. commentaire détaillé plus bas (bloc "verification du jeu actuel") : même
             # garde-fou get_total_loss ajouté ici pour éviter un faux FIN sur un creux
@@ -375,6 +376,7 @@ def all_script(driver):
                         config.log(
                             f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                             'success', False)
+                        RedisIPC.set_running(st, False)
                     return True
                 if float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType]):
                     config.log(
