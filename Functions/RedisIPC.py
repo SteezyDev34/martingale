@@ -837,12 +837,16 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
         tuple: `(script_type, perte)` de l'entrée avec la plus grande perte,
                ou None si aucune perte positive n'existe.
     """
+    # Coupure temporaire (demandée le 2026-11-09) : désactive l'emprunt croisé
+    # 15V1/15V2 sans retirer le mécanisme -- repasser à True pour le
+    # réactiver (seuil et logique inchangés une fois réactivé).
+    _CROSS_15V_ENABLED = False
     _CROSS_15V_THRESHOLD = 50.0
     exclude = {'15V1', '15V2'}
     try:
         import config
         caller = getattr(config, 'scriptType', None)
-        if caller in ('15V1', '15V2') and get_total_loss() > _CROSS_15V_THRESHOLD:
+        if _CROSS_15V_ENABLED and caller in ('15V1', '15V2') and get_total_loss() > _CROSS_15V_THRESHOLD:
             exclude.discard('15V2' if caller == '15V1' else '15V1')
     except Exception:
         pass
