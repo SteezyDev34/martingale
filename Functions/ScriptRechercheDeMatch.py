@@ -1157,24 +1157,24 @@ def _ajouter_matchs_todo(matches):
             config.log(f"Erreur lors de l'ajout du match: {str(e)}", 'error', False)
 
 
-# Matchs déjà passés par le classement à la volée dans ce process (succès ou non) :
-# évite de réinterroger l'API stats à chaque passage de la recherche live.
-_classement_volee_fait = set()
-
-
 def _classer_match_a_la_volee(p1, p2, ligue_name, match_id):
     """
     Classement à la volée d'un match live absent de matches_todo (ex : match ITF
     décalé, plus listé en pré-match au moment du classement du jour) : calcule ses
     scriptTypes via l'API auxotracker exactement comme le classement (traiter_matchlist)
-    et l'ajoute à matches_todo s'il en a. Une seule tentative par match et par process.
-    Retourne True si le match a au moins un scriptType valide pour ce bot.
+    et l'ajoute à matches_todo s'il en a. Retourne True si le match a au moins un
+    scriptType valide pour ce bot.
+
+    Retentée à CHAQUE passage de la recherche live tant que le match reste sans
+    scriptType exploitable (plus de blocage "une seule tentative par process") : les
+    stats auxotracker peuvent devenir suffisantes/fiables (ex: sample_games_set1 qui
+    grossit) après un premier échec, un match rejeté une fois mérite donc d'être
+    réessayé plutôt qu'ignoré pour le reste du process (changement demandé le
+    2026-11-09). Rien n'est écrit en base sur un échec (_ajouter_matchs_todo n'est
+    appelé qu'en cas de succès), donc rien à invalider ici pour permettre le retry.
     """
-    if match_id in _classement_volee_fait:
-        return False
-    _classement_volee_fait.add(match_id)
     if match_manager.get_match_script_config(match_id):
-        return False  # déjà classé (scriptTypes d'une autre famille ou aucun)
+        return False  # déjà classé (scriptTypes d'une autre famille ou aucun) -- recalculer ne changerait rien
     config.log(f'{match_id} absent du classement : calcul des scriptTypes à la volée', 'info', False, 4, False)
     match_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     goodmatch = traiter_matchlist([[[p1, p2], ligue_name, match_id, match_date]])
