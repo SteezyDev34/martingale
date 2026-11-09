@@ -806,14 +806,19 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
     """
     Retourne la perte la plus grande stockée dans SQLite sans la modifier.
     Exclut les script_types 15V1 et 15V2 (jamais rattrapés par ce mécanisme),
-    SAUF l'un envers l'autre quand l'emprunteur (15V1 ou 15V2) a déjà sa
-    propre perte au-dessus de 30€ -- 15V1 peut alors emprunter à 15V2 (et
-    inversement), mais toujours pas à lui-même. Seuil choisi par
-    l'utilisateur (demandé le 2026-11-09), même principe que le seuil >1€
-    existant plus bas qui fait passer le taux de récupération de 100% à 50%.
-    En dessous de 30€ de perte propre, ou pour tout autre scriptType
-    (1530A/456P), le comportement reste inchangé : 15V1/15V2 restent hors
-    du pool empruntable.
+    SAUF l'un envers l'autre quand la perte GLOBALE (somme de TOUS les
+    scriptTypes, tous matchs confondus) dépasse 30€ -- 15V1 peut alors
+    emprunter à 15V2 (et inversement), mais toujours pas à lui-même. Le
+    déclencheur est la perte globale, pas la perte propre de l'emprunteur
+    (corrigé le 2026-11-09 : la première version ne regardait que la perte
+    du script appelant, qui peut rester petite -- ex: 15V1 à 6.87€ -- alors
+    que 15V2 a 345€ de perte non récupérée sur le même match ; la perte
+    globale, elle, dépasse largement 30€ dans ce cas). Une fois 15V2 (ou
+    15V1) éligible, c'est toujours la plus grosse perte disponible tous
+    scripts confondus qui est choisie (ORDER BY loss DESC), pas forcément
+    15V1/15V2 lui-même. En dessous de 30€ de perte globale, ou pour tout
+    autre scriptType (1530A/456P), le comportement reste inchangé : 15V1/
+    15V2 restent hors du pool empruntable.
 
     Args:
         matchname (str): si fourni, cherche d'abord une perte sur CE match. Si
@@ -837,8 +842,7 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
     try:
         import config
         caller = getattr(config, 'scriptType', None)
-        caller_perte = float(getattr(config, 'perte', 0) or 0)
-        if caller in ('15V1', '15V2') and caller_perte > _CROSS_15V_THRESHOLD:
+        if caller in ('15V1', '15V2') and get_total_loss() > _CROSS_15V_THRESHOLD:
             exclude.discard('15V2' if caller == '15V1' else '15V1')
     except Exception:
         pass
