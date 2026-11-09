@@ -1271,7 +1271,16 @@ def get_total_loss(matchname: str = None, default: float = 0.0, exclude_script_t
         matchname (str): si fourni, restreint la somme aux pertes enregistrées pour
             ce match uniquement (évite de comparer un gain par match à une perte
             globale tous matchs confondus lorsque plusieurs matchs tournent en
-            parallèle). Si omis, comportement historique : somme de tout.
+            parallèle). Si omis, comportement historique : somme de tout -- utilisé
+            volontairement SANS matchname (tous matchs confondus) pour le check de
+            sortie 15V1/15V2 : une perte active sur un AUTRE match doit aussi les
+            empêcher de sortir, pas seulement une perte sur le match courant
+            (corrigé le 2026-11-09 : 15V1 avait quitté duckworth-cameron-norrie
+            alors qu'une perte de 3.78€ (150) puis 1.92€ (300) était encore active
+            sur rolland-de-ravel, un match totalement différent géré en parallèle
+            par 1530A -- la perte scopée au seul match courant laissait passer ce
+            cas, alors que deduct_largest() emprunte déjà sans distinction de
+            match).
         exclude_script_types (Iterable[str]): script_types à exclure de la somme --
             utilisé pour les checks "sortie complète du match bloquée tant que perte
             en cours" (ex: Functions_431a.py/Functions_456P.py), avec ('15V1', '15V2')
@@ -1280,14 +1289,17 @@ def get_total_loss(matchname: str = None, default: float = 0.0, exclude_script_t
             mêmes, donc 1530A/456P ne doit jamais attendre qu'elle se résolve (sinon
             blocage permanent si ces process sont arrêtés -- constaté le 2026-11-08).
             Si omis, comportement historique : aucune exclusion.
-        only_active (bool) : si vrai (nécessite `matchname`), ne compte que la perte
-            des script_types encore marqués running=1 sur CE match (table running) --
-            une perte dont le process propriétaire est reparti sur un autre match
-            (ou s'est arrêté) est abandonnée, personne ne viendra jamais la recouvrir
-            : elle ne doit pas bloquer indéfiniment la sortie d'un autre scriptType
-            qui attendrait sa résolution (constaté le 2026-11-08 sur 015/
-            ferrari-michele-mecarelli, 1530A reparti sur un autre match avec cette
-            perte encore ouverte, bloquant 15V1 pour toujours).
+        only_active (bool) : ne compte que la perte des (script_type, matchname)
+            encore marqués running=1 (table running) -- une perte dont le process
+            propriétaire est reparti sur un autre match (ou s'est arrêté) est
+            abandonnée, personne ne viendra jamais la recouvrir : elle ne doit pas
+            bloquer indéfiniment la sortie d'un autre scriptType qui attendrait sa
+            résolution (constaté le 2026-11-08 sur 015/ferrari-michele-mecarelli,
+            1530A reparti sur un autre match avec cette perte encore ouverte,
+            bloquant 15V1 pour toujours). Fonctionne avec OU sans `matchname` --
+            sans `matchname`, le filtre running porte sur le couple
+            (script_type, matchname) de chaque ligne de perte, pas sur un seul
+            match (cf. `matchname=None` ci-dessous pour le cas d'usage).
 
     Returns:
         float: total des pertes, ou `default` si la table est vide ou en cas d'erreur
@@ -1313,11 +1325,21 @@ def get_total_loss(matchname: str = None, default: float = 0.0, exclude_script_t
             else:
                 cur.execute(f"SELECT SUM(perte.loss) FROM perte WHERE perte.matchname = ?{exclude_clause}", tuple(params))
         else:
+            exclude_clause = ''
+            params = []
             if exclude_script_types:
                 placeholders = ','.join('?' for _ in exclude_script_types)
-                cur.execute(f"SELECT SUM(loss) FROM perte WHERE script_type NOT IN ({placeholders})", tuple(exclude_script_types))
+                exclude_clause = f" AND perte.script_type NOT IN ({placeholders})"
+                params = list(exclude_script_types)
+            if only_active:
+                cur.execute(
+                    "SELECT SUM(perte.loss) FROM perte "
+                    "JOIN running ON running.script_type = perte.script_type AND running.matchname = perte.matchname "
+                    f"WHERE running.is_running = 1{exclude_clause}",
+                    tuple(params),
+                )
             else:
-                cur.execute("SELECT SUM(loss) FROM perte")
+                cur.execute(f"SELECT SUM(loss) FROM perte WHERE 1=1{exclude_clause}", tuple(params))
         row = cur.fetchone()
         conn.close()
         if not row or row[0] is None:
