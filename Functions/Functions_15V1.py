@@ -805,10 +805,22 @@ def all_script(driver):
                         # firstjeu = True
                     current_game = int(config.jeu_actuel)
                 else:
+                    # Même sortie complète que le check équivalent avant l'attente
+                    # GetIfGameEnd plus haut (sinon ce check -- qui ne fait que logger
+                    # FIN sans jamais return True -- laissait la boucle reprendre un
+                    # nouveau jeu alors que l'objectif était atteint et plus personne
+                    # d'autre actif : les autres scriptTypes avaient déjà quitté ce
+                    # match PENDANT l'attente bloquante de fin de jeu, mais ce
+                    # process-ci repartait quand même au lieu de partir en même temps
+                    # (observé en direct le 2026-11-10).
                     config.log(
-                        f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
+                        f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}',
+                        'success', False)
                     config.log(f"FIN {config.scriptType}", 'success', False)
+                    from Functions.MartingaleSequence import finalize_match
+                    finalize_match(config.scriptType, config.global_match_win[scriptType])
                     RedisIPC.set_running(config.scriptType, False)
+                    return True
             else :
                 # VÉRIFCATION DU SET ACTUEL
                 GetScoreActuel(driver)
