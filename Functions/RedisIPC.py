@@ -912,10 +912,13 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
                 pass
             return 0
 
-        # 15V1/15V2 ne récupèrent que 30% de la perte empruntée (contre 50% pour les
-        # autres scriptTypes au-dessus de 1€) -- martingale au niveau du point, pas du
-        # jeu, donc un emprunt trop agressif grossirait leurs mises de façon disproportionnée
-        # par rapport à leur propre cycle (demandé le 2026-11-06).
+        # 15V1/15V2 : taux de récupération à deux paliers selon la perte GLOBALE
+        # (tous scripts confondus) -- 100% tant qu'elle reste sous 50€ (rattraper
+        # vite pour continuer sur le match), puis redescend à 30% au-dessus (freiner
+        # la croissance des mises une fois que ça devient significatif, martingale au
+        # niveau du point donc un emprunt trop agressif grossirait les mises de façon
+        # disproportionnée par rapport à leur propre cycle). Avant le 2026-11-10,
+        # taux fixe à 30% quel que soit le niveau de perte (demandé le 2026-11-06).
         try:
             import config
             is_15v = getattr(config, 'scriptType', None) in ('15V1', '15V2')
@@ -923,7 +926,8 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
             is_15v = False
 
         if is_15v:
-            deducted = round(valf * 0.30, 8)
+            _rate = 0.30 if get_total_loss() >= _CROSS_15V_THRESHOLD else 1.0
+            deducted = round(valf * _rate, 8)
             new_val = round(valf - deducted, 8)
         elif valf > 1.0:
             deducted = round(valf * 0.50, 8)
