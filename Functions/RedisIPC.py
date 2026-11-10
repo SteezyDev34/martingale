@@ -807,16 +807,16 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
     Retourne la perte la plus grande stockée dans SQLite sans la modifier.
     Exclut les script_types 15V1 et 15V2 (jamais rattrapés par ce mécanisme),
     SAUF l'un envers l'autre quand la perte GLOBALE (somme de TOUS les
-    scriptTypes, tous matchs confondus) dépasse 50€ -- 15V1 peut alors
+    scriptTypes, tous matchs confondus) dépasse 15€ -- 15V1 peut alors
     emprunter à 15V2 (et inversement), mais toujours pas à lui-même. Le
     déclencheur est la perte globale, pas la perte propre de l'emprunteur
     (corrigé le 2026-11-09 : la première version ne regardait que la perte
     du script appelant, qui peut rester petite -- ex: 15V1 à 6.87€ -- alors
     que 15V2 a 345€ de perte non récupérée sur le même match ; la perte
-    globale, elle, dépasse largement 50€ dans ce cas). Une fois 15V2 (ou
+    globale, elle, dépasse largement 15€ dans ce cas). Une fois 15V2 (ou
     15V1) éligible, c'est toujours la plus grosse perte disponible tous
     scripts confondus qui est choisie (ORDER BY loss DESC), pas forcément
-    15V1/15V2 lui-même. En dessous de 50€ de perte globale, ou pour tout
+    15V1/15V2 lui-même. En dessous de 15€ de perte globale, ou pour tout
     autre scriptType (1530A/456P), le comportement reste inchangé : 15V1/
     15V2 restent hors du pool empruntable.
 
@@ -841,7 +841,7 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
     # 15V1/15V2 sans retirer le mécanisme -- repasser à True pour le
     # réactiver (seuil et logique inchangés une fois réactivé).
     _CROSS_15V_ENABLED = False
-    _CROSS_15V_THRESHOLD = 50.0
+    _CROSS_15V_THRESHOLD = 15.0
     exclude = {'15V1', '15V2'}
     try:
         import config
@@ -913,7 +913,7 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
             return 0
 
         # 15V1/15V2 : taux de récupération à deux paliers selon la perte GLOBALE
-        # (tous scripts confondus) -- 100% tant qu'elle reste sous 50€ (rattraper
+        # (tous scripts confondus) -- 100% tant qu'elle reste sous 15€ (rattraper
         # vite pour continuer sur le match), puis redescend à 30% au-dessus (freiner
         # la croissance des mises une fois que ça devient significatif, martingale au
         # niveau du point donc un emprunt trop agressif grossirait les mises de façon
