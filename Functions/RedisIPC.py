@@ -1117,6 +1117,38 @@ def any_other_match_active(exclude_script_types: Optional[Iterable[str]] = None)
         return False
 
 
+def get_other_active_matchnames(exclude_script_types: Optional[Iterable[str]] = None,
+                                 exclude_matchname: Optional[str] = None) -> list:
+    """
+    Liste les matchnames distincts avec au moins un (script_type, matchname)
+    running=1, scriptTypes de `exclude_script_types` exclus et `exclude_matchname`
+    (le match courant) écarté. Sœur de any_other_match_active() : utilisée quand
+    on a besoin de savoir LESQUELS plutôt que juste s'il y en a (demandé le
+    2026-11-11 -- 15V1/15V2 doivent vérifier s'ils sont éligibles sur l'un de ces
+    autres matchs avant de décider d'attendre ou de partir le rejoindre).
+    """
+    try:
+        excludes = {str(s).upper() for s in exclude_script_types} if exclude_script_types else set()
+        conn = _get_sqlite_conn()
+        cur = conn.cursor()
+        clauses = ["is_running = 1", "matchname != ''"]
+        params = []
+        if excludes:
+            placeholders = ','.join('?' for _ in excludes)
+            clauses.append(f"script_type NOT IN ({placeholders})")
+            params.extend(excludes)
+        if exclude_matchname:
+            clauses.append("matchname != ?")
+            params.append(str(exclude_matchname))
+        sql = f"SELECT DISTINCT matchname FROM running WHERE {' AND '.join(clauses)}"
+        cur.execute(sql, tuple(params))
+        rows = [r[0] for r in cur.fetchall()]
+        conn.close()
+        return rows
+    except Exception:
+        return []
+
+
 def count_running(exclude_script_type: Optional[str] = None) -> int:
     """
     Retourne le nombre de scripts en cours, optionnellement en excluant un script donné.

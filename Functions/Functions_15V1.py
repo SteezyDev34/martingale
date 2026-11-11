@@ -64,6 +64,36 @@ def _pari_en_attente() -> bool:
         return False
 
 
+def _ok_quitter_malgre_autre_match_actif() -> bool:
+    """
+    True si on peut considérer "rien d'autre à attendre" même quand
+    RedisIPC.any_other_match_active() est vrai -- càd si CE scriptType (15V1/15V2)
+    n'est éligible sur AUCUN des autres matchs actifs ailleurs (1530A/456P dessus,
+    scriptTypes stockés au classement ne comprenant pas 15V1/15V2 pour ce match).
+    Dans ce cas, rester à attendre ne servirait à rien : il vaut mieux quitter
+    pour repartir en recherche, qui pourra alors s'engager sur l'UN de ces autres
+    matchs actifs si 15V1/15V2 y est éligible (demandé le 2026-11-11 : éviter que
+    15V1/15V2 reste "coincé" en attente indéfiniment juste parce que 1530A/456P
+    tournent ailleurs, alors qu'il pourrait justement aller les y rejoindre).
+    Si éligible sur au moins un de ces autres matchs, retourne False (il vaut
+    mieux rester bloqué ici tant que cette éligibilité n'a pas été exploitée --
+    la recherche de match normale la détectera et s'y engagera).
+    """
+    try:
+        from Functions.ScriptRechercheDeMatch import _get_valid_scripttypes_for_match
+        autres = RedisIPC.get_other_active_matchnames(
+            exclude_script_types=['15V1', '15V2'], exclude_matchname=config.newmatch
+        )
+        if not autres:
+            return True
+        for match_id in autres:
+            if _get_valid_scripttypes_for_match(match_id):
+                return False
+        return True
+    except Exception:
+        return False
+
+
 def _attendre_point_valide_15v(driver):
     """
     Pour 15V1/15V2 : attend que le dernier point enregistré (config.all_scores)
@@ -321,7 +351,7 @@ def all_script(driver):
             all_below_one = all(
                 float(config.global_match_win[st]) >= float(config.total_want_win[scriptType]) for st in
                 config.scriptTypeList)
-            if all_below_one and not RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2']) and RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) <= 0 and not _pari_en_attente():
+            if all_below_one and _ok_quitter_malgre_autre_match_actif() and RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) <= 0 and not _pari_en_attente():
                 for st in config.scriptTypeList:
                     config.log(f' {st} : Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                'success', False)
@@ -332,7 +362,7 @@ def all_script(driver):
             # momentané de list_running() (les autres scriptTypes togglent running=0/1
             # entre deux cycles).
             if (float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType])
-                    or RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2'])
+                    or (RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2']) and not _ok_quitter_malgre_autre_match_actif())
                     or RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) > 0):
                 config.log(
                     f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
@@ -481,7 +511,7 @@ def all_script(driver):
                         all_below_one = all(
                             float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                             config.scriptTypeList)
-                        if all_below_one and not RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2']) and RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) <= 0 and not _pari_en_attente():
+                        if all_below_one and _ok_quitter_malgre_autre_match_actif() and RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) <= 0 and not _pari_en_attente():
                             # Envoi consolidé unique pour tout le match ici (pas à chaque
                             # séquence gagnante, cf. MartingaleSequence.py) : ce scriptType a
                             # fini d'intervenir sur ce match à ce point précis (running passe
@@ -562,7 +592,7 @@ def all_script(driver):
                     # active réelle, via la table perte/running jointe, pas un flag
                     # instantané) que les autres points de sortie de ce fichier.
                     if (float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType])
-                            or RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2'])
+                            or (RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2']) and not _ok_quitter_malgre_autre_match_actif())
                             or RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) > 0):
                         config.log(f'Net profit: {config.global_match_win[scriptType]}')
                     else:
@@ -605,7 +635,7 @@ def all_script(driver):
             all_below_one = all(
                 float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                 config.scriptTypeList)
-            if all_below_one and not RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2']) and RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) <= 0 and not _pari_en_attente():
+            if all_below_one and _ok_quitter_malgre_autre_match_actif() and RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) <= 0 and not _pari_en_attente():
                 for st in config.scriptTypeList:
                     config.log(f' {st} Net profit: {config.global_match_win[st]} / {config.total_want_win[st]}',
                                'success', False)
@@ -613,7 +643,7 @@ def all_script(driver):
             print('is running for ',config.newmatch)
             print(RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2']))
             if (float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType])
-                    or RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2'])
+                    or (RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2']) and not _ok_quitter_malgre_autre_match_actif())
                     or RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) > 0):
                 config.log(
                     f' {scriptType} Net profit: {config.global_match_win[scriptType]} / {config.total_want_win[scriptType]}')
@@ -706,7 +736,7 @@ def all_script(driver):
                 all_below_one = all(
                     float(config.global_match_win[st]) >= float(config.total_want_win[st]) for st in
                     config.scriptTypeList)
-                if all_below_one and not RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2']) and RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) <= 0 and not _pari_en_attente():
+                if all_below_one and _ok_quitter_malgre_autre_match_actif() and RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) <= 0 and not _pari_en_attente():
                     # Objectif atteint : remettre perte à 0 ici (contrairement au Site A,
                     # ce chemin ne le faisait jamais avant finalize_match/return True) --
                     # sans ça, DispatchPerte (appelé juste après par le lanceur une fois
@@ -751,7 +781,7 @@ def all_script(driver):
 
                 print(RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2']))
                 if (float(config.global_match_win[scriptType]) < float(config.total_want_win[scriptType])
-                        or RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2'])
+                        or (RedisIPC.any_other_match_active(exclude_script_types=['15V1', '15V2']) and not _ok_quitter_malgre_autre_match_actif())
                         or RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) > 0):
 
                     #GetIfGameEnd(driver)
