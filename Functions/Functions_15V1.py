@@ -157,12 +157,14 @@ def all_script(driver):
             except Exception as e:
                 config.log(f"Impossible de déterminer le favori (classement) pour {config.teams}: {e}", 'warning', True)
             if config.favori_position is None:
-                # Classement indisponible/égal pour l'un des deux joueurs : pas de
-                # favori déterminable -> pas de pari possible pour 15V1/15V2 sur ce
-                # match plutôt que de deviner (cohérent avec la classification qui
-                # exige déjà ranking1/ranking2 connus pour activer ces scriptTypes).
-                config.log(f"Favori indéterminé pour {config.teams} — {config.scriptType} ne pariera pas sur ce match", 'warning', True)
-                config.scriptTypeList = []
+                # Classement introuvable (AuxoTracker ne couvre pas ce match, ex:
+                # joueurs absents de sa base malgré un sofascore_id individuel --
+                # constaté le 2026-11-11 sur Robin Bertrand/Henry Searle) : repli
+                # sur team1 par défaut comme favori plutôt que de refuser de parier
+                # (demandé le 2026-11-11 -- choix explicite de l'utilisateur parmi
+                # plusieurs options proposées : team1 fixe, aléatoire, ou ponctuel).
+                config.favori_position = 1
+                config.log(f"Favori indéterminé pour {config.teams} — repli sur team1 ({config.teams[0]}) par défaut", 'warning', True)
 
         # Déterminer l'identifiant du match depuis l'URL
         try:
