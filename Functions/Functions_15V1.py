@@ -66,20 +66,26 @@ def _pari_en_attente() -> bool:
 
 def _ok_quitter_malgre_autre_match_actif() -> bool:
     """
-    True si on peut considérer "rien d'autre à attendre" même quand
-    RedisIPC.any_other_match_active() est vrai -- càd si CE scriptType (15V1/15V2)
-    n'est éligible sur AUCUN des autres matchs actifs ailleurs (1530A/456P dessus,
-    scriptTypes stockés au classement ne comprenant pas 15V1/15V2 pour ce match).
-    Dans ce cas, rester à attendre ne servirait à rien : il vaut mieux quitter
-    pour repartir en recherche, qui pourra alors s'engager sur l'UN de ces autres
-    matchs actifs si 15V1/15V2 y est éligible (demandé le 2026-11-11 : éviter que
-    15V1/15V2 reste "coincé" en attente indéfiniment juste parce que 1530A/456P
-    tournent ailleurs, alors qu'il pourrait justement aller les y rejoindre).
-    Si éligible sur au moins un de ces autres matchs, retourne False (il vaut
-    mieux rester bloqué ici tant que cette éligibilité n'a pas été exploitée --
-    la recherche de match normale la détectera et s'y engagera).
+    True si on peut considérer "rien d'autre à attendre" pour sortir complètement
+    du match courant.
+
+    D'ABORD le garde-fou d'origine, jamais contournable : si un AUTRE scriptType
+    est encore actif sur CE match précis (1530A/456P dessus), on ne part jamais --
+    peu importe l'éligibilité ailleurs, on ne peut pas abandonner un match qu'on
+    partage encore avec un pari actif (bug corrigé le 2026-11-11 : la première
+    version de cette fonction ignorait ce cas en excluant le match courant de son
+    scan, laissant 15V2 quitter dellelba-alan-wazny alors que 5P/6P y pariaient
+    encore activement).
+
+    ENSUITE seulement, la nuance ajoutée le 2026-11-11 : si rien d'autre ne tourne
+    sur ce match mais qu'un AUTRE match est actif ailleurs (1530A/456P dessus), on
+    ne reste bloqué à l'attendre que si 15V1/15V2 est éligible sur AU MOINS UN de
+    ces autres matchs (scriptTypes stockés au classement) -- sinon rester ne sert
+    à rien, autant repartir en recherche (qui pourra s'y engager si éligible).
     """
     try:
+        if RedisIPC.list_running(exclude_script_type=config.scriptType, matchname=config.newmatch):
+            return False
         from Functions.ScriptRechercheDeMatch import _get_valid_scripttypes_for_match
         autres = RedisIPC.get_other_active_matchnames(
             exclude_script_types=['15V1', '15V2'], exclude_matchname=config.newmatch
