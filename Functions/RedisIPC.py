@@ -938,7 +938,18 @@ def deduct_largest(matchname: str = None) -> Optional[tuple]:
 
         try:
             import config
-            config.log(f"[RedisIPC] sqlite deduct_largest {script_type}: perte={valf} déduit={deducted} reste={new_val}", 'info')
+            if is_15v:
+                # Demandé le 2026-11-11 : rendre bien visible sur quel scriptType
+                # 15V1/15V2 viennent de récupérer de la perte (majuscules + couleur,
+                # contrairement au log normal 'info' des autres récupérations).
+                caller_up = str(caller).upper()
+                config.log(
+                    f"[REDISIPC] {caller_up} RECUPERE SA PERTE SUR {script_type.upper()}: "
+                    f"PERTE={valf} DEDUIT={deducted} RESTE={new_val}",
+                    'purple', False,
+                )
+            else:
+                config.log(f"[RedisIPC] sqlite deduct_largest {script_type}: perte={valf} déduit={deducted} reste={new_val}", 'info')
         except Exception:
             pass
         set_loss(script_type, new_val)
