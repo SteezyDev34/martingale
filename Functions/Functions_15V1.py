@@ -566,10 +566,25 @@ def all_script(driver):
                             or RedisIPC.get_total_loss(exclude_script_types=['15V1', '15V2'], only_active=True) > 0):
                         config.log(f'Net profit: {config.global_match_win[scriptType]}')
                     else:
-                        config.log(f'Net profit: {config.global_match_win[scriptType]}')
+                        # Sortie réelle (return True), pas juste un log + continue :
+                        # sans ça, tant que config.jeu_actuel ne bouge pas, cette
+                        # branche (jeu inchangé) retombe ici en boucle toutes les
+                        # ~2s, loguant FIN indéfiniment sans jamais repartir en
+                        # recherche d'un nouveau match -- observé en direct le
+                        # 2026-11-11 sur ayeni-alex-bolt (FIN répété à 09:55:42,
+                        # 46, 48... perte 69.74€ jamais nettoyée côté AuxoTracker).
+                        config.log(f'Net profit: {config.global_match_win[scriptType]}', 'success', False)
                         config.log(f"FIN {config.scriptType}", 'success', False)
+                        # Remet la perte à 0 avant de sortir -- sinon DispatchPerte
+                        # (appelé par le lanceur juste après ce return True) renvoie
+                        # cette perte à l'API legacy comme encore à rattraper, alors
+                        # que l'objectif vient justement d'être atteint.
+                        config.perte = 0
+                        RedisIPC.set_loss(config.scriptType, config.perte, matchname=config.newmatch)
+                        from Functions.MartingaleSequence import finalize_match
+                        finalize_match(config.scriptType, config.global_match_win[scriptType])
                         RedisIPC.set_running(config.scriptType, False)
-                        continue
+                        return True
         # JEU FINI ON PREPARE LE IPROCHAIN BET
 
         passageset = False
