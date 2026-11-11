@@ -1086,6 +1086,37 @@ def list_running(exclude_script_type: Optional[Iterable[str]] = None, matchname:
         return False
 
 
+def any_other_match_active(exclude_script_types: Optional[Iterable[str]] = None) -> bool:
+    """
+    True s'il existe au moins un (script_type, matchname) marqué running=1 quelque
+    part dans le système, scriptTypes de `exclude_script_types` exclus -- SANS
+    filtre de matchname, contrairement à list_running() qui ne regarde qu'UN match
+    précis. Demandé le 2026-11-11 : 15V1/15V2 ne doivent pas sortir complètement
+    d'un match (et repartir chercher un nouveau match) tant qu'un AUTRE match
+    tourne encore ailleurs dans le système, même sans perte active dessus --
+    list_running(matchname=...) ne voyait que le match courant, laissant 15V1/15V2
+    partir alors que 1530A/456P travaillaient encore sur un match complètement
+    différent.
+    """
+    try:
+        excludes = {str(s).upper() for s in exclude_script_types} if exclude_script_types else set()
+        conn = _get_sqlite_conn()
+        cur = conn.cursor()
+        if excludes:
+            placeholders = ','.join('?' for _ in excludes)
+            cur.execute(
+                f"SELECT 1 FROM running WHERE is_running = 1 AND script_type NOT IN ({placeholders}) LIMIT 1",
+                tuple(excludes),
+            )
+        else:
+            cur.execute("SELECT 1 FROM running WHERE is_running = 1 LIMIT 1")
+        row = cur.fetchone()
+        conn.close()
+        return bool(row)
+    except Exception:
+        return False
+
+
 def count_running(exclude_script_type: Optional[str] = None) -> int:
     """
     Retourne le nombre de scripts en cours, optionnellement en excluant un script donné.
