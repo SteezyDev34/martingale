@@ -582,25 +582,39 @@ def try_claim_score_update(
         conn = _get_sqlite_conn()
         cur = conn.cursor()
         cur.execute(
-            "SELECT score, set_actuel, jeu_actuel, numero_point, vainqueur_point, source "
+            "SELECT score, set_actuel, jeu_actuel, numero_point, vainqueur_point, source, updated_at "
             "FROM match_score WHERE matchname = ?",
             (key,),
         )
         row = cur.fetchone()
 
+        # Une ligne périmée (match terminé depuis longtemps, matchname réutilisé --
+        # même slug tronqué à 3 tokens ou mêmes joueurs rejoués plus tard) est traitée
+        # comme absente : sans ça, un vieux jeu/set plus "avancé" numériquement gagnait
+        # toujours face à un nouveau match qui repart légitimement de 0, corrompant son
+        # jeu_actuel/set_actuel dès la première transition (constaté le 2026-11-12 sur
+        # kozlov-braden-shick : ligne vieille de 6 jours, set=1/jeu=2, adoptée par le
+        # nouveau match alors qu'il était réellement à 0:0).
+        _STALE_SCORE_MAX_AGE_S = 6 * 3600  # 6h, largement au-dessus d'un match normal
+        if row is not None and (time.time() - float(row[6] or 0)) > _STALE_SCORE_MAX_AGE_S:
+            row = None
+
         if row is None:
-            # Premier enregistrement pour ce match : personne n'est encore passé, on gagne.
+            # Premier enregistrement pour ce match (ou ligne périmée écrasée) : on gagne.
             cur.execute(
-                "INSERT OR IGNORE INTO match_score "
+                "INSERT INTO match_score "
                 "(matchname, score, set_actuel, jeu_actuel, numero_point, vainqueur_point, source, updated_at) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?) "
+                "ON CONFLICT(matchname) DO UPDATE SET score=excluded.score, set_actuel=excluded.set_actuel, "
+                "jeu_actuel=excluded.jeu_actuel, numero_point=excluded.numero_point, "
+                "vainqueur_point=excluded.vainqueur_point, source=excluded.source, updated_at=excluded.updated_at",
                 (key, str(score), str(set_actuel), str(jeu_actuel), int(numero_point), int(vainqueur_point),
                  str(source), time.time()),
             )
-            gagne = cur.rowcount == 1
+            gagne = True
             conn.commit()
         else:
-            ancien_score, ancien_set, ancien_jeu, ancien_numero_point, _, _ = row
+            ancien_score, ancien_set, ancien_jeu, ancien_numero_point, _, _, _ = row
             evolutif = _est_transition_evolutive(
                 ancien_set, ancien_jeu, ancien_numero_point, set_actuel, jeu_actuel, numero_point
             )
