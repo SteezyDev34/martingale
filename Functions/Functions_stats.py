@@ -1292,7 +1292,13 @@ def compute_script_types_from_match_data(match_data, mode=None, ligue_name=None)
     # strict/in_set/loose ne s'applique pas ici. (Le passage à un ajout
     # systématique du 2026-11-09 a été retiré le même jour — retour à ce
     # filtre d'origine.)
-    _SERVER_LOSS_SAFE_THRESHOLD = 5.0  # %, sous ce seuil = "les stats le permettent"
+    # Seuil durci pour WTA/ITF femmes/"world tennis" femmes (demandé le
+    # 2026-11-14) : même détection is_women_wta_itf que le garde-fou 150/300
+    # plus haut ('wta', 'féminin', 'femmes', 'women' dans le nom de ligue) --
+    # couvre aussi bien un "wta. xxx" qu'un "world tennis. xxx. women", mais
+    # pas un "world tennis" masculin. Seuil nettement plus bas (2% au lieu de
+    # 5%) : à ajuster si trop/pas assez strict.
+    _SERVER_LOSS_SAFE_THRESHOLD = 2.0 if is_women_wta_itf else 5.0  # %, sous ce seuil = "les stats le permettent"
     ranking1 = (match_data.get('team1') or {}).get('ranking')
     ranking2 = (match_data.get('team2') or {}).get('ranking')
     server_loss1 = probs_in_set.get('SERVERLOSS_1')
