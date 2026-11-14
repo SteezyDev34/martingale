@@ -1145,6 +1145,14 @@ _TEMPORARILY_DISABLED_SCRIPT_TYPES = {'4015', '4030', '400', 'HOLD'}
 _MIN_SAMPLE_SIZE_FOR_WOMEN_150_300 = 500
 _WOMEN_SAMPLE_GATED_SCRIPT_TYPES = {'150', '300'}
 
+# Exception au seuil 100%/in_set pour 015/150 (lost_serve) et 40A (40a) --
+# demandée le 2026-11-14, justifiée par le backtest leave-one-out AuxoTracker
+# (cf. commentaire détaillé au point d'usage plus bas). 85% = seuil déjà
+# officiellement validé côté AuxoTracker, pas un chiffre choisi au hasard.
+_BACKTESTED_LOWER_THRESHOLD_SCRIPT_TYPES = {'150', '015', '40A'}
+_BACKTESTED_THRESHOLD_MEN = 90.0
+_BACKTESTED_THRESHOLD_WOMEN = 85.0
+
 
 def get_match_link_and_probs(playerName1, playerName2, date_str=None):
     """
@@ -1271,8 +1279,30 @@ def compute_script_types_from_match_data(match_data, mode=None, ligue_name=None)
             # excluait silencieusement des scriptTypes que l'utilisateur voit
             # comme "à 100%" (ex: 4015 à 99.96%, 4030 à 99.75% sur un vrai
             # match le 2026-10-18, tous deux arrondis à 100% dans le panneau).
-            activable = round(proba_pct) >= 100
-            details[st] = {'proba': proba, 'threshold': 1.0}
+            #
+            # Exception ciblée 015/150/40A (demandée le 2026-11-14, backtest
+            # leave-one-out AuxoTracker à l'appui -- 015/150 = champ
+            # 'lost_serve' : 88.73% de réussite réelle sur les matchs "verts"
+            # ≥85%, 74% sur les value bets ; 40A = champ '40a' direct : 97.22%
+            # de réussite réelle sur les verts ≥85%, 100% sur 3 value bets) :
+            # la proba moyenne prédite pour ces marchés plafonne structurellement
+            # bien en dessous de 100% (ex: 89.04% en moyenne pour lost_serve),
+            # donc le seuil 100% les exclut presque systématiquement quelle que
+            # soit la qualité réelle du modèle. Seuil dédié 90% (hommes) / 85%
+            # (WTA/ITF/world tennis femmes -- même détection is_women_wta_itf,
+            # 85% choisi car c'est le seuil déjà officiellement validé côté
+            # AuxoTracker). Les autres scriptTypes gardent 100% sans exception --
+            # rien n'indique qu'ils ont le même plafond structurel, et 030/BREAK
+            # n'ont aucune donnée de backtest pour justifier un seuil différent
+            # pour l'instant (à revoir une fois ce backtest ajouté côté
+            # AuxoTracker).
+            if st in _BACKTESTED_LOWER_THRESHOLD_SCRIPT_TYPES:
+                threshold_pct = _BACKTESTED_THRESHOLD_WOMEN if is_women_wta_itf else _BACKTESTED_THRESHOLD_MEN
+                activable = round(proba_pct) >= threshold_pct
+                details[st] = {'proba': proba, 'threshold': threshold_pct / 100.0}
+            else:
+                activable = round(proba_pct) >= 100
+                details[st] = {'proba': proba, 'threshold': 1.0}
         else:
             threshold = _LOOSE_THRESHOLDS.get(st, 1.0)
             activable = proba >= threshold
