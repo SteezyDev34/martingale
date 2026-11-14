@@ -1298,7 +1298,7 @@ def compute_script_types_from_match_data(match_data, mode=None, ligue_name=None)
     # couvre aussi bien un "wta. xxx" qu'un "world tennis. xxx. women", mais
     # pas un "world tennis" masculin. Seuil nettement plus bas (2% au lieu de
     # 5%) : à ajuster si trop/pas assez strict.
-    _SERVER_LOSS_SAFE_THRESHOLD = 2.0 if is_women_wta_itf else 5.0  # %, sous ce seuil = "les stats le permettent"
+    _SERVER_LOSS_SAFE_THRESHOLD = 3.0 if is_women_wta_itf else 5.0  # %, sous ce seuil = "les stats le permettent"
     ranking1 = (match_data.get('team1') or {}).get('ranking')
     ranking2 = (match_data.get('team2') or {}).get('ranking')
     server_loss1 = probs_in_set.get('SERVERLOSS_1')
