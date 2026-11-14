@@ -1145,11 +1145,13 @@ _TEMPORARILY_DISABLED_SCRIPT_TYPES = {'4015', '4030', '400', 'HOLD'}
 _MIN_SAMPLE_SIZE_FOR_WOMEN_150_300 = 500
 _WOMEN_SAMPLE_GATED_SCRIPT_TYPES = {'150', '300'}
 
-# Exception au seuil 100%/in_set pour 015/150 (lost_serve) et 40A (40a) --
-# demandée le 2026-11-14, justifiée par le backtest leave-one-out AuxoTracker
-# (cf. commentaire détaillé au point d'usage plus bas). 85% = seuil déjà
-# officiellement validé côté AuxoTracker, pas un chiffre choisi au hasard.
-_BACKTESTED_LOWER_THRESHOLD_SCRIPT_TYPES = {'150', '015', '40A'}
+# Exception au seuil 100%/in_set pour 015/150 (lost_serve), 40A (40a) et 30A
+# (30a) -- demandée le 2026-11-14, justifiée par le backtest leave-one-out
+# AuxoTracker (cf. commentaire détaillé au point d'usage plus bas). 85% =
+# seuil déjà officiellement validé côté AuxoTracker, pas un chiffre choisi au
+# hasard. 30a a la meilleure calibration des trois (39 matchs verts ≥85%,
+# 97.44% de réussite réelle).
+_BACKTESTED_LOWER_THRESHOLD_SCRIPT_TYPES = {'150', '015', '40A', '30A'}
 _BACKTESTED_THRESHOLD_MEN = 90.0
 _BACKTESTED_THRESHOLD_WOMEN = 85.0
 
@@ -1280,11 +1282,13 @@ def compute_script_types_from_match_data(match_data, mode=None, ligue_name=None)
             # comme "à 100%" (ex: 4015 à 99.96%, 4030 à 99.75% sur un vrai
             # match le 2026-10-18, tous deux arrondis à 100% dans le panneau).
             #
-            # Exception ciblée 015/150/40A (demandée le 2026-11-14, backtest
+            # Exception ciblée 015/150/40A/30A (demandée le 2026-11-14, backtest
             # leave-one-out AuxoTracker à l'appui -- 015/150 = champ
             # 'lost_serve' : 88.73% de réussite réelle sur les matchs "verts"
             # ≥85%, 74% sur les value bets ; 40A = champ '40a' direct : 97.22%
-            # de réussite réelle sur les verts ≥85%, 100% sur 3 value bets) :
+            # de réussite réelle sur les verts ≥85%, 100% sur 3 value bets ;
+            # 30A = champ '30a' direct : 97.44% de réussite réelle sur 39
+            # matchs verts ≥85%, 100% sur 3 value bets) :
             # la proba moyenne prédite pour ces marchés plafonne structurellement
             # bien en dessous de 100% (ex: 89.04% en moyenne pour lost_serve),
             # donc le seuil 100% les exclut presque systématiquement quelle que
