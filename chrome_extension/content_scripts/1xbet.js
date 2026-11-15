@@ -171,8 +171,13 @@
       const isMatchPage = !!scoreDiv;
       // Page de fin de match : le scoreboard (score final) reste affiché, seul ce panneau
       // apparaît. Mêmes classes que le Selenium (conf/classes.py 'end_match_stats' :
-      // mobile/old_site 'after-game-info__text', new_site 'game-over-panel-banner').
-      const matchEnded = !!qs('.after-game-info__text, .game-over-panel-banner');
+      // mobile/old_site 'after-game-info__text', new_site 'game-over-panel-banner') + le
+      // panneau "Événement terminé... nous recueillons ses statistiques" qui s'affiche
+      // juste après la fin (avant le vrai after-game-info__text) -- sans cette classe, le
+      // bot restait bloqué indéfiniment sur "ON ATTEND LE RESULTAT" alors que le marché
+      // était déjà "Événement bloqué" côté 1xBet (constaté en live le 2026-11-15 sur un
+      // pari 300).
+      const matchEnded = !!qs('.after-game-info__text, .game-over-panel-banner, .game-over-panel__progress');
       return { score, set_actuel: set, jeu_actuel: jeu, players, url: location.href, isMatchPage, matchEnded };
     },
 
