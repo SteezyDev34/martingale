@@ -28,7 +28,7 @@ def GetAndPlaceBet(driver):
                 continue
             if scriptType == actual_scryptType:
                 continue
-            if config.scriptType == '150' or config.scriptType == '015' or config.scriptType == '15A' or config.scriptType == '300' or config.scriptType == '030':
+            if config.scriptType == '150' or config.scriptType == '015' or config.scriptType == '15A' or config.scriptType == '300' or config.scriptType == '030' or config.scriptType in ('3P400', '3P3015', '3P1530', '3P040', 'AT4015', 'AT1540'):
                 if config.score_actuel == '0:0':
                     if not config.validated_bet or int(config.jeu_actuel) > int(config.validated_bet.get('jeu', -1)):
                         FirstGameBet(driver)

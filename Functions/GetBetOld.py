@@ -89,6 +89,21 @@ def GetBetOld(driver, nextBet=False, selection='', mobile=False):
                     elif config.scriptType == '400':
                         config.win_type = ['0:40']  # inversé
                         sType = f"Jeu {config.looking_game} 0:40+, Joueur {first_player}"
+            if config.scriptType in ('3P400', '3P3015', '3P1530', '3P040', 'AT4015', 'AT1540'):
+                # Marchés "Score du jeu. Après 3/4 points." -- le score donné dans le nom
+                # du marché est déjà celui du SERVEUR (pas de distinction joueur 1/2 côté
+                # 1xBet, contrairement à 015/030/150/300), donc pas de logique first_player
+                # ici : le texte et la cible sont fixes pour tout le match.
+                _SCORE_LABEL_153040 = {
+                    '3P400': '40-0', '3P3015': '30-15', '3P1530': '15-30', '3P040': '0-40',
+                    'AT4015': '40-15', 'AT1540': '15-40',
+                }
+                _WIN_TYPE_153040 = {
+                    '3P400': '40:0', '3P3015': '30:15', '3P1530': '15:30', '3P040': '0:40',
+                    'AT4015': '40:15', 'AT1540': '15:40',
+                }
+                sType = f"Jeu {jeu}, {_SCORE_LABEL_153040[config.scriptType]}"
+                config.win_type = _WIN_TYPE_153040[config.scriptType]
             if config.scriptType == '030':
                 sType = f"Jeu {jeu}, Receveur va mener 30-0"
                 # print(sType)

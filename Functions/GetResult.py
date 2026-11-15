@@ -100,6 +100,21 @@ def GetResult(driver):
                 passed_score.append('15:0')
             elif config.validated_bet.get('winscore') is not None and config.validated_bet.get('winscore') == '30:0':
                 passed_score.append('0:15')
+        elif config.scriptType in ('3P400', '3P3015', '3P1530', '3P040'):
+            # Les 4 seuls états possibles après exactement 3 points (3+0/2+1/1+2/0+3) --
+            # un seul des 4 apparaît forcément, donc dès qu'on en voit un, résultat
+            # déjà connu (le marché "Après 3 points." ne dépend pas de la suite du jeu).
+            passed_score = [
+                '40:0', '0:40', '30:15', '15:30',
+                '40:15', '15:40', '30:40', '40:30', '40:40', '40:A', 'A:40'
+            ]
+        elif config.scriptType in ('AT4015', 'AT1540'):
+            # Marché "atteint 40-15/15-40 à un moment du jeu" (peu importe l'issue finale) --
+            # la cible elle-même résout immédiatement ; les états qui ne peuvent survenir
+            # qu'après elle servent de garde-fou si le poll saute l'instant exact ; '0:0'
+            # couvre le nouveau jeu (déjà détecté par le set/jeu-diff ci-dessous, redondant
+            # par sécurité comme pour 40A/30A/15A).
+            passed_score = ['40:15', '15:40', '40:30', '30:40', '40:40', '40:A', 'A:40', '0:0']
         elif config.scriptType == '400' or config.scriptType == '4P':
             passed_score = [
                 '0:0', '15:15', '30:15', '15:30', '30:30',
@@ -116,7 +131,7 @@ def GetResult(driver):
                 '0:0'
             ]
 
-        if config.scriptType == "40A" or config.scriptType == "30A" or config.scriptType == "150" or config.scriptType == "015" or config.scriptType == "15A" or config.scriptType == '030' or config.scriptType == '300':
+        if config.scriptType == "40A" or config.scriptType == "30A" or config.scriptType == "150" or config.scriptType == "015" or config.scriptType == "15A" or config.scriptType == '030' or config.scriptType == '300' or config.scriptType in ('3P400', '3P3015', '3P1530', '3P040', 'AT4015', 'AT1540'):
             if int(config.set_actuel) != int(config.validated_bet.get('set')):
                 getresult = True
             elif int(config.jeu_actuel) != int(config.validated_bet.get('jeu')):

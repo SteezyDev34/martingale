@@ -1104,7 +1104,18 @@ _MATCH_DATA_FIELD = {'4P': '400', '5P': '4015', '6P': '4030'}
 # point-by-point côté AuxoTracker (cf. CLAUDE.md). Pas de cote de référence
 # confirmée pour ce marché -> pas d'edge, seul le mode 'in_set' (seuil >=100%)
 # s'applique, comme le reste.
-_ALL_SCRIPT_TYPES = ['15A', '30A', '40A', '150', '015', '300', '030', '400', '4015', '4030', '4P', '5P', '6P', 'HOLD', 'BREAK']
+_ALL_SCRIPT_TYPES = ['15A', '30A', '40A', '150', '015', '300', '030', '400', '4015', '4030', '4P', '5P', '6P', 'HOLD', 'BREAK',
+                     '3P400', '3P3015', '3P1530', '3P040', 'AT4015', 'AT1540']
+# 3P400/3P3015/3P1530/3P040/AT4015/AT1540 ajoutés le 2026-11-14 -- sans ça, le
+# classement ne regarde même pas leurs champs probs_in_set (prob_3p_*_in_set/
+# prob_reach_*_in_set côté AuxoTracker), donc ils n'apparaissent jamais dans
+# script_types peu importe le nombre de matchs traités. Comme pour tout
+# scriptType absent de _BACKTESTED_LOWER_THRESHOLD_SCRIPT_TYPES, ils restent au
+# seuil 100% par défaut (aucune exception demandée/justifiée pour l'instant) --
+# sans risque d'activation prématurée : proba_pct est None tant que
+# sample_service_games_3pt/sample_matches_3pt (resp. _4015) du joueur sont trop
+# faibles (compteurs qui viennent d'être créés ce jour, cf. CLAUDE.md), et
+# `if proba_pct is None: continue` les ignore simplement en attendant.
 
 # Sous ce score de tension du match (0-100), un match est déséquilibré et les
 # probas moyennes 15A/30A/40A (in_set) ne sont pas représentatives — même
@@ -1145,13 +1156,17 @@ _TEMPORARILY_DISABLED_SCRIPT_TYPES = {'4015', '4030', '400', 'HOLD'}
 _MIN_SAMPLE_SIZE_FOR_WOMEN_150_300 = 500
 _WOMEN_SAMPLE_GATED_SCRIPT_TYPES = {'150', '300'}
 
-# Exception au seuil 100%/in_set pour 015/150 (lost_serve), 40A (40a) et 30A
-# (30a) -- demandée le 2026-11-14, justifiée par le backtest leave-one-out
-# AuxoTracker (cf. commentaire détaillé au point d'usage plus bas). 85% =
-# seuil déjà officiellement validé côté AuxoTracker, pas un chiffre choisi au
-# hasard. 30a a la meilleure calibration des trois (39 matchs verts ≥85%,
-# 97.44% de réussite réelle).
-_BACKTESTED_LOWER_THRESHOLD_SCRIPT_TYPES = {'150', '015', '40A', '30A'}
+# Exception au seuil 100%/in_set pour 015/150 (lost_serve), 40A (40a), 30A
+# (30a) et 030 (lost_030) -- demandée le 2026-11-14, justifiée par le backtest
+# leave-one-out AuxoTracker (cf. commentaire détaillé au point d'usage plus
+# bas). 85% = seuil déjà officiellement validé côté AuxoTracker, pas un
+# chiffre choisi au hasard. 30a a la meilleure calibration des quatre (39
+# matchs verts ≥85%, 97.44% de réussite réelle). 030 est le plus fragile :
+# 7 matchs verts seulement (100% de réussite), à réévaluer dès que le volume
+# de données AuxoTracker augmente -- support backtest ajouté ce même jour
+# (BacktestTennisScores.php côté AuxoTracker), pas encore de recul long terme
+# comme les trois autres.
+_BACKTESTED_LOWER_THRESHOLD_SCRIPT_TYPES = {'150', '015', '40A', '30A', '030'}
 _BACKTESTED_THRESHOLD_MEN = 90.0
 _BACKTESTED_THRESHOLD_WOMEN = 85.0
 

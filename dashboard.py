@@ -48,7 +48,8 @@ if not os.path.exists(VENV_PYTHON):
 # cf. choix utilisateur — il n'y a pas de fichier "456P-1.py" unique, la famille
 # 456P étant répartie sur plusieurs dossiers SCRIPTS_*), 15V1/15V2 (deux process
 # Chrome séparés — favori/non-favori du match, cf. config.VALID_SCRIPTTYPES_15V1/
-# 15V2 et compute_script_types_from_match_data, ajoutés le 2026-10-28) et le
+# 15V2 et compute_script_types_from_match_data, ajoutés le 2026-10-28), 153040
+# (marchés "Score du jeu. Après 3/4 points.", ajouté le 2026-11-14) et le
 # Watcher Telegram (SCRIPTS_WATCH/main-1.py — pas une famille de scriptType
 # martingale, n'a donc pas d'entrée dans FAMILY_SCRIPTTYPES ci-dessous : son
 # statut n'affiche que le pid, pas d'infos de match en cours).
@@ -57,6 +58,7 @@ FIXED_LAUNCHERS = [
     (os.path.join(PROJECT_DIR, "SCRIPTS_4P6P", "4P6P-1.py"), "456P"),
     (os.path.join(PROJECT_DIR, "SCRIPTS_15V1", "15V1-1.py"), "15V1"),
     (os.path.join(PROJECT_DIR, "SCRIPTS_15V2", "15V2-1.py"), "15V2"),
+    (os.path.join(PROJECT_DIR, "SCRIPTS_153040", "153040-1.py"), "153040"),
     (os.path.join(PROJECT_DIR, "SCRIPTS_WATCH", "main-1.py"), "Watcher"),
     (os.path.join(PROJECT_DIR, "SCRIPTS_WATCH", "process_bets_loop.py"), "Placement paris"),
 ]
@@ -69,6 +71,7 @@ FAMILY_SCRIPTTYPES = {
     "456P": {"40A", "4015", "4030", "400", "4P", "5P", "6P", "BREAK", "HOLD"},
     "15V1": {"15V1"},
     "15V2": {"15V2"},
+    "153040": {"3P400", "3P3015", "3P1530", "3P040", "AT4015", "AT1540"},
 }
 
 # API distante de la liste des matchs (= config.api_url, dupliqué pour la même raison).

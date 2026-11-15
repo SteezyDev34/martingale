@@ -29,6 +29,7 @@ const WS_PORTS = [
   9014, // SCRIPTS_BREAK2/BREAK2-1.py
   9015, // SCRIPTS_BREAK2/BREAK2-2.py
   9016, // SCRIPTS_HOLD/HOLD-1.py
+  9017, // SCRIPTS_153040/153040-1.py
   10101, // Functions/Bookmakers/StakeBridge.py (router.py — placement Stake.bet, process_bets_loop.py)
   10102, // websocket_server.bridge demarre par router.py (placement 1xBet, process_bets_loop.py)
   10103, // Functions/Bookmakers/StakeBridge.py (session_init.py — placement Stake.bet direct, SCRIPTS_WATCH/main-1.py)
@@ -391,7 +392,9 @@ async function handlePythonMessage(msg, port) {
     // DEBUG uniquement — liste tous les onglets 1xBet détectés + la correspondance port→onglet
     case 'debug_list_tabs': {
       const allTabs = await chrome.tabs.query({});
-      const xbetTabs = allTabs.filter(t => t.url && (t.url.includes('1xbet') || t.url.includes('1x-bet')));
+      const kw = msg.urlContains || ['1xbet', '1x-bet'];
+      const kwList = Array.isArray(kw) ? kw : [kw];
+      const xbetTabs = allTabs.filter(t => t.url && kwList.some((k) => t.url.includes(k)));
       const info = xbetTabs.map(t => ({ id: t.id, url: t.url, active: t.active, windowId: t.windowId }));
       const byPort = [...connections.entries()].map(([p, c]) => ({ port: p, connected: c.connected, tab_id: c.tabId }));
       sendToPython(port, {
@@ -464,16 +467,41 @@ async function handlePythonMessage(msg, port) {
     case 'debug_get_text': {
       const tabId = await resolveTabId(msg, conn);
       if (!tabId) { sendToPython(port, { action: 'debug_get_text_response', req_id: msg.req_id, error: 'no_tab' }); break; }
-      const result = await execInTab(tabId, (opts) => {
-        const { selector, clickSelector, maxLen } = opts;
+      const result = await execInTab(tabId, async (opts) => {
+        const { selector, clickSelector, clickText, maxLen, html, scrollRounds, scrollWaitMs } = opts;
+        if (clickText) {
+          const all = Array.from(document.querySelectorAll('button, [role="tab"], [role="button"], div, span'));
+          const el = all.find((e) => e.children.length === 0 && (e.textContent || '').trim() === clickText);
+          if (el) {
+            const clickable = el.closest('button, [role="tab"], [role="button"]') || el;
+            clickable.click();
+            await new Promise((r) => setTimeout(r, 900));
+          }
+        }
+        if (scrollRounds) {
+          let lastHeight = document.scrollingElement.scrollHeight;
+          let stale = 0;
+          for (let i = 0; i < scrollRounds; i++) {
+            window.scrollTo(0, document.scrollingElement.scrollHeight);
+            await new Promise((r) => setTimeout(r, scrollWaitMs || 800));
+            const newHeight = document.scrollingElement.scrollHeight;
+            if (newHeight <= lastHeight) {
+              stale += 1;
+              if (stale >= 2) break; // plus rien ne charge depuis 2 tours, on arrête
+            } else {
+              stale = 0;
+            }
+            lastHeight = newHeight;
+          }
+        }
         if (clickSelector) {
           document.querySelectorAll(clickSelector).forEach((el) => { try { el.click(); } catch (e) {} });
         }
         const root = selector ? document.querySelector(selector) : document.body;
         if (!root) return { error: 'selector_not_found' };
-        const text = (root.innerText || root.textContent || '').trim();
+        const text = html ? (root.outerHTML || '') : (root.innerText || root.textContent || '').trim();
         return { text: text.slice(0, maxLen || 20000), truncated: text.length > (maxLen || 20000) };
-      }, { selector: msg.selector, clickSelector: msg.clickSelector, maxLen: msg.maxLen });
+      }, { selector: msg.selector, clickSelector: msg.clickSelector, clickText: msg.clickText, maxLen: msg.maxLen, html: msg.html, scrollRounds: msg.scrollRounds, scrollWaitMs: msg.scrollWaitMs });
       sendToPython(port, { action: 'debug_get_text_response', req_id: msg.req_id, result, tab_id: tabId });
       break;
     }
@@ -589,14 +617,27 @@ async function resolveTabId(msg, conn) {
 
 // Attend que l'onglet ait fini de charger (status 'complete') après une navigation,
 // avec un timeout de sécurité pour ne jamais bloquer indéfiniment le bridge.
-function waitForTabLoad(tabId, timeoutMs = 15000) {
+// timeoutMs relevé 15000 -> 25000 le 2026-11-09, puis -> 45000 le 2026-11-10
+// (retour utilisateur direct : la page était encore visiblement en train de
+// charger au moment où le bot abandonnait, malgré le premier relevé) -- sur une
+// connexion lente, l'événement 'complete' peut mettre largement plus de 25s à
+// arriver, auquel cas ce timeout de sécurité laissait croire à tort que la page
+// était chargée (navigate_ack envoyé quand même) alors qu'elle ne l'était pas --
+// le scan du marché qui suit (recherche de cote, cf. stake.js
+// _findPlayerStatContainer) tombait alors sur une page encore vide, quel que
+// soit son propre polling interne. Le log distingue les deux issues pour
+// diagnostiquer ce cas plus facilement.
+function waitForTabLoad(tabId, timeoutMs = 45000) {
   return new Promise((resolve) => {
     let done = false;
-    const finish = () => {
+    const finish = (reason) => {
       if (done) return;
       done = true;
       chrome.tabs.onUpdated.removeListener(listener);
       clearTimeout(timer);
+      if (reason === 'timeout') {
+        console.warn(`[waitForTabLoad] Timeout après ${timeoutMs}ms sans événement 'complete' pour l'onglet ${tabId} -- la page n'a probablement pas fini de charger, le scan qui suit risque d'échouer`);
+      }
       resolve();
     };
     const listener = (updatedTabId, changeInfo) => {
@@ -605,11 +646,11 @@ function waitForTabLoad(tabId, timeoutMs = 15000) {
       // scan lancé immédiatement après navigate_ack tombe en race condition
       // (window._martingale pas encore attaché → exec_failed).
       if (updatedTabId === tabId && changeInfo.status === 'complete') {
-        setTimeout(finish, 400);
+        setTimeout(() => finish('complete'), 400);
       }
     };
     chrome.tabs.onUpdated.addListener(listener);
-    const timer = setTimeout(finish, timeoutMs);
+    const timer = setTimeout(() => finish('timeout'), timeoutMs);
   });
 }
 

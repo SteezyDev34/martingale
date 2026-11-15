@@ -34,8 +34,13 @@ scriptTypeList6 = ['150', '015', '030']
 scriptTypeList3 = ['BREAK', '6P', '40A']
 scriptTypeList4 = ['4P','5P','HOLD']
 scriptTypeList5 = ['HOLD']  # Hold du serveur (jeu remporté sur son service) — inverse de BREAK
+# Famille 153040 (SCRIPTS_153040/153040-1.py) : marchés "Score du jeu. Après 3
+# points." (3P400/3P3015/3P1530/3P040, résolution immédiate aux 3 points) et
+# "Score du jeu. Après 4 points." (AT4015/AT1540, score 40-15/15-40 atteint
+# en cours de jeu, peu importe l'issue finale du jeu) — demandé le 2026-11-14.
+scriptTypeList7 = ['3P400', '3P3015', '3P1530', '3P040', 'AT4015', 'AT1540']
 allScriptType = ['15V1','15V2','150', '015', '030', '300', '15A', '30A', '40A', '4P', '5P', '6P', '4030', '4015', '400', 'BREAK',
-                 'HOLD', '1SET']
+                 'HOLD', '1SET', '3P400', '3P3015', '3P1530', '3P040', 'AT4015', 'AT1540']
 
 # Famille de bot en cours (défini par le script de lancement, ex. SCRIPTS_1530A/1530A-1.py).
 # Sert à filtrer les scriptTypes chargés dynamiquement pour un match (cf. rechercheDeMatch)
@@ -53,6 +58,10 @@ VALID_SCRIPTTYPES_456P = {'40A', '4015', '4030', '400', '4P', '5P', '6P', 'BREAK
 # evite que le même process tente de parier les deux côtés).
 VALID_SCRIPTTYPES_15V1 = {'15V1'}
 VALID_SCRIPTTYPES_15V2 = {'15V2'}
+# Famille 153040 (SCRIPTS_153040/153040-1.py) — scriptTypeList statique
+# (cf. scriptTypeList7), pas de classification dynamique par seuil AuxoTracker
+# pour l'instant (aucune donnée backtest pour ces marchés, cf. CLAUDE.md/030).
+VALID_SCRIPTTYPES_153040 = {'3P400', '3P3015', '3P1530', '3P040', 'AT4015', 'AT1540'}
 
 # Ordre de référence ("tableau modèle") des scriptTypes 1530A — un set Python n'a pas
 # d'ordre garanti, donc l'ordre d'itération de VALID_SCRIPTTYPES_1530A ne reflète pas

@@ -43,6 +43,10 @@ def AfficherParis(driver, categorie='', type_de_pari=''):
             key = 'Gagne dans le jeu'
         elif config.scriptType == '015' or config.scriptType == '150' or config.scriptType == '15V1' or config.scriptType == '15V2':
             key = 'Point. ' + theset + args
+        elif config.scriptType in ('3P400', '3P3015', '3P1530', '3P040'):
+            key = 'Score du jeu. Après 3 points. ' + theset + args
+        elif config.scriptType in ('AT4015', 'AT1540'):
+            key = 'Score du jeu. Après 4 points. ' + theset + args
         else:
             key = 'Score de la partie. ' + theset + args
     else:
@@ -237,6 +241,10 @@ def AfficherParisMobile(driver, categorie='', type_de_pari=''):
             key = 'Gagne dans le jeu'
         elif config.scriptType == '015' or config.scriptType == '150' or config.scriptType == '15V1' or config.scriptType == '15V2':
             key = f'Point. {theset} {args}'
+        elif config.scriptType in ('3P400', '3P3015', '3P1530', '3P040'):
+            key = f'Score du jeu. Après 3 points. {theset} {args}'
+        elif config.scriptType in ('AT4015', 'AT1540'):
+            key = f'Score du jeu. Après 4 points. {theset} {args}'
         else:
             key = 'Score du jeu. ' + theset + ' ' + args
     else:
